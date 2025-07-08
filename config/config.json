@@ -1,0 +1,31 @@
+{
+    "feed_url": "https://ricomanifesto.github.io/SentryDigest/feed.xml",
+    "output_path": "index.md",
+    "analysis": {
+        "model": "o3",
+        "max_tokens": 4000,
+        "analysis_focus": [
+            "governance frameworks",
+            "compliance requirements",
+            "risk management",
+            "regulatory updates",
+            "audit findings",
+            "policy changes",
+            "industry standards"
+        ]
+    },
+    "report": {
+        "include_date": true,
+        "include_source_links": true,
+        "format": "markdown"
+    },
+    "fetch": {
+        "timeout": 30,
+        "max_retries": 3,
+        "content_extraction": "full"
+    },
+    "logging": {
+        "level": "INFO",
+        "file": "grc_analysis.log"
+    }
+}

@@ -1,0 +1,82 @@
+name: Generate GRC Intelligence Report
+
+on:
+  # Run when triggered by SentryDigest repository
+  repository_dispatch:
+    types: [sentrydigest-updated]
+  
+  # Schedule backup run (in case webhook fails)
+  schedule:
+    - cron: '0 */12 * * *'  # Run every 12 hours
+  
+  # Allow manual triggering
+  workflow_dispatch:
+
+jobs:
+  generate-report:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pages: write
+      id-token: write
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.PAT_GITHUB }}
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      
+      - name: Generate GRC intelligence report
+        run: python main.py
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      
+      - name: Commit and push updated report
+        run: |
+          git config --global user.name 'GitHub Actions'
+          git config --global user.email 'actions@github.com'
+          # Force add index.md even if it's in .gitignore
+          git add -f index.md
+          git add -f docs/reports/
+          git commit -m "Update GRC intelligence report [automated]" || echo "No changes to commit"
+          git push https://${{ secrets.PAT_GITHUB }}@github.com/${{ github.repository }}.git
+
+  deploy-pages:
+    needs: generate-report
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    
+    steps:
+      - name: Checkout updated code
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          token: ${{ secrets.PAT_GITHUB }}
+      
+      - name: Setup Pages
+        uses: actions/configure-pages@v3
+      
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v2
+        with:
+          path: '.'
+      
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v2
