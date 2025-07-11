@@ -1,111 +1,106 @@
 # GRC Intelligence Report
 
-During the period under review, GRC attention is dominated by a surge in cyber-crime enforcement actions, new compliance guidance from the FBI’s CJIS program, and a steady stream of critical software and hardware vulnerabilities that materially expand enterprise risk.  Law-enforcement agencies in the United Kingdom, United States, and France executed high-profile arrests linked to ransomware and large-scale retail breaches, underscoring increasing governmental intolerance for cyber-extortion.  On the compliance front, the FBI reiterated strict password, multi-factor authentication (MFA), and access-control expectations for any organisation handling Criminal Justice Information (CJI).  Meanwhile, technology vendors released (or were forced to release) significant security changes—including Microsoft’s move to the JScript9Legacy engine in Windows 11 and a full migration of Microsoft Authenticator iOS backups to iCloud—that alter control baselines organisations must maintain.  Persistent disclosure of exploitable defects in AI integration frameworks (Model Context Protocol), cloud platforms (ServiceNow), automotive Bluetooth stacks, chipsets (AMD), and container tooling (NVIDIA) continues to elevate supply-chain and third-party risk, demanding rapid patching, enhanced vendor management, and stronger board-level oversight of emerging technology adoption.
+The past week’s security news cycle highlights a surge in vulnerability disclosures, supply-chain software weaknesses, and high-profile data breaches, prompting fresh guidance from regulators and new expectations for governance teams. The U.S. Cybersecurity and Infrastructure Security Agency (CISA) expanded its Known Exploited Vulnerabilities (KEV) catalog to include a critical Citrix NetScaler flaw, effectively setting an accelerated patch timetable for U.S. government systems and raising the bar for private-sector remediation. Meanwhile, the FBI reiterated Criminal Justice Information Services (CJIS) password, MFA, and access-control rules, underscoring mandatory controls for any organization that handles law-enforcement data. Multiple incidents—including a 5.7-million-record breach at Qantas, a ransomware outage at Ingram Micro, and arrests tied to the “Scattered Spider” extortion group—reinforce the importance of breach-response governance and supply-chain risk oversight. Finally, emerging technology themes—AI model integrations (MCP), widespread eSIM and Bluetooth stack vulnerabilities, and the transition to passkeys—signal evolving compliance and risk-management considerations that boards should track closely.
 
 ## Regulatory Updates and Changes
 
-### FBI Criminal Justice Information Services (CJIS) Security Policy Guidance
-- **Description**: Updated guidance emphasises stronger password hygiene, mandatory MFA, granular access control, and continuous audit logging for all entities processing Criminal Justice Information.  
-- **Impact**: Law-enforcement agencies, contractors, and any service provider touching CJI must validate and document alignment with the CJIS Security Policy; gaps in MFA deployment and password complexity must be closed.  
-- **Timeline**: Guidance is current and immediately enforceable; no grace period was referenced.  
-- **Affected Industries**: Federal, state, and local law-enforcement agencies; justice-sector service providers; cloud/SaaS hosting CJI.  
-- **Regulatory Body**: Federal Bureau of Investigation – CJIS Division  
+### CISA Known Exploited Vulnerabilities (KEV) – Addition of CVE-2025-5777
+- **Description**: CISA added a critical Citrix NetScaler ADC & Gateway remote-code-execution flaw (CVE-2025-5777) to its KEV catalog due to active exploitation in the wild.
+- **Impact**: Federal civilian executive-branch agencies must inventory affected appliances, apply vendor-provided patches or mitigation steps, and report completion through existing CISA channels. Private enterprises are strongly urged to mirror the remediation timeline.
+- **Timeline**: Specific patch-by dates were not listed in the article, but KEV inclusions generally carry short (often 7- to 21-day) federal deadlines.
+- **Affected Industries**: Government, healthcare, finance, cloud providers, and any enterprise using Citrix NetScaler.
+- **Regulatory Body**: U.S. Cybersecurity and Infrastructure Security Agency (CISA).
 
-### UK National Crime Agency (NCA) Cyber-crime Enforcement Actions
-- **Description**: The NCA arrested four individuals tied to retail hacks (Marks & Spencer, Co-op, Harrods) and four alleged members of the “Scattered Spider” ransomware collective, signalling active enforcement of existing cyber-crime statutes.  
-- **Impact**: Organisations should reassess incident-response readiness and cooperation protocols with UK law-enforcement; boards should anticipate more aggressive subpoenas and evidence-preservation requests.  
-- **Timeline**: Arrests completed; ongoing prosecutions expected.  
-- **Affected Industries**: Retail, aviation, technology, and any UK-based or UK-serving enterprise.  
-- **Regulatory Body**: UK National Crime Agency (NCA)  
+### FBI Criminal Justice Information Services (CJIS) Security Policy – Authentication Guidance
+- **Description**: New FBI guidance re-emphasizes best practices for passwords, multi-factor authentication (MFA), and granular access control to maintain CJIS compliance when handling criminal-justice data.
+- **Impact**: Organizations processing or storing CJIS-regulated information must ensure password complexity, enable MFA for all privileged and remote access, and document role-based access controls.
+- **Timeline**: Guidance is effective immediately as an interpretation of standing CJIS Security Policy.
+- **Affected Industries**: State & local law-enforcement agencies, justice information service providers, cloud/SaaS vendors servicing those agencies.
+- **Regulatory Body**: Federal Bureau of Investigation (FBI), CJIS Division.
 
-### U.S. Extradition & Arrest for Ransomware Negotiation
-- **Description**: French authorities, acting on a U.S. request, detained a Russian professional basketball player alleged to be a ransomware negotiator, reflecting cross-border cooperation on ransomware enforcement.  
-- **Impact**: Highlights legal exposure for individuals facilitating ransomware payments; companies should verify that consultants, brokers, and negotiators adhere to U.S. sanctions and anti-money-laundering rules.  
-- **Timeline**: Arrest executed; extradition pending.  
-- **Affected Industries**: All sectors employing third-party ransomware negotiators.  
-- **Regulatory Body**: U.S. Department of Justice in coordination with French law enforcement  
+### UK National Crime Agency (NCA) – Cyber-crime Enforcement Actions
+- **Description**: The NCA arrested four individuals linked to large-scale (£440 million) cyberattacks on major UK retailers and alleged members of the “Scattered Spider” ransomware group.
+- **Impact**: Demonstrates active enforcement of UK Computer Misuse statutes; highlights legal exposure for executives who fail to institute adequate cyber-controls that could be construed as facilitating criminal activity.
+- **Timeline**: Arrests announced this week; prosecutions pending.
+- **Affected Industries**: Retail, airlines, and any organization previously targeted by the group.
+- **Regulatory Body**: UK National Crime Agency (NCA).
 
 ## Compliance Requirements and Obligations
 
-- **CJIS Password & MFA Controls**  
-  - **Framework/Standard**: FBI CJIS Security Policy  
-  - **Implementation Details**: Enforce complex, non-reused passwords; enable MFA for all interactive logons; adopt privileged-session monitoring.  
+- **CJIS MFA & Password Hygiene**
+  - **Framework/Standard**: FBI CJIS Security Policy
+  - **Implementation Details**: Enforce MFA on all CJIS-connected systems; minimum 20-character passwords or equivalent pass-phrase; quarterly credential audits.
 
-- **Microsoft Authenticator iOS Cloud Backup Change**  
-  - **Framework/Standard**: Vendor security baseline / Mobile Application Management (MAM) policies  
-  - **Implementation Details**: Update mobile-device-management profiles to permit or restrict iCloud storage; review data-residency and encryption requirements.  
+- **Citrix NetScaler Patch Mandate**
+  - **Framework/Standard**: CISA KEV Catalog (federal directive)
+  - **Implementation Details**: Apply Citrix-issued firmware updates; validate no vulnerable versions remain; document remediation in vulnerability-management system.
 
-- **Windows 11 JScript9Legacy Engine Adoption**  
-  - **Framework/Standard**: Microsoft Secure Configuration Baseline  
-  - **Implementation Details**: Validate application compatibility; adjust Group Policy or Intune settings to enforce updated scripting engine across fleets.  
+- **AI Governance for SaaS Integrations**
+  - **Framework/Standard**: Internal AI usage policies aligned to emerging best practices (no specific regulation cited)
+  - **Implementation Details**: Establish data-governance review boards; implement model-input logging, privacy impact assessments, and vendor-risk questionnaires for AI features.
 
-- **Passkey (FIDO) Deployment for Passwordless Access**  
-  - **Framework/Standard**: FIDO2 / WebAuthn best practices  
-  - **Implementation Details**: Enable passkeys in identity providers; update user-training material; ensure fallback authentication is MFA-compliant.  
-
-- **ServiceNow ACL Hardening (CVE-2025-3648)**  
-  - **Framework/Standard**: ISO 27001 access-control domain / SOC 2 CC6  
-  - **Implementation Details**: Apply vendor patch; audit Access Control Lists (ACLs) for least-privilege; monitor for unusual data export activity.  
+- **Passkey Adoption for Passwordless Authentication**
+  - **Framework/Standard**: FIDO-based passkey model (standard referenced conceptually)
+  - **Implementation Details**: Update IAM roadmaps; pilot passkeys for workforce SSO; revise user education and fallback-recovery procedures.
 
 ## Risk Management Developments
 
-- **Software Supply-Chain Vulnerabilities**  
-  - **Assessment Methods**: Continuous SBOM analysis; CVE monitoring; vendor risk questionnaires.  
-  - **Mitigation Strategies**: Rapid patching of MCP, mcp-remote, NVIDIA Container Toolkit, ServiceNow, AMD chipsets; implement runtime application self-protection (RASP).  
+- **Critical Infrastructure Vulnerabilities**
+  - Citrix NetScaler (CVE-2025-5777), ServiceNow (CVE-2025-3648), mcp-remote RCE, eSIM Oracle bug, PerfektBlue Bluetooth stack, AMD Transient Scheduler attacks.
+  - **Assessment Methods**: Continuous vulnerability scanning, SBOM reviews, threat-intelligence subscription to KEV and vendor advisories.
+  - **Mitigation Strategies**: Priority patching, compensating network controls (WAF, segmentation), temporary service disabling where patches unavailable.
 
-- **Ransomware & Extortion**  
-  - **Assessment Methods**: Table-top exercises; backup recoverability testing; ransomware readiness assessments.  
-  - **Mitigation Strategies**: Network segmentation, immutable backups, use of EDR tools, adherence to sanctions screening before any negotiations.  
+- **Supply-Chain & Third-Party Risk**
+  - Ingram Micro ransomware, Trojanized Termius app, fake gaming/AI companies distributing malware.
+  - **Assessment Methods**: Third-party risk questionnaires, contractual security clauses, real-time threat-feed correlation to supplier IPs.
+  - **Mitigation Strategies**: Zero-trust access segmentation, mandatory incident-notification SLAs, continuous monitoring of supplier security posture.
 
-- **AI Integration & Model Governance Risks**  
-  - **Assessment Methods**: AI risk registers; model threat-modeling; data-flow mapping.  
-  - **Mitigation Strategies**: Establish AI governance committees; require security reviews of MCP components; enforce human-in-the-loop controls.  
+- **Data Breach & Exfiltration**
+  - Nippon Steel, Qantas 5.7 million records exposed.
+  - **Assessment Methods**: DLP telemetry, dark-web monitoring for leaked datasets, breach-impact modeling.
+  - **Mitigation Strategies**: Rapid containment playbooks, mandatory regulatory notification workflows, enhanced encryption and tokenization.
 
-- **Credential Theft & SIM-Swap Fraud**  
-  - **Assessment Methods**: User-behavior analytics; telecom-provider risk scoring.  
-  - **Mitigation Strategies**: Phone-number change detection, hardware security keys, carrier-level port-out freezes.  
-
-- **Automotive Bluetooth Exploits (PerfektBlue)**  
-  - **Assessment Methods**: Pen-testing of in-vehicle infotainment; firmware-version tracking.  
-  - **Mitigation Strategies**: Over-the-air patch deployment, isolation of critical driving systems from infotainment modules.  
+- **Identity & Authentication Risk**
+  - SIM-swap fraud uptick, Microsoft Authenticator iCloud backup shift, passkey rollout complexity.
+  - **Assessment Methods**: MFA effectiveness review, SIM-port-out monitoring, credential-stuffing detection.
+  - **Mitigation Strategies**: Number-porting PINs, hardware keys for admins, backup-encryption validation.
 
 ## Governance and Oversight Changes
 
-- **AI Governance for SaaS Adoption**  
-  - **Requirements**: Document data-usage policies, IP ownership, and liability clauses when onboarding AI-enabled SaaS.  
-  - **Accountability**: CIO/CISO jointly with a designated AI Governance Board.  
+- **AI Oversight**
+  - **Requirements**: Establish AI Ethics/Governance committee; document data-usage policies for SaaS-embedded generative AI; mandate executive review of high-risk use cases.
+  - **Accountability**: CIO/CTO in partnership with Chief Risk & Compliance Officers.
 
-- **Board-Level Cyber-Crime Response Oversight**  
-  - **Requirements**: Boards must verify existence of ransomware playbooks and law-enforcement liaison processes in light of heightened arrest activity.  
-  - **Accountability**: Board Risk Committee; CFO for financial-impact analysis.  
+- **Board-Level Cyber-Risk Reporting**
+  - Triggered by high-profile breaches (Qantas, Nippon Steel) and law-enforcement takedowns; boards expected to demand quarterly vulnerability-exposure reports and incident-readiness metrics.
+  - **Accountability**: CISO to Audit/Risk committees.
 
-- **Patch & Configuration Management Governance**  
-  - **Requirements**: CEOs/CISOs should receive quarterly assurance that critical vendor updates (Windows JScript engine, WSUS sync fixes, AMD CPU microcode) are deployed.  
-  - **Accountability**: IT Operations & Internal Audit.  
+- **Incident-Response Policy Updates**
+  - Lessons from ransomware at Ingram Micro and Citrix KEV exploitation.
+  - **Requirements**: 24-hour executive notification, cross-functional crisis-management team activation, post-incident root-cause analysis presented to governance committees.
+  - **Accountability**: CISO, General Counsel, Communications.
 
 ## Industry-Specific Impacts
 
-- **Retail**  
-  - **Sector-Specific Requirements**: Enhance point-of-sale segmentation; share indicators of compromise (IOCs) with the NCA-led Retail Cyber Intelligence Sharing forums.  
+- **Government & Public Sector**
+  - Must patch Citrix NetScaler (KEV) and uphold CJIS MFA requirements; increased reporting obligations to CISA.
 
-- **Aviation**  
-  - **Sector-Specific Requirements**: Post-breach, airlines like Qantas must strengthen identity verification for loyalty programs and review data-retention schedules.  
+- **Retail**
+  - Heightened monitoring after NCA arrests; reinforce PCI-DSS controls and incident-notification readiness.
 
-- **Automotive Manufacturing & OEMs**  
-  - **Sector-Specific Requirements**: Rapidly integrate PerfektBlue patches into dealership service workflows; validate homologation compliance for updated firmware.  
+- **Aviation**
+  - Qantas breach emphasizes need for passenger-data encryption and alignment with Australia’s Privacy Act breach-notification rules.
 
-- **Cryptocurrency & Fintech**  
-  - **Sector-Specific Requirements**: Bitcoin Depot breach highlights the need for end-to-end encryption of customer PII and alignment with virtual-asset service-provider (VASP) guidelines.  
+- **Automotive**
+  - PerfektBlue Bluetooth flaws require OEM firmware updates and post-production patch delivery to Mercedes, Volkswagen, and Skoda vehicles.
 
-- **Public Safety & Law-Enforcement IT**  
-  - **Sector-Specific Requirements**: Immediate compliance with CJIS password, MFA, and logging directives; yearly policy attestations.  
+- **Telecommunications & Mobile OEMs**
+  - eSIM vulnerability mandates SIM applet updates and carrier coordination to prevent spying or device takeover.
 
-- **Cloud/SaaS Providers**  
-  - **Sector-Specific Requirements**: Remediate ServiceNow CVE-2025-3648, monitor for tenant-to-tenant data leakage, and provide customers with updated SOC 2 reports.  
+- **Technology & SaaS Providers**
+  - ServiceNow ACL flaw and AI governance trends necessitate tighter SDLC controls, secure-by-design principles, and transparent customer communication on AI features.
 
-- **Automated AI Workflows & LLM Tooling Vendors**  
-  - **Sector-Specific Requirements**: Security testing of Model Context Protocol integrations and publication of vulnerability-disclosure policies.  
+- **Semiconductor & Hardware Manufacturers**
+  - AMD transient-scheduler vulnerabilities call for microcode or firmware mitigations and security advisories to OEM partners.
 
----
-
-This report encapsulates the material governance, risk, and compliance developments surfaced in the referenced articles and provides actionable insights for stakeholders charged with enterprise-wide GRC oversight.
+**End of Report**
