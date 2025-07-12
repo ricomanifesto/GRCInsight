@@ -1,3 +1,7 @@
+<div align="center">
+  <img src="assets/images/logo.png" alt="GRCInsight Logo" width="400"/>
+</div>
+
 # GRCInsight
 
 Automated governance, risk & compliance intelligence that monitors RSS feeds and generates GRC reports using AI analysis.
