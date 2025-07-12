@@ -67,6 +67,17 @@ async def publish_to_github_pages(
                 f.write("title: GRCInsight\n")
                 f.write("description: GRC Intelligence Reports\n")
         
+        # Copy assets folder to GitHub Pages directory
+        assets_source = Path("assets")
+        assets_dest = repo_path / "assets"
+        
+        if assets_source.exists():
+            import shutil
+            if assets_dest.exists():
+                shutil.rmtree(assets_dest)
+            shutil.copytree(assets_source, assets_dest)
+            logger.info("Copied assets folder to GitHub Pages directory")
+        
         logger.info(f"Successfully published to GitHub Pages directory: {repo_dir}")
         return True
         
