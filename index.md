@@ -1,125 +1,138 @@
 # GRC Intelligence Report
 
-Over the last week, cyber-threat activity has intensified around unpatched zero-day vulnerabilities (Microsoft SharePoint CVE-2025-53770, CrushFTP CVE-2025-54309) and insecure device configurations (HPE Aruba Instant On hard-coded credentials). Simultaneously, multiple software-supply-chain compromises (malicious npm and AUR packages) and sophisticated phishing techniques (PoisonSeed’s FIDO2 downgrade) illustrate a continued shift toward attacks that bypass traditional perimeter defenses. National authorities such as the UK NCSC have issued new advisories linking state-sponsored groups to credential-stealing malware, underscoring geopolitical risk. Collectively, these developments heighten regulatory expectations for timely vulnerability management, stricter third-party software governance, and enhanced identity-security controls across industries that rely on Microsoft 365, Web3, open-source ecosystems, or IoT/OT networking equipment.
+Over the last week the security landscape has been dominated by a string of actively-exploited zero-day vulnerabilities, sophisticated multi-factor-authentication (MFA) bypass techniques, and renewed focus on supply-chain and open-source package integrity. Of particular note, Microsoft rushed out emergency patches for two SharePoint Server remote-code-execution (RCE) flaws (CVE-2025-53770/53771) that were already being weaponised to compromise at least 85 organisations, while Hewlett-Packard Enterprise (HPE) disclosed hard-coded administrative credentials in Aruba “Instant On” access points. Threat actors simultaneously resurfaced browser-based cryptojacking across 3,500 websites, hijacked popular npm linter packages via phishing-stolen tokens, and exploited a critical CrushFTP flaw (CVE-2025-54309). In identity security, the PoisonSeed campaign showed how FIDO2 hardware-key protections can be downgraded through QR-code phishing and WebAuthn cross-device abuse, underscoring MFA implementation risks. Web3 developers were separately targeted with the “Fickle Stealer” malware via fake AI tooling. Finally, new guidance on building foundation AI models highlighted the governance need for rigorous data provenance, bias testing, and alignment with existing risk-management frameworks. Collectively, these events emphasise the urgency of disciplined patch management, supply-chain vigilance, and board-level oversight of both cyber and AI-related risks.
 
 ## Regulatory Updates and Changes
 
-### Microsoft Security Advisory – CVE-2025-53770 (SharePoint Server)
-- **Description**: Critical remote-code-execution (RCE) zero-day in Microsoft SharePoint Server actively exploited since 18 July; no official patch yet, but Microsoft released mitigation guidance.  
-- **Impact**: Organizations must apply the prescribed URL-rewrite rules, restrict external access, and enhance logging to detect exploitation.  
-- **Timeline**: Active exploitation confirmed; mitigation guidance effective immediately; patch release date pending.  
-- **Affected Industries**: All sectors using on-premises SharePoint (notably healthcare, finance, government, education).  
+### Microsoft SharePoint Emergency Security Update (CVE-2025-53770 & CVE-2025-53771)
+- **Description**: Two zero-day RCE flaws in SharePoint Server exploited in “ToolShell” and related campaigns; Microsoft issued out-of-band patches and hardened configurations.  
+- **Impact**: All organisations running on-premise SharePoint must immediately apply the cumulative update, review server logs for Indicators of Compromise (IoCs), and validate the integrity of uploaded files and workflows.  
+- **Timeline**: Patches released 20 July 2025; exploitation observed since 18 July 2025.  
+- **Affected Industries**: Any sector operating SharePoint (notably governmental, manufacturing, financial services, and professional services environments).  
 - **Regulatory Body**: Microsoft Security Response Center (MSRC).
 
-### CrushFTP Security Bulletin – CVE-2025-54309
-- **Description**: CVSS 9.0 flaw allows unauthenticated administrative access via web interface; under active exploitation.  
-- **Impact**: Immediate upgrade to the fixed CrushFTP version and review of server logs for compromise indicators.  
-- **Timeline**: Vulnerability disclosed and exploitation reported this week; patched versions already available.  
-- **Affected Industries**: Managed-file-transfer services, media, legal, manufacturing, and any firm exchanging sensitive data via CrushFTP.  
-- **Regulatory Body**: CrushFTP vendor advisory.
+### HPE Security Bulletin – Aruba Instant On Access Points Hard-Coded Credentials
+- **Description**: Critical flaw allows unauthenticated web-interface access on multiple Instant On models due to embedded username/password. HPE released firmware updates removing the credentials.  
+- **Impact**: Customers must upgrade to the fixed firmware, rotate any reused credentials, and ensure management interfaces are not exposed to untrusted networks.  
+- **Timeline**: Advisory and firmware published 19 July 2025.  
+- **Affected Industries**: SMEs, retail, hospitality, and any organisation using Aruba Instant On Wi-Fi infrastructure.  
+- **Regulatory Body**: Hewlett-Packard Enterprise PSIRT.
 
-### HPE Aruba Instant On Security Bulletin
-- **Description**: Hard-coded root credentials in specific Aruba Instant On Access Points enable authentication bypass.  
-- **Impact**: Firmware update required; disable remote administration until patched; rotate all device credentials.  
-- **Timeline**: Advisory released this week; firmware fix available for download.  
-- **Affected Industries**: Retail, hospitality, SMBs, and enterprises using Aruba Instant On Wi-Fi infrastructure.  
-- **Regulatory Body**: Hewlett Packard Enterprise (HPE) PSIRT.
+### CrushFTP Security Advisory (CVE-2025-54309)
+- **Description**: Path-traversal flaw enables attackers to obtain admin-level access on unpatched CrushFTP servers (CVSS 9.0); active exploitation confirmed.  
+- **Impact**: Immediate upgrade to the patched version, review of file-transfer logs, and revocation of compromised credentials.  
+- **Timeline**: Vulnerability disclosed and patched 17 July 2025; exploitation ongoing.  
+- **Affected Industries**: Managed-file-transfer service providers, healthcare, finance, and government entities using CrushFTP.  
+- **Regulatory Body**: CrushFTP Security Team.
 
-### UK NCSC & Cabinet Office Advisory – “Authentic Antics” (APT28)
-- **Description**: Formal attribution of Microsoft 365 credential-stealing malware “Authentic Antics” to Russia’s GRU (APT28). Guidance issued for hardening cloud identity configurations.  
-- **Impact**: Public-sector and critical-infrastructure organizations must review conditional-access policies, enable MFA, and apply Microsoft cloud hardening recommendations.  
-- **Timeline**: Advisory published this week with immediate actions recommended.  
-- **Affected Industries**: Government, defense contractors, energy, telecoms, and any UK organization leveraging Microsoft 365.  
-- **Regulatory Body**: UK National Cyber Security Centre (NCSC).
+### npm Registry Security Notice – Hijacked Linter Packages
+- **Description**: Threat actors injected malware into widely-used `eslint-config-prettier` and `eslint-plugin-prettier` after phishing maintainers and stealing npm tokens.  
+- **Impact**: Development teams must audit dependency trees, replace malicious versions, rotate compromised access tokens, and implement 2FA for maintainer accounts.  
+- **Timeline**: Malicious versions published 22 July 2025; taken down within 24 hours.  
+- **Affected Industries**: All organisations that leverage the affected JavaScript libraries (especially software vendors and SaaS providers).  
+- **Regulatory Body**: npm Security / GitHub.
 
-### Arch Linux Security Notice
-- **Description**: Three malicious AUR packages installing Chaos RAT removed from repository.  
-- **Impact**: Users must audit systems for package remnants, remove implants, and verify checksums before future AUR installs.  
-- **Timeline**: Packages pulled immediately after discovery.  
-- **Affected Industries**: Technology, research, and developers using Arch Linux in production or CI/CD pipelines.  
-- **Regulatory Body**: Arch Linux Security Team.
+### FIDO Alliance Security Alert – PoisonSeed MFA Downgrade
+- **Description**: New phishing method tricks users into approving cross-device WebAuthn requests, effectively bypassing FIDO2 hardware keys.  
+- **Impact**: Enforce origin validation, disable cross-device sign-in where unnecessary, and conduct user-education on QR-phishing scenarios.  
+- **Timeline**: Campaign observed mid-July 2025.  
+- **Affected Industries**: All sectors employing FIDO2/WebAuthn authentication.  
+- **Regulatory Body**: FIDO Alliance (best-practice guidance).
 
 ## Compliance Requirements and Obligations
-- **SharePoint Zero-Day Mitigation**  
-  - **Framework/Standard**: CIS Benchmarks / ISO 27001 (control A.12.6.1 – technical vulnerability management)  
-  - **Implementation Details**: Apply Microsoft’s URL-rewrite rules, monitor indicators of compromise (IoCs), and document compensating controls until official patching.
 
-- **CrushFTP Patch Deployment**  
-  - **Framework/Standard**: NIST SP 800-53 rev. 5 (SI-2, SI-4)  
-  - **Implementation Details**: Upgrade to patched version, enable least-privilege admin accounts, and conduct post-patch penetration testing.
+- **Mandatory SharePoint Patch Deployment**
+  - **Framework/Standard**: Vendor security bulletin; aligns with typical vulnerability-management controls.
+  - **Implementation Details**: Apply July 2025 cumulative update, enable audit logging, perform post-patch penetration testing.
 
-- **Aruba Firmware & Credential Rotation**  
-  - **Framework/Standard**: PCI-DSS v4 (2.3.1 – strong authentication for system components)  
-  - **Implementation Details**: Install new firmware, disable default accounts, enforce unique passwords, and document changes in configuration-management database.
+- **Firmware Upgrade for Aruba Instant On**
+  - **Framework/Standard**: IoT/OT security hardening guidelines.
+  - **Implementation Details**: Install fixed firmware, isolate management VLANs, enforce strong unique credentials.
 
-- **Supply-Chain Integrity for npm/AUR**  
-  - **Framework/Standard**: NIST SSDF / SOC 2 (change-management criteria)  
-  - **Implementation Details**: Implement package-signing verification, use dependency-pinning, mandate SBOM generation, and conduct developer-token hygiene training.
+- **CrushFTP Version Update**
+  - **Framework/Standard**: Secure file-transfer compliance (often referenced in HIPAA, PCI-DSS, and SOX control environments).
+  - **Implementation Details**: Upgrade to latest release, enable encryption‐in‐transit, rotate user secrets.
 
-- **Enhanced Identity Controls Against PoisonSeed**  
-  - **Framework/Standard**: ISO/IEC 27001 Annex A.9 (access control)  
-  - **Implementation Details**: Configure FIDO2 with strict origin checks, disable cross-device sign-in where unnecessary, and educate users on QR-based phishing.
+- **Open-Source Dependency Integrity Checks**
+  - **Framework/Standard**: Software-Bill-of-Materials (SBOM) best practices.
+  - **Implementation Details**: Automate dependency scanning, lock package versions, enforce maintainer 2FA.
 
-- **Incident Reporting for State-Sponsored Threat Activity**  
-  - **Framework/Standard**: GDPR/UK Data Protection Act breach-notification articles (where personal data involved)  
-  - **Implementation Details**: Update incident-response playbooks to include NCSC reporting channels and 72-hour notification timelines.
+- **Enhanced MFA Configuration Against QR Phishing**
+  - **Framework/Standard**: Identity-and-Access-Management control families.
+  - **Implementation Details**: Disable cross-device sign-in if unused, prompt-based origin pinning, user awareness campaigns.
+
+- **Cryptojacking Detection Controls**
+  - **Framework/Standard**: Web-application security baselines.
+  - **Implementation Details**: Integrate Content-Security-Policy (CSP) headers, leverage WebSocket monitoring, deploy behaviour-based browser-side detectors.
+
+- **AI Foundation Model Governance**
+  - **Framework/Standard**: Emerging AI-risk-management frameworks.
+  - **Implementation Details**: Establish data-provenance documentation, formal bias/accuracy testing procedures, human-in-the-loop approval gates.
 
 ## Risk Management Developments
-- **Risk Area**: Zero-Day Vulnerability Exposure (SharePoint & CrushFTP)  
-  - **Assessment Methods**: Real-time vulnerability scanning, CVSS prioritization, external attack-surface mapping.  
-  - **Mitigation Strategies**: Rapid virtual-patch deployment, network segmentation, immutable backups.
 
-- **Risk Area**: Software Supply-Chain Compromise (npm, AUR)  
-  - **Assessment Methods**: Dependency-graph mapping, SBOM analysis, integrity monitoring.  
-  - **Mitigation Strategies**: Least-privileged CI/CD service accounts, compulsory code-signing, periodic package provenance reviews.
+- **Supply-Chain Risk (Open-Source Packages)**
+  - **Assessment Methods**: SBOM generation, dependency-health scoring, continuous monitoring of registries for hijacked packages.
+  - **Mitigation Strategies**: Signed packages, mandatory maintainer MFA, rapid revocation of compromised tokens.
 
-- **Risk Area**: Identity & MFA Bypass (PoisonSeed, Authentic Antics)  
-  - **Assessment Methods**: Credential-phishing simulations, audit of conditional-access logs, behavioral analytics for session hijacking.  
-  - **Mitigation Strategies**: Enforce phishing-resistant MFA, disable legacy authentication, deploy risk-adaptive access controls.
+- **Zero-Day Exploitation Risk (SharePoint, CrushFTP)**
+  - **Assessment Methods**: External attack-surface mapping, CVE prioritisation matrices, exploit-attempt telemetry.
+  - **Mitigation Strategies**: Accelerated patching SLAs, virtual-patching (WAF rules) until fixed, segmentation of critical collaboration services.
 
-- **Risk Area**: Embedded & IoT Device Weak Credentials (Aruba Instant On)  
-  - **Assessment Methods**: Credential-stuffing testing, firmware-version inventory.  
-  - **Mitigation Strategies**: Centralized credential vaulting, auto-update policies, network-access control (NAC) for devices.
+- **Identity & Access Risk (FIDO2 Downgrade via QR Phishing)**
+  - **Assessment Methods**: Phishing-resilience testing, MFA efficacy reviews, cross-device request monitoring.
+  - **Mitigation Strategies**: Disable unused WebAuthn extensions, contextual authentication prompts, ongoing security-awareness training.
 
-- **Risk Area**: Geopolitical APT Activity (GRU/APT28)  
-  - **Assessment Methods**: Threat-intelligence correlation, sector-specific attack surface review.  
-  - **Mitigation Strategies**: Implement government-issued IoCs, participate in information-sharing programs, tabletop exercises for nation-state scenarios.
+- **IoT Infrastructure Risk (Aruba Instant On)**
+  - **Assessment Methods**: Device inventory reconciliation, credential-exposure scanning.
+  - **Mitigation Strategies**: Firmware life-cycle management, zero-trust network segmentation for access points.
+
+- **Cryptocurrency-Mining Abuse (Compromised Websites)**
+  - **Assessment Methods**: Web integrity checksums, browser-side resource usage analytics.
+  - **Mitigation Strategies**: Strict CSP, sub-resource integrity (SRI), and routine server-side malware sweeps.
+
+- **AI Model-Building Risk**
+  - **Assessment Methods**: Dataset licensing audits, adversarial testing for hallucinations and prompt injection.
+  - **Mitigation Strategies**: Data governance committees, red-team exercises, ethical and privacy impact assessments.
 
 ## Governance and Oversight Changes
-- **Board Cyber-Risk Oversight**  
-  - **Requirements**: Boards should receive briefings on zero-day exploitation windows and approve accelerated patch-management budgets.  
-  - **Accountability**: CISO must present weekly status until SharePoint and CrushFTP patches fully deployed.
 
-- **Third-Party Software Governance**  
-  - **Requirements**: Establish formal approval workflow for all open-source packages and mandate SBOM inclusion in vendor contracts.  
-  - **Accountability**: CTO supported by Procurement & Internal Audit.
+- **Board-Level Cyber Vulnerability Oversight**
+  - **Requirements**: Directors must receive regular briefings on high-severity zero-days (e.g., SharePoint, CrushFTP) and ensure timely remediation budgets.
+  - **Accountability**: CISO and CIO report patch-status metrics to Audit/Risk Committee.
 
-- **Identity & Access Governance**  
-  - **Requirements**: Quarterly review of MFA effectiveness and policy exceptions in light of PoisonSeed attack path.  
-  - **Accountability**: IAM Program Manager reports to CIO and Audit Committee.
+- **Software-Supply-Chain Governance**
+  - **Requirements**: Establish formal policies mandating SBOMs for all internally developed and third-party code.
+  - **Accountability**: Chief Technology Officer (CTO) and Product Security Group oversee compliance.
 
-- **Incident-Response Governance**  
-  - **Requirements**: Update playbooks to align with NCSC advisory requirements and specify roles for regulatory notifications.  
-  - **Accountability**: Head of Security Operations Center (SOC).
+- **Identity Governance**
+  - **Requirements**: Periodic review of MFA configurations to prevent downgrade attacks; user-education KPIs.
+  - **Accountability**: Identity-and-Access-Management (IAM) Program Owner.
+
+- **AI Governance**
+  - **Requirements**: Cross-functional AI Ethics Committee to approve foundation model development and ensure alignment with risk-management practices highlighted in recent industry guidance.
+  - **Accountability**: Chief Data & AI Officer, with Audit Committee oversight.
 
 ## Industry-Specific Impacts
 
-- **Financial Services**  
-  - **Impacts**: Heightened regulatory scrutiny on exploit window for SharePoint servers used in client-data portals.  
-  - **Sector-Specific Requirements**: Immediate reporting to regulators if material impact on customer data (per FCA, FDIC guidance).
+- **Technology & Software Development**
+  - **Sector-Specific Requirements**: Immediate audit of npm dependencies; integration of secure-coding pipelines to catch malicious package updates.
 
-- **Healthcare & Life Sciences**  
-  - **Impacts**: Potential HIPAA exposure if PHI stored on unpatched SharePoint or transferred via CrushFTP.  
-  - **Sector-Specific Requirements**: Conduct HIPAA Security Rule risk assessment focusing on these systems.
+- **Financial Services**
+  - **Sector-Specific Requirements**: Accelerate SharePoint patching to protect customer data, align with sectoral incident-reporting obligations, tighten controls around WebAuthn MFA for online banking portals.
 
-- **Technology & Software Development (Web3 / npm)**  
-  - **Impacts**: Supply-chain attacks threaten integrity of decentralized-app codebases.  
-  - **Sector-Specific Requirements**: Implement continuous dependency scanning; maintain signed commit policies for smart-contract repositories.
+- **Healthcare & Life Sciences**
+  - **Sector-Specific Requirements**: Remediate CrushFTP and SharePoint quickly to maintain patient-data confidentiality and avoid regulatory fines tied to protected-health-information exposure.
 
-- **Retail & Hospitality (Aruba Instant On)**  
-  - **Impacts**: Compromised Wi-Fi infrastructure could expose POS traffic and guest data.  
-  - **Sector-Specific Requirements**: Align firmware updates with PCI-DSS compliance schedule; perform quarterly wireless penetration tests.
+- **Education**
+  - **Sector-Specific Requirements**: Prepare for adoption of AI-driven learning tools from major AI vendors by assessing data-privacy impacts and updating acceptable-use and safeguarding policies.
 
-- **Government & Defense Contractors**  
-  - **Impacts**: GRU-linked malware elevates requirement for strengthened cloud-identity governance.  
-  - **Sector-Specific Requirements**: Follow UK NCSC advisory controls; map compliance to NIST 800-171 or government accreditation regimes.
+- **Retail & Hospitality (SMB)**
+  - **Sector-Specific Requirements**: Patch Aruba Instant On access points, segregate POS networks, and monitor for cryptojacking scripts on e-commerce sites.
+
+- **Web3 / Blockchain Development**
+  - **Sector-Specific Requirements**: Harden developer endpoints, validate AI-based tooling sources, and educate on EncryptHub/Fickle Stealer phishing vectors targeting wallet credentials and private keys.
+
+---
+
+**Note**: Only information explicitly referenced in the provided articles has been included; no external regulation codes or framework versions have been introduced.
