@@ -43,25 +43,3 @@ python main.py
 ```
 
 Fetches articles, filters for GRC content, analyzes governance/risk/compliance developments, and saves reports to `index.md`.
-
-## GitHub Pages Setup
-
-1. **Fork the repository** to your GitHub account
-
-2. **Configure GitHub Pages**:
-   - Go to repository Settings → Pages
-   - Set Source to "GitHub Actions"
-   - Site will be available at `https://yourusername.github.io/GRCInsight`
-
-3. **Set up repository secrets**:
-   - Go to Settings → Secrets and variables → Actions
-   - Add these secrets:
-     - `OPENAI_API_KEY`: Your OpenAI API key
-     - `PAT_GITHUB`: Personal Access Token with repo permissions
-
-4. **Enable automation** (optional):
-   - Workflow runs every 12 hours automatically
-   - Manual triggering available from Actions tab
-   - Integrates with SentryDigest updates via webhook
-
-The automated system generates fresh GRC intelligence reports and publishes them to your GitHub Pages site automatically.
