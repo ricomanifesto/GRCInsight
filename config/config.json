@@ -2,7 +2,7 @@
     "feed_url": "https://ricomanifesto.github.io/SentryDigest/feed.xml",
     "output_path": "index.md",
     "analysis": {
-        "model": "o3",
+        "model": "gpt-5",
         "max_tokens": 4000,
         "analysis_focus": [
             "governance frameworks",
