@@ -27,8 +27,8 @@ COPY --from=builder /app/main ${LAMBDA_TASK_ROOT}
 # Copy configuration files
 COPY --from=builder /app/configs ${LAMBDA_TASK_ROOT}/configs
 
-# Copy web assets (for static file serving if needed)
-COPY --from=builder /app/web ${LAMBDA_TASK_ROOT}/web
+# Copy site assets (for static file serving if needed)
+COPY --from=builder /app/site ${LAMBDA_TASK_ROOT}/site
 
 # Set the CMD to your handler
 CMD [ "main" ]

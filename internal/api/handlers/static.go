@@ -17,7 +17,7 @@ func NewStaticHandler() *StaticHandler {
 
 // ServeIndex serves the main index.html file
 func (h *StaticHandler) ServeIndex(c *gin.Context) {
-	c.File("./web/index.html")
+	c.File("./site/index.html")
 }
 
 // ServeStatic serves static assets
@@ -26,7 +26,7 @@ func (h *StaticHandler) ServeStatic(c *gin.Context) {
 	requestedPath := c.Param("filepath")
 	
 	// Construct the full file path
-	fullPath := filepath.Join("./web/static", requestedPath)
+	fullPath := filepath.Join("./site/static", requestedPath)
 	
 	// Serve the file
 	c.File(fullPath)
@@ -39,7 +39,7 @@ func (h *StaticHandler) ServeReport(c *gin.Context) {
 	// For now, serve the main index.md report
 	// In the future, this could serve specific report files
 	if reportPath == "index.md" || reportPath == "" {
-		c.File("./index.md")
+		c.File("./site/index.md")
 		return
 	}
 	
