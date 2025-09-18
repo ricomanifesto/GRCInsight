@@ -183,7 +183,7 @@ if [ "$POLICY_ARN" = "None" ] || [ -z "$POLICY_ARN" ]; then
     print_warning "Creating customer managed policy: $POLICY_NAME"
     POLICY_ARN=$(aws iam create-policy \
         --policy-name $POLICY_NAME \
-        --policy-document file://lambda-permissions-policy.json \
+        --policy-document file://deployments/lambda-permissions-policy.json \
         --query 'Policy.Arn' --output text)
 else
     print_status "Policy $POLICY_NAME already exists: $POLICY_ARN"
