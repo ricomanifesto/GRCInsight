@@ -29,9 +29,14 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
 
-      - name: Login to AWS Public ECR (increase pull limits)
+      - name: Attempt login to AWS Public ECR (optional)
+        continue-on-error: true
         run: |
+          set +e
           aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws
+          if [ $? -ne 0 ]; then
+            echo "Skipping ECR Public login (missing ecr-public:GetAuthorizationToken). Proceeding anonymously."
+          fi
 
       - name: Pre-pull base images with retries
         run: |
