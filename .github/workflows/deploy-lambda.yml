@@ -29,6 +29,19 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
 
+      - name: Login to AWS Public ECR (increase pull limits)
+        run: |
+          aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws
+
+      - name: Pre-pull base images with retries
+        run: |
+          set -e
+          retry() { n=0; max=5; delay=10; while true; do "$@" && break || { n=$((n+1)); if [ $n -ge $max ]; then echo "Command failed after $n attempts: $*" >&2; exit 1; fi; echo "Retry $n/$max in ${delay}s: $*"; sleep $delay; delay=$((delay*2)); }; done; }
+          retry docker pull golang:1.22-alpine
+          retry docker pull public.ecr.aws/lambda/go:1
+          # Match Python base image digest used in agent/Dockerfile.lambda
+          retry docker pull public.ecr.aws/lambda/python:3.11@sha256:d044e45093a29946e452fe0f20bf8536fb50c6a1b25f9f0f7a854323d598454f
+
       - name: Resolve AWS account ID
         id: aws-account
         run: |
