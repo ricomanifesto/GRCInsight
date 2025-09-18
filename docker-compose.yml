@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  go-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - GO_ENV=development
+      - PYTHON_SERVICE_URL=http://python-service:8081
+      - DATABASE_DSN=./data/grcinsight.db
+      - LOG_LEVEL=info
+    volumes:
+      - ./data:/root/data
+      - ./configs:/root/configs
+      - ./web:/root/web
+    depends_on:
+      - python-service
+    networks:
+      - grcinsight-network
+    restart: unless-stopped
+
+  python-service:
+    build:
+      context: ./agent
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8081"
+    environment:
+      - PYTHONPATH=/app
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - LOG_LEVEL=INFO
+      - HOST=0.0.0.0
+      - PORT=8081
+    networks:
+      - grcinsight-network
+    restart: unless-stopped
+
+networks:
+  grcinsight-network:
+    driver: bridge
+
+volumes:
+  grcinsight-data:

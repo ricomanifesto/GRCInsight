@@ -54,9 +54,27 @@ Thumbs.db
 *.log
 grc-analysis.log
 
+# Project docs (private notes)
+docs/notes/
+
+# Build artifacts
+bin/
+data/
+*.db
+
 # Temporary files
 *.tmp
 *.temp
+
+# Local test outputs
+lambda-response.json
+report-response.json
+report-data.json
+response-*.json
+test-*.json
+test-*.b64
+payload*.json
+payload*.b64
 
 # Cache
 .cache/

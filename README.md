@@ -1,45 +1,44 @@
 # GRCInsight
 
-<div align="center">
-  <img src="assets/images/logo.png" alt="GRCInsight Logo" width="400"/>
-</div>
+Automated GRC intelligence: monitor RSS feeds, extract regulatory signals, and publish AI‑generated reports.
 
-Automated governance, risk & compliance intelligence that monitors RSS feeds and generates GRC reports using AI analysis.
-
-[![Latest GRC Report](https://img.shields.io/badge/View-Latest%20Report-blue)](https://ricomanifesto.github.io/GRCInsight/)
+[Latest Report](https://ricomanifesto.github.io/GRCInsight/)
 
 ## Features
 
-- Monitors security RSS feeds for GRC-related content
-- Extracts and correlates regulatory mentions and frameworks
-- Generates reports with executive summaries, regulatory updates, compliance requirements, and risk management developments
-- Integrates with [SentryDigest](https://github.com/ricomanifesto/SentryDigest) for automated analysis triggers
+- Monitors security feeds and filters for GRC relevance
+- Correlates regulations, frameworks, industries, and agencies
+- Generates concise reports with summaries and actions
+- Integrates with SentryDigest for automatic triggers
 
 ## Architecture
 
-**LangGraph**: Orchestrates workflow state and conditional logic  
-**Model Context Protocol (MCP)**: Standardized RSS feed interface  
-**LangChain**: AI model integration and text processing  
-**OpenAI GPT**: Content analysis and report generation
+- Go Lambda: API, DynamoDB writes, Python Lambda invoke
+- Python Lambda: RSS fetch, AI analysis, report compose
+- GitHub Actions: deploy Lambdas, schedule runs, publish Pages
 
 ## Setup
 
-1. Install dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
+- Python deps: `pip install -r requirements.txt`
+- OpenAI key: `echo OPENAI_API_KEY=your-key > .env`
+- Go config: edit `configs/config.yaml`
 
-2. Add OpenAI API key:
-   ```bash
-   echo "OPENAI_API_KEY=your-api-key-here" > .env
-   ```
-
-3. Configure feeds and output paths in `config/config.json`
-
-## Usage
+## Use Locally
 
 ```bash
-python main.py
+# Python agent
+cd agent && uvicorn main:app --host 0.0.0.0 --port 8081 --reload
+
+# Go API
+go run ./cmd/server
 ```
 
-Fetches articles, filters for GRC content, analyzes governance/risk/compliance developments, and saves reports to `index.md`.
+## Production
+
+- Deploy: push to `main` or run `.github/workflows/deploy-lambda.yml`
+- Secrets: `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `OPENAI_API_KEY`
+- Reports: `.github/workflows/lambda-report-generation.yml` writes to `site/` and deploys Pages
+
+## Legacy
+
+Legacy single‑process Python lives under `legacy/`. Prefer the Go/Python Lambdas.

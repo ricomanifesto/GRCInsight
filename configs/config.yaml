@@ -1,0 +1,24 @@
+server:
+  port: 8080
+  mode: debug
+  host: 0.0.0.0
+
+database:
+  region: us-east-1
+  endpoint: ""
+
+python_service:
+  url: http://localhost:8081
+  timeout: 300s
+  # Optional: when set, Go will directly invoke Python Lambda instead of HTTP
+  lambda_function_name: ""
+  # Enable async invocation to avoid API Gateway timeouts in production
+  invoke_async: false
+
+logging:
+  level: info
+  format: text
+
+auth:
+  jwt_secret: your-jwt-secret-change-in-production
+  api_key: your-api-key-change-in-production

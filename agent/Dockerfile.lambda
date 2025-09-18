@@ -1,0 +1,14 @@
+FROM public.ecr.aws/lambda/python:3.11@sha256:d044e45093a29946e452fe0f20bf8536fb50c6a1b25f9f0f7a854323d598454f
+
+# Copy requirements and install dependencies
+COPY requirements.txt ${LAMBDA_TASK_ROOT}
+RUN pip install -r requirements.txt
+
+# Copy function code
+COPY . ${LAMBDA_TASK_ROOT}
+
+# Set environment variables for Lambda
+ENV PYTHONPATH=${LAMBDA_TASK_ROOT}
+
+# Set the CMD to your handler (the lambda_main.handler function)
+CMD ["lambda_main.handler"]

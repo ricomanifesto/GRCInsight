@@ -1,62 +1,28 @@
-"""GRCInsight - GRC Intelligence Report Generator using LangGraph workflow with MCP RSS tools."""
+"""
+Deprecated entrypoint.
 
-import os
-import asyncio
-import logging
-import json
-import threading
-from datetime import datetime
+The monolithic workflow has moved to `legacy/`. Use the serverless path instead:
+- API Gateway → Go Lambda → Python Lambda → DynamoDB
+- Or run services locally: `agent/main.py` (FastAPI) and `cmd/server/main.go` (Go)
 
-# Initialize environment variables
-try:
-    from dotenv import load_dotenv
-    load_dotenv()
-except ImportError:
-    pass
+This script is kept only to avoid breaking references. It does nothing.
+"""
 
-# Import the LangGraph workflow
-from src.core.workflow import run_grc_analysis
+import sys
+import textwrap
 
-# Import MCP server for RSS operations
-from src.services.rss_mcp import mcp_app
+message = textwrap.dedent(
+    """
+    GRCInsight legacy monolith has been moved to `legacy/` and is no longer maintained.
 
-# Configure logging
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    handlers=[
-        logging.FileHandler("grc-analysis.log"),
-        logging.StreamHandler()
-    ]
+    Recommended usage:
+    - Serverless: trigger the Lambda workflow (see .github/workflows/lambda-report-generation.yml)
+    - Local dev: run FastAPI in `agent/` and Go server in `cmd/server/`
+
+    If you still need the old behavior, run: `python legacy/main.py`
+    """
 )
-logger = logging.getLogger(__name__)
 
-def run_mcp_server():
-    """Run the MCP server in a separate thread."""
-    logger.info("Starting RSS MCP Server")
-    mcp_app.run(transport="stdio")
+print(message)
+sys.exit(0)
 
-async def main():
-    """Main function to run the LangGraph workflow."""
-    logger.info("Starting GRCInsight - GRC Intelligence Report Generator with LangGraph workflow")
-    
-    try:
-        # Run the LangGraph workflow
-        result = await run_grc_analysis()
-        
-        if not result or result.get("status") == "failed":
-            logger.error("Errors occurred during GRC analysis")
-        else:
-            logger.info("GRC analysis completed successfully")
-            
-    except Exception as e:
-        logger.error(f"Error in main function: {e}")
-
-if __name__ == "__main__":
-    # Start MCP server in a separate thread if needed
-    # Uncomment the following lines if you need the MCP server running:
-    # mcp_thread = threading.Thread(target=run_mcp_server, daemon=True)
-    # mcp_thread.start()
-    
-    # Run the main workflow
-    asyncio.run(main())

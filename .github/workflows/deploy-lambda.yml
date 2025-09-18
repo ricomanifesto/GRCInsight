@@ -1,0 +1,126 @@
+name: Build and Deploy Lambda
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+env:
+  AWS_REGION: us-east-1
+  GO_REPO_NAME: grcinsight-go
+  PYTHON_REPO_NAME: grcinsight-python
+  GO_FUNCTION_NAME: grcinsight-go-function
+  PYTHON_FUNCTION_NAME: grcinsight-python-function
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Resolve AWS account ID
+        id: aws-account
+        run: |
+          ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
+          echo "AWS_ACCOUNT_ID=$ACCOUNT_ID" >> $GITHUB_ENV
+          echo "registry=${ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com" >> $GITHUB_OUTPUT
+
+      - name: Ensure ECR repositories exist
+        run: |
+          set -e
+          for repo in "$GO_REPO_NAME" "$PYTHON_REPO_NAME"; do
+            if ! aws ecr describe-repositories --repository-names "$repo" --region "$AWS_REGION" > /dev/null 2>&1; then
+              aws ecr create-repository --repository-name "$repo" --region "$AWS_REGION" --image-scanning-configuration scanOnPush=true
+              echo "Created ECR repo: $repo"
+            else
+              echo "ECR repo exists: $repo"
+            fi
+          done
+
+      - name: Login to Amazon ECR
+        run: |
+          aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin ${{ steps.aws-account.outputs.registry }}
+
+      - name: Build and push Go Lambda image (amd64, BuildKit off)
+        env:
+          DOCKER_BUILDKIT: "0"
+        run: |
+          set -e
+          REGISTRY=${{ steps.aws-account.outputs.registry }}
+          GO_IMAGE_SHA="$REGISTRY/$GO_REPO_NAME:${{ github.sha }}"
+          GO_IMAGE_LATEST="$REGISTRY/$GO_REPO_NAME:latest"
+          docker build -f Dockerfile.lambda -t "$GO_IMAGE_SHA" -t "$GO_IMAGE_LATEST" .
+          docker push "$GO_IMAGE_SHA"
+          docker push "$GO_IMAGE_LATEST"
+          echo "GO_IMAGE_SHA=$GO_IMAGE_SHA" >> $GITHUB_ENV
+
+      - name: Build and push Python Lambda image (amd64, BuildKit off)
+        working-directory: agent
+        env:
+          DOCKER_BUILDKIT: "0"
+        run: |
+          set -e
+          REGISTRY=${{ steps.aws-account.outputs.registry }}
+          PY_IMAGE_SHA="$REGISTRY/$PYTHON_REPO_NAME:${{ github.sha }}"
+          PY_IMAGE_LATEST="$REGISTRY/$PYTHON_REPO_NAME:latest"
+          docker build -f Dockerfile.lambda -t "$PY_IMAGE_SHA" -t "$PY_IMAGE_LATEST" .
+          docker push "$PY_IMAGE_SHA"
+          docker push "$PY_IMAGE_LATEST"
+          echo "PYTHON_IMAGE_SHA=$PY_IMAGE_SHA" >> $GITHUB_ENV
+
+      - name: Update Go Lambda to new image
+        run: |
+          aws lambda update-function-code \
+            --function-name "$GO_FUNCTION_NAME" \
+            --image-uri "$GO_IMAGE_SHA" \
+            --region "$AWS_REGION"
+          aws lambda update-function-configuration \
+            --function-name "$GO_FUNCTION_NAME" \
+            --region "$AWS_REGION" \
+            --environment "Variables={GO_ENV=production,GIN_MODE=release,PYTHON_LAMBDA_FUNCTION_NAME=$PYTHON_FUNCTION_NAME,PYTHON_INVOKE_ASYNC=true}"
+
+      - name: Update Python Lambda to new image
+        run: |
+          aws lambda update-function-code \
+            --function-name "$PYTHON_FUNCTION_NAME" \
+            --image-uri "$PYTHON_IMAGE_SHA" \
+            --region "$AWS_REGION"
+          aws lambda update-function-configuration \
+            --function-name "$PYTHON_FUNCTION_NAME" \
+            --region "$AWS_REGION" \
+            --environment "Variables={OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }},LOG_LEVEL=INFO,DDB_TABLE_NAME=grcinsight-reports}"
+
+      - name: Wait for Lambda updates to complete
+        run: |
+          for fn in "$GO_FUNCTION_NAME" "$PYTHON_FUNCTION_NAME"; do
+            echo "Waiting for $fn to be Active..."
+            for i in {1..30}; do
+              STATUS=$(aws lambda get-function --function-name "$fn" --query 'Configuration.[State,LastUpdateStatus]' --output text)
+              echo "$fn -> $STATUS"
+              if echo "$STATUS" | grep -q "Active\tSuccessful"; then
+                break
+              fi
+              sleep 5
+            done
+          done
+
+      - name: Smoke test Go Lambda health
+        run: |
+          aws lambda invoke \
+            --function-name "$GO_FUNCTION_NAME" \
+            --payload '{"httpMethod":"GET","path":"/health"}' \
+            --region "$AWS_REGION" \
+            health.json >/dev/null
+          cat health.json || true
+
