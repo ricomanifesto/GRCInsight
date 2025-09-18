@@ -52,6 +52,7 @@ jobs:
           aws lambda invoke \
             --function-name "$GO_FUNCTION_NAME" \
             --payload "$PAYLOAD" \
+            --cli-binary-format raw-in-base64-out \
             --region "$AWS_REGION" \
             health.json >/dev/null || true
           # Parse body which may be JSON string
@@ -103,6 +104,7 @@ jobs:
         aws lambda invoke \
           --function-name $GO_FUNCTION_NAME \
           --payload "$PAYLOAD" \
+          --cli-binary-format raw-in-base64-out \
           --region $AWS_REGION \
           lambda-response.json
 
@@ -152,6 +154,7 @@ EOF
           aws lambda invoke \
             --function-name "$GO_FUNCTION_NAME" \
             --payload "$GET_PAYLOAD" \
+            --cli-binary-format raw-in-base64-out \
             --region "$AWS_REGION" \
             report-response.json >/dev/null
 

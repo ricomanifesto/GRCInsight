@@ -85,7 +85,6 @@ jobs:
             --function-name "$GO_FUNCTION_NAME" \
             --image-uri "$GO_IMAGE_SHA" \
             --region "$AWS_REGION"
-          # Wait until the code update finishes before changing config
           aws lambda wait function-updated \
             --function-name "$GO_FUNCTION_NAME" \
             --region "$AWS_REGION"
@@ -93,7 +92,6 @@ jobs:
             --function-name "$GO_FUNCTION_NAME" \
             --region "$AWS_REGION" \
             --environment "Variables={GO_ENV=production,GIN_MODE=release,PYTHON_LAMBDA_FUNCTION_NAME=$PYTHON_FUNCTION_NAME,PYTHON_INVOKE_ASYNC=true}"
-          # Wait again to ensure configuration is applied
           aws lambda wait function-updated \
             --function-name "$GO_FUNCTION_NAME" \
             --region "$AWS_REGION"
@@ -104,7 +102,6 @@ jobs:
             --function-name "$PYTHON_FUNCTION_NAME" \
             --image-uri "$PYTHON_IMAGE_SHA" \
             --region "$AWS_REGION"
-          # Wait until the code update finishes before changing config
           aws lambda wait function-updated \
             --function-name "$PYTHON_FUNCTION_NAME" \
             --region "$AWS_REGION"
@@ -112,7 +109,6 @@ jobs:
             --function-name "$PYTHON_FUNCTION_NAME" \
             --region "$AWS_REGION" \
             --environment "Variables={OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }},LOG_LEVEL=INFO,DDB_TABLE_NAME=grcinsight-reports}"
-          # Wait again to ensure configuration is applied
           aws lambda wait function-updated \
             --function-name "$PYTHON_FUNCTION_NAME" \
             --region "$AWS_REGION"
@@ -136,6 +132,7 @@ jobs:
           aws lambda invoke \
             --function-name "$GO_FUNCTION_NAME" \
             --payload '{"httpMethod":"GET","path":"/health"}' \
+            --cli-binary-format raw-in-base64-out \
             --region "$AWS_REGION" \
             health.json >/dev/null
           cat health.json || true
