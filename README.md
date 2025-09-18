@@ -1,5 +1,9 @@
 # GRCInsight
 
+<div align="center">
+  <img src="assets/images/logo.png" alt="GRCInsight Logo" width="400"/>
+</div>
+
 Automated GRC intelligence: monitor RSS feeds, extract regulatory signals, and publish AI‑generated reports.
 
 [Latest Report](https://ricomanifesto.github.io/GRCInsight/)
