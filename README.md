@@ -13,7 +13,7 @@ Automated GRC intelligence: monitor RSS feeds, extract regulatory signals, and p
 - Monitors security feeds and filters for GRC relevance
 - Correlates regulations, frameworks, industries, and agencies
 - Generates concise reports with summaries and actions
-- Integrates with SentryDigest for automatic triggers
+- Automatically triggered by updates to [SentryDigest](https://github.com/ricomanifesto/SentryDigest) repository
 
 ## Architecture
 
