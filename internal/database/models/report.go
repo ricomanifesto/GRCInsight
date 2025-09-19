@@ -38,20 +38,21 @@ type ReportMetadata struct {
 // Article represents a source article used in report generation
 type Article struct {
     ID        uint      `json:"id"`
-	Title     string    `json:"title"`
-	URL       string    `json:"url"`
-	Content   string    `json:"content"`
-	Summary   string    `json:"summary"`
-	Source    string    `json:"source"`
-	Published time.Time `json:"published"`
-	CreatedAt time.Time `json:"created_at"`
-	UpdatedAt time.Time `json:"updated_at"`
+    Title     string    `json:"title"`
+    URL       string    `json:"url"`
+    Content   string    `json:"content"`
+    Summary   string    `json:"summary"`
+    Source    string    `json:"source"`
+    Published time.Time `json:"published"`
+    CreatedAt time.Time `json:"created_at"`
+    UpdatedAt time.Time `json:"updated_at"`
 
-	// GRC Analysis results
-	HasGRCContent bool     `json:"has_grc_content"`
-	Regulations   []string `json:"regulations"`
-	Frameworks    []string `json:"frameworks"`
-	Industries    []string `json:"industries"`
+    // GRC Analysis results
+    HasGRCContent bool     `json:"has_grc_content"`
+    Regulations   []string `json:"regulations"`
+    Frameworks    []string `json:"frameworks"`
+    Industries    []string `json:"industries"`
+    RegulatoryBodies []string `json:"regulatory_bodies"`
 }
 
 // ReportStatus constants

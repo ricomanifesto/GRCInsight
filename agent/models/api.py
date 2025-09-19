@@ -8,7 +8,7 @@ from pydantic import BaseModel, Field
 # Request Models
 class AnalysisConfig(BaseModel):
     """Configuration for GRC analysis."""
-    model: str = "o3"
+    model: str = "gpt-5"
     max_tokens: int = 4000
     focus_areas: List[str] = Field(default_factory=list)
 
@@ -21,6 +21,15 @@ class ArticleInput(BaseModel):
     summary: str = ""
     source: str = ""
     published: datetime
+
+
+class ArticleRecord(ArticleInput):
+    """Article with extracted GRC analysis details."""
+    has_grc_content: bool = False
+    regulations: List[str] = Field(default_factory=list)
+    frameworks: List[str] = Field(default_factory=list)
+    industries: List[str] = Field(default_factory=list)
+    regulatory_bodies: List[str] = Field(default_factory=list)
 
 
 class WorkflowRequest(BaseModel):
@@ -96,6 +105,7 @@ class WorkflowResponse(BaseModel):
     report: Optional[Report] = None
     error: Optional[APIError] = None
     metadata: Optional[ReportMetadata] = None
+    articles: Optional[List[ArticleRecord]] = None
 
 
 class HealthStatus(BaseModel):

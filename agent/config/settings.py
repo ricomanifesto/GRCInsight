@@ -16,7 +16,7 @@ class Settings(BaseSettings):
     
     # OpenAI configuration
     openai_api_key: str = ""
-    openai_model: str = "o3"
+    openai_model: str = "gpt-5"
     openai_max_tokens: int = 4000
     
     # RSS configuration
@@ -33,6 +33,9 @@ class Settings(BaseSettings):
         "policy changes",
         "industry standards"
     ]
+
+    # CORS configuration
+    cors_allowed_origins: List[str] = ["*"]
     
     class Config:
         env_file = ".env"

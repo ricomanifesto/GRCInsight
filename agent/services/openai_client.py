@@ -19,14 +19,14 @@ class OpenAIService:
         if not settings.openai_api_key:
             raise ValueError("OpenAI API key is required")
             
-        self.client = ChatOpenAI(
-            model=self._get_model_name(),
-            max_tokens=settings.openai_max_tokens,
-            temperature=0.1,  # Lower temperature for more consistent analysis
-            openai_api_key=settings.openai_api_key
-        )
+        # Preferred and fallback models (A then B)
+        self.model_primary = self._get_model_name()
+        self.model_fallback_a = "gpt-4o"
+        self.model_fallback_b = "gpt-3.5-turbo"  # "ChatGPT03"
+
+        self.client = self._build_client(self.model_primary)
         
-        logger.info(f"Initialized OpenAI client with model: {self._get_model_name()}")
+        logger.info(f"Initialized OpenAI client with model: {self.model_primary}")
     
     def _get_model_name(self) -> str:
         """Get the correct OpenAI model name."""
@@ -34,16 +34,51 @@ class OpenAIService:
         
         # Map common model names to actual OpenAI model identifiers
         model_mapping = {
+            "gpt5": "gpt-5",
+            "gpt-5": "gpt-5",
+            "chatgpt-5": "gpt-5",
+            "chatgpt5": "gpt-5",
             "gpt4": "gpt-4",
             "gpt-4": "gpt-4", 
             "gpt4o": "gpt-4o",
             "gpt-4o": "gpt-4o",
             "o3": "gpt-4o",  # o3 doesn't exist yet, fallback to gpt-4o
             "gpt-3.5": "gpt-3.5-turbo",
-            "gpt-3.5-turbo": "gpt-3.5-turbo"
+            "gpt-3.5-turbo": "gpt-3.5-turbo",
+            "chatgpt03": "gpt-3.5-turbo",
+            "chatgpt-03": "gpt-3.5-turbo",
+            "chatgpt 03": "gpt-3.5-turbo"
         }
         
-        return model_mapping.get(model, "gpt-4o")  # Default to gpt-4o
+        return model_mapping.get(model, "gpt-5")  # Default to gpt-5; runtime fallback will handle if unavailable
+
+    def _build_client(self, model_name: str) -> ChatOpenAI:
+        """Construct a ChatOpenAI client for a given model."""
+        return ChatOpenAI(
+            model=model_name,
+            max_tokens=settings.openai_max_tokens,
+            temperature=0.1,
+            openai_api_key=settings.openai_api_key,
+        )
+
+    async def _invoke_with_fallbacks(self, messages: List[Any]):
+        """Invoke the model with ordered fallbacks: primary → A → B."""
+        # Try primary
+        try:
+            return await self.client.ainvoke(messages)
+        except Exception as e1:
+            logger.warning(f"Primary model '{self.model_primary}' failed: {e1}")
+            # Try fallback A
+            try:
+                logger.info(f"Falling back to '{self.model_fallback_a}'")
+                self.client = self._build_client(self.model_fallback_a)
+                return await self.client.ainvoke(messages)
+            except Exception as e2:
+                logger.warning(f"Fallback A '{self.model_fallback_a}' failed: {e2}")
+                # Try fallback B
+                logger.info(f"Falling back to '{self.model_fallback_b}'")
+                self.client = self._build_client(self.model_fallback_b)
+                return await self.client.ainvoke(messages)
     
     async def analyze_articles_for_grc(self, articles: List[ArticleInput]) -> Dict[str, Any]:
         """Analyze articles for GRC-relevant content."""
@@ -69,8 +104,8 @@ class OpenAIService:
             # Create analysis prompt
             analysis_prompt = self._create_analysis_prompt(articles)
             
-            # Run analysis
-            response = await self.client.ainvoke([
+            # Run analysis with ordered fallbacks
+            response = await self._invoke_with_fallbacks([
                 SystemMessage(content=self._get_system_prompt()),
                 HumanMessage(content=analysis_prompt)
             ])
@@ -107,7 +142,7 @@ class OpenAIService:
             
             report_prompt = self._create_report_prompt(analysis_data, feed_info)
             
-            response = await self.client.ainvoke([
+            response = await self._invoke_with_fallbacks([
                 SystemMessage(content=self._get_report_system_prompt()),
                 HumanMessage(content=report_prompt)
             ])
@@ -273,8 +308,8 @@ Make it actionable for risk managers and compliance officers."""
             "analysis": {
                 "regulations_mentioned": list(set(regulations)) if regulations else [],
                 "frameworks_referenced": list(set([r for r in regulations if 'ISO' in r or 'NIST' in r])) if regulations else [],
-                "industries_affected": list(set(industries)) if industries else ["Technology", "Financial Services"],
-                "risk_categories": list(set(risks)) if risks else ["Regulatory", "Operational", "Cyber Security"],
-                "regulatory_bodies": []  # Initialize as empty array
+                "industries_affected": list(set(industries)) if industries else [],
+                "risk_categories": list(set(risks)) if risks else [],
+                "regulatory_bodies": []
             }
         }

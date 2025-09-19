@@ -1,12 +1,14 @@
 package services
 
 import (
-	"grcinsight/internal/database"
-	"grcinsight/internal/database/dynamodb"
-	"grcinsight/internal/models"
-	"time"
+    "os"
+    "time"
 
-	"github.com/sirupsen/logrus"
+    "grcinsight/internal/database"
+    "grcinsight/internal/database/dynamodb"
+    "grcinsight/internal/models"
+
+    "github.com/sirupsen/logrus"
 )
 
 // HealthService handles health check operations
@@ -27,12 +29,12 @@ func NewHealthService(dynamoRepo *dynamodb.Repository, pythonClient *PythonServi
 
 // CheckHealth performs a comprehensive health check
 func (s *HealthService) CheckHealth() *models.HealthStatus {
-	status := &models.HealthStatus{
-		Status:    "healthy",
-		Timestamp: time.Now(),
-		Services:  make(map[string]models.ServiceHealth),
-		Version:   "1.0.0", // TODO: Get from build info
-	}
+    status := &models.HealthStatus{
+        Status:    "healthy",
+        Timestamp: time.Now(),
+        Services:  make(map[string]models.ServiceHealth),
+        Version:   getServiceVersion(),
+    }
 
 	// Check DynamoDB health
 	if err := database.HealthCheck(s.dynamoRepo); err != nil {
@@ -59,6 +61,13 @@ func (s *HealthService) CheckHealth() *models.HealthStatus {
 	}
 
 	return status
+}
+
+func getServiceVersion() string {
+    if v := os.Getenv("SERVICE_VERSION"); v != "" {
+        return v
+    }
+    return "1.0.0"
 }
 
 // CheckDatabase checks only the DynamoDB health

@@ -13,8 +13,8 @@ import (
 
 // ReportsHandler handles report-related endpoints
 type ReportsHandler struct {
-	reportService *services.ReportService
-	logger        *logrus.Logger
+    reportService *services.ReportService
+    logger        *logrus.Logger
 }
 
 // NewReportsHandler creates a new reports handler
@@ -146,4 +146,31 @@ func (h *ReportsHandler) GetReportStatus(c *gin.Context) {
         "created_at":   report.CreatedAt,
         "generated_at": report.GeneratedAt,
     })
+}
+
+// ListReportArticles lists the articles associated with a report
+func (h *ReportsHandler) ListReportArticles(c *gin.Context) {
+    id := c.Param("id")
+
+    // Pagination params
+    page := 1
+    perPage := 20
+    if v := c.Query("page"); v != "" {
+        if p, err := strconv.Atoi(v); err == nil && p > 0 {
+            page = p
+        }
+    }
+    if v := c.Query("per_page"); v != "" {
+        if p, err := strconv.Atoi(v); err == nil && p > 0 && p <= 100 {
+            perPage = p
+        }
+    }
+
+    resp, err := h.reportService.ListReportArticles(id, page, perPage)
+    if err != nil {
+        h.logger.WithError(err).WithField("report_id", id).Error("Failed to list report articles")
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to list report articles"})
+        return
+    }
+    c.JSON(http.StatusOK, resp)
 }

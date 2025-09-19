@@ -2,6 +2,8 @@ server:
   port: 8080
   mode: debug
   host: 0.0.0.0
+  allowed_origins:
+    - "*"  # Development default - restrict in production
 
 database:
   region: us-east-1

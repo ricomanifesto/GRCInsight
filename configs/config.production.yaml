@@ -1,0 +1,21 @@
+server:
+  mode: release
+  allowed_origins:
+    - "https://ricomanifesto.github.io"
+    - "https://grcinsight.com"
+    - "https://www.grcinsight.com"
+    - "https://api.grcinsight.com"
+
+python_service:
+  # Production uses Lambda invocation
+  lambda_function_name: "grcinsight-python-function"
+  invoke_async: true
+
+logging:
+  level: info
+  format: json
+
+auth:
+  # These should be set via environment variables in production
+  jwt_secret: ""
+  api_key: ""

@@ -11,6 +11,7 @@ from models.api import (
 )
 from services.rss_service import RSSService
 from services.openai_client import OpenAIService
+from core.entities import analyze_article_grc_content
 
 
 # Initialize services
@@ -43,15 +44,30 @@ async def run_grc_analysis_endpoint(feed_url: str, config: AnalysisConfig) -> Wo
         # Step 2: Convert entries to ArticleInput format
         logger.info("Step 2: Processing feed entries")
         articles = []
+        from email.utils import parsedate_to_datetime
         for entry in feed_data.get("entries", []):
             try:
+                # Parse published date from RSS if available
+                published_raw = entry.get("published", "")
+                published_dt = None
+                if published_raw:
+                    try:
+                        published_dt = parsedate_to_datetime(published_raw)
+                    except Exception:
+                        try:
+                            # Fallback for ISO-like strings
+                            from datetime import datetime as _dt
+                            published_dt = _dt.fromisoformat(published_raw.replace("Z", "+00:00"))
+                        except Exception:
+                            published_dt = None
+
                 article = ArticleInput(
                     title=entry.get("title", ""),
                     url=entry.get("link", ""),
                     content=entry.get("content", ""),
                     summary=entry.get("description", ""),
                     source=feed_data.get("title", "Unknown Source"),
-                    published=datetime.now()  # TODO: Parse actual published date
+                    published=published_dt or datetime.now()
                 )
                 articles.append(article)
             except Exception as e:
@@ -97,6 +113,37 @@ async def run_grc_analysis_endpoint(feed_url: str, config: AnalysisConfig) -> Wo
         grc_article_count = analysis_results.get("summary", {}).get("grc_relevant_count", 0)
         logger.info(f"Found {grc_article_count} articles with GRC content")
         
+        # Build per-article GRC output using local extraction, augmented by LLM identification
+        identified = set()
+        for item in analysis_results.get("grc_articles", []) or []:
+            if isinstance(item, dict):
+                if item.get("url"):
+                    identified.add(item.get("url"))
+                if item.get("title"):
+                    identified.add(item.get("title"))
+
+        articles_out = []
+        for art in enriched_articles:
+            local = {}
+            try:
+                local = analyze_article_grc_content(art.model_dump())
+            except Exception:
+                local = {}
+            has_grc = local.get("has_grc_content", False) or (art.url in identified) or (art.title in identified)
+            articles_out.append({
+                "title": art.title,
+                "url": art.url,
+                "content": art.content,
+                "summary": art.summary,
+                "source": art.source,
+                "published": art.published,
+                "has_grc_content": has_grc,
+                "regulations": local.get("regulations", []),
+                "frameworks": local.get("frameworks", []),
+                "industries": local.get("industries", []),
+                "regulatory_bodies": local.get("regulatory_bodies", []),
+            })
+
         # Step 6: Generate comprehensive report
         logger.info("Step 6: Generating comprehensive GRC report")
         report_content = await openai_service.generate_grc_report(analysis_results, feed_data)
@@ -130,7 +177,8 @@ async def run_grc_analysis_endpoint(feed_url: str, config: AnalysisConfig) -> Wo
         return WorkflowResponse(
             status="completed",
             report=report,
-            metadata=metadata
+            metadata=metadata,
+            articles=articles_out
         )
         
     except Exception as e:

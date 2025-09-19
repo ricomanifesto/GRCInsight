@@ -16,7 +16,7 @@ func SetupRouter(container *services.Container, logger *logrus.Logger) *gin.Engi
 	// Global middleware
 	router.Use(middleware.RecoveryMiddleware(logger))
 	router.Use(middleware.LoggingMiddleware(logger))
-	router.Use(middleware.CORSMiddleware())
+    router.Use(middleware.CORSMiddleware(container.Config.Server.AllowedOrigins))
 	router.Use(middleware.RequestIDMiddleware())
 
 	// Initialize handlers
@@ -29,26 +29,19 @@ func SetupRouter(container *services.Container, logger *logrus.Logger) *gin.Engi
 	router.GET("/health/database", healthHandler.DatabaseHealthCheck)
 	router.GET("/health/python", healthHandler.PythonServiceHealthCheck)
 
-	// API routes
+    	// API routes
 	api := router.Group("/api/v1")
 	{
 		// Report management
-		reports := api.Group("/reports")
-		{
-			reports.GET("", reportsHandler.ListReports)
-			reports.POST("/generate", reportsHandler.GenerateReport)
-			reports.GET("/:id", reportsHandler.GetReport)
-			reports.DELETE("/:id", reportsHandler.DeleteReport)
-			reports.GET("/:id/status", reportsHandler.GetReportStatus)
-		}
-
-		// Configuration endpoints (future)
-		config := api.Group("/config")
-		{
-			config.GET("", func(c *gin.Context) {
-				c.JSON(200, gin.H{"message": "Config endpoints coming soon"})
-			})
-		}
+        reports := api.Group("/reports")
+        {
+            reports.GET("", reportsHandler.ListReports)
+            reports.POST("/generate", reportsHandler.GenerateReport)
+            reports.GET("/:id", reportsHandler.GetReport)
+            reports.DELETE("/:id", reportsHandler.DeleteReport)
+            reports.GET("/:id/status", reportsHandler.GetReportStatus)
+            reports.GET("/:id/articles", reportsHandler.ListReportArticles)
+        }
 
 		// System info
 		api.GET("/version", func(c *gin.Context) {

@@ -16,11 +16,13 @@ type ReportRepository interface {
 
 // ArticleRepository defines the interface for article data access
 type ArticleRepository interface {
-	Create(article *models.Article) error
-	GetByID(id uint) (*models.Article, error)
-	GetByURL(url string) (*models.Article, error)
-	List(limit, offset int) ([]*models.Article, int64, error)
-	Update(article *models.Article) error
-	Delete(id uint) error
-	GetGRCArticles(limit, offset int) ([]*models.Article, int64, error)
+    Create(article *models.Article) error
+    CreateForReport(reportID string, article *models.Article) error
+    GetByID(id uint) (*models.Article, error)
+    GetByURL(url string) (*models.Article, error)
+    List(limit, offset int) ([]*models.Article, int64, error)
+    Update(article *models.Article) error
+    Delete(id uint) error
+    GetGRCArticles(limit, offset int) ([]*models.Article, int64, error)
+    GetByReportID(reportID string, limit, offset int) ([]*models.Article, int64, error)
 }

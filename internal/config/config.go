@@ -18,9 +18,10 @@ type Config struct {
 
 // ServerConfig holds server-related configuration
 type ServerConfig struct {
-	Port int    `mapstructure:"port"`
-	Mode string `mapstructure:"mode"`
-	Host string `mapstructure:"host"`
+    Port int    `mapstructure:"port"`
+    Mode string `mapstructure:"mode"`
+    Host string `mapstructure:"host"`
+    AllowedOrigins []string `mapstructure:"allowed_origins"`
 }
 
 // DatabaseConfig holds DynamoDB configuration
@@ -53,9 +54,10 @@ type AuthConfig struct {
 // Load loads configuration from file and environment variables
 func Load() (*Config, error) {
 	// Set default values
-	viper.SetDefault("server.port", 8080)
-	viper.SetDefault("server.mode", "release")
-	viper.SetDefault("server.host", "0.0.0.0")
+    viper.SetDefault("server.port", 8080)
+    viper.SetDefault("server.mode", "release")
+    viper.SetDefault("server.host", "0.0.0.0")
+    viper.SetDefault("server.allowed_origins", []string{"*"})
 	viper.SetDefault("database.region", "us-east-1")
 	viper.SetDefault("database.endpoint", "")
     viper.SetDefault("python_service.url", "http://localhost:8081")

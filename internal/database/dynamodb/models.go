@@ -30,11 +30,33 @@ type ReportMetadata struct {
 
 // ReportStatus constants
 const (
-	StatusPending    = "pending"
-	StatusProcessing = "processing"
-	StatusCompleted  = "completed"
-	StatusFailed     = "failed"
+    StatusPending    = "pending"
+    StatusProcessing = "processing"
+    StatusCompleted  = "completed"
+    StatusFailed     = "failed"
 )
+
+// Article represents an article stored in DynamoDB
+type Article struct {
+    ArticleID     string    `dynamodbav:"article_id" json:"article_id"`
+    NumericID     uint32    `dynamodbav:"numeric_id" json:"numeric_id"`
+    ReportID      string    `dynamodbav:"report_id" json:"report_id"`
+    Title         string    `dynamodbav:"title" json:"title"`
+    URL           string    `dynamodbav:"url" json:"url"`
+    Content       string    `dynamodbav:"content" json:"content"`
+    Summary       string    `dynamodbav:"summary" json:"summary"`
+    Source        string    `dynamodbav:"source" json:"source"`
+    Published     string    `dynamodbav:"published" json:"published"`
+    CreatedAt     string    `dynamodbav:"created_at" json:"created_at"`
+    UpdatedAt     string    `dynamodbav:"updated_at" json:"updated_at"`
+
+    // GRC Analysis results
+    HasGRCContent bool      `dynamodbav:"has_grc_content" json:"has_grc_content"`
+    Regulations   []string  `dynamodbav:"regulations" json:"regulations"`
+    Frameworks    []string  `dynamodbav:"frameworks" json:"frameworks"`
+    Industries    []string  `dynamodbav:"industries" json:"industries"`
+    RegulatoryBodies []string `dynamodbav:"regulatory_bodies" json:"regulatory_bodies"`
+}
 
 // GenerateReportID creates a unique ID for a new report
 func GenerateReportID() string {

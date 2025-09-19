@@ -1,20 +1,24 @@
 package services
 
 import (
-	"context"
-	"encoding/json"
-	"fmt"
-	"os"
-	"time"
+    "bytes"
+    "context"
+    "encoding/json"
+    "fmt"
+    "io"
+    "net/http"
+    "os"
+    "strings"
+    "time"
 
-	"grcinsight/internal/config"
-	"grcinsight/internal/models"
+    "grcinsight/internal/config"
+    "grcinsight/internal/models"
 
-	"github.com/aws/aws-sdk-go-v2/aws"
-	awsconfig "github.com/aws/aws-sdk-go-v2/config"
-	"github.com/aws/aws-sdk-go-v2/service/lambda"
-	"github.com/aws/aws-sdk-go-v2/service/lambda/types"
-	"github.com/sirupsen/logrus"
+    "github.com/aws/aws-sdk-go-v2/aws"
+    awsconfig "github.com/aws/aws-sdk-go-v2/config"
+    "github.com/aws/aws-sdk-go-v2/service/lambda"
+    "github.com/aws/aws-sdk-go-v2/service/lambda/types"
+    "github.com/sirupsen/logrus"
 )
 
 // PythonServiceClient handles communication with the Python agent service
@@ -23,6 +27,8 @@ type PythonServiceClient struct {
     functionName   string
     isLambdaMode   bool
     invokeAsync    bool
+    httpClient     *http.Client
+    baseURL        string
     logger         *logrus.Logger
 }
 
@@ -60,11 +66,21 @@ func NewPythonServiceClient(cfg config.PythonServiceConfig, logger *logrus.Logge
         }
     }
 
+    // Build HTTP client regardless (used when not in Lambda mode)
+    httpClient := &http.Client{Timeout: cfg.Timeout}
+    baseURL := cfg.URL
+    if baseURL == "" {
+        baseURL = "http://localhost:8081"
+    }
+    baseURL = strings.TrimRight(baseURL, "/")
+
     client := &PythonServiceClient{
         lambdaClient:   lambdaClient,
         functionName:   functionName,
         isLambdaMode:   isLambdaMode,
         invokeAsync:    invokeAsync,
+        httpClient:     httpClient,
+        baseURL:        baseURL,
         logger:         logger,
     }
 
@@ -88,13 +104,15 @@ func (c *PythonServiceClient) RunWorkflow(req *models.WorkflowRequest) (*models.
         return c.invokeLambdaWorkflow(req)
     }
 
-	return nil, fmt.Errorf("Lambda mode not available - PYTHON_LAMBDA_FUNCTION_NAME environment variable not set")
+    // HTTP mode
+    return c.invokeHTTPWorkflow(req)
 }
 
 // RunWorkflowAsync triggers the Python Lambda asynchronously (no response expected)
 func (c *PythonServiceClient) RunWorkflowAsync(req *models.WorkflowRequest, reportID string) error {
     if !c.isLambdaMode {
-        return fmt.Errorf("Lambda mode not available - PYTHON_LAMBDA_FUNCTION_NAME environment variable not set")
+        // For HTTP mode, we don't support async fire-and-forget yet
+        return fmt.Errorf("async invocation not supported in HTTP mode")
     }
     if c.lambdaClient == nil {
         return fmt.Errorf("Lambda client not initialized")
@@ -203,46 +221,121 @@ func (c *PythonServiceClient) invokeLambdaWorkflow(req *models.WorkflowRequest) 
 
 // AnalyzeArticles sends articles to Python service for GRC analysis
 func (c *PythonServiceClient) AnalyzeArticles(req *models.AnalysisRequest) (*models.AnalysisResponse, error) {
-	// For Lambda mode, we'll use the main workflow instead of separate analysis
-	// This can be enhanced later to support specific analysis endpoints
-	return nil, fmt.Errorf("AnalyzeArticles not yet implemented for Lambda mode - use RunWorkflow instead")
+    if c.isLambdaMode {
+        // Not implemented for Lambda path
+        return nil, fmt.Errorf("AnalyzeArticles not implemented for Lambda mode - use RunWorkflow instead")
+    }
+
+    // HTTP mode: POST to Python service
+    url := c.baseURL + "/api/v1/analyze"
+    bodyBytes, err := json.Marshal(req)
+    if err != nil {
+        return nil, fmt.Errorf("failed to marshal analysis request: %w", err)
+    }
+
+    httpReq, err := http.NewRequest(http.MethodPost, url, bytes.NewReader(bodyBytes))
+    if err != nil {
+        return nil, fmt.Errorf("failed to create request: %w", err)
+    }
+    httpReq.Header.Set("Content-Type", "application/json")
+
+    resp, err := c.httpClient.Do(httpReq)
+    if err != nil {
+        return nil, fmt.Errorf("python service request failed: %w", err)
+    }
+    defer resp.Body.Close()
+    if resp.StatusCode < 200 || resp.StatusCode >= 300 {
+        b, _ := io.ReadAll(resp.Body)
+        return nil, fmt.Errorf("python service returned %d: %s", resp.StatusCode, string(b))
+    }
+
+    var ar models.AnalysisResponse
+    if err := json.NewDecoder(resp.Body).Decode(&ar); err != nil {
+        return nil, fmt.Errorf("failed to decode analysis response: %w", err)
+    }
+    return &ar, nil
 }
 
 // HealthCheck checks if the Python service is healthy
 func (c *PythonServiceClient) HealthCheck() error {
-	if !c.isLambdaMode {
-		return fmt.Errorf("Lambda mode not available - PYTHON_LAMBDA_FUNCTION_NAME environment variable not set")
-	}
+    if c.isLambdaMode {
+        // For Lambda functions, test connectivity by a simple invoke
+        ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+        defer cancel()
 
-	// For Lambda functions, we can test connectivity by doing a simple invoke
-	// with a health check payload
-	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
-	defer cancel()
+        payload := map[string]interface{}{"health_check": true}
+        payloadBytes, err := json.Marshal(payload)
+        if err != nil {
+            return fmt.Errorf("failed to marshal health check payload: %w", err)
+        }
+        input := &lambda.InvokeInput{
+            FunctionName: aws.String(c.functionName),
+            Payload:      payloadBytes,
+        }
+        result, err := c.lambdaClient.Invoke(ctx, input)
+        if err != nil {
+            return fmt.Errorf("failed to invoke Python Lambda for health check: %w", err)
+        }
+        if result.FunctionError != nil {
+            return fmt.Errorf("Python Lambda health check failed: %s", string(result.Payload))
+        }
+        c.logger.Debug("Python Lambda health check passed")
+        return nil
+    }
 
-	// Simple health check payload
-	payload := map[string]interface{}{
-		"health_check": true,
-	}
+    // HTTP mode: GET /health
+    url := c.baseURL + "/api/v1/health"
+    req, err := http.NewRequest(http.MethodGet, url, nil)
+    if err != nil {
+        return fmt.Errorf("failed to create health request: %w", err)
+    }
+    resp, err := c.httpClient.Do(req)
+    if err != nil {
+        return fmt.Errorf("python service health request failed: %w", err)
+    }
+    defer resp.Body.Close()
+    if resp.StatusCode < 200 || resp.StatusCode >= 300 {
+        b, _ := io.ReadAll(resp.Body)
+        return fmt.Errorf("python service health returned %d: %s", resp.StatusCode, string(b))
+    }
 
-	payloadBytes, err := json.Marshal(payload)
-	if err != nil {
-		return fmt.Errorf("failed to marshal health check payload: %w", err)
-	}
+    // Optionally parse to verify status
+    var hs models.HealthStatus
+    if err := json.NewDecoder(resp.Body).Decode(&hs); err == nil {
+        if strings.ToLower(hs.Status) != "healthy" {
+            return fmt.Errorf("python service unhealthy: %s", hs.Status)
+        }
+    }
+    return nil
+}
 
-	input := &lambda.InvokeInput{
-		FunctionName: aws.String(c.functionName),
-		Payload:      payloadBytes,
-	}
+// invokeHTTPWorkflow calls the Python FastAPI service synchronously
+func (c *PythonServiceClient) invokeHTTPWorkflow(req *models.WorkflowRequest) (*models.WorkflowResponse, error) {
+    url := c.baseURL + "/api/v1/workflow/run"
+    bodyBytes, err := json.Marshal(req)
+    if err != nil {
+        return nil, fmt.Errorf("failed to marshal workflow request: %w", err)
+    }
 
-	result, err := c.lambdaClient.Invoke(ctx, input)
-	if err != nil {
-		return fmt.Errorf("failed to invoke Python Lambda for health check: %w", err)
-	}
+    httpReq, err := http.NewRequest(http.MethodPost, url, bytes.NewReader(bodyBytes))
+    if err != nil {
+        return nil, fmt.Errorf("failed to create request: %w", err)
+    }
+    httpReq.Header.Set("Content-Type", "application/json")
 
-	if result.FunctionError != nil {
-		return fmt.Errorf("Python Lambda health check failed: %s", string(result.Payload))
-	}
+    resp, err := c.httpClient.Do(httpReq)
+    if err != nil {
+        return nil, fmt.Errorf("python service request failed: %w", err)
+    }
+    defer resp.Body.Close()
+    if resp.StatusCode < 200 || resp.StatusCode >= 300 {
+        b, _ := io.ReadAll(resp.Body)
+        return nil, fmt.Errorf("python service returned %d: %s", resp.StatusCode, string(b))
+    }
 
-	c.logger.Debug("Python Lambda health check passed")
-	return nil
+    var wr models.WorkflowResponse
+    if err := json.NewDecoder(resp.Body).Decode(&wr); err != nil {
+        return nil, fmt.Errorf("failed to decode workflow response: %w", err)
+    }
+    return &wr, nil
 }

@@ -10,11 +10,12 @@ type WorkflowRequest struct {
 
 // WorkflowResponse represents the response from the workflow execution
 type WorkflowResponse struct {
-	Status    string     `json:"status"`
-	ReportID  string     `json:"report_id,omitempty"`
-	Report    *Report    `json:"report,omitempty"`
-	Error     *APIError  `json:"error,omitempty"`
-	Metadata  *Metadata  `json:"metadata,omitempty"`
+    Status    string     `json:"status"`
+    ReportID  string     `json:"report_id,omitempty"`
+    Report    *Report    `json:"report,omitempty"`
+    Error     *APIError  `json:"error,omitempty"`
+    Metadata  *Metadata  `json:"metadata,omitempty"`
+    Articles  []ArticleRecord `json:"articles,omitempty"`
 }
 
 // AnalysisRequest represents a request for GRC analysis
@@ -40,12 +41,36 @@ type AnalysisConfig struct {
 
 // ArticleInput represents an article for analysis
 type ArticleInput struct {
-	Title     string    `json:"title"`
-	URL       string    `json:"url"`
-	Content   string    `json:"content"`
-	Summary   string    `json:"summary"`
-	Source    string    `json:"source"`
-	Published time.Time `json:"published"`
+    Title     string    `json:"title"`
+    URL       string    `json:"url"`
+    Content   string    `json:"content"`
+    Summary   string    `json:"summary"`
+    Source    string    `json:"source"`
+    Published time.Time `json:"published"`
+}
+
+// ArticleRecord represents an article with GRC analysis fields
+type ArticleRecord struct {
+    Title           string    `json:"title"`
+    URL             string    `json:"url"`
+    Content         string    `json:"content"`
+    Summary         string    `json:"summary"`
+    Source          string    `json:"source"`
+    Published       time.Time `json:"published"`
+    HasGRCContent   bool      `json:"has_grc_content"`
+    Regulations     []string  `json:"regulations"`
+    Frameworks      []string  `json:"frameworks"`
+    Industries      []string  `json:"industries"`
+    RegulatoryBodies []string `json:"regulatory_bodies"`
+}
+
+// ListArticlesResponse represents a paginated list of articles
+type ListArticlesResponse struct {
+    Articles   []ArticleRecord `json:"articles"`
+    Total      int64           `json:"total"`
+    Page       int             `json:"page"`
+    PerPage    int             `json:"per_page"`
+    TotalPages int             `json:"total_pages"`
 }
 
 // AnalysisResult represents the analysis result for a single article

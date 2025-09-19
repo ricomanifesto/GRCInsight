@@ -36,20 +36,19 @@ app = FastAPI(
 )
 
 # Add CORS middleware (more restrictive for production Lambda)
+# Allow override via settings; default more restrictive in Lambda
 if os.getenv('AWS_LAMBDA_FUNCTION_NAME'):
-    # Production Lambda - more restrictive CORS
     app.add_middleware(
         CORSMiddleware,
-        allow_origins=["https://ricomanifesto.github.io"],  # Your GitHub Pages domain
+        allow_origins=settings.cors_allowed_origins if settings.cors_allowed_origins else ["https://ricomanifesto.github.io"],
         allow_credentials=False,
         allow_methods=["GET", "POST"],
         allow_headers=["*"],
     )
 else:
-    # Development - permissive CORS
     app.add_middleware(
         CORSMiddleware,
-        allow_origins=["*"],
+        allow_origins=settings.cors_allowed_origins,
         allow_credentials=True,
         allow_methods=["*"],
         allow_headers=["*"],
@@ -112,7 +111,7 @@ def handler(event, context):
                     focus_areas = ['governance', 'compliance']
 
                 config = AnalysisConfig(
-                    model=config_data.get('model', 'gpt-4'),
+                    model=config_data.get('model', 'gpt-5'),
                     max_tokens=config_data.get('max_tokens', 4000),
                     focus_areas=focus_areas
                 )
@@ -175,6 +174,53 @@ def handler(event, context):
                             ConditionExpression='attribute_exists(report_id)'
                         )
                         logger.info(f"DynamoDB updated for report {report_id}")
+
+                        # Optionally persist analyzed articles to the articles table
+                        try:
+                            articles = []
+                            if result.articles is not None:
+                                # Pydantic model to dict list
+                                articles = [a if isinstance(a, dict) else a.model_dump() for a in result.articles]
+                            articles_table_name = os.getenv('ARTICLES_TABLE_NAME', 'grcinsight-articles')
+                            if articles and articles_table_name:
+                                atable = ddb.Table(articles_table_name)
+
+                                def fnv1a_32(data: str) -> int:
+                                    h = 2166136261
+                                    for ch in data.encode('utf-8'):
+                                        h ^= ch
+                                        h = (h * 16777619) & 0xFFFFFFFF
+                                    return h
+
+                                now_iso = datetime.now(timezone.utc).isoformat().replace('+00:00', 'Z')
+                                date_prefix = now_iso[:10].replace('-', '')
+                                with atable.batch_writer() as batch:
+                                    for a in articles:
+                                        url = a.get('url', '')
+                                        nid = fnv1a_32(url) if url else 0
+                                        art_id = f"a_{date_prefix}_{nid:08x}"
+                                        item = {
+                                            'article_id': art_id,
+                                            'numeric_id': nid,
+                                            'report_id': report_id,
+                                            'title': a.get('title', ''),
+                                            'url': url,
+                                            'content': a.get('content', '')[:50000],
+                                            'summary': a.get('summary', ''),
+                                            'source': a.get('source', ''),
+                                            'published': (a.get('published') if isinstance(a.get('published'), str) else now_iso),
+                                            'created_at': now_iso,
+                                            'updated_at': now_iso,
+                                            'has_grc_content': bool(a.get('has_grc_content', False)),
+                                            'regulations': a.get('regulations', []) or [],
+                                            'frameworks': a.get('frameworks', []) or [],
+                                            'industries': a.get('industries', []) or [],
+                                            'regulatory_bodies': a.get('regulatory_bodies', []) or [],
+                                        }
+                                        batch.put_item(Item=item)
+                                logger.info(f"Persisted {len(articles)} articles to {articles_table_name}")
+                        except Exception as art_err:
+                            logger.warning(f"Failed to persist articles: {art_err}")
 
                         # For async invocations, return simple success response
                         return {

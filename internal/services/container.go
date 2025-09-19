@@ -29,7 +29,7 @@ type Container struct {
 func NewContainer(dynamoRepo *dynamodb.Repository, cfg *config.Config, logger *logrus.Logger) *Container {
 	// Initialize repositories
 	reportRepo := repositories.NewReportRepository(dynamoRepo)
-	articleRepo := repositories.NewArticleRepository(nil) // TODO: Create DynamoDB article repository
+    articleRepo := repositories.NewArticleRepository(dynamoRepo)
 
 	// Initialize Python service client
 	pythonClient := NewPythonServiceClient(cfg.PythonService, logger)

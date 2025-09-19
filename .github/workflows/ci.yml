@@ -1,0 +1,83 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  go:
+    name: Go Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.22.x'
+      - name: Cache Go modules
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/go-build
+            ~/go/pkg/mod
+          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-
+      - name: Run Go tests
+        env:
+          SERVICE_VERSION: ${{ github.sha }}
+        run: |
+          go build ./cmd/server
+          go test ./...
+
+  go-lint:
+    name: Go Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.22.x'
+      - name: golangci-lint
+        uses: golangci/golangci-lint-action@v6
+        with:
+          version: v1.60.3
+          args: --timeout=5m
+
+  python:
+    name: Python Agent Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r agent/requirements.txt
+          pip install -r agent/requirements-dev.txt
+      - name: Run tests
+        env:
+          PYTHONPATH: agent
+        run: pytest -q agent/tests
+
+      - name: Run ruff (lint)
+        run: ruff check agent
+
+  terraform:
+    name: Terraform fmt/validate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hashicorp/setup-terraform@v3
+      - name: Terraform fmt (check)
+        working-directory: configs/terraform/articles-table
+        run: terraform fmt -check -recursive
+      - name: Terraform init (no backend)
+        working-directory: configs/terraform/articles-table
+        run: terraform init -backend=false
+      - name: Terraform validate
+        working-directory: configs/terraform/articles-table
+        run: terraform validate

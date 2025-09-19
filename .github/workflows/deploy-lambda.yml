@@ -109,7 +109,7 @@ jobs:
           aws lambda update-function-configuration \
             --function-name "$GO_FUNCTION_NAME" \
             --region "$AWS_REGION" \
-            --environment "Variables={GO_ENV=production,GIN_MODE=release,PYTHON_LAMBDA_FUNCTION_NAME=$PYTHON_FUNCTION_NAME,PYTHON_INVOKE_ASYNC=true}"
+            --environment "Variables={GO_ENV=production,GIN_MODE=release,PYTHON_LAMBDA_FUNCTION_NAME=$PYTHON_FUNCTION_NAME,PYTHON_INVOKE_ASYNC=true,DDB_TABLE_NAME=grcinsight-reports,ARTICLES_TABLE_NAME=grcinsight-articles,SERVICE_VERSION=${{ github.sha }},SERVER_ALLOWED_ORIGINS=https://ricomanifesto.github.io}"
           aws lambda wait function-updated \
             --function-name "$GO_FUNCTION_NAME" \
             --region "$AWS_REGION"
@@ -126,7 +126,7 @@ jobs:
           aws lambda update-function-configuration \
             --function-name "$PYTHON_FUNCTION_NAME" \
             --region "$AWS_REGION" \
-            --environment "Variables={OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }},LOG_LEVEL=INFO,DDB_TABLE_NAME=grcinsight-reports}"
+            --environment "Variables={OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }},LOG_LEVEL=INFO,DDB_TABLE_NAME=grcinsight-reports,ARTICLES_TABLE_NAME=grcinsight-articles}"
           aws lambda wait function-updated \
             --function-name "$PYTHON_FUNCTION_NAME" \
             --region "$AWS_REGION"

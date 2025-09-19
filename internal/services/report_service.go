@@ -101,6 +101,30 @@ func (s *ReportService) GenerateReport(req *apiModels.GenerateReportRequest) (*m
             s.logger.WithError(err).Error("Failed to update report")
             return nil, fmt.Errorf("failed to update report: %w", err)
         }
+
+        // Persist enriched/analyzed articles if provided by Python workflow
+        if workflowResp.Articles != nil && len(workflowResp.Articles) > 0 {
+            s.logger.WithField("count", len(workflowResp.Articles)).Info("Persisting analyzed articles")
+            for _, ar := range workflowResp.Articles {
+                art := &models.Article{
+                    Title:         ar.Title,
+                    URL:           ar.URL,
+                    Content:       ar.Content,
+                    Summary:       ar.Summary,
+                    Source:        ar.Source,
+                    Published:     ar.Published,
+                    HasGRCContent: ar.HasGRCContent,
+                    Regulations:   ensureNonNilSlice(ar.Regulations),
+                    Frameworks:    ensureNonNilSlice(ar.Frameworks),
+                    Industries:    ensureNonNilSlice(ar.Industries),
+                    RegulatoryBodies: ensureNonNilSlice(ar.RegulatoryBodies),
+                }
+                if err := s.articleRepo.CreateForReport(report.ID, art); err != nil {
+                    s.logger.WithError(err).WithField("url", ar.URL).Warn("Failed to persist article")
+                    continue
+                }
+            }
+        }
     }
 
     s.logger.WithFields(logrus.Fields{
@@ -150,6 +174,46 @@ func (s *ReportService) ListReports(page, perPage int) (*apiModels.ListReportsRe
 		PerPage:    perPage,
 		TotalPages: totalPages,
 	}, nil
+}
+
+// ListReportArticles lists articles associated with a report
+func (s *ReportService) ListReportArticles(reportID string, page, perPage int) (*apiModels.ListArticlesResponse, error) {
+    if reportID == "" {
+        return nil, fmt.Errorf("reportID is required")
+    }
+
+    offset := (page - 1) * perPage
+    articles, total, err := s.articleRepo.GetByReportID(reportID, perPage, offset)
+    if err != nil {
+        return nil, fmt.Errorf("failed to list report articles: %w", err)
+    }
+
+    // Map to API model
+    apiArticles := make([]apiModels.ArticleRecord, len(articles))
+    for i, a := range articles {
+        apiArticles[i] = apiModels.ArticleRecord{
+            Title:           a.Title,
+            URL:             a.URL,
+            Content:         a.Content,
+            Summary:         a.Summary,
+            Source:          a.Source,
+            Published:       a.Published,
+            HasGRCContent:   a.HasGRCContent,
+            Regulations:     ensureNonNilSlice(a.Regulations),
+            Frameworks:      ensureNonNilSlice(a.Frameworks),
+            Industries:      ensureNonNilSlice(a.Industries),
+            RegulatoryBodies: ensureNonNilSlice(a.RegulatoryBodies),
+        }
+    }
+
+    totalPages := int((total + int64(perPage) - 1) / int64(perPage))
+    return &apiModels.ListArticlesResponse{
+        Articles:   apiArticles,
+        Total:      total,
+        Page:       page,
+        PerPage:    perPage,
+        TotalPages: totalPages,
+    }, nil
 }
 
 // DeleteReport deletes a report by ID
