@@ -39,7 +39,7 @@ body.light .theme-toggle .light { display: inline; }
 
 .controls { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; margin-top: 12px; align-items: center; }
 .control-buttons { display: flex; gap: 8px; flex-wrap: wrap; }
-.action-btn { border: 1px solid rgba(255,255,255,0.25); background: transparent; color: #fff; border-radius: 8px; padding: 8px 10px; cursor: pointer; font-size: 13px; }
+.action-btn { border: 1px solid rgba(255,255,255,0.25); background: transparent; color: #fff; border-radius: 8px; padding: 8px 10px; cursor: pointer; font-size: 13px; display: inline-flex; align-items: center; gap: 6px; }
 body.light .action-btn { border-color: rgba(0,0,0,0.15); color: #0b1220; }
 .action-btn:hover { background: rgba(255,255,255,0.08); }
 body.light .action-btn:hover { background: rgba(0,0,0,0.05); }
@@ -118,13 +118,13 @@ a:hover { text-decoration: underline; }
 .card h2:hover .anchor-link, .card h3:hover .anchor-link { opacity: 1; }
 
 /* Copy link button */
-.copy-link { margin-left: 8px; font-size: 12px; border: 1px solid rgba(255,255,255,0.25); background: transparent; color: #93c5fd; border-radius: 6px; padding: 2px 6px; cursor: pointer; }
+.copy-link { margin-left: 8px; font-size: 12px; border: 1px solid rgba(255,255,255,0.25); background: transparent; color: #93c5fd; border-radius: 6px; padding: 2px 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
 body.light .copy-link { border-color: rgba(0,0,0,0.2); color: #1e3a8a; }
 .copy-link:hover { background: rgba(147,197,253,0.15); }
-.collapse-toggle { margin-left: 8px; font-size: 12px; border: 1px solid rgba(255,255,255,0.25); background: transparent; color: #cfe4ff; border-radius: 6px; padding: 2px 6px; cursor: pointer; }
+.collapse-toggle { margin-left: 8px; font-size: 12px; border: 1px solid rgba(255,255,255,0.25); background: transparent; color: #cfe4ff; border-radius: 6px; padding: 2px 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
 body.light .collapse-toggle { border-color: rgba(0,0,0,0.2); color: #1e3a8a; }
 .collapse-toggle:hover { background: rgba(255,255,255,0.08); }
-.focus-toggle { margin-left: 6px; font-size: 12px; border: 1px solid rgba(255,255,255,0.25); background: transparent; color: #cfe4ff; border-radius: 6px; padding: 2px 6px; cursor: pointer; }
+.focus-toggle { margin-left: 6px; font-size: 12px; border: 1px solid rgba(255,255,255,0.25); background: transparent; color: #cfe4ff; border-radius: 6px; padding: 2px 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
 body.light .focus-toggle { border-color: rgba(0,0,0,0.2); color: #1e3a8a; }
 .focus-toggle:hover { background: rgba(255,255,255,0.08); }
 
@@ -173,3 +173,7 @@ body.light .nav-fab { border-color: rgba(0,0,0,0.12); }
 .nav-fab.left { left: 12px; }
 .nav-fab.right { right: 12px; }
 .nav-fab:hover { transform: translateY(-50%) scale(1.04); }
+
+/* Chip icons */
+.chip .chip-icon { opacity: 0.85; margin-right: 6px; font-size: 12px; }
+.chip svg.icon { margin-right: 6px; }

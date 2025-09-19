@@ -88,12 +88,12 @@
         toggle.className = 'collapse-toggle';
         toggle.type = 'button';
         toggle.setAttribute('aria-expanded', 'true');
-        toggle.textContent = 'Collapse';
+        toggle.innerHTML = '<svg class="icon" width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M7 10l5-5 5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Collapse</span>';
         n.appendChild(toggle);
         const focus = document.createElement('button');
         focus.className = 'focus-toggle';
         focus.type = 'button';
-        focus.textContent = 'Focus';
+        focus.innerHTML = '<svg class="icon" width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span>Focus</span>';
         n.appendChild(focus);
         card.appendChild(n);
       } else {
@@ -225,7 +225,7 @@
     const bar = document.getElementById('topbarLinks');
     if (!bar) return;
     const h2s = Array.from(document.querySelectorAll('#report h2'));
-    bar.innerHTML = h2s.map(h => `<a class="chip" href="#${h.id}">${h.childNodes[0].textContent.trim()}</a>`).join('');
+    bar.innerHTML = h2s.map(h => `<a class="chip" href="#${h.id}"><span class="chip-icon">§</span>${h.childNodes[0].textContent.trim()}</a>`).join('');
     const chips = Array.from(bar.querySelectorAll('.chip'));
     const map = new Map(h2s.map(h => [h.id, chips.find(c => c.getAttribute('href') === `#${h.id}`)]));
     const obs = new IntersectionObserver(entries => {
@@ -245,15 +245,24 @@
     const map = JSON.parse(localStorage.getItem('cardCollapsed') || '{}');
     const cards = Array.from(document.querySelectorAll('.card'));
     const isMobile = window.matchMedia('(max-width: 900px)').matches;
-    const useDefault = Object.keys(map).length === 0 && isMobile;
     cards.forEach((c, idx) => {
-      const h2 = c.querySelector('h2');
-      if (!h2) return;
+      const h2 = c.querySelector('h2'); if (!h2) return;
       const id = h2.id;
-      const collapsed = useDefault ? idx !== 0 : !!map[id];
-      if (collapsed) c.classList.add('collapsed'); else c.classList.remove('collapsed');
+      const title = (h2.childNodes[0]?.textContent || '').trim().toLowerCase();
+      const isExec = /executive\s+summary/.test(title);
+      const hasSaved = Object.prototype.hasOwnProperty.call(map, id);
+      let collapsed;
+      if (hasSaved) collapsed = !!map[id];
+      else collapsed = isMobile ? idx !== 0 : false;
+      if (isExec && !hasSaved) collapsed = false; // default expand Executive Summary
+      c.classList.toggle('collapsed', !!collapsed);
       const btn = h2.querySelector('.collapse-toggle');
-      if (btn) { btn.textContent = collapsed ? 'Expand' : 'Collapse'; btn.setAttribute('aria-expanded', String(!collapsed)); }
+      if (btn) {
+        btn.setAttribute('aria-expanded', String(!collapsed));
+        btn.innerHTML = collapsed
+          ? '<svg class="icon" width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M7 14l5 5 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Expand</span>'
+          : '<svg class="icon" width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M7 10l5-5 5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Collapse</span>';
+      }
     });
   }
 
@@ -320,7 +329,9 @@
       if (!card || !h2) return;
       const collapsed = card.classList.toggle('collapsed');
       t.setAttribute('aria-expanded', String(!collapsed));
-      t.textContent = collapsed ? 'Expand' : 'Collapse';
+      t.innerHTML = collapsed
+        ? '<svg class="icon" width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M7 14l5 5 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Expand</span>'
+        : '<svg class="icon" width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M7 10l5-5 5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Collapse</span>';
       const map = JSON.parse(localStorage.getItem('cardCollapsed') || '{}');
       map[h2.id] = collapsed;
       localStorage.setItem('cardCollapsed', JSON.stringify(map));
@@ -332,7 +343,7 @@
     expandAll && expandAll.addEventListener('click', () => {
       const map = {};
       document.querySelectorAll('.card').forEach(c => c.classList.remove('collapsed'));
-      document.querySelectorAll('.collapse-toggle').forEach(b => { b.textContent = 'Collapse'; b.setAttribute('aria-expanded', 'true'); });
+      document.querySelectorAll('.collapse-toggle').forEach(b => { b.innerHTML = '<svg class="icon" width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M7 10l5-5 5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Collapse</span>'; b.setAttribute('aria-expanded', 'true'); });
       localStorage.setItem('cardCollapsed', JSON.stringify(map));
     });
     collapseAll && collapseAll.addEventListener('click', () => {
@@ -341,7 +352,7 @@
         c.classList.add('collapsed');
         const h2 = c.querySelector('h2'); if (h2) map[h2.id] = true;
       });
-      document.querySelectorAll('.collapse-toggle').forEach(b => { b.textContent = 'Expand'; b.setAttribute('aria-expanded', 'false'); });
+      document.querySelectorAll('.collapse-toggle').forEach(b => { b.innerHTML = '<svg class="icon" width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M7 14l5 5 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Expand</span>'; b.setAttribute('aria-expanded', 'false'); });
       localStorage.setItem('cardCollapsed', JSON.stringify(map));
     });
 
@@ -420,17 +431,7 @@
     setTimeout(() => { btn.textContent = 'Copy'; }, 800);
   });
 
-  // Collapse/expand per section
-  document.addEventListener('click', e => {
-    const t = e.target.closest && e.target.closest('.collapse-toggle');
-    if (!t) return;
-    const heading = t.closest('h2');
-    const card = heading && heading.parentElement;
-    if (!card || !card.classList.contains('card')) return;
-    const collapsed = card.classList.toggle('collapsed');
-    t.setAttribute('aria-expanded', String(!collapsed));
-    t.textContent = collapsed ? 'Expand' : 'Collapse';
-  });
+  // Collapse per-section handled earlier with persistence and icons
 
   // Expand/Collapse all handled in installFocusAndShortcuts (with persistence)
 })();
