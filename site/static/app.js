@@ -90,6 +90,11 @@
         toggle.setAttribute('aria-expanded', 'true');
         toggle.textContent = 'Collapse';
         n.appendChild(toggle);
+        const focus = document.createElement('button');
+        focus.className = 'focus-toggle';
+        focus.type = 'button';
+        focus.textContent = 'Focus';
+        n.appendChild(focus);
         card.appendChild(n);
       } else {
         card.appendChild(n);
@@ -236,6 +241,125 @@
     h2s.forEach(h => obs.observe(h));
   }
 
+  function applyCollapsedState() {
+    const map = JSON.parse(localStorage.getItem('cardCollapsed') || '{}');
+    const cards = Array.from(document.querySelectorAll('.card'));
+    const isMobile = window.matchMedia('(max-width: 900px)').matches;
+    const useDefault = Object.keys(map).length === 0 && isMobile;
+    cards.forEach((c, idx) => {
+      const h2 = c.querySelector('h2');
+      if (!h2) return;
+      const id = h2.id;
+      const collapsed = useDefault ? idx !== 0 : !!map[id];
+      if (collapsed) c.classList.add('collapsed'); else c.classList.remove('collapsed');
+      const btn = h2.querySelector('.collapse-toggle');
+      if (btn) { btn.textContent = collapsed ? 'Expand' : 'Collapse'; btn.setAttribute('aria-expanded', String(!collapsed)); }
+    });
+  }
+
+  function updateCurrentSection() {
+    const lbl = document.getElementById('currentSection');
+    if (!lbl) return;
+    const h2s = Array.from(document.querySelectorAll('#report h2'));
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          const title = e.target.childNodes[0].textContent.trim();
+          lbl.textContent = `Current section: ${title}`;
+        }
+      });
+    }, { rootMargin: '-10% 0px -70% 0px', threshold: 0.1 });
+    h2s.forEach(h => obs.observe(h));
+  }
+
+  function installNavFabs() {
+    const left = document.createElement('button');
+    left.id = 'navPrev'; left.className = 'nav-fab left'; left.setAttribute('aria-label', 'Previous section');
+    left.innerHTML = '\u2190';
+    const right = document.createElement('button');
+    right.id = 'navNext'; right.className = 'nav-fab right'; right.setAttribute('aria-label', 'Next section');
+    right.innerHTML = '\u2192';
+    document.body.appendChild(left); document.body.appendChild(right);
+    const getH2s = () => Array.from(document.querySelectorAll('#report h2'));
+    function currentIndex() {
+      const h2s = getH2s();
+      const y = window.scrollY + 100;
+      let idx = 0;
+      for (let i = 0; i < h2s.length; i++) { if (h2s[i].getBoundingClientRect().top + window.scrollY - 90 <= y) idx = i; }
+      return idx;
+    }
+    left.addEventListener('click', () => {
+      const h2s = getH2s(); const idx = Math.max(0, currentIndex() - 1); h2s[idx]?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+    right.addEventListener('click', () => {
+      const h2s = getH2s(); const idx = Math.min(getH2s().length - 1, currentIndex() + 1); h2s[idx]?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  }
+
+  function installFocusAndShortcuts() {
+    // Focus mode toggle buttons are created in wrapSections
+    document.addEventListener('click', e => {
+      const t = e.target.closest && e.target.closest('.focus-toggle');
+      if (!t) return;
+      const card = t.closest('.card');
+      if (!card) return;
+      const isActive = document.body.classList.toggle('focus-mode');
+      document.querySelectorAll('.card').forEach(c => c.classList.remove('focused'));
+      if (isActive) card.classList.add('focused');
+      // Update all buttons text
+      document.querySelectorAll('.focus-toggle').forEach(b => b.textContent = 'Focus');
+      t.textContent = isActive ? 'Unfocus' : 'Focus';
+    });
+
+    // Collapse/expand individual card + persist state
+    document.addEventListener('click', e => {
+      const t = e.target.closest && e.target.closest('.collapse-toggle');
+      if (!t) return;
+      const card = t.closest('.card');
+      const h2 = card && card.querySelector('h2');
+      if (!card || !h2) return;
+      const collapsed = card.classList.toggle('collapsed');
+      t.setAttribute('aria-expanded', String(!collapsed));
+      t.textContent = collapsed ? 'Expand' : 'Collapse';
+      const map = JSON.parse(localStorage.getItem('cardCollapsed') || '{}');
+      map[h2.id] = collapsed;
+      localStorage.setItem('cardCollapsed', JSON.stringify(map));
+    });
+
+    // Expand/Collapse all
+    const expandAll = document.getElementById('expandAll');
+    const collapseAll = document.getElementById('collapseAll');
+    expandAll && expandAll.addEventListener('click', () => {
+      const map = {};
+      document.querySelectorAll('.card').forEach(c => c.classList.remove('collapsed'));
+      document.querySelectorAll('.collapse-toggle').forEach(b => { b.textContent = 'Collapse'; b.setAttribute('aria-expanded', 'true'); });
+      localStorage.setItem('cardCollapsed', JSON.stringify(map));
+    });
+    collapseAll && collapseAll.addEventListener('click', () => {
+      const map = {};
+      document.querySelectorAll('.card').forEach(c => {
+        c.classList.add('collapsed');
+        const h2 = c.querySelector('h2'); if (h2) map[h2.id] = true;
+      });
+      document.querySelectorAll('.collapse-toggle').forEach(b => { b.textContent = 'Expand'; b.setAttribute('aria-expanded', 'false'); });
+      localStorage.setItem('cardCollapsed', JSON.stringify(map));
+    });
+
+    // Keyboard shortcuts
+    document.addEventListener('keydown', e => {
+      const tag = (e.target.tagName || '').toLowerCase();
+      if (tag === 'input' || tag === 'textarea') return;
+      const h2s = Array.from(document.querySelectorAll('#report h2'));
+      const y = window.scrollY + 100; let idx = 0;
+      for (let i = 0; i < h2s.length; i++) { if (h2s[i].getBoundingClientRect().top + window.scrollY - 90 <= y) idx = i; }
+      if (['j','ArrowDown'].includes(e.key)) { e.preventDefault(); h2s[Math.min(h2s.length-1, idx+1)]?.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+      if (['k','ArrowUp'].includes(e.key)) { e.preventDefault(); h2s[Math.max(0, idx-1)]?.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+      if (e.key === 'f') { e.preventDefault(); const btn = h2s[idx]?.querySelector('.focus-toggle'); btn && btn.click(); }
+      if (e.key === 'Escape') { document.body.classList.remove('focus-mode'); document.querySelectorAll('.card').forEach(c => c.classList.remove('focused')); }
+      if (e.key === 'c') { const btn = h2s[idx]?.querySelector('.collapse-toggle'); btn && btn.click(); }
+    });
+  }
+
 
   fetch('index.md', { cache: 'no-store' })
     .then(r => r.text())
@@ -243,10 +367,14 @@
       const html = mdToHtml(md);
       el.report.innerHTML = html;
       wrapSections(el.report);
+      applyCollapsedState();
       addSummaryStats(el.report);
       highlightPills(el.report);
       buildSidebar();
       buildTopbar();
+      updateCurrentSection();
+      installNavFabs();
+      installFocusAndShortcuts();
     })
     .catch(() => {
       el.report.innerHTML = '<div class="card"><p>Unable to load report.</p></div>';
@@ -304,19 +432,5 @@
     t.textContent = collapsed ? 'Expand' : 'Collapse';
   });
 
-  // Expand/Collapse all
-  const expandAll = document.getElementById('expandAll');
-  const collapseAll = document.getElementById('collapseAll');
-  expandAll && expandAll.addEventListener('click', () => {
-    document.querySelectorAll('.card.collapsed').forEach(c => c.classList.remove('collapsed'));
-    document.querySelectorAll('.collapse-toggle').forEach(b => { b.textContent = 'Collapse'; b.setAttribute('aria-expanded', 'true'); });
-  });
-  collapseAll && collapseAll.addEventListener('click', () => {
-    document.querySelectorAll('.card').forEach(c => c.classList.add('collapsed'));
-    document.querySelectorAll('.collapse-toggle').forEach(b => { b.textContent = 'Expand'; b.setAttribute('aria-expanded', 'false'); });
-  });
-
-  // Print button
-  const printBtn = document.getElementById('printBtn');
-  printBtn && printBtn.addEventListener('click', () => window.print());
+  // Expand/Collapse all handled in installFocusAndShortcuts (with persistence)
 })();
