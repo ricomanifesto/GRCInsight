@@ -142,14 +142,7 @@ jobs:
         while [ $attempt -le $MAX_ATTEMPTS ]; do
           echo "Attempt $attempt/$MAX_ATTEMPTS to fetch report..."
 
-          GET_PAYLOAD=$(cat <<EOF
-          {
-            "httpMethod": "GET",
-            "path": "/api/v1/reports/$REPORT_ID",
-            "headers": {}
-          }
-EOF
-          )
+          GET_PAYLOAD='{"httpMethod":"GET","path":"/api/v1/reports/'$REPORT_ID'","headers":{}}'
 
           aws lambda invoke \
             --function-name "$GO_FUNCTION_NAME" \
@@ -169,42 +162,20 @@ EOF
           if [ "$STATUS" = "completed" ] && [ -n "$CONTENT" ]; then
             echo "Report completed. Building site files..."
 
-            # Create HTML report
+            # Create simple HTML and Markdown reports
             mkdir -p site
-            cat > site/index.html <<EOF
-            <!DOCTYPE html>
-            <html lang="en">
-            <head>
-                <meta charset="UTF-8">
-                <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <title>${TITLE:-GRC Intelligence Report}</title>
-                <style>
-                    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; max-width: 800px; margin: 0 auto; padding: 20px; }
-                    .header { border-bottom: 2px solid #333; padding-bottom: 20px; margin-bottom: 30px; }
-                    .timestamp { color: #666; font-size: 0.9em; }
-                    .content { white-space: pre-wrap; }
-                    h1, h2, h3 { color: #333; }
-                    .metadata { background: #f5f5f5; padding: 15px; border-radius: 5px; margin: 20px 0; }
-                </style>
-            </head>
-            <body>
-                <div class="header">
-                    <h1>${TITLE:-GRC Intelligence Report}</h1>
-                    <div class="timestamp">Generated: ${GENERATED_AT}</div>
-                </div>
-                <div class="content">${CONTENT}</div>
-            </body>
-            </html>
-EOF
 
-            # Markdown version
-            cat > site/index.md <<EOF
-            # ${TITLE:-GRC Intelligence Report}
+            # Simple HTML report
+            echo '<!DOCTYPE html><html><head><title>GRC Intelligence Report</title></head><body>' > site/index.html
+            echo "<h1>${TITLE:-GRC Intelligence Report}</h1>" >> site/index.html
+            echo "<p><strong>Generated:</strong> ${GENERATED_AT}</p>" >> site/index.html
+            echo "<pre>${CONTENT}</pre>" >> site/index.html
+            echo '</body></html>' >> site/index.html
 
-            **Generated:** ${GENERATED_AT}
-
-            ${CONTENT}
-EOF
+            # Simple Markdown report
+            echo "# ${TITLE:-GRC Intelligence Report}" > site/index.md
+            echo "**Generated:** ${GENERATED_AT}" >> site/index.md
+            echo "${CONTENT}" >> site/index.md
 
             echo "Report files created successfully"
             break
