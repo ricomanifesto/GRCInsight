@@ -11,6 +11,10 @@ on:
         description: 'RSS Feed URL'
         required: false
         default: 'https://ricomanifesto.github.io/SentryDigest/feed.xml'
+  workflow_run:
+    workflows: ["Build and Deploy Lambda"]
+    types:
+      - completed
 
 concurrency:
   group: grcinsight-report-${{ github.ref }}
