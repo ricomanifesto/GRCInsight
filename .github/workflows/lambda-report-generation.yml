@@ -170,31 +170,10 @@ jobs:
           if [ "$STATUS" = "completed" ] && [ -n "$CONTENT" ]; then
             echo "Report completed. Building site files..."
 
-            # Create styled HTML and Markdown reports
+            # Create/refresh site directory and Markdown report only.
+            # We keep the committed static index.html + assets (site/static/*)
+            # and let the UI load this Markdown.
             mkdir -p site
-
-            # Copy CSS file and create HTML with reference to it
-            cp report-styles.css site/ 2>/dev/null || true
-
-            # Create HTML report with external CSS reference
-            echo '<!DOCTYPE html>' > site/index.html
-            echo '<html lang="en">' >> site/index.html
-            echo '<head>' >> site/index.html
-            echo '    <meta charset="UTF-8">' >> site/index.html
-            echo '    <meta name="viewport" content="width=device-width, initial-scale=1.0">' >> site/index.html
-            echo "    <title>${TITLE:-GRC Intelligence Report}</title>" >> site/index.html
-            echo '    <link rel="stylesheet" href="report-styles.css">' >> site/index.html
-            echo '</head>' >> site/index.html
-            echo '<body>' >> site/index.html
-            echo '    <div class="header">' >> site/index.html
-            echo "        <h1>${TITLE:-GRC Intelligence Report}</h1>" >> site/index.html
-            echo "        <div class=\"timestamp\">Generated: ${GENERATED_AT}</div>" >> site/index.html
-            echo '    </div>' >> site/index.html
-            echo "    <div class=\"content\">${CONTENT}</div>" >> site/index.html
-            echo '</body>' >> site/index.html
-            echo '</html>' >> site/index.html
-
-            # Create Markdown report
             echo "# ${TITLE:-GRC Intelligence Report}" > site/index.md
             echo "**Generated:** ${GENERATED_AT}" >> site/index.md
             echo "${CONTENT}" >> site/index.md
@@ -218,7 +197,7 @@ jobs:
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
-        git add site/index.html site/index.md
+        git add site/index.md
         git commit -m "Update GRC intelligence report [automated] [skip ci]" || exit 0
         git push
 
