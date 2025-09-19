@@ -199,6 +199,33 @@ jobs:
           exit 1
         fi
 
+    - name: Dump recent Lambda logs (Go & Python)
+      if: failure()
+      continue-on-error: true
+      env:
+        SINCE_MINUTES: 60
+      run: |
+        set -e
+        echo "Collecting CloudWatch logs for the last ${SINCE_MINUTES} minutes..."
+        END_TS=$(date +%s000)
+        START_TS=$(( ( $(date +%s) - SINCE_MINUTES*60 ) * 1000 ))
+        for FN in "$GO_FUNCTION_NAME" "$PYTHON_FUNCTION_NAME"; do
+          echo "=== Logs for ${FN} ==="
+          LG="/aws/lambda/${FN}"
+          if aws logs describe-log-groups --log-group-name-prefix "$LG" >/dev/null 2>&1; then
+            aws logs filter-log-events \
+              --log-group-name "$LG" \
+              --start-time "$START_TS" \
+              --end-time "$END_TS" \
+              --max-items 400 \
+              --output json \
+            | jq -r '.events[] | "[\(.timestamp)] \(.message)"' | sed -e 's/\\n/\n/g' | sed -e 's/\r$//' || true
+          else
+            echo "No log group found: $LG" >&2
+          fi
+          echo
+        done
+
     - name: Commit and push report
       if: steps.get-report.conclusion == 'success'
       run: |
