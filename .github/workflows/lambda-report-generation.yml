@@ -166,17 +166,31 @@ jobs:
           if [ "$STATUS" = "completed" ] && [ -n "$CONTENT" ]; then
             echo "Report completed. Building site files..."
 
-            # Create simple HTML and Markdown reports
+            # Create styled HTML and Markdown reports
             mkdir -p site
 
-            # Simple HTML report
-            echo '<!DOCTYPE html><html><head><title>GRC Intelligence Report</title></head><body>' > site/index.html
-            echo "<h1>${TITLE:-GRC Intelligence Report}</h1>" >> site/index.html
-            echo "<p><strong>Generated:</strong> ${GENERATED_AT}</p>" >> site/index.html
-            echo "<pre>${CONTENT}</pre>" >> site/index.html
-            echo '</body></html>' >> site/index.html
+            # Copy CSS file and create HTML with reference to it
+            cp report-styles.css site/ 2>/dev/null || true
 
-            # Simple Markdown report
+            # Create HTML report with external CSS reference
+            echo '<!DOCTYPE html>' > site/index.html
+            echo '<html lang="en">' >> site/index.html
+            echo '<head>' >> site/index.html
+            echo '    <meta charset="UTF-8">' >> site/index.html
+            echo '    <meta name="viewport" content="width=device-width, initial-scale=1.0">' >> site/index.html
+            echo "    <title>${TITLE:-GRC Intelligence Report}</title>" >> site/index.html
+            echo '    <link rel="stylesheet" href="report-styles.css">' >> site/index.html
+            echo '</head>' >> site/index.html
+            echo '<body>' >> site/index.html
+            echo '    <div class="header">' >> site/index.html
+            echo "        <h1>${TITLE:-GRC Intelligence Report}</h1>" >> site/index.html
+            echo "        <div class=\"timestamp\">Generated: ${GENERATED_AT}</div>" >> site/index.html
+            echo '    </div>' >> site/index.html
+            echo "    <div class=\"content\">${CONTENT}</div>" >> site/index.html
+            echo '</body>' >> site/index.html
+            echo '</html>' >> site/index.html
+
+            # Create Markdown report
             echo "# ${TITLE:-GRC Intelligence Report}" > site/index.md
             echo "**Generated:** ${GENERATED_AT}" >> site/index.md
             echo "${CONTENT}" >> site/index.md
