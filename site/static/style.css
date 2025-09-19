@@ -36,10 +36,12 @@ body.light .theme-toggle { background: rgba(0,0,0,0.06); color: #0b1220; border-
 body:not(.light) .theme-toggle .dark { display: inline; }
 body.light .theme-toggle .light { display: inline; }
 
-.controls { display: grid; grid-template-columns: 1fr 220px; gap: 10px; margin-top: 12px; }
-@media (max-width: 900px) { .controls { grid-template-columns: 1fr; } }
-.search { width: 100%; border-radius: 10px; border: 1px solid rgba(255,255,255,0.25); padding: 10px 12px; background: rgba(255,255,255,0.12); color: #fff; }
-body.light .search { background: rgba(0,0,0,0.04); color: #0b1220; border-color: rgba(0,0,0,0.15); }
+.controls { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; margin-top: 12px; align-items: center; }
+.control-buttons { display: flex; gap: 8px; flex-wrap: wrap; }
+.action-btn { border: 1px solid rgba(255,255,255,0.25); background: transparent; color: #fff; border-radius: 8px; padding: 8px 10px; cursor: pointer; font-size: 13px; }
+body.light .action-btn { border-color: rgba(0,0,0,0.15); color: #0b1220; }
+.action-btn:hover { background: rgba(255,255,255,0.08); }
+body.light .action-btn:hover { background: rgba(0,0,0,0.05); }
 .mobile-toc { width: 100%; border-radius: 10px; border: 1px solid rgba(255,255,255,0.25); padding: 10px 12px; background: rgba(255,255,255,0.12); color: #fff; }
 body.light .mobile-toc { background: rgba(0,0,0,0.04); color: #0b1220; border-color: rgba(0,0,0,0.15); }
 
@@ -73,6 +75,7 @@ body.light .sidebar details[open] > summary { background: rgba(37, 99, 235, 0.10
 .sidebar details ul a:hover { color: var(--text); }
 
 .card { background: linear-gradient(180deg, var(--panel), var(--panel-2)); border: 1px solid rgba(255,255,255,0.06); border-radius: 12px; padding: 18px 20px; box-shadow: 0 6px 18px rgba(0,0,0,0.25); }
+.card.collapsed > :not(h2) { display: none; }
 .card h2, .card h3 { margin-top: 0; color: #cfe4ff; }
 body.light .card { border-color: rgba(0,0,0,0.08); box-shadow: 0 6px 18px rgba(0,0,0,0.08); }
 body.light .card h2, body.light .card h3 { color: #1e3a8a; }
@@ -116,6 +119,9 @@ a:hover { text-decoration: underline; }
 .copy-link { margin-left: 8px; font-size: 12px; border: 1px solid rgba(255,255,255,0.25); background: transparent; color: #93c5fd; border-radius: 6px; padding: 2px 6px; cursor: pointer; }
 body.light .copy-link { border-color: rgba(0,0,0,0.2); color: #1e3a8a; }
 .copy-link:hover { background: rgba(147,197,253,0.15); }
+.collapse-toggle { margin-left: 8px; font-size: 12px; border: 1px solid rgba(255,255,255,0.25); background: transparent; color: #cfe4ff; border-radius: 6px; padding: 2px 6px; cursor: pointer; }
+body.light .collapse-toggle { border-color: rgba(0,0,0,0.2); color: #1e3a8a; }
+.collapse-toggle:hover { background: rgba(255,255,255,0.08); }
 
 /* Mobile top bar */
 .topbar { display: none; position: sticky; top: 0; z-index: 5; background: linear-gradient(90deg, var(--panel), var(--panel-2)); border-bottom: 1px solid rgba(255,255,255,0.06); }
@@ -141,3 +147,13 @@ body.light .back-to-top { border-color: rgba(0,0,0,0.12); }
 /* Mark highlight */
 mark { background: rgba(250, 204, 21, 0.35); padding: 0 2px; border-radius: 3px; }
 body.light mark { background: rgba(250, 204, 21, 0.5); }
+
+/* Progress bar */
+.progress { position: fixed; top: 0; left: 0; height: 3px; width: 0; background: linear-gradient(90deg, var(--accent-2), #38bdf8); z-index: 1000; box-shadow: 0 1px 6px rgba(0,0,0,0.3); }
+
+/* Print styles */
+@media print {
+  body { background: #fff; color: #000; }
+  .app-header, .sidebar, .topbar, .controls, .app-footer, .back-to-top, .theme-toggle, .progress { display: none !important; }
+  .card, .content { background: #fff; border: none; box-shadow: none; }
+}

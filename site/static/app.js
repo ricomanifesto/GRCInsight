@@ -6,7 +6,6 @@
   };
   const themeBtn = document.getElementById('themeToggle');
   const mobileToc = document.getElementById('mobileToc');
-  const searchBox = document.getElementById('searchBox');
 
   // Keyword highlighting catalog
   const frameworks = ['ISO 27001', 'ISO/IEC 27001', 'NIST', 'NIST CSF', 'COBIT', 'COSO', 'PCI-DSS'];
@@ -15,6 +14,25 @@
 
   function escapeHtml(s) {
     return s.replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+  }
+
+  function renderNestedList(block) {
+    const lines = block.trim().split(/\n/).filter(l => /^\s*-\s+/.test(l));
+    let html = '';
+    let level = 0;
+    const open = n => { for (let i = 0; i < n; i++) html += '<ul>'; };
+    const close = n => { for (let i = 0; i < n; i++) html += '</ul>'; };
+    lines.forEach((line, idx) => {
+      const m = line.match(/^(\s*)-\s+(.*)$/);
+      const indent = Math.floor((m[1] || '').length / 2) + 1; // 2 spaces per level, base 1
+      const content = m[2];
+      if (idx === 0) { open(indent); level = indent; }
+      else if (indent > level) { open(indent - level); level = indent; }
+      else if (indent < level) { close(level - indent); level = indent; }
+      html += `<li>${content}</li>`;
+    });
+    close(level);
+    return html;
   }
 
   function mdToHtml(md) {
@@ -30,11 +48,10 @@
     html = html.replace(/^###\s+(.*)$/gm, '<h3>$1</h3>');
     html = html.replace(/^##\s+(.*)$/gm, '<h2>$1</h2>');
     html = html.replace(/^#\s+(.*)$/gm, '<h1>$1</h1>');
-    // Lists
-    html = html.replace(/^(?:-\s+.*(?:\n|$))+?/gm, m => {
-      const items = m.trim().split(/\n/).map(line => line.replace(/^-\s+/, ''));
-      return '<ul>' + items.map(it => `<li>${it}</li>`).join('') + '</ul>';
-    });
+    // Numbered section headings like "1) Executive Summary" or "2. Section"
+    html = html.replace(/^\s*(\d+)[\.)]\s+(.*)$/gm, '<h2>$1) $2</h2>');
+    // Lists (support nested lists via indentation, 2 spaces per level)
+    html = html.replace(/^(?:\s*-\s+.*(?:\n|$))+?/gm, m => renderNestedList(m));
     // Simple paragraphs
     html = html
       .split(/\n\n+/)
@@ -67,6 +84,12 @@
         copy.setAttribute('data-target', id);
         copy.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M15 3H6a2 2 0 0 0-2 2v9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><rect x="9" y="9" width="12" height="12" rx="2" stroke="currentColor" stroke-width="2"/></svg><span>Copy</span>';
         n.appendChild(copy);
+        const toggle = document.createElement('button');
+        toggle.className = 'collapse-toggle';
+        toggle.type = 'button';
+        toggle.setAttribute('aria-expanded', 'true');
+        toggle.textContent = 'Collapse';
+        n.appendChild(toggle);
         card.appendChild(n);
       } else {
         card.appendChild(n);
@@ -92,8 +115,8 @@
   }
 
   function addSummaryStats(node) {
-    // Look for "Total Articles Analyzed" line to render stats cards
-    const m = node.textContent.match(/Total Articles Analyzed:\s*(\d+)\s*\|\s*GRC-Relevant Articles:\s*(\d+)/i);
+    // Look for Total/GRC counts, tolerate separators or newlines
+    const m = node.textContent.match(/Total\s+Articles\s+Analyzed:\s*(\d+)[\s\S]*?GRC[-\s]?Relevant\s+Articles:\s*(\d+)/i);
     if (!m) return;
     const total = m[1], grc = m[2];
     const statGrid = document.createElement('div');
@@ -213,49 +236,6 @@
     h2s.forEach(h => obs.observe(h));
   }
 
-  // Search with highlight
-  function clearMarks(root) {
-    const marks = root.querySelectorAll('mark');
-    marks.forEach(m => {
-      const t = document.createTextNode(m.textContent || '');
-      m.parentNode.replaceChild(t, m);
-    });
-  }
-
-  function highlightQuery(root, q) {
-    if (!q || q.length < 2) { clearMarks(root); return; }
-    clearMarks(root);
-    const regex = new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
-    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
-      acceptNode(node) {
-        if (!node.nodeValue || !node.nodeValue.trim()) return NodeFilter.FILTER_REJECT;
-        if (node.parentElement && ['SCRIPT','STYLE','MARK'].includes(node.parentElement.tagName)) return NodeFilter.FILTER_REJECT;
-        return NodeFilter.FILTER_ACCEPT;
-      }
-    });
-    const textNodes = [];
-    while (walker.nextNode()) textNodes.push(walker.currentNode);
-    textNodes.forEach(node => {
-      const text = node.nodeValue;
-      if (!regex.test(text)) return;
-      const frag = document.createDocumentFragment();
-      let lastIndex = 0; regex.lastIndex = 0;
-      let m;
-      while ((m = regex.exec(text)) !== null) {
-        const before = text.slice(lastIndex, m.index);
-        if (before) frag.appendChild(document.createTextNode(before));
-        const mark = document.createElement('mark');
-        mark.textContent = m[0];
-        frag.appendChild(mark);
-        lastIndex = m.index + m[0].length;
-      }
-      const after = text.slice(lastIndex);
-      if (after) frag.appendChild(document.createTextNode(after));
-      node.parentNode.replaceChild(frag, node);
-    });
-    const first = root.querySelector('mark');
-    if (first) first.scrollIntoView({ behavior: 'smooth', block: 'center' });
-  }
 
   fetch('index.md', { cache: 'no-store' })
     .then(r => r.text())
@@ -290,6 +270,12 @@
   const onScroll = () => {
     const y = window.scrollY || document.documentElement.scrollTop;
     if (y > 280) back?.classList.add('show'); else back?.classList.remove('show');
+    // Progress bar
+    const doc = document.documentElement;
+    const h = doc.scrollHeight - doc.clientHeight;
+    const p = h > 0 ? Math.min(100, (y / h) * 100) : 0;
+    const bar = document.getElementById('progress');
+    if (bar) bar.style.width = p + '%';
   };
   window.addEventListener('scroll', onScroll, { passive: true });
   back && back.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
@@ -306,11 +292,31 @@
     setTimeout(() => { btn.textContent = 'Copy'; }, 800);
   });
 
-  // Search events
-  let searchTimer = null;
-  searchBox && searchBox.addEventListener('input', e => {
-    const q = e.target.value.trim();
-    if (searchTimer) clearTimeout(searchTimer);
-    searchTimer = setTimeout(() => highlightQuery(el.report, q), 180);
+  // Collapse/expand per section
+  document.addEventListener('click', e => {
+    const t = e.target.closest && e.target.closest('.collapse-toggle');
+    if (!t) return;
+    const heading = t.closest('h2');
+    const card = heading && heading.parentElement;
+    if (!card || !card.classList.contains('card')) return;
+    const collapsed = card.classList.toggle('collapsed');
+    t.setAttribute('aria-expanded', String(!collapsed));
+    t.textContent = collapsed ? 'Expand' : 'Collapse';
   });
+
+  // Expand/Collapse all
+  const expandAll = document.getElementById('expandAll');
+  const collapseAll = document.getElementById('collapseAll');
+  expandAll && expandAll.addEventListener('click', () => {
+    document.querySelectorAll('.card.collapsed').forEach(c => c.classList.remove('collapsed'));
+    document.querySelectorAll('.collapse-toggle').forEach(b => { b.textContent = 'Collapse'; b.setAttribute('aria-expanded', 'true'); });
+  });
+  collapseAll && collapseAll.addEventListener('click', () => {
+    document.querySelectorAll('.card').forEach(c => c.classList.add('collapsed'));
+    document.querySelectorAll('.collapse-toggle').forEach(b => { b.textContent = 'Expand'; b.setAttribute('aria-expanded', 'false'); });
+  });
+
+  // Print button
+  const printBtn = document.getElementById('printBtn');
+  printBtn && printBtn.addEventListener('click', () => window.print());
 })();

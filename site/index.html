@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="static/style.css" />
   </head>
   <body>
+    <div id="progress" class="progress" aria-hidden="true"></div>
     <header class="app-header">
       <div class="container">
         <h1 class="title">GRC Intelligence Report</h1>
@@ -16,10 +17,14 @@
           <span class="mode light">Light</span>
         </button>
         <div class="controls" role="group" aria-label="Report controls">
-          <input id="searchBox" class="search" type="search" placeholder="Search in report" aria-label="Search in report" />
           <select id="mobileToc" class="mobile-toc" aria-label="Jump to section">
             <option value="">Jump to section</option>
           </select>
+          <div class="control-buttons" role="group" aria-label="View actions">
+            <button id="expandAll" class="action-btn" type="button">Expand all</button>
+            <button id="collapseAll" class="action-btn" type="button">Collapse all</button>
+            <button id="printBtn" class="action-btn" type="button">Print</button>
+          </div>
         </div>
       </div>
     </header>
@@ -53,4 +58,3 @@
     </button>
   </body>
   </html>
-
