@@ -55,9 +55,13 @@ jobs:
             --cli-binary-format raw-in-base64-out \
             --region "$AWS_REGION" \
             health.json >/dev/null || true
-          # Parse body which may be JSON string
-          BODY=$(cat health.json | jq -r '.body')
-          STATUS=$(echo "$BODY" | (jq -r 'try fromjson catch .') | jq -r '.status // empty')
+          # Parse body which may be JSON string - more robust parsing
+          BODY=$(cat health.json | jq -r '.body // empty')
+          if [ -n "$BODY" ] && [ "$BODY" != "null" ]; then
+            STATUS=$(echo "$BODY" | jq -r '.status // empty' 2>/dev/null || echo "unknown")
+          else
+            STATUS="unknown"
+          fi
           echo "Reported status: ${STATUS:-unknown}"
           if [ "$STATUS" = "healthy" ]; then
             echo "Go Lambda health OK"
