@@ -178,16 +178,22 @@ jobs:
             exit 1
           fi
 
-          if [ "$STATUS" = "completed" ] && [ -n "$CONTENT" ]; then
+          if [ "$STATUS" = "completed" ]; then
             echo "Report completed. Building site files..."
 
             # Create/refresh site directory and Markdown report only.
             # We keep the committed static index.html + assets (site/static/*)
             # and let the UI load this Markdown.
             mkdir -p site
-            echo "# ${TITLE:-GRC Intelligence Report}" > site/index.md
-            echo "**Generated:** ${GENERATED_AT}" >> site/index.md
-            echo "${CONTENT}" >> site/index.md
+            SAFE_TITLE=${TITLE:-GRC Intelligence Report}
+            SAFE_GENERATED=${GENERATED_AT}
+            SAFE_CONTENT=${CONTENT}
+            if [ -z "$SAFE_CONTENT" ] || [ "$SAFE_CONTENT" = "null" ]; then
+              SAFE_CONTENT="# No content\n\nThe report generation completed, but no content was returned by the backend."
+            fi
+            echo "# ${SAFE_TITLE}" > site/index.md
+            echo "**Generated:** ${SAFE_GENERATED}" >> site/index.md
+            echo "${SAFE_CONTENT}" >> site/index.md
 
             echo "Report files created successfully"
             break
