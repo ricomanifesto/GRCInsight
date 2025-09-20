@@ -82,13 +82,17 @@ jobs:
     - name: Set feed URL
       id: feed-url
       run: |
+        FEED_URL=""
         if [ "${{ github.event_name }}" = "repository_dispatch" ]; then
-          echo "FEED_URL=${{ github.event.client_payload.feed_url }}" >> $GITHUB_OUTPUT
+          FEED_URL="${{ github.event.client_payload.feed_url }}"
         elif [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-          echo "FEED_URL=${{ github.event.inputs.feed_url }}" >> $GITHUB_OUTPUT
-        else
-          echo "FEED_URL=https://ricomanifesto.github.io/SentryDigest/feed.xml" >> $GITHUB_OUTPUT
+          FEED_URL="${{ github.event.inputs.feed_url }}"
         fi
+        if [ -z "$FEED_URL" ] || [ "$FEED_URL" = "null" ]; then
+          FEED_URL="https://ricomanifesto.github.io/SentryDigest/feed.xml"
+        fi
+        echo "Using FEED_URL=$FEED_URL"
+        echo "FEED_URL=$FEED_URL" >> $GITHUB_OUTPUT
 
     - name: Invoke Lambda report generation
       id: lambda-invoke
