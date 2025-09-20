@@ -185,6 +185,9 @@ jobs:
             # We keep the committed static index.html + assets (site/static/*)
             # and let the UI load this Markdown.
             mkdir -p site
+            # Ensure favicon is included in the Pages artifact
+            mkdir -p site/static
+            cp assets/images/logo.png site/static/favicon.png 2>/dev/null || true
             SAFE_TITLE=${TITLE:-GRC Intelligence Report}
             SAFE_GENERATED=${GENERATED_AT}
             SAFE_CONTENT=${CONTENT}
