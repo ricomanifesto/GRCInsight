@@ -6,6 +6,7 @@
   };
   const themeBtn = document.getElementById('themeToggle');
   const mobileToc = document.getElementById('mobileToc');
+  let originalMd = null;
 
   // Keyword highlighting catalog
   const frameworks = ['ISO 27001', 'ISO/IEC 27001', 'NIST', 'NIST CSF', 'COBIT', 'COSO', 'PCI-DSS'];
@@ -61,13 +62,14 @@
   }
 
   function wrapSections(node) {
-    // Wrap content under each h2 into a card
+    // Wrap content under each h2 into a card; drop any leading content before first h2
     const fragment = document.createDocumentFragment();
-    let card = document.createElement('div');
-    card.className = 'card';
+    let card = null;
+    let started = false;
     Array.from(node.childNodes).forEach(n => {
       if (n.nodeType === 1 && n.tagName === 'H2') {
-        fragment.appendChild(card);
+        started = true;
+        if (card) fragment.appendChild(card);
         card = document.createElement('div');
         card.className = 'card';
         // Add id + anchor link
@@ -96,11 +98,12 @@
         focus.innerHTML = '<svg class="icon" width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span>Focus</span>';
         n.appendChild(focus);
         card.appendChild(n);
-      } else {
+      } else if (started && card) {
         card.appendChild(n);
       }
+      // else: drop preface content before first H2
     });
-    fragment.appendChild(card);
+    if (card) fragment.appendChild(card);
     node.innerHTML = '';
     node.appendChild(fragment);
   }
@@ -119,9 +122,10 @@
     node.innerHTML = html;
   }
 
-  function addSummaryStats(node) {
-    // Look for Total/GRC counts, tolerate separators or newlines
-    const m = node.textContent.match(/Total\s+Articles\s+Analyzed:\s*(\d+)[\s\S]*?GRC[-\s]?Relevant\s+Articles:\s*(\d+)/i);
+  function addSummaryStats(node, sourceText) {
+    // Look for Total/GRC counts in provided text (prefer original MD), tolerate separators/newlines
+    const haystack = (sourceText || node.textContent || '');
+    const m = haystack.match(/Total\s+Articles\s+Analyzed:\s*(\d+)[\s\S]*?GRC[-\s]?Relevant\s+Articles:\s*(\d+)/i);
     if (!m) return;
     const total = m[1], grc = m[2];
     const statGrid = document.createElement('div');
@@ -375,6 +379,7 @@
   fetch('index.md', { cache: 'no-store' })
     .then(r => r.text())
     .then(md => {
+      originalMd = md;
       const html = mdToHtml(md);
       el.report.innerHTML = html;
       wrapSections(el.report);
@@ -398,7 +403,7 @@
         }
       })();
       applyCollapsedState();
-      addSummaryStats(el.report);
+      addSummaryStats(el.report, originalMd);
       highlightPills(el.report);
       buildSidebar();
       buildTopbar();
