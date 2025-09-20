@@ -79,6 +79,13 @@ body.light .sidebar details[open] > summary { background: rgba(37, 99, 235, 0.10
 .card.collapsed > :not(h2) { display: none; }
 .card h2, .card h3 { margin-top: 0; color: #cfe4ff; }
 .card h2 { scroll-margin-top: 90px; }
+/* Temporary outline styling */
+.card.temp-outline { border-color: rgba(245, 158, 11, 0.45); }
+.card.temp-outline h2 { color: #fde68a; }
+.temp-note { color: #fbbf24; font-size: 13px; margin: 6px 0 8px; opacity: 0.95; }
+body.light .card.temp-outline { border-color: rgba(245, 158, 11, 0.55); }
+body.light .card.temp-outline h2 { color: #b45309; }
+body.light .temp-note { color: #b45309; }
 body.light .card { border-color: rgba(0,0,0,0.08); box-shadow: 0 6px 18px rgba(0,0,0,0.08); }
 body.light .card h2, body.light .card h3 { color: #1e3a8a; }
 

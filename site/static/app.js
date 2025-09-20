@@ -378,6 +378,25 @@
       const html = mdToHtml(md);
       el.report.innerHTML = html;
       wrapSections(el.report);
+      // Mark and handle temporary outline placeholder if present
+      (function handleTempOutline() {
+        const h2s = Array.from(document.querySelectorAll('#report h2'));
+        const temp = h2s.find(h => /temporary\s+outline/i.test(h.textContent));
+        if (!temp) return;
+        const card = temp.parentElement;
+        if (!card || !card.classList.contains('card')) return;
+        card.classList.add('temp-outline');
+        // Add a small note under the heading
+        const note = document.createElement('p');
+        note.className = 'temp-note';
+        note.textContent = 'Temporary placeholder — the full report content will replace this automatically on the next successful run.';
+        card.insertBefore(note, temp.nextSibling);
+        // If other sections exist, remove the placeholder entirely
+        const cards = Array.from(document.querySelectorAll('#report .card'));
+        if (cards.length > 1) {
+          card.remove();
+        }
+      })();
       applyCollapsedState();
       addSummaryStats(el.report);
       highlightPills(el.report);

@@ -211,8 +211,8 @@ jobs:
               ART_COUNT=$(jq -r '.total // 0' articles-data.json 2>/dev/null || echo 0)
               if [ "${ART_COUNT:-0}" -gt 0 ]; then
                 echo "" >> site/index.md
-                echo "## Articles Outline" >> site/index.md
-                echo "_Auto-rendered placeholder until full content is available._" >> site/index.md
+                echo "## Temporary Outline" >> site/index.md
+                echo "_Temporary placeholder — full content will replace this automatically._" >> site/index.md
                 jq -r '.articles[] | "- [\(.title // "Untitled")] (\(.url // "#"))"' articles-data.json | head -n 50 >> site/index.md || true
               else
                 echo "No articles returned; skipping outline."
