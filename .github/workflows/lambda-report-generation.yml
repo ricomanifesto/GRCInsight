@@ -188,12 +188,36 @@ jobs:
             SAFE_TITLE=${TITLE:-GRC Intelligence Report}
             SAFE_GENERATED=${GENERATED_AT}
             SAFE_CONTENT=${CONTENT}
+            CONTENT_LEN=$(printf %s "$CONTENT" | wc -c | tr -d ' ')
+            echo "Content length (bytes): ${CONTENT_LEN:-0}"
             if [ -z "$SAFE_CONTENT" ] || [ "$SAFE_CONTENT" = "null" ]; then
               SAFE_CONTENT="# No content\n\nThe report generation completed, but no content was returned by the backend."
             fi
             echo "# ${SAFE_TITLE}" > site/index.md
             echo "**Generated:** ${SAFE_GENERATED}" >> site/index.md
             echo "${SAFE_CONTENT}" >> site/index.md
+
+            # If content is empty, append a minimal articles outline to aid readability
+            if [ -z "$CONTENT" ] || [ "$CONTENT" = "null" ]; then
+              echo "Attempting to fetch articles to build a minimal outline..."
+              GET_ARTS_PAYLOAD='{"httpMethod":"GET","path":"/api/v1/reports/'$REPORT_ID'/articles","headers":{}}'
+              aws lambda invoke \
+                --function-name "$GO_FUNCTION_NAME" \
+                --payload "$GET_ARTS_PAYLOAD" \
+                --cli-binary-format raw-in-base64-out \
+                --region "$AWS_REGION" \
+                articles-response.json >/dev/null || true
+              cat articles-response.json | jq -r '.body | (try fromjson catch .)' > articles-data.json || true
+              ART_COUNT=$(jq -r '.total // 0' articles-data.json 2>/dev/null || echo 0)
+              if [ "${ART_COUNT:-0}" -gt 0 ]; then
+                echo "" >> site/index.md
+                echo "## Articles Outline" >> site/index.md
+                echo "_Auto-rendered placeholder until full content is available._" >> site/index.md
+                jq -r '.articles[] | "- [\(.title // "Untitled")] (\(.url // "#"))"' articles-data.json | head -n 50 >> site/index.md || true
+              else
+                echo "No articles returned; skipping outline."
+              fi
+            fi
 
             echo "Report files created successfully"
             break
@@ -228,8 +252,12 @@ jobs:
               --start-time "$START_TS" \
               --end-time "$END_TS" \
               --max-items 400 \
-              --output json \
-            | jq -r '.events[] | "[\(.timestamp)] \(.message)"' | sed -e 's/\\n/\n/g' | sed -e 's/\r$//' || true
+              --output json > cw.json || true
+            jq -r '.events[] | "[\(.timestamp)] \(.message)"' cw.json | sed -e 's/\\n/\n/g' | sed -e 's/\r$//' | tee cw.txt || true
+            echo "--- ERROR lines (last 50) ---"
+            grep -i "error" cw.txt | tail -n 50 || true
+            echo "--- Last RequestId ---"
+            grep -E "(RequestId:|START RequestId:)" cw.txt | tail -n 1 || true
           else
             echo "No log group found: $LG" >&2
           fi
