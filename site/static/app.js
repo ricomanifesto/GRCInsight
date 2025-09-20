@@ -122,37 +122,7 @@
     node.innerHTML = html;
   }
 
-  function addSummaryStats(node, sourceText) {
-    // Look for Total/GRC counts in provided text (prefer original MD), tolerate separators/newlines
-    const haystack = (sourceText || node.textContent || '');
-    const m = haystack.match(/Total\s+Articles\s+Analyzed:\s*(\d+)[\s\S]*?GRC[-\s]?Relevant\s+Articles:\s*(\d+)/i);
-    if (!m) return;
-    const total = m[1], grc = m[2];
-    const statGrid = document.createElement('div');
-    statGrid.className = 'summary-grid';
-    statGrid.innerHTML = `
-      <div class="stat"><div class="label">Total Articles</div><div class="value animate" data-target="${total}">0</div></div>
-      <div class="stat"><div class="label">GRC‑Relevant</div><div class="value animate" data-target="${grc}">0</div></div>
-    `;
-    node.insertBefore(statGrid, node.firstChild);
-    animateCounters(statGrid.querySelectorAll('.value.animate'));
-  }
-
-  function animateCounters(nodes) {
-    nodes.forEach(n => {
-      const target = parseInt(n.getAttribute('data-target') || '0', 10);
-      const start = 0;
-      const duration = 800;
-      const t0 = performance.now();
-      function step(ts) {
-        const p = Math.min(1, (ts - t0) / duration);
-        const val = Math.floor(start + (target - start) * p);
-        n.textContent = String(val);
-        if (p < 1) requestAnimationFrame(step);
-      }
-      requestAnimationFrame(step);
-    });
-  }
+  
 
   function buildSidebar() {
     const toc = document.getElementById('toc');
@@ -403,7 +373,6 @@
         }
       })();
       applyCollapsedState();
-      addSummaryStats(el.report, originalMd);
       highlightPills(el.report);
       buildSidebar();
       buildTopbar();

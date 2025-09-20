@@ -107,12 +107,7 @@ code { background: rgba(255,255,255,0.06); padding: 2px 6px; border-radius: 4px;
 pre { background: rgba(255,255,255,0.06); padding: 12px; border-radius: 8px; overflow: auto; }
 body.light pre, body.light code { background: rgba(0,0,0,0.05); }
 
-.summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-top: 6px; }
-.stat { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.06); border-radius: 10px; padding: 12px; text-align: center; }
-.stat .label { color: var(--muted); font-size: 12px; }
-.stat .value { font-size: 22px; font-weight: 600; margin-top: 4px; }
-.stat .value.animate { transition: color 200ms ease; }
-.stat:hover .value { color: #93c5fd; }
+
 
 .chips { margin-top: 6px; }
 
