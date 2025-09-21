@@ -1,5 +1,5 @@
 # GRC Intelligence Report - 2025-09-21
-**Generated:** 2025-09-21T12:14:29.236315Z
+**Generated:** 2025-09-21T15:09:13.669073Z
 # No content\n\nThe report generation completed, but no content was returned by the backend.
 
 ## Temporary Outline
@@ -7,6 +7,7 @@ _Temporary placeholder — full content will replace this automatically._
 - [UNC1549 Hacks 34 Devices in 11 Telecom Firms via LinkedIn Job Lures and MINIBIKE Malware] (https://thehackernews.com/2025/09/unc1549-hacks-34-devices-in-11-telecom.html)
 - [U.K. Arrests Two Teen Scattered Spider Hackers Linked to August 2024 TfL Cyber Attack] (https://thehackernews.com/2025/09/uk-arrest-two-teen-scattered-spider.html)
 - [Canada dismantles TradeOgre exchange, seizes $40 million in crypto] (https://www.bleepingcomputer.com/news/security/canada-dismantles-tradeogre-exchange-seizes-40-million-in-crypto/)
+- [DPRK Hackers Use ClickFix to Deliver BeaverTail Malware in Crypto Job Scams] (https://thehackernews.com/2025/09/dprk-hackers-use-clickfix-to-deliver.html)
 - [Russian Hackers Gamaredon and Turla Collaborate to Deploy Kazuar Backdoor in Ukraine] (https://thehackernews.com/2025/09/russian-hackers-gamaredon-and-turla.html)
 - [ChatGPT now gives you greater control over GPT-5 Thinking model] (https://www.bleepingcomputer.com/news/artificial-intelligence/chatgpt-now-gives-you-greater-control-over-gpt-5-thinking-model/)
 - [Critical Azure Entra ID Flaw Highlights Microsoft IAM Issues] (https://www.darkreading.com/cloud-security/critical-azure-entra-id-flaw-microsoft-iam-issues)
@@ -23,4 +24,3 @@ _Temporary placeholder — full content will replace this automatically._
 - [ChatGPT Search is now smarter as OpenAI takes on Google Search] (https://www.bleepingcomputer.com/news/artificial-intelligence/chatgpt-search-is-now-smarter-as-openai-takes-on-google-search/)
 - [Fortra Releases Critical Patch for CVSS 10.0 GoAnywhere MFT Vulnerability] (https://thehackernews.com/2025/09/fortra-releases-critical-patch-for-cvss.html)
 - [ShadowLeak Zero-Click Flaw Leaks Gmail Data via OpenAI ChatGPT Deep Research Agent] (https://thehackernews.com/2025/09/shadowleak-zero-click-flaw-leaks-gmail.html)
-- [Transforming Cyber Frameworks to Take Control of Cyber-Risk] (https://www.darkreading.com/cyber-risk/transforming-cyber-frameworks-cyber-risk)
