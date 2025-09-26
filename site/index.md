@@ -1,5 +1,5 @@
 # GRC Intelligence Report - 2025-09-26
-**Generated:** 2025-09-26T06:15:12.498602Z
+**Generated:** 2025-09-26T09:11:49.478119Z
 # No content\n\nThe report generation completed, but no content was returned by the backend.
 
 ## Temporary Outline
@@ -22,5 +22,5 @@ _Temporary placeholder — full content will replace this automatically._
 - [North Korean Hackers Use New AkdoorTea Backdoor to Target Global Crypto Developers] (https://thehackernews.com/2025/09/north-korean-hackers-use-new-akdoortea.html)
 - [Cisco's Wave of Actively Exploited Zero-Day Bugs Targets Firewalls, IOS] (https://www.darkreading.com/vulnerabilities-threats/cisco-actively-exploited-zero-day-bugs-firewalls-ios)
 - [Microsoft warns of new XCSSET macOS malware variant targeting Xcode devs] (https://www.bleepingcomputer.com/news/security/microsoft-warns-of-new-xcsset-macos-malware-variant-targeting-xcode-devs/)
-- [Kali Linux 2025.3 released with 10 new tools, Wi-Fi enhancements] (https://www.bleepingcomputer.com/news/security/kali-linux-20253-released-with-10-new-tools-wifi-enhancements/)
 - [Urgent: Cisco ASA Zero-Day Duo Under Attack; CISA Triggers Emergency Mitigation Directive] (https://thehackernews.com/2025/09/urgent-cisco-asa-zero-day-duo-under.html)
+- [Cisco warns of ASA firewall zero-days exploited in attacks] (https://www.bleepingcomputer.com/news/security/cisco-warns-of-asa-firewall-zero-days-exploited-in-attacks/)
