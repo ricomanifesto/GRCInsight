@@ -1,5 +1,5 @@
 # GRC Intelligence Report - 2025-10-05
-**Generated:** 2025-10-05T12:44:39.698309Z
+**Generated:** 2025-10-05T15:22:13.187889Z
 # No content\n\nThe report generation completed, but no content was returned by the backend.
 
 ## Temporary Outline
@@ -7,6 +7,7 @@ _Temporary placeholder — full content will replace this automatically._
 - [Dutch Authorities Arrest Two Teens for Alleged Pro-Russian Espionage] (https://www.darkreading.com/cyberattacks-data-breaches/dutch-authorities-arrest-teens-pro-russian-espionage)
 - [ChatGPT social could be a thing, as leak shows direct messages support] (https://www.bleepingcomputer.com/news/artificial-intelligence/chatgpt-social-could-be-a-thing-as-leak-shows-direct-messages-support/)
 - [Product Walkthrough: How Passwork 7 Addresses Complexity of Enterprise Security] (https://thehackernews.com/2025/10/product-walkthrough-how-passwork-7.html)
+- [ParkMobile pays... $1 each for 2021 data breach that hit 22 million] (https://www.bleepingcomputer.com/news/security/parkmobile-pays-1-each-for-2021-data-breach-that-hit-22-million/)
 - [OpenAI rolls out GPT Codex Alpha with early access to new models] (https://www.bleepingcomputer.com/news/artificial-intelligence/openai-rolls-out-gpt-codex-alpha-with-early-access-to-new-models/)
 - [For One NFL Team, Tackling Cyber Threats Is Basic Defense] (https://www.darkreading.com/cybersecurity-operations/for-one-nfl-team-tackling-cyber-threats-basic-defense)
 - [BCI: The Stuff of Nightmares or Dreams?] (https://www.darkreading.com/data-privacy/bci-the-thing-of-nightmare-or-dreams-)
@@ -16,7 +17,6 @@ _Temporary placeholder — full content will replace this automatically._
 - [Discord discloses data breach after hackers steal support tickets] (https://www.bleepingcomputer.com/news/security/discord-discloses-data-breach-after-hackers-steal-support-tickets/)
 - [Scattered Lapsus$ Hunters Returns With Salesforce Leak Site] (https://www.darkreading.com/cyberattacks-data-breaches/scattered-lapsus-hunters-returns-salesforce-leak-site)
 - [OpenAI wants ChatGPT to be your emotional support] (https://www.bleepingcomputer.com/news/artificial-intelligence/openai-wants-chatgpt-to-be-your-emotional-support/)
-- [CommetJacking attack tricks Comet browser into stealing emails] (https://www.bleepingcomputer.com/news/security/commetjacking-attack-tricks-comet-browser-into-stealing-emails/)
 - [Leaked Apple iPad Pro M5 benchmark shows massive improvements] (https://www.bleepingcomputer.com/news/technology/leaked-apple-ipad-pro-m5-benchmark-shows-massive-improvements/)
 - [Renault and Dacia UK warn of data breach impacting customers] (https://www.bleepingcomputer.com/news/security/renault-and-dacia-uk-warn-of-data-breach-impacting-customers/)
 - [Japanese beer giant Asahi confirms ransomware attack] (https://www.bleepingcomputer.com/news/security/japanese-beer-giant-asahi-confirms-ransomware-attack/)
