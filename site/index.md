@@ -1,5 +1,5 @@
 # GRC Intelligence Report - 2025-10-06
-**Generated:** 2025-10-06T06:37:54.748926Z
+**Generated:** 2025-10-06T09:29:46.402984Z
 # No content\n\nThe report generation completed, but no content was returned by the backend.
 
 ## Temporary Outline
@@ -12,6 +12,7 @@ _Temporary placeholder — full content will replace this automatically._
 - [CometJacking: One Click Can Turn Perplexity’s Comet AI Browser Into a Data Thief] (https://thehackernews.com/2025/10/cometjacking-one-click-can-turn.html)
 - [[Dark Reading Virtual Event] Know Your Enemy: How cybercriminals and nation-state hackers operate] (https://www.darkreading.com/events/-dark-reading-virtual-event-know-your-enemy-how-cybercriminals-and-nation-state-hackers-operate)
 - [Detour Dog Caught Running DNS-Powered Malware Factory for Strela Stealer] (https://thehackernews.com/2025/10/detour-dog-caught-running-dns-powered.html)
+- [Oracle Rushes Patch for CVE-2025-61882 After Cl0p Exploited It in Data Theft Attacks] (https://thehackernews.com/2025/10/oracle-rushes-patch-for-cve-2025-61882.html)
 - [UAT-8099 Hijacks Reputable Sites for SEO Fraud &amp; Theft] (https://www.darkreading.com/cyberattacks-data-breaches/uat-8099-hijacks-reputable-sites-seo-fraud-theft)
 - [Oracle patches EBS zero-day exploited in Clop data theft attacks] (https://www.bleepingcomputer.com/news/security/oracle-patches-ebs-zero-day-exploited-in-clop-data-theft-attacks/)
 - [Despite More CVEs, Cyber Insurers Aren't Altering Policies] (https://www.darkreading.com/cyber-risk/more-cves-cyber-insurers-arent-altering-policies)
@@ -23,4 +24,3 @@ _Temporary placeholder — full content will replace this automatically._
 - [ParkMobile pays... $1 each for 2021 data breach that hit 22 million] (https://www.bleepingcomputer.com/news/security/parkmobile-pays-1-each-for-2021-data-breach-that-hit-22-million/)
 - [Dutch Authorities Arrest Two Teens for Alleged Pro-Russian Espionage] (https://www.darkreading.com/cyberattacks-data-breaches/dutch-authorities-arrest-teens-pro-russian-espionage)
 - [Jaguar Land Rover Shows Cyberattacks Mean (Bad) Business] (https://www.darkreading.com/cyberattacks-data-breaches/jaguar-land-rover-cyberattacks-bad-business)
-- [Scanning Activity on Palo Alto Networks Portals Jump 500% in One Day] (https://thehackernews.com/2025/10/scanning-activity-on-palo-alto-networks.html)
