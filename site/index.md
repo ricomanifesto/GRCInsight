@@ -1,5 +1,5 @@
 # GRC Intelligence Report - 2025-10-06
-**Generated:** 2025-10-06T09:29:46.402984Z
+**Generated:** 2025-10-06T12:52:34.44839Z
 # No content\n\nThe report generation completed, but no content was returned by the backend.
 
 ## Temporary Outline
