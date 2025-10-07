@@ -1,5 +1,5 @@
 # GRC Intelligence Report - 2025-10-07
-**Generated:** 2025-10-07T06:36:54.584462Z
+**Generated:** 2025-10-07T09:27:53.132904Z
 # No content\n\nThe report generation completed, but no content was returned by the backend.
 
 ## Temporary Outline
@@ -20,7 +20,7 @@ _Temporary placeholder — full content will replace this automatically._
 - [Clop Ransomware Hits Oracle Customers Via Zero-Day Flaw] (https://www.darkreading.com/application-security/clop-ransomware-oracle-customers-zero-day-flaw)
 - [Chinese Gov't Fronts Trick the West to Obtain Cyber Tech] (https://www.darkreading.com/threat-intelligence/chinese-govt-fronts-cyber-tech)
 - [The role of Artificial Intelligence in today’s cybersecurity landscape] (https://www.bleepingcomputer.com/news/security/the-role-of-artificial-intelligence-in-todays-cybersecurity-landscape/)
+- [Oracle EBS Under Fire as Cl0p Exploits CVE-2025-61882 in Real-World Attacks] (https://thehackernews.com/2025/10/oracle-ebs-under-fire-as-cl0p-exploits.html)
 - [Hackers exploited Zimbra flaw as zero-day using iCalendar files] (https://www.bleepingcomputer.com/news/security/hackers-exploited-zimbra-flaw-as-zero-day-using-icalendar-files/)
-- [Rhadamanthys Stealer Evolves: Adds Device Fingerprinting, PNG Steganography Payloads] (https://thehackernews.com/2025/10/rhadamanthys-stealer-evolves-adds.html)
 - [Detour Dog Caught Running DNS-Powered Malware Factory for Strela Stealer] (https://thehackernews.com/2025/10/detour-dog-caught-running-dns-powered.html)
 - [Dutch Authorities Arrest Two Teens for Alleged Pro-Russian Espionage] (https://www.darkreading.com/cyberattacks-data-breaches/dutch-authorities-arrest-teens-pro-russian-espionage)
