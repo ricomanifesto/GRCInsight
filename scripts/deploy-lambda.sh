@@ -63,13 +63,49 @@ for repo in $GO_REPO_NAME $PYTHON_REPO_NAME; do
     fi
 done
 
+print_status "Ensuring Lambda ECR retrieval policies are present..."
+apply_ecr_policy() {
+    local repo="$1"
+    local policy_file
+    policy_file=$(mktemp)
+    # Same-account Lambda functions need unconditional service access so
+    # inactive functions can re-fetch images during re-optimization.
+    cat >"$policy_file" <<'EOF'
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "LambdaECRImageRetrievalPolicy",
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "lambda.amazonaws.com"
+      },
+      "Action": [
+        "ecr:BatchGetImage",
+        "ecr:GetDownloadUrlForLayer"
+      ]
+    }
+  ]
+}
+EOF
+    aws ecr set-repository-policy \
+        --repository-name "$repo" \
+        --region "$AWS_REGION" \
+        --policy-text "file://$policy_file" > /dev/null
+    rm -f "$policy_file"
+    print_status "Applied Lambda ECR retrieval policy to $repo"
+}
+
+apply_ecr_policy "$GO_REPO_NAME"
+apply_ecr_policy "$PYTHON_REPO_NAME"
+
 # Step 2: Login to ECR
 print_status "Logging in to ECR..."
 aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $ECR_REGISTRY
 
 # Step 3: Build and push Go Lambda function
 print_status "Building Go Lambda function (BuildKit disabled for Lambda manifest compatibility)..."
-docker build -f Dockerfile.lambda -t $GO_REPO_NAME:latest .
+docker build --platform linux/amd64 -f Dockerfile.lambda -t $GO_REPO_NAME:latest .
 docker tag $GO_REPO_NAME:latest $ECR_REGISTRY/$GO_REPO_NAME:latest
 
 print_status "Pushing Go Lambda function to ECR..."
@@ -80,7 +116,7 @@ GO_IMAGE_URI=$ECR_REGISTRY/$GO_REPO_NAME:latest
 # Step 4: Build and push Python Lambda function
 print_status "Building Python Lambda function (BuildKit disabled for Lambda manifest compatibility)..."
 cd agent
-docker build -f Dockerfile.lambda -t $PYTHON_REPO_NAME:latest .
+docker build --platform linux/amd64 -f Dockerfile.lambda -t $PYTHON_REPO_NAME:latest .
 docker tag $PYTHON_REPO_NAME:latest $ECR_REGISTRY/$PYTHON_REPO_NAME:latest
 
 print_status "Pushing Python Lambda function to ECR..."

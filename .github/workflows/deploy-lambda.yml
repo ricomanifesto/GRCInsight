@@ -66,6 +66,26 @@ jobs:
             fi
           done
 
+      - name: Ensure ECR repository policies allow Lambda image retrieval
+        run: |
+          set -euo pipefail
+          apply_policy() {
+            local repo="$1"
+            # Same-account Lambda functions need unconditional service-principal access
+            # so inactive functions can re-fetch the image for optimization/caching.
+            local policy_text
+            policy_text=$(jq -cn \
+              '{Version:"2012-10-17",Statement:[{Sid:"LambdaECRImageRetrievalPolicy",Effect:"Allow",Principal:{Service:"lambda.amazonaws.com"},Action:["ecr:BatchGetImage","ecr:GetDownloadUrlForLayer"]}]}')
+            aws ecr set-repository-policy \
+              --repository-name "$repo" \
+              --region "$AWS_REGION" \
+              --policy-text "$policy_text" >/dev/null
+            echo "Applied Lambda ECR retrieval policy to $repo"
+          }
+
+          apply_policy "$GO_REPO_NAME"
+          apply_policy "$PYTHON_REPO_NAME"
+
       - name: Login to Amazon ECR
         run: |
           aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin ${{ steps.aws-account.outputs.registry }}
@@ -78,7 +98,7 @@ jobs:
           REGISTRY=${{ steps.aws-account.outputs.registry }}
           GO_IMAGE_SHA="$REGISTRY/$GO_REPO_NAME:${{ github.sha }}"
           GO_IMAGE_LATEST="$REGISTRY/$GO_REPO_NAME:latest"
-          docker build -f Dockerfile.lambda -t "$GO_IMAGE_SHA" -t "$GO_IMAGE_LATEST" .
+          docker build --platform linux/amd64 -f Dockerfile.lambda -t "$GO_IMAGE_SHA" -t "$GO_IMAGE_LATEST" .
           docker push "$GO_IMAGE_SHA"
           docker push "$GO_IMAGE_LATEST"
           echo "GO_IMAGE_SHA=$GO_IMAGE_SHA" >> $GITHUB_ENV
@@ -92,7 +112,7 @@ jobs:
           REGISTRY=${{ steps.aws-account.outputs.registry }}
           PY_IMAGE_SHA="$REGISTRY/$PYTHON_REPO_NAME:${{ github.sha }}"
           PY_IMAGE_LATEST="$REGISTRY/$PYTHON_REPO_NAME:latest"
-          docker build -f Dockerfile.lambda -t "$PY_IMAGE_SHA" -t "$PY_IMAGE_LATEST" .
+          docker build --platform linux/amd64 -f Dockerfile.lambda -t "$PY_IMAGE_SHA" -t "$PY_IMAGE_LATEST" .
           docker push "$PY_IMAGE_SHA"
           docker push "$PY_IMAGE_LATEST"
           echo "PYTHON_IMAGE_SHA=$PY_IMAGE_SHA" >> $GITHUB_ENV
