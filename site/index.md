@@ -1,7 +1,7 @@
 # GRC Intelligence Report - 2026-03-20
-**Generated:** 2026-03-20T06:26:20.752957Z
+**Generated:** 2026-03-20T09:15:06.633922Z
 # GRC Intelligence Report - 2026-03-20
-**Generated:** 2026-03-20T06:26:20.606571Z
+**Generated:** 2026-03-20T09:15:05.996226Z
 GRC Intelligence Report - Deterministic Fallback Summary
 Source: Cybersecurity News Aggregator
 Analysis Period: Recent articles
@@ -25,11 +25,11 @@ Implications for Business
 - Organizations in regulated or data-intensive sectors should expect the same cyber events to trigger legal, contractual, and supervisory scrutiny.
 
 4) Risk Assessment
-- Vulnerability and patch management: Example signals include AI Conundrum: Why MCP Security Can't Be Patched Away, New ‘PolyShell’ flaw allows unauthenticated RCE on Magento e-stores.
+- Vulnerability and patch management: Example signals include Apple Warns Older iPhones Vulnerable to Coruna, DarkSword Exploit Kit Attacks, AI Conundrum: Why MCP Security Can't Be Patched Away.
 - Identity and access security: Example signals include New ‘PolyShell’ flaw allows unauthenticated RCE on Magento e-stores, 7 Ways to Prevent Privilege Escalation via Password Resets.
 - Ransomware and malware operations: Example signals include Feds Disrupt IoT Botnets Behind Huge DDoS Attacks, Speagle Malware Hijacks Cobra DocGuard to Steal Data via Compromised Servers.
-- Cloud and data protection: Example signals include Navia discloses data breach impacting 2.7 million people, FBI seizes Handala data leak site after Stryker cyberattack.
 - Regulatory and enforcement activity: Example signals include FBI seizes Handala data leak site after Stryker cyberattack, CISA urges US orgs to secure Microsoft Intune systems after Stryker breach.
+- Cloud and data protection: Example signals include Navia discloses data breach impacting 2.7 million people, FBI seizes Handala data leak site after Stryker cyberattack.
 
 5) Recommendations for Action
 - Maintain incident response, disclosure, and evidence-retention readiness for high-severity cyber events.
@@ -38,12 +38,12 @@ Implications for Business
 - Track regulator and enforcement updates from bodies such as CISA, the FBI, OFAC, and relevant privacy authorities.
 
 6) Source Highlights
+- [Apple Warns Older iPhones Vulnerable to Coruna, DarkSword Exploit Kit Attacks](https://thehackernews.com/2026/03/apple-warns-older-iphones-vulnerable-to.html) - Risk themes: Vulnerability and patch management.
 - [Feds Disrupt IoT Botnets Behind Huge DDoS Attacks](https://krebsonsecurity.com/2026/03/feds-disrupt-iot-botnets-behind-huge-ddos-attacks/) - Risk themes: Ransomware and malware operations.
 - [AI Conundrum: Why MCP Security Can't Be Patched Away](https://www.darkreading.com/application-security/mcp-security-patched) - Risk themes: Vulnerability and patch management.
 - [Navia discloses data breach impacting 2.7 million people](https://www.bleepingcomputer.com/news/security/navia-discloses-data-breach-impacting-27-million-people/) - Risk themes: Cloud and data protection.
 - [New ‘PolyShell’ flaw allows unauthenticated RCE on Magento e-stores](https://www.bleepingcomputer.com/news/security/new-polyshell-flaw-allows-unauthenticated-rce-on-magento-e-stores/) - Risk themes: Identity and access security, Vulnerability and patch management.
 - [Speagle Malware Hijacks Cobra DocGuard to Steal Data via Compromised Servers](https://thehackernews.com/2026/03/speagle-malware-hijacks-cobra-docguard.html) - Risk themes: Ransomware and malware operations.
-- [54 EDR Killers Use BYOVD to Exploit 34 Signed Vulnerable Drivers and Disable Security](https://thehackernews.com/2026/03/54-edr-killers-use-byovd-to-exploit-34.html) - Risk themes: Vulnerability and patch management.
 
 Notes and limitations
 - This fallback keeps the report current using feed content plus local entity extraction while OpenAI quota is unavailable.
