@@ -39,6 +39,8 @@
         "ecr:GetDownloadUrlForLayer",
         "ecr:BatchGetImage",
         "ecr:DescribeRepositories",
+        "ecr:GetRepositoryPolicy",
+        "ecr:SetRepositoryPolicy",
         "ecr:CreateRepository",
         "ecr:PutImage",
         "ecr:InitiateLayerUpload",

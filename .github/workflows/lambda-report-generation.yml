@@ -36,6 +36,8 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
 
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v4
@@ -273,8 +275,31 @@ jobs:
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
         git add site/index.md
-        git commit -m "Update GRC intelligence report [automated] [skip ci]" || exit 0
-        git push
+        if git diff --cached --quiet; then
+          echo "No report changes to commit"
+          exit 0
+        fi
+
+        git commit -m "Update GRC intelligence report [automated] [skip ci]"
+
+        attempts=1
+        max_attempts=3
+        while [ $attempts -le $max_attempts ]; do
+          git fetch origin "$GITHUB_REF_NAME"
+          git rebase -X theirs "origin/$GITHUB_REF_NAME"
+
+          if git push origin HEAD:"$GITHUB_REF_NAME"; then
+            exit 0
+          fi
+
+          attempts=$((attempts+1))
+          if [ $attempts -le $max_attempts ]; then
+            echo "Push raced with a newer remote update; retrying..."
+          fi
+        done
+
+        echo "Failed to push the generated report after $max_attempts attempts" >&2
+        exit 1
 
     - name: Upload Pages artifact
       if: steps.get-report.conclusion == 'success'
