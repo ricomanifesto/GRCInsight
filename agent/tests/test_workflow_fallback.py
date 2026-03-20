@@ -2,6 +2,7 @@ import asyncio
 
 from core import workflow as workflow_mod
 from models.api import AnalysisConfig
+from services.rss_service import RSSService
 
 
 def test_run_grc_analysis_endpoint_falls_back_when_openai_is_unavailable(monkeypatch):
@@ -60,3 +61,55 @@ def test_run_grc_analysis_endpoint_falls_back_when_openai_is_unavailable(monkeyp
     assert response.metadata is not None
     assert response.metadata.article_count == 1
     assert response.metadata.grc_article_count >= 1
+
+
+def test_rss_service_fetch_feed_survives_multiple_event_loops(monkeypatch):
+    class FakeResponse:
+        status_code = 200
+
+        def __init__(self, text):
+            self.text = text
+
+        def raise_for_status(self):
+            return None
+
+    class LoopBoundAsyncClient:
+        def __init__(self, *args, **kwargs):
+            self.bound_loop = None
+
+        async def __aenter__(self):
+            return self
+
+        async def __aexit__(self, exc_type, exc_val, exc_tb):
+            return None
+
+        async def get(self, _url, timeout=None):
+            current_loop = asyncio.get_running_loop()
+            if self.bound_loop is None:
+                self.bound_loop = current_loop
+            elif self.bound_loop is not current_loop:
+                raise RuntimeError("Event loop is closed")
+
+            return FakeResponse(
+                """<?xml version="1.0" encoding="UTF-8"?>
+                <rss version="2.0">
+                    <channel>
+                        <title>Test Feed</title>
+                        <item>
+                            <title>Test Article</title>
+                            <link>https://example.com/article</link>
+                            <description>Test summary</description>
+                        </item>
+                    </channel>
+                </rss>"""
+            )
+
+    monkeypatch.setattr("services.rss_service.httpx.AsyncClient", LoopBoundAsyncClient)
+
+    service = RSSService()
+
+    first_result = asyncio.run(service.fetch_feed("https://example.com/feed.xml"))
+    second_result = asyncio.run(service.fetch_feed("https://example.com/feed.xml"))
+
+    assert first_result["entry_count"] == 1
+    assert second_result["entry_count"] == 1

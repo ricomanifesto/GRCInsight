@@ -14,17 +14,18 @@ class RSSService:
     """Service for handling RSS feed operations."""
     
     def __init__(self):
-        self.client = httpx.AsyncClient(
-            follow_redirects=True,
-            timeout=settings.rss_timeout
-        )
+        self.client_kwargs = {
+            "follow_redirects": True,
+            "timeout": settings.rss_timeout,
+        }
     
     async def fetch_feed(self, feed_url: str) -> Dict[str, Any]:
         """Fetch and parse an RSS feed."""
         try:
             logger.info(f"Fetching RSS feed from {feed_url}")
-            response = await self.client.get(feed_url)
-            response.raise_for_status()
+            async with httpx.AsyncClient(**self.client_kwargs) as client:
+                response = await client.get(feed_url)
+                response.raise_for_status()
             
             # Parse the feed
             feed = feedparser.parse(response.text)
@@ -61,32 +62,33 @@ class RSSService:
     async def enrich_articles(self, articles: List[ArticleInput]) -> List[ArticleInput]:
         """Enrich articles with additional content."""
         enriched_articles = []
-        
-        for article in articles:
-            try:
-                logger.debug(f"Enriching article: {article.title}")
-                
-                # For now, just return the article as-is
-                # In the future, you could fetch full content from the URL
-                enriched_article = article
-                
-                # If the article has minimal content, try to fetch more
-                if not article.content and article.url:
-                    try:
-                        response = await self.client.get(article.url, timeout=10.0)
-                        if response.status_code == 200:
-                            # Simple content extraction - in production you'd want
-                            # more sophisticated content extraction
-                            enriched_article.content = response.text[:5000]  # Limit content size
-                    except Exception as e:
-                        logger.warning(f"Failed to fetch content for {article.url}: {e}")
-                
-                enriched_articles.append(enriched_article)
-                
-            except Exception as e:
-                logger.error(f"Error enriching article: {e}")
-                # Add the article anyway, even if enrichment failed
-                enriched_articles.append(article)
+
+        async with httpx.AsyncClient(**self.client_kwargs) as client:
+            for article in articles:
+                try:
+                    logger.debug(f"Enriching article: {article.title}")
+                    
+                    # For now, just return the article as-is
+                    # In the future, you could fetch full content from the URL
+                    enriched_article = article
+                    
+                    # If the article has minimal content, try to fetch more
+                    if not article.content and article.url:
+                        try:
+                            response = await client.get(article.url, timeout=10.0)
+                            if response.status_code == 200:
+                                # Simple content extraction - in production you'd want
+                                # more sophisticated content extraction
+                                enriched_article.content = response.text[:5000]  # Limit content size
+                        except Exception as e:
+                            logger.warning(f"Failed to fetch content for {article.url}: {e}")
+                    
+                    enriched_articles.append(enriched_article)
+                    
+                except Exception as e:
+                    logger.error(f"Error enriching article: {e}")
+                    # Add the article anyway, even if enrichment failed
+                    enriched_articles.append(article)
         
         return enriched_articles
     
@@ -108,4 +110,4 @@ class RSSService:
     
     async def __aexit__(self, exc_type, exc_val, exc_tb):
         """Async context manager exit."""
-        await self.client.aclose()
+        return None
