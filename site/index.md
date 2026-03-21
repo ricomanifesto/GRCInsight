@@ -1,7 +1,7 @@
 # GRC Intelligence Report - 2026-03-21
-**Generated:** 2026-03-21T00:23:09.111674Z
+**Generated:** 2026-03-21T00:39:11.942057Z
 # GRC Intelligence Report - 2026-03-21
-**Generated:** 2026-03-21T00:23:08.927782Z
+**Generated:** 2026-03-21T00:39:11.731314Z
 GRC Intelligence Report - Deterministic Fallback Summary
 Source: Cybersecurity News Aggregator
 Analysis Period: Recent articles
