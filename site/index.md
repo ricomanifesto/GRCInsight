@@ -1,11 +1,11 @@
 # GRC Intelligence Report - 2026-03-21
-**Generated:** 2026-03-21T09:13:18.278346Z
+**Generated:** 2026-03-21T12:08:55.159834Z
 # GRC Intelligence Report - 2026-03-21
-**Generated:** 2026-03-21T09:13:18.272647Z
+**Generated:** 2026-03-21T12:08:54.873098Z
 GRC Intelligence Report - Deterministic Fallback Summary
 Source: Cybersecurity News Aggregator
 Analysis Period: Recent articles
-Total Articles Analyzed: 30 (Locally flagged as GRC-relevant: 26)
+Total Articles Analyzed: 30 (Locally flagged as GRC-relevant: 27)
 
 1) Executive Summary
 - This report was generated using deterministic local analysis because OpenAI generation was unavailable: Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}.
@@ -15,7 +15,7 @@ Total Articles Analyzed: 30 (Locally flagged as GRC-relevant: 26)
 
 2) Key Regulatory Developments
 Observations
-- Regulatory or government bodies mentioned: CISA, DOJ.
+- Regulatory or government bodies mentioned: CISA, CMS, DOJ.
 Implications for Business
 - Teams should treat major cyber incidents, sanctions activity, and regulator advisories as compliance-relevant events even when source articles are operational in nature.
 - Evidence capture, executive escalation, and breach-notification decision support remain priority governance controls.
@@ -25,10 +25,10 @@ Implications for Business
 - Organizations in regulated or data-intensive sectors should expect the same cyber events to trigger legal, contractual, and supervisory scrutiny.
 
 4) Risk Assessment
-- Vulnerability and patch management: Example signals include Patch Now: Oracle's Fusion Middleware Has Critical RCE Flaw, Oracle pushes emergency fix for critical Identity Manager RCE flaw.
+- Vulnerability and patch management: Example signals include CISA Flags Apple, Craft CMS, Laravel Bugs in KEV, Orders Patching by April 3, 2026, Patch Now: Oracle's Fusion Middleware Has Critical RCE Flaw.
 - Ransomware and malware operations: Example signals include FBI links Signal phishing attacks to Russian intelligence services, Trivy Security Scanner GitHub Actions Breached, 75 Tags Hijacked to Steal CI/CD Secrets.
 - Identity and access security: Example signals include Patch Now: Oracle's Fusion Middleware Has Critical RCE Flaw, Oracle pushes emergency fix for critical Identity Manager RCE flaw.
-- Regulatory and enforcement activity: Example signals include FBI links Signal phishing attacks to Russian intelligence services, Police take down 373,000 fake CSAM sites in Operation Alice.
+- Regulatory and enforcement activity: Example signals include CISA Flags Apple, Craft CMS, Laravel Bugs in KEV, Orders Patching by April 3, 2026, FBI links Signal phishing attacks to Russian intelligence services.
 - Cloud and data protection: Example signals include Cyber OpSec Fail: Beast Gang Exposes Ransomware Server, Navia discloses data breach impacting 2.7 million people.
 
 5) Recommendations for Action
@@ -38,12 +38,12 @@ Implications for Business
 - Track regulator and enforcement updates from bodies such as CISA, the FBI, OFAC, and relevant privacy authorities.
 
 6) Source Highlights
+- [Trivy Supply Chain Attack Triggers Self-Spreading CanisterWorm Across 47 npm Packages](https://thehackernews.com/2026/03/trivy-supply-chain-attack-triggers-self.html) - Risk themes: Third-party and supply chain exposure.
+- [CISA Flags Apple, Craft CMS, Laravel Bugs in KEV, Orders Patching by April 3, 2026](https://thehackernews.com/2026/03/cisa-flags-apple-craft-cms-laravel-bugs.html) - Regulatory bodies: CMS, CISA.
 - [FBI links Signal phishing attacks to Russian intelligence services](https://www.bleepingcomputer.com/news/security/fbi-links-signal-phishing-attacks-to-russian-intelligence-services/) - Risk themes: Regulatory and enforcement activity, Ransomware and malware operations.
 - [Patch Now: Oracle's Fusion Middleware Has Critical RCE Flaw](https://www.darkreading.com/vulnerabilities-threats/patch-oracle-fusion-middleware-rce-flaw) - Risk themes: Identity and access security, Vulnerability and patch management.
 - [Oracle pushes emergency fix for critical Identity Manager RCE flaw](https://www.bleepingcomputer.com/news/security/oracle-pushes-emergency-fix-for-critical-identity-manager-rce-flaw/) - Risk themes: Identity and access security, Vulnerability and patch management.
 - [Trivy Security Scanner GitHub Actions Breached, 75 Tags Hijacked to Steal CI/CD Secrets](https://thehackernews.com/2026/03/trivy-security-scanner-github-actions.html) - Risk themes: Vulnerability and patch management, Ransomware and malware operations.
-- [Police take down 373,000 fake CSAM sites in Operation Alice](https://www.bleepingcomputer.com/news/security/police-take-down-373-000-fake-csam-sites-in-operation-alice/) - Risk themes: Regulatory and enforcement activity, Vulnerability and patch management.
-- [Cyber OpSec Fail: Beast Gang Exposes Ransomware Server](https://www.darkreading.com/threat-intelligence/opsec-beast-gang-exposes-ransomware-server) - Risk themes: Ransomware and malware operations, Cloud and data protection.
 
 Notes and limitations
 - This fallback keeps the report current using feed content plus local entity extraction while OpenAI quota is unavailable.
