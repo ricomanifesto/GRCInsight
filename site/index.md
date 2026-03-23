@@ -1,7 +1,7 @@
 # GRC Intelligence Report - 2026-03-23
-**Generated:** 2026-03-23T15:28:14.343404Z
+**Generated:** 2026-03-23T18:18:49.654966Z
 # GRC Intelligence Report - 2026-03-23
-**Generated:** 2026-03-23T15:28:14.336516Z
+**Generated:** 2026-03-23T18:18:49.494203Z
 GRC Intelligence Report - Deterministic Fallback Summary
 Source: Cybersecurity News Aggregator
 Analysis Period: Recent articles
@@ -10,7 +10,7 @@ Total Articles Analyzed: 30 (Locally flagged as GRC-relevant: 27)
 1) Executive Summary
 - This report was generated using deterministic local analysis because OpenAI generation was unavailable: Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}.
 - The monitored feed continues to surface material GRC monitoring signals across 30 current articles.
-- Dominant themes in the current batch include Ransomware and malware operations, Vulnerability and patch management, Identity and access security.
+- Dominant themes in the current batch include Vulnerability and patch management, Ransomware and malware operations, Identity and access security.
 - Business impact remains concentrated in incident response readiness, disclosure obligations, control effectiveness, and board-level risk oversight.
 
 2) Key Regulatory Developments
@@ -25,10 +25,10 @@ Implications for Business
 - Organizations in regulated or data-intensive sectors should expect the same cyber events to trigger legal, contractual, and supervisory scrutiny.
 
 4) Risk Assessment
-- Ransomware and malware operations: Example signals include Microsoft Warns IRS Phishing Hits 29,000 Users, Deploys RMM Malware, FBI warns of Handala hackers using Telegram in malware attacks.
 - Vulnerability and patch management: Example signals include CISA orders feds to patch DarkSword iOS flaws exploited attacks, Hackers Exploit CVE-2025-32975 (CVSS 10.0) to Hijack Unpatched Quest KACE SMA Systems.
-- Identity and access security: Example signals include Microsoft Exchange Online service change causes email access issues, Microsoft Warns IRS Phishing Hits 29,000 Users, Deploys RMM Malware.
-- Regulatory and enforcement activity: Example signals include FBI warns of Handala hackers using Telegram in malware attacks, CISA orders feds to patch DarkSword iOS flaws exploited attacks.
+- Ransomware and malware operations: Example signals include Microsoft Warns IRS Phishing Hits 29,000 Users, Deploys RMM Malware, FBI warns of Handala hackers using Telegram in malware attacks.
+- Identity and access security: Example signals include Varonis Atlas: Securing AI and the Data That Powers It, Microsoft Exchange Online service change causes email access issues.
+- Regulatory and enforcement activity: Example signals include ⚡ Weekly Recap: CI/CD Backdoor, FBI Buys Location Data, WhatsApp Ditches Numbers & More, FBI warns of Handala hackers using Telegram in malware attacks.
 - Cloud and data protection: Example signals include Microsoft Exchange Online service change causes email access issues, Cyber OpSec Fail: Beast Gang Exposes Ransomware Server.
 
 5) Recommendations for Action
@@ -38,12 +38,12 @@ Implications for Business
 - Track regulator and enforcement updates from bodies such as CISA, the FBI, OFAC, and relevant privacy authorities.
 
 6) Source Highlights
+- [Varonis Atlas: Securing AI and the Data That Powers It](https://www.bleepingcomputer.com/news/security/varonis-atlas-securing-ai-and-the-data-that-powers-it/) - Risk themes: Identity and access security.
+- [⚡ Weekly Recap: CI/CD Backdoor, FBI Buys Location Data, WhatsApp Ditches Numbers & More](https://thehackernews.com/2026/03/weekly-recap-cicd-backdoor-fbi-buys.html) - Risk themes: Regulatory and enforcement activity.
 - [Microsoft Exchange Online service change causes email access issues](https://www.bleepingcomputer.com/news/microsoft/new-exchange-online-virtual-account-blocks-email-access-via-mobile-mac-apps/) - Risk themes: Identity and access security, Cloud and data protection.
+- [We Found Eight Attack Vectors Inside AWS Bedrock. Here's What Attackers Can Do with Them](https://thehackernews.com/2026/03/we-found-eight-attack-vectors-inside.html) - Risk themes: Identity and access security.
 - [Microsoft Warns IRS Phishing Hits 29,000 Users, Deploys RMM Malware](https://thehackernews.com/2026/03/microsoft-warns-irs-phishing-hits-29000.html) - Risk themes: Identity and access security, Ransomware and malware operations.
 - [FBI warns of Handala hackers using Telegram in malware attacks](https://www.bleepingcomputer.com/news/security/fbi-warns-of-handala-hackers-using-telegram-in-malware-attacks/) - Risk themes: Regulatory and enforcement activity, Ransomware and malware operations.
-- [CISA orders feds to patch DarkSword iOS flaws exploited attacks](https://www.bleepingcomputer.com/news/security/cisa-orders-feds-to-patch-darksword-ios-flaws-exploited-attacks/) - Regulatory bodies: CISA.
-- [Trivy Hack Spreads Infostealer via Docker, Triggers Worm and Kubernetes Wiper](https://thehackernews.com/2026/03/trivy-hack-spreads-infostealer-via.html) - Risk themes: Third-party and supply chain exposure.
-- [Hackers Exploit CVE-2025-32975 (CVSS 10.0) to Hijack Unpatched Quest KACE SMA Systems](https://thehackernews.com/2026/03/hackers-exploit-cve-2025-32975-cvss-100.html) - Risk themes: Vulnerability and patch management.
 
 Notes and limitations
 - This fallback keeps the report current using feed content plus local entity extraction while OpenAI quota is unavailable.
