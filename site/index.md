@@ -1,7 +1,7 @@
 # GRC Intelligence Report - 2026-03-24
-**Generated:** 2026-03-24T09:24:11.44783Z
+**Generated:** 2026-03-24T12:18:44.252624Z
 # GRC Intelligence Report - 2026-03-24
-**Generated:** 2026-03-24T09:24:11.441009Z
+**Generated:** 2026-03-24T12:18:44.074635Z
 GRC Intelligence Report - Deterministic Fallback Summary
 Source: Cybersecurity News Aggregator
 Analysis Period: Recent articles
@@ -25,10 +25,10 @@ Implications for Business
 - Organizations in regulated or data-intensive sectors should expect the same cyber events to trigger legal, contractual, and supervisory scrutiny.
 
 4) Risk Assessment
-- Ransomware and malware operations: Example signals include Tycoon2FA phishing platform returns after recent police disruption, Ransomware's New Era: Moving at AI Speed.
+- Ransomware and malware operations: Example signals include U.S. Sentences Russian Hacker to 6.75 Years for Role in $9M Ransomware Damage, Tycoon2FA phishing platform returns after recent police disruption.
 - Identity and access security: Example signals include Trivy Supply Chain Attack Targets CI/CD Secrets, Ransomware's New Era: Moving at AI Speed.
-- Vulnerability and patch management: Example signals include Trivy Supply Chain Attack Targets CI/CD Secrets, Ransomware's New Era: Moving at AI Speed.
-- Cloud and data protection: Example signals include OpenAI rolls out ChatGPT Library to store your personal files, Trivy Supply Chain Attack Targets CI/CD Secrets.
+- Vulnerability and patch management: Example signals include Citrix Urges Patching Critical NetScaler Flaw Allowing Unauthenticated Data Leaks, Trivy Supply Chain Attack Targets CI/CD Secrets.
+- Cloud and data protection: Example signals include Citrix Urges Patching Critical NetScaler Flaw Allowing Unauthenticated Data Leaks, OpenAI rolls out ChatGPT Library to store your personal files.
 - Regulatory and enforcement activity: Example signals include ⚡ Weekly Recap: CI/CD Backdoor, FBI Buys Location Data, WhatsApp Ditches Numbers & More, FBI warns of Handala hackers using Telegram in malware attacks.
 
 5) Recommendations for Action
@@ -38,12 +38,12 @@ Implications for Business
 - Track regulator and enforcement updates from bodies such as CISA, the FBI, OFAC, and relevant privacy authorities.
 
 6) Source Highlights
+- [U.S. Sentences Russian Hacker to 6.75 Years for Role in $9M Ransomware Damage](https://thehackernews.com/2026/03/us-sentences-russian-hacker-to-675.html) - Risk themes: Ransomware and malware operations.
+- [Citrix Urges Patching Critical NetScaler Flaw Allowing Unauthenticated Data Leaks](https://thehackernews.com/2026/03/citrix-urges-patching-critical.html) - Risk themes: Vulnerability and patch management, Cloud and data protection.
 - [OpenAI rolls out ChatGPT Library to store your personal files](https://www.bleepingcomputer.com/news/artificial-intelligence/openai-rolls-out-chatgpt-library-to-store-your-personal-files/) - Risk themes: Cloud and data protection.
 - [Tycoon2FA phishing platform returns after recent police disruption](https://www.bleepingcomputer.com/news/security/tycoon2fa-phishing-platform-returns-after-recent-police-disruption/) - Risk themes: Ransomware and malware operations.
 - [Trivy Supply Chain Attack Targets CI/CD Secrets](https://www.darkreading.com/application-security/trivy-supply-chain-attack-targets-ci-cd-secrets) - Risk themes: Identity and access security, Third-party and supply chain exposure.
 - [Ransomware's New Era: Moving at AI Speed](https://www.darkreading.com/endpoint-security/ransomware-new-era-moving-ai-speed) - Risk themes: Identity and access security, Vulnerability and patch management.
-- [CISOs Debate Human Role in AI-Powered Security](https://www.darkreading.com/application-security/cisos-debate-human-role-ai-powered-security) - Operational and compliance monitoring signal.
-- [North Korean Hackers Abuse VS Code Auto-Run Tasks to Deploy StoatWaffle Malware](https://thehackernews.com/2026/03/north-korean-hackers-abuse-vs-code-auto.html) - Risk themes: Ransomware and malware operations.
 
 Notes and limitations
 - This fallback keeps the report current using feed content plus local entity extraction while OpenAI quota is unavailable.
