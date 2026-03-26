@@ -1,7 +1,7 @@
 # GRC Intelligence Report - 2026-03-26
-**Generated:** 2026-03-26T09:28:03.603629Z
+**Generated:** 2026-03-26T12:21:06.476815Z
 # GRC Intelligence Report - 2026-03-26
-**Generated:** 2026-03-26T09:28:03.596785Z
+**Generated:** 2026-03-26T12:21:06.315403Z
 GRC Intelligence Report - Deterministic Fallback Summary
 Source: Cybersecurity News Aggregator
 Analysis Period: Recent articles
@@ -25,7 +25,7 @@ Implications for Business
 - Organizations in regulated or data-intensive sectors should expect the same cyber events to trigger legal, contractual, and supervisory scrutiny.
 
 4) Risk Assessment
-- Vulnerability and patch management: Example signals include GitHub adds AI-powered bug detection to expand security coverage, PolyShell attacks target 56% of all vulnerable Magento stores.
+- Vulnerability and patch management: Example signals include WebRTC Skimmer Bypasses CSP to Steal Payment Data from E-Commerce Sites, GitHub adds AI-powered bug detection to expand security coverage.
 - Ransomware and malware operations: Example signals include Bubble AI app builder abused to steal Microsoft account credentials, New Torg Grabber infostealer malware targets 728 crypto wallets.
 - Identity and access security: Example signals include Bubble AI app builder abused to steal Microsoft account credentials, LeakBase Admin Arrested in Russia Over Massive Stolen Credential Marketplace.
 - Third-party and supply chain exposure: Example signals include Paid AI Accounts Are Now a Hot Underground Commodity, FCC Bans New Foreign-Made Routers Over Supply Chain and Cyber Risk Concerns.
@@ -38,12 +38,12 @@ Implications for Business
 - Track regulator and enforcement updates from bodies such as CISA, the FBI, OFAC, and relevant privacy authorities.
 
 6) Source Highlights
+- [WebRTC Skimmer Bypasses CSP to Steal Payment Data from E-Commerce Sites](https://thehackernews.com/2026/03/webrtc-skimmer-bypasses-csp-to-steal.html) - Risk themes: Vulnerability and patch management.
 - [GitHub adds AI-powered bug detection to expand security coverage](https://www.bleepingcomputer.com/news/security/github-adds-ai-powered-bug-detection-to-expand-security-coverage/) - Risk themes: Vulnerability and patch management.
 - [PolyShell attacks target 56% of all vulnerable Magento stores](https://www.bleepingcomputer.com/news/security/polyshell-attacks-target-56-percent-of-all-vulnerable-magento-stores/) - Risk themes: Vulnerability and patch management.
 - [Bubble AI app builder abused to steal Microsoft account credentials](https://www.bleepingcomputer.com/news/security/bubble-ai-app-builder-abused-to-steal-microsoft-account-credentials/) - Risk themes: Identity and access security, Ransomware and malware operations.
 - [New Torg Grabber infostealer malware targets 728 crypto wallets](https://www.bleepingcomputer.com/news/security/new-torg-grabber-infostealer-malware-targets-728-crypto-wallets/) - Risk themes: Ransomware and malware operations.
 - [LeakBase Admin Arrested in Russia Over Massive Stolen Credential Marketplace](https://thehackernews.com/2026/03/leakbase-admin-arrested-in-russia-over.html) - Risk themes: Regulatory and enforcement activity, Identity and access security.
-- [Blame Game: Why Public Cyber Attribution Carries Risks](https://www.darkreading.com/cyber-risk/blame-game-public-cyber-attribution-risks) - Operational and compliance monitoring signal.
 
 Notes and limitations
 - This fallback keeps the report current using feed content plus local entity extraction while OpenAI quota is unavailable.
