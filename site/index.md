@@ -1,7 +1,7 @@
 # GRC Intelligence Report - 2026-03-26
-**Generated:** 2026-03-26T12:28:50.998373Z
+**Generated:** 2026-03-26T15:30:29.232751Z
 # GRC Intelligence Report - 2026-03-26
-**Generated:** 2026-03-26T12:28:50.827849Z
+**Generated:** 2026-03-26T15:30:29.102145Z
 GRC Intelligence Report - Deterministic Fallback Summary
 Source: Cybersecurity News Aggregator
 Analysis Period: Recent articles
@@ -25,11 +25,11 @@ Implications for Business
 - Organizations in regulated or data-intensive sectors should expect the same cyber events to trigger legal, contractual, and supervisory scrutiny.
 
 4) Risk Assessment
-- Vulnerability and patch management: Example signals include WebRTC Skimmer Bypasses CSP to Steal Payment Data from E-Commerce Sites, GitHub adds AI-powered bug detection to expand security coverage.
-- Ransomware and malware operations: Example signals include Bubble AI app builder abused to steal Microsoft account credentials, New Torg Grabber infostealer malware targets 728 crypto wallets.
+- Vulnerability and patch management: Example signals include Coruna iOS Kit Reuses 2023 Triangulation Exploit Code in New Mass Attacks, WebRTC Skimmer Bypasses CSP to Steal Payment Data from E-Commerce Sites.
+- Ransomware and malware operations: Example signals include Suspected RedLine infostealer malware admin extradited to US, Bubble AI app builder abused to steal Microsoft account credentials.
 - Identity and access security: Example signals include Bubble AI app builder abused to steal Microsoft account credentials, LeakBase Admin Arrested in Russia Over Massive Stolen Credential Marketplace.
-- Third-party and supply chain exposure: Example signals include Paid AI Accounts Are Now a Hot Underground Commodity, FCC Bans New Foreign-Made Routers Over Supply Chain and Cyber Risk Concerns.
-- Cloud and data protection: Example signals include GlassWorm Malware Uses Solana Dead Drops to Deliver RAT and Steal Browser, Crypto Data, CSA Launches CSAI Foundation for AI Security.
+- Third-party and supply chain exposure: Example signals include Intermediaries Driving Global Spyware Market Expansion, Paid AI Accounts Are Now a Hot Underground Commodity.
+- Regulatory and enforcement activity: Example signals include LeakBase Admin Arrested in Russia Over Massive Stolen Credential Marketplace.
 
 5) Recommendations for Action
 - Maintain incident response, disclosure, and evidence-retention readiness for high-severity cyber events.
@@ -38,12 +38,12 @@ Implications for Business
 - Track regulator and enforcement updates from bodies such as CISA, the FBI, OFAC, and relevant privacy authorities.
 
 6) Source Highlights
+- [Intermediaries Driving Global Spyware Market Expansion](https://www.darkreading.com/cyber-risk/intermediaries-driving-global-spyware-market-expansion) - Risk themes: Third-party and supply chain exposure.
+- [Suspected RedLine infostealer malware admin extradited to US](https://www.bleepingcomputer.com/news/security/suspected-redline-infostealer-administrator-extradited-to-us/) - Risk themes: Ransomware and malware operations.
+- [[Webinar] Stop Guessing. Learn to Validate Your Defenses Against Real Attacks](https://thehackernews.com/2026/03/webinar-stop-guessing-learn-to-validate.html) - Operational and compliance monitoring signal.
+- [Coruna iOS Kit Reuses 2023 Triangulation Exploit Code in New Mass Attacks](https://thehackernews.com/2026/03/coruna-ios-kit-reuses-2023.html) - Risk themes: Vulnerability and patch management.
 - [WebRTC Skimmer Bypasses CSP to Steal Payment Data from E-Commerce Sites](https://thehackernews.com/2026/03/webrtc-skimmer-bypasses-csp-to-steal.html) - Risk themes: Vulnerability and patch management.
 - [GitHub adds AI-powered bug detection to expand security coverage](https://www.bleepingcomputer.com/news/security/github-adds-ai-powered-bug-detection-to-expand-security-coverage/) - Risk themes: Vulnerability and patch management.
-- [PolyShell attacks target 56% of all vulnerable Magento stores](https://www.bleepingcomputer.com/news/security/polyshell-attacks-target-56-percent-of-all-vulnerable-magento-stores/) - Risk themes: Vulnerability and patch management.
-- [Bubble AI app builder abused to steal Microsoft account credentials](https://www.bleepingcomputer.com/news/security/bubble-ai-app-builder-abused-to-steal-microsoft-account-credentials/) - Risk themes: Identity and access security, Ransomware and malware operations.
-- [New Torg Grabber infostealer malware targets 728 crypto wallets](https://www.bleepingcomputer.com/news/security/new-torg-grabber-infostealer-malware-targets-728-crypto-wallets/) - Risk themes: Ransomware and malware operations.
-- [LeakBase Admin Arrested in Russia Over Massive Stolen Credential Marketplace](https://thehackernews.com/2026/03/leakbase-admin-arrested-in-russia-over.html) - Risk themes: Regulatory and enforcement activity, Identity and access security.
 
 Notes and limitations
 - This fallback keeps the report current using feed content plus local entity extraction while OpenAI quota is unavailable.
