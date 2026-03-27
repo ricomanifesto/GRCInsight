@@ -1,16 +1,16 @@
 # GRC Intelligence Report - 2026-03-27
-**Generated:** 2026-03-27T18:25:40.934864Z
+**Generated:** 2026-03-27T21:12:16.783011Z
 # GRC Intelligence Report - 2026-03-27
-**Generated:** 2026-03-27T18:25:40.929013Z
+**Generated:** 2026-03-27T21:12:16.625222Z
 GRC Intelligence Report - Deterministic Fallback Summary
 Source: Cybersecurity News Aggregator
 Analysis Period: Recent articles
-Total Articles Analyzed: 30 (Locally flagged as GRC-relevant: 24)
+Total Articles Analyzed: 30 (Locally flagged as GRC-relevant: 23)
 
 1) Executive Summary
 - This report was generated using deterministic local analysis because OpenAI generation was unavailable: Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}.
 - The monitored feed continues to surface material GRC monitoring signals across 30 current articles.
-- Dominant themes in the current batch include Vulnerability and patch management, Ransomware and malware operations, Identity and access security.
+- Dominant themes in the current batch include Ransomware and malware operations, Vulnerability and patch management, Identity and access security.
 - Business impact remains concentrated in incident response readiness, disclosure obligations, control effectiveness, and board-level risk oversight.
 
 2) Key Regulatory Developments
@@ -25,10 +25,10 @@ Implications for Business
 - Organizations in regulated or data-intensive sectors should expect the same cyber events to trigger legal, contractual, and supervisory scrutiny.
 
 4) Risk Assessment
-- Vulnerability and patch management: Example signals include Open VSX Bug Let Malicious VS Code Extensions Bypass Pre-Publish Security Checks, LangChain, LangGraph Flaws Expose Files, Secrets, Databases in Widely Used AI Frameworks.
-- Ransomware and malware operations: Example signals include AitM Phishing Targets TikTok Business Accounts Using Cloudflare Turnstile Evasion, Bearlyfy Hits Russian Firms with Custom GenieLocker Ransomware.
-- Identity and access security: Example signals include European Commission investigating breach after Amazon cloud hack, Ajax football club hack exposed fan data, enabled ticket hijack.
-- Cloud and data protection: Example signals include European Commission investigating breach after Amazon cloud hack, AitM Phishing Targets TikTok Business Accounts Using Cloudflare Turnstile Evasion.
+- Ransomware and malware operations: Example signals include Fake VS Code alerts on GitHub spread malware to developers, China Upgrades the Backdoor It Uses to Spy on Telcos Globally.
+- Vulnerability and patch management: Example signals include Wartime Usage of Compromised IP Cameras Highlight Their Danger, Open VSX Bug Let Malicious VS Code Extensions Bypass Pre-Publish Security Checks.
+- Identity and access security: Example signals include European Commission investigating breach after Amazon cloud account hack, Ajax football club hack exposed fan data, enabled ticket hijack.
+- Cloud and data protection: Example signals include European Commission investigating breach after Amazon cloud account hack, AitM Phishing Targets TikTok Business Accounts Using Cloudflare Turnstile Evasion.
 - Regulatory and enforcement activity: Example signals include CISA: New Langflow flaw actively exploited to hijack AI workflows, UK sanctions Xinbi marketplace linked to Asian scam centers.
 
 5) Recommendations for Action
@@ -38,12 +38,12 @@ Implications for Business
 - Track regulator and enforcement updates from bodies such as CISA, the FBI, OFAC, and relevant privacy authorities.
 
 6) Source Highlights
+- [TeamPCP Pushes Malicious Telnyx Versions to PyPI, Hides Stealer in WAV Files](https://thehackernews.com/2026/03/teampcp-pushes-malicious-telnyx.html) - Risk themes: Third-party and supply chain exposure.
+- [Fake VS Code alerts on GitHub spread malware to developers](https://www.bleepingcomputer.com/news/security/fake-vs-code-alerts-on-github-spread-malware-to-developers/) - Risk themes: Ransomware and malware operations.
+- [China Upgrades the Backdoor It Uses to Spy on Telcos Globally](https://www.darkreading.com/threat-intelligence/china-upgrades-backdoor-spy-telcos) - Risk themes: Ransomware and malware operations.
+- [Wartime Usage of Compromised IP Cameras Highlight Their Danger](https://www.darkreading.com/cyber-risk/wartime-usage-of-compromised-ip-cameras-highlight-their-danger) - Risk themes: Vulnerability and patch management.
 - [Agentic GRC: Teams Get the Tech. The Mindset Shift Is What's Missing.](https://www.bleepingcomputer.com/news/security/agentic-grc-teams-get-the-tech-the-mindset-shift-is-whats-missing/) - Operational and compliance monitoring signal.
 - [Open VSX Bug Let Malicious VS Code Extensions Bypass Pre-Publish Security Checks](https://thehackernews.com/2026/03/open-vsx-bug-let-malicious-vs-code.html) - Risk themes: Vulnerability and patch management.
-- [European Commission investigating breach after Amazon cloud hack](https://www.bleepingcomputer.com/news/security/european-commission-investigating-breach-after-amazon-cloud-hack/) - Risk themes: Identity and access security, Cloud and data protection.
-- [AitM Phishing Targets TikTok Business Accounts Using Cloudflare Turnstile Evasion](https://thehackernews.com/2026/03/aitm-phishing-targets-tiktok-business.html) - Risk themes: Ransomware and malware operations, Cloud and data protection.
-- [Bearlyfy Hits Russian Firms with Custom GenieLocker Ransomware](https://thehackernews.com/2026/03/bearlyfy-hits-70-russian-firms-with.html) - Risk themes: Ransomware and malware operations.
-- [Windows 11 KB5079391 update rolls out Smart App Control improvements](https://www.bleepingcomputer.com/news/microsoft/windows-11-kb5079391-update-rolls-out-smart-app-control-improvements/) - Operational and compliance monitoring signal.
 
 Notes and limitations
 - This fallback keeps the report current using feed content plus local entity extraction while OpenAI quota is unavailable.
