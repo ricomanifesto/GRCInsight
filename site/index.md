@@ -1,7 +1,7 @@
 # GRC Intelligence Report - 2026-03-27
-**Generated:** 2026-03-27T09:24:09.0764Z
+**Generated:** 2026-03-27T12:16:49.757209Z
 # GRC Intelligence Report - 2026-03-27
-**Generated:** 2026-03-27T09:24:09.070436Z
+**Generated:** 2026-03-27T12:16:49.603259Z
 GRC Intelligence Report - Deterministic Fallback Summary
 Source: Cybersecurity News Aggregator
 Analysis Period: Recent articles
@@ -25,8 +25,8 @@ Implications for Business
 - Organizations in regulated or data-intensive sectors should expect the same cyber events to trigger legal, contractual, and supervisory scrutiny.
 
 4) Risk Assessment
-- Vulnerability and patch management: Example signals include Ajax football club hack exposed fan data, enabled ticket hijack, CISA: New Langflow flaw actively exploited to hijack AI workflows.
-- Ransomware and malware operations: Example signals include China-Linked Red Menshen Uses Stealthy BPFDoor Implants to Spy via Telecom Networks, TikTok for Business accounts targeted in new phishing campaign.
+- Vulnerability and patch management: Example signals include LangChain, LangGraph Flaws Expose Files, Secrets, Databases in Widely Used AI Frameworks, Ajax football club hack exposed fan data, enabled ticket hijack.
+- Ransomware and malware operations: Example signals include Dutch Police discloses security breach after phishing attack, China-Linked Red Menshen Uses Stealthy BPFDoor Implants to Spy via Telecom Networks.
 - Identity and access security: Example signals include Ajax football club hack exposed fan data, enabled ticket hijack, How Organizations Can Use Blunders to Level Up Their Security Programs.
 - Regulatory and enforcement activity: Example signals include CISA: New Langflow flaw actively exploited to hijack AI workflows, UK sanctions Xinbi marketplace linked to Asian scam centers.
 - Third-party and supply chain exposure: Example signals include Intermediaries Driving Global Spyware Market Expansion.
@@ -38,12 +38,12 @@ Implications for Business
 - Track regulator and enforcement updates from bodies such as CISA, the FBI, OFAC, and relevant privacy authorities.
 
 6) Source Highlights
+- [Windows 11 KB5079391 update rolls out Smart App Control improvements](https://www.bleepingcomputer.com/news/microsoft/windows-11-kb5079391-update-rolls-out-smart-app-control-improvements/) - Operational and compliance monitoring signal.
+- [Dutch Police discloses security breach after phishing attack](https://www.bleepingcomputer.com/news/security/dutch-police-discloses-security-breach-after-phishing-attack/) - Risk themes: Ransomware and malware operations.
+- [LangChain, LangGraph Flaws Expose Files, Secrets, Databases in Widely Used AI Frameworks](https://thehackernews.com/2026/03/langchain-langgraph-flaws-expose-files.html) - Risk themes: Vulnerability and patch management.
 - [Ajax football club hack exposed fan data, enabled ticket hijack](https://www.bleepingcomputer.com/news/security/ajax-football-club-hack-exposed-fan-data-enabled-ticket-hijack/) - Risk themes: Identity and access security, Vulnerability and patch management.
 - [CISA: New Langflow flaw actively exploited to hijack AI workflows](https://www.bleepingcomputer.com/news/security/cisa-new-langflow-flaw-actively-exploited-to-hijack-ai-workflows/) - Regulatory bodies: CISA.
 - [Critical Flaw in Langflow AI Platform Under Attack](https://www.darkreading.com/vulnerabilities-threats/critical-flaw-langflow-ai-platform-under-attack) - Risk themes: Vulnerability and patch management.
-- [China-Linked Red Menshen Uses Stealthy BPFDoor Implants to Spy via Telecom Networks](https://thehackernews.com/2026/03/china-linked-red-menshen-uses-stealthy.html) - Risk themes: Ransomware and malware operations.
-- [UK sanctions Xinbi marketplace linked to Asian scam centers](https://www.bleepingcomputer.com/news/security/uk-sanctions-xinbi-marketplace-linked-to-asian-scam-centers/) - Risk themes: Regulatory and enforcement activity.
-- [How Organizations Can Use Blunders to Level Up Their Security Programs](https://www.darkreading.com/cybersecurity-operations/blunders-level-up-security-programs) - Risk themes: Identity and access security, Vulnerability and patch management.
 
 Notes and limitations
 - This fallback keeps the report current using feed content plus local entity extraction while OpenAI quota is unavailable.
