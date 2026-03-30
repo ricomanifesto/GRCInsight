@@ -1,7 +1,7 @@
 # GRC Intelligence Report - 2026-03-30
-**Generated:** 2026-03-30T12:28:50.104907Z
+**Generated:** 2026-03-30T15:30:29.750235Z
 # GRC Intelligence Report - 2026-03-30
-**Generated:** 2026-03-30T12:28:49.940896Z
+**Generated:** 2026-03-30T15:30:29.593089Z
 GRC Intelligence Report - Deterministic Fallback Summary
 Source: Cybersecurity News Aggregator
 Analysis Period: Recent articles
@@ -25,9 +25,9 @@ Implications for Business
 - Organizations in regulated or data-intensive sectors should expect the same cyber events to trigger legal, contractual, and supervisory scrutiny.
 
 4) Risk Assessment
-- Vulnerability and patch management: Example signals include Critical Fortinet Forticlient EMS flaw now exploited in attacks, Three China-Linked Clusters Target Southeast Asian Government in 2025 Cyber Campaign.
+- Vulnerability and patch management: Example signals include Hackers now exploit critical F5 BIG-IP flaw in attacks, patch now, Critical Fortinet Forticlient EMS flaw now exploited in attacks.
 - Ransomware and malware operations: Example signals include European Commission confirms data breach after Europa.eu hack, New Infinity Stealer malware grabs macOS data via ClickFix lures.
-- Identity and access security: Example signals include File read flaw in Smart Slider plugin impacts 500K WordPress sites, CISA Adds CVE-2025-53521 to KEV After Active F5 BIG-IP APM Exploitation.
+- Identity and access security: Example signals include Russian CTRL Toolkit Delivered via Malicious LNK Files Hijacks RDP via FRP Tunnels, File read flaw in Smart Slider plugin impacts 500K WordPress sites.
 - Cloud and data protection: Example signals include European Commission confirms data breach after Europa.eu hack, European Commission investigating breach after Amazon cloud account hack.
 - Regulatory and enforcement activity: Example signals include FBI confirms hack of Director Patel's personal email inbox, Iran-Linked Hackers Breach FBI Director’s Personal Email, Hit Stryker With Wiper Attack.
 
@@ -38,12 +38,12 @@ Implications for Business
 - Track regulator and enforcement updates from bodies such as CISA, the FBI, OFAC, and relevant privacy authorities.
 
 6) Source Highlights
+- [The State of Secrets Sprawl 2026: 9 Takeaways for CISOs](https://thehackernews.com/2026/03/the-state-of-secrets-sprawl-2026-9.html) - Operational and compliance monitoring signal.
+- [Hackers now exploit critical F5 BIG-IP flaw in attacks, patch now](https://www.bleepingcomputer.com/news/security/hackers-now-exploit-critical-f5-big-ip-flaw-in-attacks-patch-now/) - Risk themes: Vulnerability and patch management.
+- [Russian CTRL Toolkit Delivered via Malicious LNK Files Hijacks RDP via FRP Tunnels](https://thehackernews.com/2026/03/russian-ctrl-toolkit-delivered-via.html) - Risk themes: Identity and access security.
 - [Critical Fortinet Forticlient EMS flaw now exploited in attacks](https://www.bleepingcomputer.com/news/security/critical-fortinet-forticlient-ems-flaw-now-exploited-in-attacks/) - Risk themes: Vulnerability and patch management.
 - [Three China-Linked Clusters Target Southeast Asian Government in 2025 Cyber Campaign](https://thehackernews.com/2026/03/three-china-linked-clusters-target.html) - Risk themes: Vulnerability and patch management.
 - [European Commission confirms data breach after Europa.eu hack](https://www.bleepingcomputer.com/news/security/european-commission-confirms-data-breach-after-europaeu-hack/) - Risk themes: Ransomware and malware operations, Cloud and data protection.
-- [FBI confirms hack of Director Patel's personal email inbox](https://www.bleepingcomputer.com/news/security/fbi-confirms-hack-of-director-patels-personal-email-inbox/) - Risk themes: Regulatory and enforcement activity.
-- [File read flaw in Smart Slider plugin impacts 500K WordPress sites](https://www.bleepingcomputer.com/news/security/file-read-flaw-in-smart-slider-plugin-impacts-500k-wordpress-sites/) - Risk themes: Identity and access security, Vulnerability and patch management.
-- [Iran-Linked Hackers Breach FBI Director’s Personal Email, Hit Stryker With Wiper Attack](https://thehackernews.com/2026/03/iran-linked-hackers-breach-fbi.html) - Risk themes: Regulatory and enforcement activity.
 
 Notes and limitations
 - This fallback keeps the report current using feed content plus local entity extraction while OpenAI quota is unavailable.
