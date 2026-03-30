@@ -1,7 +1,7 @@
-# GRC Intelligence Report - 2026-03-29
-**Generated:** 2026-03-29T21:13:02.641568Z
-# GRC Intelligence Report - 2026-03-29
-**Generated:** 2026-03-29T21:13:02.635096Z
+# GRC Intelligence Report - 2026-03-30
+**Generated:** 2026-03-30T00:29:01.193691Z
+# GRC Intelligence Report - 2026-03-30
+**Generated:** 2026-03-30T00:29:01.048220Z
 GRC Intelligence Report - Deterministic Fallback Summary
 Source: Cybersecurity News Aggregator
 Analysis Period: Recent articles
@@ -28,7 +28,7 @@ Implications for Business
 - Vulnerability and patch management: Example signals include File read flaw in Smart Slider plugin impacts 500K WordPress sites, New Infinity Stealer malware grabs macOS data via ClickFix lures.
 - Ransomware and malware operations: Example signals include New Infinity Stealer malware grabs macOS data via ClickFix lures, TA446 Deploys DarkSword iOS Exploit Kit in Targeted Spear-Phishing Campaign.
 - Identity and access security: Example signals include File read flaw in Smart Slider plugin impacts 500K WordPress sites, CISA Adds CVE-2025-53521 to KEV After Active F5 BIG-IP APM Exploitation.
-- Regulatory and enforcement activity: Example signals include Iran-Linked Hackers Breach FBI Director’s Personal Email, Hit Stryker With Wiper Attack, CISA Adds CVE-2025-53521 to KEV After Active F5 BIG-IP APM Exploitation.
+- Regulatory and enforcement activity: Example signals include FBI confirms hack of Director Patel's personal email inbox, Iran-Linked Hackers Breach FBI Director’s Personal Email, Hit Stryker With Wiper Attack.
 - Cloud and data protection: Example signals include European Commission investigating breach after Amazon cloud account hack, AitM Phishing Targets TikTok Business Accounts Using Cloudflare Turnstile Evasion.
 
 5) Recommendations for Action
@@ -38,12 +38,12 @@ Implications for Business
 - Track regulator and enforcement updates from bodies such as CISA, the FBI, OFAC, and relevant privacy authorities.
 
 6) Source Highlights
+- [FBI confirms hack of Director Patel's personal email inbox](https://www.bleepingcomputer.com/news/security/fbi-confirms-hack-of-director-patels-personal-email-inbox/) - Risk themes: Regulatory and enforcement activity.
 - [File read flaw in Smart Slider plugin impacts 500K WordPress sites](https://www.bleepingcomputer.com/news/security/file-read-flaw-in-smart-slider-plugin-impacts-500k-wordpress-sites/) - Risk themes: Identity and access security, Vulnerability and patch management.
 - [Iran-Linked Hackers Breach FBI Director’s Personal Email, Hit Stryker With Wiper Attack](https://thehackernews.com/2026/03/iran-linked-hackers-breach-fbi.html) - Risk themes: Regulatory and enforcement activity.
 - [New Infinity Stealer malware grabs macOS data via ClickFix lures](https://www.bleepingcomputer.com/news/security/new-infinity-stealer-malware-grabs-macos-data-via-clickfix-lures/) - Risk themes: Vulnerability and patch management, Ransomware and malware operations.
 - [Citrix NetScaler Under Active Recon for CVE-2026-3055 (CVSS 9.3) Memory Overread Bug](https://thehackernews.com/2026/03/citrix-netscaler-under-active-recon-for.html) - Risk themes: Vulnerability and patch management.
 - [TA446 Deploys DarkSword iOS Exploit Kit in Targeted Spear-Phishing Campaign](https://thehackernews.com/2026/03/ta446-deploys-leaked-darksword-ios.html) - Risk themes: Vulnerability and patch management, Ransomware and malware operations.
-- [CISA Adds CVE-2025-53521 to KEV After Active F5 BIG-IP APM Exploitation](https://thehackernews.com/2026/03/cisa-adds-cve-2025-53521-to-kev-after.html) - Regulatory bodies: CISA.
 
 Notes and limitations
 - This fallback keeps the report current using feed content plus local entity extraction while OpenAI quota is unavailable.
