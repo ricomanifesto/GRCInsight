@@ -1,7 +1,7 @@
 # GRC Intelligence Report - 2026-03-31
-**Generated:** 2026-03-31T18:27:21.281534Z
+**Generated:** 2026-03-31T21:14:13.527331Z
 # GRC Intelligence Report - 2026-03-31
-**Generated:** 2026-03-31T18:27:21.156695Z
+**Generated:** 2026-03-31T21:14:13.389906Z
 GRC Intelligence Report - Deterministic Fallback Summary
 Source: Cybersecurity News Aggregator
 Analysis Period: Recent articles
@@ -25,11 +25,11 @@ Implications for Business
 - Organizations in regulated or data-intensive sectors should expect the same cyber events to trigger legal, contractual, and supervisory scrutiny.
 
 4) Risk Assessment
-- Vulnerability and patch management: Example signals include Vertex AI Vulnerability Exposes Google Cloud Data and Private Artifacts, CISA orders feds to patch actively exploited Citrix flaw by Thursday.
-- Identity and access security: Example signals include How to Categorize AI Agents and Prioritize Risk, Hackers compromise Axios npm package to drop cross-platform malware.
-- Ransomware and malware operations: Example signals include Hackers compromise Axios npm package to drop cross-platform malware, Silver Fox Expands Asia Cyber Campaign with AtlasCross RAT and Fake Domains.
+- Vulnerability and patch management: Example signals include Cisco source code stolen in Trivy-linked dev environment breach, TrueConf Zero-Day Exploited in Attacks on Southeast Asian Government Networks.
+- Identity and access security: Example signals include Cisco source code stolen in Trivy-linked dev environment breach, How to Categorize AI Agents and Prioritize Risk.
+- Ransomware and malware operations: Example signals include Hackers compromise Axios npm package to drop cross-platform malware, Iran Deploys 'Pseudo-Ransomware,' Revives Pay2Key Operations.
+- Third-party and supply chain exposure: Example signals include Cisco source code stolen in Trivy-linked dev environment breach, Axios Supply Chain Attack Pushes Cross-Platform RAT via Compromised npm Account.
 - Cloud and data protection: Example signals include Vertex AI Vulnerability Exposes Google Cloud Data and Private Artifacts, Healthcare tech firm CareCloud says hackers stole patient data.
-- Regulatory and enforcement activity: Example signals include CISA orders feds to patch actively exploited Citrix flaw by Thursday.
 
 5) Recommendations for Action
 - Maintain incident response, disclosure, and evidence-retention readiness for high-severity cyber events.
@@ -38,12 +38,12 @@ Implications for Business
 - Track regulator and enforcement updates from bodies such as CISA, the FBI, OFAC, and relevant privacy authorities.
 
 6) Source Highlights
+- [Cisco source code stolen in Trivy-linked dev environment breach](https://www.bleepingcomputer.com/news/security/cisco-source-code-stolen-in-trivy-linked-dev-environment-breach/) - Risk themes: Identity and access security, Third-party and supply chain exposure.
+- [TrueConf Zero-Day Exploited in Attacks on Southeast Asian Government Networks](https://thehackernews.com/2026/03/trueconf-zero-day-exploited-in-attacks.html) - Risk themes: Vulnerability and patch management.
+- [Rethinking Vulnerability Management Strategies for Mid-Market Security](https://www.darkreading.com/cybersecurity-operations/rethinking-vulnerability-management-strategies-for-mid-market-security) - Risk themes: Vulnerability and patch management.
 - [How to Categorize AI Agents and Prioritize Risk](https://www.bleepingcomputer.com/news/security/how-to-categorize-ai-agents-and-prioritize-risk/) - Risk themes: Identity and access security.
 - [Hackers compromise Axios npm package to drop cross-platform malware](https://www.bleepingcomputer.com/news/security/hackers-compromise-axios-npm-package-to-drop-cross-platform-malware/) - Risk themes: Identity and access security, Ransomware and malware operations.
-- [Vertex AI Vulnerability Exposes Google Cloud Data and Private Artifacts](https://thehackernews.com/2026/03/vertex-ai-vulnerability-exposes-google.html) - Risk themes: Vulnerability and patch management, Cloud and data protection.
-- [The AI Arms Race – Why Unified Exposure Management Is Becoming a Boardroom Priority](https://thehackernews.com/2026/03/the-ai-arms-race-why-unified-exposure.html) - Operational and compliance monitoring signal.
-- [Silver Fox Expands Asia Cyber Campaign with AtlasCross RAT and Fake Domains](https://thehackernews.com/2026/03/silver-fox-expands-asia-cyber-campaign.html) - Risk themes: Identity and access security, Ransomware and malware operations.
-- [Dutch Finance Ministry takes treasury banking portal offline after breach](https://www.bleepingcomputer.com/news/security/dutch-finance-ministry-takes-treasury-banking-portal-offline-after-breach/) - Operational and compliance monitoring signal.
+- [Iran Deploys 'Pseudo-Ransomware,' Revives Pay2Key Operations](https://www.darkreading.com/threat-intelligence/iran-pseudo-ransomware-pay2key-operations) - Risk themes: Ransomware and malware operations.
 
 Notes and limitations
 - This fallback keeps the report current using feed content plus local entity extraction while OpenAI quota is unavailable.
