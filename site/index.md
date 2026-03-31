@@ -1,16 +1,16 @@
 # GRC Intelligence Report - 2026-03-31
-**Generated:** 2026-03-31T12:29:02.372911Z
+**Generated:** 2026-03-31T15:28:54.880512Z
 # GRC Intelligence Report - 2026-03-31
-**Generated:** 2026-03-31T12:29:02.206446Z
+**Generated:** 2026-03-31T15:28:54.569742Z
 GRC Intelligence Report - Deterministic Fallback Summary
 Source: Cybersecurity News Aggregator
 Analysis Period: Recent articles
-Total Articles Analyzed: 30 (Locally flagged as GRC-relevant: 26)
+Total Articles Analyzed: 30 (Locally flagged as GRC-relevant: 25)
 
 1) Executive Summary
 - This report was generated using deterministic local analysis because OpenAI generation was unavailable: Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}.
 - The monitored feed continues to surface material GRC monitoring signals across 30 current articles.
-- Dominant themes in the current batch include Vulnerability and patch management, Ransomware and malware operations, Identity and access security.
+- Dominant themes in the current batch include Vulnerability and patch management, Identity and access security, Ransomware and malware operations.
 - Business impact remains concentrated in incident response readiness, disclosure obligations, control effectiveness, and board-level risk oversight.
 
 2) Key Regulatory Developments
@@ -26,8 +26,8 @@ Implications for Business
 
 4) Risk Assessment
 - Vulnerability and patch management: Example signals include CISA orders feds to patch actively exploited Citrix flaw by Thursday, Critical Citrix NetScaler memory flaw actively exploited in attacks.
-- Ransomware and malware operations: Example signals include AI-Powered 'DeepLoad' Malware Steals Credentials, Evades Detection, New RoadK1ll WebSocket implant used to pivot on breached networks.
 - Identity and access security: Example signals include AI-Powered 'DeepLoad' Malware Steals Credentials, Evades Detection, Manufacturing and Healthcare Share Struggles with Passwords.
+- Ransomware and malware operations: Example signals include AI-Powered 'DeepLoad' Malware Steals Credentials, Evades Detection, New RoadK1ll WebSocket implant used to pivot on breached networks.
 - Regulatory and enforcement activity: Example signals include CISA orders feds to patch actively exploited Citrix flaw by Thursday, FBI confirms hack of Director Patel's personal email inbox.
 - Cloud and data protection: Example signals include Healthcare tech firm CareCloud says hackers stole patient data, European Commission confirms data breach after Europa.eu hack.
 
