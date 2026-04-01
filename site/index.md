@@ -1,7 +1,7 @@
 # GRC Intelligence Report - 2026-04-01
-**Generated:** 2026-04-01T06:44:15.490965Z
+**Generated:** 2026-04-01T09:28:19.602264Z
 # GRC Intelligence Report - 2026-04-01
-**Generated:** 2026-04-01T06:44:15.341248Z
+**Generated:** 2026-04-01T09:28:19.454392Z
 GRC Intelligence Report - Deterministic Fallback Summary
 Source: Cybersecurity News Aggregator
 Analysis Period: Recent articles
@@ -25,9 +25,9 @@ Implications for Business
 - Organizations in regulated or data-intensive sectors should expect the same cyber events to trigger legal, contractual, and supervisory scrutiny.
 
 4) Risk Assessment
-- Vulnerability and patch management: Example signals include Claude Code source code accidentally leaked in NPM package, GIGABYTE Control Center vulnerable to arbitrary file write flaw.
+- Vulnerability and patch management: Example signals include Claude Code Source Leaked via npm Packaging Error, Anthropic Confirms, Claude Code source code accidentally leaked in NPM package.
 - Identity and access security: Example signals include Claude Code source code accidentally leaked in NPM package, GIGABYTE Control Center vulnerable to arbitrary file write flaw.
-- Ransomware and malware operations: Example signals include Hackers compromise Axios npm package to drop cross-platform malware, Iran Deploys 'Pseudo-Ransomware,' Revives Pay2Key Operations.
+- Ransomware and malware operations: Example signals include Google Drive ransomware detection now on by default for paying users, Hackers compromise Axios npm package to drop cross-platform malware.
 - Cloud and data protection: Example signals include Google's Vertex AI Has an Over-Privileged Problem, TeamPCP Breaches Cloud, SaaS Instances With Stolen Credentials.
 - Regulatory and enforcement activity: Example signals include Proton launches new "Meet" privacy-focused conferencing platform, Android Developer Verification Rollout Begins Ahead of September Enforcement.
 
@@ -38,12 +38,12 @@ Implications for Business
 - Track regulator and enforcement updates from bodies such as CISA, the FBI, OFAC, and relevant privacy authorities.
 
 6) Source Highlights
+- [Google Drive ransomware detection now on by default for paying users](https://www.bleepingcomputer.com/news/security/google-drive-ransomware-detection-now-on-by-default-for-paying-users/) - Risk themes: Ransomware and malware operations.
+- [Claude Code Source Leaked via npm Packaging Error, Anthropic Confirms](https://thehackernews.com/2026/04/claude-code-tleaked-via-npm-packaging.html) - Risk themes: Vulnerability and patch management.
 - [Claude Code source code accidentally leaked in NPM package](https://www.bleepingcomputer.com/news/artificial-intelligence/claude-code-source-code-accidentally-leaked-in-npm-package/) - Risk themes: Identity and access security, Vulnerability and patch management.
 - [Proton launches new "Meet" privacy-focused conferencing platform](https://www.bleepingcomputer.com/news/security/proton-launches-new-meet-privacy-focused-conferencing-platform/) - Risk themes: Regulatory and enforcement activity.
 - [GIGABYTE Control Center vulnerable to arbitrary file write flaw](https://www.bleepingcomputer.com/news/security/gigabyte-control-center-vulnerable-to-arbitrary-file-write-flaw/) - Risk themes: Identity and access security, Vulnerability and patch management.
 - [Claude AI finds Vim, Emacs RCE bugs that trigger on file open](https://www.bleepingcomputer.com/news/security/claude-ai-finds-vim-emacs-rce-bugs-that-trigger-on-file-open/) - Risk themes: Vulnerability and patch management.
-- [Google's Vertex AI Has an Over-Privileged Problem](https://www.darkreading.com/cyber-risk/googles-vertex-ai-over-privilege-problem) - Risk themes: Identity and access security, Vulnerability and patch management.
-- [TeamPCP Breaches Cloud, SaaS Instances With Stolen Credentials](https://www.darkreading.com/cloud-security/teampcp-breaches-cloud-saas-instances-stolen-credentials) - Risk themes: Identity and access security, Cloud and data protection.
 
 Notes and limitations
 - This fallback keeps the report current using feed content plus local entity extraction while OpenAI quota is unavailable.
