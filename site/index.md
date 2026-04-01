@@ -1,11 +1,11 @@
-# GRC Intelligence Report - 2026-03-31
-**Generated:** 2026-03-31T21:18:05.412699Z
-# GRC Intelligence Report - 2026-03-31
-**Generated:** 2026-03-31T21:18:05.406860Z
+# GRC Intelligence Report - 2026-04-01
+**Generated:** 2026-04-01T00:31:15.892998Z
+# GRC Intelligence Report - 2026-04-01
+**Generated:** 2026-04-01T00:31:15.725918Z
 GRC Intelligence Report - Deterministic Fallback Summary
 Source: Cybersecurity News Aggregator
 Analysis Period: Recent articles
-Total Articles Analyzed: 30 (Locally flagged as GRC-relevant: 23)
+Total Articles Analyzed: 30 (Locally flagged as GRC-relevant: 25)
 
 1) Executive Summary
 - This report was generated using deterministic local analysis because OpenAI generation was unavailable: Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}.
@@ -25,11 +25,11 @@ Implications for Business
 - Organizations in regulated or data-intensive sectors should expect the same cyber events to trigger legal, contractual, and supervisory scrutiny.
 
 4) Risk Assessment
-- Vulnerability and patch management: Example signals include Cisco source code stolen in Trivy-linked dev environment breach, TrueConf Zero-Day Exploited in Attacks on Southeast Asian Government Networks.
-- Identity and access security: Example signals include Cisco source code stolen in Trivy-linked dev environment breach, How to Categorize AI Agents and Prioritize Risk.
+- Vulnerability and patch management: Example signals include Google's Vertex AI Has an Over-Privileged Problem, Android Developer Verification Rollout Begins Ahead of September Enforcement.
+- Identity and access security: Example signals include Google's Vertex AI Has an Over-Privileged Problem, TeamPCP Breaches Cloud, SaaS Instances With Stolen Credentials.
 - Ransomware and malware operations: Example signals include Hackers compromise Axios npm package to drop cross-platform malware, Iran Deploys 'Pseudo-Ransomware,' Revives Pay2Key Operations.
-- Third-party and supply chain exposure: Example signals include Cisco source code stolen in Trivy-linked dev environment breach, Axios Supply Chain Attack Pushes Cross-Platform RAT via Compromised npm Account.
-- Cloud and data protection: Example signals include Vertex AI Vulnerability Exposes Google Cloud Data and Private Artifacts, Healthcare tech firm CareCloud says hackers stole patient data.
+- Cloud and data protection: Example signals include Google's Vertex AI Has an Over-Privileged Problem, TeamPCP Breaches Cloud, SaaS Instances With Stolen Credentials.
+- Regulatory and enforcement activity: Example signals include Android Developer Verification Rollout Begins Ahead of September Enforcement, CISA orders feds to patch actively exploited Citrix flaw by Thursday.
 
 5) Recommendations for Action
 - Maintain incident response, disclosure, and evidence-retention readiness for high-severity cyber events.
@@ -38,12 +38,12 @@ Implications for Business
 - Track regulator and enforcement updates from bodies such as CISA, the FBI, OFAC, and relevant privacy authorities.
 
 6) Source Highlights
+- [Google's Vertex AI Has an Over-Privileged Problem](https://www.darkreading.com/cyber-risk/googles-vertex-ai-over-privilege-problem) - Risk themes: Identity and access security, Vulnerability and patch management.
+- [TeamPCP Breaches Cloud, SaaS Instances With Stolen Credentials](https://www.darkreading.com/cloud-security/teampcp-breaches-cloud-saas-instances-stolen-credentials) - Risk themes: Identity and access security, Cloud and data protection.
+- [Android Developer Verification Rollout Begins Ahead of September Enforcement](https://thehackernews.com/2026/03/android-developer-verification-rollout.html) - Risk themes: Regulatory and enforcement activity, Vulnerability and patch management.
 - [Cisco source code stolen in Trivy-linked dev environment breach](https://www.bleepingcomputer.com/news/security/cisco-source-code-stolen-in-trivy-linked-dev-environment-breach/) - Risk themes: Identity and access security, Third-party and supply chain exposure.
 - [TrueConf Zero-Day Exploited in Attacks on Southeast Asian Government Networks](https://thehackernews.com/2026/03/trueconf-zero-day-exploited-in-attacks.html) - Risk themes: Vulnerability and patch management.
 - [Rethinking Vulnerability Management Strategies for Mid-Market Security](https://www.darkreading.com/cybersecurity-operations/rethinking-vulnerability-management-strategies-for-mid-market-security) - Risk themes: Vulnerability and patch management.
-- [How to Categorize AI Agents and Prioritize Risk](https://www.bleepingcomputer.com/news/security/how-to-categorize-ai-agents-and-prioritize-risk/) - Risk themes: Identity and access security.
-- [Hackers compromise Axios npm package to drop cross-platform malware](https://www.bleepingcomputer.com/news/security/hackers-compromise-axios-npm-package-to-drop-cross-platform-malware/) - Risk themes: Identity and access security, Ransomware and malware operations.
-- [Iran Deploys 'Pseudo-Ransomware,' Revives Pay2Key Operations](https://www.darkreading.com/threat-intelligence/iran-pseudo-ransomware-pay2key-operations) - Risk themes: Ransomware and malware operations.
 
 Notes and limitations
 - This fallback keeps the report current using feed content plus local entity extraction while OpenAI quota is unavailable.
