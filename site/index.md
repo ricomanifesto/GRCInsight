@@ -1,7 +1,7 @@
 # GRC Intelligence Report - 2026-04-01
-**Generated:** 2026-04-01T15:35:20.312597Z
+**Generated:** 2026-04-01T18:20:16.488681Z
 # GRC Intelligence Report - 2026-04-01
-**Generated:** 2026-04-01T15:35:20.306005Z
+**Generated:** 2026-04-01T18:20:16.354814Z
 GRC Intelligence Report - Deterministic Fallback Summary
 Source: Cybersecurity News Aggregator
 Analysis Period: Recent articles
@@ -22,15 +22,15 @@ Implications for Business
 - Evidence capture, executive escalation, and breach-notification decision support remain priority governance controls.
 
 3) Industry Impact Analysis
-- Industries with explicit mentions: Government, Technology.
+- Industries with explicit mentions: Banking, Government, Technology.
 - Organizations in regulated or data-intensive sectors should expect the same cyber events to trigger legal, contractual, and supervisory scrutiny.
 
 4) Risk Assessment
-- Vulnerability and patch management: Example signals include Are We Training AI Too Late?, Google fixes fourth Chrome zero-day exploited in attacks in 2026.
-- Identity and access security: Example signals include Claude Code source code accidentally leaked in NPM package, GIGABYTE Control Center vulnerable to arbitrary file write flaw.
-- Ransomware and malware operations: Example signals include 3 Reasons Attackers Are Using Your Trusted Tools Against You (And Why You Don’t See It Coming), Google Drive ransomware detection now on by default for paying users.
+- Vulnerability and patch management: Example signals include Routine Access Is Powering Modern Intrusions, a New Threat Report Finds, New Chrome Zero-Day CVE-2026-5281 Under Active Exploitation — Patch Released.
+- Identity and access security: Example signals include Routine Access Is Powering Modern Intrusions, a New Threat Report Finds, Claude Code source code accidentally leaked in NPM package.
+- Ransomware and malware operations: Example signals include Microsoft Warns of WhatsApp-Delivered VBS Malware Hijacking Windows via UAC Bypass, Casbaneiro Phishing Targets Latin America and Europe Using Dynamic PDF Lures.
 - Regulatory and enforcement activity: Example signals include FBI warns against using Chinese mobile apps due to privacy risks, Proton launches new "Meet" privacy-focused conferencing platform.
-- Cloud and data protection: Example signals include Google's Vertex AI Has an Over-Privileged Problem, TeamPCP Breaches Cloud, SaaS Instances With Stolen Credentials.
+- Third-party and supply chain exposure: Example signals include Google Attributes Axios npm Supply Chain Attack to North Korean Group UNC1069, Cisco source code stolen in Trivy-linked dev environment breach.
 
 5) Recommendations for Action
 - Maintain incident response, disclosure, and evidence-retention readiness for high-severity cyber events.
@@ -39,12 +39,12 @@ Implications for Business
 - Track regulator and enforcement updates from bodies such as CISA, the FBI, OFAC, and relevant privacy authorities.
 
 6) Source Highlights
+- [Microsoft Warns of WhatsApp-Delivered VBS Malware Hijacking Windows via UAC Bypass](https://thehackernews.com/2026/04/microsoft-warns-of-whatsapp-delivered.html) - Risk themes: Ransomware and malware operations.
+- [Routine Access Is Powering Modern Intrusions, a New Threat Report Finds](https://www.bleepingcomputer.com/news/security/routine-access-is-powering-modern-intrusions-a-new-threat-report-finds/) - Risk themes: Identity and access security, Vulnerability and patch management.
+- [Block the Prompt, Not the Work: The End of "Doctor No"](https://thehackernews.com/2026/04/block-prompt-not-work-end-of-doctor-no.html) - Operational and compliance monitoring signal.
+- [Casbaneiro Phishing Targets Latin America and Europe Using Dynamic PDF Lures](https://thehackernews.com/2026/04/casbaneiro-phishing-targets-latin.html) - Risk themes: Ransomware and malware operations.
+- [New Chrome Zero-Day CVE-2026-5281 Under Active Exploitation — Patch Released](https://thehackernews.com/2026/04/new-chrome-zero-day-cve-2026-5281-under.html) - Risk themes: Vulnerability and patch management.
 - [FBI warns against using Chinese mobile apps due to privacy risks](https://www.bleepingcomputer.com/news/security/fbi-warns-against-using-chinese-mobile-apps-over-to-data-security-risks/) - Risk themes: Regulatory and enforcement activity.
-- [3 Reasons Attackers Are Using Your Trusted Tools Against You (And Why You Don’t See It Coming)](https://thehackernews.com/2026/04/3-reasons-attackers-are-using-your.html) - Risk themes: Ransomware and malware operations.
-- [Are We Training AI Too Late?](https://www.darkreading.com/cybersecurity-analytics/are-we-training-ai-too-late) - Risk themes: Vulnerability and patch management.
-- [Google fixes fourth Chrome zero-day exploited in attacks in 2026](https://www.bleepingcomputer.com/news/security/google-fixes-fourth-chrome-zero-day-exploited-in-attacks-in-2026/) - Risk themes: Vulnerability and patch management.
-- [Google Attributes Axios npm Supply Chain Attack to North Korean Group UNC1069](https://thehackernews.com/2026/04/google-attributes-axios-npm-supply.html) - Risk themes: Third-party and supply chain exposure.
-- [Google Drive ransomware detection now on by default for paying users](https://www.bleepingcomputer.com/news/security/google-drive-ransomware-detection-now-on-by-default-for-paying-users/) - Risk themes: Ransomware and malware operations.
 
 Notes and limitations
 - This fallback keeps the report current using feed content plus local entity extraction while OpenAI quota is unavailable.
