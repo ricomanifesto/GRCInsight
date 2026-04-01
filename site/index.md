@@ -1,7 +1,7 @@
 # GRC Intelligence Report - 2026-04-01
-**Generated:** 2026-04-01T18:26:56.533084Z
+**Generated:** 2026-04-01T21:16:45.881477Z
 # GRC Intelligence Report - 2026-04-01
-**Generated:** 2026-04-01T18:26:56.368993Z
+**Generated:** 2026-04-01T21:16:45.730892Z
 GRC Intelligence Report - Deterministic Fallback Summary
 Source: Cybersecurity News Aggregator
 Analysis Period: Recent articles
@@ -28,7 +28,7 @@ Implications for Business
 4) Risk Assessment
 - Vulnerability and patch management: Example signals include Routine Access Is Powering Modern Intrusions, a New Threat Report Finds, New Chrome Zero-Day CVE-2026-5281 Under Active Exploitation — Patch Released.
 - Identity and access security: Example signals include Routine Access Is Powering Modern Intrusions, a New Threat Report Finds, Claude Code source code accidentally leaked in NPM package.
-- Ransomware and malware operations: Example signals include Microsoft Warns of WhatsApp-Delivered VBS Malware Hijacking Windows via UAC Bypass, Casbaneiro Phishing Targets Latin America and Europe Using Dynamic PDF Lures.
+- Ransomware and malware operations: Example signals include 'NoVoice' Android malware on Google Play infected 2.3 million devices, CERT-UA Impersonation Campaign Spread AGEWHEEZE Malware to 1 Million Emails.
 - Regulatory and enforcement activity: Example signals include FBI warns against using Chinese mobile apps due to privacy risks, Proton launches new "Meet" privacy-focused conferencing platform.
 - Third-party and supply chain exposure: Example signals include Google Attributes Axios npm Supply Chain Attack to North Korean Group UNC1069, Cisco source code stolen in Trivy-linked dev environment breach.
 
@@ -39,12 +39,12 @@ Implications for Business
 - Track regulator and enforcement updates from bodies such as CISA, the FBI, OFAC, and relevant privacy authorities.
 
 6) Source Highlights
+- ['NoVoice' Android malware on Google Play infected 2.3 million devices](https://www.bleepingcomputer.com/news/security/novoice-android-malware-on-google-play-infected-23-million-devices/) - Risk themes: Ransomware and malware operations.
+- [CERT-UA Impersonation Campaign Spread AGEWHEEZE Malware to 1 Million Emails](https://thehackernews.com/2026/04/cert-ua-impersonation-campaign-spread.html) - Risk themes: Ransomware and malware operations.
 - [Microsoft Warns of WhatsApp-Delivered VBS Malware Hijacking Windows via UAC Bypass](https://thehackernews.com/2026/04/microsoft-warns-of-whatsapp-delivered.html) - Risk themes: Ransomware and malware operations.
 - [Routine Access Is Powering Modern Intrusions, a New Threat Report Finds](https://www.bleepingcomputer.com/news/security/routine-access-is-powering-modern-intrusions-a-new-threat-report-finds/) - Risk themes: Identity and access security, Vulnerability and patch management.
 - [Block the Prompt, Not the Work: The End of "Doctor No"](https://thehackernews.com/2026/04/block-prompt-not-work-end-of-doctor-no.html) - Operational and compliance monitoring signal.
 - [Casbaneiro Phishing Targets Latin America and Europe Using Dynamic PDF Lures](https://thehackernews.com/2026/04/casbaneiro-phishing-targets-latin.html) - Risk themes: Ransomware and malware operations.
-- [New Chrome Zero-Day CVE-2026-5281 Under Active Exploitation — Patch Released](https://thehackernews.com/2026/04/new-chrome-zero-day-cve-2026-5281-under.html) - Risk themes: Vulnerability and patch management.
-- [FBI warns against using Chinese mobile apps due to privacy risks](https://www.bleepingcomputer.com/news/security/fbi-warns-against-using-chinese-mobile-apps-over-to-data-security-risks/) - Risk themes: Regulatory and enforcement activity.
 
 Notes and limitations
 - This fallback keeps the report current using feed content plus local entity extraction while OpenAI quota is unavailable.
