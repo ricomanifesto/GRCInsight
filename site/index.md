@@ -1,7 +1,7 @@
 # GRC Intelligence Report - 2026-04-01
-**Generated:** 2026-04-01T09:32:52.729388Z
+**Generated:** 2026-04-01T12:21:20.58891Z
 # GRC Intelligence Report - 2026-04-01
-**Generated:** 2026-04-01T09:32:52.722705Z
+**Generated:** 2026-04-01T12:21:20.439939Z
 GRC Intelligence Report - Deterministic Fallback Summary
 Source: Cybersecurity News Aggregator
 Analysis Period: Recent articles
@@ -29,7 +29,7 @@ Implications for Business
 - Identity and access security: Example signals include Claude Code source code accidentally leaked in NPM package, GIGABYTE Control Center vulnerable to arbitrary file write flaw.
 - Ransomware and malware operations: Example signals include Google Drive ransomware detection now on by default for paying users, Hackers compromise Axios npm package to drop cross-platform malware.
 - Cloud and data protection: Example signals include Google's Vertex AI Has an Over-Privileged Problem, TeamPCP Breaches Cloud, SaaS Instances With Stolen Credentials.
-- Regulatory and enforcement activity: Example signals include Proton launches new "Meet" privacy-focused conferencing platform, Android Developer Verification Rollout Begins Ahead of September Enforcement.
+- Third-party and supply chain exposure: Example signals include Google Attributes Axios npm Supply Chain Attack to North Korean Group UNC1069, Cisco source code stolen in Trivy-linked dev environment breach.
 
 5) Recommendations for Action
 - Maintain incident response, disclosure, and evidence-retention readiness for high-severity cyber events.
@@ -38,12 +38,12 @@ Implications for Business
 - Track regulator and enforcement updates from bodies such as CISA, the FBI, OFAC, and relevant privacy authorities.
 
 6) Source Highlights
+- [Google Attributes Axios npm Supply Chain Attack to North Korean Group UNC1069](https://thehackernews.com/2026/04/google-attributes-axios-npm-supply.html) - Risk themes: Third-party and supply chain exposure.
 - [Google Drive ransomware detection now on by default for paying users](https://www.bleepingcomputer.com/news/security/google-drive-ransomware-detection-now-on-by-default-for-paying-users/) - Risk themes: Ransomware and malware operations.
 - [Claude Code Source Leaked via npm Packaging Error, Anthropic Confirms](https://thehackernews.com/2026/04/claude-code-tleaked-via-npm-packaging.html) - Risk themes: Vulnerability and patch management.
 - [Claude Code source code accidentally leaked in NPM package](https://www.bleepingcomputer.com/news/artificial-intelligence/claude-code-source-code-accidentally-leaked-in-npm-package/) - Risk themes: Identity and access security, Vulnerability and patch management.
 - [Proton launches new "Meet" privacy-focused conferencing platform](https://www.bleepingcomputer.com/news/security/proton-launches-new-meet-privacy-focused-conferencing-platform/) - Risk themes: Regulatory and enforcement activity.
 - [GIGABYTE Control Center vulnerable to arbitrary file write flaw](https://www.bleepingcomputer.com/news/security/gigabyte-control-center-vulnerable-to-arbitrary-file-write-flaw/) - Risk themes: Identity and access security, Vulnerability and patch management.
-- [Claude AI finds Vim, Emacs RCE bugs that trigger on file open](https://www.bleepingcomputer.com/news/security/claude-ai-finds-vim-emacs-rce-bugs-that-trigger-on-file-open/) - Risk themes: Vulnerability and patch management.
 
 Notes and limitations
 - This fallback keeps the report current using feed content plus local entity extraction while OpenAI quota is unavailable.
