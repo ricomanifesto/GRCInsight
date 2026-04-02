@@ -1,7 +1,7 @@
 # GRC Intelligence Report - 2026-04-02
-**Generated:** 2026-04-02T09:28:01.13266Z
+**Generated:** 2026-04-02T12:20:37.5617Z
 # GRC Intelligence Report - 2026-04-02
-**Generated:** 2026-04-02T09:28:01.125703Z
+**Generated:** 2026-04-02T12:20:37.408910Z
 GRC Intelligence Report - Deterministic Fallback Summary
 Source: Cybersecurity News Aggregator
 Analysis Period: Recent articles
@@ -26,7 +26,7 @@ Implications for Business
 - Organizations in regulated or data-intensive sectors should expect the same cyber events to trigger legal, contractual, and supervisory scrutiny.
 
 4) Risk Assessment
-- Vulnerability and patch management: Example signals include Apple expands iOS 18 updates to more iPhones to block DarkSword attacks, Hackers exploit TrueConf zero-day to push malicious software updates.
+- Vulnerability and patch management: Example signals include Over 14,000 F5 BIG-IP APM instances still exposed to RCE attacks, Apple Expands iOS 18.7.7 Update to More Devices to Block DarkSword Exploit.
 - Ransomware and malware operations: Example signals include New CrystalRAT malware adds RAT, stealer and prankware features, New EvilTokens service fuels Microsoft device code phishing attacks.
 - Identity and access security: Example signals include New CrystalRAT malware adds RAT, stealer and prankware features, Routine Access Is Powering Modern Intrusions, a New Threat Report Finds.
 - Regulatory and enforcement activity: Example signals include FBI warns against using Chinese mobile apps due to privacy risks, Proton launches new "Meet" privacy-focused conferencing platform.
@@ -39,12 +39,12 @@ Implications for Business
 - Track regulator and enforcement updates from bodies such as CISA, the FBI, OFAC, and relevant privacy authorities.
 
 6) Source Highlights
+- [Over 14,000 F5 BIG-IP APM instances still exposed to RCE attacks](https://www.bleepingcomputer.com/news/security/over-14-000-f5-big-ip-apm-instances-still-exposed-to-rce-attacks/) - Risk themes: Vulnerability and patch management.
+- [Apple Expands iOS 18.7.7 Update to More Devices to Block DarkSword Exploit](https://thehackernews.com/2026/04/apple-expands-ios-1877-update-to-more.html) - Risk themes: Vulnerability and patch management.
 - [New CrystalRAT malware adds RAT, stealer and prankware features](https://www.bleepingcomputer.com/news/security/new-crystalrat-malware-adds-rat-stealer-and-prankware-features/) - Risk themes: Identity and access security, Ransomware and malware operations.
 - [Apple expands iOS 18 updates to more iPhones to block DarkSword attacks](https://www.bleepingcomputer.com/news/security/apple-expands-ios-18-updates-to-more-iphones-to-block-darksword-attacks/) - Risk themes: Vulnerability and patch management.
 - [Hackers exploit TrueConf zero-day to push malicious software updates](https://www.bleepingcomputer.com/news/security/hackers-exploit-trueconf-zero-day-to-push-malicious-software-updates/) - Risk themes: Vulnerability and patch management.
 - [New EvilTokens service fuels Microsoft device code phishing attacks](https://www.bleepingcomputer.com/news/security/new-eviltokens-service-fuels-microsoft-device-code-phishing-attacks/) - Risk themes: Ransomware and malware operations.
-- ['NoVoice' Android malware on Google Play infected 2.3 million devices](https://www.bleepingcomputer.com/news/security/novoice-android-malware-on-google-play-infected-23-million-devices/) - Risk themes: Ransomware and malware operations.
-- [CERT-UA Impersonation Campaign Spread AGEWHEEZE Malware to 1 Million Emails](https://thehackernews.com/2026/04/cert-ua-impersonation-campaign-spread.html) - Risk themes: Ransomware and malware operations.
 
 Notes and limitations
 - This fallback keeps the report current using feed content plus local entity extraction while OpenAI quota is unavailable.
