@@ -1,7 +1,7 @@
 # GRC Intelligence Report - 2026-04-02
-**Generated:** 2026-04-02T00:43:27.167762Z
+**Generated:** 2026-04-02T03:56:18.177387Z
 # GRC Intelligence Report - 2026-04-02
-**Generated:** 2026-04-02T00:43:27.008594Z
+**Generated:** 2026-04-02T03:56:18.028852Z
 GRC Intelligence Report - Deterministic Fallback Summary
 Source: Cybersecurity News Aggregator
 Analysis Period: Recent articles
@@ -26,11 +26,11 @@ Implications for Business
 - Organizations in regulated or data-intensive sectors should expect the same cyber events to trigger legal, contractual, and supervisory scrutiny.
 
 4) Risk Assessment
-- Vulnerability and patch management: Example signals include Routine Access Is Powering Modern Intrusions, a New Threat Report Finds, New Chrome Zero-Day CVE-2026-5281 Under Active Exploitation — Patch Released.
-- Ransomware and malware operations: Example signals include New EvilTokens service fuels Microsoft device code phishing attacks, 'NoVoice' Android malware on Google Play infected 2.3 million devices.
-- Identity and access security: Example signals include Routine Access Is Powering Modern Intrusions, a New Threat Report Finds, Claude Code source code accidentally leaked in NPM package.
+- Vulnerability and patch management: Example signals include Apple expands iOS 18 updates to more iPhones to block DarkSword attacks, Hackers exploit TrueConf zero-day to push malicious software updates.
+- Ransomware and malware operations: Example signals include New CrystalRAT malware adds RAT, stealer and prankware features, New EvilTokens service fuels Microsoft device code phishing attacks.
+- Identity and access security: Example signals include New CrystalRAT malware adds RAT, stealer and prankware features, Routine Access Is Powering Modern Intrusions, a New Threat Report Finds.
 - Regulatory and enforcement activity: Example signals include FBI warns against using Chinese mobile apps due to privacy risks, Proton launches new "Meet" privacy-focused conferencing platform.
-- Cloud and data protection: Example signals include Google's Vertex AI Is Over-Privileged. That's a Problem, TeamPCP Breaches Cloud, SaaS Instances With Stolen Credentials.
+- Cloud and data protection: Example signals include New CrystalRAT malware adds RAT, stealer and prankware features.
 
 5) Recommendations for Action
 - Maintain incident response, disclosure, and evidence-retention readiness for high-severity cyber events.
@@ -39,12 +39,12 @@ Implications for Business
 - Track regulator and enforcement updates from bodies such as CISA, the FBI, OFAC, and relevant privacy authorities.
 
 6) Source Highlights
+- [New CrystalRAT malware adds RAT, stealer and prankware features](https://www.bleepingcomputer.com/news/security/new-crystalrat-malware-adds-rat-stealer-and-prankware-features/) - Risk themes: Identity and access security, Ransomware and malware operations.
+- [Apple expands iOS 18 updates to more iPhones to block DarkSword attacks](https://www.bleepingcomputer.com/news/security/apple-expands-ios-18-updates-to-more-iphones-to-block-darksword-attacks/) - Risk themes: Vulnerability and patch management.
+- [Hackers exploit TrueConf zero-day to push malicious software updates](https://www.bleepingcomputer.com/news/security/hackers-exploit-trueconf-zero-day-to-push-malicious-software-updates/) - Risk themes: Vulnerability and patch management.
 - [New EvilTokens service fuels Microsoft device code phishing attacks](https://www.bleepingcomputer.com/news/security/new-eviltokens-service-fuels-microsoft-device-code-phishing-attacks/) - Risk themes: Ransomware and malware operations.
 - ['NoVoice' Android malware on Google Play infected 2.3 million devices](https://www.bleepingcomputer.com/news/security/novoice-android-malware-on-google-play-infected-23-million-devices/) - Risk themes: Ransomware and malware operations.
 - [CERT-UA Impersonation Campaign Spread AGEWHEEZE Malware to 1 Million Emails](https://thehackernews.com/2026/04/cert-ua-impersonation-campaign-spread.html) - Risk themes: Ransomware and malware operations.
-- [Microsoft Warns of WhatsApp-Delivered VBS Malware Hijacking Windows via UAC Bypass](https://thehackernews.com/2026/04/microsoft-warns-of-whatsapp-delivered.html) - Risk themes: Ransomware and malware operations.
-- [Routine Access Is Powering Modern Intrusions, a New Threat Report Finds](https://www.bleepingcomputer.com/news/security/routine-access-is-powering-modern-intrusions-a-new-threat-report-finds/) - Risk themes: Identity and access security, Vulnerability and patch management.
-- [Block the Prompt, Not the Work: The End of "Doctor No"](https://thehackernews.com/2026/04/block-prompt-not-work-end-of-doctor-no.html) - Operational and compliance monitoring signal.
 
 Notes and limitations
 - This fallback keeps the report current using feed content plus local entity extraction while OpenAI quota is unavailable.
