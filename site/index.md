@@ -1,11 +1,11 @@
 # GRC Intelligence Report - 2026-04-02
-**Generated:** 2026-04-02T12:28:50.305852Z
+**Generated:** 2026-04-02T15:24:29.037976Z
 # GRC Intelligence Report - 2026-04-02
-**Generated:** 2026-04-02T12:28:50.147067Z
+**Generated:** 2026-04-02T15:24:28.907377Z
 GRC Intelligence Report - Deterministic Fallback Summary
 Source: Cybersecurity News Aggregator
 Analysis Period: Recent articles
-Total Articles Analyzed: 30 (Locally flagged as GRC-relevant: 23)
+Total Articles Analyzed: 30 (Locally flagged as GRC-relevant: 24)
 
 1) Executive Summary
 - This report was generated using deterministic local analysis because OpenAI generation was unavailable: Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}.
@@ -22,15 +22,15 @@ Implications for Business
 - Evidence capture, executive escalation, and breach-notification decision support remain priority governance controls.
 
 3) Industry Impact Analysis
-- Industries with explicit mentions: Banking, Government, Technology.
+- Industries with explicit mentions: Banking, Government.
 - Organizations in regulated or data-intensive sectors should expect the same cyber events to trigger legal, contractual, and supervisory scrutiny.
 
 4) Risk Assessment
-- Vulnerability and patch management: Example signals include Over 14,000 F5 BIG-IP APM instances still exposed to RCE attacks, Apple Expands iOS 18.7.7 Update to More Devices to Block DarkSword Exploit.
-- Ransomware and malware operations: Example signals include New CrystalRAT malware adds RAT, stealer and prankware features, New EvilTokens service fuels Microsoft device code phishing attacks.
-- Identity and access security: Example signals include New CrystalRAT malware adds RAT, stealer and prankware features, Routine Access Is Powering Modern Intrusions, a New Threat Report Finds.
-- Regulatory and enforcement activity: Example signals include FBI warns against using Chinese mobile apps due to privacy risks, Proton launches new "Meet" privacy-focused conferencing platform.
+- Vulnerability and patch management: Example signals include The State of Trusted Open Source Report, Critical Cisco IMC auth bypass gives attackers Admin access.
+- Ransomware and malware operations: Example signals include Researchers Uncover Mining Operation Using ISO Lures to Spread RATs and Crypto Miners, New CrystalRAT malware adds RAT, stealer and prankware features.
+- Identity and access security: Example signals include Researchers Uncover Mining Operation Using ISO Lures to Spread RATs and Crypto Miners, Critical Cisco IMC auth bypass gives attackers Admin access.
 - Cloud and data protection: Example signals include New CrystalRAT malware adds RAT, stealer and prankware features.
+- Regulatory and enforcement activity: Example signals include FBI warns against using Chinese mobile apps due to privacy risks.
 
 5) Recommendations for Action
 - Maintain incident response, disclosure, and evidence-retention readiness for high-severity cyber events.
@@ -39,12 +39,12 @@ Implications for Business
 - Track regulator and enforcement updates from bodies such as CISA, the FBI, OFAC, and relevant privacy authorities.
 
 6) Source Highlights
+- [Researchers Uncover Mining Operation Using ISO Lures to Spread RATs and Crypto Miners](https://thehackernews.com/2026/04/researchers-uncover-mining-operation.html) - Risk themes: Identity and access security, Ransomware and malware operations.
+- [The State of Trusted Open Source Report](https://thehackernews.com/2026/04/the-state-of-trusted-open-source-report.html) - Risk themes: Vulnerability and patch management.
+- [Critical Cisco IMC auth bypass gives attackers Admin access](https://www.bleepingcomputer.com/news/security/critical-cisco-imc-auth-bypass-gives-attackers-admin-access/) - Risk themes: Identity and access security, Vulnerability and patch management.
 - [Over 14,000 F5 BIG-IP APM instances still exposed to RCE attacks](https://www.bleepingcomputer.com/news/security/over-14-000-f5-big-ip-apm-instances-still-exposed-to-rce-attacks/) - Risk themes: Vulnerability and patch management.
 - [Apple Expands iOS 18.7.7 Update to More Devices to Block DarkSword Exploit](https://thehackernews.com/2026/04/apple-expands-ios-1877-update-to-more.html) - Risk themes: Vulnerability and patch management.
 - [New CrystalRAT malware adds RAT, stealer and prankware features](https://www.bleepingcomputer.com/news/security/new-crystalrat-malware-adds-rat-stealer-and-prankware-features/) - Risk themes: Identity and access security, Ransomware and malware operations.
-- [Apple expands iOS 18 updates to more iPhones to block DarkSword attacks](https://www.bleepingcomputer.com/news/security/apple-expands-ios-18-updates-to-more-iphones-to-block-darksword-attacks/) - Risk themes: Vulnerability and patch management.
-- [Hackers exploit TrueConf zero-day to push malicious software updates](https://www.bleepingcomputer.com/news/security/hackers-exploit-trueconf-zero-day-to-push-malicious-software-updates/) - Risk themes: Vulnerability and patch management.
-- [New EvilTokens service fuels Microsoft device code phishing attacks](https://www.bleepingcomputer.com/news/security/new-eviltokens-service-fuels-microsoft-device-code-phishing-attacks/) - Risk themes: Ransomware and malware operations.
 
 Notes and limitations
 - This fallback keeps the report current using feed content plus local entity extraction while OpenAI quota is unavailable.
