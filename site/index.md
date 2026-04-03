@@ -1,7 +1,7 @@
 # GRC Intelligence Report - 2026-04-03
-**Generated:** 2026-04-03T09:24:56.093217Z
+**Generated:** 2026-04-03T12:15:23.404422Z
 # GRC Intelligence Report - 2026-04-03
-**Generated:** 2026-04-03T09:24:56.086549Z
+**Generated:** 2026-04-03T12:15:23.246472Z
 GRC Intelligence Report - Deterministic Fallback Summary
 Source: Cybersecurity News Aggregator
 Analysis Period: Recent articles
@@ -26,8 +26,8 @@ Implications for Business
 - Organizations in regulated or data-intensive sectors should expect the same cyber events to trigger legal, contractual, and supervisory scrutiny.
 
 4) Risk Assessment
-- Vulnerability and patch management: Example signals include Claude Code leak used to push infostealer malware on GitHub, Hackers Exploit CVE-2025-55182 to Breach 766 Next.js Hosts, Steal Credentials.
-- Ransomware and malware operations: Example signals include Claude Code leak used to push infostealer malware on GitHub, Bank Trojan 'Casbaneiro' Worms Through Latin America.
+- Vulnerability and patch management: Example signals include Microsoft now force upgrades unmanaged Windows 11 24H2 PCs, Claude Code leak used to push infostealer malware on GitHub.
+- Ransomware and malware operations: Example signals include New SparkCat Variant in iOS, Android Apps Steals Crypto Wallet Recovery Phrase Images, Man admits to locking thousands of Windows devices in extortion plot.
 - Identity and access security: Example signals include Not Toying Around: Hasbro Attack May Take 'Weeks' to Remediate, Hackers Exploit CVE-2025-55182 to Breach 766 Next.js Hosts, Steal Credentials.
 - Cloud and data protection: Example signals include CERT-EU: European Commission hack exposes data of 30 EU entities, ThreatsDay Bulletin: Pre-Auth Chains, Android Rootkits, CloudTrail Evasion & 10 More Stories.
 
@@ -38,12 +38,12 @@ Implications for Business
 - Track regulator and enforcement updates from bodies such as CISA, the FBI, OFAC, and relevant privacy authorities.
 
 6) Source Highlights
+- [New SparkCat Variant in iOS, Android Apps Steals Crypto Wallet Recovery Phrase Images](https://thehackernews.com/2026/04/new-sparkcat-variant-in-ios-android.html) - Risk themes: Ransomware and malware operations.
+- [Man admits to locking thousands of Windows devices in extortion plot](https://www.bleepingcomputer.com/news/security/man-admits-to-extortion-plot-locking-coworkers-out-of-thousands-of-windows-devices/) - Risk themes: Ransomware and malware operations.
+- [Microsoft now force upgrades unmanaged Windows 11 24H2 PCs](https://www.bleepingcomputer.com/news/microsoft/microsoft-now-force-upgrades-unmanaged-windows-11-24h2-pcs/) - Risk themes: Vulnerability and patch management.
 - [CERT-EU: European Commission hack exposes data of 30 EU entities](https://www.bleepingcomputer.com/news/security/cert-eu-european-commission-hack-exposes-data-of-30-eu-entities/) - Risk themes: Cloud and data protection.
 - [Claude Code leak used to push infostealer malware on GitHub](https://www.bleepingcomputer.com/news/security/claude-code-leak-used-to-push-infostealer-malware-on-github/) - Risk themes: Vulnerability and patch management, Ransomware and malware operations.
 - [Not Toying Around: Hasbro Attack May Take 'Weeks' to Remediate](https://www.darkreading.com/cyberattacks-data-breaches/toying-around-hasbro-attack-remediate) - Risk themes: Identity and access security.
-- [Hackers Exploit CVE-2025-55182 to Breach 766 Next.js Hosts, Steal Credentials](https://thehackernews.com/2026/04/hackers-exploit-cve-2025-55182-to.html) - Risk themes: Identity and access security, Vulnerability and patch management.
-- [Security Bosses Are All-In on AI. Here's Why](https://www.darkreading.com/cybersecurity-operations/security-bosses-all-in-ai) - Operational and compliance monitoring signal.
-- [Drift loses $280 million North Korean hackers seize Security Council powers](https://www.bleepingcomputer.com/news/security/drift-loses-280-million-north-korean-hackers-seize-security-council-powers/) - Operational and compliance monitoring signal.
 
 Notes and limitations
 - This fallback keeps the report current using feed content plus local entity extraction while OpenAI quota is unavailable.
