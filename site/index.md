@@ -1,7 +1,7 @@
 # GRC Intelligence Report - 2026-04-04
-**Generated:** 2026-04-04T00:42:31.869606Z
+**Generated:** 2026-04-04T03:49:32.611847Z
 # GRC Intelligence Report - 2026-04-04
-**Generated:** 2026-04-04T00:42:31.725355Z
+**Generated:** 2026-04-04T03:49:32.449673Z
 GRC Intelligence Report - Deterministic Fallback Summary
 Source: Cybersecurity News Aggregator
 Analysis Period: Recent articles
@@ -39,12 +39,12 @@ Implications for Business
 - Track regulator and enforcement updates from bodies such as CISA, the FBI, OFAC, and relevant privacy authorities.
 
 6) Source Highlights
+- [Inconsistent Privacy Labels Don't Tell Users What They Are Getting](https://www.darkreading.com/data-privacy/inconsistent-privacy-labels-not-enough) - Risk themes: Regulatory and enforcement activity.
 - [Hims & Hers warns of data breach after Zendesk support ticket breach](https://www.bleepingcomputer.com/news/security/hims-and-hers-warns-of-data-breach-after-zendesk-support-ticket-breach/) - Risk themes: Third-party and supply chain exposure, Cloud and data protection.
 - [China-Linked TA416 Targets European Governments with PlugX and OAuth-Based Phishing](https://thehackernews.com/2026/04/china-linked-ta416-targets-european.html) - Risk themes: Ransomware and malware operations.
 - [Apple Breaks Precedent, Patches DarkSword for iOS 18](https://www.darkreading.com/endpoint-security/apple-patches-darksword-ios-18) - Risk themes: Vulnerability and patch management.
 - [Die Linke German political party confirms data stolen by Qilin ransomware](https://www.bleepingcomputer.com/news/security/die-linke-german-political-party-confirms-data-stolen-by-qilin-ransomware/) - Risk themes: Ransomware and malware operations, Cloud and data protection.
 - [Microsoft Details Cookie-Controlled PHP Web Shells Persisting via Cron on Linux Servers](https://thehackernews.com/2026/04/microsoft-details-cookie-controlled-php.html) - Operational and compliance monitoring signal.
-- [Blast Radius of TeamPCP Attacks Expands Amid Hacker Infighting](https://www.darkreading.com/threat-intelligence/teampcp-attacks-hacker-infighting) - Risk themes: Third-party and supply chain exposure.
 
 Notes and limitations
 - This fallback keeps the report current using feed content plus local entity extraction while OpenAI quota is unavailable.
