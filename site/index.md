@@ -1,11 +1,11 @@
-# GRC Intelligence Report - 2026-04-03
-**Generated:** 2026-04-03T21:14:35.957358Z
-# GRC Intelligence Report - 2026-04-03
-**Generated:** 2026-04-03T21:14:35.950147Z
+# GRC Intelligence Report - 2026-04-04
+**Generated:** 2026-04-04T00:26:14.987056Z
+# GRC Intelligence Report - 2026-04-04
+**Generated:** 2026-04-04T00:26:14.828771Z
 GRC Intelligence Report - Deterministic Fallback Summary
 Source: Cybersecurity News Aggregator
 Analysis Period: Recent articles
-Total Articles Analyzed: 30 (Locally flagged as GRC-relevant: 25)
+Total Articles Analyzed: 30 (Locally flagged as GRC-relevant: 24)
 
 1) Executive Summary
 - This report was generated using deterministic local analysis because OpenAI generation was unavailable: Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}.
