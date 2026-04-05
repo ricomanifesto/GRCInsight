@@ -1,68 +1,85 @@
-"""OpenAI client service for GRC analysis."""
+"""Anthropic Claude client service for GRC analysis."""
 
 import asyncio
 from typing import List, Dict, Any, Optional
-from langchain_openai import ChatOpenAI
+from langchain_anthropic import ChatAnthropic
 from langchain_core.messages import HumanMessage, SystemMessage
-from langchain_core.prompts import ChatPromptTemplate
 from loguru import logger
 
 from config.settings import settings
 from models.api import ArticleInput
 
 
-class OpenAIService:
-    """Service for OpenAI-powered GRC analysis."""
-    
+class AnthropicService:
+    """Service for Anthropic Claude-powered GRC analysis."""
+
     def __init__(self):
-        """Initialize OpenAI service."""
-        if not settings.openai_api_key:
-            raise ValueError("OpenAI API key is required")
-            
+        """Initialize Anthropic Claude service."""
+        if not settings.anthropic_api_key:
+            raise ValueError("Anthropic API key is required")
+
         # Preferred and fallback models (A then B)
         self.model_primary = self._get_model_name()
-        self.model_fallback_a = "gpt-4o"
-        self.model_fallback_b = "gpt-3.5-turbo"  # "ChatGPT03"
+        self.model_fallback_a = "claude-sonnet-4-5-20250929"
+        self.model_fallback_b = "claude-haiku-4-5-20251001"
 
         self.client = self._build_client(self.model_primary)
-        
-        logger.info(f"Initialized OpenAI client with model: {self.model_primary}")
-    
-    def _get_model_name(self) -> str:
-        """Get the correct OpenAI model name."""
-        model = settings.openai_model.lower()
-        
-        # Map common model names to actual OpenAI model identifiers
-        model_mapping = {
-            "gpt5": "gpt-5",
-            "gpt-5": "gpt-5",
-            "chatgpt-5": "gpt-5",
-            "chatgpt5": "gpt-5",
-            "gpt4": "gpt-4",
-            "gpt-4": "gpt-4", 
-            "gpt4o": "gpt-4o",
-            "gpt-4o": "gpt-4o",
-            "o3": "gpt-4o",  # o3 doesn't exist yet, fallback to gpt-4o
-            "gpt-3.5": "gpt-3.5-turbo",
-            "gpt-3.5-turbo": "gpt-3.5-turbo",
-            "chatgpt03": "gpt-3.5-turbo",
-            "chatgpt-03": "gpt-3.5-turbo",
-            "chatgpt 03": "gpt-3.5-turbo"
-        }
-        
-        return model_mapping.get(model, "gpt-5")  # Default to gpt-5; runtime fallback will handle if unavailable
 
-    def _build_client(self, model_name: str) -> ChatOpenAI:
-        """Construct a ChatOpenAI client for a given model."""
-        return ChatOpenAI(
+        logger.info(f"Initialized Anthropic client with model: {self.model_primary}")
+
+    def _get_model_name(self) -> str:
+        """Get the correct Anthropic model name."""
+        model = settings.anthropic_model.lower()
+
+        # Map common model names to actual Anthropic model identifiers
+        model_mapping = {
+            "claude-opus-4-6": "claude-opus-4-6",
+            "opus": "claude-opus-4-6",
+            "claude-sonnet-4-5-20250929": "claude-sonnet-4-5-20250929",
+            "sonnet": "claude-sonnet-4-5-20250929",
+            "claude-haiku-4-5-20251001": "claude-haiku-4-5-20251001",
+            "haiku": "claude-haiku-4-5-20251001",
+            # Legacy OpenAI names for backwards compatibility
+            "gpt5": "claude-opus-4-6",
+            "gpt-5": "claude-opus-4-6",
+            "chatgpt-5": "claude-opus-4-6",
+            "chatgpt5": "claude-opus-4-6",
+            "gpt4": "claude-sonnet-4-5-20250929",
+            "gpt-4": "claude-sonnet-4-5-20250929",
+            "gpt4o": "claude-sonnet-4-5-20250929",
+            "gpt-4o": "claude-sonnet-4-5-20250929",
+            "gpt-3.5": "claude-haiku-4-5-20251001",
+            "gpt-3.5-turbo": "claude-haiku-4-5-20251001",
+        }
+
+        return model_mapping.get(model, "claude-opus-4-6")
+
+    def _build_client(self, model_name: str) -> ChatAnthropic:
+        """Construct a ChatAnthropic client for a given model."""
+        return ChatAnthropic(
             model=model_name,
-            max_tokens=settings.openai_max_tokens,
-            temperature=0.1,
-            openai_api_key=settings.openai_api_key,
+            max_tokens=settings.anthropic_max_tokens,
+            temperature=1,
+            anthropic_api_key=settings.anthropic_api_key,
+            thinking={"type": "enabled", "budget_tokens": 10000},
         )
 
+    def _extract_text(self, response) -> str:
+        """Extract text content from response, handling extended thinking blocks."""
+        content = response.content
+        if isinstance(content, str):
+            return content
+        if isinstance(content, list):
+            texts = [
+                block["text"]
+                for block in content
+                if isinstance(block, dict) and block.get("type") == "text"
+            ]
+            return "\n".join(texts)
+        return str(content)
+
     async def _invoke_with_fallbacks(self, messages: List[Any]):
-        """Invoke the model with ordered fallbacks: primary → A → B."""
+        """Invoke the model with ordered fallbacks: primary -> A -> B."""
         # Try primary
         try:
             return await self.client.ainvoke(messages)
@@ -79,12 +96,12 @@ class OpenAIService:
                 logger.info(f"Falling back to '{self.model_fallback_b}'")
                 self.client = self._build_client(self.model_fallback_b)
                 return await self.client.ainvoke(messages)
-    
+
     async def analyze_articles_for_grc(self, articles: List[ArticleInput]) -> Dict[str, Any]:
         """Analyze articles for GRC-relevant content."""
         try:
             logger.info(f"Analyzing {len(articles)} articles for GRC content")
-            
+
             if not articles:
                 return {
                     "grc_articles": [],
@@ -100,23 +117,23 @@ class OpenAIService:
                         "risk_categories": []
                     }
                 }
-            
+
             # Create analysis prompt
             analysis_prompt = self._create_analysis_prompt(articles)
-            
+
             # Run analysis with ordered fallbacks
             response = await self._invoke_with_fallbacks([
                 SystemMessage(content=self._get_system_prompt()),
                 HumanMessage(content=analysis_prompt)
             ])
-            
+
             # Process the response
-            analysis_result = self._process_analysis_response(response.content, articles)
-            
+            analysis_result = self._process_analysis_response(self._extract_text(response), articles)
+
             logger.info(f"Analysis complete: {analysis_result['summary']['grc_relevant_count']} GRC-relevant articles found")
-            
+
             return analysis_result
-            
+
         except Exception as e:
             logger.error(f"Error during GRC analysis: {e}")
             return {
@@ -134,32 +151,32 @@ class OpenAIService:
                     "risk_categories": []
                 }
             }
-    
+
     async def generate_grc_report(self, analysis_data: Dict[str, Any], feed_info: Dict[str, Any]) -> str:
         """Generate a comprehensive GRC intelligence report."""
         try:
             logger.info("Generating GRC intelligence report")
-            
+
             report_prompt = self._create_report_prompt(analysis_data, feed_info)
-            
+
             response = await self._invoke_with_fallbacks([
                 SystemMessage(content=self._get_report_system_prompt()),
                 HumanMessage(content=report_prompt)
             ])
-            
-            report_content = response.content
-            
+
+            report_content = self._extract_text(response)
+
             logger.info("GRC report generation completed")
             return report_content
-            
+
         except Exception as e:
             logger.error(f"Error generating report: {e}")
             return f"# GRC Intelligence Report - Error\n\nUnable to generate report: {str(e)}"
-    
+
     def _get_system_prompt(self) -> str:
         """Get the system prompt for GRC analysis."""
         focus_areas = ", ".join(settings.analysis_focus_areas)
-        
+
         return f"""You are a GRC (Governance, Risk, and Compliance) intelligence analyst specializing in identifying regulatory and compliance-related content in news articles and industry reports.
 
 Your focus areas include: {focus_areas}
@@ -175,7 +192,7 @@ Be precise and factual. Only flag content as GRC-relevant if it has clear govern
 
     def _get_report_system_prompt(self) -> str:
         """Get the system prompt for report generation."""
-        return """You are a senior GRC analyst creating executive-level intelligence reports. 
+        return """You are a senior GRC analyst creating executive-level intelligence reports.
 
 Create a comprehensive report that:
 1. Summarizes key GRC developments and trends
@@ -197,7 +214,7 @@ URL: {article.url}
 Content: {content[:500]}...
 Published: {article.published}
 ---"""
-        
+
         return f"""Analyze the following articles for GRC relevance:
 
 {articles_text}
@@ -215,11 +232,11 @@ Focus only on content with clear governance, risk, or compliance implications.""
         """Create prompt for report generation."""
         grc_count = analysis_data.get("summary", {}).get("grc_relevant_count", 0)
         total_count = analysis_data.get("summary", {}).get("total_articles", 0)
-        
+
         regulations = analysis_data.get("analysis", {}).get("regulations_mentioned", [])
         industries = analysis_data.get("analysis", {}).get("industries_affected", [])
         risks = analysis_data.get("analysis", {}).get("risk_categories", [])
-        
+
         return f"""Create a GRC Intelligence Report based on this analysis:
 
 Source: {feed_info.get('title', 'Unknown Feed')}
@@ -242,7 +259,7 @@ Please create a professional executive summary report with:
 Make it actionable for risk managers and compliance officers."""
 
     def _process_analysis_response(self, response_content: str, original_articles: List[ArticleInput]) -> Dict[str, Any]:
-        """Process the OpenAI analysis response."""
+        """Process the Claude analysis response."""
         lines = response_content.split('\n')
 
         grc_articles = []

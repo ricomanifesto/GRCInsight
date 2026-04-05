@@ -24,7 +24,7 @@ Automated GRC intelligence: monitor RSS feeds, extract regulatory signals, and p
 ## Setup
 
 - Python deps: `pip install -r requirements.txt`
-- OpenAI key: `echo OPENAI_API_KEY=your-key > .env`
+- Anthropic key: `echo ANTHROPIC_API_KEY=your-key > .env`
 - Go config: edit `configs/config.yaml`
 
 ## Use Locally
@@ -40,7 +40,7 @@ go run ./cmd/server
 ## Production
 
 - Deploy: push to `main` or run `.github/workflows/deploy-lambda.yml`
-- Secrets: `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `OPENAI_API_KEY`
+- Secrets: `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `ANTHROPIC_API_KEY`
 - Reports: `.github/workflows/lambda-report-generation.yml` writes to `site/` and deploys Pages
 
 ## Legacy

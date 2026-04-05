@@ -5,7 +5,7 @@ from fastapi import APIRouter, Query
 from loguru import logger
 
 from models.api import HealthStatus
-from services.openai_client import OpenAIService
+from services.anthropic_client import AnthropicService
 import os
 
 try:
@@ -29,21 +29,21 @@ async def health_check(deep: bool = Query(default=False, description="Run deeper
     overall = "healthy"
     services = {}
 
-    # OpenAI readiness: ensure API key present and client can be constructed
+    # Anthropic Claude readiness: ensure API key present and client can be constructed
     try:
-        openai_service = OpenAIService()
+        anthropic_service = AnthropicService()
         # Optional deep LLM call
         if deep and HumanMessage is not None:
             try:
-                _ = await openai_service._invoke_with_fallbacks([HumanMessage(content="ping")])
-                services["openai"] = {"status": "healthy", "deep": True}
+                _ = await anthropic_service._invoke_with_fallbacks([HumanMessage(content="ping")])
+                services["llm"] = {"status": "healthy", "provider": "anthropic", "deep": True}
             except Exception as llm_err:
-                services["openai"] = {"status": "unhealthy", "error": str(llm_err)}
+                services["llm"] = {"status": "unhealthy", "provider": "anthropic", "error": str(llm_err)}
                 overall = "unhealthy"
         else:
-            services["openai"] = {"status": "healthy"}
+            services["llm"] = {"status": "healthy", "provider": "anthropic"}
     except Exception as e:
-        services["openai"] = {"status": "unhealthy", "error": str(e)}
+        services["llm"] = {"status": "unhealthy", "provider": "anthropic", "error": str(e)}
         overall = "unhealthy"
 
     # Workflow readiness: trivial OK for now (no background queues here)
@@ -76,7 +76,7 @@ async def readiness_check():
     return {"status": "ready", "timestamp": datetime.utcnow()}
 
 
-@router.get("/health/live") 
+@router.get("/health/live")
 async def liveness_check():
     """Liveness check for container orchestration."""
     return {"status": "alive", "timestamp": datetime.utcnow()}

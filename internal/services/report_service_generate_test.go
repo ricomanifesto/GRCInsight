@@ -62,7 +62,7 @@ func TestGenerateReport_PersistsReportAndArticles(t *testing.T) {
         logger:       nil,
     }
 
-    req := &apimodels.GenerateReportRequest{FeedURL: "https://example.com/rss", Config: apimodels.AnalysisConfig{Model: "gpt-5", MaxTokens: 4000}}
+    req := &apimodels.GenerateReportRequest{FeedURL: "https://example.com/rss", Config: apimodels.AnalysisConfig{Model: "claude-opus-4-6", MaxTokens: 16000}}
     report, err := svc.GenerateReport(req)
     if err != nil { t.Fatalf("unexpected error: %v", err) }
 

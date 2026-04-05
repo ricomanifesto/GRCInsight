@@ -25,7 +25,7 @@ Set environment variables for the services:
 
 ## Environment Variables
 - Python agent
-  - `OPENAI_API_KEY` (required for real analysis)
+  - `ANTHROPIC_API_KEY` (required for real analysis)
   - `CORS_ALLOWED_ORIGINS` (optional; comma‑separated, or use `.env` with `cors_allowed_origins`)
   - `DDB_TABLE_NAME`, `ARTICLES_TABLE_NAME` if running in Lambda mode and using the status/async paths
 - Go API
@@ -82,6 +82,6 @@ The script:
 - GET `/api/v1/reports/{id}/articles`
 
 ## Notes
-- Default model remains `gpt-5` (runtime fallback is handled in code if unavailable).
+- Default model is `claude-opus-4-6` (runtime fallback is handled in code if unavailable).
 - Articles table benefits from GSIs (`by-report-id`, `by-url`); the Terraform module creates these.
 - For serverless, use `agent/lambda_main.py` packaged behind API Gateway or direct Lambda invokes.

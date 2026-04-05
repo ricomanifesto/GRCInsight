@@ -6,18 +6,18 @@ Go Lambda orchestrates API and DynamoDB. Python Lambda analyzes feeds and writes
 
 - AWS account with ECR and Lambda access
 - AWS CLI and Docker installed
-- OpenAI API key
+- Anthropic API key
 
 ## CI Deploy (recommended)
 
-- Add repo secrets: `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `OPENAI_API_KEY`
+- Add repo secrets: `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `ANTHROPIC_API_KEY`
 - Run `.github/workflows/deploy-lambda.yml` (manual or push to `main`)
 - Workflow builds both images with `DOCKER_BUILDKIT=0`, pushes to ECR, updates Lambdas, and smoke‑tests `/health`
 
 ## Manual Deploy
 
 ```bash
-export OPENAI_API_KEY=your-key
+export ANTHROPIC_API_KEY=your-key
 export AWS_REGION=us-east-1
 export DOCKER_BUILDKIT=0
 ./scripts/deploy-lambda.sh

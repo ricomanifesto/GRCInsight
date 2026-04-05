@@ -8,8 +8,8 @@ from pydantic import BaseModel, Field
 # Request Models
 class AnalysisConfig(BaseModel):
     """Configuration for GRC analysis."""
-    model: str = "gpt-5"
-    max_tokens: int = 4000
+    model: str = "claude-opus-4-6"
+    max_tokens: int = 16000
     focus_areas: List[str] = Field(default_factory=list)
 
 

@@ -17,11 +17,11 @@ def test_health_basic_ok():
     assert data.get("status") in {"healthy", "unhealthy"}
 
 
-def test_analyze_with_fake_openai(monkeypatch):
-    """Patch OpenAIService used in analysis route to avoid network calls."""
+def test_analyze_with_fake_anthropic(monkeypatch):
+    """Patch AnthropicService used in analysis route to avoid network calls."""
     from api.routes import analysis as analysis_route
 
-    class FakeOpenAIService:
+    class FakeAnthropicService:
         def __init__(self):
             pass
 
@@ -37,8 +37,8 @@ def test_analyze_with_fake_openai(monkeypatch):
                 },
             }
 
-    # Patch the route's OpenAIService symbol
-    monkeypatch.setattr(analysis_route, "OpenAIService", FakeOpenAIService)
+    # Patch the route's AnthropicService symbol
+    monkeypatch.setattr(analysis_route, "AnthropicService", FakeAnthropicService)
 
     client = TestClient(app)
     payload = {
@@ -52,7 +52,7 @@ def test_analyze_with_fake_openai(monkeypatch):
                 "published": "2025-01-01T00:00:00Z",
             }
         ],
-        "config": {"model": "gpt-5", "max_tokens": 4000, "focus_areas": []},
+        "config": {"model": "claude-opus-4-6", "max_tokens": 16000, "focus_areas": []},
     }
 
     resp = client.post("/api/v1/analyze", json=payload)
@@ -128,10 +128,10 @@ def test_workflow_status_not_found(monkeypatch):
     assert resp.status_code == 404
 
 
-def test_health_deep_true_with_fake_openai(monkeypatch):
+def test_health_deep_true_with_fake_anthropic(monkeypatch):
     from api.routes import health as health_route
 
-    class FakeOpenAIService:
+    class FakeAnthropicService:
         def __init__(self):
             pass
         async def _invoke_with_fallbacks(self, messages):  # noqa: N802
@@ -139,12 +139,16 @@ def test_health_deep_true_with_fake_openai(monkeypatch):
                 content = "ok"
             return Resp()
 
-    # Force deep path by setting HumanMessage sentinel
-    monkeypatch.setattr(health_route, "HumanMessage", object())
-    monkeypatch.setattr(health_route, "OpenAIService", FakeOpenAIService)
+    class FakeHumanMessage:
+        def __init__(self, content=""):
+            self.content = content
+
+    # Force deep path by setting HumanMessage to a callable class
+    monkeypatch.setattr(health_route, "HumanMessage", FakeHumanMessage)
+    monkeypatch.setattr(health_route, "AnthropicService", FakeAnthropicService)
 
     client = TestClient(app)
     resp = client.get("/api/v1/health?deep=true")
     assert resp.status_code == 200
     data = resp.json()
-    assert data["services"]["openai"]["status"] == "healthy"
+    assert data["services"]["llm"]["status"] == "healthy"

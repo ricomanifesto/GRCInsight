@@ -18,7 +18,7 @@ from config.settings import settings
 async def lifespan(app: FastAPI):
     """Manage application lifespan events for Lambda."""
     logger.info("Starting GRCInsight Python Lambda Service")
-    logger.info(f"OpenAI API Key configured: {'Yes' if settings.openai_api_key else 'No'}")
+    logger.info(f"Anthropic API Key configured: {'Yes' if settings.anthropic_api_key else 'No'}")
     logger.info(f"Running in Lambda: {'Yes' if os.getenv('AWS_LAMBDA_FUNCTION_NAME') else 'No'}")
     yield
     logger.info("Lambda function execution completed")
@@ -111,8 +111,8 @@ def handler(event, context):
                     focus_areas = ['governance', 'compliance']
 
                 config = AnalysisConfig(
-                    model=config_data.get('model', 'gpt-5'),
-                    max_tokens=config_data.get('max_tokens', 4000),
+                    model=config_data.get('model', 'claude-opus-4-6'),
+                    max_tokens=config_data.get('max_tokens', 16000),
                     focus_areas=focus_areas
                 )
 

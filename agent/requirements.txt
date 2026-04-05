@@ -2,10 +2,9 @@ fastapi==0.104.1
 uvicorn==0.24.0
 httpx==0.25.2
 feedparser==6.0.10
-tiktoken==0.7.0
-openai==1.104.2
+anthropic>=0.39.0
 langchain==0.3.27
-langchain-openai==0.3.33
+langchain-anthropic>=0.3.0
 python-dotenv==1.0.0
 pydantic==2.11.9
 pydantic-settings==2.10.1

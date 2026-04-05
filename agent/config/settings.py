@@ -14,10 +14,10 @@ class Settings(BaseSettings):
     reload: bool = True
     log_level: str = "INFO"
     
-    # OpenAI configuration
-    openai_api_key: str = ""
-    openai_model: str = "gpt-5"
-    openai_max_tokens: int = 4000
+    # Anthropic Claude configuration
+    anthropic_api_key: str = ""
+    anthropic_model: str = "claude-opus-4-6"
+    anthropic_max_tokens: int = 16000
     
     # RSS configuration
     rss_timeout: int = 30

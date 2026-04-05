@@ -10,13 +10,13 @@ from models.api import (
     AnalysisConfig, ArticleInput
 )
 from services.rss_service import RSSService
-from services.openai_client import OpenAIService
+from services.anthropic_client import AnthropicService
 from core.entities import analyze_article_grc_content
 
 
 # Initialize services
 rss_service = RSSService()
-openai_service = None  # Will be initialized in the function
+anthropic_service = None  # Will be initialized in the function
 
 
 async def run_grc_analysis_endpoint(feed_url: str, config: AnalysisConfig) -> WorkflowResponse:
@@ -80,24 +80,24 @@ async def run_grc_analysis_endpoint(feed_url: str, config: AnalysisConfig) -> Wo
         logger.info("Step 3: Enriching articles with full content")
         enriched_articles = await rss_service.enrich_articles(articles)
         
-        # Step 4: Initialize OpenAI service
-        logger.info("Step 4: Initializing OpenAI service")
+        # Step 4: Initialize Anthropic Claude service
+        logger.info("Step 4: Initializing Anthropic Claude service")
         try:
-            openai_service = OpenAIService()
+            anthropic_service = AnthropicService()
         except ValueError as e:
-            logger.error(f"Failed to initialize OpenAI service: {e}")
+            logger.error(f"Failed to initialize Anthropic service: {e}")
             return WorkflowResponse(
                 status="failed",
                 error=APIError(
-                    code="OPENAI_INIT_FAILED",
-                    message="OpenAI service initialization failed",
+                    code="LLM_INIT_FAILED",
+                    message="Anthropic service initialization failed",
                     details=str(e)
                 )
             )
         
-        # Step 5: Analyze articles for GRC content with OpenAI
-        logger.info("Step 5: Analyzing articles for GRC content with OpenAI")
-        analysis_results = await openai_service.analyze_articles_for_grc(enriched_articles)
+        # Step 5: Analyze articles for GRC content with Claude
+        logger.info("Step 5: Analyzing articles for GRC content with Claude")
+        analysis_results = await anthropic_service.analyze_articles_for_grc(enriched_articles)
         
         if "error" in analysis_results:
             logger.error(f"GRC analysis failed: {analysis_results['error']}")
@@ -146,7 +146,7 @@ async def run_grc_analysis_endpoint(feed_url: str, config: AnalysisConfig) -> Wo
 
         # Step 6: Generate comprehensive report
         logger.info("Step 6: Generating comprehensive GRC report")
-        report_content = await openai_service.generate_grc_report(analysis_results, feed_data)
+        report_content = await anthropic_service.generate_grc_report(analysis_results, feed_data)
         
         if not report_content or "Error" in report_content:
             logger.warning("Report generation had issues, using fallback content")

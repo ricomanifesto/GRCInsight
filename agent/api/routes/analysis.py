@@ -10,7 +10,7 @@ from models.api import (
     AnalysisSummary,
     APIError,
 )
-from services.openai_client import OpenAIService
+from services.anthropic_client import AnthropicService
 from core.entities import analyze_article_grc_content
 
 router = APIRouter()
@@ -18,15 +18,15 @@ router = APIRouter()
 
 @router.post("/analyze", response_model=AnalysisResponse)
 async def analyze_ar(request: AnalysisRequest):
-    """Analyze articles for GRC content using OpenAIService."""
+    """Analyze articles for GRC content using AnthropicService."""
     logger.info(f"Starting analysis of {len(request.articles)} articles")
 
     try:
-        # Initialize OpenAI service
+        # Initialize Anthropic service
         try:
-            openai_service = OpenAIService()
+            anthropic_service = AnthropicService()
         except ValueError as init_err:
-            logger.error(f"OpenAI service initialization failed: {init_err}")
+            logger.error(f"Anthropic service initialization failed: {init_err}")
             return AnalysisResponse(
                 status="failed",
                 results=[],
@@ -38,14 +38,14 @@ async def analyze_ar(request: AnalysisRequest):
                     affected_industries=[],
                 ),
                 error=APIError(
-                    code="OPENAI_INIT_FAILED",
-                    message="OpenAI service initialization failed",
+                    code="LLM_INIT_FAILED",
+                    message="Anthropic service initialization failed",
                     details=str(init_err),
                 ),
             )
 
         # Run analysis
-        analysis = await openai_service.analyze_articles_for_grc(request.articles)
+        analysis = await anthropic_service.analyze_articles_for_grc(request.articles)
 
         if "error" in analysis:
             logger.error(f"GRC analysis error: {analysis['error']}")
@@ -137,18 +137,18 @@ async def analyze_ar(request: AnalysisRequest):
 async def extract_entities(text: str):
     """Extract GRC entities from text."""
     logger.info("Extracting entities from text")
-    
+
     try:
         # Import here to avoid circular imports
         from core.entities import extract_entities
-        
+
         entities = extract_entities(text)
-        
+
         return {
             "status": "success",
             "entities": entities
         }
-        
+
     except Exception as e:
         logger.error(f"Entity extraction failed: {str(e)}")
         raise HTTPException(
