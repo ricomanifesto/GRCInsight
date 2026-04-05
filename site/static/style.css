@@ -109,6 +109,17 @@ body.light td { border-color: rgba(0,0,0,0.06); }
 tbody tr:hover { background: rgba(255,255,255,0.03); }
 body.light tbody tr:hover { background: rgba(0,0,0,0.02); }
 
+/* Blockquotes */
+blockquote { border-left: 3px solid var(--accent-2); margin: 16px 0; padding: 12px 18px; background: rgba(37, 99, 235, 0.06); border-radius: 0 8px 8px 0; color: var(--text); }
+body.light blockquote { background: rgba(37, 99, 235, 0.04); }
+
+/* H4 */
+.card h4 { margin: 18px 0 8px; font-size: 15px; color: var(--text); font-weight: 600; }
+
+/* Code blocks */
+pre { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); padding: 14px 16px; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.5; white-space: pre; }
+body.light pre { background: rgba(0,0,0,0.03); border-color: rgba(0,0,0,0.08); }
+
 /* Heading action buttons — icon-only, visible on hover */
 .heading-actions { display: inline-flex; gap: 4px; margin-left: 12px; opacity: 0; transition: opacity 150ms ease; vertical-align: middle; }
 .card h2:hover .heading-actions, .heading-actions:focus-within { opacity: 1; }

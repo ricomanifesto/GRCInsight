@@ -62,32 +62,54 @@
     const genMatch = md.match(/\*\*Generated:\*\*\s*(.+)/);
     if (genMatch) el.generated.textContent = `Generated ${genMatch[1].trim()}`;
 
+    // Pre-process: extract fenced code blocks before HTML-escaping
+    const codeBlocks = [];
+    md = md.replace(/^```[\s\S]*?^```/gm, m => {
+      const code = m.replace(/^```\w*\n?/, '').replace(/\n?```$/, '');
+      codeBlocks.push(code);
+      return `%%CODEBLOCK_${codeBlocks.length - 1}%%`;
+    });
+
     // Basic markdown transforms: headings, lists, bold
     let html = escapeHtml(md);
+
+    // Restore code blocks as <pre>
+    html = html.replace(/%%CODEBLOCK_(\d+)%%/g, (_, i) =>
+      `<pre><code>${escapeHtml(codeBlocks[+i])}</code></pre>`);
+
     // Bold
     html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
     // Italic
     html = html.replace(/\*([^*]+)\*/g, '<em>$1</em>');
-    // Headings
+    // Headings (#### before ### before ## before #)
+    html = html.replace(/^####\s+(.*)$/gm, '<h4>$1</h4>');
     html = html.replace(/^###\s+(.*)$/gm, '<h3>$1</h3>');
     html = html.replace(/^##\s+(.*)$/gm, '<h2>$1</h2>');
     html = html.replace(/^#\s+(.*)$/gm, '<h1>$1</h1>');
-    // Numbered section headings like "1) Executive Summary" or "2. Section"
-    html = html.replace(/^\s*(\d+)[\.)]\s+(.*)$/gm, '<h2>$1. $2</h2>');
     // Markdown tables: consecutive lines starting with | (must run before HR to avoid eating separator rows)
     html = html.replace(/^(?:\|.+\|(?:\n|$)){2,}/gm, m => renderTable(m));
     // Horizontal rules (--- or ___ or ***)
     html = html.replace(/^-{3,}$/gm, '<hr>');
     html = html.replace(/^_{3,}$/gm, '<hr>');
     html = html.replace(/^\*{3,}$/gm, '<hr>');
+    // Blockquotes (> lines)
+    html = html.replace(/^(?:&gt;\s?.*(?:\n|$))+/gm, m => {
+      const inner = m.replace(/^&gt;\s?/gm, '').trim();
+      return `<blockquote>${inner}</blockquote>`;
+    });
     // Links: [text](url)
     html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
-    // Lists (support nested lists via indentation, 2 spaces per level)
+    // Unordered lists (support nested lists via indentation, 2 spaces per level)
     html = html.replace(/^(?:\s*-\s+.*(?:\n|$))+?/gm, m => renderNestedList(m));
+    // Ordered lists (consecutive lines starting with digits)
+    html = html.replace(/^(?:\d+\.\s+.*(?:\n|$))+/gm, m => {
+      const items = m.trim().split(/\n/).filter(l => /^\d+\.\s+/.test(l));
+      return '<ol>' + items.map(l => `<li>${l.replace(/^\d+\.\s+/, '')}</li>`).join('') + '</ol>';
+    });
     // Simple paragraphs
     html = html
       .split(/\n\n+/)
-      .map(block => /<(h\d|ul|li|strong|table|div|hr)/.test(block) ? block : `<p>${block.trim()}</p>`)
+      .map(block => /<(h\d|ul|ol|li|strong|table|div|hr|pre|blockquote)/.test(block) ? block : `<p>${block.trim()}</p>`)
       .join('\n');
     // Clean up empty paragraphs
     html = html.replace(/<p>\s*<\/p>/g, '');
