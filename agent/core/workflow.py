@@ -200,13 +200,18 @@ def _build_fallback_report(
 
     limitation = fallback_reason or "AI analysis temporarily unavailable"
 
+    now = datetime.utcnow()
     return "\n".join([
-        f"# GRC Intelligence Report - {datetime.utcnow().strftime('%Y-%m-%d')}",
-        f"**Generated:** {datetime.utcnow().isoformat()}Z",
-        "GRC Intelligence Report - Deterministic Fallback Summary",
-        f"Source: {feed_data.get('title', 'Unknown Feed')}",
-        "Analysis Period: Recent articles",
-        f"Total Articles Analyzed: {total_count} (Locally flagged as GRC-relevant: {grc_count})",
+        f"# GRC Intelligence Report - {now.strftime('%Y-%m-%d')}",
+        f"**Generated:** {now.isoformat()}Z",
+        "",
+        f"**Report Classification:** Internal — Executive Distribution",
+        f"**Analysis Period:** Current Quarter ({now.strftime('%B %Y')})",
+        f"**Date of Issue:** {now.strftime('%B %Y')}",
+        f"**Source:** {feed_data.get('title', 'Unknown Feed')}",
+        f"**Total Articles Analyzed:** {total_count} (Locally flagged as GRC-relevant: {grc_count})",
+        "",
+        "---",
         "",
         "1) Executive Summary",
         f"- This report was generated using deterministic local analysis because AI generation was temporarily unavailable: {limitation}.",

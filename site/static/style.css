@@ -89,8 +89,29 @@ body.light .temp-note { color: #b45309; }
 body.light .card { border-color: rgba(0,0,0,0.08); box-shadow: 0 6px 18px rgba(0,0,0,0.08); }
 body.light .card h2, body.light .card h3 { color: #1e3a8a; }
 
-p, li { line-height: 1.55; }
+p, li { line-height: 1.65; }
 ul { margin: 8px 0 8px 22px; padding: 0; }
+
+/* Horizontal rules */
+hr { border: none; border-top: 1px solid rgba(255,255,255,0.1); margin: 20px 0; }
+body.light hr { border-color: rgba(0,0,0,0.1); }
+
+/* Tables */
+.table-wrap { overflow-x: auto; margin: 16px 0; border-radius: 8px; border: 1px solid rgba(255,255,255,0.08); }
+body.light .table-wrap { border-color: rgba(0,0,0,0.1); }
+table { width: 100%; border-collapse: collapse; font-size: 14px; }
+thead { background: rgba(37, 99, 235, 0.12); }
+body.light thead { background: rgba(37, 99, 235, 0.08); }
+th { text-align: left; padding: 10px 14px; font-weight: 600; color: #cfe4ff; border-bottom: 2px solid rgba(255,255,255,0.1); white-space: nowrap; }
+body.light th { color: #1e3a8a; border-color: rgba(0,0,0,0.1); }
+td { padding: 9px 14px; border-bottom: 1px solid rgba(255,255,255,0.04); }
+body.light td { border-color: rgba(0,0,0,0.06); }
+tbody tr:hover { background: rgba(255,255,255,0.03); }
+body.light tbody tr:hover { background: rgba(0,0,0,0.02); }
+
+/* Heading action buttons — icon-only, visible on hover */
+.heading-actions { display: inline-flex; gap: 4px; margin-left: 12px; opacity: 0; transition: opacity 150ms ease; vertical-align: middle; }
+.card h2:hover .heading-actions, .heading-actions:focus-within { opacity: 1; }
 
 .pill { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 12px; margin: 0 6px 6px 0; border: 1px solid rgba(255,255,255,0.12); }
 .pill.framework { background: rgba(37, 99, 235, 0.15); color: #cfe4ff; }
@@ -119,16 +140,11 @@ a:hover { text-decoration: underline; }
 .anchor-link { opacity: 0.0; margin-left: 8px; font-size: 0.85em; color: #93c5fd; text-decoration: none; }
 .card h2:hover .anchor-link, .card h3:hover .anchor-link { opacity: 1; }
 
-/* Copy link button */
-.copy-link { margin-left: 8px; font-size: 12px; border: 1px solid rgba(255,255,255,0.25); background: transparent; color: #93c5fd; border-radius: 6px; padding: 2px 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
-body.light .copy-link { border-color: rgba(0,0,0,0.2); color: #1e3a8a; }
-.copy-link:hover { background: rgba(147,197,253,0.15); }
-.collapse-toggle { margin-left: 8px; font-size: 12px; border: 1px solid rgba(255,255,255,0.25); background: transparent; color: #cfe4ff; border-radius: 6px; padding: 2px 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
-body.light .collapse-toggle { border-color: rgba(0,0,0,0.2); color: #1e3a8a; }
-.collapse-toggle:hover { background: rgba(255,255,255,0.08); }
-.focus-toggle { margin-left: 6px; font-size: 12px; border: 1px solid rgba(255,255,255,0.25); background: transparent; color: #cfe4ff; border-radius: 6px; padding: 2px 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
-body.light .focus-toggle { border-color: rgba(0,0,0,0.2); color: #1e3a8a; }
-.focus-toggle:hover { background: rgba(255,255,255,0.08); }
+/* Section action buttons (icon-only) */
+.copy-link, .collapse-toggle, .focus-toggle { border: 1px solid rgba(255,255,255,0.15); background: transparent; color: var(--muted); border-radius: 6px; padding: 4px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; }
+body.light .copy-link, body.light .collapse-toggle, body.light .focus-toggle { border-color: rgba(0,0,0,0.12); }
+.copy-link:hover, .collapse-toggle:hover, .focus-toggle:hover { background: rgba(255,255,255,0.08); color: #cfe4ff; }
+body.light .copy-link:hover, body.light .collapse-toggle:hover, body.light .focus-toggle:hover { background: rgba(0,0,0,0.06); color: #1e3a8a; }
 
 /* Mobile top bar */
 .topbar { display: none; position: sticky; top: 0; z-index: 5; background: linear-gradient(90deg, var(--panel), var(--panel-2)); border-bottom: 1px solid rgba(255,255,255,0.06); }
@@ -144,7 +160,6 @@ body.light .focus-toggle { border-color: rgba(0,0,0,0.2); color: #1e3a8a; }
 body.light .back-to-top { border-color: rgba(0,0,0,0.12); }
 
 /* Copy button inline icon */
-.copy-link { display: inline-flex; align-items: center; gap: 6px; }
 .copy-link svg { display: inline-block; }
 
 /* Subtle fade-in for pills */

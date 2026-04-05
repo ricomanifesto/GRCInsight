@@ -192,7 +192,12 @@ Be precise and factual. Only flag content as GRC-relevant if it has clear govern
 
     def _get_report_system_prompt(self) -> str:
         """Get the system prompt for report generation."""
-        return """You are a senior GRC analyst creating executive-level intelligence reports.
+        from datetime import datetime
+        today = datetime.utcnow().strftime("%B %Y")
+        today_full = datetime.utcnow().strftime("%Y-%m-%d")
+        return f"""You are a senior GRC analyst creating executive-level intelligence reports.
+
+Today's date is {today_full}. The current reporting period is {today}.
 
 Create a comprehensive report that:
 1. Summarizes key GRC developments and trends
@@ -200,7 +205,9 @@ Create a comprehensive report that:
 3. Identifies emerging risks and compliance challenges
 4. Provides actionable insights for governance and risk management
 
-Use professional language and structure the report with clear sections and bullet points. Focus on business impact and strategic implications."""
+IMPORTANT: Use "{today}" as the Date of Issue and analysis period in the report metadata. Never use a hardcoded or stale date. All dates in the report must reflect the current period ({today}).
+
+Use professional language and structure the report with clear sections and markdown tables where data comparisons are appropriate. Focus on business impact and strategic implications."""
 
     def _create_analysis_prompt(self, articles: List[ArticleInput]) -> str:
         """Create prompt for analyzing articles."""
@@ -230,6 +237,10 @@ Focus only on content with clear governance, risk, or compliance implications.""
 
     def _create_report_prompt(self, analysis_data: Dict[str, Any], feed_info: Dict[str, Any]) -> str:
         """Create prompt for report generation."""
+        from datetime import datetime
+        today = datetime.utcnow().strftime("%B %Y")
+        today_full = datetime.utcnow().strftime("%Y-%m-%d")
+
         grc_count = analysis_data.get("summary", {}).get("grc_relevant_count", 0)
         total_count = analysis_data.get("summary", {}).get("total_articles", 0)
 
@@ -239,8 +250,10 @@ Focus only on content with clear governance, risk, or compliance implications.""
 
         return f"""Create a GRC Intelligence Report based on this analysis:
 
+Report Date: {today_full}
+Date of Issue: {today}
 Source: {feed_info.get('title', 'Unknown Feed')}
-Analysis Period: Recent articles
+Analysis Period: Current Quarter ({today})
 Total Articles Analyzed: {total_count}
 GRC-Relevant Articles: {grc_count}
 
@@ -255,6 +268,8 @@ Please create a professional executive summary report with:
 3. Industry Impact Analysis
 4. Risk Assessment
 5. Recommendations for Action
+
+IMPORTANT: The Date of Issue in the report header MUST be "{today}" (the current month/year). Do NOT use any other date.
 
 Make it actionable for risk managers and compliance officers."""
 
