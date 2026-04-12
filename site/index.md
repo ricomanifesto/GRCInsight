@@ -1,7 +1,7 @@
 # GRC Intelligence Report - 2026-04-12
-**Generated:** 2026-04-12T12:20:07.139121Z
+**Generated:** 2026-04-12T15:14:30.229748Z
 # GRC Intelligence Report - 2026-04-12
-**Generated:** 2026-04-12T12:20:07.003836Z
+**Generated:** 2026-04-12T15:14:30.076323Z
 
 **Report Classification:** Internal — Executive Distribution
 **Analysis Period:** Current Quarter (April 2026)
@@ -12,7 +12,7 @@
 ---
 
 1) Executive Summary
-- This report was generated using deterministic local analysis because AI generation was temporarily unavailable: Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011CZysC4Lp28aF1oTtqj793'}.
+- This report was generated using deterministic local analysis because AI generation was temporarily unavailable: Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011CZz6VLJVK63CYdnAwSBSW'}.
 - The monitored feed continues to surface material GRC monitoring signals across 30 current articles.
 - Dominant themes in the current batch include Vulnerability and patch management, Ransomware and malware operations, Identity and access security.
 - Business impact remains concentrated in incident response readiness, disclosure obligations, control effectiveness, and board-level risk oversight.
