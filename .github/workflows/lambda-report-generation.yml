@@ -4,7 +4,7 @@ on:
   repository_dispatch:
     types: [generate-report, sentrydigest-updated]
   schedule:
-    - cron: '0 */3 * * *'  # Every 3 hours
+    - cron: '0 13 * * *'  # Once daily at 8 AM CT (13:00 UTC)
   workflow_dispatch:
     inputs:
       feed_url:
