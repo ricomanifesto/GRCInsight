@@ -205,7 +205,6 @@ def _build_fallback_report(
         f"# GRC Intelligence Report - {now.strftime('%Y-%m-%d')}",
         f"**Generated:** {now.isoformat()}Z",
         "",
-        f"**Report Classification:** Internal — Executive Distribution",
         f"**Analysis Period:** Current Quarter ({now.strftime('%B %Y')})",
         f"**Date of Issue:** {now.strftime('%B %Y')}",
         f"**Source:** {feed_data.get('title', 'Unknown Feed')}",
