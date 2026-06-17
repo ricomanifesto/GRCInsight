@@ -1,7 +1,5 @@
 import logging
 import os
-import re
-import json
 from typing import List, Dict, Any
 from datetime import datetime
 
@@ -69,9 +67,6 @@ async def analyze_grc_content(articles: List[Dict[str, Any]], config: Dict[str, 
         GRC analysis report
     """
     logger.info(f"Analyzing GRC content in {len(articles)} articles")
-
-    # Get the template
-    template = load_template()
 
     # Initialize the AI model
     api_key = os.getenv("ANTHROPIC_API_KEY")

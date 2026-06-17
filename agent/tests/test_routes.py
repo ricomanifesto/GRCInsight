@@ -1,16 +1,25 @@
 import asyncio
-import json
-from typing import Any, Dict, List
 
-from fastapi.testclient import TestClient
+import httpx
 
 # Import the FastAPI app
 from main import app  # type: ignore
 
 
+def request(method, url, **kwargs):
+    async def send():
+        transport = httpx.ASGITransport(app=app)
+        async with httpx.AsyncClient(
+            transport=transport,
+            base_url="http://testserver",
+        ) as client:
+            return await client.request(method, url, **kwargs)
+
+    return asyncio.run(send())
+
+
 def test_health_basic_ok():
-    client = TestClient(app)
-    resp = client.get("/api/v1/health")
+    resp = request("GET", "/api/v1/health")
     assert resp.status_code == 200
     data = resp.json()
     assert isinstance(data, dict)
@@ -40,7 +49,6 @@ def test_analyze_with_fake_anthropic(monkeypatch):
     # Patch the route's AnthropicService symbol
     monkeypatch.setattr(analysis_route, "AnthropicService", FakeAnthropicService)
 
-    client = TestClient(app)
     payload = {
         "articles": [
             {
@@ -55,7 +63,7 @@ def test_analyze_with_fake_anthropic(monkeypatch):
         "config": {"model": "claude-opus-4-6", "max_tokens": 16000, "focus_areas": []},
     }
 
-    resp = client.post("/api/v1/analyze", json=payload)
+    resp = request("POST", "/api/v1/analyze", json=payload)
     assert resp.status_code == 200
     data = resp.json()
     assert data["status"] == "success"
@@ -99,8 +107,7 @@ def test_workflow_status_success(monkeypatch):
     # Patch boto3 resource in workflow route
     monkeypatch.setitem(wf_route.__dict__, "boto3", FakeBoto3(item))
 
-    client = TestClient(app)
-    resp = client.get("/api/v1/workflow/status/rep123")
+    resp = request("GET", "/api/v1/workflow/status/rep123")
     assert resp.status_code == 200
     data = resp.json()
     assert data["report_id"] == "rep123"
@@ -123,8 +130,7 @@ def test_workflow_status_not_found(monkeypatch):
             return FakeDynamo()
 
     monkeypatch.setitem(wf_route.__dict__, "boto3", FakeBoto3())
-    client = TestClient(app)
-    resp = client.get("/api/v1/workflow/status/does-not-exist")
+    resp = request("GET", "/api/v1/workflow/status/does-not-exist")
     assert resp.status_code == 404
 
 
@@ -147,8 +153,7 @@ def test_health_deep_true_with_fake_anthropic(monkeypatch):
     monkeypatch.setattr(health_route, "HumanMessage", FakeHumanMessage)
     monkeypatch.setattr(health_route, "AnthropicService", FakeAnthropicService)
 
-    client = TestClient(app)
-    resp = client.get("/api/v1/health?deep=true")
+    resp = request("GET", "/api/v1/health?deep=true")
     assert resp.status_code == 200
     data = resp.json()
     assert data["services"]["llm"]["status"] == "healthy"

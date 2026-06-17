@@ -1,6 +1,5 @@
 """LangGraph workflow for FastAPI service."""
 
-import asyncio
 from collections import Counter
 from datetime import datetime
 from typing import Dict, Any, List

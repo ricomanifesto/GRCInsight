@@ -93,3 +93,29 @@ coverage.xml
 
 # pyenv
 .python-version
+
+# Private local files
+AGENTS.md
+agents.md
+AGENT.md
+agent.md
+CLAUDE.md
+claude.md
+GEMINI.md
+gemini.md
+.claude/
+.codex/
+.copilot/
+.cursor/
+.cursorrules
+.windsurf/
+.windsurfrules
+.github/copilot-instructions.md
+.github/instructions/
+agent-instructions.md
+agent_instructions.md
+assistant-instructions.md
+assistant_instructions.md
+
+# Local build binaries
+/server
