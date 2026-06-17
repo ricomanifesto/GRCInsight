@@ -7,7 +7,7 @@ from fastapi import APIRouter, Query
 from loguru import logger
 
 from models.api import HealthStatus
-from services.anthropic_client import AnthropicService
+from services.model_service import ModelService
 import os
 
 boto3: Any | None = None
@@ -15,14 +15,6 @@ try:
     import boto3 as _boto3  # Optional, only used if configured
 
     boto3 = _boto3
-except Exception:  # pragma: no cover
-    pass
-
-HumanMessage: Any | None = None
-try:
-    from langchain_core.messages import HumanMessage as _HumanMessage
-
-    HumanMessage = _HumanMessage
 except Exception:  # pragma: no cover
     pass
 
@@ -45,25 +37,38 @@ async def health_check(
     overall = "healthy"
     services = {}
 
-    # Anthropic Claude readiness: ensure API key present and client can be constructed
+    # Model readiness: ensure config is valid and the client can be constructed.
     try:
-        anthropic_service = AnthropicService()
-        # Optional deep LLM call
-        if deep and HumanMessage is not None:
+        model_service = ModelService()
+        if deep:
             try:
-                _ = await anthropic_service._invoke_with_fallbacks([HumanMessage(content="ping")])
-                services["llm"] = {"status": "healthy", "provider": "anthropic", "deep": True}
+                _ = await model_service._invoke(
+                    system_prompt="Return a one-word health response.",
+                    user_prompt="ping",
+                    title="GRCInsight health check",
+                )
+                services["llm"] = {
+                    "status": "healthy",
+                    "provider": model_service.model.provider_id,
+                    "model": model_service.model.model_id,
+                    "deep": True,
+                }
             except Exception as llm_err:
                 services["llm"] = {
                     "status": "unhealthy",
-                    "provider": "anthropic",
+                    "provider": model_service.model.provider_id,
+                    "model": model_service.model.model_id,
                     "error": str(llm_err),
                 }
                 overall = "unhealthy"
         else:
-            services["llm"] = {"status": "healthy", "provider": "anthropic"}
+            services["llm"] = {
+                "status": "healthy",
+                "provider": model_service.model.provider_id,
+                "model": model_service.model.model_id,
+            }
     except Exception as e:
-        services["llm"] = {"status": "unhealthy", "provider": "anthropic", "error": str(e)}
+        services["llm"] = {"status": "unhealthy", "error": str(e)}
         overall = "unhealthy"
 
     # Workflow readiness: trivial OK for now (no background queues here)

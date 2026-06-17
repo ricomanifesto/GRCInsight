@@ -27,11 +27,11 @@ def test_health_basic_ok():
     assert data.get("status") in {"healthy", "unhealthy"}
 
 
-def test_analyze_with_fake_anthropic(monkeypatch):
-    """Patch AnthropicService used in analysis route to avoid network calls."""
+def test_analyze_with_fake_model_service(monkeypatch):
+    """Patch ModelService used in analysis route to avoid network calls."""
     from api.routes import analysis as analysis_route
 
-    class FakeAnthropicService:
+    class FakeModelService:
         def __init__(self):
             pass
 
@@ -47,8 +47,7 @@ def test_analyze_with_fake_anthropic(monkeypatch):
                 },
             }
 
-    # Patch the route's AnthropicService symbol
-    monkeypatch.setattr(analysis_route, "AnthropicService", FakeAnthropicService)
+    monkeypatch.setattr(analysis_route, "ModelService", FakeModelService)
 
     payload = {
         "articles": [
@@ -61,7 +60,11 @@ def test_analyze_with_fake_anthropic(monkeypatch):
                 "published": "2025-01-01T00:00:00Z",
             }
         ],
-        "config": {"model": "claude-opus-4-6", "max_tokens": 16000, "focus_areas": []},
+        "config": {
+            "model": "anthropic/claude-sonnet-4-5-20250929",
+            "max_tokens": 16000,
+            "focus_areas": [],
+        },
     }
 
     resp = request("POST", "/api/v1/analyze", json=payload)
@@ -138,28 +141,24 @@ def test_workflow_status_not_found(monkeypatch):
     assert resp.status_code == 404
 
 
-def test_health_deep_true_with_fake_anthropic(monkeypatch):
+def test_health_deep_true_with_fake_model_service(monkeypatch):
     from api.routes import health as health_route
 
-    class FakeAnthropicService:
+    class FakeModelService:
         def __init__(self):
-            pass
+            class Model:
+                provider_id = "openai"
+                model_id = "gpt-5"
 
-        async def _invoke_with_fallbacks(self, messages):  # noqa: N802
-            class Resp:
-                content = "ok"
+            self.model = Model()
 
-            return Resp()
+        async def _invoke(self, **_kwargs):
+            return "ok"
 
-    class FakeHumanMessage:
-        def __init__(self, content=""):
-            self.content = content
-
-    # Force deep path by setting HumanMessage to a callable class
-    monkeypatch.setattr(health_route, "HumanMessage", FakeHumanMessage)
-    monkeypatch.setattr(health_route, "AnthropicService", FakeAnthropicService)
+    monkeypatch.setattr(health_route, "ModelService", FakeModelService)
 
     resp = request("GET", "/api/v1/health?deep=true")
     assert resp.status_code == 200
     data = resp.json()
     assert data["services"]["llm"]["status"] == "healthy"
+    assert data["services"]["llm"]["provider"] == "openai"

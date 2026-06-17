@@ -14,7 +14,7 @@ from config.settings import settings
 async def lifespan(app: FastAPI):
     """Manage application lifespan events."""
     logger.info("Starting GRCInsight Python Agent Service")
-    logger.info(f"Anthropic API Key configured: {'Yes' if settings.anthropic_api_key else 'No'}")
+    logger.info(f"Model configured: {settings.llm_model}")
     yield
     logger.info("Shutting down GRCInsight Python Agent Service")
 

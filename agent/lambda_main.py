@@ -19,7 +19,7 @@ from config.settings import settings
 async def lifespan(app: FastAPI):
     """Manage application lifespan events for Lambda."""
     logger.info("Starting GRCInsight Python Lambda Service")
-    logger.info(f"Anthropic API Key configured: {'Yes' if settings.anthropic_api_key else 'No'}")
+    logger.info(f"Model configured: {settings.llm_model}")
     logger.info(f"Running in Lambda: {'Yes' if os.getenv('AWS_LAMBDA_FUNCTION_NAME') else 'No'}")
     yield
     logger.info("Lambda function execution completed")

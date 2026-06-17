@@ -5,7 +5,7 @@ from models.api import AnalysisConfig
 from services.rss_service import RSSService
 
 
-def test_run_grc_analysis_endpoint_falls_back_when_anthropic_is_unavailable(monkeypatch):
+def test_run_grc_analysis_endpoint_falls_back_when_model_is_unavailable(monkeypatch):
     async def fake_fetch_feed(_feed_url):
         return {
             "title": "Test Feed",
@@ -23,7 +23,7 @@ def test_run_grc_analysis_endpoint_falls_back_when_anthropic_is_unavailable(monk
     async def fake_enrich_articles(articles):
         return articles
 
-    class FakeAnthropicService:
+    class FakeModelService:
         def __init__(self):
             pass
 
@@ -46,7 +46,7 @@ def test_run_grc_analysis_endpoint_falls_back_when_anthropic_is_unavailable(monk
 
     monkeypatch.setattr(workflow_mod.rss_service, "fetch_feed", fake_fetch_feed)
     monkeypatch.setattr(workflow_mod.rss_service, "enrich_articles", fake_enrich_articles)
-    monkeypatch.setattr(workflow_mod, "AnthropicService", FakeAnthropicService)
+    monkeypatch.setattr(workflow_mod, "ModelService", FakeModelService)
 
     response = asyncio.run(
         workflow_mod.run_grc_analysis_endpoint(
