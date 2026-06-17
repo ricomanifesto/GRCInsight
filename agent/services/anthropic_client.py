@@ -1,7 +1,6 @@
 """Anthropic Claude client service for GRC analysis."""
 
-import asyncio
-from typing import List, Dict, Any, Optional
+from typing import List, Dict, Any
 from langchain_anthropic import ChatAnthropic
 from langchain_core.messages import HumanMessage, SystemMessage
 from loguru import logger
@@ -305,7 +304,7 @@ Make it actionable for risk managers and compliance officers."""
                             "summary": "GRC-relevant content identified"
                         }
                         grc_articles.append(article_info)
-                except:
+                except Exception:
                     pass
 
             # Extract items from current section

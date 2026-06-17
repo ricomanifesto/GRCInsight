@@ -2,7 +2,6 @@
 
 import httpx
 import feedparser
-from datetime import datetime
 from typing import Dict, Any, List
 from loguru import logger
 

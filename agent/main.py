@@ -1,6 +1,5 @@
 """FastAPI server for GRCInsight Python Agent Service."""
 
-import os
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI

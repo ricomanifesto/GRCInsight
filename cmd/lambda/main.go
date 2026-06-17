@@ -13,7 +13,7 @@ import (
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
-	"github.com/awslabs/aws-lambda-go-api-proxy/gin"
+	ginadapter "github.com/awslabs/aws-lambda-go-api-proxy/gin"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	"github.com/sirupsen/logrus"
@@ -35,10 +35,10 @@ func init() {
 
 	// Initialize logger
 	logger := utils.NewLogger(cfg.Logging)
-    logger.WithFields(logrus.Fields{
-        "aws_lambda":                os.Getenv("AWS_LAMBDA_FUNCTION_NAME") != "",
-        "python_lambda_function_name": os.Getenv("PYTHON_LAMBDA_FUNCTION_NAME"),
-    }).Info("Starting GRCInsight Lambda Service")
+	logger.WithFields(logrus.Fields{
+		"aws_lambda":                  os.Getenv("AWS_LAMBDA_FUNCTION_NAME") != "",
+		"python_lambda_function_name": os.Getenv("PYTHON_LAMBDA_FUNCTION_NAME"),
+	}).Info("Starting GRCInsight Lambda Service")
 
 	// Initialize DynamoDB for Lambda
 	dynamoRepo, err := database.InitializeForLambda(logger)

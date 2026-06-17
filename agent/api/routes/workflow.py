@@ -1,12 +1,16 @@
 """Workflow execution endpoints."""
 
 import os
-from datetime import datetime
 from fastapi import APIRouter, HTTPException
 from loguru import logger
 
 from models.api import WorkflowRequest, WorkflowResponse, APIError
 from core.workflow import run_grc_analysis_endpoint
+
+try:
+    import boto3
+except ImportError:  # pragma: no cover - exercised only when optional dependency is absent
+    boto3 = None
 
 router = APIRouter()
 
@@ -40,8 +44,9 @@ async def get_workflow_status(report_id: str):
     """Get the status of a workflow execution from DynamoDB (Lambda mode)."""
     table_name = os.getenv("DDB_TABLE_NAME", "grcinsight-reports")
     try:
-        import boto3
-        from botocore.exceptions import BotoCoreError, ClientError
+        if boto3 is None:
+            raise RuntimeError("boto3 is not available")
+
         ddb = boto3.resource("dynamodb")
         table = ddb.Table(table_name)
 

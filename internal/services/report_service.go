@@ -5,25 +5,33 @@ import (
 	"time"
 
 	"grcinsight/internal/database/models"
-	"grcinsight/internal/repositories"
 	apiModels "grcinsight/internal/models"
+	"grcinsight/internal/repositories"
 
 	"github.com/sirupsen/logrus"
 )
 
 // ReportService handles report business logic
+type PythonWorkflowClient interface {
+	IsAsync() bool
+	RunWorkflow(req *apiModels.WorkflowRequest) (*apiModels.WorkflowResponse, error)
+	RunWorkflowAsync(req *apiModels.WorkflowRequest, reportID string) error
+}
+
+var _ PythonWorkflowClient = (*PythonServiceClient)(nil)
+
 type ReportService struct {
-    reportRepo    repositories.ReportRepository
-    articleRepo   repositories.ArticleRepository
-    pythonClient  *PythonServiceClient
-    logger        *logrus.Logger
+	reportRepo   repositories.ReportRepository
+	articleRepo  repositories.ArticleRepository
+	pythonClient PythonWorkflowClient
+	logger       *logrus.Logger
 }
 
 // NewReportService creates a new report service
 func NewReportService(
 	reportRepo repositories.ReportRepository,
 	articleRepo repositories.ArticleRepository,
-	pythonClient *PythonServiceClient,
+	pythonClient PythonWorkflowClient,
 	logger *logrus.Logger,
 ) *ReportService {
 	return &ReportService{
@@ -36,112 +44,112 @@ func NewReportService(
 
 // GenerateReport generates a new GRC report
 func (s *ReportService) GenerateReport(req *apiModels.GenerateReportRequest) (*models.Report, error) {
-    s.logger.Info("Starting report generation")
+	s.logger.Info("Starting report generation")
 
-    // Create report record
-    report := &models.Report{
-        Title:     fmt.Sprintf("GRC Intelligence Report - %s", time.Now().Format("2006-01-02")),
-        Status:    models.StatusProcessing,
-        SourceURL: req.FeedURL,
-    }
+	// Create report record
+	report := &models.Report{
+		Title:     fmt.Sprintf("GRC Intelligence Report - %s", time.Now().Format("2006-01-02")),
+		Status:    models.StatusProcessing,
+		SourceURL: req.FeedURL,
+	}
 
-    if err := s.reportRepo.Create(report); err != nil {
-        s.logger.WithError(err).Error("Failed to create report record")
-        return nil, fmt.Errorf("failed to create report record: %w", err)
-    }
+	if err := s.reportRepo.Create(report); err != nil {
+		s.logger.WithError(err).Error("Failed to create report record")
+		return nil, fmt.Errorf("failed to create report record: %w", err)
+	}
 
-    // Build workflow request
-    workflowReq := &apiModels.WorkflowRequest{FeedURL: req.FeedURL, Config: req.Config}
+	// Build workflow request
+	workflowReq := &apiModels.WorkflowRequest{FeedURL: req.FeedURL, Config: req.Config}
 
-    if s.pythonClient.IsAsync() {
-        // Async mode: fire-and-forget, return processing status
-        if err := s.pythonClient.RunWorkflowAsync(workflowReq, report.ID); err != nil {
-            s.logger.WithError(err).Error("Async Python workflow invocation failed")
-            report.Status = models.StatusFailed
-            _ = s.reportRepo.Update(report)
-            return nil, fmt.Errorf("async workflow invocation failed: %w", err)
-        }
-        // Do not update content here; Python Lambda will update DynamoDB
-        s.logger.WithFields(logrus.Fields{"report_id": report.ID}).Info("Report queued for async processing")
-    } else {
-        // Sync mode: wait for Python result
-        workflowResp, err := s.pythonClient.RunWorkflow(workflowReq)
-        if err != nil {
-            s.logger.WithError(err).Error("Python workflow failed")
-            report.Status = models.StatusFailed
-            _ = s.reportRepo.Update(report)
-            return nil, fmt.Errorf("workflow execution failed: %w", err)
-        }
+	if s.pythonClient.IsAsync() {
+		// Async mode: fire-and-forget, return processing status
+		if err := s.pythonClient.RunWorkflowAsync(workflowReq, report.ID); err != nil {
+			s.logger.WithError(err).Error("Async Python workflow invocation failed")
+			report.Status = models.StatusFailed
+			_ = s.reportRepo.Update(report)
+			return nil, fmt.Errorf("async workflow invocation failed: %w", err)
+		}
+		// Do not update content here; Python Lambda will update DynamoDB
+		s.logger.WithFields(logrus.Fields{"report_id": report.ID}).Info("Report queued for async processing")
+	} else {
+		// Sync mode: wait for Python result
+		workflowResp, err := s.pythonClient.RunWorkflow(workflowReq)
+		if err != nil {
+			s.logger.WithError(err).Error("Python workflow failed")
+			report.Status = models.StatusFailed
+			_ = s.reportRepo.Update(report)
+			return nil, fmt.Errorf("workflow execution failed: %w", err)
+		}
 
-        // Update report with results
-        if workflowResp.Report != nil {
-            now := time.Now()
-            report.Title = workflowResp.Report.Title
-            report.Content = workflowResp.Report.Content
-            report.GeneratedAt = &now
-            report.Status = models.StatusCompleted
+		// Update report with results
+		if workflowResp.Report != nil {
+			now := time.Now()
+			report.Title = workflowResp.Report.Title
+			report.Content = workflowResp.Report.Content
+			report.GeneratedAt = &now
+			report.Status = models.StatusCompleted
 
-            // Update metadata if available
-            if workflowResp.Metadata != nil {
-                report.Metadata = models.ReportMetadata{
-                    ArticleCount:         workflowResp.Metadata.ArticleCount,
-                    GRCArticleCount:      workflowResp.Metadata.GRCArticleCount,
-                    RegulationsMentioned: ensureNonNilSlice(workflowResp.Metadata.RegulationsMentioned),
-                    FrameworksReferenced: ensureNonNilSlice(workflowResp.Metadata.FrameworksReferenced),
-                    IndustriesAffected:   ensureNonNilSlice(workflowResp.Metadata.IndustriesAffected),
-                    RegulatoryBodies:     ensureNonNilSlice(workflowResp.Metadata.RegulatoryBodies),
-                }
-            }
-        } else {
-            report.Status = models.StatusFailed
-            s.logger.Error("No report content received from Python service")
-        }
+			// Update metadata if available
+			if workflowResp.Metadata != nil {
+				report.Metadata = models.ReportMetadata{
+					ArticleCount:         workflowResp.Metadata.ArticleCount,
+					GRCArticleCount:      workflowResp.Metadata.GRCArticleCount,
+					RegulationsMentioned: ensureNonNilSlice(workflowResp.Metadata.RegulationsMentioned),
+					FrameworksReferenced: ensureNonNilSlice(workflowResp.Metadata.FrameworksReferenced),
+					IndustriesAffected:   ensureNonNilSlice(workflowResp.Metadata.IndustriesAffected),
+					RegulatoryBodies:     ensureNonNilSlice(workflowResp.Metadata.RegulatoryBodies),
+				}
+			}
+		} else {
+			report.Status = models.StatusFailed
+			s.logger.Error("No report content received from Python service")
+		}
 
-        if err := s.reportRepo.Update(report); err != nil {
-            s.logger.WithError(err).Error("Failed to update report")
-            return nil, fmt.Errorf("failed to update report: %w", err)
-        }
+		if err := s.reportRepo.Update(report); err != nil {
+			s.logger.WithError(err).Error("Failed to update report")
+			return nil, fmt.Errorf("failed to update report: %w", err)
+		}
 
-        // Persist enriched/analyzed articles if provided by Python workflow
-        if workflowResp.Articles != nil && len(workflowResp.Articles) > 0 {
-            s.logger.WithField("count", len(workflowResp.Articles)).Info("Persisting analyzed articles")
-            for _, ar := range workflowResp.Articles {
-                art := &models.Article{
-                    Title:         ar.Title,
-                    URL:           ar.URL,
-                    Content:       ar.Content,
-                    Summary:       ar.Summary,
-                    Source:        ar.Source,
-                    Published:     ar.Published,
-                    HasGRCContent: ar.HasGRCContent,
-                    Regulations:   ensureNonNilSlice(ar.Regulations),
-                    Frameworks:    ensureNonNilSlice(ar.Frameworks),
-                    Industries:    ensureNonNilSlice(ar.Industries),
-                    RegulatoryBodies: ensureNonNilSlice(ar.RegulatoryBodies),
-                }
-                if err := s.articleRepo.CreateForReport(report.ID, art); err != nil {
-                    s.logger.WithError(err).WithField("url", ar.URL).Warn("Failed to persist article")
-                    continue
-                }
-            }
-        }
-    }
+		// Persist enriched/analyzed articles if provided by Python workflow
+		if len(workflowResp.Articles) > 0 {
+			s.logger.WithField("count", len(workflowResp.Articles)).Info("Persisting analyzed articles")
+			for _, ar := range workflowResp.Articles {
+				art := &models.Article{
+					Title:            ar.Title,
+					URL:              ar.URL,
+					Content:          ar.Content,
+					Summary:          ar.Summary,
+					Source:           ar.Source,
+					Published:        ar.Published,
+					HasGRCContent:    ar.HasGRCContent,
+					Regulations:      ensureNonNilSlice(ar.Regulations),
+					Frameworks:       ensureNonNilSlice(ar.Frameworks),
+					Industries:       ensureNonNilSlice(ar.Industries),
+					RegulatoryBodies: ensureNonNilSlice(ar.RegulatoryBodies),
+				}
+				if err := s.articleRepo.CreateForReport(report.ID, art); err != nil {
+					s.logger.WithError(err).WithField("url", ar.URL).Warn("Failed to persist article")
+					continue
+				}
+			}
+		}
+	}
 
-    s.logger.WithFields(logrus.Fields{
-        "report_id": report.ID,
-        "status":    report.Status,
-    }).Info("Report generation completed")
+	s.logger.WithFields(logrus.Fields{
+		"report_id": report.ID,
+		"status":    report.Status,
+	}).Info("Report generation completed")
 
 	return report, nil
 }
 
 // GetReport retrieves a report by ID
 func (s *ReportService) GetReport(id string) (*models.Report, error) {
-    report, err := s.reportRepo.GetByID(id)
-    if err != nil {
-        return nil, fmt.Errorf("failed to get report: %w", err)
-    }
-    return report, nil
+	report, err := s.reportRepo.GetByID(id)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get report: %w", err)
+	}
+	return report, nil
 }
 
 // ListReports lists reports with pagination
@@ -153,17 +161,17 @@ func (s *ReportService) ListReports(page, perPage int) (*apiModels.ListReportsRe
 	}
 
 	// Convert to summary format
-    summaries := make([]apiModels.ReportSummary, len(reports))
-    for i, report := range reports {
-        summaries[i] = apiModels.ReportSummary{
-            ID:           report.ID,
-            Title:        report.Title,
-            Status:       report.Status,
-            GeneratedAt:  report.GeneratedAt,
-            CreatedAt:    report.CreatedAt,
-            ArticleCount: report.Metadata.ArticleCount,
-        }
-    }
+	summaries := make([]apiModels.ReportSummary, len(reports))
+	for i, report := range reports {
+		summaries[i] = apiModels.ReportSummary{
+			ID:           report.ID,
+			Title:        report.Title,
+			Status:       report.Status,
+			GeneratedAt:  report.GeneratedAt,
+			CreatedAt:    report.CreatedAt,
+			ArticleCount: report.Metadata.ArticleCount,
+		}
+	}
 
 	totalPages := int((total + int64(perPage) - 1) / int64(perPage))
 
@@ -178,50 +186,50 @@ func (s *ReportService) ListReports(page, perPage int) (*apiModels.ListReportsRe
 
 // ListReportArticles lists articles associated with a report
 func (s *ReportService) ListReportArticles(reportID string, page, perPage int) (*apiModels.ListArticlesResponse, error) {
-    if reportID == "" {
-        return nil, fmt.Errorf("reportID is required")
-    }
+	if reportID == "" {
+		return nil, fmt.Errorf("reportID is required")
+	}
 
-    offset := (page - 1) * perPage
-    articles, total, err := s.articleRepo.GetByReportID(reportID, perPage, offset)
-    if err != nil {
-        return nil, fmt.Errorf("failed to list report articles: %w", err)
-    }
+	offset := (page - 1) * perPage
+	articles, total, err := s.articleRepo.GetByReportID(reportID, perPage, offset)
+	if err != nil {
+		return nil, fmt.Errorf("failed to list report articles: %w", err)
+	}
 
-    // Map to API model
-    apiArticles := make([]apiModels.ArticleRecord, len(articles))
-    for i, a := range articles {
-        apiArticles[i] = apiModels.ArticleRecord{
-            Title:           a.Title,
-            URL:             a.URL,
-            Content:         a.Content,
-            Summary:         a.Summary,
-            Source:          a.Source,
-            Published:       a.Published,
-            HasGRCContent:   a.HasGRCContent,
-            Regulations:     ensureNonNilSlice(a.Regulations),
-            Frameworks:      ensureNonNilSlice(a.Frameworks),
-            Industries:      ensureNonNilSlice(a.Industries),
-            RegulatoryBodies: ensureNonNilSlice(a.RegulatoryBodies),
-        }
-    }
+	// Map to API model
+	apiArticles := make([]apiModels.ArticleRecord, len(articles))
+	for i, a := range articles {
+		apiArticles[i] = apiModels.ArticleRecord{
+			Title:            a.Title,
+			URL:              a.URL,
+			Content:          a.Content,
+			Summary:          a.Summary,
+			Source:           a.Source,
+			Published:        a.Published,
+			HasGRCContent:    a.HasGRCContent,
+			Regulations:      ensureNonNilSlice(a.Regulations),
+			Frameworks:       ensureNonNilSlice(a.Frameworks),
+			Industries:       ensureNonNilSlice(a.Industries),
+			RegulatoryBodies: ensureNonNilSlice(a.RegulatoryBodies),
+		}
+	}
 
-    totalPages := int((total + int64(perPage) - 1) / int64(perPage))
-    return &apiModels.ListArticlesResponse{
-        Articles:   apiArticles,
-        Total:      total,
-        Page:       page,
-        PerPage:    perPage,
-        TotalPages: totalPages,
-    }, nil
+	totalPages := int((total + int64(perPage) - 1) / int64(perPage))
+	return &apiModels.ListArticlesResponse{
+		Articles:   apiArticles,
+		Total:      total,
+		Page:       page,
+		PerPage:    perPage,
+		TotalPages: totalPages,
+	}, nil
 }
 
 // DeleteReport deletes a report by ID
 func (s *ReportService) DeleteReport(id string) error {
-    if err := s.reportRepo.Delete(id); err != nil {
-        return fmt.Errorf("failed to delete report: %w", err)
-    }
-    return nil
+	if err := s.reportRepo.Delete(id); err != nil {
+		return fmt.Errorf("failed to delete report: %w", err)
+	}
+	return nil
 }
 
 // ensureNonNilSlice converts nil slices to empty slices for database storage
