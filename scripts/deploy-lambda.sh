@@ -42,9 +42,14 @@ fi
 print_status "AWS Account ID: $AWS_ACCOUNT_ID"
 print_status "AWS Region: $AWS_REGION"
 
-# Ensure OpenAI API key is present for Python Lambda
-if [ -z "${OPENAI_API_KEY}" ]; then
-    print_error "OPENAI_API_KEY is not set. Export OPENAI_API_KEY before deploying."
+# Ensure model gateway settings are present for Python Lambda
+if [ -z "${LLM_MODEL}" ]; then
+    print_error "LLM_MODEL is not set. Export LLM_MODEL before deploying."
+    exit 1
+fi
+
+if [ -z "${OPENCODE_BASE_URL}" ]; then
+    print_error "OPENCODE_BASE_URL is not set. Export OPENCODE_BASE_URL before deploying."
     exit 1
 fi
 
@@ -197,7 +202,7 @@ if aws lambda get-function --function-name $PYTHON_FUNCTION_NAME --region $AWS_R
     aws lambda update-function-configuration \
         --function-name $PYTHON_FUNCTION_NAME \
         --region $AWS_REGION \
-        --environment Variables="{\n            OPENAI_API_KEY=${OPENAI_API_KEY:-},\n            LOG_LEVEL=INFO,\n            DDB_TABLE_NAME=grcinsight-reports\n        }"
+        --environment Variables="{\n            LLM_MODEL=${LLM_MODEL},\n            OPENCODE_BASE_URL=${OPENCODE_BASE_URL},\n            LOG_LEVEL=INFO,\n            DDB_TABLE_NAME=grcinsight-reports\n        }"
 else
     print_warning "Creating new Python Lambda function..."
     aws lambda create-function \
@@ -208,7 +213,7 @@ else
         --timeout 900 \
         --memory-size 2048 \
         --region $AWS_REGION \
-        --environment Variables="{\n            OPENAI_API_KEY=${OPENAI_API_KEY:-},\n            LOG_LEVEL=INFO,\n            DDB_TABLE_NAME=grcinsight-reports\n        }"
+        --environment Variables="{\n            LLM_MODEL=${LLM_MODEL},\n            OPENCODE_BASE_URL=${OPENCODE_BASE_URL},\n            LOG_LEVEL=INFO,\n            DDB_TABLE_NAME=grcinsight-reports\n        }"
 fi
 
 # Ensure IAM policy for DynamoDB and Lambda invoke is attached to the role

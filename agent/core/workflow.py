@@ -15,7 +15,7 @@ from models.api import (
     ArticleRecord,
 )
 from services.rss_service import RSSService
-from services.anthropic_client import AnthropicService
+from services.model_service import ModelService
 from core.entities import analyze_article_grc_content
 
 # Initialize services
@@ -174,7 +174,7 @@ def _build_fallback_report(
     analysis_results: Dict[str, Any],
     fallback_reason: str,
 ) -> str:
-    """Create a deterministic Markdown report when Claude is unavailable."""
+    """Create a deterministic Markdown report when model output is unavailable."""
     total_count = analysis_results.get("summary", {}).get("total_articles", len(enriched_articles))
     grc_count = analysis_results.get("summary", {}).get("grc_relevant_count", 0)
     analysis = analysis_results.get("analysis", {})
@@ -358,32 +358,32 @@ async def run_grc_analysis_endpoint(feed_url: str, config: AnalysisConfig) -> Wo
         logger.info("Step 3: Enriching articles with full content")
         enriched_articles = await rss_service.enrich_articles(articles)
 
-        # Build local analysis upfront — used as fallback if Claude is unavailable
+        # Build local analysis upfront, used as fallback if model output is unavailable.
         local_signals, local_analysis = _build_local_analysis(enriched_articles)
 
-        # Step 4: Initialize Anthropic Claude service
-        logger.info("Step 4: Initializing Anthropic Claude service")
+        # Step 4: Initialize model service
+        logger.info("Step 4: Initializing model service")
         fallback_reason = ""
         analysis_results = local_analysis
-        used_claude_analysis = False
-        anthropic_service = None
+        used_model_analysis = False
+        model_service = None
 
         try:
-            anthropic_service = AnthropicService()
+            model_service = ModelService()
         except ValueError as e:
             fallback_reason = str(e)
-            logger.warning(f"Anthropic service unavailable, falling back to local analysis: {e}")
+            logger.warning(f"Model service unavailable, falling back to local analysis: {e}")
 
-        # Step 5: Analyze articles for GRC content with Claude
+        # Step 5: Analyze articles for GRC content with the configured model
         logger.info("Step 5: Analyzing articles for GRC content")
-        if anthropic_service is not None:
-            claude_analysis = await anthropic_service.analyze_articles_for_grc(enriched_articles)
-            if "error" in claude_analysis:
-                fallback_reason = claude_analysis["error"]
+        if model_service is not None:
+            model_analysis = await model_service.analyze_articles_for_grc(enriched_articles)
+            if "error" in model_analysis:
+                fallback_reason = model_analysis["error"]
                 logger.warning(f"GRC analysis failed, using local fallback: {fallback_reason}")
             else:
-                analysis_results = claude_analysis
-                used_claude_analysis = True
+                analysis_results = model_analysis
+                used_model_analysis = True
 
         grc_article_count = analysis_results.get("summary", {}).get("grc_relevant_count", 0)
         logger.info(f"Found {grc_article_count} articles with GRC content")
@@ -424,12 +424,10 @@ async def run_grc_analysis_endpoint(feed_url: str, config: AnalysisConfig) -> Wo
         logger.info("Step 6: Generating comprehensive GRC report")
         report_content = ""
 
-        if used_claude_analysis and anthropic_service is not None:
-            report_content = await anthropic_service.generate_grc_report(
-                analysis_results, feed_data
-            )
+        if used_model_analysis and model_service is not None:
+            report_content = await model_service.generate_grc_report(analysis_results, feed_data)
             if not report_content or report_content.startswith("# GRC Intelligence Report - Error"):
-                fallback_reason = report_content or "empty report content from Claude"
+                fallback_reason = report_content or "empty report content from model"
                 report_content = ""
 
         if not report_content:
@@ -440,7 +438,7 @@ async def run_grc_analysis_endpoint(feed_url: str, config: AnalysisConfig) -> Wo
                 analysis_results,
                 fallback_reason,
             )
-            logger.warning("Generated fallback report because Claude output was unavailable")
+            logger.warning("Generated fallback report because model output was unavailable")
 
         # Step 7: Create response
         logger.info("Step 7: Creating workflow response")

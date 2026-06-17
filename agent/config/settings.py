@@ -13,10 +13,9 @@ class Settings(BaseSettings):
     reload: bool = True
     log_level: str = "INFO"
 
-    # Anthropic Claude configuration
-    anthropic_api_key: str = ""
-    anthropic_model: str = "claude-opus-4-6"
-    anthropic_max_tokens: int = 16000
+    # Model configuration
+    llm_model: str = "anthropic/claude-sonnet-4-5-20250929"
+    llm_max_tokens: int = 16000
 
     # RSS configuration
     rss_timeout: int = 30

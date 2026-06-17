@@ -3,9 +3,8 @@ import os
 from typing import List, Dict, Any
 from datetime import datetime
 
-from pydantic import SecretStr
-from langchain_anthropic import ChatAnthropic
-from langchain_core.messages import HumanMessage, SystemMessage
+from config.settings import settings
+from services.opencode_client import OpenCodeClient, parse_model_selection
 
 # Configure logging
 logging.basicConfig(
@@ -78,26 +77,16 @@ async def analyze_grc_content(
     """
     logger.info(f"Analyzing GRC content in {len(articles)} articles")
 
-    # Initialize the AI model
-    api_key = os.getenv("ANTHROPIC_API_KEY")
-    model_name = config.get("analysis", {}).get("model", "claude-opus-4-6")
-    temperature = config.get("analysis", {}).get("temperature", 1)
-
-    if not api_key:
-        logger.error("No Anthropic API key provided")
+    model_name = config.get("analysis", {}).get("model", settings.llm_model)
+    try:
+        model = parse_model_selection(model_name)
+    except ValueError as e:
+        logger.error(f"Invalid model configuration: {e}")
         return {
-            "grc_report": "# Error: No Anthropic API Key\n\nPlease set the ANTHROPIC_API_KEY environment variable.",
+            "grc_report": f"# Error: Invalid Model\n\n{str(e)}",
             "date": datetime.now().strftime("%Y-%m-%d"),
-            "error": "No API key",
+            "error": str(e),
         }
-
-    model = ChatAnthropic(
-        api_key=SecretStr(api_key),
-        model_name=model_name,
-        temperature=temperature,
-        max_tokens_to_sample=16000,
-        thinking={"type": "enabled", "budget_tokens": 10000},
-    )
 
     # Prepare all article summaries
     all_article_summaries = []
@@ -219,28 +208,13 @@ Generate a well-formatted GRC intelligence report following the structure above.
 
     # Call the AI model
     try:
-        messages = [
-            SystemMessage(
-                content="You are a GRC expert specializing in governance, risk, and compliance analysis. Your task is to create a comprehensive report on current GRC developments based on recent articles. Be extremely thorough in identifying ALL GRC-related content mentioned in the articles, including regulatory updates, compliance requirements, governance changes, and risk management developments."
-            ),
-            HumanMessage(content=prompt),
-        ]
-
-        response = await model.ainvoke(messages)
-
-        # Extract text content, handling extended thinking response format
-        content = response.content
-        if isinstance(content, str):
-            grc_report = content
-        elif isinstance(content, list):
-            texts = [
-                block["text"]
-                for block in content
-                if isinstance(block, dict) and block.get("type") == "text"
-            ]
-            grc_report = "\n".join(texts)
-        else:
-            grc_report = str(content)
+        client = OpenCodeClient(timeout=max(120.0, float(settings.llm_max_tokens) / 20))
+        grc_report = await client.generate(
+            system_prompt="You are a GRC expert specializing in governance, risk, and compliance analysis. Your task is to create a comprehensive report on current GRC developments based on recent articles. Be extremely thorough in identifying ALL GRC-related content mentioned in the articles, including regulatory updates, compliance requirements, governance changes, and risk management developments.",
+            user_prompt=prompt,
+            model=model,
+            title="GRC intelligence report",
+        )
 
         return {
             "grc_report": grc_report,

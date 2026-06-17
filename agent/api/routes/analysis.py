@@ -10,7 +10,7 @@ from models.api import (
     AnalysisSummary,
     APIError,
 )
-from services.anthropic_client import AnthropicService
+from services.model_service import ModelService
 from core.entities import analyze_article_grc_content
 
 router = APIRouter()
@@ -18,15 +18,14 @@ router = APIRouter()
 
 @router.post("/analyze", response_model=AnalysisResponse)
 async def analyze_ar(request: AnalysisRequest):
-    """Analyze articles for GRC content using AnthropicService."""
+    """Analyze articles for GRC content using the configured model service."""
     logger.info(f"Starting analysis of {len(request.articles)} articles")
 
     try:
-        # Initialize Anthropic service
         try:
-            anthropic_service = AnthropicService()
+            model_service = ModelService()
         except ValueError as init_err:
-            logger.error(f"Anthropic service initialization failed: {init_err}")
+            logger.error(f"Model service initialization failed: {init_err}")
             return AnalysisResponse(
                 status="failed",
                 results=[],
@@ -39,13 +38,13 @@ async def analyze_ar(request: AnalysisRequest):
                 ),
                 error=APIError(
                     code="LLM_INIT_FAILED",
-                    message="Anthropic service initialization failed",
+                    message="Model service initialization failed",
                     details=str(init_err),
                 ),
             )
 
         # Run analysis
-        analysis = await anthropic_service.analyze_articles_for_grc(request.articles)
+        analysis = await model_service.analyze_articles_for_grc(request.articles)
 
         if "error" in analysis:
             logger.error(f"GRC analysis error: {analysis['error']}")

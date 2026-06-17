@@ -18,13 +18,14 @@ Automated GRC intelligence: monitor RSS feeds, extract regulatory signals, and p
 ## Architecture
 
 - Go Lambda: API, DynamoDB writes, Python Lambda invoke
-- Python Lambda: RSS fetch, AI analysis, report compose
+- Python Lambda: RSS fetch, model-backed analysis, report compose
 - GitHub Actions: deploy Lambdas, schedule runs, publish Pages
 
 ## Setup
 
 - Python agent deps: `cd agent && uv sync`
-- Anthropic key: `echo ANTHROPIC_API_KEY=your-key > .env`
+- Model gateway: run OpenCode and set `OPENCODE_BASE_URL`
+- Model: set `LLM_MODEL=provider/model`
 - Go config: edit `configs/config.yaml`
 
 ## Use Locally
@@ -46,7 +47,8 @@ make check
 ## Production
 
 - Deploy: push to `main` or run `.github/workflows/deploy-lambda.yml`
-- Secrets: `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `ANTHROPIC_API_KEY`
+- Secrets: `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`
+- Runtime env: `LLM_MODEL`, `OPENCODE_BASE_URL`
 - Reports: `.github/workflows/lambda-report-generation.yml` writes to `site/` and deploys Pages
 
 ## Legacy

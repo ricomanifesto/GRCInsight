@@ -1,73 +1,32 @@
-"""Anthropic Claude client service for GRC analysis."""
+"""Provider-switchable model service for GRC analysis."""
 
 from datetime import datetime, timezone
 from typing import List, Dict, Any
 
-from langchain_anthropic import ChatAnthropic
-from langchain_core.messages import HumanMessage, SystemMessage
 from loguru import logger
-from pydantic import SecretStr
 
 from config.settings import settings
 from models.api import ArticleInput
+from services.opencode_client import OpenCodeClient, parse_model_selection
 
 
-class AnthropicService:
-    """Service for Anthropic Claude-powered GRC analysis."""
+class ModelService:
+    """Service for model-powered GRC analysis."""
 
     def __init__(self):
-        """Initialize Anthropic Claude service."""
-        if not settings.anthropic_api_key:
-            raise ValueError("Anthropic API key is required")
-
-        # Preferred and fallback models (A then B)
-        self.model_primary = self._get_model_name()
-        self.model_fallback_a = "claude-sonnet-4-5-20250929"
-        self.model_fallback_b = "claude-haiku-4-5-20251001"
-
-        self.client = self._build_client(self.model_primary)
-
-        logger.info(f"Initialized Anthropic client with model: {self.model_primary}")
-
-    def _get_model_name(self) -> str:
-        """Get the correct Anthropic model name."""
-        model = settings.anthropic_model.lower()
-
-        # Map common model names to actual Anthropic model identifiers
-        model_mapping = {
-            "claude-opus-4-6": "claude-opus-4-6",
-            "opus": "claude-opus-4-6",
-            "claude-sonnet-4-5-20250929": "claude-sonnet-4-5-20250929",
-            "sonnet": "claude-sonnet-4-5-20250929",
-            "claude-haiku-4-5-20251001": "claude-haiku-4-5-20251001",
-            "haiku": "claude-haiku-4-5-20251001",
-            # Legacy OpenAI names for backwards compatibility
-            "gpt5": "claude-opus-4-6",
-            "gpt-5": "claude-opus-4-6",
-            "chatgpt-5": "claude-opus-4-6",
-            "chatgpt5": "claude-opus-4-6",
-            "gpt4": "claude-sonnet-4-5-20250929",
-            "gpt-4": "claude-sonnet-4-5-20250929",
-            "gpt4o": "claude-sonnet-4-5-20250929",
-            "gpt-4o": "claude-sonnet-4-5-20250929",
-            "gpt-3.5": "claude-haiku-4-5-20251001",
-            "gpt-3.5-turbo": "claude-haiku-4-5-20251001",
-        }
-
-        return model_mapping.get(model, "claude-opus-4-6")
-
-    def _build_client(self, model_name: str) -> ChatAnthropic:
-        """Construct a ChatAnthropic client for a given model."""
-        return ChatAnthropic(
-            model_name=model_name,
-            max_tokens_to_sample=settings.anthropic_max_tokens,
-            temperature=1,
-            api_key=SecretStr(settings.anthropic_api_key),
-            thinking={"type": "enabled", "budget_tokens": 10000},
+        """Initialize model service."""
+        self.model = parse_model_selection(settings.llm_model)
+        self.client = OpenCodeClient(timeout=max(120.0, float(settings.llm_max_tokens) / 20))
+        logger.info(
+            "Initialized model service with provider=%s model=%s",
+            self.model.provider_id,
+            self.model.model_id,
         )
 
     def _extract_text(self, response) -> str:
-        """Extract text content from response, handling extended thinking blocks."""
+        """Return text content from either a raw string or response-like object."""
+        if isinstance(response, str):
+            return response
         content = response.content
         if isinstance(content, str):
             return content
@@ -80,24 +39,14 @@ class AnthropicService:
             return "\n".join(texts)
         return str(content)
 
-    async def _invoke_with_fallbacks(self, messages: List[Any]):
-        """Invoke the model with ordered fallbacks: primary -> A -> B."""
-        # Try primary
-        try:
-            return await self.client.ainvoke(messages)
-        except Exception as e1:
-            logger.warning(f"Primary model '{self.model_primary}' failed: {e1}")
-            # Try fallback A
-            try:
-                logger.info(f"Falling back to '{self.model_fallback_a}'")
-                self.client = self._build_client(self.model_fallback_a)
-                return await self.client.ainvoke(messages)
-            except Exception as e2:
-                logger.warning(f"Fallback A '{self.model_fallback_a}' failed: {e2}")
-                # Try fallback B
-                logger.info(f"Falling back to '{self.model_fallback_b}'")
-                self.client = self._build_client(self.model_fallback_b)
-                return await self.client.ainvoke(messages)
+    async def _invoke(self, *, system_prompt: str, user_prompt: str, title: str) -> str:
+        """Invoke the configured model through OpenCode."""
+        return await self.client.generate(
+            system_prompt=system_prompt,
+            user_prompt=user_prompt,
+            model=self.model,
+            title=title,
+        )
 
     async def analyze_articles_for_grc(self, articles: List[ArticleInput]) -> Dict[str, Any]:
         """Analyze articles for GRC-relevant content."""
@@ -120,21 +69,15 @@ class AnthropicService:
                     },
                 }
 
-            # Create analysis prompt
             analysis_prompt = self._create_analysis_prompt(articles)
 
-            # Run analysis with ordered fallbacks
-            response = await self._invoke_with_fallbacks(
-                [
-                    SystemMessage(content=self._get_system_prompt()),
-                    HumanMessage(content=analysis_prompt),
-                ]
+            response_content = await self._invoke(
+                system_prompt=self._get_system_prompt(),
+                user_prompt=analysis_prompt,
+                title="GRC article analysis",
             )
 
-            # Process the response
-            analysis_result = self._process_analysis_response(
-                self._extract_text(response), articles
-            )
+            analysis_result = self._process_analysis_response(response_content, articles)
 
             logger.info(
                 f"Analysis complete: {analysis_result['summary']['grc_relevant_count']} GRC-relevant articles found"
@@ -169,14 +112,11 @@ class AnthropicService:
 
             report_prompt = self._create_report_prompt(analysis_data, feed_info)
 
-            response = await self._invoke_with_fallbacks(
-                [
-                    SystemMessage(content=self._get_report_system_prompt()),
-                    HumanMessage(content=report_prompt),
-                ]
+            report_content = await self._invoke(
+                system_prompt=self._get_report_system_prompt(),
+                user_prompt=report_prompt,
+                title="GRC intelligence report",
             )
-
-            report_content = self._extract_text(response)
 
             logger.info("GRC report generation completed")
             return report_content
@@ -224,7 +164,7 @@ Use professional language and structure the report with clear sections and markd
     def _create_analysis_prompt(self, articles: List[ArticleInput]) -> str:
         """Create prompt for analyzing articles."""
         articles_text = ""
-        for i, article in enumerate(articles, 1):  # Analyze all articles
+        for i, article in enumerate(articles, 1):
             content = article.content or article.summary or "No content available"
             articles_text += f"""
 Article {i}:
@@ -290,7 +230,7 @@ Make it actionable for risk managers and compliance officers."""
     def _process_analysis_response(
         self, response_content: str, original_articles: List[ArticleInput]
     ) -> Dict[str, Any]:
-        """Process the Claude analysis response."""
+        """Process model analysis output."""
         lines = response_content.split("\n")
 
         grc_articles = []
@@ -303,7 +243,6 @@ Make it actionable for risk managers and compliance officers."""
             if not line:
                 continue
 
-            # Identify sections
             if "regulation" in line.lower() or "framework" in line.lower():
                 current_section = "regulations"
             elif "industri" in line.lower():
@@ -313,9 +252,7 @@ Make it actionable for risk managers and compliance officers."""
             elif line.startswith("Article ") and any(
                 word in line.lower() for word in ["relevant", "grc", "compliance"]
             ):
-                # Extract article info
                 try:
-                    # Simple extraction - could be improved
                     if "score" in line.lower():
                         article_info = {
                             "title": (
@@ -323,23 +260,20 @@ Make it actionable for risk managers and compliance officers."""
                                 if "Title:" in line
                                 else line
                             ),
-                            "relevance_score": 7.0,  # Default score
+                            "relevance_score": 7.0,
                             "summary": "GRC-relevant content identified",
                         }
                         grc_articles.append(article_info)
                 except Exception:
                     pass
 
-            # Extract items from current section
             if current_section == "regulations" and any(
                 reg in line for reg in ["GDPR", "SOX", "PCI", "ISO", "NIST", "CCPA"]
             ):
-                # Extract just the regulation names, not the formatted text
                 for reg in ["GDPR", "SOX", "PCI-DSS", "ISO 27001", "NIST", "CCPA"]:
                     if reg in line:
                         regulations.append(reg)
 
-        # Consider all articles potentially relevant for comprehensive GRC analysis
         if not grc_articles and original_articles:
             for article in original_articles:
                 grc_articles.append(
@@ -347,7 +281,7 @@ Make it actionable for risk managers and compliance officers."""
                         "title": article.title,
                         "url": article.url,
                         "relevance_score": 7.0,
-                        "summary": "GRC analysis via comprehensive AI evaluation",
+                        "summary": "GRC analysis via comprehensive model evaluation",
                     }
                 )
 
