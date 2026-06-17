@@ -90,8 +90,7 @@ def test_rss_service_fetch_feed_survives_multiple_event_loops(monkeypatch):
             elif self.bound_loop is not current_loop:
                 raise RuntimeError("Event loop is closed")
 
-            return FakeResponse(
-                """<?xml version="1.0" encoding="UTF-8"?>
+            return FakeResponse("""<?xml version="1.0" encoding="UTF-8"?>
                 <rss version="2.0">
                     <channel>
                         <title>Test Feed</title>
@@ -101,8 +100,7 @@ def test_rss_service_fetch_feed_survives_multiple_event_loops(monkeypatch):
                             <description>Test summary</description>
                         </item>
                     </channel>
-                </rss>"""
-            )
+                </rss>""")
 
     monkeypatch.setattr("services.rss_service.httpx.AsyncClient", LoopBoundAsyncClient)
 

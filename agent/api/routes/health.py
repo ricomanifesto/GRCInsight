@@ -1,6 +1,8 @@
 """Health check endpoints."""
 
-from datetime import datetime
+from datetime import datetime, timezone
+from typing import Any
+
 from fastapi import APIRouter, Query
 from loguru import logger
 
@@ -8,21 +10,35 @@ from models.api import HealthStatus
 from services.anthropic_client import AnthropicService
 import os
 
+boto3: Any | None = None
 try:
-    import boto3  # Optional, only used if configured
-except Exception:  # pragma: no cover
-    boto3 = None
+    import boto3 as _boto3  # Optional, only used if configured
 
-try:
-    from langchain_core.messages import HumanMessage
+    boto3 = _boto3
 except Exception:  # pragma: no cover
-    HumanMessage = None
+    pass
+
+HumanMessage: Any | None = None
+try:
+    from langchain_core.messages import HumanMessage as _HumanMessage
+
+    HumanMessage = _HumanMessage
+except Exception:  # pragma: no cover
+    pass
 
 router = APIRouter()
 
 
+def _utc_now() -> datetime:
+    return datetime.now(timezone.utc)
+
+
 @router.get("/health", response_model=HealthStatus)
-async def health_check(deep: bool = Query(default=False, description="Run deeper checks (LLM call, DynamoDB table describe)")):
+async def health_check(
+    deep: bool = Query(
+        default=False, description="Run deeper checks (LLM call, DynamoDB table describe)"
+    )
+):
     """Comprehensive health check."""
     logger.info("Health check requested")
 
@@ -38,7 +54,11 @@ async def health_check(deep: bool = Query(default=False, description="Run deeper
                 _ = await anthropic_service._invoke_with_fallbacks([HumanMessage(content="ping")])
                 services["llm"] = {"status": "healthy", "provider": "anthropic", "deep": True}
             except Exception as llm_err:
-                services["llm"] = {"status": "unhealthy", "provider": "anthropic", "error": str(llm_err)}
+                services["llm"] = {
+                    "status": "unhealthy",
+                    "provider": "anthropic",
+                    "error": str(llm_err),
+                }
                 overall = "unhealthy"
         else:
             services["llm"] = {"status": "healthy", "provider": "anthropic"}
@@ -65,7 +85,7 @@ async def health_check(deep: bool = Query(default=False, description="Run deeper
 
     return HealthStatus(
         status=overall,
-        timestamp=datetime.utcnow(),
+        timestamp=_utc_now(),
         services=services,
     )
 
@@ -73,10 +93,10 @@ async def health_check(deep: bool = Query(default=False, description="Run deeper
 @router.get("/health/ready")
 async def readiness_check():
     """Readiness check for container orchestration."""
-    return {"status": "ready", "timestamp": datetime.utcnow()}
+    return {"status": "ready", "timestamp": _utc_now()}
 
 
 @router.get("/health/live")
 async def liveness_check():
     """Liveness check for container orchestration."""
-    return {"status": "alive", "timestamp": datetime.utcnow()}
+    return {"status": "alive", "timestamp": _utc_now()}

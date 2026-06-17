@@ -95,7 +95,11 @@ async def analyze_ar(request: AnalysisRequest):
                     frameworks=local.get("frameworks", []),
                     industries=local.get("industries", []),
                     regulatory_bodies=local.get("regulatory_bodies", []),
-                    risk_levels=[r.get("level", "") for r in local.get("risk_levels", []) if isinstance(r, dict)],
+                    risk_levels=[
+                        r.get("level", "")
+                        for r in local.get("risk_levels", [])
+                        if isinstance(r, dict)
+                    ],
                 )
             )
 
@@ -144,14 +148,8 @@ async def extract_entities(text: str):
 
         entities = extract_entities(text)
 
-        return {
-            "status": "success",
-            "entities": entities
-        }
+        return {"status": "success", "entities": entities}
 
     except Exception as e:
         logger.error(f"Entity extraction failed: {str(e)}")
-        raise HTTPException(
-            status_code=500,
-            detail=f"Entity extraction failed: {str(e)}"
-        )
+        raise HTTPException(status_code=500, detail=f"Entity extraction failed: {str(e)}")

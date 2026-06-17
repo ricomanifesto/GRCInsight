@@ -58,8 +58,8 @@ make test-go
 - Python tests
 ```
 # Optional: install dev deps
-pip install -r agent/requirements.txt
-pip install -r agent/requirements-dev.txt
+cd agent
+uv sync
 
 # Run tests
 make test-agent

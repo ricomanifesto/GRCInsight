@@ -8,11 +8,13 @@ RUN apt-get update && apt-get install -y \
     gcc \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy requirements first for better caching
-COPY requirements.txt .
+# Install uv and copy dependency metadata first for better caching
+RUN pip install --no-cache-dir uv==0.6.13
 
-# Install Python dependencies
-RUN pip install --no-cache-dir -r requirements.txt
+COPY pyproject.toml uv.lock ./
+
+# Install Python dependencies into the image Python environment
+RUN UV_PROJECT_ENVIRONMENT=/usr/local uv sync --locked --no-dev
 
 # Copy application code
 COPY . .
