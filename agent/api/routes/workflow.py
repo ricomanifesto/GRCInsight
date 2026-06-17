@@ -1,16 +1,21 @@
 """Workflow execution endpoints."""
 
 import os
+from typing import Any
+
 from fastapi import APIRouter, HTTPException
 from loguru import logger
 
 from models.api import WorkflowRequest, WorkflowResponse, APIError
 from core.workflow import run_grc_analysis_endpoint
 
+boto3: Any | None = None
 try:
-    import boto3
+    import boto3 as _boto3
+
+    boto3 = _boto3
 except ImportError:  # pragma: no cover - exercised only when optional dependency is absent
-    boto3 = None
+    pass
 
 router = APIRouter()
 
@@ -19,23 +24,21 @@ router = APIRouter()
 async def run_workflow(request: WorkflowRequest):
     """Execute the complete GRC analysis workflow."""
     logger.info(f"Starting workflow execution for feed: {request.feed_url}")
-    
+
     try:
         # Execute the real GRC analysis workflow
         result = await run_grc_analysis_endpoint(request.feed_url, request.config)
-        
+
         logger.info("Workflow execution completed successfully")
         return result
-        
+
     except Exception as e:
         logger.error(f"Workflow execution failed: {str(e)}")
         return WorkflowResponse(
             status="failed",
             error=APIError(
-                code="WORKFLOW_ERROR",
-                message="Workflow execution error",
-                details=str(e)
-            )
+                code="WORKFLOW_ERROR", message="Workflow execution error", details=str(e)
+            ),
         )
 
 

@@ -42,20 +42,17 @@ app.include_router(workflow.router, prefix="/api/v1", tags=["workflow"])
 app.include_router(analysis.router, prefix="/api/v1", tags=["analysis"])
 app.include_router(rss.router, prefix="/api/v1", tags=["rss"])
 
+
 # Root endpoint
 @app.get("/")
 async def root():
     """Root endpoint."""
-    return {
-        "message": "GRCInsight Python Agent Service",
-        "version": "1.0.0",
-        "status": "running"
-    }
+    return {"message": "GRCInsight Python Agent Service", "version": "1.0.0", "status": "running"}
 
 
 if __name__ == "__main__":
     import uvicorn
-    
+
     uvicorn.run(
         "main:app",
         host=settings.host,

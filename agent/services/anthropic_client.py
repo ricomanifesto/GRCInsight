@@ -1,9 +1,12 @@
 """Anthropic Claude client service for GRC analysis."""
 
+from datetime import datetime, timezone
 from typing import List, Dict, Any
+
 from langchain_anthropic import ChatAnthropic
 from langchain_core.messages import HumanMessage, SystemMessage
 from loguru import logger
+from pydantic import SecretStr
 
 from config.settings import settings
 from models.api import ArticleInput
@@ -56,10 +59,10 @@ class AnthropicService:
     def _build_client(self, model_name: str) -> ChatAnthropic:
         """Construct a ChatAnthropic client for a given model."""
         return ChatAnthropic(
-            model=model_name,
-            max_tokens=settings.anthropic_max_tokens,
+            model_name=model_name,
+            max_tokens_to_sample=settings.anthropic_max_tokens,
             temperature=1,
-            anthropic_api_key=settings.anthropic_api_key,
+            api_key=SecretStr(settings.anthropic_api_key),
             thinking={"type": "enabled", "budget_tokens": 10000},
         )
 
@@ -107,29 +110,35 @@ class AnthropicService:
                     "summary": {
                         "total_articles": 0,
                         "grc_relevant_count": 0,
-                        "confidence_score": 0.0
+                        "confidence_score": 0.0,
                     },
                     "analysis": {
                         "regulations_mentioned": [],
                         "frameworks_referenced": [],
                         "industries_affected": [],
-                        "risk_categories": []
-                    }
+                        "risk_categories": [],
+                    },
                 }
 
             # Create analysis prompt
             analysis_prompt = self._create_analysis_prompt(articles)
 
             # Run analysis with ordered fallbacks
-            response = await self._invoke_with_fallbacks([
-                SystemMessage(content=self._get_system_prompt()),
-                HumanMessage(content=analysis_prompt)
-            ])
+            response = await self._invoke_with_fallbacks(
+                [
+                    SystemMessage(content=self._get_system_prompt()),
+                    HumanMessage(content=analysis_prompt),
+                ]
+            )
 
             # Process the response
-            analysis_result = self._process_analysis_response(self._extract_text(response), articles)
+            analysis_result = self._process_analysis_response(
+                self._extract_text(response), articles
+            )
 
-            logger.info(f"Analysis complete: {analysis_result['summary']['grc_relevant_count']} GRC-relevant articles found")
+            logger.info(
+                f"Analysis complete: {analysis_result['summary']['grc_relevant_count']} GRC-relevant articles found"
+            )
 
             return analysis_result
 
@@ -141,27 +150,31 @@ class AnthropicService:
                 "summary": {
                     "total_articles": len(articles),
                     "grc_relevant_count": 0,
-                    "confidence_score": 0.0
+                    "confidence_score": 0.0,
                 },
                 "analysis": {
                     "regulations_mentioned": [],
                     "frameworks_referenced": [],
                     "industries_affected": [],
-                    "risk_categories": []
-                }
+                    "risk_categories": [],
+                },
             }
 
-    async def generate_grc_report(self, analysis_data: Dict[str, Any], feed_info: Dict[str, Any]) -> str:
+    async def generate_grc_report(
+        self, analysis_data: Dict[str, Any], feed_info: Dict[str, Any]
+    ) -> str:
         """Generate a comprehensive GRC intelligence report."""
         try:
             logger.info("Generating GRC intelligence report")
 
             report_prompt = self._create_report_prompt(analysis_data, feed_info)
 
-            response = await self._invoke_with_fallbacks([
-                SystemMessage(content=self._get_report_system_prompt()),
-                HumanMessage(content=report_prompt)
-            ])
+            response = await self._invoke_with_fallbacks(
+                [
+                    SystemMessage(content=self._get_report_system_prompt()),
+                    HumanMessage(content=report_prompt),
+                ]
+            )
 
             report_content = self._extract_text(response)
 
@@ -191,9 +204,9 @@ Be precise and factual. Only flag content as GRC-relevant if it has clear govern
 
     def _get_report_system_prompt(self) -> str:
         """Get the system prompt for report generation."""
-        from datetime import datetime
-        today = datetime.utcnow().strftime("%B %Y")
-        today_full = datetime.utcnow().strftime("%Y-%m-%d")
+        now = datetime.now(timezone.utc)
+        today = now.strftime("%B %Y")
+        today_full = now.strftime("%Y-%m-%d")
         return f"""You are a senior GRC analyst creating executive-level intelligence reports.
 
 Today's date is {today_full}. The current reporting period is {today}.
@@ -212,7 +225,7 @@ Use professional language and structure the report with clear sections and markd
         """Create prompt for analyzing articles."""
         articles_text = ""
         for i, article in enumerate(articles, 1):  # Analyze all articles
-            content = article.content or article.description or "No content available"
+            content = article.content or article.summary or "No content available"
             articles_text += f"""
 Article {i}:
 Title: {article.title}
@@ -234,11 +247,13 @@ Please provide analysis in this format:
 
 Focus only on content with clear governance, risk, or compliance implications."""
 
-    def _create_report_prompt(self, analysis_data: Dict[str, Any], feed_info: Dict[str, Any]) -> str:
+    def _create_report_prompt(
+        self, analysis_data: Dict[str, Any], feed_info: Dict[str, Any]
+    ) -> str:
         """Create prompt for report generation."""
-        from datetime import datetime
-        today = datetime.utcnow().strftime("%B %Y")
-        today_full = datetime.utcnow().strftime("%Y-%m-%d")
+        now = datetime.now(timezone.utc)
+        today = now.strftime("%B %Y")
+        today_full = now.strftime("%Y-%m-%d")
 
         grc_count = analysis_data.get("summary", {}).get("grc_relevant_count", 0)
         total_count = analysis_data.get("summary", {}).get("total_articles", 0)
@@ -272,9 +287,11 @@ IMPORTANT: The Date of Issue in the report header MUST be "{today}" (the current
 
 Make it actionable for risk managers and compliance officers."""
 
-    def _process_analysis_response(self, response_content: str, original_articles: List[ArticleInput]) -> Dict[str, Any]:
+    def _process_analysis_response(
+        self, response_content: str, original_articles: List[ArticleInput]
+    ) -> Dict[str, Any]:
         """Process the Claude analysis response."""
-        lines = response_content.split('\n')
+        lines = response_content.split("\n")
 
         grc_articles = []
         regulations = []
@@ -287,55 +304,69 @@ Make it actionable for risk managers and compliance officers."""
                 continue
 
             # Identify sections
-            if 'regulation' in line.lower() or 'framework' in line.lower():
-                current_section = 'regulations'
-            elif 'industri' in line.lower():
-                current_section = 'industries'
-            elif 'risk' in line.lower():
-                current_section = 'risks'
-            elif line.startswith('Article ') and any(word in line.lower() for word in ['relevant', 'grc', 'compliance']):
+            if "regulation" in line.lower() or "framework" in line.lower():
+                current_section = "regulations"
+            elif "industri" in line.lower():
+                current_section = "industries"
+            elif "risk" in line.lower():
+                current_section = "risks"
+            elif line.startswith("Article ") and any(
+                word in line.lower() for word in ["relevant", "grc", "compliance"]
+            ):
                 # Extract article info
                 try:
                     # Simple extraction - could be improved
-                    if 'score' in line.lower():
+                    if "score" in line.lower():
                         article_info = {
-                            "title": line.split('Title:')[-1].split('score')[0].strip() if 'Title:' in line else line,
+                            "title": (
+                                line.split("Title:")[-1].split("score")[0].strip()
+                                if "Title:" in line
+                                else line
+                            ),
                             "relevance_score": 7.0,  # Default score
-                            "summary": "GRC-relevant content identified"
+                            "summary": "GRC-relevant content identified",
                         }
                         grc_articles.append(article_info)
                 except Exception:
                     pass
 
             # Extract items from current section
-            if current_section == 'regulations' and any(reg in line for reg in ['GDPR', 'SOX', 'PCI', 'ISO', 'NIST', 'CCPA']):
+            if current_section == "regulations" and any(
+                reg in line for reg in ["GDPR", "SOX", "PCI", "ISO", "NIST", "CCPA"]
+            ):
                 # Extract just the regulation names, not the formatted text
-                for reg in ['GDPR', 'SOX', 'PCI-DSS', 'ISO 27001', 'NIST', 'CCPA']:
+                for reg in ["GDPR", "SOX", "PCI-DSS", "ISO 27001", "NIST", "CCPA"]:
                     if reg in line:
                         regulations.append(reg)
 
         # Consider all articles potentially relevant for comprehensive GRC analysis
         if not grc_articles and original_articles:
             for article in original_articles:
-                grc_articles.append({
-                    "title": article.title,
-                    "url": article.url,
-                    "relevance_score": 7.0,
-                    "summary": "GRC analysis via comprehensive AI evaluation"
-                })
+                grc_articles.append(
+                    {
+                        "title": article.title,
+                        "url": article.url,
+                        "relevance_score": 7.0,
+                        "summary": "GRC analysis via comprehensive AI evaluation",
+                    }
+                )
 
         return {
             "grc_articles": grc_articles,
             "summary": {
                 "total_articles": len(original_articles),
                 "grc_relevant_count": len(grc_articles),
-                "confidence_score": 0.8 if grc_articles else 0.2
+                "confidence_score": 0.8 if grc_articles else 0.2,
             },
             "analysis": {
                 "regulations_mentioned": list(set(regulations)) if regulations else [],
-                "frameworks_referenced": list(set([r for r in regulations if 'ISO' in r or 'NIST' in r])) if regulations else [],
+                "frameworks_referenced": (
+                    list(set([r for r in regulations if "ISO" in r or "NIST" in r]))
+                    if regulations
+                    else []
+                ),
                 "industries_affected": list(set(industries)) if industries else [],
                 "risk_categories": list(set(risks)) if risks else [],
-                "regulatory_bodies": []
-            }
+                "regulatory_bodies": [],
+            },
         }

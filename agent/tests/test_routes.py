@@ -1,14 +1,15 @@
 import asyncio
+from typing import Any, cast
 
 import httpx
 
 # Import the FastAPI app
-from main import app  # type: ignore
+from main import app
 
 
 def request(method, url, **kwargs):
     async def send():
-        transport = httpx.ASGITransport(app=app)
+        transport = httpx.ASGITransport(app=cast(Any, app))
         async with httpx.AsyncClient(
             transport=transport,
             base_url="http://testserver",
@@ -34,7 +35,7 @@ def test_analyze_with_fake_anthropic(monkeypatch):
         def __init__(self):
             pass
 
-        async def analyze_articles_for_grc(self, articles):  # type: ignore
+        async def analyze_articles_for_grc(self, articles):
             # Return a deterministic, small payload similar to the real shape
             return {
                 "grc_articles": [{"title": articles[0].title, "url": articles[0].url}],
@@ -78,18 +79,21 @@ def test_workflow_status_success(monkeypatch):
     class FakeTable:
         def __init__(self, item):
             self._item = item
+
         def get_item(self, Key):  # noqa: N802
             return {"Item": self._item}
 
     class FakeDynamo:
         def __init__(self, item):
             self._item = item
+
         def Table(self, name):  # noqa: N802
             return FakeTable(self._item)
 
     class FakeBoto3:
         def __init__(self, item):
             self._ddb = FakeDynamo(item)
+
         def resource(self, name):  # noqa: A003
             assert name == "dynamodb"
             return self._ddb
@@ -140,9 +144,11 @@ def test_health_deep_true_with_fake_anthropic(monkeypatch):
     class FakeAnthropicService:
         def __init__(self):
             pass
+
         async def _invoke_with_fallbacks(self, messages):  # noqa: N802
             class Resp:
                 content = "ok"
+
             return Resp()
 
     class FakeHumanMessage:

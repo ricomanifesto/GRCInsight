@@ -3,16 +3,22 @@ import os
 from typing import List, Dict, Any
 from datetime import datetime
 
+from pydantic import SecretStr
 from langchain_anthropic import ChatAnthropic
 from langchain_core.messages import HumanMessage, SystemMessage
 
 # Configure logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+logging.basicConfig(
+    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+)
 logger = logging.getLogger(__name__)
+
 
 def load_template() -> str:
     """Load the GRC report template"""
-    template_path = os.path.join(os.path.dirname(__file__), "..", "..", "docs", "templates", "grc_report.md")
+    template_path = os.path.join(
+        os.path.dirname(__file__), "..", "..", "docs", "templates", "grc_report.md"
+    )
     try:
         with open(template_path, "r") as f:
             return f.read()
@@ -39,6 +45,7 @@ def load_template() -> str:
 {{ governance_changes }}
 """
 
+
 def filter_grc_articles(articles: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
     """
     Filter articles to only include those with GRC-related content
@@ -55,7 +62,10 @@ def filter_grc_articles(articles: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
     # This gives the AI more context to work with
     return articles
 
-async def analyze_grc_content(articles: List[Dict[str, Any]], config: Dict[str, Any]) -> Dict[str, Any]:
+
+async def analyze_grc_content(
+    articles: List[Dict[str, Any]], config: Dict[str, Any]
+) -> Dict[str, Any]:
     """
     Analyze GRC-related articles
 
@@ -78,14 +88,14 @@ async def analyze_grc_content(articles: List[Dict[str, Any]], config: Dict[str, 
         return {
             "grc_report": "# Error: No Anthropic API Key\n\nPlease set the ANTHROPIC_API_KEY environment variable.",
             "date": datetime.now().strftime("%Y-%m-%d"),
-            "error": "No API key"
+            "error": "No API key",
         }
 
     model = ChatAnthropic(
-        anthropic_api_key=api_key,
-        model=model_name,
+        api_key=SecretStr(api_key),
+        model_name=model_name,
         temperature=temperature,
-        max_tokens=16000,
+        max_tokens_to_sample=16000,
         thinking={"type": "enabled", "budget_tokens": 10000},
     )
 
@@ -203,13 +213,17 @@ Generate a well-formatted GRC intelligence report following the structure above.
 
     # Estimate prompt length for logging
     estimated_chars = len(prompt)
-    logger.info(f"Estimated prompt length: {estimated_chars} characters (~{estimated_chars // 4} tokens)")
+    logger.info(
+        f"Estimated prompt length: {estimated_chars} characters (~{estimated_chars // 4} tokens)"
+    )
 
     # Call the AI model
     try:
         messages = [
-            SystemMessage(content="You are a GRC expert specializing in governance, risk, and compliance analysis. Your task is to create a comprehensive report on current GRC developments based on recent articles. Be extremely thorough in identifying ALL GRC-related content mentioned in the articles, including regulatory updates, compliance requirements, governance changes, and risk management developments."),
-            HumanMessage(content=prompt)
+            SystemMessage(
+                content="You are a GRC expert specializing in governance, risk, and compliance analysis. Your task is to create a comprehensive report on current GRC developments based on recent articles. Be extremely thorough in identifying ALL GRC-related content mentioned in the articles, including regulatory updates, compliance requirements, governance changes, and risk management developments."
+            ),
+            HumanMessage(content=prompt),
         ]
 
         response = await model.ainvoke(messages)
@@ -219,7 +233,11 @@ Generate a well-formatted GRC intelligence report following the structure above.
         if isinstance(content, str):
             grc_report = content
         elif isinstance(content, list):
-            texts = [block["text"] for block in content if isinstance(block, dict) and block.get("type") == "text"]
+            texts = [
+                block["text"]
+                for block in content
+                if isinstance(block, dict) and block.get("type") == "text"
+            ]
             grc_report = "\n".join(texts)
         else:
             grc_report = str(content)
@@ -231,15 +249,16 @@ Generate a well-formatted GRC intelligence report following the structure above.
             "regulations_identified": list(all_regulations),
             "frameworks_identified": list(all_frameworks),
             "industries_identified": list(all_industries),
-            "regulatory_bodies_identified": list(all_regulatory_bodies)
+            "regulatory_bodies_identified": list(all_regulatory_bodies),
         }
     except Exception as e:
         logger.error(f"Error during GRC analysis: {e}")
         return {
             "grc_report": f"# Error Generating GRC Intelligence Report\n\nAn error occurred during analysis: {str(e)}\n\n## Partial Data\n\nRegulations identified: {', '.join(all_regulations) if all_regulations else 'None'}\n\nFrameworks identified: {', '.join(all_frameworks) if all_frameworks else 'None'}\n\nIndustries identified: {', '.join(all_industries) if all_industries else 'None'}",
             "date": datetime.now().strftime("%Y-%m-%d"),
-            "error": str(e)
+            "error": str(e),
         }
+
 
 def analyze_article_grc_content(article: Dict[str, Any]) -> Dict[str, Any]:
     """
@@ -259,5 +278,5 @@ def analyze_article_grc_content(article: Dict[str, Any]) -> Dict[str, Any]:
         "compliance_requirements": [],
         "industries": [],
         "regulatory_bodies": [],
-        "risk_levels": []
+        "risk_levels": [],
     }

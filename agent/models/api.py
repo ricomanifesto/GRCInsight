@@ -8,6 +8,7 @@ from pydantic import BaseModel, Field
 # Request Models
 class AnalysisConfig(BaseModel):
     """Configuration for GRC analysis."""
+
     model: str = "claude-opus-4-6"
     max_tokens: int = 16000
     focus_areas: List[str] = Field(default_factory=list)
@@ -15,6 +16,7 @@ class AnalysisConfig(BaseModel):
 
 class ArticleInput(BaseModel):
     """Input model for an article to be analyzed."""
+
     title: str
     url: str
     content: str
@@ -25,6 +27,7 @@ class ArticleInput(BaseModel):
 
 class ArticleRecord(ArticleInput):
     """Article with extracted GRC analysis details."""
+
     has_grc_content: bool = False
     regulations: List[str] = Field(default_factory=list)
     frameworks: List[str] = Field(default_factory=list)
@@ -34,12 +37,14 @@ class ArticleRecord(ArticleInput):
 
 class WorkflowRequest(BaseModel):
     """Request model for running the complete GRC workflow."""
+
     feed_url: str = Field(..., description="URL of the RSS feed to analyze")
     config: AnalysisConfig = Field(default_factory=AnalysisConfig)
 
 
 class AnalysisRequest(BaseModel):
     """Request model for analyzing specific articles."""
+
     articles: List[ArticleInput]
     config: AnalysisConfig = Field(default_factory=AnalysisConfig)
 
@@ -47,6 +52,7 @@ class AnalysisRequest(BaseModel):
 # Response Models
 class APIError(BaseModel):
     """Error response model."""
+
     code: str
     message: str
     details: Optional[str] = None
@@ -54,6 +60,7 @@ class APIError(BaseModel):
 
 class AnalysisResult(BaseModel):
     """Analysis result for a single article."""
+
     article_url: str
     has_grc_content: bool
     regulations: List[str] = Field(default_factory=list)
@@ -65,6 +72,7 @@ class AnalysisResult(BaseModel):
 
 class AnalysisSummary(BaseModel):
     """Summary of analysis results."""
+
     total_articles: int
     grc_articles: int
     top_regulations: List[str] = Field(default_factory=list)
@@ -74,6 +82,7 @@ class AnalysisSummary(BaseModel):
 
 class AnalysisResponse(BaseModel):
     """Response model for analysis requests."""
+
     status: str
     results: List[AnalysisResult] = Field(default_factory=list)
     summary: AnalysisSummary
@@ -82,6 +91,7 @@ class AnalysisResponse(BaseModel):
 
 class ReportMetadata(BaseModel):
     """Metadata for generated reports."""
+
     article_count: int
     grc_article_count: int
     regulations_mentioned: List[str] = Field(default_factory=list)
@@ -92,6 +102,7 @@ class ReportMetadata(BaseModel):
 
 class Report(BaseModel):
     """Generated GRC report."""
+
     title: str
     content: str
     generated_at: datetime
@@ -100,6 +111,7 @@ class Report(BaseModel):
 
 class WorkflowResponse(BaseModel):
     """Response model for workflow execution."""
+
     status: str
     report_id: Optional[str] = None
     report: Optional[Report] = None
@@ -110,6 +122,7 @@ class WorkflowResponse(BaseModel):
 
 class HealthStatus(BaseModel):
     """Health status response."""
+
     status: str
     timestamp: datetime
     version: str = "1.0.0"
@@ -118,6 +131,7 @@ class HealthStatus(BaseModel):
 
 class RSSFeedResponse(BaseModel):
     """RSS feed fetch response."""
+
     title: str
     description: str = ""
     link: str = ""

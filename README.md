@@ -23,7 +23,7 @@ Automated GRC intelligence: monitor RSS feeds, extract regulatory signals, and p
 
 ## Setup
 
-- Python deps: `pip install -r requirements.txt`
+- Python agent deps: `cd agent && uv sync`
 - Anthropic key: `echo ANTHROPIC_API_KEY=your-key > .env`
 - Go config: edit `configs/config.yaml`
 
@@ -31,10 +31,16 @@ Automated GRC intelligence: monitor RSS feeds, extract regulatory signals, and p
 
 ```bash
 # Python agent
-cd agent && uvicorn main:app --host 0.0.0.0 --port 8081 --reload
+cd agent && uv run uvicorn main:app --host 0.0.0.0 --port 8081 --reload
 
 # Go API
 go run ./cmd/server
+```
+
+## Local Checks
+
+```bash
+make check
 ```
 
 ## Production

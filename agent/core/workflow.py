@@ -1,49 +1,94 @@
 """LangGraph workflow for FastAPI service."""
 
 from collections import Counter
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Dict, Any, List
 from loguru import logger
 
 from models.api import (
-    WorkflowResponse, Report, ReportMetadata, APIError,
-    AnalysisConfig, ArticleInput
+    WorkflowResponse,
+    Report,
+    ReportMetadata,
+    APIError,
+    AnalysisConfig,
+    ArticleInput,
+    ArticleRecord,
 )
 from services.rss_service import RSSService
 from services.anthropic_client import AnthropicService
 from core.entities import analyze_article_grc_content
 
-
 # Initialize services
 rss_service = RSSService()
+
+
+def _utc_now() -> datetime:
+    return datetime.now(timezone.utc)
 
 
 def _detect_risk_categories(text: str) -> List[str]:
     """Infer coarse risk themes from article text without using an LLM."""
     catalog = {
         "Regulatory and enforcement activity": [
-            "regulator", "regulatory", "compliance", "cisa", "fbi", "ofac",
-            "sanction", "privacy", "enforcement", "directive",
+            "regulator",
+            "regulatory",
+            "compliance",
+            "cisa",
+            "fbi",
+            "ofac",
+            "sanction",
+            "privacy",
+            "enforcement",
+            "directive",
         ],
         "Identity and access security": [
-            "identity", "credential", "access", "mfa", "password",
-            "privilege", "account takeover", "intune",
+            "identity",
+            "credential",
+            "access",
+            "mfa",
+            "password",
+            "privilege",
+            "account takeover",
+            "intune",
         ],
         "Third-party and supply chain exposure": [
-            "third-party", "third party", "vendor", "supplier",
-            "supply chain", "msp",
+            "third-party",
+            "third party",
+            "vendor",
+            "supplier",
+            "supply chain",
+            "msp",
         ],
         "Vulnerability and patch management": [
-            "vulnerability", "zero-day", "zero day", "patch", "cve",
-            "exploit", "rce", "flaw", "unauthenticated",
+            "vulnerability",
+            "zero-day",
+            "zero day",
+            "patch",
+            "cve",
+            "exploit",
+            "rce",
+            "flaw",
+            "unauthenticated",
         ],
         "Ransomware and malware operations": [
-            "ransomware", "malware", "botnet", "ddos", "extortion",
-            "phishing", "trojan", "implant",
+            "ransomware",
+            "malware",
+            "botnet",
+            "ddos",
+            "extortion",
+            "phishing",
+            "trojan",
+            "implant",
         ],
         "Cloud and data protection": [
-            "cloud", "sharepoint", "data breach", "data exposure",
-            "data leak", "data theft", "storage", "saas",
+            "cloud",
+            "sharepoint",
+            "data breach",
+            "data exposure",
+            "data leak",
+            "data theft",
+            "storage",
+            "saas",
         ],
     }
 
@@ -95,11 +140,13 @@ def _build_local_analysis(enriched_articles: List[ArticleInput]):
         risk_counter.update(risk_categories)
 
         if has_grc:
-            grc_articles.append({
-                "title": article.title,
-                "url": article.url,
-                "reason": _build_article_reason(local, risk_categories),
-            })
+            grc_articles.append(
+                {
+                    "title": article.title,
+                    "url": article.url,
+                    "reason": _build_article_reason(local, risk_categories),
+                }
+            )
 
     grc_count = sum(1 for signal in local_signals if signal.get("has_grc_content"))
     analysis = {
@@ -176,11 +223,17 @@ def _build_fallback_report(
     regulatory_lines = []
     if regulations or frameworks or bodies:
         if regulations:
-            regulatory_lines.append(f"- Explicit regulation references detected: {', '.join(regulations[:6])}.")
+            regulatory_lines.append(
+                f"- Explicit regulation references detected: {', '.join(regulations[:6])}."
+            )
         if frameworks:
-            regulatory_lines.append(f"- Framework references detected: {', '.join(frameworks[:6])}.")
+            regulatory_lines.append(
+                f"- Framework references detected: {', '.join(frameworks[:6])}."
+            )
         if bodies:
-            regulatory_lines.append(f"- Regulatory or government bodies mentioned: {', '.join(bodies[:6])}.")
+            regulatory_lines.append(
+                f"- Regulatory or government bodies mentioned: {', '.join(bodies[:6])}."
+            )
     else:
         regulatory_lines.append(
             "- No explicit regulation codes or named frameworks were detected in the current source set."
@@ -199,48 +252,50 @@ def _build_fallback_report(
 
     limitation = fallback_reason or "AI analysis temporarily unavailable"
 
-    now = datetime.utcnow()
-    return "\n".join([
-        f"# GRC Intelligence Report - {now.strftime('%Y-%m-%d')}",
-        f"**Generated:** {now.isoformat()}Z",
-        "",
-        f"**Analysis Period:** Current Quarter ({now.strftime('%B %Y')})",
-        f"**Date of Issue:** {now.strftime('%B %Y')}",
-        f"**Source:** {feed_data.get('title', 'Unknown Feed')}",
-        f"**Total Articles Analyzed:** {total_count} (Locally flagged as GRC-relevant: {grc_count})",
-        "",
-        "---",
-        "",
-        "1) Executive Summary",
-        f"- This report was generated using deterministic local analysis because AI generation was temporarily unavailable: {limitation}.",
-        f"- The monitored feed continues to surface material GRC monitoring signals across {total_count} current articles.",
-        f"- Dominant themes in the current batch include {', '.join(risk_categories[:3]) if risk_categories else 'operational cyber risk, third-party exposure, and regulatory monitoring'}.",
-        "- Business impact remains concentrated in incident response readiness, disclosure obligations, control effectiveness, and board-level risk oversight.",
-        "",
-        "2) Key Regulatory Developments",
-        "Observations",
-        *regulatory_lines,
-        "Implications for Business",
-        "- Teams should treat major cyber incidents, sanctions activity, and regulator advisories as compliance-relevant events even when source articles are operational in nature.",
-        "- Evidence capture, executive escalation, and breach-notification decision support remain priority governance controls.",
-        "",
-        "3) Industry Impact Analysis",
-        *industry_lines,
-        "- Organizations in regulated or data-intensive sectors should expect the same cyber events to trigger legal, contractual, and supervisory scrutiny.",
-        "",
-        "4) Risk Assessment",
-        *risk_lines,
-        "",
-        "5) Recommendations for Action",
-        *recommendation_lines,
-        "",
-        "6) Source Highlights",
-        *highlights,
-        "",
-        "Notes and limitations",
-        "- This fallback keeps the report current using feed content plus local entity extraction while AI generation is unavailable.",
-        "- Once the AI backend is restored, the richer narrative report will resume automatically.",
-    ])
+    now = _utc_now()
+    return "\n".join(
+        [
+            f"# GRC Intelligence Report - {now.strftime('%Y-%m-%d')}",
+            f"**Generated:** {now.isoformat().replace('+00:00', 'Z')}",
+            "",
+            f"**Analysis Period:** Current Quarter ({now.strftime('%B %Y')})",
+            f"**Date of Issue:** {now.strftime('%B %Y')}",
+            f"**Source:** {feed_data.get('title', 'Unknown Feed')}",
+            f"**Total Articles Analyzed:** {total_count} (Locally flagged as GRC-relevant: {grc_count})",
+            "",
+            "---",
+            "",
+            "1) Executive Summary",
+            f"- This report was generated using deterministic local analysis because AI generation was temporarily unavailable: {limitation}.",
+            f"- The monitored feed continues to surface material GRC monitoring signals across {total_count} current articles.",
+            f"- Dominant themes in the current batch include {', '.join(risk_categories[:3]) if risk_categories else 'operational cyber risk, third-party exposure, and regulatory monitoring'}.",
+            "- Business impact remains concentrated in incident response readiness, disclosure obligations, control effectiveness, and board-level risk oversight.",
+            "",
+            "2) Key Regulatory Developments",
+            "Observations",
+            *regulatory_lines,
+            "Implications for Business",
+            "- Teams should treat major cyber incidents, sanctions activity, and regulator advisories as compliance-relevant events even when source articles are operational in nature.",
+            "- Evidence capture, executive escalation, and breach-notification decision support remain priority governance controls.",
+            "",
+            "3) Industry Impact Analysis",
+            *industry_lines,
+            "- Organizations in regulated or data-intensive sectors should expect the same cyber events to trigger legal, contractual, and supervisory scrutiny.",
+            "",
+            "4) Risk Assessment",
+            *risk_lines,
+            "",
+            "5) Recommendations for Action",
+            *recommendation_lines,
+            "",
+            "6) Source Highlights",
+            *highlights,
+            "",
+            "Notes and limitations",
+            "- This fallback keeps the report current using feed content plus local entity extraction while AI generation is unavailable.",
+            "- Once the AI backend is restored, the richer narrative report will resume automatically.",
+        ]
+    )
 
 
 async def run_grc_analysis_endpoint(feed_url: str, config: AnalysisConfig) -> WorkflowResponse:
@@ -260,14 +315,15 @@ async def run_grc_analysis_endpoint(feed_url: str, config: AnalysisConfig) -> Wo
                 error=APIError(
                     code="RSS_FETCH_FAILED",
                     message="Failed to fetch RSS feed",
-                    details=feed_data["error"]
-                )
+                    details=feed_data["error"],
+                ),
             )
 
         # Step 2: Convert entries to ArticleInput format
         logger.info("Step 2: Processing feed entries")
-        articles = []
+        articles: List[ArticleInput] = []
         from email.utils import parsedate_to_datetime
+
         for entry in feed_data.get("entries", []):
             try:
                 published_raw = entry.get("published", "")
@@ -278,6 +334,7 @@ async def run_grc_analysis_endpoint(feed_url: str, config: AnalysisConfig) -> Wo
                     except Exception:
                         try:
                             from datetime import datetime as _dt
+
                             published_dt = _dt.fromisoformat(published_raw.replace("Z", "+00:00"))
                         except Exception:
                             published_dt = None
@@ -288,7 +345,7 @@ async def run_grc_analysis_endpoint(feed_url: str, config: AnalysisConfig) -> Wo
                     content=entry.get("content", ""),
                     summary=entry.get("description", ""),
                     source=feed_data.get("title", "Unknown Source"),
-                    published=published_dt or datetime.now()
+                    published=published_dt or datetime.now(),
                 )
                 articles.append(article)
             except Exception as e:
@@ -340,29 +397,37 @@ async def run_grc_analysis_endpoint(feed_url: str, config: AnalysisConfig) -> Wo
                 if item.get("title"):
                     identified.add(item.get("title"))
 
-        articles_out = []
+        articles_out: List[ArticleRecord] = []
         for art, local in zip(enriched_articles, local_signals):
-            has_grc = local.get("has_grc_content", False) or (art.url in identified) or (art.title in identified)
-            articles_out.append({
-                "title": art.title,
-                "url": art.url,
-                "content": art.content,
-                "summary": art.summary,
-                "source": art.source,
-                "published": art.published,
-                "has_grc_content": has_grc,
-                "regulations": local.get("regulations", []),
-                "frameworks": local.get("frameworks", []),
-                "industries": local.get("industries", []),
-                "regulatory_bodies": local.get("regulatory_bodies", []),
-            })
+            has_grc = (
+                local.get("has_grc_content", False)
+                or (art.url in identified)
+                or (art.title in identified)
+            )
+            articles_out.append(
+                ArticleRecord(
+                    title=art.title,
+                    url=art.url,
+                    content=art.content,
+                    summary=art.summary,
+                    source=art.source,
+                    published=art.published,
+                    has_grc_content=has_grc,
+                    regulations=local.get("regulations", []),
+                    frameworks=local.get("frameworks", []),
+                    industries=local.get("industries", []),
+                    regulatory_bodies=local.get("regulatory_bodies", []),
+                )
+            )
 
         # Step 6: Generate comprehensive report
         logger.info("Step 6: Generating comprehensive GRC report")
         report_content = ""
 
         if used_claude_analysis and anthropic_service is not None:
-            report_content = await anthropic_service.generate_grc_report(analysis_results, feed_data)
+            report_content = await anthropic_service.generate_grc_report(
+                analysis_results, feed_data
+            )
             if not report_content or report_content.startswith("# GRC Intelligence Report - Error"):
                 fallback_reason = report_content or "empty report content from Claude"
                 report_content = ""
@@ -380,10 +445,11 @@ async def run_grc_analysis_endpoint(feed_url: str, config: AnalysisConfig) -> Wo
         # Step 7: Create response
         logger.info("Step 7: Creating workflow response")
 
+        generated_at = _utc_now()
         report = Report(
-            title=f"GRC Intelligence Report - {datetime.utcnow().strftime('%Y-%m-%d')}",
+            title=f"GRC Intelligence Report - {generated_at.strftime('%Y-%m-%d')}",
             content=report_content,
-            generated_at=datetime.utcnow().isoformat() + "Z"
+            generated_at=generated_at,
         )
 
         analysis_data = analysis_results.get("analysis", {})
@@ -393,15 +459,12 @@ async def run_grc_analysis_endpoint(feed_url: str, config: AnalysisConfig) -> Wo
             regulations_mentioned=analysis_data.get("regulations_mentioned", []),
             frameworks_referenced=analysis_data.get("frameworks_referenced", []),
             industries_affected=analysis_data.get("industries_affected", []),
-            regulatory_bodies=analysis_data.get("regulatory_bodies", [])
+            regulatory_bodies=analysis_data.get("regulatory_bodies", []),
         )
 
         logger.info("GRC workflow completed successfully")
         return WorkflowResponse(
-            status="completed",
-            report=report,
-            metadata=metadata,
-            articles=articles_out
+            status="completed", report=report, metadata=metadata, articles=articles_out
         )
 
     except Exception as e:
@@ -409,10 +472,8 @@ async def run_grc_analysis_endpoint(feed_url: str, config: AnalysisConfig) -> Wo
         return WorkflowResponse(
             status="failed",
             error=APIError(
-                code="WORKFLOW_EXECUTION_ERROR",
-                message="Workflow execution failed",
-                details=str(e)
-            )
+                code="WORKFLOW_EXECUTION_ERROR", message="Workflow execution failed", details=str(e)
+            ),
         )
 
 
