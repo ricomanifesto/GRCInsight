@@ -61,7 +61,7 @@ def test_analyze_with_fake_model_service(monkeypatch):
             }
         ],
         "config": {
-            "model": "anthropic/claude-sonnet-4-5-20250929",
+            "model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
             "max_tokens": 16000,
             "focus_areas": [],
         },

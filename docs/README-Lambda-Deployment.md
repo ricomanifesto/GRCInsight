@@ -18,7 +18,7 @@ Go Lambda orchestrates API and DynamoDB. Python Lambda analyzes feeds and writes
 ## Manual Deploy
 
 ```bash
-export LLM_MODEL=anthropic/claude-sonnet-4-5-20250929
+export LLM_MODEL=openrouter/nvidia/nemotron-3-ultra-550b-a55b:free
 export OPENCODE_BASE_URL=http://localhost:4096
 export AWS_REGION=us-east-1
 export DOCKER_BUILDKIT=0

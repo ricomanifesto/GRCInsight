@@ -66,7 +66,7 @@ function check_policy_attachment() {
 function generate_report() {
   echo "[3/6] Generating report via API Gateway..."
   local payload http_code report_id body_file
-  payload=$(jq -n --arg url "$FEED_URL" '{feed_url: $url, config: {model: "gpt-4", max_tokens: 4000, focus_areas: ["governance","compliance","risk"]}}')
+  payload=$(jq -n --arg url "$FEED_URL" '{feed_url: $url, config: {model: "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free", max_tokens: 4000, focus_areas: ["governance","compliance","risk"]}}')
   body_file=$(mktemp)
   http_code=$(curl -sS -o "$body_file" -w '%{http_code}' -X POST "$API_URL/api/v1/reports/generate" \
     -H 'Content-Type: application/json' -d "$payload")
