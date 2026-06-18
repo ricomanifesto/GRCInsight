@@ -4,9 +4,10 @@ from services.opencode_client import parse_model_selection
 
 
 def test_settings_default_uses_free_openrouter_report_model():
-    settings = Settings(_env_file=None)
-
-    assert settings.llm_model == "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free"
+    assert (
+        Settings.model_fields["llm_model"].default
+        == "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free"
+    )
 
 
 def test_analysis_config_default_uses_free_openrouter_report_model():
