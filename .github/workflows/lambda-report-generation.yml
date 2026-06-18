@@ -78,34 +78,43 @@ jobs:
 
     - name: Set feed URL
       id: feed-url
+      env:
+        DISPATCH_FEED_URL: ${{ github.event.client_payload.feed_url }}
+        WORKFLOW_FEED_URL: ${{ github.event.inputs.feed_url }}
       run: |
         FEED_URL=""
-        if [ "${{ github.event_name }}" = "repository_dispatch" ]; then
-          FEED_URL="${{ github.event.client_payload.feed_url }}"
-        elif [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-          FEED_URL="${{ github.event.inputs.feed_url }}"
+        if [ "$GITHUB_EVENT_NAME" = "repository_dispatch" ]; then
+          FEED_URL="$DISPATCH_FEED_URL"
+        elif [ "$GITHUB_EVENT_NAME" = "workflow_dispatch" ]; then
+          FEED_URL="$WORKFLOW_FEED_URL"
         fi
         if [ -z "$FEED_URL" ] || [ "$FEED_URL" = "null" ]; then
           FEED_URL="https://ricomanifesto.github.io/SentryDigest/feed.xml"
         fi
+        case "$FEED_URL" in
+          http://*|https://*) ;;
+          *)
+            echo "Invalid FEED_URL; expected http(s) URL without whitespace" >&2
+            exit 1
+            ;;
+        esac
+        if printf '%s' "$FEED_URL" | grep -q '[[:space:]]'; then
+          echo "Invalid FEED_URL; expected http(s) URL without whitespace" >&2
+          exit 1
+        fi
         echo "Using FEED_URL=$FEED_URL"
-        echo "FEED_URL=$FEED_URL" >> $GITHUB_OUTPUT
+        printf 'FEED_URL=%s\n' "$FEED_URL" >> "$GITHUB_OUTPUT"
 
     - name: Invoke Lambda report generation
       id: lambda-invoke
+      env:
+        FEED_URL: ${{ steps.feed-url.outputs.FEED_URL }}
       run: |
         # Create payload for Lambda invocation
-        PAYLOAD=$(cat <<EOF
-        {
-          "httpMethod": "POST",
-          "path": "/api/v1/reports/generate",
-          "headers": {
-            "Content-Type": "application/json"
-          },
-          "body": "{\"feed_url\": \"${{ steps.feed-url.outputs.FEED_URL }}\", \"config\": {\"model\": \"claude-opus-4-6\", \"max_tokens\": 16000, \"focus_areas\": [\"governance\", \"compliance\", \"risk\"]}}"
-        }
-        EOF
-        )
+        BODY=$(jq -n --arg feed_url "$FEED_URL" -c \
+          '{feed_url: $feed_url, config: {model: "claude-opus-4-6", max_tokens: 16000, focus_areas: ["governance", "compliance", "risk"]}}')
+        PAYLOAD=$(jq -n --arg body "$BODY" -c \
+          '{httpMethod: "POST", path: "/api/v1/reports/generate", headers: {"Content-Type": "application/json"}, body: $body}')
 
         echo "Invoking Lambda function: $GO_FUNCTION_NAME"
 
