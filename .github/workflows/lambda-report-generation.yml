@@ -128,11 +128,12 @@ jobs:
 
         # Check if invocation was successful
         if [ $? -eq 0 ]; then
+          STATUS_CODE=$(jq -r '.statusCode // empty' lambda-response.json)
           echo "Lambda invocation successful"
-          cat lambda-response.json
+          echo "Lambda status code: ${STATUS_CODE:-unknown}"
 
           # Extract report ID from response
-          REPORT_ID=$(cat lambda-response.json | jq -r '.body' | jq -r '.report_id // empty')
+          REPORT_ID=$(jq -r '.body | (try fromjson catch .) | .report_id // empty' lambda-response.json)
           if [ ! -z "$REPORT_ID" ]; then
             echo "REPORT_ID=$REPORT_ID" >> $GITHUB_OUTPUT
             echo "Report generated with ID: $REPORT_ID"
