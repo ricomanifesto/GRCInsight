@@ -5,7 +5,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"io"
 	"net/http"
 	"os"
 	"strings"
@@ -246,8 +245,7 @@ func (c *PythonServiceClient) AnalyzeArticles(req *models.AnalysisRequest) (*mod
 	}
 	defer func() { _ = resp.Body.Close() }()
 	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
-		b, _ := io.ReadAll(resp.Body)
-		return nil, fmt.Errorf("python service returned %d: %s", resp.StatusCode, string(b))
+		return nil, fmt.Errorf("python service returned %d", resp.StatusCode)
 	}
 
 	var ar models.AnalysisResponse
@@ -296,8 +294,7 @@ func (c *PythonServiceClient) HealthCheck() error {
 	}
 	defer func() { _ = resp.Body.Close() }()
 	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
-		b, _ := io.ReadAll(resp.Body)
-		return fmt.Errorf("python service health returned %d: %s", resp.StatusCode, string(b))
+		return fmt.Errorf("python service health returned %d", resp.StatusCode)
 	}
 
 	// Optionally parse to verify status
@@ -330,8 +327,7 @@ func (c *PythonServiceClient) invokeHTTPWorkflow(req *models.WorkflowRequest) (*
 	}
 	defer func() { _ = resp.Body.Close() }()
 	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
-		b, _ := io.ReadAll(resp.Body)
-		return nil, fmt.Errorf("python service returned %d: %s", resp.StatusCode, string(b))
+		return nil, fmt.Errorf("python service returned %d", resp.StatusCode)
 	}
 
 	var wr models.WorkflowResponse

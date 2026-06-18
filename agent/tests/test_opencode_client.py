@@ -56,3 +56,30 @@ def test_parse_model_selection_rejects_bare_model():
         assert "provider/model" in str(exc)
     else:
         raise AssertionError("bare models must be rejected")
+
+
+def test_opencode_error_redacts_response_body():
+    def handler(request):
+        if request.url.path == "/session":
+            return httpx.Response(503, text="provider leaked request payload")
+        return httpx.Response(404)
+
+    client = OpenCodeClient(
+        base_url="http://opencode.test",
+        transport=httpx.MockTransport(handler),
+    )
+
+    try:
+        asyncio.run(
+            client.generate(
+                system_prompt="system",
+                user_prompt="user",
+                model=parse_model_selection("anthropic/claude-sonnet-4-5-20250929"),
+                title="test",
+            )
+        )
+    except Exception as exc:
+        assert "Failed to create OpenCode session: HTTP 503" in str(exc)
+        assert "provider leaked request payload" not in str(exc)
+    else:
+        raise AssertionError("failed OpenCode responses must raise")
