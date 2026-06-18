@@ -6,7 +6,7 @@ from pydantic import BaseModel, Field
 
 
 # Request Models
-class AnalysisConfig(BaseModel):
+class GRCAnalysisConfig(BaseModel):
     """Configuration for GRC analysis."""
 
     model: str = "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free"
@@ -39,14 +39,14 @@ class WorkflowRequest(BaseModel):
     """Request model for running the complete GRC workflow."""
 
     feed_url: str = Field(..., description="URL of the RSS feed to analyze")
-    config: AnalysisConfig = Field(default_factory=AnalysisConfig)
+    config: GRCAnalysisConfig = Field(default_factory=GRCAnalysisConfig)
 
 
 class AnalysisRequest(BaseModel):
     """Request model for analyzing specific articles."""
 
     articles: List[ArticleInput]
-    config: AnalysisConfig = Field(default_factory=AnalysisConfig)
+    config: GRCAnalysisConfig = Field(default_factory=GRCAnalysisConfig)
 
 
 # Response Models

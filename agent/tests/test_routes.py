@@ -28,10 +28,10 @@ def test_health_basic_ok():
 
 
 def test_analyze_with_fake_model_service(monkeypatch):
-    """Patch ModelService used in analysis route to avoid network calls."""
+    """Patch GRCModelService used in analysis route to avoid network calls."""
     from api.routes import analysis as analysis_route
 
-    class FakeModelService:
+    class FakeGRCModelService:
         def __init__(self):
             pass
 
@@ -47,7 +47,7 @@ def test_analyze_with_fake_model_service(monkeypatch):
                 },
             }
 
-    monkeypatch.setattr(analysis_route, "ModelService", FakeModelService)
+    monkeypatch.setattr(analysis_route, "GRCModelService", FakeGRCModelService)
 
     payload = {
         "articles": [
@@ -144,7 +144,7 @@ def test_workflow_status_not_found(monkeypatch):
 def test_health_deep_true_with_fake_model_service(monkeypatch):
     from api.routes import health as health_route
 
-    class FakeModelService:
+    class FakeGRCModelService:
         def __init__(self):
             class Model:
                 provider_id = "openai"
@@ -155,7 +155,7 @@ def test_health_deep_true_with_fake_model_service(monkeypatch):
         async def _invoke(self, **_kwargs):
             return "ok"
 
-    monkeypatch.setattr(health_route, "ModelService", FakeModelService)
+    monkeypatch.setattr(health_route, "GRCModelService", FakeGRCModelService)
 
     resp = request("GET", "/api/v1/health?deep=true")
     assert resp.status_code == 200
