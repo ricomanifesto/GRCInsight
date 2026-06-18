@@ -7,7 +7,7 @@ from fastapi import APIRouter, Query
 from loguru import logger
 
 from models.api import HealthStatus
-from services.model_service import ModelService
+from services.model_service import GRCModelService
 import os
 
 boto3: Any | None = None
@@ -39,7 +39,7 @@ async def health_check(
 
     # Model readiness: ensure config is valid and the client can be constructed.
     try:
-        model_service = ModelService()
+        model_service = GRCModelService()
         if deep:
             try:
                 _ = await model_service._invoke(

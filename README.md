@@ -50,7 +50,3 @@ make check
 - Secrets: `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`
 - Runtime env: `LLM_MODEL`, `OPENCODE_BASE_URL`
 - Reports: `.github/workflows/lambda-report-generation.yml` writes to `site/` and deploys Pages
-
-## Legacy
-
-Legacy single‑process Python lives under `legacy/`. Prefer the Go/Python Lambdas.

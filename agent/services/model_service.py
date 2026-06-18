@@ -10,7 +10,7 @@ from models.api import ArticleInput
 from services.opencode_client import OpenCodeClient, parse_model_selection
 
 
-class ModelService:
+class GRCModelService:
     """Service for model-powered GRC analysis."""
 
     def __init__(self):

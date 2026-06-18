@@ -10,7 +10,7 @@ from models.api import (
     AnalysisSummary,
     APIError,
 )
-from services.model_service import ModelService
+from services.model_service import GRCModelService
 from core.entities import analyze_article_grc_content
 
 router = APIRouter()
@@ -23,7 +23,7 @@ async def analyze_ar(request: AnalysisRequest):
 
     try:
         try:
-            model_service = ModelService()
+            model_service = GRCModelService()
         except ValueError as init_err:
             logger.error(f"Model service initialization failed: {init_err}")
             return AnalysisResponse(

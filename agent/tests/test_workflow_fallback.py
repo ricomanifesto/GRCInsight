@@ -1,7 +1,7 @@
 import asyncio
 
 from core import workflow as workflow_mod
-from models.api import AnalysisConfig
+from models.api import GRCAnalysisConfig
 from services.rss_service import RSSService
 
 
@@ -23,7 +23,7 @@ def test_run_grc_analysis_endpoint_falls_back_when_model_is_unavailable(monkeypa
     async def fake_enrich_articles(articles):
         return articles
 
-    class FakeModelService:
+    class FakeGRCModelService:
         def __init__(self):
             pass
 
@@ -46,12 +46,12 @@ def test_run_grc_analysis_endpoint_falls_back_when_model_is_unavailable(monkeypa
 
     monkeypatch.setattr(workflow_mod.rss_service, "fetch_feed", fake_fetch_feed)
     monkeypatch.setattr(workflow_mod.rss_service, "enrich_articles", fake_enrich_articles)
-    monkeypatch.setattr(workflow_mod, "ModelService", FakeModelService)
+    monkeypatch.setattr(workflow_mod, "GRCModelService", FakeGRCModelService)
 
     response = asyncio.run(
         workflow_mod.run_grc_analysis_endpoint(
             "https://example.com/feed.xml",
-            AnalysisConfig(),
+            GRCAnalysisConfig(),
         )
     )
 

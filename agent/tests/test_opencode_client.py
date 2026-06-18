@@ -37,9 +37,7 @@ def test_opencode_client_posts_explicit_provider_model():
         client.generate(
             system_prompt="system",
             user_prompt="user",
-            model=parse_model_selection(
-                "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free"
-            ),
+            model=parse_model_selection("openrouter/nvidia/nemotron-3-ultra-550b-a55b:free"),
             title="test",
         )
     )
@@ -76,9 +74,7 @@ def test_opencode_error_redacts_response_body():
             client.generate(
                 system_prompt="system",
                 user_prompt="user",
-                model=parse_model_selection(
-                    "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free"
-                ),
+                model=parse_model_selection("openrouter/nvidia/nemotron-3-ultra-550b-a55b:free"),
                 title="test",
             )
         )

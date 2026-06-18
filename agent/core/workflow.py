@@ -10,12 +10,12 @@ from models.api import (
     Report,
     ReportMetadata,
     APIError,
-    AnalysisConfig,
+    GRCAnalysisConfig,
     ArticleInput,
     ArticleRecord,
 )
 from services.rss_service import RSSService
-from services.model_service import ModelService
+from services.model_service import GRCModelService
 from core.entities import analyze_article_grc_content
 
 # Initialize services
@@ -298,7 +298,7 @@ def _build_fallback_report(
     )
 
 
-async def run_grc_analysis_endpoint(feed_url: str, config: AnalysisConfig) -> WorkflowResponse:
+async def run_grc_analysis_endpoint(feed_url: str, config: GRCAnalysisConfig) -> WorkflowResponse:
     """
     Main workflow endpoint that orchestrates the complete GRC analysis.
     """
@@ -369,7 +369,7 @@ async def run_grc_analysis_endpoint(feed_url: str, config: AnalysisConfig) -> Wo
         model_service = None
 
         try:
-            model_service = ModelService()
+            model_service = GRCModelService()
         except ValueError as e:
             fallback_reason = str(e)
             logger.warning(f"Model service unavailable, falling back to local analysis: {e}")

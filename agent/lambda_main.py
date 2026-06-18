@@ -105,7 +105,7 @@ def handler(event, context):
         if "feed_url" in event:
             try:
                 from core.workflow import run_grc_analysis_endpoint
-                from models.api import AnalysisConfig
+                from models.api import GRCAnalysisConfig
 
                 # Extract parameters
                 feed_url = event["feed_url"]
@@ -116,7 +116,7 @@ def handler(event, context):
                 if focus_areas is None:
                     focus_areas = ["governance", "compliance"]
 
-                config = AnalysisConfig(
+                config = GRCAnalysisConfig(
                     model=config_data.get(
                         "model",
                         "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",

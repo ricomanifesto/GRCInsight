@@ -92,7 +92,7 @@ func TestGenerateReport_PersistsReportAndArticles(t *testing.T) {
 		logger:       logger,
 	}
 
-	req := &apimodels.GenerateReportRequest{FeedURL: "https://example.com/rss", Config: apimodels.AnalysisConfig{Model: "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free", MaxTokens: 16000}}
+	req := &apimodels.GenerateReportRequest{FeedURL: "https://example.com/rss", Config: apimodels.GRCAnalysisConfig{Model: "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free", MaxTokens: 16000}}
 	report, err := svc.GenerateReport(req)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
