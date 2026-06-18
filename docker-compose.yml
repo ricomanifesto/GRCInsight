@@ -30,7 +30,7 @@ services:
       - "8081:8081"
     environment:
       - PYTHONPATH=/app
-      - LLM_MODEL=${LLM_MODEL:-anthropic/claude-sonnet-4-5-20250929}
+      - LLM_MODEL=${LLM_MODEL:-openrouter/nvidia/nemotron-3-ultra-550b-a55b:free}
       - OPENCODE_BASE_URL=${OPENCODE_BASE_URL:-http://host.docker.internal:4096}
       - LOG_LEVEL=INFO
       - HOST=0.0.0.0

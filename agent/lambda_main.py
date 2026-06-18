@@ -117,7 +117,10 @@ def handler(event, context):
                     focus_areas = ["governance", "compliance"]
 
                 config = AnalysisConfig(
-                    model=config_data.get("model", "claude-opus-4-6"),
+                    model=config_data.get(
+                        "model",
+                        "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
+                    ),
                     max_tokens=config_data.get("max_tokens", 16000),
                     focus_areas=focus_areas,
                 )

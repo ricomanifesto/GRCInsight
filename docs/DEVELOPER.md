@@ -82,6 +82,6 @@ The script:
 - GET `/api/v1/reports/{id}/articles`
 
 ## Notes
-- Default model is `claude-opus-4-6` (runtime fallback is handled in code if unavailable).
+- Default model is `openrouter/nvidia/nemotron-3-ultra-550b-a55b:free` (runtime fallback is handled in code if unavailable).
 - Articles table benefits from GSIs (`by-report-id`, `by-url`); the Terraform module creates these.
 - For serverless, use `agent/lambda_main.py` packaged behind API Gateway or direct Lambda invokes.
