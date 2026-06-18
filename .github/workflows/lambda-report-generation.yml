@@ -1,6 +1,7 @@
 name: Generate GRC Report with Lambda
 
 on:
+  repository_dispatch:
   schedule:
     - cron: '0 13 * * *'  # Once daily at 8 AM CT (13:00 UTC)
   workflow_dispatch:
