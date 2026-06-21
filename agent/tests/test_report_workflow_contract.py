@@ -24,3 +24,10 @@ def test_report_generation_workflow_does_not_dump_lambda_response_body():
 
     assert "cat lambda-response.json" not in workflow
     assert "Lambda status code:" in workflow
+
+
+def test_report_generation_workflow_does_not_dump_failed_report_body():
+    workflow = REPORT_WORKFLOW.read_text()
+
+    assert "cat report-data.json" not in workflow
+    assert "Report status is 'failed'. Aborting early." in workflow
