@@ -31,3 +31,11 @@ def test_report_generation_workflow_does_not_dump_failed_report_body():
 
     assert "cat report-data.json" not in workflow
     assert "Report status is 'failed'. Aborting early." in workflow
+
+
+def test_report_generation_workflow_strips_duplicate_report_title():
+    workflow = REPORT_WORKFLOW.read_text()
+
+    assert 'echo "# ${SAFE_TITLE}" > site/index.md' in workflow
+    assert "REPORT_BODY=$(printf '%s\\n' \"$SAFE_CONTENT\" | awk" in workflow
+    assert 'echo "${REPORT_BODY}" >> site/index.md' in workflow
