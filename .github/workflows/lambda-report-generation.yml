@@ -180,8 +180,9 @@ jobs:
 
           if [ "$STATUS" = "failed" ]; then
             echo "Report status is 'failed'. Aborting early." >&2
-            echo "Response:" >&2
-            cat report-data.json >&2 || true
+            if jq -e '.error? // .message? // empty' report-data.json >/dev/null; then
+              echo "Report failure reason returned; details omitted from logs." >&2
+            fi
             exit 1
           fi
 
