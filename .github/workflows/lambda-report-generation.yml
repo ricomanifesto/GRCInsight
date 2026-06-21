@@ -207,7 +207,8 @@ jobs:
             fi
             echo "# ${SAFE_TITLE}" > site/index.md
             echo "**Generated:** ${SAFE_GENERATED}" >> site/index.md
-            echo "${SAFE_CONTENT}" >> site/index.md
+            REPORT_BODY=$(printf '%s\n' "$SAFE_CONTENT" | awk 'BEGIN { dropped = 0 } !dropped && /^# / { dropped = 1; next } { print }')
+            echo "${REPORT_BODY}" >> site/index.md
 
             echo "Report files created successfully"
             break

@@ -1,4 +1,4 @@
-.PHONY: test-go test-agent lint-agent format-agent type-agent check-agent check e2e fmt-go
+.PHONY: test-go test-agent lint-agent format-agent type-agent check-agent check-site check e2e fmt-go
 
 GOCACHE_DIR ?= $(CURDIR)/.cache/go-build
 GOMODCACHE_DIR ?= $(CURDIR)/.cache/go-mod
@@ -21,7 +21,10 @@ type-agent:
 
 check-agent: test-agent lint-agent format-agent type-agent
 
-check: test-go check-agent
+check-site:
+	python3 scripts/check_site_report.py
+
+check: test-go check-agent check-site
 
 e2e:
 	@bash scripts/integration/run_e2e.sh

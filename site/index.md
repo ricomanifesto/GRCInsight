@@ -1,6 +1,5 @@
 # GRC Intelligence Report - 2026-06-17
 **Generated:** 2026-06-17T14:15:32.859011Z
-# GRC Intelligence Report
 ## Governance, Risk & Compliance — Executive Briefing
 
 ---
