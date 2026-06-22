@@ -8,6 +8,7 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 SITE_DIR = REPO_ROOT / "site"
 INDEX_HTML = SITE_DIR / "index.html"
 INDEX_MD = SITE_DIR / "index.md"
+APP_JS = SITE_DIR / "static" / "app.js"
 
 
 def fail(message: str) -> None:
@@ -23,6 +24,7 @@ def read_text(path: Path) -> str:
 def main() -> None:
     html = read_text(INDEX_HTML)
     markdown = read_text(INDEX_MD)
+    app_js = read_text(APP_JS)
 
     for asset in ("static/style.css", "static/app.js"):
         if asset not in html:
@@ -49,6 +51,18 @@ def main() -> None:
 
     if "Temporary placeholder" in markdown or "Temporary Outline" in markdown:
         fail("index.md still contains temporary placeholder content")
+
+    if 'href="$2"' in app_js:
+        fail("app.js renders Markdown links without URL sanitization")
+
+    required_link_guards = (
+        "function sanitizeMarkdownUrl(",
+        "function renderMarkdownLink(",
+        "sanitizeMarkdownUrl(url)",
+    )
+    for guard in required_link_guards:
+        if guard not in app_js:
+            fail(f"app.js missing link sanitizer guard: {guard}")
 
     print("site report check passed")
 
