@@ -17,6 +17,24 @@
     return s.replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
   }
 
+  function escapeAttribute(s) {
+    return escapeHtml(s).replace(/"/g, '&quot;');
+  }
+
+  function sanitizeMarkdownUrl(url) {
+    const value = url.trim();
+    if (!value || /[\s"'<>]/.test(value)) return null;
+    if (/^(https?:\/\/|\/(?!\/)|\.{0,2}\/|#)/i.test(value)) return value;
+    if (!/^[a-z][a-z0-9+.-]*:/i.test(value)) return value;
+    return null;
+  }
+
+  function renderMarkdownLink(text, url) {
+    const safeUrl = sanitizeMarkdownUrl(url);
+    if (!safeUrl) return text;
+    return `<a href="${escapeAttribute(safeUrl)}" target="_blank" rel="noopener">${text}</a>`;
+  }
+
   function renderNestedList(block) {
     const lines = block.trim().split(/\n/).filter(l => /^\s*-\s+/.test(l));
     let html = '';
@@ -98,7 +116,7 @@
       return `<blockquote>${inner}</blockquote>`;
     });
     // Links: [text](url)
-    html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
+    html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_, text, url) => renderMarkdownLink(text, url));
     // Unordered lists (support nested lists via indentation, 2 spaces per level)
     html = html.replace(/^(?:\s*-\s+.*(?:\n|$))+?/gm, m => renderNestedList(m));
     // Ordered lists (consecutive lines starting with digits)
