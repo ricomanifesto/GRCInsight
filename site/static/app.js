@@ -22,6 +22,7 @@
 
   const renderMarkdownLink = window.GRCInsightRenderer.renderMarkdownLink;
   const sanitizeMarkdownUrl = window.GRCInsightRenderer.sanitizeMarkdownUrl;
+  const escapeAttribute = window.GRCInsightRenderer.escapeAttribute;
 
   function renderArchiveDigest(markdown) {
     const container = document.getElementById('archiveDigest');
@@ -37,12 +38,12 @@
         <article class="archive-entry${isCurrent ? ' current' : ''}">
           <div class="archive-entry-main">
             <div class="archive-entry-kicker">${escapeHtml(report.status || 'Archived')} · ${escapeHtml(report.period || 'Unspecified period')}</div>
-            <h3><a href="${escapeHtml(href)}">${escapeHtml(report.title || 'Untitled report')}</a></h3>
+            <h3><a href="${escapeAttribute(href)}">${escapeHtml(report.title || 'Untitled report')}</a></h3>
             <p>${escapeHtml(report.summary || 'No digest summary available.')}</p>
             <ul>${highlights.map(item => `<li>${escapeHtml(item)}</li>`).join('')}</ul>
           </div>
           <div class="archive-entry-meta">
-            <time datetime="${escapeHtml(report.generatedAt || '')}">${escapeHtml((report.generatedAt || '').slice(0, 10) || 'Unknown date')}</time>
+            <time datetime="${escapeAttribute(report.generatedAt || '')}">${escapeHtml((report.generatedAt || '').slice(0, 10) || 'Unknown date')}</time>
             <div class="archive-tags">${tags.map(tag => `<span>${escapeHtml(tag)}</span>`).join('')}</div>
           </div>
         </article>

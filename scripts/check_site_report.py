@@ -172,6 +172,7 @@ def main() -> None:
         "archive-card",
         "archive-entry${isCurrent ? ' current' : ''}",
         "sanitizeMarkdownUrl(report.href || '#')",
+        "escapeAttribute(report.generatedAt || '')",
     )
     for guard in required_archive_ui:
         if guard not in html + app_js:
