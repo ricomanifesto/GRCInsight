@@ -10,6 +10,7 @@ INDEX_HTML = SITE_DIR / "index.html"
 INDEX_MD = SITE_DIR / "index.md"
 APP_JS = SITE_DIR / "static" / "app.js"
 RENDERER_JS = SITE_DIR / "static" / "renderer.js"
+TAGS_JS = SITE_DIR / "static" / "tags.js"
 
 
 def fail(message: str) -> None:
@@ -27,8 +28,9 @@ def main() -> None:
     markdown = read_text(INDEX_MD)
     app_js = read_text(APP_JS)
     renderer_js = read_text(RENDERER_JS)
+    tags_js = read_text(TAGS_JS)
 
-    for asset in ("static/style.css", "static/renderer.js", "static/app.js"):
+    for asset in ("static/style.css", "static/renderer.js", "static/tags.js", "static/app.js"):
         if asset not in html:
             fail(f"index.html does not reference {asset}")
 
@@ -60,6 +62,13 @@ def main() -> None:
     if "window.GRCInsightRenderer" not in app_js:
         fail("app.js does not use exported renderer helpers")
 
+    if "window.GRCInsightTags" not in app_js:
+        fail("app.js does not use exported compliance tag helpers")
+
+    for inline_catalog in ("const frameworks =", "const regulations =", "const risks ="):
+        if inline_catalog in app_js:
+            fail(f"app.js still defines inline tag catalog: {inline_catalog}")
+
     required_link_guards = (
         "function sanitizeMarkdownUrl(",
         "function renderMarkdownLink(",
@@ -68,6 +77,17 @@ def main() -> None:
     for guard in required_link_guards:
         if guard not in renderer_js:
             fail(f"renderer.js missing link sanitizer guard: {guard}")
+
+    required_tag_guards = (
+        "window.GRCInsightTags",
+        "frameworks",
+        "regulations",
+        "risks",
+        "pillClass",
+    )
+    for guard in required_tag_guards:
+        if guard not in tags_js:
+            fail(f"tags.js missing compliance tag guard: {guard}")
 
     print("site report check passed")
 

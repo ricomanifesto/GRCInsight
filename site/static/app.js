@@ -8,10 +8,7 @@
   const mobileToc = document.getElementById('mobileToc');
   let originalMd = null;
 
-  // Keyword highlighting catalog
-  const frameworks = ['ISO 27001', 'ISO/IEC 27001', 'NIST', 'NIST CSF', 'COBIT', 'COSO', 'PCI-DSS'];
-  const regulations = ['GDPR', 'CCPA', 'SOX', 'HIPAA', 'FFIEC'];
-  const risks = ['Ransomware', 'Extortion', 'Third-party', 'Identity', 'Cloud misconfiguration', 'BEC'];
+  const tagCategories = window.GRCInsightTags.categories;
 
   function escapeHtml(s) {
     return s.replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
@@ -174,15 +171,13 @@
 
   function highlightPills(node) {
     let html = node.innerHTML;
-    function pillify(list, cls) {
-      list.forEach(k => {
+    function pillify(category) {
+      category.terms.forEach(k => {
         const re = new RegExp(`(\\b${k.replace(/[-/]/g, m=>`\\${m}`)}\\b)`, 'g');
-        html = html.replace(re, `<span class="pill ${cls}">$1</span>`);
+        html = html.replace(re, `<span class="pill ${category.pillClass}">$1</span>`);
       });
     }
-    pillify(frameworks, 'framework');
-    pillify(regulations, 'regulation');
-    pillify(risks, 'risk');
+    tagCategories.forEach(pillify);
     node.innerHTML = html;
   }
 
