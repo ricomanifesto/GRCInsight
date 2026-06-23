@@ -117,9 +117,14 @@ def main() -> None:
         "window.GRCInsightMetadata",
         "deriveSectionMetadata",
         "renderSectionMetadata",
+        "summarizeSections",
+        "renderAuditSummary",
         "reviewStatus",
         "Needs source trail",
+        "Audit-ready",
         "data-review-status",
+        "data-obligations",
+        "data-evidence",
     )
     for guard in required_metadata_guards:
         if guard not in metadata_js:
@@ -180,6 +185,18 @@ def main() -> None:
 
     if ".archive-entry.current" not in style_css:
         fail("style.css missing archive current-entry styling")
+
+    required_audit_summary_ui = (
+        "auditSummary",
+        "installAuditSummary",
+        "summarizeSections",
+        "renderAuditSummary",
+        "data-obligations",
+        "audit-summary-card",
+    )
+    for guard in required_audit_summary_ui:
+        if guard not in html + app_js + style_css:
+            fail(f"site missing audit summary UI guard: {guard}")
 
     if "filterSections(sections, currentFilters()).map(section => section.id)" in app_js:
         fail("app.js collapses filtered section matches by section id")

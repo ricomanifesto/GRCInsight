@@ -89,6 +89,25 @@ body.light .archive-tags span { border-color: rgba(0,0,0,0.08); background: rgba
   .archive-tags { justify-content: flex-start; }
 }
 .filter-state { margin-top: 14px; color: var(--muted); font-size: 13px; }
+.audit-summary { margin-top: 14px; }
+.audit-summary-card { display: grid; gap: 14px; background: linear-gradient(180deg, var(--panel), var(--panel-2)); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 18px 20px; box-shadow: 0 6px 18px rgba(0,0,0,0.18); }
+.audit-kicker { margin: 0; color: var(--muted); font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0; }
+.audit-summary-card h2 { margin: 4px 0 0; color: #cfe4ff; font-size: 20px; }
+.audit-summary-copy { margin: 6px 0 0; color: var(--muted); }
+.audit-metrics { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; }
+.audit-metrics span { min-height: 58px; display: grid; align-content: center; gap: 2px; padding: 10px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.04); color: var(--muted); font-size: 12px; }
+.audit-metrics strong { color: #cfe4ff; font-size: 20px; }
+.audit-lists { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.audit-lists > div { border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 12px; background: rgba(255,255,255,0.035); }
+.audit-lists h3 { margin: 0 0 8px; color: #cfe4ff; font-size: 14px; }
+.audit-lists ul { margin: 0 0 0 18px; }
+body.light .audit-summary-card { border-color: rgba(0,0,0,0.08); box-shadow: 0 6px 18px rgba(0,0,0,0.08); }
+body.light .audit-summary-card h2, body.light .audit-metrics strong, body.light .audit-lists h3 { color: #1e3a8a; }
+body.light .audit-metrics span, body.light .audit-lists > div { border-color: rgba(0,0,0,0.08); background: rgba(0,0,0,0.03); }
+@media (max-width: 760px) {
+  .audit-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .audit-lists { grid-template-columns: 1fr; }
+}
 .empty-results { margin-top: 14px; padding: 14px 16px; border: 1px solid rgba(245, 158, 11, 0.35); border-radius: 8px; background: rgba(245, 158, 11, 0.10); color: #fde68a; }
 body.light .empty-results { color: #92400e; background: rgba(245, 158, 11, 0.12); border-color: rgba(245, 158, 11, 0.42); }
 

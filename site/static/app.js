@@ -329,6 +329,26 @@
     applyFilters();
   }
 
+  function installAuditSummary() {
+    const container = document.getElementById('auditSummary');
+    if (!container || !sectionMetadata || !sectionMetadata.summarizeSections) return;
+    const sections = Array.from(document.querySelectorAll('#report .card')).map(card => {
+      const heading = card.querySelector('h2');
+      const metadataEl = card.querySelector('.section-meta');
+      return {
+        title: heading ? (heading.childNodes[0]?.textContent || '').trim() : 'Untitled section',
+        metadata: {
+          reviewStatus: metadataEl ? metadataEl.getAttribute('data-review-status') : 'Needs review',
+          obligations: metadataEl ? metadataEl.getAttribute('data-obligations') : 'Not detected',
+          gaps: metadataEl ? metadataEl.getAttribute('data-gaps') : 'Not detected',
+          deadlines: metadataEl ? metadataEl.getAttribute('data-deadlines') : 'Not detected',
+          evidence: metadataEl ? metadataEl.getAttribute('data-evidence') : 'Needs source trail',
+        },
+      };
+    });
+    container.innerHTML = sectionMetadata.renderAuditSummary(sectionMetadata.summarizeSections(sections));
+  }
+
 
   function buildSidebar() {
     const toc = document.getElementById('toc');
@@ -566,6 +586,7 @@
       const html = mdToHtml(md);
       el.report.innerHTML = html;
       wrapSections(el.report);
+      installAuditSummary();
       // Mark and handle temporary outline placeholder if present
       (function handleTempOutline() {
         const h2s = Array.from(document.querySelectorAll('#report h2'));
