@@ -10,6 +10,7 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 RENDERER_JS = REPO_ROOT / "site" / "static" / "renderer.js"
 TAGS_JS = REPO_ROOT / "site" / "static" / "tags.js"
 METADATA_JS = REPO_ROOT / "site" / "static" / "metadata.js"
+FILTERS_JS = REPO_ROOT / "site" / "static" / "filters.js"
 
 
 def fail(message: str) -> None:
@@ -23,6 +24,8 @@ def main() -> None:
         fail("missing site/static/tags.js")
     if not METADATA_JS.exists():
         fail("missing site/static/metadata.js")
+    if not FILTERS_JS.exists():
+        fail("missing site/static/filters.js")
 
     script = f"""
 const fs = require('fs');
@@ -30,20 +33,24 @@ const vm = require('vm');
 const rendererSource = fs.readFileSync({json.dumps(str(RENDERER_JS))}, 'utf8');
 const tagsSource = fs.readFileSync({json.dumps(str(TAGS_JS))}, 'utf8');
 const metadataSource = fs.readFileSync({json.dumps(str(METADATA_JS))}, 'utf8');
+const filtersSource = fs.readFileSync({json.dumps(str(FILTERS_JS))}, 'utf8');
 const context = {{ window: {{}} }};
 vm.createContext(context);
 vm.runInContext(rendererSource, context, {{ filename: 'renderer.js' }});
 vm.runInContext(tagsSource, context, {{ filename: 'tags.js' }});
 vm.runInContext(metadataSource, context, {{ filename: 'metadata.js' }});
+vm.runInContext(filtersSource, context, {{ filename: 'filters.js' }});
 const renderer = context.window.GRCInsightRenderer;
 const tags = context.window.GRCInsightTags;
 const metadata = context.window.GRCInsightMetadata;
+const filters = context.window.GRCInsightFilters;
 function assert(condition, message) {{
   if (!condition) throw new Error(message);
 }}
 assert(renderer, 'renderer object is not exported');
 assert(tags, 'tag catalog is not exported');
 assert(metadata, 'section metadata helpers are not exported');
+assert(filters, 'section filter helpers are not exported');
 assert(renderer.sanitizeMarkdownUrl('https://example.com/a') === 'https://example.com/a', 'https links should be allowed');
 assert(renderer.sanitizeMarkdownUrl('/reports/current') === '/reports/current', 'root-relative links should be allowed');
 assert(renderer.sanitizeMarkdownUrl('controls/nist') === 'controls/nist', 'relative links should be allowed');
@@ -70,6 +77,35 @@ assert(sourceMetadata.evidence === 'Source referenced', 'source-backed sections 
 const emptyMetadata = metadata.deriveSectionMetadata('Overview', '');
 assert(emptyMetadata.reviewStatus === 'Needs review', 'empty sections should default to needs review');
 assert(metadata.renderSectionMetadata(emptyMetadata).includes('data-review-status="Needs review"'), 'metadata renderer should expose review status');
+const sections = [
+  {{
+    id: 'gdpr-obligations',
+    title: 'GDPR Obligations',
+    text: 'GDPR requires evidence collection for privacy controls.',
+    tagCategories: ['regulation'],
+    metadata: {{ reviewStatus: 'Action required' }},
+  }},
+  {{
+    id: 'nist-summary',
+    title: 'NIST Summary',
+    text: 'NIST control review is source backed.',
+    tagCategories: ['framework'],
+    metadata: {{ reviewStatus: 'Review ready' }},
+  }},
+  {{
+    id: 'ransomware-risk',
+    title: 'Ransomware Risk',
+    text: 'Needs incident tabletop review.',
+    tagCategories: ['risk'],
+    metadata: {{ reviewStatus: 'Needs review' }},
+  }},
+];
+assert(filters.filterSections(sections, {{}}).length === 3, 'empty filters should keep all sections');
+assert(filters.filterSections(sections, {{ query: 'privacy controls' }}).map(s => s.id).join(',') === 'gdpr-obligations', 'query should match section text');
+assert(filters.filterSections(sections, {{ reviewStatus: 'Review ready' }}).map(s => s.id).join(',') === 'nist-summary', 'review status should filter sections');
+assert(filters.filterSections(sections, {{ tagCategory: 'risk' }}).map(s => s.id).join(',') === 'ransomware-risk', 'tag category should filter sections');
+assert(filters.filterSections(sections, {{ query: 'GDPR', reviewStatus: 'Action required', tagCategory: 'regulation' }}).map(s => s.id).join(',') === 'gdpr-obligations', 'combined filters should narrow sections');
+assert(filters.filterSections(sections, {{ query: 'not present' }}).length === 0, 'unmatched query should return empty results');
 """
     try:
         result = subprocess.run(

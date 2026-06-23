@@ -10,6 +10,7 @@
 
   const tagCategories = window.GRCInsightTags.categories;
   const sectionMetadata = window.GRCInsightMetadata;
+  const sectionFilters = window.GRCInsightFilters;
 
   function escapeHtml(s) {
     return s.replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
@@ -189,7 +190,82 @@
     node.innerHTML = html;
   }
 
-  
+  function collectSection(card) {
+    const heading = card.querySelector('h2');
+    const metadataEl = card.querySelector('.section-meta');
+    const pills = Array.from(card.querySelectorAll('.pill'));
+    const tagCategories = pills
+      .flatMap(pill => ['framework', 'regulation', 'risk'].filter(name => pill.classList.contains(name)));
+    return {
+      id: heading ? heading.id : '',
+      title: heading ? (heading.childNodes[0]?.textContent || '').trim() : '',
+      text: card.textContent || '',
+      tagCategories: Array.from(new Set(tagCategories)),
+      tagTerms: pills.map(pill => pill.textContent.trim()).filter(Boolean),
+      metadata: {
+        reviewStatus: metadataEl ? metadataEl.getAttribute('data-review-status') : '',
+      },
+      element: card,
+    };
+  }
+
+  function installSectionFilters() {
+    const search = document.getElementById('sectionSearch');
+    const status = document.getElementById('statusFilter');
+    const tag = document.getElementById('tagFilter');
+    const clear = document.getElementById('clearFilters');
+    const summary = document.getElementById('filterSummary');
+    const empty = document.getElementById('emptyResults');
+    if (!search || !status || !tag || !summary || !empty || !sectionFilters) return;
+
+    const sections = Array.from(document.querySelectorAll('#report .card')).map(collectSection);
+    const total = sections.length;
+
+    function currentFilters() {
+      return {
+        query: search.value,
+        reviewStatus: status.value,
+        tagCategory: tag.value,
+      };
+    }
+
+    function applyFilters() {
+      const matches = new Set(sectionFilters.filterSections(sections, currentFilters()).map(section => section.id));
+      sections.forEach(section => {
+        const visible = matches.has(section.id);
+        section.element.classList.toggle('filtered-out', !visible);
+        section.element.setAttribute('aria-hidden', String(!visible));
+      });
+      const count = matches.size;
+      summary.textContent = count === total ? `Showing all ${total} sections` : `Showing ${count} of ${total} sections`;
+      empty.hidden = count !== 0;
+      clear.disabled = count === total && !search.value && status.value === 'all' && tag.value === 'all';
+    }
+
+    [search, status, tag].forEach(control => {
+      control.addEventListener('input', applyFilters);
+      control.addEventListener('change', applyFilters);
+    });
+    function resetFilters() {
+      search.value = '';
+      status.value = 'all';
+      tag.value = 'all';
+      applyFilters();
+      search.focus();
+    }
+
+    document.addEventListener('click', event => {
+      if (event.target.closest && event.target.closest('#clearFilters')) resetFilters();
+    });
+    clear.addEventListener('keydown', event => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        resetFilters();
+      }
+    });
+    applyFilters();
+  }
+
 
   function buildSidebar() {
     const toc = document.getElementById('toc');
@@ -402,7 +478,7 @@
     // Keyboard shortcuts
     document.addEventListener('keydown', e => {
       const tag = (e.target.tagName || '').toLowerCase();
-      if (tag === 'input' || tag === 'textarea') return;
+      if (tag === 'input' || tag === 'textarea' || tag === 'select' || tag === 'button') return;
       const h2s = Array.from(document.querySelectorAll('#report h2'));
       const y = window.scrollY + 100; let idx = 0;
       for (let i = 0; i < h2s.length; i++) { if (h2s[i].getBoundingClientRect().top + window.scrollY - 90 <= y) idx = i; }
@@ -443,6 +519,7 @@
       })();
       applyCollapsedState();
       highlightPills(el.report);
+      installSectionFilters();
       buildSidebar();
       buildTopbar();
       updateCurrentSection();
