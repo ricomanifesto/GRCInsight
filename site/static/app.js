@@ -9,6 +9,7 @@
   let originalMd = null;
 
   const tagCategories = window.GRCInsightTags.categories;
+  const sectionMetadata = window.GRCInsightMetadata;
 
   function escapeHtml(s) {
     return s.replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
@@ -167,6 +168,13 @@
     if (card) fragment.appendChild(card);
     node.innerHTML = '';
     node.appendChild(fragment);
+    Array.from(node.querySelectorAll('.card')).forEach(c => {
+      const h2 = c.querySelector('h2');
+      if (!h2) return;
+      const title = (h2.childNodes[0]?.textContent || '').trim();
+      const metadata = sectionMetadata.deriveSectionMetadata(title, c.textContent || '');
+      h2.insertAdjacentHTML('afterend', sectionMetadata.renderSectionMetadata(metadata));
+    });
   }
 
   function highlightPills(node) {
