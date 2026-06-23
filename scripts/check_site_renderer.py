@@ -11,6 +11,7 @@ RENDERER_JS = REPO_ROOT / "site" / "static" / "renderer.js"
 TAGS_JS = REPO_ROOT / "site" / "static" / "tags.js"
 METADATA_JS = REPO_ROOT / "site" / "static" / "metadata.js"
 FILTERS_JS = REPO_ROOT / "site" / "static" / "filters.js"
+ARCHIVE_JS = REPO_ROOT / "site" / "static" / "archive.js"
 
 
 def fail(message: str) -> None:
@@ -26,6 +27,8 @@ def main() -> None:
         fail("missing site/static/metadata.js")
     if not FILTERS_JS.exists():
         fail("missing site/static/filters.js")
+    if not ARCHIVE_JS.exists():
+        fail("missing site/static/archive.js")
 
     script = f"""
 const fs = require('fs');
@@ -34,16 +37,19 @@ const rendererSource = fs.readFileSync({json.dumps(str(RENDERER_JS))}, 'utf8');
 const tagsSource = fs.readFileSync({json.dumps(str(TAGS_JS))}, 'utf8');
 const metadataSource = fs.readFileSync({json.dumps(str(METADATA_JS))}, 'utf8');
 const filtersSource = fs.readFileSync({json.dumps(str(FILTERS_JS))}, 'utf8');
+const archiveSource = fs.readFileSync({json.dumps(str(ARCHIVE_JS))}, 'utf8');
 const context = {{ window: {{}} }};
 vm.createContext(context);
 vm.runInContext(rendererSource, context, {{ filename: 'renderer.js' }});
 vm.runInContext(tagsSource, context, {{ filename: 'tags.js' }});
 vm.runInContext(metadataSource, context, {{ filename: 'metadata.js' }});
 vm.runInContext(filtersSource, context, {{ filename: 'filters.js' }});
+vm.runInContext(archiveSource, context, {{ filename: 'archive.js' }});
 const renderer = context.window.GRCInsightRenderer;
 const tags = context.window.GRCInsightTags;
 const metadata = context.window.GRCInsightMetadata;
 const filters = context.window.GRCInsightFilters;
+const archive = context.window.GRCInsightArchive;
 function assert(condition, message) {{
   if (!condition) throw new Error(message);
 }}
@@ -51,6 +57,31 @@ assert(renderer, 'renderer object is not exported');
 assert(tags, 'tag catalog is not exported');
 assert(metadata, 'section metadata helpers are not exported');
 assert(filters, 'section filter helpers are not exported');
+assert(archive, 'archive digest data is not exported');
+assert(archive.currentReportId === 'current', 'archive should keep the current report as default');
+assert(typeof archive.buildReports === 'function', 'archive should build reports from markdown');
+assert(typeof archive.deriveCurrentReportMetadata === 'function', 'archive should derive current metadata from markdown');
+const archiveMarkdown = `# GRC Intelligence Report - 2026-06-23
+**Generated:** 2026-06-23T12:00:00Z
+
+| **Field** | **Detail** |
+|---|---|
+| **Report Period** | Q3 2026 |
+`;
+const derivedReport = archive.deriveCurrentReportMetadata(archiveMarkdown);
+assert(derivedReport.title === 'GRC Intelligence Report - 2026-06-23', 'archive should derive title from index markdown');
+assert(derivedReport.generatedAt === '2026-06-23T12:00:00Z', 'archive should derive generatedAt from index markdown');
+assert(derivedReport.period === 'Q3 2026', 'archive should derive report period from index markdown');
+const archiveReports = archive.buildReports(archiveMarkdown);
+assert(Array.isArray(archiveReports) && archiveReports.length >= 1, 'archive should expose at least one report entry');
+const currentReport = archiveReports.find(report => report.id === archive.currentReportId);
+assert(currentReport, 'archive should include the current report entry');
+assert(currentReport.href === 'index.html', 'current report should keep index.html as the default route');
+assert(currentReport.status === 'Current', 'current report should be marked current');
+assert(currentReport.generatedAt === '2026-06-23T12:00:00Z', 'current report should use generated markdown timestamp');
+assert(currentReport.period === 'Q3 2026', 'current report should use generated markdown period');
+assert(Array.isArray(currentReport.highlights) && currentReport.highlights.length >= 2, 'current report should expose digest highlights');
+assert(Array.isArray(currentReport.tags) && currentReport.tags.includes('GRC'), 'current report should expose digest tags');
 assert(renderer.sanitizeMarkdownUrl('https://example.com/a') === 'https://example.com/a', 'https links should be allowed');
 assert(renderer.sanitizeMarkdownUrl('/reports/current') === '/reports/current', 'root-relative links should be allowed');
 assert(renderer.sanitizeMarkdownUrl('controls/nist') === 'controls/nist', 'relative links should be allowed');
