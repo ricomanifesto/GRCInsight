@@ -143,6 +143,7 @@ def main() -> None:
         "parseFilterParams",
         "buildFilterParams",
         "sectionMatches",
+        "summarizeFilterResults",
         "reviewStatus",
         "tagCategory",
         "ownerCue",
@@ -159,6 +160,8 @@ def main() -> None:
         "ownerFilter",
         "clearFilters",
         "filterSummary",
+        "sectionFilters.summarizeFilterResults(count, total, filters)",
+        "empty.textContent = count === 0",
         "emptyResults",
     )
     for guard in required_filter_ui:

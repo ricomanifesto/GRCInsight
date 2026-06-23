@@ -346,8 +346,13 @@
         clearFocusMode();
       }
       const count = matches.size;
-      summary.textContent = count === total ? `Showing all ${total} sections` : `Showing ${count} of ${total} sections`;
+      summary.textContent = sectionFilters.summarizeFilterResults
+        ? sectionFilters.summarizeFilterResults(count, total, filters)
+        : (count === total ? `Showing all ${total} sections` : `Showing ${count} of ${total} sections`);
       empty.hidden = count !== 0;
+      empty.textContent = count === 0
+        ? `${summary.textContent}. Clear filters to return to the full report.`
+        : 'No matching sections. Clear filters to return to the full report.';
       clear.disabled = count === total && !search.value && status.value === 'all' && tag.value === 'all' && owner.value === 'all';
       buildSidebar();
       buildTopbar();
