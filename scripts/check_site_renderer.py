@@ -38,7 +38,7 @@ const tagsSource = fs.readFileSync({json.dumps(str(TAGS_JS))}, 'utf8');
 const metadataSource = fs.readFileSync({json.dumps(str(METADATA_JS))}, 'utf8');
 const filtersSource = fs.readFileSync({json.dumps(str(FILTERS_JS))}, 'utf8');
 const archiveSource = fs.readFileSync({json.dumps(str(ARCHIVE_JS))}, 'utf8');
-const context = {{ window: {{}} }};
+const context = {{ URLSearchParams, window: {{}} }};
 vm.createContext(context);
 vm.runInContext(rendererSource, context, {{ filename: 'renderer.js' }});
 vm.runInContext(tagsSource, context, {{ filename: 'tags.js' }});
@@ -61,6 +61,8 @@ assert(archive, 'archive digest data is not exported');
 assert(archive.currentReportId === 'current', 'archive should keep the current report as default');
 assert(typeof archive.buildReports === 'function', 'archive should build reports from markdown');
 assert(typeof archive.deriveCurrentReportMetadata === 'function', 'archive should derive current metadata from markdown');
+assert(typeof filters.parseFilterParams === 'function', 'filters should parse URL filter params');
+assert(typeof filters.buildFilterParams === 'function', 'filters should build URL filter params');
 const archiveMarkdown = `# GRC Intelligence Report - 2026-06-23
 **Generated:** 2026-06-23T12:00:00Z
 
@@ -194,6 +196,14 @@ const duplicateSections = [
 ];
 const duplicateMatches = filters.filterSections(duplicateSections, {{ query: 'unique gdpr' }});
 assert(duplicateMatches.length === 1 && duplicateMatches[0] === duplicateSections[0], 'duplicate section ids should not merge filter results');
+const parsedFilters = filters.parseFilterParams('?q=privacy%20controls&status=Review%20ready&tag=control');
+assert(parsedFilters.query === 'privacy controls', 'filter params should parse search query');
+assert(parsedFilters.reviewStatus === 'Review ready', 'filter params should parse review status');
+assert(parsedFilters.tagCategory === 'control', 'filter params should parse tag category');
+const safeFilters = filters.parseFilterParams('?status=Bad&tag=unknown');
+assert(safeFilters.query === '' && safeFilters.reviewStatus === 'all' && safeFilters.tagCategory === 'all', 'invalid filter params should fall back to defaults');
+assert(filters.buildFilterParams({{ query: 'privacy controls', reviewStatus: 'Review ready', tagCategory: 'control' }}) === '?q=privacy+controls&status=Review+ready&tag=control', 'filter params should serialize active filters');
+assert(filters.buildFilterParams({{ query: '', reviewStatus: 'all', tagCategory: 'all' }}) === '', 'filter params should omit default filters');
 """
     try:
         result = subprocess.run(

@@ -42,9 +42,40 @@
     return (sections || []).filter(section => sectionMatches(section, filters));
   }
 
+  const allowedReviewStatuses = new Set(['all', 'Action required', 'Review ready', 'Needs review']);
+  const allowedTagCategories = new Set(['all', 'framework', 'regulation', 'risk', 'control', 'agency']);
+
+  function safeValue(value, allowed, fallback) {
+    return allowed.has(value) ? value : fallback;
+  }
+
+  function parseFilterParams(searchParams) {
+    const params = new URLSearchParams(String(searchParams || '').replace(/^\?/, ''));
+    return {
+      query: String(params.get('q') || '').trim(),
+      reviewStatus: safeValue(params.get('status') || 'all', allowedReviewStatuses, 'all'),
+      tagCategory: safeValue(params.get('tag') || 'all', allowedTagCategories, 'all'),
+    };
+  }
+
+  function buildFilterParams(filters) {
+    const active = filters || {};
+    const params = new URLSearchParams();
+    const query = String(active.query || '').trim();
+    const reviewStatus = safeValue(active.reviewStatus || 'all', allowedReviewStatuses, 'all');
+    const tagCategory = safeValue(active.tagCategory || 'all', allowedTagCategories, 'all');
+    if (query) params.set('q', query);
+    if (reviewStatus !== 'all') params.set('status', reviewStatus);
+    if (tagCategory !== 'all') params.set('tag', tagCategory);
+    const serialized = params.toString();
+    return serialized ? `?${serialized}` : '';
+  }
+
   window.GRCInsightFilters = {
+    buildFilterParams,
     filterSections,
     normalize,
+    parseFilterParams,
     sectionMatches,
   };
 })();
