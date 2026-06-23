@@ -115,6 +115,8 @@ assert(sourceMetadata.evidence === 'Source referenced', 'source-backed sections 
 const emptyMetadata = metadata.deriveSectionMetadata('Overview', '');
 assert(emptyMetadata.reviewStatus === 'Needs review', 'empty sections should default to needs review');
 assert(emptyMetadata.owners === 'Not detected', 'empty sections should not detect owners');
+const genericDomainMetadata = metadata.deriveSectionMetadata('Compliance Overview', 'Board and legal teams review general GRC risk themes.');
+assert(genericDomainMetadata.owners === 'Not detected', 'generic domain terms should not count as owner cues');
 assert(metadata.renderSectionMetadata(emptyMetadata).includes('data-review-status="Needs review"'), 'metadata renderer should expose review status');
 assert(metadata.renderSectionMetadata(actionMetadata).includes('data-owners="Detected"'), 'metadata renderer should expose owner cue state');
 const auditSummary = metadata.summarizeSections([

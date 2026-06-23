@@ -4,7 +4,7 @@
   const gapPattern = /\b(gap|gaps|lapsed|unresolved|finding|findings|non-compliance|exposure|underassessed|unknown|absence)\b/i;
   const deadlinePattern = /\b(deadline|due|within|0.{0,3}30|30.{0,3}90|90.{0,3}180|days|weekly|monthly|quarterly|immediate|begins|passed|q[1-4]\s+\d{4})\b/i;
   const actionPattern = /\b(action|priority|owner|remediation|implement|conduct|validate|update|establish)\b/i;
-  const ownerPattern = /\b(owner|owners|accountable|accountability|responsible|ciso|cro|general counsel|legal|compliance|grc|board|secretary|security operations|payment security|vendor management)\b/i;
+  const ownerPattern = /\b(owner|owners|owned by|accountable|accountability|responsible|assigned to)\b/i;
 
   function detected(pattern, value) {
     return pattern.test(value);
