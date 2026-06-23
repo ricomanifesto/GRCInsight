@@ -195,10 +195,14 @@ body.light pre { background: rgba(0,0,0,0.03); border-color: rgba(0,0,0,0.08); }
 .pill.framework { background: rgba(37, 99, 235, 0.15); color: #cfe4ff; }
 .pill.regulation { background: rgba(34, 197, 94, 0.15); color: #d1fae5; }
 .pill.risk { background: rgba(245, 158, 11, 0.15); color: #fde68a; }
+.pill.control { background: rgba(20, 184, 166, 0.15); color: #99f6e4; }
+.pill.agency { background: rgba(168, 85, 247, 0.15); color: #e9d5ff; }
 .pill::before { content: ""; display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; background: currentColor; opacity: 0.9; }
 .pill.framework { color: #9cc3ff; }
 .pill.regulation { color: #86efac; }
 .pill.risk { color: #fde68a; }
+.pill.control { color: #5eead4; }
+.pill.agency { color: #d8b4fe; }
 
 .kbd { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); padding: 2px 6px; border-radius: 6px; }
 

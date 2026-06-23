@@ -107,7 +107,11 @@ def main() -> None:
         "frameworks",
         "regulations",
         "risks",
+        "controls",
+        "agencies",
         "pillClass",
+        "control",
+        "agency",
     )
     for guard in required_tag_guards:
         if guard not in tags_js:

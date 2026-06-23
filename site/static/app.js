@@ -222,15 +222,41 @@
   }
 
   function highlightPills(node) {
-    let html = node.innerHTML;
-    function pillify(category) {
-      category.terms.forEach(k => {
-        const re = new RegExp(`(\\b${k.replace(/[-/]/g, m=>`\\${m}`)}\\b)`, 'g');
-        html = html.replace(re, `<span class="pill ${category.pillClass}">$1</span>`);
+    const terms = tagCategories
+      .flatMap(category => category.terms.map(term => ({ term, pillClass: category.pillClass })))
+      .sort((a, b) => b.term.length - a.term.length);
+    if (!terms.length) return;
+
+    const escapeRegExp = value => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const pattern = new RegExp(`\\b(${terms.map(item => escapeRegExp(item.term)).join('|')})\\b`, 'gi');
+    const termMap = new Map(terms.map(item => [item.term.toLowerCase(), item.pillClass]));
+    const walker = document.createTreeWalker(node, NodeFilter.SHOW_TEXT, {
+      acceptNode(textNode) {
+        const parent = textNode.parentElement;
+        if (!parent || parent.closest('.pill')) return NodeFilter.FILTER_REJECT;
+        if (!pattern.test(textNode.nodeValue || '')) return NodeFilter.FILTER_REJECT;
+        pattern.lastIndex = 0;
+        return NodeFilter.FILTER_ACCEPT;
+      },
+    });
+    const textNodes = [];
+    while (walker.nextNode()) textNodes.push(walker.currentNode);
+    textNodes.forEach(textNode => {
+      const fragment = document.createDocumentFragment();
+      const text = textNode.nodeValue || '';
+      let cursor = 0;
+      text.replace(pattern, (match, _term, offset) => {
+        if (offset > cursor) fragment.appendChild(document.createTextNode(text.slice(cursor, offset)));
+        const pill = document.createElement('span');
+        pill.className = `pill ${termMap.get(match.toLowerCase())}`;
+        pill.textContent = match;
+        fragment.appendChild(pill);
+        cursor = offset + match.length;
+        return match;
       });
-    }
-    tagCategories.forEach(pillify);
-    node.innerHTML = html;
+      if (cursor < text.length) fragment.appendChild(document.createTextNode(text.slice(cursor)));
+      textNode.replaceWith(fragment);
+    });
   }
 
   function visibleSectionHeadings() {
@@ -250,13 +276,14 @@
     const heading = card.querySelector('h2');
     const metadataEl = card.querySelector('.section-meta');
     const pills = Array.from(card.querySelectorAll('.pill'));
-    const tagCategories = pills
-      .flatMap(pill => ['framework', 'regulation', 'risk'].filter(name => pill.classList.contains(name)));
+    const pillClasses = tagCategories.map(category => category.pillClass);
+    const sectionTagCategories = pills
+      .flatMap(pill => pillClasses.filter(name => pill.classList.contains(name)));
     return {
       id: heading ? heading.id : '',
       title: heading ? (heading.childNodes[0]?.textContent || '').trim() : '',
       text: card.textContent || '',
-      tagCategories: Array.from(new Set(tagCategories)),
+      tagCategories: Array.from(new Set(sectionTagCategories)),
       tagTerms: pills.map(pill => pill.textContent.trim()).filter(Boolean),
       metadata: {
         reviewStatus: metadataEl ? metadataEl.getAttribute('data-review-status') : '',
