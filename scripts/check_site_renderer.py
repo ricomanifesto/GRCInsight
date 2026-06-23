@@ -178,9 +178,24 @@ const sections = [
     tagCategories: ['agency'],
     metadata: {{ reviewStatus: 'Review ready' }},
   }},
+  {{
+    id: 'explicit-owner',
+    title: 'Owner Cue',
+    text: 'Recommendations table lists an Owner column.',
+    tagCategories: [],
+    metadata: {{ reviewStatus: 'Action required', owners: 'Detected' }},
+  }},
+  {{
+    id: 'metadata-label-only',
+    title: 'Metadata Label Only',
+    text: 'OwnersNot detected EvidenceNeeds source trail',
+    tagCategories: [],
+    metadata: {{ reviewStatus: 'Needs review', owners: 'Not detected' }},
+  }},
 ];
-assert(filters.filterSections(sections, {{}}).length === 5, 'empty filters should keep all sections');
+assert(filters.filterSections(sections, {{}}).length === 7, 'empty filters should keep all sections');
 assert(filters.filterSections(sections, {{ query: 'privacy controls' }}).map(s => s.id).join(',') === 'gdpr-obligations', 'query should match section text');
+assert(filters.filterSections(sections, {{ query: 'owner' }}).map(s => s.id).join(',') === 'explicit-owner', 'owner query should match owner cues, not metadata labels');
 assert(filters.filterSections(sections, {{ reviewStatus: 'Review ready' }}).map(s => s.id).join(',') === 'nist-summary,sec-review', 'review status should filter sections');
 assert(filters.filterSections(sections, {{ tagCategory: 'risk' }}).map(s => s.id).join(',') === 'ransomware-risk', 'tag category should filter sections');
 assert(filters.filterSections(sections, {{ tagCategory: 'control' }}).map(s => s.id).join(',') === 'access-control', 'control tag category should filter sections');

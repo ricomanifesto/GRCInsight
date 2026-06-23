@@ -279,10 +279,12 @@
     const pillClasses = tagCategories.map(category => category.pillClass);
     const sectionTagCategories = pills
       .flatMap(pill => pillClasses.filter(name => pill.classList.contains(name)));
+    const contentClone = card.cloneNode(true);
+    contentClone.querySelectorAll('.section-meta, .heading-actions').forEach(node => node.remove());
     return {
       id: heading ? heading.id : '',
       title: heading ? (heading.childNodes[0]?.textContent || '').trim() : '',
-      text: card.textContent || '',
+      text: contentClone.textContent || '',
       tagCategories: Array.from(new Set(sectionTagCategories)),
       tagTerms: pills.map(pill => pill.textContent.trim()).filter(Boolean),
       metadata: {

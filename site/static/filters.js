@@ -7,16 +7,25 @@
     return (values || []).map(normalize).filter(Boolean);
   }
 
+  function stripMetadataLabels(value) {
+    return String(value || '').replace(/\b(?:Status|Obligations|Gaps|Deadlines|Owners|Evidence)\s*(?:Detected|Not detected|Action required|Review ready|Needs review|Source referenced|Needs source trail)\b/gi, ' ');
+  }
+
+  function ownerSearchTokens(metadata) {
+    return metadata.owners === 'Detected' ? 'owner owners owner cues' : '';
+  }
+
   function searchableText(section) {
     const metadata = section.metadata || {};
     return normalize([
       section.title,
-      section.text,
+      stripMetadataLabels(section.text),
       metadata.reviewStatus,
       metadata.obligations,
       metadata.gaps,
       metadata.deadlines,
       metadata.owners,
+      ownerSearchTokens(metadata),
       metadata.evidence,
       (section.tagCategories || []).join(' '),
       (section.tagTerms || []).join(' '),
