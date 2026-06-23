@@ -7,9 +7,13 @@
   const themeBtn = document.getElementById('themeToggle');
   const mobileToc = document.getElementById('mobileToc');
   let originalMd = null;
+  let sidebarObserver = null;
+  let topbarObserver = null;
+  let currentSectionObserver = null;
 
   const tagCategories = window.GRCInsightTags.categories;
   const sectionMetadata = window.GRCInsightMetadata;
+  const sectionFilters = window.GRCInsightFilters;
 
   function escapeHtml(s) {
     return s.replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
@@ -189,13 +193,108 @@
     node.innerHTML = html;
   }
 
-  
+  function visibleSectionHeadings() {
+    return Array.from(document.querySelectorAll('#report .card:not(.filtered-out) h2'));
+  }
+
+  function clearFocusMode() {
+    document.body.classList.remove('focus-mode');
+    document.querySelectorAll('.card').forEach(card => card.classList.remove('focused'));
+    document.querySelectorAll('.focus-toggle').forEach(button => {
+      button.textContent = 'Focus';
+      button.title = 'Focus this section';
+    });
+  }
+
+  function collectSection(card) {
+    const heading = card.querySelector('h2');
+    const metadataEl = card.querySelector('.section-meta');
+    const pills = Array.from(card.querySelectorAll('.pill'));
+    const tagCategories = pills
+      .flatMap(pill => ['framework', 'regulation', 'risk'].filter(name => pill.classList.contains(name)));
+    return {
+      id: heading ? heading.id : '',
+      title: heading ? (heading.childNodes[0]?.textContent || '').trim() : '',
+      text: card.textContent || '',
+      tagCategories: Array.from(new Set(tagCategories)),
+      tagTerms: pills.map(pill => pill.textContent.trim()).filter(Boolean),
+      metadata: {
+        reviewStatus: metadataEl ? metadataEl.getAttribute('data-review-status') : '',
+      },
+      element: card,
+    };
+  }
+
+  function installSectionFilters() {
+    const search = document.getElementById('sectionSearch');
+    const status = document.getElementById('statusFilter');
+    const tag = document.getElementById('tagFilter');
+    const clear = document.getElementById('clearFilters');
+    const summary = document.getElementById('filterSummary');
+    const empty = document.getElementById('emptyResults');
+    if (!search || !status || !tag || !summary || !empty || !sectionFilters) return;
+
+    const sections = Array.from(document.querySelectorAll('#report .card')).map(collectSection);
+    const total = sections.length;
+
+    function currentFilters() {
+      return {
+        query: search.value,
+        reviewStatus: status.value,
+        tagCategory: tag.value,
+      };
+    }
+
+    function applyFilters() {
+      const matches = new Set(sectionFilters.filterSections(sections, currentFilters()));
+      sections.forEach(section => {
+        const visible = matches.has(section);
+        section.element.classList.toggle('filtered-out', !visible);
+        section.element.setAttribute('aria-hidden', String(!visible));
+      });
+      const focusedCard = document.querySelector('.card.focused');
+      if (focusedCard && focusedCard.classList.contains('filtered-out')) {
+        clearFocusMode();
+      }
+      const count = matches.size;
+      summary.textContent = count === total ? `Showing all ${total} sections` : `Showing ${count} of ${total} sections`;
+      empty.hidden = count !== 0;
+      clear.disabled = count === total && !search.value && status.value === 'all' && tag.value === 'all';
+      buildSidebar();
+      buildTopbar();
+      updateCurrentSection();
+    }
+
+    [search, status, tag].forEach(control => {
+      control.addEventListener('input', applyFilters);
+      control.addEventListener('change', applyFilters);
+    });
+    function resetFilters() {
+      search.value = '';
+      status.value = 'all';
+      tag.value = 'all';
+      applyFilters();
+      search.focus();
+    }
+
+    document.addEventListener('click', event => {
+      if (event.target.closest && event.target.closest('#clearFilters')) resetFilters();
+    });
+    clear.addEventListener('keydown', event => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        resetFilters();
+      }
+    });
+    applyFilters();
+  }
+
 
   function buildSidebar() {
     const toc = document.getElementById('toc');
     if (!toc) return;
-    const h2s = Array.from(document.querySelectorAll('#report h2'));
-    const all = Array.from(document.querySelectorAll('#report h2, #report h3'));
+    const h2s = visibleSectionHeadings();
+    const all = Array.from(document.querySelectorAll('#report .card:not(.filtered-out) h2, #report .card:not(.filtered-out) h3'));
     // Build nested outline: for each H2, collect following H3s until next H2
     const blocks = h2s.map(h2 => {
       const id = h2.id;
@@ -221,7 +320,8 @@
     // Highlight on scroll
     const links = Array.from(toc.querySelectorAll('a'));
     const map = new Map(h2s.map((h, i) => [h.id, links.find(l => l.getAttribute('href') === `#${h.id}`)]));
-    const obs = new IntersectionObserver(entries => {
+    if (sidebarObserver) sidebarObserver.disconnect();
+    sidebarObserver = new IntersectionObserver(entries => {
       entries.forEach(e => {
         const link = map.get(e.target.id);
         if (!link) return;
@@ -231,17 +331,17 @@
         }
       });
     }, { rootMargin: '0px 0px -70% 0px', threshold: 0.1 });
-    h2s.forEach(h => obs.observe(h));
+    h2s.forEach(h => sidebarObserver.observe(h));
 
     // Mobile TOC
     if (mobileToc) {
       mobileToc.innerHTML = '<option value="">Jump to section</option>' +
         h2s.map(h => `<option value="#${h.id}">${h.childNodes[0].textContent.trim()}</option>`).join('');
-      mobileToc.addEventListener('change', e => {
+      mobileToc.onchange = e => {
         const v = e.target.value;
         if (v) document.querySelector(v)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
         e.target.value = '';
-      });
+      };
     }
 
     // Restore open state from storage. Default: desktop open, mobile collapsed
@@ -265,11 +365,12 @@
   function buildTopbar() {
     const bar = document.getElementById('topbarLinks');
     if (!bar) return;
-    const h2s = Array.from(document.querySelectorAll('#report h2'));
+    const h2s = visibleSectionHeadings();
     bar.innerHTML = h2s.map(h => `<a class="chip" href="#${h.id}"><span class="chip-icon">§</span>${h.childNodes[0].textContent.trim()}</a>`).join('');
     const chips = Array.from(bar.querySelectorAll('.chip'));
     const map = new Map(h2s.map(h => [h.id, chips.find(c => c.getAttribute('href') === `#${h.id}`)]));
-    const obs = new IntersectionObserver(entries => {
+    if (topbarObserver) topbarObserver.disconnect();
+    topbarObserver = new IntersectionObserver(entries => {
       entries.forEach(e => {
         const chip = map.get(e.target.id);
         if (!chip) return;
@@ -279,7 +380,7 @@
         }
       });
     }, { rootMargin: '0px 0px -70% 0px', threshold: 0.1 });
-    h2s.forEach(h => obs.observe(h));
+    h2s.forEach(h => topbarObserver.observe(h));
   }
 
   function applyCollapsedState() {
@@ -311,8 +412,9 @@
   function updateCurrentSection() {
     const lbl = document.getElementById('currentSection');
     if (!lbl) return;
-    const h2s = Array.from(document.querySelectorAll('#report h2'));
-    const obs = new IntersectionObserver(entries => {
+    const h2s = visibleSectionHeadings();
+    if (currentSectionObserver) currentSectionObserver.disconnect();
+    currentSectionObserver = new IntersectionObserver(entries => {
       entries.forEach(e => {
         if (e.isIntersecting) {
           const title = e.target.childNodes[0].textContent.trim();
@@ -320,7 +422,7 @@
         }
       });
     }, { rootMargin: '-10% 0px -70% 0px', threshold: 0.1 });
-    h2s.forEach(h => obs.observe(h));
+    h2s.forEach(h => currentSectionObserver.observe(h));
   }
 
   function installNavFabs() {
@@ -331,7 +433,7 @@
     right.id = 'navNext'; right.className = 'nav-fab right'; right.setAttribute('aria-label', 'Next section');
     right.innerHTML = '\u2192';
     document.body.appendChild(left); document.body.appendChild(right);
-    const getH2s = () => Array.from(document.querySelectorAll('#report h2'));
+    const getH2s = visibleSectionHeadings;
     function currentIndex() {
       const h2s = getH2s();
       const y = window.scrollY + 100;
@@ -402,14 +504,15 @@
     // Keyboard shortcuts
     document.addEventListener('keydown', e => {
       const tag = (e.target.tagName || '').toLowerCase();
-      if (tag === 'input' || tag === 'textarea') return;
-      const h2s = Array.from(document.querySelectorAll('#report h2'));
+      if (tag === 'input' || tag === 'textarea' || tag === 'select' || tag === 'button') return;
+      const h2s = visibleSectionHeadings();
+      if (!h2s.length) return;
       const y = window.scrollY + 100; let idx = 0;
       for (let i = 0; i < h2s.length; i++) { if (h2s[i].getBoundingClientRect().top + window.scrollY - 90 <= y) idx = i; }
       if (['j','ArrowDown'].includes(e.key)) { e.preventDefault(); h2s[Math.min(h2s.length-1, idx+1)]?.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
       if (['k','ArrowUp'].includes(e.key)) { e.preventDefault(); h2s[Math.max(0, idx-1)]?.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
       if (e.key === 'f') { e.preventDefault(); const btn = h2s[idx]?.querySelector('.focus-toggle'); btn && btn.click(); }
-      if (e.key === 'Escape') { document.body.classList.remove('focus-mode'); document.querySelectorAll('.card').forEach(c => c.classList.remove('focused')); }
+      if (e.key === 'Escape') { clearFocusMode(); }
       if (e.key === 'c') { const btn = h2s[idx]?.querySelector('.collapse-toggle'); btn && btn.click(); }
     });
   }
@@ -443,6 +546,7 @@
       })();
       applyCollapsedState();
       highlightPills(el.report);
+      installSectionFilters();
       buildSidebar();
       buildTopbar();
       updateCurrentSection();

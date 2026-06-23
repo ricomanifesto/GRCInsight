@@ -12,6 +12,7 @@ APP_JS = SITE_DIR / "static" / "app.js"
 RENDERER_JS = SITE_DIR / "static" / "renderer.js"
 TAGS_JS = SITE_DIR / "static" / "tags.js"
 METADATA_JS = SITE_DIR / "static" / "metadata.js"
+FILTERS_JS = SITE_DIR / "static" / "filters.js"
 
 
 def fail(message: str) -> None:
@@ -31,11 +32,13 @@ def main() -> None:
     renderer_js = read_text(RENDERER_JS)
     tags_js = read_text(TAGS_JS)
     metadata_js = read_text(METADATA_JS)
+    filters_js = read_text(FILTERS_JS)
 
     for asset in (
         "static/style.css",
         "static/tags.js",
         "static/metadata.js",
+        "static/filters.js",
         "static/renderer.js",
         "static/app.js",
     ):
@@ -76,6 +79,9 @@ def main() -> None:
     if "window.GRCInsightMetadata" not in app_js:
         fail("app.js does not use exported section metadata helpers")
 
+    if "window.GRCInsightFilters" not in app_js:
+        fail("app.js does not use exported section filter helpers")
+
     for inline_catalog in ("const frameworks =", "const regulations =", "const risks ="):
         if inline_catalog in app_js:
             fail(f"app.js still defines inline tag catalog: {inline_catalog}")
@@ -111,6 +117,46 @@ def main() -> None:
     for guard in required_metadata_guards:
         if guard not in metadata_js:
             fail(f"metadata.js missing section metadata guard: {guard}")
+
+    required_filter_guards = (
+        "window.GRCInsightFilters",
+        "filterSections",
+        "sectionMatches",
+        "reviewStatus",
+        "tagCategory",
+        "query",
+    )
+    for guard in required_filter_guards:
+        if guard not in filters_js:
+            fail(f"filters.js missing section filter guard: {guard}")
+
+    required_filter_ui = (
+        "sectionSearch",
+        "statusFilter",
+        "tagFilter",
+        "clearFilters",
+        "filterSummary",
+        "emptyResults",
+    )
+    for guard in required_filter_ui:
+        if guard not in html + app_js:
+            fail(f"site missing section filter UI guard: {guard}")
+
+    if "filterSections(sections, currentFilters()).map(section => section.id)" in app_js:
+        fail("app.js collapses filtered section matches by section id")
+
+    if "matches.has(section.id)" in app_js:
+        fail("app.js keys filtered section visibility by section id")
+
+    required_filtered_navigation_guards = (
+        "function visibleSectionHeadings()",
+        "#report .card:not(.filtered-out) h2",
+        "function clearFocusMode()",
+        "focusedCard.classList.contains('filtered-out')",
+    )
+    for guard in required_filtered_navigation_guards:
+        if guard not in app_js:
+            fail(f"app.js missing filtered navigation guard: {guard}")
 
     print("site report check passed")
 
