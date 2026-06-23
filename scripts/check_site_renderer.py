@@ -108,6 +108,22 @@ assert(sourceMetadata.evidence === 'Source referenced', 'source-backed sections 
 const emptyMetadata = metadata.deriveSectionMetadata('Overview', '');
 assert(emptyMetadata.reviewStatus === 'Needs review', 'empty sections should default to needs review');
 assert(metadata.renderSectionMetadata(emptyMetadata).includes('data-review-status="Needs review"'), 'metadata renderer should expose review status');
+const auditSummary = metadata.summarizeSections([
+  {{ title: 'PCI remediation', metadata: actionMetadata }},
+  {{ title: 'Evidence backed overview', metadata: sourceMetadata }},
+  {{ title: 'Unmapped overview', metadata: emptyMetadata }},
+]);
+assert(auditSummary.totalSections === 3, 'audit summary should count sections');
+assert(auditSummary.actionRequired === 1, 'audit summary should count action-required sections');
+assert(auditSummary.reviewReady === 1, 'audit summary should count review-ready sections');
+assert(auditSummary.needsReview === 1, 'audit summary should count needs-review sections');
+assert(auditSummary.obligations === 1, 'audit summary should count detected obligations');
+assert(auditSummary.deadlines === 1, 'audit summary should count detected deadlines');
+assert(auditSummary.evidenceGaps === 2, 'audit summary should count sections needing source trails');
+assert(auditSummary.auditReady === false, 'audit summary should not be audit-ready when gaps remain');
+assert(auditSummary.gapTitles.includes('PCI remediation') && auditSummary.gapTitles.includes('Unmapped overview'), 'audit summary should name source-trail gaps');
+assert(metadata.renderAuditSummary(auditSummary).includes('audit-summary-card'), 'audit summary renderer should produce a summary card');
+assert(metadata.renderAuditSummary(auditSummary).includes('Needs source trail'), 'audit summary renderer should expose missing evidence state');
 const sections = [
   {{
     id: 'gdpr-obligations',

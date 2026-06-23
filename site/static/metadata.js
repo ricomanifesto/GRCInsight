@@ -33,11 +33,16 @@
     };
   }
 
-  function escapeAttribute(value) {
-    return String(value).replace(/[&<>"]/g, c => ({
+  function escapeHtml(value) {
+    return String(value).replace(/[&<>]/g, c => ({
       '&': '&amp;',
       '<': '&lt;',
       '>': '&gt;',
+    })[c]);
+  }
+
+  function escapeAttribute(value) {
+    return escapeHtml(value).replace(/"/g, c => ({
       '"': '&quot;',
     })[c]);
   }
@@ -51,13 +56,79 @@
       ['Evidence', metadata.evidence],
     ];
     const items = rows.map(([label, value]) =>
-      `<span class="section-meta-item"><span class="section-meta-label">${label}</span><span>${value}</span></span>`
+      `<span class="section-meta-item"><span class="section-meta-label">${escapeHtml(label)}</span><span>${escapeHtml(value)}</span></span>`
     ).join('');
-    return `<div class="section-meta" data-review-status="${escapeAttribute(metadata.reviewStatus)}">${items}</div>`;
+    return `<div class="section-meta" data-review-status="${escapeAttribute(metadata.reviewStatus)}" data-obligations="${escapeAttribute(metadata.obligations)}" data-gaps="${escapeAttribute(metadata.gaps)}" data-deadlines="${escapeAttribute(metadata.deadlines)}" data-evidence="${escapeAttribute(metadata.evidence)}">${items}</div>`;
+  }
+
+  function countByValue(sections, field, value) {
+    return sections.filter(section => section.metadata && section.metadata[field] === value).length;
+  }
+
+  function summarizeSections(sections) {
+    const normalized = Array.isArray(sections) ? sections : [];
+    const gapTitles = normalized
+      .filter(section => section.metadata && section.metadata.evidence === 'Needs source trail')
+      .map(section => section.title || 'Untitled section');
+    const actionTitles = normalized
+      .filter(section => section.metadata && section.metadata.reviewStatus === 'Action required')
+      .map(section => section.title || 'Untitled section');
+    const evidenceGaps = gapTitles.length;
+    return {
+      totalSections: normalized.length,
+      actionRequired: countByValue(normalized, 'reviewStatus', 'Action required'),
+      reviewReady: countByValue(normalized, 'reviewStatus', 'Review ready'),
+      needsReview: countByValue(normalized, 'reviewStatus', 'Needs review'),
+      obligations: countByValue(normalized, 'obligations', 'Detected'),
+      gaps: countByValue(normalized, 'gaps', 'Detected'),
+      deadlines: countByValue(normalized, 'deadlines', 'Detected'),
+      evidenceReady: countByValue(normalized, 'evidence', 'Source referenced'),
+      evidenceGaps,
+      auditReady: normalized.length > 0 && evidenceGaps === 0 && countByValue(normalized, 'reviewStatus', 'Needs review') === 0,
+      gapTitles,
+      actionTitles,
+    };
+  }
+
+  function renderList(items, emptyText) {
+    if (!items.length) return `<li>${escapeHtml(emptyText)}</li>`;
+    return items.slice(0, 4).map(item => `<li>${escapeHtml(item)}</li>`).join('');
+  }
+
+  function renderAuditSummary(summary) {
+    const readiness = summary.auditReady ? 'Audit-ready' : 'Needs source trail';
+    return `
+      <div class="audit-summary-card">
+        <div>
+          <p class="audit-kicker">Audit-ready summary</p>
+          <h2>${escapeHtml(readiness)}</h2>
+          <p class="audit-summary-copy">${summary.totalSections} sections reviewed for obligations, gaps, deadlines, and evidence trails.</p>
+        </div>
+        <div class="audit-metrics">
+          <span><strong>${summary.actionRequired}</strong> action required</span>
+          <span><strong>${summary.obligations}</strong> obligations</span>
+          <span><strong>${summary.gaps}</strong> gaps</span>
+          <span><strong>${summary.deadlines}</strong> deadlines</span>
+          <span><strong>${summary.evidenceGaps}</strong> source-trail gaps</span>
+        </div>
+        <div class="audit-lists">
+          <div>
+            <h3>Action focus</h3>
+            <ul>${renderList(summary.actionTitles, 'No action-required sections detected')}</ul>
+          </div>
+          <div>
+            <h3>Evidence gaps</h3>
+            <ul>${renderList(summary.gapTitles, 'No missing source trails detected')}</ul>
+          </div>
+        </div>
+      </div>
+    `;
   }
 
   window.GRCInsightMetadata = {
     deriveSectionMetadata,
     renderSectionMetadata,
+    summarizeSections,
+    renderAuditSummary,
   };
 })();
