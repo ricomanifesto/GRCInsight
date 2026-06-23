@@ -142,6 +142,20 @@ def main() -> None:
         if guard not in html + app_js:
             fail(f"site missing section filter UI guard: {guard}")
 
+    if "filterSections(sections, currentFilters()).map(section => section.id)" in app_js:
+        fail("app.js collapses filtered section matches by section id")
+
+    if "matches.has(section.id)" in app_js:
+        fail("app.js keys filtered section visibility by section id")
+
+    required_filtered_navigation_guards = (
+        "function visibleSectionHeadings()",
+        "#report .card:not(.filtered-out) h2",
+    )
+    for guard in required_filtered_navigation_guards:
+        if guard not in app_js:
+            fail(f"app.js missing filtered navigation guard: {guard}")
+
     print("site report check passed")
 
 

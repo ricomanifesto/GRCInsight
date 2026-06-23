@@ -7,6 +7,9 @@
   const themeBtn = document.getElementById('themeToggle');
   const mobileToc = document.getElementById('mobileToc');
   let originalMd = null;
+  let sidebarObserver = null;
+  let topbarObserver = null;
+  let currentSectionObserver = null;
 
   const tagCategories = window.GRCInsightTags.categories;
   const sectionMetadata = window.GRCInsightMetadata;
@@ -190,6 +193,10 @@
     node.innerHTML = html;
   }
 
+  function visibleSectionHeadings() {
+    return Array.from(document.querySelectorAll('#report .card:not(.filtered-out) h2'));
+  }
+
   function collectSection(card) {
     const heading = card.querySelector('h2');
     const metadataEl = card.querySelector('.section-meta');
@@ -230,9 +237,9 @@
     }
 
     function applyFilters() {
-      const matches = new Set(sectionFilters.filterSections(sections, currentFilters()).map(section => section.id));
+      const matches = new Set(sectionFilters.filterSections(sections, currentFilters()));
       sections.forEach(section => {
-        const visible = matches.has(section.id);
+        const visible = matches.has(section);
         section.element.classList.toggle('filtered-out', !visible);
         section.element.setAttribute('aria-hidden', String(!visible));
       });
@@ -240,6 +247,9 @@
       summary.textContent = count === total ? `Showing all ${total} sections` : `Showing ${count} of ${total} sections`;
       empty.hidden = count !== 0;
       clear.disabled = count === total && !search.value && status.value === 'all' && tag.value === 'all';
+      buildSidebar();
+      buildTopbar();
+      updateCurrentSection();
     }
 
     [search, status, tag].forEach(control => {
@@ -270,8 +280,8 @@
   function buildSidebar() {
     const toc = document.getElementById('toc');
     if (!toc) return;
-    const h2s = Array.from(document.querySelectorAll('#report h2'));
-    const all = Array.from(document.querySelectorAll('#report h2, #report h3'));
+    const h2s = visibleSectionHeadings();
+    const all = Array.from(document.querySelectorAll('#report .card:not(.filtered-out) h2, #report .card:not(.filtered-out) h3'));
     // Build nested outline: for each H2, collect following H3s until next H2
     const blocks = h2s.map(h2 => {
       const id = h2.id;
@@ -297,7 +307,8 @@
     // Highlight on scroll
     const links = Array.from(toc.querySelectorAll('a'));
     const map = new Map(h2s.map((h, i) => [h.id, links.find(l => l.getAttribute('href') === `#${h.id}`)]));
-    const obs = new IntersectionObserver(entries => {
+    if (sidebarObserver) sidebarObserver.disconnect();
+    sidebarObserver = new IntersectionObserver(entries => {
       entries.forEach(e => {
         const link = map.get(e.target.id);
         if (!link) return;
@@ -307,17 +318,17 @@
         }
       });
     }, { rootMargin: '0px 0px -70% 0px', threshold: 0.1 });
-    h2s.forEach(h => obs.observe(h));
+    h2s.forEach(h => sidebarObserver.observe(h));
 
     // Mobile TOC
     if (mobileToc) {
       mobileToc.innerHTML = '<option value="">Jump to section</option>' +
         h2s.map(h => `<option value="#${h.id}">${h.childNodes[0].textContent.trim()}</option>`).join('');
-      mobileToc.addEventListener('change', e => {
+      mobileToc.onchange = e => {
         const v = e.target.value;
         if (v) document.querySelector(v)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
         e.target.value = '';
-      });
+      };
     }
 
     // Restore open state from storage. Default: desktop open, mobile collapsed
@@ -341,11 +352,12 @@
   function buildTopbar() {
     const bar = document.getElementById('topbarLinks');
     if (!bar) return;
-    const h2s = Array.from(document.querySelectorAll('#report h2'));
+    const h2s = visibleSectionHeadings();
     bar.innerHTML = h2s.map(h => `<a class="chip" href="#${h.id}"><span class="chip-icon">§</span>${h.childNodes[0].textContent.trim()}</a>`).join('');
     const chips = Array.from(bar.querySelectorAll('.chip'));
     const map = new Map(h2s.map(h => [h.id, chips.find(c => c.getAttribute('href') === `#${h.id}`)]));
-    const obs = new IntersectionObserver(entries => {
+    if (topbarObserver) topbarObserver.disconnect();
+    topbarObserver = new IntersectionObserver(entries => {
       entries.forEach(e => {
         const chip = map.get(e.target.id);
         if (!chip) return;
@@ -355,7 +367,7 @@
         }
       });
     }, { rootMargin: '0px 0px -70% 0px', threshold: 0.1 });
-    h2s.forEach(h => obs.observe(h));
+    h2s.forEach(h => topbarObserver.observe(h));
   }
 
   function applyCollapsedState() {
@@ -387,8 +399,9 @@
   function updateCurrentSection() {
     const lbl = document.getElementById('currentSection');
     if (!lbl) return;
-    const h2s = Array.from(document.querySelectorAll('#report h2'));
-    const obs = new IntersectionObserver(entries => {
+    const h2s = visibleSectionHeadings();
+    if (currentSectionObserver) currentSectionObserver.disconnect();
+    currentSectionObserver = new IntersectionObserver(entries => {
       entries.forEach(e => {
         if (e.isIntersecting) {
           const title = e.target.childNodes[0].textContent.trim();
@@ -396,7 +409,7 @@
         }
       });
     }, { rootMargin: '-10% 0px -70% 0px', threshold: 0.1 });
-    h2s.forEach(h => obs.observe(h));
+    h2s.forEach(h => currentSectionObserver.observe(h));
   }
 
   function installNavFabs() {
@@ -407,7 +420,7 @@
     right.id = 'navNext'; right.className = 'nav-fab right'; right.setAttribute('aria-label', 'Next section');
     right.innerHTML = '\u2192';
     document.body.appendChild(left); document.body.appendChild(right);
-    const getH2s = () => Array.from(document.querySelectorAll('#report h2'));
+    const getH2s = visibleSectionHeadings;
     function currentIndex() {
       const h2s = getH2s();
       const y = window.scrollY + 100;
@@ -479,7 +492,8 @@
     document.addEventListener('keydown', e => {
       const tag = (e.target.tagName || '').toLowerCase();
       if (tag === 'input' || tag === 'textarea' || tag === 'select' || tag === 'button') return;
-      const h2s = Array.from(document.querySelectorAll('#report h2'));
+      const h2s = visibleSectionHeadings();
+      if (!h2s.length) return;
       const y = window.scrollY + 100; let idx = 0;
       for (let i = 0; i < h2s.length; i++) { if (h2s[i].getBoundingClientRect().top + window.scrollY - 90 <= y) idx = i; }
       if (['j','ArrowDown'].includes(e.key)) { e.preventDefault(); h2s[Math.min(h2s.length-1, idx+1)]?.scrollIntoView({ behavior: 'smooth', block: 'start' }); }

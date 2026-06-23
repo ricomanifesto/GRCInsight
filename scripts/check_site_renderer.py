@@ -106,6 +106,24 @@ assert(filters.filterSections(sections, {{ reviewStatus: 'Review ready' }}).map(
 assert(filters.filterSections(sections, {{ tagCategory: 'risk' }}).map(s => s.id).join(',') === 'ransomware-risk', 'tag category should filter sections');
 assert(filters.filterSections(sections, {{ query: 'GDPR', reviewStatus: 'Action required', tagCategory: 'regulation' }}).map(s => s.id).join(',') === 'gdpr-obligations', 'combined filters should narrow sections');
 assert(filters.filterSections(sections, {{ query: 'not present' }}).length === 0, 'unmatched query should return empty results');
+const duplicateSections = [
+  {{
+    id: 'same-heading',
+    title: 'Repeated Heading',
+    text: 'Unique GDPR obligation text.',
+    tagCategories: ['regulation'],
+    metadata: {{ reviewStatus: 'Action required' }},
+  }},
+  {{
+    id: 'same-heading',
+    title: 'Repeated Heading',
+    text: 'Unrelated framework summary.',
+    tagCategories: ['framework'],
+    metadata: {{ reviewStatus: 'Review ready' }},
+  }},
+];
+const duplicateMatches = filters.filterSections(duplicateSections, {{ query: 'unique gdpr' }});
+assert(duplicateMatches.length === 1 && duplicateMatches[0] === duplicateSections[0], 'duplicate section ids should not merge filter results');
 """
     try:
         result = subprocess.run(
