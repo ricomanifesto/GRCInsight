@@ -279,14 +279,21 @@
     const pillClasses = tagCategories.map(category => category.pillClass);
     const sectionTagCategories = pills
       .flatMap(pill => pillClasses.filter(name => pill.classList.contains(name)));
+    const contentClone = card.cloneNode(true);
+    contentClone.querySelectorAll('.section-meta, .heading-actions').forEach(node => node.remove());
     return {
       id: heading ? heading.id : '',
       title: heading ? (heading.childNodes[0]?.textContent || '').trim() : '',
-      text: card.textContent || '',
+      text: contentClone.textContent || '',
       tagCategories: Array.from(new Set(sectionTagCategories)),
       tagTerms: pills.map(pill => pill.textContent.trim()).filter(Boolean),
       metadata: {
         reviewStatus: metadataEl ? metadataEl.getAttribute('data-review-status') : '',
+        obligations: metadataEl ? metadataEl.getAttribute('data-obligations') : '',
+        gaps: metadataEl ? metadataEl.getAttribute('data-gaps') : '',
+        deadlines: metadataEl ? metadataEl.getAttribute('data-deadlines') : '',
+        owners: metadataEl ? metadataEl.getAttribute('data-owners') : '',
+        evidence: metadataEl ? metadataEl.getAttribute('data-evidence') : '',
       },
       element: card,
     };
@@ -382,6 +389,7 @@
           obligations: metadataEl ? metadataEl.getAttribute('data-obligations') : 'Not detected',
           gaps: metadataEl ? metadataEl.getAttribute('data-gaps') : 'Not detected',
           deadlines: metadataEl ? metadataEl.getAttribute('data-deadlines') : 'Not detected',
+          owners: metadataEl ? metadataEl.getAttribute('data-owners') : 'Not detected',
           evidence: metadataEl ? metadataEl.getAttribute('data-evidence') : 'Needs source trail',
         },
       };

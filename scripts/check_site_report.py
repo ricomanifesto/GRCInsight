@@ -130,6 +130,8 @@ def main() -> None:
         "data-review-status",
         "data-obligations",
         "data-evidence",
+        "data-owners",
+        "Owner cues",
     )
     for guard in required_metadata_guards:
         if guard not in metadata_js:

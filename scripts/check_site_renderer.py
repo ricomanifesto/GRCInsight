@@ -108,12 +108,17 @@ assert(actionMetadata.reviewStatus === 'Action required', 'action sections shoul
 assert(actionMetadata.obligations === 'Detected', 'action sections should detect obligations');
 assert(actionMetadata.deadlines === 'Detected', 'deadline language should be detected');
 assert(actionMetadata.evidence === 'Needs source trail', 'sections without source language should flag source trail gaps');
+assert(actionMetadata.owners === 'Detected', 'owner language should be detected');
 const sourceMetadata = metadata.deriveSectionMetadata('Executive Summary', 'Source Multi-Source OSINT Articles Analyzed 30 of 30');
 assert(sourceMetadata.reviewStatus === 'Review ready', 'source-backed sections should be review ready');
 assert(sourceMetadata.evidence === 'Source referenced', 'source-backed sections should detect evidence');
 const emptyMetadata = metadata.deriveSectionMetadata('Overview', '');
 assert(emptyMetadata.reviewStatus === 'Needs review', 'empty sections should default to needs review');
+assert(emptyMetadata.owners === 'Not detected', 'empty sections should not detect owners');
+const genericDomainMetadata = metadata.deriveSectionMetadata('Compliance Overview', 'Board and legal teams review general GRC risk themes.');
+assert(genericDomainMetadata.owners === 'Not detected', 'generic domain terms should not count as owner cues');
 assert(metadata.renderSectionMetadata(emptyMetadata).includes('data-review-status="Needs review"'), 'metadata renderer should expose review status');
+assert(metadata.renderSectionMetadata(actionMetadata).includes('data-owners="Detected"'), 'metadata renderer should expose owner cue state');
 const auditSummary = metadata.summarizeSections([
   {{ title: 'PCI remediation', metadata: actionMetadata }},
   {{ title: 'Evidence backed overview', metadata: sourceMetadata }},
@@ -125,14 +130,18 @@ assert(auditSummary.reviewReady === 1, 'audit summary should count review-ready 
 assert(auditSummary.needsReview === 1, 'audit summary should count needs-review sections');
 assert(auditSummary.obligations === 1, 'audit summary should count detected obligations');
 assert(auditSummary.deadlines === 1, 'audit summary should count detected deadlines');
+assert(auditSummary.owners === 1, 'audit summary should count detected owner cues');
 assert(auditSummary.evidenceGaps === 2, 'audit summary should count sections needing source trails');
 assert(auditSummary.auditReady === false, 'audit summary should not be audit-ready when gaps remain');
 assert(auditSummary.evidenceTitles.includes('Evidence backed overview'), 'audit summary should name source-backed sections');
 assert(auditSummary.gapTitles.includes('PCI remediation') && auditSummary.gapTitles.includes('Unmapped overview'), 'audit summary should name source-trail gaps');
+assert(auditSummary.ownerTitles.includes('PCI remediation'), 'audit summary should name sections with owner cues');
 assert(metadata.renderAuditSummary(auditSummary).includes('audit-summary-card'), 'audit summary renderer should produce a summary card');
 assert(metadata.renderAuditSummary(auditSummary).includes('Needs source trail'), 'audit summary renderer should expose missing evidence state');
 assert(metadata.renderAuditSummary(auditSummary).includes('Evidence trail'), 'audit summary renderer should expose evidence trail list');
 assert(metadata.renderAuditSummary(auditSummary).includes('Evidence backed overview'), 'audit summary renderer should list source-backed sections');
+assert(metadata.renderAuditSummary(auditSummary).includes('Owner cues'), 'audit summary renderer should expose owner cue list');
+assert(metadata.renderAuditSummary(auditSummary).includes('PCI remediation'), 'audit summary renderer should list sections with owner cues');
 const sections = [
   {{
     id: 'gdpr-obligations',
@@ -169,9 +178,24 @@ const sections = [
     tagCategories: ['agency'],
     metadata: {{ reviewStatus: 'Review ready' }},
   }},
+  {{
+    id: 'explicit-owner',
+    title: 'Owner Cue',
+    text: 'Recommendations table lists an Owner column.',
+    tagCategories: [],
+    metadata: {{ reviewStatus: 'Action required', owners: 'Detected' }},
+  }},
+  {{
+    id: 'metadata-label-only',
+    title: 'Metadata Label Only',
+    text: 'OwnersNot detected EvidenceNeeds source trail',
+    tagCategories: [],
+    metadata: {{ reviewStatus: 'Needs review', owners: 'Not detected' }},
+  }},
 ];
-assert(filters.filterSections(sections, {{}}).length === 5, 'empty filters should keep all sections');
+assert(filters.filterSections(sections, {{}}).length === 7, 'empty filters should keep all sections');
 assert(filters.filterSections(sections, {{ query: 'privacy controls' }}).map(s => s.id).join(',') === 'gdpr-obligations', 'query should match section text');
+assert(filters.filterSections(sections, {{ query: 'owner' }}).map(s => s.id).join(',') === 'explicit-owner', 'owner query should match owner cues, not metadata labels');
 assert(filters.filterSections(sections, {{ reviewStatus: 'Review ready' }}).map(s => s.id).join(',') === 'nist-summary,sec-review', 'review status should filter sections');
 assert(filters.filterSections(sections, {{ tagCategory: 'risk' }}).map(s => s.id).join(',') === 'ransomware-risk', 'tag category should filter sections');
 assert(filters.filterSections(sections, {{ tagCategory: 'control' }}).map(s => s.id).join(',') === 'access-control', 'control tag category should filter sections');
