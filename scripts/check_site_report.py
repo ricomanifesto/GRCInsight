@@ -152,12 +152,13 @@ def main() -> None:
     required_archive_guards = (
         "window.GRCInsightArchive",
         "currentReportId",
-        "reports",
+        "buildReports",
+        "deriveCurrentReportMetadata",
         "id: 'current'",
         "href: 'index.html'",
         "status: 'Current'",
-        "generatedAt:",
-        "period:",
+        "Generated:",
+        "Report Period",
     )
     for guard in required_archive_guards:
         if guard not in archive_js:
@@ -166,6 +167,8 @@ def main() -> None:
     required_archive_ui = (
         "archiveDigest",
         "renderArchiveDigest",
+        "renderArchiveDigest(md)",
+        "archiveDigest.buildReports(markdown || '')",
         "archive-card",
         "archive-entry${isCurrent ? ' current' : ''}",
         "sanitizeMarkdownUrl(report.href || '#')",

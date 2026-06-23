@@ -23,11 +23,12 @@
   const renderMarkdownLink = window.GRCInsightRenderer.renderMarkdownLink;
   const sanitizeMarkdownUrl = window.GRCInsightRenderer.sanitizeMarkdownUrl;
 
-  function renderArchiveDigest() {
+  function renderArchiveDigest(markdown) {
     const container = document.getElementById('archiveDigest');
-    if (!container || !archiveDigest || !Array.isArray(archiveDigest.reports)) return;
-    if (!archiveDigest.reports.find(report => report.id === archiveDigest.currentReportId)) return;
-    const entries = archiveDigest.reports.map(report => {
+    if (!container || !archiveDigest || !archiveDigest.buildReports) return;
+    const reports = archiveDigest.buildReports(markdown || '');
+    if (!reports.find(report => report.id === archiveDigest.currentReportId)) return;
+    const entries = reports.map(report => {
       const isCurrent = report.id === archiveDigest.currentReportId;
       const tags = Array.isArray(report.tags) ? report.tags : [];
       const highlights = Array.isArray(report.highlights) ? report.highlights : [];
@@ -560,7 +561,7 @@
     .then(r => r.text())
     .then(md => {
       originalMd = md;
-      renderArchiveDigest();
+      renderArchiveDigest(md);
       const html = mdToHtml(md);
       el.report.innerHTML = html;
       wrapSections(el.report);

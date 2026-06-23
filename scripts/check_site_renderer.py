@@ -59,13 +59,27 @@ assert(metadata, 'section metadata helpers are not exported');
 assert(filters, 'section filter helpers are not exported');
 assert(archive, 'archive digest data is not exported');
 assert(archive.currentReportId === 'current', 'archive should keep the current report as default');
-assert(Array.isArray(archive.reports) && archive.reports.length >= 1, 'archive should expose at least one report entry');
-const currentReport = archive.reports.find(report => report.id === archive.currentReportId);
+assert(typeof archive.buildReports === 'function', 'archive should build reports from markdown');
+assert(typeof archive.deriveCurrentReportMetadata === 'function', 'archive should derive current metadata from markdown');
+const archiveMarkdown = `# GRC Intelligence Report - 2026-06-23
+**Generated:** 2026-06-23T12:00:00Z
+
+| **Field** | **Detail** |
+|---|---|
+| **Report Period** | Q3 2026 |
+`;
+const derivedReport = archive.deriveCurrentReportMetadata(archiveMarkdown);
+assert(derivedReport.title === 'GRC Intelligence Report - 2026-06-23', 'archive should derive title from index markdown');
+assert(derivedReport.generatedAt === '2026-06-23T12:00:00Z', 'archive should derive generatedAt from index markdown');
+assert(derivedReport.period === 'Q3 2026', 'archive should derive report period from index markdown');
+const archiveReports = archive.buildReports(archiveMarkdown);
+assert(Array.isArray(archiveReports) && archiveReports.length >= 1, 'archive should expose at least one report entry');
+const currentReport = archiveReports.find(report => report.id === archive.currentReportId);
 assert(currentReport, 'archive should include the current report entry');
 assert(currentReport.href === 'index.html', 'current report should keep index.html as the default route');
 assert(currentReport.status === 'Current', 'current report should be marked current');
-assert(/^\\d{{4}}-\\d{{2}}-\\d{{2}}T/.test(currentReport.generatedAt), 'current report should include an ISO generatedAt value');
-assert(currentReport.period && currentReport.period.length > 0, 'current report should include a report period');
+assert(currentReport.generatedAt === '2026-06-23T12:00:00Z', 'current report should use generated markdown timestamp');
+assert(currentReport.period === 'Q3 2026', 'current report should use generated markdown period');
 assert(Array.isArray(currentReport.highlights) && currentReport.highlights.length >= 2, 'current report should expose digest highlights');
 assert(Array.isArray(currentReport.tags) && currentReport.tags.includes('GRC'), 'current report should expose digest tags');
 assert(renderer.sanitizeMarkdownUrl('https://example.com/a') === 'https://example.com/a', 'https links should be allowed');
