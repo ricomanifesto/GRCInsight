@@ -9,6 +9,7 @@ SITE_DIR = REPO_ROOT / "site"
 INDEX_HTML = SITE_DIR / "index.html"
 INDEX_MD = SITE_DIR / "index.md"
 APP_JS = SITE_DIR / "static" / "app.js"
+RENDERER_JS = SITE_DIR / "static" / "renderer.js"
 
 
 def fail(message: str) -> None:
@@ -25,8 +26,9 @@ def main() -> None:
     html = read_text(INDEX_HTML)
     markdown = read_text(INDEX_MD)
     app_js = read_text(APP_JS)
+    renderer_js = read_text(RENDERER_JS)
 
-    for asset in ("static/style.css", "static/app.js"):
+    for asset in ("static/style.css", "static/renderer.js", "static/app.js"):
         if asset not in html:
             fail(f"index.html does not reference {asset}")
 
@@ -55,14 +57,17 @@ def main() -> None:
     if 'href="$2"' in app_js:
         fail("app.js renders Markdown links without URL sanitization")
 
+    if "window.GRCInsightRenderer" not in app_js:
+        fail("app.js does not use exported renderer helpers")
+
     required_link_guards = (
         "function sanitizeMarkdownUrl(",
         "function renderMarkdownLink(",
         "sanitizeMarkdownUrl(url)",
     )
     for guard in required_link_guards:
-        if guard not in app_js:
-            fail(f"app.js missing link sanitizer guard: {guard}")
+        if guard not in renderer_js:
+            fail(f"renderer.js missing link sanitizer guard: {guard}")
 
     print("site report check passed")
 
