@@ -165,6 +165,15 @@ def main() -> None:
         if guard not in html + app_js:
             fail(f"site missing section filter UI guard: {guard}")
 
+    required_filter_layout = (
+        ".filter-controls",
+        "repeat(3, minmax(120px, 0.8fr))",
+        ".clear-filters",
+    )
+    for guard in required_filter_layout:
+        if guard not in style_css:
+            fail(f"style.css missing section filter layout guard: {guard}")
+
     required_archive_guards = (
         "window.GRCInsightArchive",
         "currentReportId",
