@@ -3,6 +3,7 @@
 GOCACHE_DIR ?= $(CURDIR)/.cache/go-build
 GOMODCACHE_DIR ?= $(CURDIR)/.cache/go-mod
 UV_CACHE_DIR ?= $(CURDIR)/.cache/uv
+PYTHON ?= python3
 
 test-go:
 	GO111MODULE=on GOCACHE=$(GOCACHE_DIR) GOMODCACHE=$(GOMODCACHE_DIR) go test ./...
@@ -22,7 +23,8 @@ type-agent:
 check-agent: test-agent lint-agent format-agent type-agent
 
 check-site:
-	python3 scripts/check_site_report.py
+	$(PYTHON) scripts/check_site_report.py
+	$(PYTHON) scripts/check_site_renderer.py
 
 check: test-go check-agent check-site
 

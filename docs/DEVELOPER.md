@@ -5,7 +5,7 @@ This guide summarizes environment setup, provisioning, and how to run tests and 
 ## Prerequisites
 - Go 1.21+
 - Python 3.10+
-- Node: not required
+- Node.js 18+ (for generated-site renderer validation)
 - AWS credentials (for DynamoDB), region set (e.g., `AWS_REGION=us-east-1`)
 - Terraform >= 1.5 (for infra)
 - jq (for E2E script)
