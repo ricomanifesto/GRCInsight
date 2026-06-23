@@ -125,9 +125,12 @@ assert(auditSummary.obligations === 1, 'audit summary should count detected obli
 assert(auditSummary.deadlines === 1, 'audit summary should count detected deadlines');
 assert(auditSummary.evidenceGaps === 2, 'audit summary should count sections needing source trails');
 assert(auditSummary.auditReady === false, 'audit summary should not be audit-ready when gaps remain');
+assert(auditSummary.evidenceTitles.includes('Evidence backed overview'), 'audit summary should name source-backed sections');
 assert(auditSummary.gapTitles.includes('PCI remediation') && auditSummary.gapTitles.includes('Unmapped overview'), 'audit summary should name source-trail gaps');
 assert(metadata.renderAuditSummary(auditSummary).includes('audit-summary-card'), 'audit summary renderer should produce a summary card');
 assert(metadata.renderAuditSummary(auditSummary).includes('Needs source trail'), 'audit summary renderer should expose missing evidence state');
+assert(metadata.renderAuditSummary(auditSummary).includes('Evidence trail'), 'audit summary renderer should expose evidence trail list');
+assert(metadata.renderAuditSummary(auditSummary).includes('Evidence backed overview'), 'audit summary renderer should list source-backed sections');
 const sections = [
   {{
     id: 'gdpr-obligations',

@@ -70,6 +70,9 @@
     const gapTitles = normalized
       .filter(section => section.metadata && section.metadata.evidence === 'Needs source trail')
       .map(section => section.title || 'Untitled section');
+    const evidenceTitles = normalized
+      .filter(section => section.metadata && section.metadata.evidence === 'Source referenced')
+      .map(section => section.title || 'Untitled section');
     const actionTitles = normalized
       .filter(section => section.metadata && section.metadata.reviewStatus === 'Action required')
       .map(section => section.title || 'Untitled section');
@@ -86,6 +89,7 @@
       evidenceGaps,
       auditReady: normalized.length > 0 && evidenceGaps === 0 && countByValue(normalized, 'reviewStatus', 'Needs review') === 0,
       gapTitles,
+      evidenceTitles,
       actionTitles,
     };
   }
@@ -115,6 +119,10 @@
           <div>
             <h3>Action focus</h3>
             <ul>${renderList(summary.actionTitles, 'No action-required sections detected')}</ul>
+          </div>
+          <div>
+            <h3>Evidence trail</h3>
+            <ul>${renderList(summary.evidenceTitles, 'No source-backed sections detected')}</ul>
           </div>
           <div>
             <h3>Evidence gaps</h3>

@@ -126,6 +126,7 @@ def main() -> None:
         "reviewStatus",
         "Needs source trail",
         "Audit-ready",
+        "Evidence trail",
         "data-review-status",
         "data-obligations",
         "data-evidence",
