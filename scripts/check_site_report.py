@@ -138,6 +138,8 @@ def main() -> None:
     required_filter_guards = (
         "window.GRCInsightFilters",
         "filterSections",
+        "parseFilterParams",
+        "buildFilterParams",
         "sectionMatches",
         "reviewStatus",
         "tagCategory",

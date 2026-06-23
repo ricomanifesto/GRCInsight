@@ -303,6 +303,10 @@
 
     const sections = Array.from(document.querySelectorAll('#report .card')).map(collectSection);
     const total = sections.length;
+    const initialFilters = sectionFilters.parseFilterParams ? sectionFilters.parseFilterParams(window.location.search) : {};
+    search.value = initialFilters.query || '';
+    status.value = initialFilters.reviewStatus || 'all';
+    tag.value = initialFilters.tagCategory || 'all';
 
     function currentFilters() {
       return {
@@ -312,8 +316,16 @@
       };
     }
 
+    function syncFilterParams(filters) {
+      if (!sectionFilters.buildFilterParams || !window.history || !window.history.replaceState) return;
+      const nextSearch = sectionFilters.buildFilterParams(filters);
+      const nextUrl = `${window.location.pathname}${nextSearch}${window.location.hash}`;
+      window.history.replaceState(null, '', nextUrl);
+    }
+
     function applyFilters() {
-      const matches = new Set(sectionFilters.filterSections(sections, currentFilters()));
+      const filters = currentFilters();
+      const matches = new Set(sectionFilters.filterSections(sections, filters));
       sections.forEach(section => {
         const visible = matches.has(section);
         section.element.classList.toggle('filtered-out', !visible);
@@ -330,6 +342,7 @@
       buildSidebar();
       buildTopbar();
       updateCurrentSection();
+      syncFilterParams(filters);
     }
 
     [search, status, tag].forEach(control => {
