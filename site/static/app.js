@@ -303,10 +303,11 @@
     const search = document.getElementById('sectionSearch');
     const status = document.getElementById('statusFilter');
     const tag = document.getElementById('tagFilter');
+    const owner = document.getElementById('ownerFilter');
     const clear = document.getElementById('clearFilters');
     const summary = document.getElementById('filterSummary');
     const empty = document.getElementById('emptyResults');
-    if (!search || !status || !tag || !summary || !empty || !sectionFilters) return;
+    if (!search || !status || !tag || !owner || !summary || !empty || !sectionFilters) return;
 
     const sections = Array.from(document.querySelectorAll('#report .card')).map(collectSection);
     const total = sections.length;
@@ -314,12 +315,14 @@
     search.value = initialFilters.query || '';
     status.value = initialFilters.reviewStatus || 'all';
     tag.value = initialFilters.tagCategory || 'all';
+    owner.value = initialFilters.ownerCue || 'all';
 
     function currentFilters() {
       return {
         query: search.value,
         reviewStatus: status.value,
         tagCategory: tag.value,
+        ownerCue: owner.value,
       };
     }
 
@@ -345,14 +348,14 @@
       const count = matches.size;
       summary.textContent = count === total ? `Showing all ${total} sections` : `Showing ${count} of ${total} sections`;
       empty.hidden = count !== 0;
-      clear.disabled = count === total && !search.value && status.value === 'all' && tag.value === 'all';
+      clear.disabled = count === total && !search.value && status.value === 'all' && tag.value === 'all' && owner.value === 'all';
       buildSidebar();
       buildTopbar();
       updateCurrentSection();
       syncFilterParams(filters);
     }
 
-    [search, status, tag].forEach(control => {
+    [search, status, tag, owner].forEach(control => {
       control.addEventListener('input', applyFilters);
       control.addEventListener('change', applyFilters);
     });
@@ -360,6 +363,7 @@
       search.value = '';
       status.value = 'all';
       tag.value = 'all';
+      owner.value = 'all';
       applyFilters();
       search.focus();
     }

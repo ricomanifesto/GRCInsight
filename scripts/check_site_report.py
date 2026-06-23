@@ -145,6 +145,7 @@ def main() -> None:
         "sectionMatches",
         "reviewStatus",
         "tagCategory",
+        "ownerCue",
         "query",
     )
     for guard in required_filter_guards:
@@ -155,6 +156,7 @@ def main() -> None:
         "sectionSearch",
         "statusFilter",
         "tagFilter",
+        "ownerFilter",
         "clearFilters",
         "filterSummary",
         "emptyResults",

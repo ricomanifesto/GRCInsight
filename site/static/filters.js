@@ -37,6 +37,7 @@
     const query = normalize(active.query);
     const reviewStatus = normalize(active.reviewStatus);
     const tagCategory = normalize(active.tagCategory);
+    const ownerCue = normalize(active.ownerCue);
 
     if (query && !searchableText(section).includes(query)) return false;
     if (reviewStatus && reviewStatus !== 'all') {
@@ -44,6 +45,11 @@
     }
     if (tagCategory && tagCategory !== 'all') {
       if (!normalizedTokens(section.tagCategories).includes(tagCategory)) return false;
+    }
+    if (ownerCue && ownerCue !== 'all') {
+      const hasOwnerCue = normalize(section.metadata && section.metadata.owners) === 'detected';
+      if (ownerCue === 'detected' && !hasOwnerCue) return false;
+      if (ownerCue === 'missing' && hasOwnerCue) return false;
     }
     return true;
   }
@@ -54,6 +60,7 @@
 
   const allowedReviewStatuses = new Set(['all', 'Action required', 'Review ready', 'Needs review']);
   const allowedTagCategories = new Set(['all', 'framework', 'regulation', 'risk', 'control', 'agency']);
+  const allowedOwnerCues = new Set(['all', 'detected', 'missing']);
 
   function safeValue(value, allowed, fallback) {
     return allowed.has(value) ? value : fallback;
@@ -65,6 +72,7 @@
       query: String(params.get('q') || '').trim(),
       reviewStatus: safeValue(params.get('status') || 'all', allowedReviewStatuses, 'all'),
       tagCategory: safeValue(params.get('tag') || 'all', allowedTagCategories, 'all'),
+      ownerCue: safeValue(params.get('owner') || 'all', allowedOwnerCues, 'all'),
     };
   }
 
@@ -74,9 +82,11 @@
     const query = String(active.query || '').trim();
     const reviewStatus = safeValue(active.reviewStatus || 'all', allowedReviewStatuses, 'all');
     const tagCategory = safeValue(active.tagCategory || 'all', allowedTagCategories, 'all');
+    const ownerCue = safeValue(active.ownerCue || 'all', allowedOwnerCues, 'all');
     if (query) params.set('q', query);
     if (reviewStatus !== 'all') params.set('status', reviewStatus);
     if (tagCategory !== 'all') params.set('tag', tagCategory);
+    if (ownerCue !== 'all') params.set('owner', ownerCue);
     const serialized = params.toString();
     return serialized ? `?${serialized}` : '';
   }
