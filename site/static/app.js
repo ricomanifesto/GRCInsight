@@ -14,12 +14,50 @@
   const tagCategories = window.GRCInsightTags.categories;
   const sectionMetadata = window.GRCInsightMetadata;
   const sectionFilters = window.GRCInsightFilters;
+  const archiveDigest = window.GRCInsightArchive;
 
   function escapeHtml(s) {
     return s.replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
   }
 
   const renderMarkdownLink = window.GRCInsightRenderer.renderMarkdownLink;
+  const sanitizeMarkdownUrl = window.GRCInsightRenderer.sanitizeMarkdownUrl;
+
+  function renderArchiveDigest() {
+    const container = document.getElementById('archiveDigest');
+    if (!container || !archiveDigest || !Array.isArray(archiveDigest.reports)) return;
+    if (!archiveDigest.reports.find(report => report.id === archiveDigest.currentReportId)) return;
+    const entries = archiveDigest.reports.map(report => {
+      const isCurrent = report.id === archiveDigest.currentReportId;
+      const tags = Array.isArray(report.tags) ? report.tags : [];
+      const highlights = Array.isArray(report.highlights) ? report.highlights : [];
+      const href = sanitizeMarkdownUrl(report.href || '#') || '#';
+      return `
+        <article class="archive-entry${isCurrent ? ' current' : ''}">
+          <div class="archive-entry-main">
+            <div class="archive-entry-kicker">${escapeHtml(report.status || 'Archived')} · ${escapeHtml(report.period || 'Unspecified period')}</div>
+            <h3><a href="${escapeHtml(href)}">${escapeHtml(report.title || 'Untitled report')}</a></h3>
+            <p>${escapeHtml(report.summary || 'No digest summary available.')}</p>
+            <ul>${highlights.map(item => `<li>${escapeHtml(item)}</li>`).join('')}</ul>
+          </div>
+          <div class="archive-entry-meta">
+            <time datetime="${escapeHtml(report.generatedAt || '')}">${escapeHtml((report.generatedAt || '').slice(0, 10) || 'Unknown date')}</time>
+            <div class="archive-tags">${tags.map(tag => `<span>${escapeHtml(tag)}</span>`).join('')}</div>
+          </div>
+        </article>
+      `;
+    }).join('');
+    container.innerHTML = `
+      <div class="archive-card">
+        <div>
+          <p class="archive-kicker">Digest archive</p>
+          <h2>Current report and archive trail</h2>
+        </div>
+        <p class="archive-summary">The latest generated report remains the default view. This digest trail keeps report metadata, highlights, and review context explicit as snapshots are added.</p>
+        <div class="archive-list">${entries}</div>
+      </div>
+    `;
+  }
 
   function renderNestedList(block) {
     const lines = block.trim().split(/\n/).filter(l => /^\s*-\s+/.test(l));
@@ -522,6 +560,7 @@
     .then(r => r.text())
     .then(md => {
       originalMd = md;
+      renderArchiveDigest();
       const html = mdToHtml(md);
       el.report.innerHTML = html;
       wrapSections(el.report);

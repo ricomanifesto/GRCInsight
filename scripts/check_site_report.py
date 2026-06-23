@@ -13,6 +13,7 @@ RENDERER_JS = SITE_DIR / "static" / "renderer.js"
 TAGS_JS = SITE_DIR / "static" / "tags.js"
 METADATA_JS = SITE_DIR / "static" / "metadata.js"
 FILTERS_JS = SITE_DIR / "static" / "filters.js"
+ARCHIVE_JS = SITE_DIR / "static" / "archive.js"
 
 
 def fail(message: str) -> None:
@@ -27,18 +28,21 @@ def read_text(path: Path) -> str:
 
 def main() -> None:
     html = read_text(INDEX_HTML)
+    style_css = read_text(SITE_DIR / "static" / "style.css")
     markdown = read_text(INDEX_MD)
     app_js = read_text(APP_JS)
     renderer_js = read_text(RENDERER_JS)
     tags_js = read_text(TAGS_JS)
     metadata_js = read_text(METADATA_JS)
     filters_js = read_text(FILTERS_JS)
+    archive_js = read_text(ARCHIVE_JS)
 
     for asset in (
         "static/style.css",
         "static/tags.js",
         "static/metadata.js",
         "static/filters.js",
+        "static/archive.js",
         "static/renderer.js",
         "static/app.js",
     ):
@@ -81,6 +85,9 @@ def main() -> None:
 
     if "window.GRCInsightFilters" not in app_js:
         fail("app.js does not use exported section filter helpers")
+
+    if "window.GRCInsightArchive" not in app_js:
+        fail("app.js does not use exported archive digest data")
 
     for inline_catalog in ("const frameworks =", "const regulations =", "const risks ="):
         if inline_catalog in app_js:
@@ -141,6 +148,34 @@ def main() -> None:
     for guard in required_filter_ui:
         if guard not in html + app_js:
             fail(f"site missing section filter UI guard: {guard}")
+
+    required_archive_guards = (
+        "window.GRCInsightArchive",
+        "currentReportId",
+        "reports",
+        "id: 'current'",
+        "href: 'index.html'",
+        "status: 'Current'",
+        "generatedAt:",
+        "period:",
+    )
+    for guard in required_archive_guards:
+        if guard not in archive_js:
+            fail(f"archive.js missing digest metadata guard: {guard}")
+
+    required_archive_ui = (
+        "archiveDigest",
+        "renderArchiveDigest",
+        "archive-card",
+        "archive-entry${isCurrent ? ' current' : ''}",
+        "sanitizeMarkdownUrl(report.href || '#')",
+    )
+    for guard in required_archive_ui:
+        if guard not in html + app_js:
+            fail(f"site missing archive digest UI guard: {guard}")
+
+    if ".archive-entry.current" not in style_css:
+        fail("style.css missing archive current-entry styling")
 
     if "filterSections(sections, currentFilters()).map(section => section.id)" in app_js:
         fail("app.js collapses filtered section matches by section id")
