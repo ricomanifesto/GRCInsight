@@ -4,12 +4,13 @@ GOCACHE_DIR ?= $(CURDIR)/.cache/go-build
 GOMODCACHE_DIR ?= $(CURDIR)/.cache/go-mod
 UV_CACHE_DIR ?= $(CURDIR)/.cache/uv
 PYTHON ?= python3
+PYTEST_DISABLE_PLUGIN_AUTOLOAD ?= 1
 
 test-go:
 	GO111MODULE=on GOCACHE=$(GOCACHE_DIR) GOMODCACHE=$(GOMODCACHE_DIR) go test ./...
 
 test-agent:
-	cd agent && UV_CACHE_DIR=$(UV_CACHE_DIR) uv run pytest -q
+	cd agent && UV_CACHE_DIR=$(UV_CACHE_DIR) PYTEST_DISABLE_PLUGIN_AUTOLOAD=$(PYTEST_DISABLE_PLUGIN_AUTOLOAD) uv run pytest -q
 
 lint-agent:
 	cd agent && UV_CACHE_DIR=$(UV_CACHE_DIR) uv run ruff check .

@@ -11,6 +11,7 @@ INDEX_MD = SITE_DIR / "index.md"
 APP_JS = SITE_DIR / "static" / "app.js"
 RENDERER_JS = SITE_DIR / "static" / "renderer.js"
 TAGS_JS = SITE_DIR / "static" / "tags.js"
+METADATA_JS = SITE_DIR / "static" / "metadata.js"
 
 
 def fail(message: str) -> None:
@@ -29,8 +30,15 @@ def main() -> None:
     app_js = read_text(APP_JS)
     renderer_js = read_text(RENDERER_JS)
     tags_js = read_text(TAGS_JS)
+    metadata_js = read_text(METADATA_JS)
 
-    for asset in ("static/style.css", "static/renderer.js", "static/tags.js", "static/app.js"):
+    for asset in (
+        "static/style.css",
+        "static/tags.js",
+        "static/metadata.js",
+        "static/renderer.js",
+        "static/app.js",
+    ):
         if asset not in html:
             fail(f"index.html does not reference {asset}")
 
@@ -65,6 +73,9 @@ def main() -> None:
     if "window.GRCInsightTags" not in app_js:
         fail("app.js does not use exported compliance tag helpers")
 
+    if "window.GRCInsightMetadata" not in app_js:
+        fail("app.js does not use exported section metadata helpers")
+
     for inline_catalog in ("const frameworks =", "const regulations =", "const risks ="):
         if inline_catalog in app_js:
             fail(f"app.js still defines inline tag catalog: {inline_catalog}")
@@ -88,6 +99,18 @@ def main() -> None:
     for guard in required_tag_guards:
         if guard not in tags_js:
             fail(f"tags.js missing compliance tag guard: {guard}")
+
+    required_metadata_guards = (
+        "window.GRCInsightMetadata",
+        "deriveSectionMetadata",
+        "renderSectionMetadata",
+        "reviewStatus",
+        "Needs source trail",
+        "data-review-status",
+    )
+    for guard in required_metadata_guards:
+        if guard not in metadata_js:
+            fail(f"metadata.js missing section metadata guard: {guard}")
 
     print("site report check passed")
 
