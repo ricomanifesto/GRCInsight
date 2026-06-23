@@ -196,6 +196,8 @@ const sections = [
 assert(filters.filterSections(sections, {{}}).length === 7, 'empty filters should keep all sections');
 assert(filters.filterSections(sections, {{ query: 'privacy controls' }}).map(s => s.id).join(',') === 'gdpr-obligations', 'query should match section text');
 assert(filters.filterSections(sections, {{ query: 'owner' }}).map(s => s.id).join(',') === 'explicit-owner', 'owner query should match owner cues, not metadata labels');
+assert(filters.filterSections(sections, {{ ownerCue: 'detected' }}).map(s => s.id).join(',') === 'explicit-owner', 'owner cue detected filter should narrow to owner-cue sections');
+assert(filters.filterSections(sections, {{ ownerCue: 'missing' }}).map(s => s.id).join(',') === 'gdpr-obligations,nist-summary,ransomware-risk,access-control,sec-review,metadata-label-only', 'owner cue missing filter should narrow to sections without owner cues');
 assert(filters.filterSections(sections, {{ reviewStatus: 'Review ready' }}).map(s => s.id).join(',') === 'nist-summary,sec-review', 'review status should filter sections');
 assert(filters.filterSections(sections, {{ tagCategory: 'risk' }}).map(s => s.id).join(',') === 'ransomware-risk', 'tag category should filter sections');
 assert(filters.filterSections(sections, {{ tagCategory: 'control' }}).map(s => s.id).join(',') === 'access-control', 'control tag category should filter sections');
@@ -220,14 +222,15 @@ const duplicateSections = [
 ];
 const duplicateMatches = filters.filterSections(duplicateSections, {{ query: 'unique gdpr' }});
 assert(duplicateMatches.length === 1 && duplicateMatches[0] === duplicateSections[0], 'duplicate section ids should not merge filter results');
-const parsedFilters = filters.parseFilterParams('?q=privacy%20controls&status=Review%20ready&tag=control');
+const parsedFilters = filters.parseFilterParams('?q=privacy%20controls&status=Review%20ready&tag=control&owner=detected');
 assert(parsedFilters.query === 'privacy controls', 'filter params should parse search query');
 assert(parsedFilters.reviewStatus === 'Review ready', 'filter params should parse review status');
 assert(parsedFilters.tagCategory === 'control', 'filter params should parse tag category');
-const safeFilters = filters.parseFilterParams('?status=Bad&tag=unknown');
-assert(safeFilters.query === '' && safeFilters.reviewStatus === 'all' && safeFilters.tagCategory === 'all', 'invalid filter params should fall back to defaults');
-assert(filters.buildFilterParams({{ query: 'privacy controls', reviewStatus: 'Review ready', tagCategory: 'control' }}) === '?q=privacy+controls&status=Review+ready&tag=control', 'filter params should serialize active filters');
-assert(filters.buildFilterParams({{ query: '', reviewStatus: 'all', tagCategory: 'all' }}) === '', 'filter params should omit default filters');
+assert(parsedFilters.ownerCue === 'detected', 'filter params should parse owner cue filter');
+const safeFilters = filters.parseFilterParams('?status=Bad&tag=unknown&owner=unclear');
+assert(safeFilters.query === '' && safeFilters.reviewStatus === 'all' && safeFilters.tagCategory === 'all' && safeFilters.ownerCue === 'all', 'invalid filter params should fall back to defaults');
+assert(filters.buildFilterParams({{ query: 'privacy controls', reviewStatus: 'Review ready', tagCategory: 'control', ownerCue: 'detected' }}) === '?q=privacy+controls&status=Review+ready&tag=control&owner=detected', 'filter params should serialize active filters');
+assert(filters.buildFilterParams({{ query: '', reviewStatus: 'all', tagCategory: 'all', ownerCue: 'all' }}) === '', 'filter params should omit default filters');
 """
     try:
         result = subprocess.run(
