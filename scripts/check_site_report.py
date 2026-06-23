@@ -198,6 +198,15 @@ def main() -> None:
         if guard not in html + app_js + style_css:
             fail(f"site missing audit summary UI guard: {guard}")
 
+    placeholder_cleanup = app_js.find("function handleTempOutline()")
+    audit_summary_install = app_js.rfind("installAuditSummary();")
+    if placeholder_cleanup == -1:
+        fail("app.js missing temporary outline cleanup guard")
+    if audit_summary_install == -1:
+        fail("app.js missing audit summary install call")
+    if audit_summary_install < placeholder_cleanup:
+        fail("app.js installs audit summary before temporary outline cleanup")
+
     if "filterSections(sections, currentFilters()).map(section => section.id)" in app_js:
         fail("app.js collapses filtered section matches by section id")
 

@@ -586,7 +586,6 @@
       const html = mdToHtml(md);
       el.report.innerHTML = html;
       wrapSections(el.report);
-      installAuditSummary();
       // Mark and handle temporary outline placeholder if present
       (function handleTempOutline() {
         const h2s = Array.from(document.querySelectorAll('#report h2'));
@@ -606,6 +605,7 @@
           card.remove();
         }
       })();
+      installAuditSummary();
       applyCollapsedState();
       highlightPills(el.report);
       installSectionFilters();
