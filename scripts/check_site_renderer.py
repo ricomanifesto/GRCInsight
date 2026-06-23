@@ -94,9 +94,13 @@ assert(renderer.renderMarkdownLink('Unsafe', 'javascript:alert(1)') === 'Unsafe'
 const frameworks = tags.categories.find(category => category.key === 'frameworks');
 const regulations = tags.categories.find(category => category.key === 'regulations');
 const risks = tags.categories.find(category => category.key === 'risks');
+const controls = tags.categories.find(category => category.key === 'controls');
+const agencies = tags.categories.find(category => category.key === 'agencies');
 assert(frameworks && frameworks.terms.includes('NIST') && frameworks.pillClass === 'framework', 'framework tag category should render framework pills');
 assert(regulations && regulations.terms.includes('GDPR') && regulations.pillClass === 'regulation', 'regulation tag category should render regulation pills');
 assert(risks && risks.terms.includes('Ransomware') && risks.pillClass === 'risk', 'risk tag category should render risk pills');
+assert(controls && controls.terms.includes('Access Control') && controls.pillClass === 'control', 'control tag category should render control pills');
+assert(agencies && agencies.terms.includes('SEC') && agencies.pillClass === 'agency', 'agency tag category should render agency pills');
 const actionMetadata = metadata.deriveSectionMetadata('Recommendations for Action', 'P0 CRITICAL Conduct gap assessment within 30 days before next QSA assessment Owner CISO Framework PCI-DSS v4.0.1');
 assert(actionMetadata.reviewStatus === 'Action required', 'action sections should be marked action required');
 assert(actionMetadata.obligations === 'Detected', 'action sections should detect obligations');
@@ -146,11 +150,27 @@ const sections = [
     tagCategories: ['risk'],
     metadata: {{ reviewStatus: 'Needs review' }},
   }},
+  {{
+    id: 'access-control',
+    title: 'Access Control',
+    text: 'Access Control review maps to IAM evidence.',
+    tagCategories: ['control'],
+    metadata: {{ reviewStatus: 'Action required' }},
+  }},
+  {{
+    id: 'sec-review',
+    title: 'SEC Review',
+    text: 'SEC disclosure review is source backed.',
+    tagCategories: ['agency'],
+    metadata: {{ reviewStatus: 'Review ready' }},
+  }},
 ];
-assert(filters.filterSections(sections, {{}}).length === 3, 'empty filters should keep all sections');
+assert(filters.filterSections(sections, {{}}).length === 5, 'empty filters should keep all sections');
 assert(filters.filterSections(sections, {{ query: 'privacy controls' }}).map(s => s.id).join(',') === 'gdpr-obligations', 'query should match section text');
-assert(filters.filterSections(sections, {{ reviewStatus: 'Review ready' }}).map(s => s.id).join(',') === 'nist-summary', 'review status should filter sections');
+assert(filters.filterSections(sections, {{ reviewStatus: 'Review ready' }}).map(s => s.id).join(',') === 'nist-summary,sec-review', 'review status should filter sections');
 assert(filters.filterSections(sections, {{ tagCategory: 'risk' }}).map(s => s.id).join(',') === 'ransomware-risk', 'tag category should filter sections');
+assert(filters.filterSections(sections, {{ tagCategory: 'control' }}).map(s => s.id).join(',') === 'access-control', 'control tag category should filter sections');
+assert(filters.filterSections(sections, {{ tagCategory: 'agency' }}).map(s => s.id).join(',') === 'sec-review', 'agency tag category should filter sections');
 assert(filters.filterSections(sections, {{ query: 'GDPR', reviewStatus: 'Action required', tagCategory: 'regulation' }}).map(s => s.id).join(',') === 'gdpr-obligations', 'combined filters should narrow sections');
 assert(filters.filterSections(sections, {{ query: 'not present' }}).length === 0, 'unmatched query should return empty results');
 const duplicateSections = [

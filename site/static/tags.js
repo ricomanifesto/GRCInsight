@@ -18,6 +18,18 @@
       pillClass: 'risk',
       terms: ['Ransomware', 'Extortion', 'Third-party', 'Identity', 'Cloud misconfiguration', 'BEC'],
     },
+    {
+      key: 'controls',
+      label: 'Controls',
+      pillClass: 'control',
+      terms: ['Access Control', 'Controls', 'Control', 'IAM', 'Encryption', 'Logging', 'Incident Response', 'Vendor Risk'],
+    },
+    {
+      key: 'agencies',
+      label: 'Agencies',
+      pillClass: 'agency',
+      terms: ['SEC', 'FTC', 'HHS', 'CISA', 'CPPA'],
+    },
   ];
 
   window.GRCInsightTags = {
