@@ -287,6 +287,11 @@
       tagTerms: pills.map(pill => pill.textContent.trim()).filter(Boolean),
       metadata: {
         reviewStatus: metadataEl ? metadataEl.getAttribute('data-review-status') : '',
+        obligations: metadataEl ? metadataEl.getAttribute('data-obligations') : '',
+        gaps: metadataEl ? metadataEl.getAttribute('data-gaps') : '',
+        deadlines: metadataEl ? metadataEl.getAttribute('data-deadlines') : '',
+        owners: metadataEl ? metadataEl.getAttribute('data-owners') : '',
+        evidence: metadataEl ? metadataEl.getAttribute('data-evidence') : '',
       },
       element: card,
     };
@@ -382,6 +387,7 @@
           obligations: metadataEl ? metadataEl.getAttribute('data-obligations') : 'Not detected',
           gaps: metadataEl ? metadataEl.getAttribute('data-gaps') : 'Not detected',
           deadlines: metadataEl ? metadataEl.getAttribute('data-deadlines') : 'Not detected',
+          owners: metadataEl ? metadataEl.getAttribute('data-owners') : 'Not detected',
           evidence: metadataEl ? metadataEl.getAttribute('data-evidence') : 'Needs source trail',
         },
       };

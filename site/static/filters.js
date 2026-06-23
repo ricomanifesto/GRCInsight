@@ -16,6 +16,7 @@
       metadata.obligations,
       metadata.gaps,
       metadata.deadlines,
+      metadata.owners,
       metadata.evidence,
       (section.tagCategories || []).join(' '),
       (section.tagTerms || []).join(' '),
