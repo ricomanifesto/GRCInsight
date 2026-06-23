@@ -91,11 +91,37 @@
     return serialized ? `?${serialized}` : '';
   }
 
+  function activeFilterLabels(filters) {
+    const active = filters || {};
+    const labels = [];
+    const query = String(active.query || '').trim();
+    const reviewStatus = safeValue(active.reviewStatus || 'all', allowedReviewStatuses, 'all');
+    const tagCategory = safeValue(active.tagCategory || 'all', allowedTagCategories, 'all');
+    const ownerCue = safeValue(active.ownerCue || 'all', allowedOwnerCues, 'all');
+    if (query) labels.push(`Search: ${query}`);
+    if (reviewStatus !== 'all') labels.push(`Status: ${reviewStatus}`);
+    if (tagCategory !== 'all') labels.push(`Tag: ${tagCategory}`);
+    if (ownerCue !== 'all') labels.push(`Owner cues: ${ownerCue}`);
+    return labels;
+  }
+
+  function summarizeFilterResults(matchCount, totalCount, filters) {
+    const count = Number(matchCount) || 0;
+    const total = Number(totalCount) || 0;
+    const labels = activeFilterLabels(filters);
+    if (labels.length === 0) return `Showing all ${total} sections`;
+    const prefix = count === 0
+      ? `No sections match ${labels.length} active ${labels.length === 1 ? 'filter' : 'filters'}`
+      : `Showing ${count} of ${total} sections`;
+    return [prefix].concat(labels).join(' | ');
+  }
+
   window.GRCInsightFilters = {
     buildFilterParams,
     filterSections,
     normalize,
     parseFilterParams,
     sectionMatches,
+    summarizeFilterResults,
   };
 })();

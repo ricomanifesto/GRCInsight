@@ -63,6 +63,7 @@ assert(typeof archive.buildReports === 'function', 'archive should build reports
 assert(typeof archive.deriveCurrentReportMetadata === 'function', 'archive should derive current metadata from markdown');
 assert(typeof filters.parseFilterParams === 'function', 'filters should parse URL filter params');
 assert(typeof filters.buildFilterParams === 'function', 'filters should build URL filter params');
+assert(typeof filters.summarizeFilterResults === 'function', 'filters should summarize active filter results');
 const archiveMarkdown = `# GRC Intelligence Report - 2026-06-23
 **Generated:** 2026-06-23T12:00:00Z
 
@@ -231,6 +232,11 @@ const safeFilters = filters.parseFilterParams('?status=Bad&tag=unknown&owner=unc
 assert(safeFilters.query === '' && safeFilters.reviewStatus === 'all' && safeFilters.tagCategory === 'all' && safeFilters.ownerCue === 'all', 'invalid filter params should fall back to defaults');
 assert(filters.buildFilterParams({{ query: 'privacy controls', reviewStatus: 'Review ready', tagCategory: 'control', ownerCue: 'detected' }}) === '?q=privacy+controls&status=Review+ready&tag=control&owner=detected', 'filter params should serialize active filters');
 assert(filters.buildFilterParams({{ query: '', reviewStatus: 'all', tagCategory: 'all', ownerCue: 'all' }}) === '', 'filter params should omit default filters');
+assert(filters.summarizeFilterResults(7, 7, {{}}) === 'Showing all 7 sections', 'filter summary should describe the default view');
+const activeSummary = filters.summarizeFilterResults(2, 7, {{ query: 'privacy controls', reviewStatus: 'Review ready', tagCategory: 'control', ownerCue: 'detected' }});
+assert(activeSummary === 'Showing 2 of 7 sections | Search: privacy controls | Status: Review ready | Tag: control | Owner cues: detected', 'filter summary should name active filters');
+const emptySummary = filters.summarizeFilterResults(0, 7, {{ query: 'not present', ownerCue: 'missing' }});
+assert(emptySummary === 'No sections match 2 active filters | Search: not present | Owner cues: missing', 'filter summary should describe empty active filters');
 """
     try:
         result = subprocess.run(
