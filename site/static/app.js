@@ -197,6 +197,15 @@
     return Array.from(document.querySelectorAll('#report .card:not(.filtered-out) h2'));
   }
 
+  function clearFocusMode() {
+    document.body.classList.remove('focus-mode');
+    document.querySelectorAll('.card').forEach(card => card.classList.remove('focused'));
+    document.querySelectorAll('.focus-toggle').forEach(button => {
+      button.textContent = 'Focus';
+      button.title = 'Focus this section';
+    });
+  }
+
   function collectSection(card) {
     const heading = card.querySelector('h2');
     const metadataEl = card.querySelector('.section-meta');
@@ -243,6 +252,10 @@
         section.element.classList.toggle('filtered-out', !visible);
         section.element.setAttribute('aria-hidden', String(!visible));
       });
+      const focusedCard = document.querySelector('.card.focused');
+      if (focusedCard && focusedCard.classList.contains('filtered-out')) {
+        clearFocusMode();
+      }
       const count = matches.size;
       summary.textContent = count === total ? `Showing all ${total} sections` : `Showing ${count} of ${total} sections`;
       empty.hidden = count !== 0;
@@ -499,7 +512,7 @@
       if (['j','ArrowDown'].includes(e.key)) { e.preventDefault(); h2s[Math.min(h2s.length-1, idx+1)]?.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
       if (['k','ArrowUp'].includes(e.key)) { e.preventDefault(); h2s[Math.max(0, idx-1)]?.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
       if (e.key === 'f') { e.preventDefault(); const btn = h2s[idx]?.querySelector('.focus-toggle'); btn && btn.click(); }
-      if (e.key === 'Escape') { document.body.classList.remove('focus-mode'); document.querySelectorAll('.card').forEach(c => c.classList.remove('focused')); }
+      if (e.key === 'Escape') { clearFocusMode(); }
       if (e.key === 'c') { const btn = h2s[idx]?.querySelector('.collapse-toggle'); btn && btn.click(); }
     });
   }

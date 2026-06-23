@@ -151,6 +151,8 @@ def main() -> None:
     required_filtered_navigation_guards = (
         "function visibleSectionHeadings()",
         "#report .card:not(.filtered-out) h2",
+        "function clearFocusMode()",
+        "focusedCard.classList.contains('filtered-out')",
     )
     for guard in required_filtered_navigation_guards:
         if guard not in app_js:
