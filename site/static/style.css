@@ -92,12 +92,19 @@ body.light .archive-tags span { border-color: rgba(0,0,0,0.08); background: rgba
   .archive-tags { justify-content: flex-start; }
 }
 .filter-state { margin-top: 14px; color: var(--muted); font-size: 13px; }
+.active-filter-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.active-filter-chip { display: inline-flex; align-items: center; gap: 8px; max-width: 100%; min-height: 32px; border: 1px solid rgba(34,211,238,0.34); border-radius: 8px; background: rgba(34,211,238,0.09); color: #dff8ff; padding: 6px 9px; font: inherit; font-size: 12px; font-weight: 700; cursor: pointer; }
+.active-filter-chip span:first-child { overflow-wrap: anywhere; text-align: left; }
+.active-filter-chip-clear { display: inline-flex; align-items: center; justify-content: center; width: 16px; height: 16px; border-radius: 999px; background: rgba(255,255,255,0.13); color: currentColor; line-height: 1; flex: 0 0 auto; }
+.active-filter-chip:hover, .active-filter-chip:focus-visible { border-color: rgba(34,211,238,0.7); background: rgba(34,211,238,0.16); }
 .status-quick-filters { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
 .status-quick-filter { display: inline-flex; align-items: center; gap: 8px; min-height: 34px; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; background: var(--panel); color: var(--muted); padding: 7px 10px; font: inherit; font-size: 12px; font-weight: 700; cursor: pointer; }
 .status-quick-filter strong { color: #cfe4ff; font-size: 13px; }
 .status-quick-filter.active { border-color: rgba(34,211,238,0.62); color: #e0f7ff; background: rgba(34,211,238,0.12); }
 .status-quick-filter:disabled { cursor: default; opacity: 0.55; }
 body.light .status-quick-filter { border-color: rgba(0,0,0,0.1); background: #fff; color: #475569; }
+body.light .active-filter-chip { border-color: rgba(37,99,235,0.28); background: rgba(37,99,235,0.08); color: #1e3a8a; }
+body.light .active-filter-chip-clear { background: rgba(37,99,235,0.12); }
 body.light .status-quick-filter strong { color: #1e3a8a; }
 body.light .status-quick-filter.active { border-color: rgba(37,99,235,0.55); color: #1e3a8a; background: rgba(37,99,235,0.08); }
 .audit-summary { margin-top: 14px; }

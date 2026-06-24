@@ -307,6 +307,7 @@
     const evidence = document.getElementById('evidenceFilter');
     const clear = document.getElementById('clearFilters');
     const summary = document.getElementById('filterSummary');
+    const activeChips = document.getElementById('activeFilterChips');
     const empty = document.getElementById('emptyResults');
     const quickFilters = document.getElementById('statusQuickFilters');
     if (!search || !status || !tag || !owner || !evidence || !summary || !empty || !sectionFilters) return;
@@ -353,6 +354,7 @@
       summary.textContent = sectionFilters.summarizeFilterResults
         ? sectionFilters.summarizeFilterResults(count, total, filters)
         : (count === total ? `Showing all ${total} sections` : `Showing ${count} of ${total} sections`);
+      renderActiveFilterChips(filters);
       empty.hidden = count !== 0;
       empty.textContent = count === 0
         ? `${summary.textContent}. Clear filters to return to the full report.`
@@ -380,6 +382,27 @@
       }).join('');
     }
 
+    function renderActiveFilterChips(filters) {
+      if (!activeChips || !sectionFilters.activeFilterEntries) return;
+      const entries = sectionFilters.activeFilterEntries(filters);
+      activeChips.hidden = entries.length === 0;
+      activeChips.replaceChildren(...entries.map(entry => {
+        const button = document.createElement('button');
+        button.className = 'active-filter-chip';
+        button.type = 'button';
+        button.dataset.clearFilter = entry.key;
+        button.setAttribute('aria-label', `Clear ${entry.label}`);
+        const label = document.createElement('span');
+        label.textContent = entry.label;
+        const clearMark = document.createElement('span');
+        clearMark.className = 'active-filter-chip-clear';
+        clearMark.setAttribute('aria-hidden', 'true');
+        clearMark.textContent = 'x';
+        button.append(label, clearMark);
+        return button;
+      }));
+    }
+
     [search, status, tag, owner, evidence].forEach(control => {
       control.addEventListener('input', applyFilters);
       control.addEventListener('change', applyFilters);
@@ -394,8 +417,22 @@
       search.focus();
     }
 
+    function clearSingleFilter(filterKey) {
+      if (filterKey === 'query') search.value = '';
+      if (filterKey === 'reviewStatus') status.value = 'all';
+      if (filterKey === 'tagCategory') tag.value = 'all';
+      if (filterKey === 'ownerCue') owner.value = 'all';
+      if (filterKey === 'evidenceState') evidence.value = 'all';
+      applyFilters();
+    }
+
     document.addEventListener('click', event => {
       if (event.target.closest && event.target.closest('#clearFilters')) resetFilters();
+      const clearButton = event.target.closest && event.target.closest('[data-clear-filter]');
+      if (clearButton) {
+        clearSingleFilter(clearButton.dataset.clearFilter);
+        return;
+      }
       const button = event.target.closest && event.target.closest('[data-status-filter]');
       if (button) {
         const targetStatus = button.dataset.statusFilter || 'all';
