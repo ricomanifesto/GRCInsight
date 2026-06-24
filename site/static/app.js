@@ -307,6 +307,7 @@
     const clear = document.getElementById('clearFilters');
     const summary = document.getElementById('filterSummary');
     const empty = document.getElementById('emptyResults');
+    const quickFilters = document.getElementById('statusQuickFilters');
     if (!search || !status || !tag || !owner || !summary || !empty || !sectionFilters) return;
 
     const sections = Array.from(document.querySelectorAll('#report .card')).map(collectSection);
@@ -354,11 +355,26 @@
         ? `${summary.textContent}. Clear filters to return to the full report.`
         : 'No matching sections. Clear filters to return to the full report.';
       clear.disabled = count === total && !search.value && status.value === 'all' && tag.value === 'all' && owner.value === 'all';
+      updateStatusQuickFilters(sections);
       updateNavigationContext(count, total);
       buildSidebar();
       buildTopbar();
       updateCurrentSection();
       syncFilterParams(filters);
+    }
+
+    function updateStatusQuickFilters(sections) {
+      if (!quickFilters) return;
+      const statuses = [
+        ['Action required', 'Action'],
+        ['Review ready', 'Ready'],
+        ['Needs review', 'Needs review'],
+      ];
+      quickFilters.innerHTML = statuses.map(([value, label]) => {
+        const count = sections.filter(section => section.metadata && section.metadata.reviewStatus === value).length;
+        const selected = status.value === value;
+        return `<button class="status-quick-filter${selected ? ' active' : ''}" type="button" data-status-filter="${value}" aria-label="${label}: ${count} sections" aria-pressed="${selected}" ${count === 0 ? 'disabled' : ''}><span>${label}</span><strong>${count}</strong></button>`;
+      }).join('');
     }
 
     [search, status, tag, owner].forEach(control => {
@@ -376,6 +392,16 @@
 
     document.addEventListener('click', event => {
       if (event.target.closest && event.target.closest('#clearFilters')) resetFilters();
+      const button = event.target.closest && event.target.closest('[data-status-filter]');
+      if (button) {
+        const targetStatus = button.dataset.statusFilter || 'all';
+        if (status.value === targetStatus) {
+          status.value = 'all';
+        } else {
+          status.value = targetStatus;
+        }
+        applyFilters();
+      }
     });
     clear.addEventListener('keydown', event => {
       if (event.key === 'Enter' || event.key === ' ') {
