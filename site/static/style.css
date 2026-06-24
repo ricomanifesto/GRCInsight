@@ -60,6 +60,9 @@ body.light .filter-field input::placeholder { color: rgba(17,24,39,0.58); }
 }
 .mobile-toc { width: 100%; border-radius: 10px; border: 1px solid rgba(255,255,255,0.25); padding: 10px 12px; background: rgba(255,255,255,0.12); color: #fff; }
 body.light .mobile-toc { background: rgba(0,0,0,0.04); color: #0b1220; border-color: rgba(0,0,0,0.15); }
+.nav-filter-state { margin: 0 0 8px; color: var(--muted); font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0; }
+.topbar .nav-filter-state { padding: 0 0 10px; white-space: nowrap; }
+.nav-empty { margin: 6px 8px; color: var(--muted); font-size: 13px; }
 
 .app-footer { padding: 24px 0; color: var(--muted); border-top: 1px solid rgba(255,255,255,0.06); margin-top: 28px; }
 

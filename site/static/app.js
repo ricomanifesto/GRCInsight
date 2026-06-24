@@ -354,6 +354,7 @@
         ? `${summary.textContent}. Clear filters to return to the full report.`
         : 'No matching sections. Clear filters to return to the full report.';
       clear.disabled = count === total && !search.value && status.value === 'all' && tag.value === 'all' && owner.value === 'all';
+      updateNavigationContext(count, total);
       buildSidebar();
       buildTopbar();
       updateCurrentSection();
@@ -383,6 +384,18 @@
       }
     });
     applyFilters();
+  }
+
+  function updateNavigationContext(count, total) {
+    const text = count === total
+      ? `All ${total} sections`
+      : (count === 0 ? 'No sections in filtered view' : `${count} filtered sections`);
+    ['sidebarFilterState', 'topbarFilterState'].forEach(id => {
+      const node = document.getElementById(id);
+      if (!node) return;
+      node.textContent = text;
+      node.dataset.filterState = count === total ? 'all' : (count === 0 ? 'empty' : 'filtered');
+    });
   }
 
   function installAuditSummary() {
@@ -432,7 +445,7 @@
     toc.innerHTML = blocks.map(b => {
       const sub = b.h3s.map(s => `<li><a href="#${s.id}">${s.title}</a></li>`).join('');
       return `<details><summary><a href="#${b.id}">${b.title}</a></summary>${sub ? `<ul>${sub}</ul>` : ''}</details>`;
-    }).join('');
+    }).join('') || '<p class="nav-empty">No sections in filtered view</p>';
 
     // Highlight on scroll
     const links = Array.from(toc.querySelectorAll('a'));
@@ -453,10 +466,12 @@
     // Mobile TOC
     if (mobileToc) {
       mobileToc.innerHTML = '<option value="">Jump to section</option>' +
-        h2s.map(h => `<option value="#${h.id}">${h.childNodes[0].textContent.trim()}</option>`).join('');
+        (h2s.length
+          ? h2s.map(h => `<option value="${h.id}">${h.childNodes[0].textContent.trim()}</option>`).join('')
+          : '<option value="" disabled>No sections in filtered view</option>');
       mobileToc.onchange = e => {
         const v = e.target.value;
-        if (v) document.querySelector(v)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        if (v) document.getElementById(v)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
         e.target.value = '';
       };
     }
@@ -483,7 +498,9 @@
     const bar = document.getElementById('topbarLinks');
     if (!bar) return;
     const h2s = visibleSectionHeadings();
-    bar.innerHTML = h2s.map(h => `<a class="chip" href="#${h.id}"><span class="chip-icon">§</span>${h.childNodes[0].textContent.trim()}</a>`).join('');
+    bar.innerHTML = h2s.length
+      ? h2s.map(h => `<a class="chip" href="#${h.id}"><span class="chip-icon">§</span>${h.childNodes[0].textContent.trim()}</a>`).join('')
+      : '<span class="nav-empty">No sections in filtered view</span>';
     const chips = Array.from(bar.querySelectorAll('.chip'));
     const map = new Map(h2s.map(h => [h.id, chips.find(c => c.getAttribute('href') === `#${h.id}`)]));
     if (topbarObserver) topbarObserver.disconnect();
