@@ -145,6 +145,7 @@ def main() -> None:
         "sectionMatches",
         "summarizeFilterResults",
         "reviewStatus",
+        "evidenceState",
         "tagCategory",
         "ownerCue",
         "query",
@@ -158,6 +159,7 @@ def main() -> None:
         "statusFilter",
         "tagFilter",
         "ownerFilter",
+        "evidenceFilter",
         "clearFilters",
         "filterSummary",
         "statusQuickFilters",
@@ -181,7 +183,8 @@ def main() -> None:
 
     required_filter_layout = (
         ".filter-controls",
-        "repeat(3, minmax(120px, 0.8fr))",
+        "repeat(4, minmax(120px, 0.8fr))",
+        "@media (max-width: 900px)",
         ".clear-filters",
     )
     for guard in required_filter_layout:

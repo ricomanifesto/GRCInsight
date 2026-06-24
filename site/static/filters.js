@@ -38,6 +38,7 @@
     const reviewStatus = normalize(active.reviewStatus);
     const tagCategory = normalize(active.tagCategory);
     const ownerCue = normalize(active.ownerCue);
+    const evidenceState = normalize(active.evidenceState);
 
     if (query && !searchableText(section).includes(query)) return false;
     if (reviewStatus && reviewStatus !== 'all') {
@@ -51,6 +52,11 @@
       if (ownerCue === 'detected' && !hasOwnerCue) return false;
       if (ownerCue === 'missing' && hasOwnerCue) return false;
     }
+    if (evidenceState && evidenceState !== 'all') {
+      const hasEvidence = normalize(section.metadata && section.metadata.evidence) === 'source referenced';
+      if (evidenceState === 'referenced' && !hasEvidence) return false;
+      if (evidenceState === 'missing' && hasEvidence) return false;
+    }
     return true;
   }
 
@@ -61,6 +67,7 @@
   const allowedReviewStatuses = new Set(['all', 'Action required', 'Review ready', 'Needs review']);
   const allowedTagCategories = new Set(['all', 'framework', 'regulation', 'risk', 'control', 'agency']);
   const allowedOwnerCues = new Set(['all', 'detected', 'missing']);
+  const allowedEvidenceStates = new Set(['all', 'referenced', 'missing']);
 
   function safeValue(value, allowed, fallback) {
     return allowed.has(value) ? value : fallback;
@@ -73,6 +80,7 @@
       reviewStatus: safeValue(params.get('status') || 'all', allowedReviewStatuses, 'all'),
       tagCategory: safeValue(params.get('tag') || 'all', allowedTagCategories, 'all'),
       ownerCue: safeValue(params.get('owner') || 'all', allowedOwnerCues, 'all'),
+      evidenceState: safeValue(params.get('evidence') || 'all', allowedEvidenceStates, 'all'),
     };
   }
 
@@ -83,10 +91,12 @@
     const reviewStatus = safeValue(active.reviewStatus || 'all', allowedReviewStatuses, 'all');
     const tagCategory = safeValue(active.tagCategory || 'all', allowedTagCategories, 'all');
     const ownerCue = safeValue(active.ownerCue || 'all', allowedOwnerCues, 'all');
+    const evidenceState = safeValue(active.evidenceState || 'all', allowedEvidenceStates, 'all');
     if (query) params.set('q', query);
     if (reviewStatus !== 'all') params.set('status', reviewStatus);
     if (tagCategory !== 'all') params.set('tag', tagCategory);
     if (ownerCue !== 'all') params.set('owner', ownerCue);
+    if (evidenceState !== 'all') params.set('evidence', evidenceState);
     const serialized = params.toString();
     return serialized ? `?${serialized}` : '';
   }
@@ -98,10 +108,12 @@
     const reviewStatus = safeValue(active.reviewStatus || 'all', allowedReviewStatuses, 'all');
     const tagCategory = safeValue(active.tagCategory || 'all', allowedTagCategories, 'all');
     const ownerCue = safeValue(active.ownerCue || 'all', allowedOwnerCues, 'all');
+    const evidenceState = safeValue(active.evidenceState || 'all', allowedEvidenceStates, 'all');
     if (query) labels.push(`Search: ${query}`);
     if (reviewStatus !== 'all') labels.push(`Status: ${reviewStatus}`);
     if (tagCategory !== 'all') labels.push(`Tag: ${tagCategory}`);
     if (ownerCue !== 'all') labels.push(`Owner cues: ${ownerCue}`);
+    if (evidenceState !== 'all') labels.push(`Evidence: ${evidenceState}`);
     return labels;
   }
 

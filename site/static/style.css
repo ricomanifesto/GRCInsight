@@ -43,7 +43,7 @@ body.light .theme-toggle .light { display: inline; }
 body.light .action-btn { border-color: rgba(0,0,0,0.15); color: #0b1220; }
 .action-btn:hover { background: rgba(255,255,255,0.08); }
 body.light .action-btn:hover { background: rgba(0,0,0,0.05); }
-.filter-controls { display: grid; grid-template-columns: minmax(180px, 1.4fr) repeat(3, minmax(120px, 0.8fr)) auto; gap: 8px; align-items: end; }
+.filter-controls { display: grid; grid-template-columns: minmax(180px, 1.4fr) repeat(4, minmax(120px, 0.8fr)) auto; gap: 8px; align-items: end; }
 .filter-field { display: grid; gap: 4px; min-width: 0; font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.86); }
 .filter-field input, .filter-field select { width: 100%; min-height: 38px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.28); background: rgba(255,255,255,0.12); color: #fff; padding: 8px 10px; font: inherit; font-size: 13px; }
 .filter-field input::placeholder { color: rgba(255,255,255,0.72); }
@@ -53,7 +53,7 @@ body.light .action-btn:hover { background: rgba(0,0,0,0.05); }
 body.light .filter-field { color: #0b1220; }
 body.light .filter-field input, body.light .filter-field select { background: rgba(0,0,0,0.04); color: #0b1220; border-color: rgba(0,0,0,0.15); }
 body.light .filter-field input::placeholder { color: rgba(17,24,39,0.58); }
-@media (max-width: 760px) {
+@media (max-width: 900px) {
   .filter-controls { grid-template-columns: 1fr; }
   .control-buttons { width: 100%; }
   .control-buttons .action-btn, .clear-filters { flex: 1 1 140px; }

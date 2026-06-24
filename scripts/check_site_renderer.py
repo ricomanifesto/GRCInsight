@@ -149,49 +149,49 @@ const sections = [
     title: 'GDPR Obligations',
     text: 'GDPR requires evidence collection for privacy controls.',
     tagCategories: ['regulation'],
-    metadata: {{ reviewStatus: 'Action required' }},
+    metadata: {{ reviewStatus: 'Action required', evidence: 'Source referenced' }},
   }},
   {{
     id: 'nist-summary',
     title: 'NIST Summary',
     text: 'NIST control review is source backed.',
     tagCategories: ['framework'],
-    metadata: {{ reviewStatus: 'Review ready' }},
+    metadata: {{ reviewStatus: 'Review ready', evidence: 'Source referenced' }},
   }},
   {{
     id: 'ransomware-risk',
     title: 'Ransomware Risk',
     text: 'Needs incident tabletop review.',
     tagCategories: ['risk'],
-    metadata: {{ reviewStatus: 'Needs review' }},
+    metadata: {{ reviewStatus: 'Needs review', evidence: 'Needs source trail' }},
   }},
   {{
     id: 'access-control',
     title: 'Access Control',
     text: 'Access Control review maps to IAM evidence.',
     tagCategories: ['control'],
-    metadata: {{ reviewStatus: 'Action required' }},
+    metadata: {{ reviewStatus: 'Action required', evidence: 'Needs source trail' }},
   }},
   {{
     id: 'sec-review',
     title: 'SEC Review',
     text: 'SEC disclosure review is source backed.',
     tagCategories: ['agency'],
-    metadata: {{ reviewStatus: 'Review ready' }},
+    metadata: {{ reviewStatus: 'Review ready', evidence: 'Source referenced' }},
   }},
   {{
     id: 'explicit-owner',
     title: 'Owner Cue',
     text: 'Recommendations table lists an Owner column.',
     tagCategories: [],
-    metadata: {{ reviewStatus: 'Action required', owners: 'Detected' }},
+    metadata: {{ reviewStatus: 'Action required', owners: 'Detected', evidence: 'Needs source trail' }},
   }},
   {{
     id: 'metadata-label-only',
     title: 'Metadata Label Only',
     text: 'OwnersNot detected EvidenceNeeds source trail',
     tagCategories: [],
-    metadata: {{ reviewStatus: 'Needs review', owners: 'Not detected' }},
+    metadata: {{ reviewStatus: 'Needs review', owners: 'Not detected', evidence: 'Needs source trail' }},
   }},
 ];
 assert(filters.filterSections(sections, {{}}).length === 7, 'empty filters should keep all sections');
@@ -200,6 +200,8 @@ assert(filters.filterSections(sections, {{ query: 'owner' }}).map(s => s.id).joi
 assert(filters.filterSections(sections, {{ ownerCue: 'detected' }}).map(s => s.id).join(',') === 'explicit-owner', 'owner cue detected filter should narrow to owner-cue sections');
 assert(filters.filterSections(sections, {{ ownerCue: 'missing' }}).map(s => s.id).join(',') === 'gdpr-obligations,nist-summary,ransomware-risk,access-control,sec-review,metadata-label-only', 'owner cue missing filter should narrow to sections without owner cues');
 assert(filters.filterSections(sections, {{ reviewStatus: 'Review ready' }}).map(s => s.id).join(',') === 'nist-summary,sec-review', 'review status should filter sections');
+assert(filters.filterSections(sections, {{ evidenceState: 'referenced' }}).map(s => s.id).join(',') === 'gdpr-obligations,nist-summary,sec-review', 'evidence referenced filter should narrow to source-backed sections');
+assert(filters.filterSections(sections, {{ evidenceState: 'missing' }}).map(s => s.id).join(',') === 'ransomware-risk,access-control,explicit-owner,metadata-label-only', 'evidence missing filter should narrow to source-trail gaps');
 assert(filters.filterSections(sections, {{ tagCategory: 'risk' }}).map(s => s.id).join(',') === 'ransomware-risk', 'tag category should filter sections');
 assert(filters.filterSections(sections, {{ tagCategory: 'control' }}).map(s => s.id).join(',') === 'access-control', 'control tag category should filter sections');
 assert(filters.filterSections(sections, {{ tagCategory: 'agency' }}).map(s => s.id).join(',') === 'sec-review', 'agency tag category should filter sections');
@@ -223,20 +225,21 @@ const duplicateSections = [
 ];
 const duplicateMatches = filters.filterSections(duplicateSections, {{ query: 'unique gdpr' }});
 assert(duplicateMatches.length === 1 && duplicateMatches[0] === duplicateSections[0], 'duplicate section ids should not merge filter results');
-const parsedFilters = filters.parseFilterParams('?q=privacy%20controls&status=Review%20ready&tag=control&owner=detected');
+const parsedFilters = filters.parseFilterParams('?q=privacy%20controls&status=Review%20ready&tag=control&owner=detected&evidence=referenced');
 assert(parsedFilters.query === 'privacy controls', 'filter params should parse search query');
 assert(parsedFilters.reviewStatus === 'Review ready', 'filter params should parse review status');
 assert(parsedFilters.tagCategory === 'control', 'filter params should parse tag category');
 assert(parsedFilters.ownerCue === 'detected', 'filter params should parse owner cue filter');
-const safeFilters = filters.parseFilterParams('?status=Bad&tag=unknown&owner=unclear');
-assert(safeFilters.query === '' && safeFilters.reviewStatus === 'all' && safeFilters.tagCategory === 'all' && safeFilters.ownerCue === 'all', 'invalid filter params should fall back to defaults');
-assert(filters.buildFilterParams({{ query: 'privacy controls', reviewStatus: 'Review ready', tagCategory: 'control', ownerCue: 'detected' }}) === '?q=privacy+controls&status=Review+ready&tag=control&owner=detected', 'filter params should serialize active filters');
-assert(filters.buildFilterParams({{ query: '', reviewStatus: 'all', tagCategory: 'all', ownerCue: 'all' }}) === '', 'filter params should omit default filters');
+assert(parsedFilters.evidenceState === 'referenced', 'filter params should parse evidence filter');
+const safeFilters = filters.parseFilterParams('?status=Bad&tag=unknown&owner=unclear&evidence=maybe');
+assert(safeFilters.query === '' && safeFilters.reviewStatus === 'all' && safeFilters.tagCategory === 'all' && safeFilters.ownerCue === 'all' && safeFilters.evidenceState === 'all', 'invalid filter params should fall back to defaults');
+assert(filters.buildFilterParams({{ query: 'privacy controls', reviewStatus: 'Review ready', tagCategory: 'control', ownerCue: 'detected', evidenceState: 'referenced' }}) === '?q=privacy+controls&status=Review+ready&tag=control&owner=detected&evidence=referenced', 'filter params should serialize active filters');
+assert(filters.buildFilterParams({{ query: '', reviewStatus: 'all', tagCategory: 'all', ownerCue: 'all', evidenceState: 'all' }}) === '', 'filter params should omit default filters');
 assert(filters.summarizeFilterResults(7, 7, {{}}) === 'Showing all 7 sections', 'filter summary should describe the default view');
-const activeSummary = filters.summarizeFilterResults(2, 7, {{ query: 'privacy controls', reviewStatus: 'Review ready', tagCategory: 'control', ownerCue: 'detected' }});
-assert(activeSummary === 'Showing 2 of 7 sections | Search: privacy controls | Status: Review ready | Tag: control | Owner cues: detected', 'filter summary should name active filters');
-const emptySummary = filters.summarizeFilterResults(0, 7, {{ query: 'not present', ownerCue: 'missing' }});
-assert(emptySummary === 'No sections match 2 active filters | Search: not present | Owner cues: missing', 'filter summary should describe empty active filters');
+const activeSummary = filters.summarizeFilterResults(2, 7, {{ query: 'privacy controls', reviewStatus: 'Review ready', tagCategory: 'control', ownerCue: 'detected', evidenceState: 'referenced' }});
+assert(activeSummary === 'Showing 2 of 7 sections | Search: privacy controls | Status: Review ready | Tag: control | Owner cues: detected | Evidence: referenced', 'filter summary should name active filters');
+const emptySummary = filters.summarizeFilterResults(0, 7, {{ query: 'not present', ownerCue: 'missing', evidenceState: 'missing' }});
+assert(emptySummary === 'No sections match 3 active filters | Search: not present | Owner cues: missing | Evidence: missing', 'filter summary should describe empty active filters');
 """
     try:
         result = subprocess.run(
