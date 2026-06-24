@@ -93,6 +93,7 @@ body.light .archive-tags span { border-color: rgba(0,0,0,0.08); background: rgba
 }
 .filter-state { margin-top: 14px; color: var(--muted); font-size: 13px; }
 .active-filter-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.active-filter-chips[hidden] { display: none; }
 .active-filter-chip { display: inline-flex; align-items: center; gap: 8px; max-width: 100%; min-height: 32px; border: 1px solid rgba(34,211,238,0.34); border-radius: 8px; background: rgba(34,211,238,0.09); color: #dff8ff; padding: 6px 9px; font: inherit; font-size: 12px; font-weight: 700; cursor: pointer; }
 .active-filter-chip span:first-child { overflow-wrap: anywhere; text-align: left; }
 .active-filter-chip-clear { display: inline-flex; align-items: center; justify-content: center; width: 16px; height: 16px; border-radius: 999px; background: rgba(255,255,255,0.13); color: currentColor; line-height: 1; flex: 0 0 auto; }
