@@ -101,20 +101,24 @@
     return serialized ? `?${serialized}` : '';
   }
 
-  function activeFilterLabels(filters) {
+  function activeFilterEntries(filters) {
     const active = filters || {};
-    const labels = [];
+    const entries = [];
     const query = String(active.query || '').trim();
     const reviewStatus = safeValue(active.reviewStatus || 'all', allowedReviewStatuses, 'all');
     const tagCategory = safeValue(active.tagCategory || 'all', allowedTagCategories, 'all');
     const ownerCue = safeValue(active.ownerCue || 'all', allowedOwnerCues, 'all');
     const evidenceState = safeValue(active.evidenceState || 'all', allowedEvidenceStates, 'all');
-    if (query) labels.push(`Search: ${query}`);
-    if (reviewStatus !== 'all') labels.push(`Status: ${reviewStatus}`);
-    if (tagCategory !== 'all') labels.push(`Tag: ${tagCategory}`);
-    if (ownerCue !== 'all') labels.push(`Owner cues: ${ownerCue}`);
-    if (evidenceState !== 'all') labels.push(`Evidence: ${evidenceState}`);
-    return labels;
+    if (query) entries.push({ key: 'query', label: `Search: ${query}` });
+    if (reviewStatus !== 'all') entries.push({ key: 'reviewStatus', label: `Status: ${reviewStatus}` });
+    if (tagCategory !== 'all') entries.push({ key: 'tagCategory', label: `Tag: ${tagCategory}` });
+    if (ownerCue !== 'all') entries.push({ key: 'ownerCue', label: `Owner cues: ${ownerCue}` });
+    if (evidenceState !== 'all') entries.push({ key: 'evidenceState', label: `Evidence: ${evidenceState}` });
+    return entries;
+  }
+
+  function activeFilterLabels(filters) {
+    return activeFilterEntries(filters).map(entry => entry.label);
   }
 
   function summarizeFilterResults(matchCount, totalCount, filters) {
@@ -129,6 +133,8 @@
   }
 
   window.GRCInsightFilters = {
+    activeFilterEntries,
+    activeFilterLabels,
     buildFilterParams,
     filterSections,
     normalize,

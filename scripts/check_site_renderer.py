@@ -64,6 +64,8 @@ assert(typeof archive.deriveCurrentReportMetadata === 'function', 'archive shoul
 assert(typeof filters.parseFilterParams === 'function', 'filters should parse URL filter params');
 assert(typeof filters.buildFilterParams === 'function', 'filters should build URL filter params');
 assert(typeof filters.summarizeFilterResults === 'function', 'filters should summarize active filter results');
+assert(typeof filters.activeFilterEntries === 'function', 'filters should expose active filter entries for UI chips');
+assert(typeof filters.activeFilterLabels === 'function', 'filters should expose active filter labels for summaries and UI chips');
 const archiveMarkdown = `# GRC Intelligence Report - 2026-06-23
 **Generated:** 2026-06-23T12:00:00Z
 
@@ -235,6 +237,10 @@ const safeFilters = filters.parseFilterParams('?status=Bad&tag=unknown&owner=unc
 assert(safeFilters.query === '' && safeFilters.reviewStatus === 'all' && safeFilters.tagCategory === 'all' && safeFilters.ownerCue === 'all' && safeFilters.evidenceState === 'all', 'invalid filter params should fall back to defaults');
 assert(filters.buildFilterParams({{ query: 'privacy controls', reviewStatus: 'Review ready', tagCategory: 'control', ownerCue: 'detected', evidenceState: 'referenced' }}) === '?q=privacy+controls&status=Review+ready&tag=control&owner=detected&evidence=referenced', 'filter params should serialize active filters');
 assert(filters.buildFilterParams({{ query: '', reviewStatus: 'all', tagCategory: 'all', ownerCue: 'all', evidenceState: 'all' }}) === '', 'filter params should omit default filters');
+const activeEntries = filters.activeFilterEntries({{ query: 'privacy controls', reviewStatus: 'Review ready', tagCategory: 'control', ownerCue: 'missing', evidenceState: 'referenced' }});
+assert(activeEntries.map(entry => `${{entry.key}}=${{entry.label}}`).join('|') === 'query=Search: privacy controls|reviewStatus=Status: Review ready|tagCategory=Tag: control|ownerCue=Owner cues: missing|evidenceState=Evidence: referenced', 'active filter entries should preserve labels and clear keys');
+assert(filters.activeFilterLabels({{ query: 'privacy controls', reviewStatus: 'Review ready', tagCategory: 'control', ownerCue: 'missing', evidenceState: 'referenced' }}).join('|') === 'Search: privacy controls|Status: Review ready|Tag: control|Owner cues: missing|Evidence: referenced', 'active filter labels should expose canonical active filter labels');
+assert(filters.activeFilterEntries({{ query: '', reviewStatus: 'all', tagCategory: 'all', ownerCue: 'all', evidenceState: 'all' }}).length === 0, 'default filters should not create active filter entries');
 assert(filters.summarizeFilterResults(7, 7, {{}}) === 'Showing all 7 sections', 'filter summary should describe the default view');
 const activeSummary = filters.summarizeFilterResults(2, 7, {{ query: 'privacy controls', reviewStatus: 'Review ready', tagCategory: 'control', ownerCue: 'detected', evidenceState: 'referenced' }});
 assert(activeSummary === 'Showing 2 of 7 sections | Search: privacy controls | Status: Review ready | Tag: control | Owner cues: detected | Evidence: referenced', 'filter summary should name active filters');

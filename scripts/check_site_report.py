@@ -144,6 +144,8 @@ def main() -> None:
         "buildFilterParams",
         "sectionMatches",
         "summarizeFilterResults",
+        "activeFilterEntries",
+        "activeFilterLabels",
         "reviewStatus",
         "evidenceState",
         "tagCategory",
@@ -162,7 +164,11 @@ def main() -> None:
         "evidenceFilter",
         "clearFilters",
         "filterSummary",
+        "activeFilterChips",
         "statusQuickFilters",
+        "data-clear-filter",
+        "renderActiveFilterChips(filters)",
+        "clearSingleFilter(clearButton.dataset.clearFilter)",
         "data-status-filter",
         "updateStatusQuickFilters(sections)",
         "button.dataset.statusFilter",
@@ -185,6 +191,7 @@ def main() -> None:
         ".filter-controls",
         "repeat(4, minmax(120px, 0.8fr))",
         "@media (max-width: 900px)",
+        ".active-filter-chips[hidden]",
         ".clear-filters",
     )
     for guard in required_filter_layout:
