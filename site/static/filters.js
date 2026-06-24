@@ -64,6 +64,23 @@
     return (sections || []).filter(section => sectionMatches(section, filters));
   }
 
+  function statusQuickFilterCounts(sections, filters) {
+    const active = filters || {};
+    const counts = {
+      'Action required': 0,
+      'Review ready': 0,
+      'Needs review': 0,
+    };
+    (sections || []).forEach(section => {
+      const status = section.metadata && section.metadata.reviewStatus;
+      if (!Object.prototype.hasOwnProperty.call(counts, status)) return;
+      if (sectionMatches(section, Object.assign({}, active, { reviewStatus: 'all' }))) {
+        counts[status] += 1;
+      }
+    });
+    return counts;
+  }
+
   const allowedReviewStatuses = new Set(['all', 'Action required', 'Review ready', 'Needs review']);
   const allowedTagCategories = new Set(['all', 'framework', 'regulation', 'risk', 'control', 'agency']);
   const allowedOwnerCues = new Set(['all', 'detected', 'missing']);
@@ -140,6 +157,7 @@
     normalize,
     parseFilterParams,
     sectionMatches,
+    statusQuickFilterCounts,
     summarizeFilterResults,
   };
 })();

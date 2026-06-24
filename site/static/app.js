@@ -360,7 +360,7 @@
         ? `${summary.textContent}. Clear filters to return to the full report.`
         : 'No matching sections. Clear filters to return to the full report.';
       clear.disabled = count === total && !search.value && status.value === 'all' && tag.value === 'all' && owner.value === 'all' && evidence.value === 'all';
-      updateStatusQuickFilters(sections);
+      updateStatusQuickFilters(sections, filters);
       updateNavigationContext(count, total);
       buildSidebar();
       buildTopbar();
@@ -368,15 +368,18 @@
       syncFilterParams(filters);
     }
 
-    function updateStatusQuickFilters(sections) {
+    function updateStatusQuickFilters(sections, filters) {
       if (!quickFilters) return;
       const statuses = [
         ['Action required', 'Action'],
         ['Review ready', 'Ready'],
         ['Needs review', 'Needs review'],
       ];
+      const counts = sectionFilters.statusQuickFilterCounts
+        ? sectionFilters.statusQuickFilterCounts(sections, filters)
+        : {};
       quickFilters.innerHTML = statuses.map(([value, label]) => {
-        const count = sections.filter(section => section.metadata && section.metadata.reviewStatus === value).length;
+        const count = Number(counts[value]) || 0;
         const selected = status.value === value;
         return `<button class="status-quick-filter${selected ? ' active' : ''}" type="button" data-status-filter="${value}" aria-label="${label}: ${count} sections" aria-pressed="${selected}" ${count === 0 ? 'disabled' : ''}><span>${label}</span><strong>${count}</strong></button>`;
       }).join('');
