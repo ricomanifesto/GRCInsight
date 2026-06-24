@@ -63,6 +63,7 @@ assert(typeof archive.buildReports === 'function', 'archive should build reports
 assert(typeof archive.deriveCurrentReportMetadata === 'function', 'archive should derive current metadata from markdown');
 assert(typeof filters.parseFilterParams === 'function', 'filters should parse URL filter params');
 assert(typeof filters.buildFilterParams === 'function', 'filters should build URL filter params');
+assert(typeof filters.statusQuickFilterCounts === 'function', 'filters should expose context-aware status quick-filter counts');
 assert(typeof filters.summarizeFilterResults === 'function', 'filters should summarize active filter results');
 assert(typeof filters.activeFilterEntries === 'function', 'filters should expose active filter entries for UI chips');
 assert(typeof filters.activeFilterLabels === 'function', 'filters should expose active filter labels for summaries and UI chips');
@@ -209,6 +210,10 @@ assert(filters.filterSections(sections, {{ tagCategory: 'control' }}).map(s => s
 assert(filters.filterSections(sections, {{ tagCategory: 'agency' }}).map(s => s.id).join(',') === 'sec-review', 'agency tag category should filter sections');
 assert(filters.filterSections(sections, {{ query: 'GDPR', reviewStatus: 'Action required', tagCategory: 'regulation' }}).map(s => s.id).join(',') === 'gdpr-obligations', 'combined filters should narrow sections');
 assert(filters.filterSections(sections, {{ query: 'not present' }}).length === 0, 'unmatched query should return empty results');
+const statusCounts = filters.statusQuickFilterCounts(sections, {{ tagCategory: 'control', reviewStatus: 'Needs review' }});
+assert(statusCounts['Action required'] === 1 && statusCounts['Review ready'] === 0 && statusCounts['Needs review'] === 0, 'status quick-filter counts should respect tag context while ignoring selected status');
+const evidenceCounts = filters.statusQuickFilterCounts(sections, {{ ownerCue: 'missing', evidenceState: 'referenced', reviewStatus: 'Action required' }});
+assert(evidenceCounts['Action required'] === 1 && evidenceCounts['Review ready'] === 2 && evidenceCounts['Needs review'] === 0, 'status quick-filter counts should respect owner and evidence context');
 const duplicateSections = [
   {{
     id: 'same-heading',
