@@ -168,6 +168,8 @@ def main() -> None:
         "activeFilterChips",
         "statusQuickFilters",
         "sectionFilters.statusQuickFilterCounts(sections, filters)",
+        "statuses.reduce((fallbackCounts, [value])",
+        "fallbackCounts[value] = sections.filter(section => section.metadata && section.metadata.reviewStatus === value).length",
         "const disabled = count === 0 && !selected",
         "data-clear-filter",
         "renderActiveFilterChips(filters)",

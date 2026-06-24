@@ -377,7 +377,10 @@
       ];
       const counts = sectionFilters.statusQuickFilterCounts
         ? sectionFilters.statusQuickFilterCounts(sections, filters)
-        : {};
+        : statuses.reduce((fallbackCounts, [value]) => {
+          fallbackCounts[value] = sections.filter(section => section.metadata && section.metadata.reviewStatus === value).length;
+          return fallbackCounts;
+        }, {});
       quickFilters.innerHTML = statuses.map(([value, label]) => {
         const count = Number(counts[value]) || 0;
         const selected = status.value === value;
