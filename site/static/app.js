@@ -304,11 +304,12 @@
     const status = document.getElementById('statusFilter');
     const tag = document.getElementById('tagFilter');
     const owner = document.getElementById('ownerFilter');
+    const evidence = document.getElementById('evidenceFilter');
     const clear = document.getElementById('clearFilters');
     const summary = document.getElementById('filterSummary');
     const empty = document.getElementById('emptyResults');
     const quickFilters = document.getElementById('statusQuickFilters');
-    if (!search || !status || !tag || !owner || !summary || !empty || !sectionFilters) return;
+    if (!search || !status || !tag || !owner || !evidence || !summary || !empty || !sectionFilters) return;
 
     const sections = Array.from(document.querySelectorAll('#report .card')).map(collectSection);
     const total = sections.length;
@@ -317,6 +318,7 @@
     status.value = initialFilters.reviewStatus || 'all';
     tag.value = initialFilters.tagCategory || 'all';
     owner.value = initialFilters.ownerCue || 'all';
+    evidence.value = initialFilters.evidenceState || 'all';
 
     function currentFilters() {
       return {
@@ -324,6 +326,7 @@
         reviewStatus: status.value,
         tagCategory: tag.value,
         ownerCue: owner.value,
+        evidenceState: evidence.value,
       };
     }
 
@@ -354,7 +357,7 @@
       empty.textContent = count === 0
         ? `${summary.textContent}. Clear filters to return to the full report.`
         : 'No matching sections. Clear filters to return to the full report.';
-      clear.disabled = count === total && !search.value && status.value === 'all' && tag.value === 'all' && owner.value === 'all';
+      clear.disabled = count === total && !search.value && status.value === 'all' && tag.value === 'all' && owner.value === 'all' && evidence.value === 'all';
       updateStatusQuickFilters(sections);
       updateNavigationContext(count, total);
       buildSidebar();
@@ -377,7 +380,7 @@
       }).join('');
     }
 
-    [search, status, tag, owner].forEach(control => {
+    [search, status, tag, owner, evidence].forEach(control => {
       control.addEventListener('input', applyFilters);
       control.addEventListener('change', applyFilters);
     });
@@ -386,6 +389,7 @@
       status.value = 'all';
       tag.value = 'all';
       owner.value = 'all';
+      evidence.value = 'all';
       applyFilters();
       search.focus();
     }
