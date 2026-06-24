@@ -467,11 +467,11 @@
     if (mobileToc) {
       mobileToc.innerHTML = '<option value="">Jump to section</option>' +
         (h2s.length
-          ? h2s.map(h => `<option value="#${h.id}">${h.childNodes[0].textContent.trim()}</option>`).join('')
+          ? h2s.map(h => `<option value="${h.id}">${h.childNodes[0].textContent.trim()}</option>`).join('')
           : '<option value="" disabled>No sections in filtered view</option>');
       mobileToc.onchange = e => {
         const v = e.target.value;
-        if (v) document.querySelector(v)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        if (v) document.getElementById(v)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
         e.target.value = '';
       };
     }

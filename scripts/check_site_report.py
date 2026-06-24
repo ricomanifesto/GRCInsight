@@ -166,6 +166,7 @@ def main() -> None:
         "sidebarFilterState",
         "topbarFilterState",
         "mobileToc",
+        "document.getElementById(v)",
         "updateNavigationContext(count, total)",
         "No sections in filtered view",
     )
