@@ -53,7 +53,7 @@ body.light .action-btn:hover { background: rgba(0,0,0,0.05); }
 body.light .filter-field { color: #0b1220; }
 body.light .filter-field input, body.light .filter-field select { background: rgba(0,0,0,0.04); color: #0b1220; border-color: rgba(0,0,0,0.15); }
 body.light .filter-field input::placeholder { color: rgba(17,24,39,0.58); }
-@media (max-width: 760px) {
+@media (max-width: 900px) {
   .filter-controls { grid-template-columns: 1fr; }
   .control-buttons { width: 100%; }
   .control-buttons .action-btn, .clear-filters { flex: 1 1 140px; }
