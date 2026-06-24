@@ -381,7 +381,8 @@
       quickFilters.innerHTML = statuses.map(([value, label]) => {
         const count = Number(counts[value]) || 0;
         const selected = status.value === value;
-        return `<button class="status-quick-filter${selected ? ' active' : ''}" type="button" data-status-filter="${value}" aria-label="${label}: ${count} sections" aria-pressed="${selected}" ${count === 0 ? 'disabled' : ''}><span>${label}</span><strong>${count}</strong></button>`;
+        const disabled = count === 0 && !selected;
+        return `<button class="status-quick-filter${selected ? ' active' : ''}" type="button" data-status-filter="${value}" aria-label="${label}: ${count} sections" aria-pressed="${selected}" ${disabled ? 'disabled' : ''}><span>${label}</span><strong>${count}</strong></button>`;
       }).join('');
     }
 

@@ -168,6 +168,7 @@ def main() -> None:
         "activeFilterChips",
         "statusQuickFilters",
         "sectionFilters.statusQuickFilterCounts(sections, filters)",
+        "const disabled = count === 0 && !selected",
         "data-clear-filter",
         "renderActiveFilterChips(filters)",
         "clearSingleFilter(clearButton.dataset.clearFilter)",
