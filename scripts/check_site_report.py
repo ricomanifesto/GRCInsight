@@ -163,6 +163,11 @@ def main() -> None:
         "sectionFilters.summarizeFilterResults(count, total, filters)",
         "empty.textContent = count === 0",
         "emptyResults",
+        "sidebarFilterState",
+        "topbarFilterState",
+        "mobileToc",
+        "updateNavigationContext(count, total)",
+        "No sections in filtered view",
     )
     for guard in required_filter_ui:
         if guard not in html + app_js:
