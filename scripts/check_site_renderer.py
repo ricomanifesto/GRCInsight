@@ -140,6 +140,14 @@ assert(auditSummary.auditReady === false, 'audit summary should not be audit-rea
 assert(auditSummary.evidenceTitles.includes('Evidence backed overview'), 'audit summary should name source-backed sections');
 assert(auditSummary.gapTitles.includes('PCI remediation') && auditSummary.gapTitles.includes('Unmapped overview'), 'audit summary should name source-trail gaps');
 assert(auditSummary.ownerTitles.includes('PCI remediation'), 'audit summary should name sections with owner cues');
+const coverageRows = metadata.coverageRows(auditSummary);
+assert(Array.isArray(coverageRows) && coverageRows.length === 5, 'coverage rows should expose generated section coverage');
+assert(coverageRows.map(row => row.label).join('|') === 'Generated sections|Source provenance|Obligations|Ownership cues|Gaps and deadlines', 'coverage rows should use stable labels');
+assert(coverageRows[1].value === '1/3', 'source provenance row should expose source-ready coverage');
+assert(coverageRows[1].state === 'gap', 'source provenance row should flag missing source trails');
+assert(metadata.renderWorkspaceOverview(auditSummary).includes('workspace-overview-card'), 'workspace overview renderer should produce a workspace card');
+assert(metadata.renderWorkspaceOverview(auditSummary).includes('coverage-table'), 'workspace overview should expose the coverage matrix');
+assert(metadata.renderWorkspaceOverview(auditSummary).includes('Source provenance'), 'workspace overview should name source provenance coverage');
 assert(metadata.renderAuditSummary(auditSummary).includes('audit-summary-card'), 'audit summary renderer should produce a summary card');
 assert(metadata.renderAuditSummary(auditSummary).includes('Needs source trail'), 'audit summary renderer should expose missing evidence state');
 assert(metadata.renderAuditSummary(auditSummary).includes('Evidence trail'), 'audit summary renderer should expose evidence trail list');
@@ -158,6 +166,8 @@ assert(metadata.renderAuditSummary(filteredAuditSummary).includes('1 sections re
 const emptyFilteredAuditSummary = metadata.summarizeSections([]);
 assert(emptyFilteredAuditSummary.totalSections === 0, 'empty filtered audit summary should count zero sections');
 assert(emptyFilteredAuditSummary.auditReady === false, 'empty filtered audit summary should not be audit-ready');
+assert(metadata.coverageRows(emptyFilteredAuditSummary)[0].value === '0', 'empty coverage rows should preserve zero generated sections');
+assert(metadata.renderWorkspaceOverview(emptyFilteredAuditSummary).includes('No generated sections match the active filters'), 'empty workspace overview should expose empty filtered state');
 assert(metadata.renderAuditSummary(emptyFilteredAuditSummary).includes('0 sections reviewed'), 'empty filtered audit summary renderer should expose zero matched sections');
 const sections = [
   {{
