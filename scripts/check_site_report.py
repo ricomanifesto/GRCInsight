@@ -154,6 +154,7 @@ def main() -> None:
         "filterSections",
         "parseFilterParams",
         "buildFilterParams",
+        "filterParamEntries",
         "defaultFilterState",
         "isDefaultFilterState",
         "normalizeFilterValue",
@@ -256,6 +257,17 @@ def main() -> None:
     for guard in duplicate_filter_active_value_guards:
         if guard in filters_js:
             fail(f"filters.js still duplicates active filter value normalization: {guard}")
+
+    duplicate_filter_url_param_guards = (
+        "params.set(options.query.param, active.query)",
+        "params.set(options.reviewStatus.param, active.reviewStatus)",
+        "params.set(options.tagCategory.param, active.tagCategory)",
+        "params.set(options.ownerCue.param, active.ownerCue)",
+        "params.set(options.evidenceState.param, active.evidenceState)",
+    )
+    for guard in duplicate_filter_url_param_guards:
+        if guard in filters_js:
+            fail(f"filters.js still duplicates filter URL param serialization: {guard}")
 
     required_filter_layout = (
         ".filter-controls",

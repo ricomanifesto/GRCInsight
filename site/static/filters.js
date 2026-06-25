@@ -212,15 +212,22 @@
     return normalizeFilterState(active);
   }
 
-  function buildFilterParams(filters) {
+  function filterParamEntries(filters) {
     const active = normalizeFilterState(filters);
+    return filterStateOptions.reduce((entries, option) => {
+      const value = active[option.key];
+      if (value !== option.defaultValue) {
+        entries.push({ key: option.key, param: option.param, value });
+      }
+      return entries;
+    }, []);
+  }
+
+  function buildFilterParams(filters) {
     const params = new URLSearchParams();
-    const options = filterStateOptionMap;
-    if (active.query) params.set(options.query.param, active.query);
-    if (active.reviewStatus !== options.reviewStatus.defaultValue) params.set(options.reviewStatus.param, active.reviewStatus);
-    if (active.tagCategory !== options.tagCategory.defaultValue) params.set(options.tagCategory.param, active.tagCategory);
-    if (active.ownerCue !== options.ownerCue.defaultValue) params.set(options.ownerCue.param, active.ownerCue);
-    if (active.evidenceState !== options.evidenceState.defaultValue) params.set(options.evidenceState.param, active.evidenceState);
+    filterParamEntries(filters).forEach(entry => {
+      params.set(entry.param, entry.value);
+    });
     const serialized = params.toString();
     return serialized ? `?${serialized}` : '';
   }
@@ -259,6 +266,7 @@
     buildFilterParams,
     defaultFilterState,
     evidenceStateValues,
+    filterParamEntries,
     filterStateOption,
     filterStateOptionMap,
     filterStateOptions,
