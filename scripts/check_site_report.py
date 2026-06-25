@@ -213,6 +213,7 @@ def main() -> None:
         "window.GRCInsightArchive",
         "currentReportId",
         "buildReports",
+        "buildReviewMetrics",
         "deriveCurrentReportMetadata",
         "id: 'current'",
         "href: 'index.html'",
@@ -227,10 +228,13 @@ def main() -> None:
     required_archive_ui = (
         "archiveDigest",
         "renderArchiveDigest",
-        "renderArchiveDigest(md)",
-        "archiveDigest.buildReports(markdown || '')",
+        "renderArchiveDigest(md, fullSections)",
+        "archiveDigest.buildReports(markdown || '',",
+        "tagCategories: Array.from(tagCategorySet)",
         "archive-card",
         "archive-entry${isCurrent ? ' current' : ''}",
+        "archive-review-metrics",
+        "report.reviewMetrics",
         "sanitizeMarkdownUrl(report.href || '#')",
         "escapeAttribute(report.generatedAt || '')",
     )

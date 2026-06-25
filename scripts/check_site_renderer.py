@@ -88,6 +88,22 @@ assert(currentReport.generatedAt === '2026-06-23T12:00:00Z', 'current report sho
 assert(currentReport.period === 'Q3 2026', 'current report should use generated markdown period');
 assert(Array.isArray(currentReport.highlights) && currentReport.highlights.length >= 2, 'current report should expose digest highlights');
 assert(Array.isArray(currentReport.tags) && currentReport.tags.includes('GRC'), 'current report should expose digest tags');
+const archiveReviewReports = archive.buildReports(archiveMarkdown, {{
+  summary: {{
+    totalSections: 4,
+    actionRequired: 2,
+    evidenceReady: 3,
+    evidenceGaps: 1,
+  }},
+  tagCategories: ['framework', 'control', 'risk'],
+}});
+const archiveReviewMetrics = archiveReviewReports[0].reviewMetrics;
+assert(Array.isArray(archiveReviewMetrics) && archiveReviewMetrics.length === 5, 'archive entry should expose review metrics when context is available');
+assert(archiveReviewMetrics.map(row => row.label).join('|') === 'Sections|Action required|Evidence ready|Source-trail gaps|Tag categories', 'archive review metrics should use stable labels');
+assert(archiveReviewMetrics[0].value === '4', 'archive review metrics should expose section count');
+assert(archiveReviewMetrics[2].value === '3/4', 'archive review metrics should expose evidence readiness coverage');
+assert(archiveReviewMetrics[3].state === 'gap', 'archive review metrics should flag source-trail gaps');
+assert(archiveReviewMetrics[4].value === '3', 'archive review metrics should count unique tag categories');
 assert(renderer.sanitizeMarkdownUrl('https://example.com/a') === 'https://example.com/a', 'https links should be allowed');
 assert(renderer.sanitizeMarkdownUrl('/reports/current') === '/reports/current', 'root-relative links should be allowed');
 assert(renderer.sanitizeMarkdownUrl('controls/nist') === 'controls/nist', 'relative links should be allowed');
