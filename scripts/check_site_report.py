@@ -238,6 +238,8 @@ def main() -> None:
     required_audit_summary_ui = (
         "auditSummary",
         "installAuditSummary",
+        "updateAuditSummary",
+        "updateAuditSummary(Array.from(matches))",
         "summarizeSections",
         "renderAuditSummary",
         "data-obligations",

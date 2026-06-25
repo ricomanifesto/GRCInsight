@@ -361,6 +361,7 @@
         : 'No matching sections. Clear filters to return to the full report.';
       clear.disabled = count === total && !search.value && status.value === 'all' && tag.value === 'all' && owner.value === 'all' && evidence.value === 'all';
       updateStatusQuickFilters(sections, filters);
+      updateAuditSummary(Array.from(matches));
       updateNavigationContext(count, total);
       buildSidebar();
       buildTopbar();
@@ -473,24 +474,24 @@
   }
 
   function installAuditSummary() {
+    updateAuditSummary(Array.from(document.querySelectorAll('#report .card')).map(collectSection));
+  }
+
+  function updateAuditSummary(sections) {
     const container = document.getElementById('auditSummary');
-    if (!container || !sectionMetadata || !sectionMetadata.summarizeSections) return;
-    const sections = Array.from(document.querySelectorAll('#report .card')).map(card => {
-      const heading = card.querySelector('h2');
-      const metadataEl = card.querySelector('.section-meta');
-      return {
-        title: heading ? (heading.childNodes[0]?.textContent || '').trim() : 'Untitled section',
-        metadata: {
-          reviewStatus: metadataEl ? metadataEl.getAttribute('data-review-status') : 'Needs review',
-          obligations: metadataEl ? metadataEl.getAttribute('data-obligations') : 'Not detected',
-          gaps: metadataEl ? metadataEl.getAttribute('data-gaps') : 'Not detected',
-          deadlines: metadataEl ? metadataEl.getAttribute('data-deadlines') : 'Not detected',
-          owners: metadataEl ? metadataEl.getAttribute('data-owners') : 'Not detected',
-          evidence: metadataEl ? metadataEl.getAttribute('data-evidence') : 'Needs source trail',
-        },
-      };
-    });
-    container.innerHTML = sectionMetadata.renderAuditSummary(sectionMetadata.summarizeSections(sections));
+    if (!container || !sectionMetadata || !sectionMetadata.summarizeSections || !sectionMetadata.renderAuditSummary) return;
+    const auditSections = (sections || []).map(section => ({
+      title: section.title || 'Untitled section',
+      metadata: {
+        reviewStatus: section.metadata && section.metadata.reviewStatus || 'Needs review',
+        obligations: section.metadata && section.metadata.obligations || 'Not detected',
+        gaps: section.metadata && section.metadata.gaps || 'Not detected',
+        deadlines: section.metadata && section.metadata.deadlines || 'Not detected',
+        owners: section.metadata && section.metadata.owners || 'Not detected',
+        evidence: section.metadata && section.metadata.evidence || 'Needs source trail',
+      },
+    }));
+    container.innerHTML = sectionMetadata.renderAuditSummary(sectionMetadata.summarizeSections(auditSections));
   }
 
 

@@ -146,6 +146,19 @@ assert(metadata.renderAuditSummary(auditSummary).includes('Evidence trail'), 'au
 assert(metadata.renderAuditSummary(auditSummary).includes('Evidence backed overview'), 'audit summary renderer should list source-backed sections');
 assert(metadata.renderAuditSummary(auditSummary).includes('Owner cues'), 'audit summary renderer should expose owner cue list');
 assert(metadata.renderAuditSummary(auditSummary).includes('PCI remediation'), 'audit summary renderer should list sections with owner cues');
+const filteredAuditSummary = metadata.summarizeSections([
+  {{ title: 'Evidence backed overview', metadata: sourceMetadata }},
+]);
+assert(filteredAuditSummary.totalSections === 1, 'filtered audit summary should count only matched sections');
+assert(filteredAuditSummary.actionRequired === 0, 'filtered audit summary should not retain full-report action counts');
+assert(filteredAuditSummary.reviewReady === 1, 'filtered audit summary should count matched review-ready sections');
+assert(filteredAuditSummary.evidenceGaps === 0, 'filtered audit summary should not retain hidden source-trail gaps');
+assert(filteredAuditSummary.auditReady === true, 'filtered audit summary should evaluate readiness from matched sections');
+assert(metadata.renderAuditSummary(filteredAuditSummary).includes('1 sections reviewed'), 'filtered audit summary renderer should expose matched section count');
+const emptyFilteredAuditSummary = metadata.summarizeSections([]);
+assert(emptyFilteredAuditSummary.totalSections === 0, 'empty filtered audit summary should count zero sections');
+assert(emptyFilteredAuditSummary.auditReady === false, 'empty filtered audit summary should not be audit-ready');
+assert(metadata.renderAuditSummary(emptyFilteredAuditSummary).includes('0 sections reviewed'), 'empty filtered audit summary renderer should expose zero matched sections');
 const sections = [
   {{
     id: 'gdpr-obligations',
