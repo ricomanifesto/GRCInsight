@@ -36,6 +36,7 @@
     });
     const reports = archiveDigest.buildReports(markdown || '', {
       summary,
+      provenanceSummary: sectionMetadata.buildProvenanceSummary(summary),
       tagCategories: Array.from(tagCategorySet),
     });
     if (!reports.find(report => report.id === archiveDigest.currentReportId)) return;

@@ -32,10 +32,10 @@
   function buildReviewMetrics(reviewContext) {
     const context = reviewContext || {};
     const summary = context.summary || {};
+    const provenanceSummary = context.provenanceSummary || {};
     const totalSections = Number(summary.totalSections) || 0;
-    const evidenceReady = Number(summary.evidenceReady) || 0;
-    const evidenceGaps = Number(summary.evidenceGaps) || 0;
     const actionRequired = Number(summary.actionRequired) || 0;
+    const sourceGaps = Number(provenanceSummary.sourceGaps) || 0;
     const tagCategories = Array.from(new Set(context.tagCategories || []));
     if (!totalSections && !tagCategories.length) return [];
     return [
@@ -51,13 +51,13 @@
       },
       {
         label: 'Evidence ready',
-        value: totalSections ? `${evidenceReady}/${totalSections}` : 'No data',
-        state: totalSections && evidenceGaps === 0 ? 'ready' : (totalSections ? 'gap' : 'empty'),
+        value: provenanceSummary.value || 'No data',
+        state: provenanceSummary.state || 'empty',
       },
       {
         label: 'Source-trail gaps',
-        value: totalSections ? String(evidenceGaps) : 'No data',
-        state: evidenceGaps ? 'gap' : (totalSections ? 'ready' : 'empty'),
+        value: totalSections ? String(sourceGaps) : 'No data',
+        state: sourceGaps ? 'gap' : (totalSections ? 'ready' : 'empty'),
       },
       {
         label: 'Tag categories',
