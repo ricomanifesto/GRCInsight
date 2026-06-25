@@ -108,25 +108,40 @@
     return items.slice(0, 4).map(item => `<li>${escapeHtml(item)}</li>`).join('');
   }
 
-  function sourceProvenanceCoverageRow(summary) {
-    const total = summary.totalSections || 0;
+  function buildProvenanceSummary(summary) {
+    const normalized = summary || {};
+    const total = normalized.totalSections || 0;
     if (total <= 0) {
       return {
-        label: 'Source provenance',
+        totalSections: 0,
+        sourceReady: 0,
+        sourceGaps: 0,
         value: 'No data',
         state: 'empty',
         note: 'No generated sections available for provenance review.',
       };
     }
-    const sourceReady = summary.evidenceReady || 0;
-    const evidenceGaps = summary.evidenceGaps || 0;
+    const sourceReady = normalized.evidenceReady || 0;
+    const evidenceGaps = normalized.evidenceGaps || 0;
     return {
-      label: 'Source provenance',
+      totalSections: total,
+      sourceReady,
+      sourceGaps: evidenceGaps,
       value: `${sourceReady}/${total}`,
       state: evidenceGaps === 0 ? 'ready' : 'gap',
       note: evidenceGaps
         ? `${evidenceGaps} sections still need source trails.`
         : 'Every visible section includes source evidence language.',
+    };
+  }
+
+  function sourceProvenanceCoverageRow(summary) {
+    const provenance = buildProvenanceSummary(summary);
+    return {
+      label: 'Source provenance',
+      value: provenance.value,
+      state: provenance.state,
+      note: provenance.note,
     };
   }
 
@@ -283,6 +298,7 @@
   }
 
   window.GRCInsightMetadata = {
+    buildProvenanceSummary,
     coverageRows,
     deriveSectionMetadata,
     renderSectionMetadata,

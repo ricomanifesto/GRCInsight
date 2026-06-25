@@ -67,6 +67,7 @@ assert(typeof filters.statusQuickFilterCounts === 'function', 'filters should ex
 assert(typeof filters.summarizeFilterResults === 'function', 'filters should summarize active filter results');
 assert(typeof filters.activeFilterEntries === 'function', 'filters should expose active filter entries for UI chips');
 assert(typeof filters.activeFilterLabels === 'function', 'filters should expose active filter labels for summaries and UI chips');
+assert(typeof metadata.buildProvenanceSummary === 'function', 'metadata should expose canonical provenance summaries');
 const archiveMarkdown = `# GRC Intelligence Report - 2026-06-23
 **Generated:** 2026-06-23T12:00:00Z
 
@@ -92,9 +93,8 @@ const archiveReviewReports = archive.buildReports(archiveMarkdown, {{
   summary: {{
     totalSections: 4,
     actionRequired: 2,
-    evidenceReady: 3,
-    evidenceGaps: 1,
   }},
+  provenanceSummary: {{ value: '3/4', state: 'gap', sourceGaps: 1 }},
   tagCategories: ['framework', 'control', 'risk'],
 }});
 const archiveReviewMetrics = archiveReviewReports[0].reviewMetrics;
@@ -104,6 +104,19 @@ assert(archiveReviewMetrics[0].value === '4', 'archive review metrics should exp
 assert(archiveReviewMetrics[2].value === '3/4', 'archive review metrics should expose evidence readiness coverage');
 assert(archiveReviewMetrics[3].state === 'gap', 'archive review metrics should flag source-trail gaps');
 assert(archiveReviewMetrics[4].value === '3', 'archive review metrics should count unique tag categories');
+const summaryOnlyArchiveReports = archive.buildReports(archiveMarkdown, {{
+  summary: {{
+    totalSections: 4,
+    actionRequired: 2,
+    evidenceReady: 3,
+    evidenceGaps: 1,
+  }},
+}});
+const summaryOnlyArchiveMetrics = summaryOnlyArchiveReports[0].reviewMetrics;
+assert(summaryOnlyArchiveMetrics[2].value === '3/4', 'archive metrics should preserve summary-only evidence readiness');
+assert(summaryOnlyArchiveMetrics[2].state === 'gap', 'archive metrics should preserve summary-only evidence gap state');
+assert(summaryOnlyArchiveMetrics[3].value === '1', 'archive metrics should preserve summary-only source gap count');
+assert(summaryOnlyArchiveMetrics[3].state === 'gap', 'archive metrics should preserve summary-only source gap state');
 assert(renderer.sanitizeMarkdownUrl('https://example.com/a') === 'https://example.com/a', 'https links should be allowed');
 assert(renderer.sanitizeMarkdownUrl('/reports/current') === '/reports/current', 'root-relative links should be allowed');
 assert(renderer.sanitizeMarkdownUrl('controls/nist') === 'controls/nist', 'relative links should be allowed');
@@ -165,6 +178,13 @@ assert(Array.isArray(coverageRows) && coverageRows.length === 5, 'coverage rows 
 assert(coverageRows.map(row => row.label).join('|') === 'Generated sections|Source provenance|Obligations|Ownership cues|Gaps and deadlines', 'coverage rows should use stable labels');
 assert(coverageRows[1].value === '1/3', 'source provenance row should expose source-ready coverage');
 assert(coverageRows[1].state === 'gap', 'source provenance row should flag missing source trails');
+const provenanceSummary = metadata.buildProvenanceSummary(auditSummary);
+assert(provenanceSummary.totalSections === 3, 'provenance summary should expose total section count');
+assert(provenanceSummary.sourceReady === 1, 'provenance summary should expose source-ready section count');
+assert(provenanceSummary.sourceGaps === 2, 'provenance summary should expose source-gap count');
+assert(provenanceSummary.value === '1/3', 'provenance summary should expose coverage value');
+assert(provenanceSummary.state === 'gap', 'provenance summary should flag source gaps');
+assert(provenanceSummary.note === '2 sections still need source trails.', 'provenance summary should expose gap note');
 assert(metadata.renderWorkspaceOverview(auditSummary).includes('workspace-overview-card'), 'workspace overview renderer should produce a workspace card');
 assert(metadata.renderWorkspaceOverview(auditSummary).includes('coverage-table'), 'workspace overview should expose the coverage matrix');
 assert(metadata.renderWorkspaceOverview(auditSummary).includes('Source provenance'), 'workspace overview should name source provenance coverage');
@@ -182,6 +202,10 @@ assert(filteredAuditSummary.actionRequired === 0, 'filtered audit summary should
 assert(filteredAuditSummary.reviewReady === 1, 'filtered audit summary should count matched review-ready sections');
 assert(filteredAuditSummary.evidenceGaps === 0, 'filtered audit summary should not retain hidden source-trail gaps');
 assert(filteredAuditSummary.auditReady === true, 'filtered audit summary should evaluate readiness from matched sections');
+const completeProvenanceSummary = metadata.buildProvenanceSummary(filteredAuditSummary);
+assert(completeProvenanceSummary.value === '1/1', 'complete provenance summary should expose full coverage');
+assert(completeProvenanceSummary.state === 'ready', 'complete provenance summary should be ready');
+assert(completeProvenanceSummary.note === 'Every visible section includes source evidence language.', 'complete provenance summary should expose complete note');
 assert(metadata.renderAuditSummary(filteredAuditSummary).includes('1 sections reviewed'), 'filtered audit summary renderer should expose matched section count');
 const emptyFilteredAuditSummary = metadata.summarizeSections([]);
 assert(emptyFilteredAuditSummary.totalSections === 0, 'empty filtered audit summary should count zero sections');
@@ -191,6 +215,10 @@ const emptyCoverageRows = metadata.coverageRows(emptyFilteredAuditSummary);
 assert(emptyCoverageRows[1].value === 'No data', 'empty source provenance row should not expose 0/0 coverage');
 assert(emptyCoverageRows[1].state === 'empty', 'empty source provenance row should use empty state');
 assert(emptyCoverageRows[1].note === 'No generated sections available for provenance review.', 'empty source provenance row should avoid complete-coverage wording');
+const emptyProvenanceSummary = metadata.buildProvenanceSummary(emptyFilteredAuditSummary);
+assert(emptyProvenanceSummary.value === 'No data', 'empty provenance summary should not expose 0/0 coverage');
+assert(emptyProvenanceSummary.state === 'empty', 'empty provenance summary should use empty state');
+assert(emptyProvenanceSummary.note === 'No generated sections available for provenance review.', 'empty provenance summary should avoid complete-coverage wording');
 assert(metadata.renderWorkspaceOverview(emptyFilteredAuditSummary).includes('No generated sections match the active filters'), 'empty workspace overview should expose empty filtered state');
 assert(!metadata.renderWorkspaceOverview(emptyFilteredAuditSummary).includes('Every visible section includes source evidence language'), 'empty workspace overview should not claim complete provenance coverage');
 assert(metadata.renderAuditSummary(emptyFilteredAuditSummary).includes('0 sections reviewed'), 'empty filtered audit summary renderer should expose zero matched sections');

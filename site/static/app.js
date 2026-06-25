@@ -34,8 +34,12 @@
     (sections || []).forEach(section => {
       (section.tagCategories || []).forEach(category => tagCategorySet.add(category));
     });
+    const provenanceSummary = sectionMetadata && sectionMetadata.buildProvenanceSummary
+      ? sectionMetadata.buildProvenanceSummary(summary)
+      : null;
     const reports = archiveDigest.buildReports(markdown || '', {
       summary,
+      provenanceSummary,
       tagCategories: Array.from(tagCategorySet),
     });
     if (!reports.find(report => report.id === archiveDigest.currentReportId)) return;

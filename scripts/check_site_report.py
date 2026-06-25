@@ -120,6 +120,7 @@ def main() -> None:
     required_metadata_guards = (
         "window.GRCInsightMetadata",
         "deriveSectionMetadata",
+        "buildProvenanceSummary",
         "renderSectionMetadata",
         "summarizeSections",
         "coverageRows",
@@ -230,6 +231,8 @@ def main() -> None:
         "renderArchiveDigest",
         "renderArchiveDigest(md, fullSections)",
         "archiveDigest.buildReports(markdown || '',",
+        "const provenanceSummary = sectionMetadata && sectionMetadata.buildProvenanceSummary",
+        "provenanceSummary,",
         "tagCategories: Array.from(tagCategorySet)",
         "archive-card",
         "archive-entry${isCurrent ? ' current' : ''}",
