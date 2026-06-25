@@ -18,6 +18,9 @@
   if (sectionFilters && sectionMetadata && Array.isArray(sectionMetadata.reviewStatusOptions) && sectionFilters.setReviewStatusOptions) {
     sectionFilters.setReviewStatusOptions(sectionMetadata.reviewStatusOptions);
   }
+  if (sectionFilters && sectionMetadata && sectionMetadata.metadataStates && sectionFilters.setMetadataStates) {
+    sectionFilters.setMetadataStates(sectionMetadata.metadataStates);
+  }
 
   function escapeHtml(s) {
     return s.replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
@@ -512,15 +515,18 @@
   }
 
   function normalizeSummarySections(sections) {
+    const metadataStates = sectionMetadata && sectionMetadata.metadataStates;
+    const detection = metadataStates && metadataStates.detection || {};
+    const evidence = metadataStates && metadataStates.evidence || {};
     return (sections || []).map(section => ({
       title: section.title || 'Untitled section',
       metadata: {
         reviewStatus: section.metadata && section.metadata.reviewStatus || 'Needs review',
-        obligations: section.metadata && section.metadata.obligations || 'Not detected',
-        gaps: section.metadata && section.metadata.gaps || 'Not detected',
-        deadlines: section.metadata && section.metadata.deadlines || 'Not detected',
-        owners: section.metadata && section.metadata.owners || 'Not detected',
-        evidence: section.metadata && section.metadata.evidence || 'Needs source trail',
+        obligations: section.metadata && section.metadata.obligations || detection.notDetected || 'Not detected',
+        gaps: section.metadata && section.metadata.gaps || detection.notDetected || 'Not detected',
+        deadlines: section.metadata && section.metadata.deadlines || detection.notDetected || 'Not detected',
+        owners: section.metadata && section.metadata.owners || detection.notDetected || 'Not detected',
+        evidence: section.metadata && section.metadata.evidence || evidence.needsSourceTrail || 'Needs source trail',
       },
     }));
   }
