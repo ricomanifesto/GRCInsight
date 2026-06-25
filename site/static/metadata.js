@@ -111,7 +111,6 @@
   function coverageRows(summary) {
     const total = summary.totalSections || 0;
     const sourceReady = summary.evidenceReady || 0;
-    const actionSignals = summary.actionRequired || 0;
     const obligationSignals = summary.obligations || 0;
     const gapSignals = summary.gaps || 0;
     const deadlineSignals = summary.deadlines || 0;
@@ -180,7 +179,7 @@
       {
         label: 'Gaps and deadlines',
         value: String(gapSignals + deadlineSignals),
-        state: (gapSignals || deadlineSignals || actionSignals) ? 'attention' : 'ready',
+        state: (gapSignals || deadlineSignals) ? 'attention' : 'ready',
         note: (gapSignals || deadlineSignals)
           ? `${gapSignals} gap signals and ${deadlineSignals} deadline signals need review.`
           : 'No gap or deadline signals detected in visible sections.',

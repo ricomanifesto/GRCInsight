@@ -116,6 +116,10 @@ assert(actionMetadata.owners === 'Detected', 'owner language should be detected'
 const sourceMetadata = metadata.deriveSectionMetadata('Executive Summary', 'Source Multi-Source OSINT Articles Analyzed 30 of 30');
 assert(sourceMetadata.reviewStatus === 'Review ready', 'source-backed sections should be review ready');
 assert(sourceMetadata.evidence === 'Source referenced', 'source-backed sections should detect evidence');
+const obligationOnlyMetadata = metadata.deriveSectionMetadata('Control Update', 'Source evidence shows PCI requires implementation of encryption controls.');
+assert(obligationOnlyMetadata.reviewStatus === 'Action required', 'obligation-only sections should still need action');
+assert(obligationOnlyMetadata.gaps === 'Not detected', 'obligation-only sections should not detect gaps');
+assert(obligationOnlyMetadata.deadlines === 'Not detected', 'obligation-only sections should not detect deadlines');
 const emptyMetadata = metadata.deriveSectionMetadata('Overview', '');
 assert(emptyMetadata.reviewStatus === 'Needs review', 'empty sections should default to needs review');
 assert(emptyMetadata.owners === 'Not detected', 'empty sections should not detect owners');
@@ -174,6 +178,14 @@ assert(emptyCoverageRows[1].note === 'No generated sections available for proven
 assert(metadata.renderWorkspaceOverview(emptyFilteredAuditSummary).includes('No generated sections match the active filters'), 'empty workspace overview should expose empty filtered state');
 assert(!metadata.renderWorkspaceOverview(emptyFilteredAuditSummary).includes('Every visible section includes source evidence language'), 'empty workspace overview should not claim complete provenance coverage');
 assert(metadata.renderAuditSummary(emptyFilteredAuditSummary).includes('0 sections reviewed'), 'empty filtered audit summary renderer should expose zero matched sections');
+const obligationOnlySummary = metadata.summarizeSections([
+  {{ title: 'Obligation only', metadata: obligationOnlyMetadata }},
+]);
+const obligationOnlyRows = metadata.coverageRows(obligationOnlySummary);
+assert(obligationOnlySummary.actionRequired === 1, 'obligation-only summary should retain action-required count');
+assert(obligationOnlyRows[4].value === '0', 'gap/deadline row should not count generic action-required signals');
+assert(obligationOnlyRows[4].state === 'ready', 'gap/deadline row should stay ready when only obligation/action wording is present');
+assert(obligationOnlyRows[4].note === 'No gap or deadline signals detected in visible sections.', 'gap/deadline row should match its zero value');
 const sections = [
   {{
     id: 'gdpr-obligations',
