@@ -24,15 +24,26 @@
   const sanitizeMarkdownUrl = window.GRCInsightRenderer.sanitizeMarkdownUrl;
   const escapeAttribute = window.GRCInsightRenderer.escapeAttribute;
 
-  function renderArchiveDigest(markdown) {
+  function renderArchiveDigest(markdown, sections) {
     const container = document.getElementById('archiveDigest');
     if (!container || !archiveDigest || !archiveDigest.buildReports) return;
-    const reports = archiveDigest.buildReports(markdown || '');
+    const summary = sectionMetadata && sectionMetadata.summarizeSections
+      ? sectionMetadata.summarizeSections(normalizeSummarySections(sections || []))
+      : null;
+    const tagCategorySet = new Set();
+    (sections || []).forEach(section => {
+      (section.tagCategories || []).forEach(category => tagCategorySet.add(category));
+    });
+    const reports = archiveDigest.buildReports(markdown || '', {
+      summary,
+      tagCategories: Array.from(tagCategorySet),
+    });
     if (!reports.find(report => report.id === archiveDigest.currentReportId)) return;
     const entries = reports.map(report => {
       const isCurrent = report.id === archiveDigest.currentReportId;
       const tags = Array.isArray(report.tags) ? report.tags : [];
       const highlights = Array.isArray(report.highlights) ? report.highlights : [];
+      const reviewMetrics = Array.isArray(report.reviewMetrics) ? report.reviewMetrics : [];
       const href = sanitizeMarkdownUrl(report.href || '#') || '#';
       return `
         <article class="archive-entry${isCurrent ? ' current' : ''}">
@@ -44,6 +55,7 @@
           </div>
           <div class="archive-entry-meta">
             <time datetime="${escapeAttribute(report.generatedAt || '')}">${escapeHtml((report.generatedAt || '').slice(0, 10) || 'Unknown date')}</time>
+            ${reviewMetrics.length ? `<dl class="archive-review-metrics">${reviewMetrics.map(row => `<div data-review-metric-state="${escapeAttribute(row.state || 'ready')}"><dt>${escapeHtml(row.label)}</dt><dd>${escapeHtml(row.value)}</dd></div>`).join('')}</dl>` : ''}
             <div class="archive-tags">${tags.map(tag => `<span>${escapeHtml(tag)}</span>`).join('')}</div>
           </div>
         </article>
@@ -750,7 +762,6 @@
     .then(r => r.text())
     .then(md => {
       originalMd = md;
-      renderArchiveDigest(md);
       const html = mdToHtml(md);
       el.report.innerHTML = html;
       wrapSections(el.report);
@@ -773,9 +784,11 @@
           card.remove();
         }
       })();
-      installAuditSummary();
       applyCollapsedState();
       highlightPills(el.report);
+      const fullSections = Array.from(document.querySelectorAll('#report .card')).map(collectSection);
+      renderArchiveDigest(md, fullSections);
+      installAuditSummary();
       installSectionFilters();
       buildSidebar();
       buildTopbar();

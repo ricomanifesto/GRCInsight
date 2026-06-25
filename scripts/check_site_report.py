@@ -213,6 +213,7 @@ def main() -> None:
         "window.GRCInsightArchive",
         "currentReportId",
         "buildReports",
+        "buildReviewMetrics",
         "deriveCurrentReportMetadata",
         "id: 'current'",
         "href: 'index.html'",
@@ -227,10 +228,13 @@ def main() -> None:
     required_archive_ui = (
         "archiveDigest",
         "renderArchiveDigest",
-        "renderArchiveDigest(md)",
-        "archiveDigest.buildReports(markdown || '')",
+        "renderArchiveDigest(md, fullSections)",
+        "archiveDigest.buildReports(markdown || '',",
+        "tagCategories: Array.from(tagCategorySet)",
         "archive-card",
         "archive-entry${isCurrent ? ' current' : ''}",
+        "archive-review-metrics",
+        "report.reviewMetrics",
         "sanitizeMarkdownUrl(report.href || '#')",
         "escapeAttribute(report.generatedAt || '')",
     )
@@ -240,6 +244,14 @@ def main() -> None:
 
     if ".archive-entry.current" not in style_css:
         fail("style.css missing archive current-entry styling")
+
+    required_archive_metric_styles = (
+        'body.light .archive-review-metrics [data-review-metric-state="attention"] dd',
+        'body.light .archive-review-metrics [data-review-metric-state="gap"] dd',
+    )
+    for guard in required_archive_metric_styles:
+        if guard not in style_css:
+            fail(f"style.css missing archive metric state styling: {guard}")
 
     required_audit_summary_ui = (
         "workspaceOverview",

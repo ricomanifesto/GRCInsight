@@ -29,11 +29,50 @@
     };
   }
 
-  function buildReports(markdown) {
+  function buildReviewMetrics(reviewContext) {
+    const context = reviewContext || {};
+    const summary = context.summary || {};
+    const totalSections = Number(summary.totalSections) || 0;
+    const evidenceReady = Number(summary.evidenceReady) || 0;
+    const evidenceGaps = Number(summary.evidenceGaps) || 0;
+    const actionRequired = Number(summary.actionRequired) || 0;
+    const tagCategories = Array.from(new Set(context.tagCategories || []));
+    if (!totalSections && !tagCategories.length) return [];
+    return [
+      {
+        label: 'Sections',
+        value: String(totalSections),
+        state: totalSections ? 'ready' : 'empty',
+      },
+      {
+        label: 'Action required',
+        value: String(actionRequired),
+        state: actionRequired ? 'attention' : 'ready',
+      },
+      {
+        label: 'Evidence ready',
+        value: totalSections ? `${evidenceReady}/${totalSections}` : 'No data',
+        state: totalSections && evidenceGaps === 0 ? 'ready' : (totalSections ? 'gap' : 'empty'),
+      },
+      {
+        label: 'Source-trail gaps',
+        value: totalSections ? String(evidenceGaps) : 'No data',
+        state: evidenceGaps ? 'gap' : (totalSections ? 'ready' : 'empty'),
+      },
+      {
+        label: 'Tag categories',
+        value: String(tagCategories.length),
+        state: tagCategories.length ? 'ready' : 'empty',
+      },
+    ];
+  }
+
+  function buildReports(markdown, reviewContext) {
     return [
       {
         ...currentReportDefaults,
         ...deriveCurrentReportMetadata(markdown || ''),
+        reviewMetrics: buildReviewMetrics(reviewContext),
       },
     ];
   }
@@ -41,6 +80,7 @@
   window.GRCInsightArchive = {
     currentReportId: 'current',
     currentReportDefaults,
+    buildReviewMetrics,
     deriveCurrentReportMetadata,
     buildReports,
   };

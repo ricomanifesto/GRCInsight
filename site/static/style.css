@@ -93,6 +93,12 @@ body.light .mobile-toc { background: rgba(0,0,0,0.04); color: #0b1220; border-co
 .archive-entry p { margin: 0 0 8px; color: var(--text); }
 .archive-entry ul { margin: 8px 0 0 18px; }
 .archive-entry-meta { display: grid; gap: 10px; justify-items: end; align-content: start; color: var(--muted); font-size: 13px; }
+.archive-review-metrics { display: grid; grid-template-columns: repeat(2, minmax(86px, 1fr)); gap: 6px; min-width: 220px; margin: 0; }
+.archive-review-metrics div { display: grid; gap: 2px; padding: 7px 8px; border: 1px solid rgba(255,255,255,0.09); border-radius: 6px; background: rgba(0,0,0,0.12); }
+.archive-review-metrics dt { color: var(--muted); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0; }
+.archive-review-metrics dd { margin: 0; color: #f5e8c8; font-size: 14px; font-weight: 800; }
+.archive-review-metrics [data-review-metric-state="attention"] dd { color: #fde68a; }
+.archive-review-metrics [data-review-metric-state="gap"] dd { color: #fca5a5; }
 .archive-tags { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
 .archive-tags span { display: inline-flex; min-height: 24px; align-items: center; padding: 3px 7px; border-radius: 999px; border: 1px solid rgba(255,255,255,0.10); background: rgba(255,255,255,0.05); color: #f5e8c8; font-size: 12px; }
 body.light .workspace-overview-card, body.light .archive-card { border-color: rgba(0,0,0,0.08); box-shadow: 0 6px 18px rgba(0,0,0,0.08); }
@@ -100,10 +106,15 @@ body.light .workspace-overview-card h2, body.light .archive-card h2, body.light 
 body.light .workspace-actions a { color: #31513e; background: rgba(49,81,62,0.08); border-color: rgba(49,81,62,0.22); }
 body.light .archive-entry { border-color: rgba(0,0,0,0.08); background: rgba(0,0,0,0.025); }
 body.light .archive-entry.current { border-color: rgba(49, 81, 62, 0.32); background: rgba(49, 81, 62, 0.08); }
+body.light .archive-review-metrics div { border-color: rgba(0,0,0,0.08); background: rgba(0,0,0,0.035); }
+body.light .archive-review-metrics dd { color: #31513e; }
+body.light .archive-review-metrics [data-review-metric-state="attention"] dd { color: #8a5b00; }
+body.light .archive-review-metrics [data-review-metric-state="gap"] dd { color: #9f2f2f; }
 body.light .archive-tags span { border-color: rgba(0,0,0,0.08); background: rgba(0,0,0,0.04); color: #31513e; }
 @media (max-width: 760px) {
   .archive-entry { grid-template-columns: 1fr; }
   .archive-entry-meta { justify-items: start; }
+  .archive-review-metrics { width: 100%; min-width: 0; }
   .archive-tags { justify-content: flex-start; }
 }
 .filter-state { margin-top: 14px; color: var(--muted); font-size: 13px; }
