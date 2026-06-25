@@ -242,6 +242,8 @@ def main() -> None:
         "updateAuditSummary(Array.from(matches))",
         "function sectionHeadingTitle(heading)",
         "clone.querySelectorAll('.anchor-link, .heading-actions').forEach(node => node.remove())",
+        "escapeHtml(sectionHeadingTitle(h))",
+        "escapeHtml(b.title)",
         "summarizeSections",
         "renderAuditSummary",
         "data-obligations",

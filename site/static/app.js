@@ -525,8 +525,8 @@
     });
 
     toc.innerHTML = blocks.map(b => {
-      const sub = b.h3s.map(s => `<li><a href="#${s.id}">${s.title}</a></li>`).join('');
-      return `<details><summary><a href="#${b.id}">${b.title}</a></summary>${sub ? `<ul>${sub}</ul>` : ''}</details>`;
+      const sub = b.h3s.map(s => `<li><a href="#${s.id}">${escapeHtml(s.title)}</a></li>`).join('');
+      return `<details><summary><a href="#${b.id}">${escapeHtml(b.title)}</a></summary>${sub ? `<ul>${sub}</ul>` : ''}</details>`;
     }).join('') || '<p class="nav-empty">No sections in filtered view</p>';
 
     // Highlight on scroll
@@ -549,7 +549,7 @@
     if (mobileToc) {
       mobileToc.innerHTML = '<option value="">Jump to section</option>' +
         (h2s.length
-          ? h2s.map(h => `<option value="${h.id}">${sectionHeadingTitle(h)}</option>`).join('')
+          ? h2s.map(h => `<option value="${h.id}">${escapeHtml(sectionHeadingTitle(h))}</option>`).join('')
           : '<option value="" disabled>No sections in filtered view</option>');
       mobileToc.onchange = e => {
         const v = e.target.value;
@@ -581,7 +581,7 @@
     if (!bar) return;
     const h2s = visibleSectionHeadings();
     bar.innerHTML = h2s.length
-      ? h2s.map(h => `<a class="chip" href="#${h.id}"><span class="chip-icon">§</span>${sectionHeadingTitle(h)}</a>`).join('')
+      ? h2s.map(h => `<a class="chip" href="#${h.id}"><span class="chip-icon">§</span>${escapeHtml(sectionHeadingTitle(h))}</a>`).join('')
       : '<span class="nav-empty">No sections in filtered view</span>';
     const chips = Array.from(bar.querySelectorAll('.chip'));
     const map = new Map(h2s.map(h => [h.id, chips.find(c => c.getAttribute('href') === `#${h.id}`)]));
