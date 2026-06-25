@@ -156,6 +156,8 @@ def main() -> None:
         "buildFilterParams",
         "defaultFilterState",
         "isDefaultFilterState",
+        "normalizeFilterValue",
+        "normalizeFilterState",
         "sectionMatches",
         "statusQuickFilterCounts",
         "setMetadataStates",
@@ -243,6 +245,17 @@ def main() -> None:
     for guard in duplicate_filter_default_guards:
         if guard in filters_js + app_js:
             fail(f"site still duplicates filter default state: {guard}")
+
+    duplicate_filter_active_value_guards = (
+        "const query = String(active.query || options.query.defaultValue).trim();",
+        "const reviewStatus = safeValue(active.reviewStatus || options.reviewStatus.defaultValue, allowedReviewStatusValues(), options.reviewStatus.defaultValue);",
+        "const tagCategory = safeValue(active.tagCategory || options.tagCategory.defaultValue, allowedTagCategories, options.tagCategory.defaultValue);",
+        "const ownerCue = safeValue(active.ownerCue || options.ownerCue.defaultValue, allowedOwnerCues, options.ownerCue.defaultValue);",
+        "const evidenceState = safeValue(active.evidenceState || options.evidenceState.defaultValue, allowedEvidenceStates, options.evidenceState.defaultValue);",
+    )
+    for guard in duplicate_filter_active_value_guards:
+        if guard in filters_js:
+            fail(f"filters.js still duplicates active filter value normalization: {guard}")
 
     required_filter_layout = (
         ".filter-controls",

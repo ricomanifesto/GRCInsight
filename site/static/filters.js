@@ -176,60 +176,64 @@
     }, {});
   }
 
-  function isDefaultFilterState(filters) {
+  function normalizeFilterValue(key, value) {
+    const option = filterStateOption(key);
+    if (!option) return '';
+    const activeValue = value || option.defaultValue;
+    if (key === 'query') return String(activeValue).trim();
+    if (key === 'reviewStatus') return safeValue(activeValue, allowedReviewStatusValues(), option.defaultValue);
+    if (key === 'tagCategory') return safeValue(activeValue, allowedTagCategories, option.defaultValue);
+    if (key === 'ownerCue') return safeValue(activeValue, allowedOwnerCues, option.defaultValue);
+    if (key === 'evidenceState') return safeValue(activeValue, allowedEvidenceStates, option.defaultValue);
+    return option.defaultValue;
+  }
+
+  function normalizeFilterState(filters) {
     const active = filters || {};
+    return filterStateOptions.reduce((normalized, option) => {
+      normalized[option.key] = normalizeFilterValue(option.key, active[option.key]);
+      return normalized;
+    }, {});
+  }
+
+  function isDefaultFilterState(filters) {
+    const active = normalizeFilterState(filters);
     return filterStateOptions.every(option => {
-      const value = option.key === 'query'
-        ? String(active[option.key] || '').trim()
-        : String(active[option.key] || option.defaultValue);
-      return value === option.defaultValue;
+      return active[option.key] === option.defaultValue;
     });
   }
 
   function parseFilterParams(searchParams) {
     const params = new URLSearchParams(String(searchParams || '').replace(/^\?/, ''));
-    const options = filterStateOptionMap;
-    const defaults = defaultFilterState();
-    defaults.query = String(params.get(options.query.param) || options.query.defaultValue).trim();
-    defaults.reviewStatus = safeValue(params.get(options.reviewStatus.param) || options.reviewStatus.defaultValue, allowedReviewStatusValues(), options.reviewStatus.defaultValue);
-    defaults.tagCategory = safeValue(params.get(options.tagCategory.param) || options.tagCategory.defaultValue, allowedTagCategories, options.tagCategory.defaultValue);
-    defaults.ownerCue = safeValue(params.get(options.ownerCue.param) || options.ownerCue.defaultValue, allowedOwnerCues, options.ownerCue.defaultValue);
-    defaults.evidenceState = safeValue(params.get(options.evidenceState.param) || options.evidenceState.defaultValue, allowedEvidenceStates, options.evidenceState.defaultValue);
-    return defaults;
+    const active = filterStateOptions.reduce((filters, option) => {
+      filters[option.key] = params.get(option.param);
+      return filters;
+    }, {});
+    return normalizeFilterState(active);
   }
 
   function buildFilterParams(filters) {
-    const active = filters || {};
+    const active = normalizeFilterState(filters);
     const params = new URLSearchParams();
     const options = filterStateOptionMap;
-    const query = String(active.query || options.query.defaultValue).trim();
-    const reviewStatus = safeValue(active.reviewStatus || options.reviewStatus.defaultValue, allowedReviewStatusValues(), options.reviewStatus.defaultValue);
-    const tagCategory = safeValue(active.tagCategory || options.tagCategory.defaultValue, allowedTagCategories, options.tagCategory.defaultValue);
-    const ownerCue = safeValue(active.ownerCue || options.ownerCue.defaultValue, allowedOwnerCues, options.ownerCue.defaultValue);
-    const evidenceState = safeValue(active.evidenceState || options.evidenceState.defaultValue, allowedEvidenceStates, options.evidenceState.defaultValue);
-    if (query) params.set(options.query.param, query);
-    if (reviewStatus !== options.reviewStatus.defaultValue) params.set(options.reviewStatus.param, reviewStatus);
-    if (tagCategory !== options.tagCategory.defaultValue) params.set(options.tagCategory.param, tagCategory);
-    if (ownerCue !== options.ownerCue.defaultValue) params.set(options.ownerCue.param, ownerCue);
-    if (evidenceState !== options.evidenceState.defaultValue) params.set(options.evidenceState.param, evidenceState);
+    if (active.query) params.set(options.query.param, active.query);
+    if (active.reviewStatus !== options.reviewStatus.defaultValue) params.set(options.reviewStatus.param, active.reviewStatus);
+    if (active.tagCategory !== options.tagCategory.defaultValue) params.set(options.tagCategory.param, active.tagCategory);
+    if (active.ownerCue !== options.ownerCue.defaultValue) params.set(options.ownerCue.param, active.ownerCue);
+    if (active.evidenceState !== options.evidenceState.defaultValue) params.set(options.evidenceState.param, active.evidenceState);
     const serialized = params.toString();
     return serialized ? `?${serialized}` : '';
   }
 
   function activeFilterEntries(filters) {
-    const active = filters || {};
+    const active = normalizeFilterState(filters);
     const entries = [];
     const options = filterStateOptionMap;
-    const query = String(active.query || options.query.defaultValue).trim();
-    const reviewStatus = safeValue(active.reviewStatus || options.reviewStatus.defaultValue, allowedReviewStatusValues(), options.reviewStatus.defaultValue);
-    const tagCategory = safeValue(active.tagCategory || options.tagCategory.defaultValue, allowedTagCategories, options.tagCategory.defaultValue);
-    const ownerCue = safeValue(active.ownerCue || options.ownerCue.defaultValue, allowedOwnerCues, options.ownerCue.defaultValue);
-    const evidenceState = safeValue(active.evidenceState || options.evidenceState.defaultValue, allowedEvidenceStates, options.evidenceState.defaultValue);
-    if (query) entries.push({ key: options.query.key, label: `${options.query.labelPrefix}: ${query}` });
-    if (reviewStatus !== options.reviewStatus.defaultValue) entries.push({ key: options.reviewStatus.key, label: `${options.reviewStatus.labelPrefix}: ${reviewStatus}` });
-    if (tagCategory !== options.tagCategory.defaultValue) entries.push({ key: options.tagCategory.key, label: `${options.tagCategory.labelPrefix}: ${tagCategory}` });
-    if (ownerCue !== options.ownerCue.defaultValue) entries.push({ key: options.ownerCue.key, label: `${options.ownerCue.labelPrefix}: ${ownerCue}` });
-    if (evidenceState !== options.evidenceState.defaultValue) entries.push({ key: options.evidenceState.key, label: `${options.evidenceState.labelPrefix}: ${evidenceState}` });
+    if (active.query) entries.push({ key: options.query.key, label: `${options.query.labelPrefix}: ${active.query}` });
+    if (active.reviewStatus !== options.reviewStatus.defaultValue) entries.push({ key: options.reviewStatus.key, label: `${options.reviewStatus.labelPrefix}: ${active.reviewStatus}` });
+    if (active.tagCategory !== options.tagCategory.defaultValue) entries.push({ key: options.tagCategory.key, label: `${options.tagCategory.labelPrefix}: ${active.tagCategory}` });
+    if (active.ownerCue !== options.ownerCue.defaultValue) entries.push({ key: options.ownerCue.key, label: `${options.ownerCue.labelPrefix}: ${active.ownerCue}` });
+    if (active.evidenceState !== options.evidenceState.defaultValue) entries.push({ key: options.evidenceState.key, label: `${options.evidenceState.labelPrefix}: ${active.evidenceState}` });
     return entries;
   }
 
@@ -261,6 +265,8 @@
     filterSections,
     isDefaultFilterState,
     normalize,
+    normalizeFilterState,
+    normalizeFilterValue,
     parseFilterParams,
     sectionMatches,
     setMetadataStates,
