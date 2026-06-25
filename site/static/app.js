@@ -215,7 +215,7 @@
     Array.from(node.querySelectorAll('.card')).forEach(c => {
       const h2 = c.querySelector('h2');
       if (!h2) return;
-      const title = (h2.childNodes[0]?.textContent || '').trim();
+      const title = sectionHeadingTitle(h2);
       const metadata = sectionMetadata.deriveSectionMetadata(title, c.textContent || '');
       h2.insertAdjacentHTML('afterend', sectionMetadata.renderSectionMetadata(metadata));
     });
@@ -272,6 +272,13 @@
     });
   }
 
+  function sectionHeadingTitle(heading) {
+    if (!heading) return '';
+    const clone = heading.cloneNode(true);
+    clone.querySelectorAll('.anchor-link, .heading-actions').forEach(node => node.remove());
+    return clone.textContent.trim();
+  }
+
   function collectSection(card) {
     const heading = card.querySelector('h2');
     const metadataEl = card.querySelector('.section-meta');
@@ -283,7 +290,7 @@
     contentClone.querySelectorAll('.section-meta, .heading-actions').forEach(node => node.remove());
     return {
       id: heading ? heading.id : '',
-      title: heading ? (heading.childNodes[0]?.textContent || '').trim() : '',
+      title: sectionHeadingTitle(heading),
       text: contentClone.textContent || '',
       tagCategories: Array.from(new Set(sectionTagCategories)),
       tagTerms: pills.map(pill => pill.textContent.trim()).filter(Boolean),
@@ -361,6 +368,7 @@
         : 'No matching sections. Clear filters to return to the full report.';
       clear.disabled = count === total && !search.value && status.value === 'all' && tag.value === 'all' && owner.value === 'all' && evidence.value === 'all';
       updateStatusQuickFilters(sections, filters);
+      updateAuditSummary(Array.from(matches));
       updateNavigationContext(count, total);
       buildSidebar();
       buildTopbar();
@@ -473,24 +481,24 @@
   }
 
   function installAuditSummary() {
+    updateAuditSummary(Array.from(document.querySelectorAll('#report .card')).map(collectSection));
+  }
+
+  function updateAuditSummary(sections) {
     const container = document.getElementById('auditSummary');
-    if (!container || !sectionMetadata || !sectionMetadata.summarizeSections) return;
-    const sections = Array.from(document.querySelectorAll('#report .card')).map(card => {
-      const heading = card.querySelector('h2');
-      const metadataEl = card.querySelector('.section-meta');
-      return {
-        title: heading ? (heading.childNodes[0]?.textContent || '').trim() : 'Untitled section',
-        metadata: {
-          reviewStatus: metadataEl ? metadataEl.getAttribute('data-review-status') : 'Needs review',
-          obligations: metadataEl ? metadataEl.getAttribute('data-obligations') : 'Not detected',
-          gaps: metadataEl ? metadataEl.getAttribute('data-gaps') : 'Not detected',
-          deadlines: metadataEl ? metadataEl.getAttribute('data-deadlines') : 'Not detected',
-          owners: metadataEl ? metadataEl.getAttribute('data-owners') : 'Not detected',
-          evidence: metadataEl ? metadataEl.getAttribute('data-evidence') : 'Needs source trail',
-        },
-      };
-    });
-    container.innerHTML = sectionMetadata.renderAuditSummary(sectionMetadata.summarizeSections(sections));
+    if (!container || !sectionMetadata || !sectionMetadata.summarizeSections || !sectionMetadata.renderAuditSummary) return;
+    const auditSections = (sections || []).map(section => ({
+      title: section.title || 'Untitled section',
+      metadata: {
+        reviewStatus: section.metadata && section.metadata.reviewStatus || 'Needs review',
+        obligations: section.metadata && section.metadata.obligations || 'Not detected',
+        gaps: section.metadata && section.metadata.gaps || 'Not detected',
+        deadlines: section.metadata && section.metadata.deadlines || 'Not detected',
+        owners: section.metadata && section.metadata.owners || 'Not detected',
+        evidence: section.metadata && section.metadata.evidence || 'Needs source trail',
+      },
+    }));
+    container.innerHTML = sectionMetadata.renderAuditSummary(sectionMetadata.summarizeSections(auditSections));
   }
 
 
@@ -502,7 +510,7 @@
     // Build nested outline: for each H2, collect following H3s until next H2
     const blocks = h2s.map(h2 => {
       const id = h2.id;
-      const title = h2.childNodes[0].textContent.trim();
+      const title = sectionHeadingTitle(h2);
       const h3s = [];
       for (let i = all.indexOf(h2) + 1; i < all.length; i++) {
         const el = all[i];
@@ -517,8 +525,8 @@
     });
 
     toc.innerHTML = blocks.map(b => {
-      const sub = b.h3s.map(s => `<li><a href="#${s.id}">${s.title}</a></li>`).join('');
-      return `<details><summary><a href="#${b.id}">${b.title}</a></summary>${sub ? `<ul>${sub}</ul>` : ''}</details>`;
+      const sub = b.h3s.map(s => `<li><a href="#${s.id}">${escapeHtml(s.title)}</a></li>`).join('');
+      return `<details><summary><a href="#${b.id}">${escapeHtml(b.title)}</a></summary>${sub ? `<ul>${sub}</ul>` : ''}</details>`;
     }).join('') || '<p class="nav-empty">No sections in filtered view</p>';
 
     // Highlight on scroll
@@ -541,7 +549,7 @@
     if (mobileToc) {
       mobileToc.innerHTML = '<option value="">Jump to section</option>' +
         (h2s.length
-          ? h2s.map(h => `<option value="${h.id}">${h.childNodes[0].textContent.trim()}</option>`).join('')
+          ? h2s.map(h => `<option value="${h.id}">${escapeHtml(sectionHeadingTitle(h))}</option>`).join('')
           : '<option value="" disabled>No sections in filtered view</option>');
       mobileToc.onchange = e => {
         const v = e.target.value;
@@ -573,7 +581,7 @@
     if (!bar) return;
     const h2s = visibleSectionHeadings();
     bar.innerHTML = h2s.length
-      ? h2s.map(h => `<a class="chip" href="#${h.id}"><span class="chip-icon">§</span>${h.childNodes[0].textContent.trim()}</a>`).join('')
+      ? h2s.map(h => `<a class="chip" href="#${h.id}"><span class="chip-icon">§</span>${escapeHtml(sectionHeadingTitle(h))}</a>`).join('')
       : '<span class="nav-empty">No sections in filtered view</span>';
     const chips = Array.from(bar.querySelectorAll('.chip'));
     const map = new Map(h2s.map(h => [h.id, chips.find(c => c.getAttribute('href') === `#${h.id}`)]));
@@ -598,7 +606,7 @@
     cards.forEach((c, idx) => {
       const h2 = c.querySelector('h2'); if (!h2) return;
       const id = h2.id;
-      const title = (h2.childNodes[0]?.textContent || '').trim().toLowerCase();
+      const title = sectionHeadingTitle(h2).toLowerCase();
       const isExec = /executive\s+summary/.test(title);
       const hasSaved = Object.prototype.hasOwnProperty.call(map, id);
       let collapsed;
@@ -625,7 +633,7 @@
     currentSectionObserver = new IntersectionObserver(entries => {
       entries.forEach(e => {
         if (e.isIntersecting) {
-          const title = e.target.childNodes[0].textContent.trim();
+          const title = sectionHeadingTitle(e.target);
           lbl.textContent = `Current section: ${title}`;
         }
       });

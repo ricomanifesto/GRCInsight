@@ -238,6 +238,12 @@ def main() -> None:
     required_audit_summary_ui = (
         "auditSummary",
         "installAuditSummary",
+        "updateAuditSummary",
+        "updateAuditSummary(Array.from(matches))",
+        "function sectionHeadingTitle(heading)",
+        "clone.querySelectorAll('.anchor-link, .heading-actions').forEach(node => node.remove())",
+        "escapeHtml(sectionHeadingTitle(h))",
+        "escapeHtml(b.title)",
         "summarizeSections",
         "renderAuditSummary",
         "data-obligations",
@@ -261,6 +267,9 @@ def main() -> None:
 
     if "matches.has(section.id)" in app_js:
         fail("app.js keys filtered section visibility by section id")
+
+    if "childNodes[0]" in app_js:
+        fail("app.js reads partial heading text instead of the section heading title helper")
 
     required_filtered_navigation_guards = (
         "function visibleSectionHeadings()",
