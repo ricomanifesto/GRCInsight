@@ -63,6 +63,8 @@ assert(typeof archive.buildReports === 'function', 'archive should build reports
 assert(typeof archive.deriveCurrentReportMetadata === 'function', 'archive should derive current metadata from markdown');
 assert(typeof filters.parseFilterParams === 'function', 'filters should parse URL filter params');
 assert(typeof filters.buildFilterParams === 'function', 'filters should build URL filter params');
+assert(typeof filters.defaultFilterState === 'function', 'filters should build canonical default filter state');
+assert(typeof filters.isDefaultFilterState === 'function', 'filters should detect canonical default filter state');
 assert(Array.isArray(filters.filterStateOptions), 'filters should expose canonical filter state options');
 assert(filters.filterStateOptionMap && typeof filters.filterStateOptionMap === 'object', 'filters should expose canonical filter state option lookup map');
 assert(filters.filterStateOptions.map(option => option.key).join('|') === 'query|reviewStatus|tagCategory|ownerCue|evidenceState', 'filter state options should use stable keys');
@@ -353,8 +355,13 @@ assert(parsedFilters.ownerCue === 'detected', 'filter params should parse owner 
 assert(parsedFilters.evidenceState === 'referenced', 'filter params should parse evidence filter');
 const safeFilters = filters.parseFilterParams('?status=Bad&tag=unknown&owner=unclear&evidence=maybe');
 assert(safeFilters.query === '' && safeFilters.reviewStatus === 'all' && safeFilters.tagCategory === 'all' && safeFilters.ownerCue === 'all' && safeFilters.evidenceState === 'all', 'invalid filter params should fall back to defaults');
+const defaultFilters = filters.defaultFilterState();
+assert(JSON.stringify(defaultFilters) === JSON.stringify({{ query: '', reviewStatus: 'all', tagCategory: 'all', ownerCue: 'all', evidenceState: 'all' }}), 'default filter state should come from canonical option defaults');
+assert(filters.isDefaultFilterState(defaultFilters), 'default filter state should be detected as default');
+assert(filters.isDefaultFilterState(safeFilters), 'invalid filter params should parse to default filter state');
+assert(!filters.isDefaultFilterState({{ query: 'privacy controls', reviewStatus: 'all', tagCategory: 'all', ownerCue: 'all', evidenceState: 'all' }}), 'active query should not be detected as default');
 assert(filters.buildFilterParams({{ query: 'privacy controls', reviewStatus: 'Review ready', tagCategory: 'control', ownerCue: 'detected', evidenceState: 'referenced' }}) === '?q=privacy+controls&status=Review+ready&tag=control&owner=detected&evidence=referenced', 'filter params should serialize active filters');
-assert(filters.buildFilterParams({{ query: '', reviewStatus: 'all', tagCategory: 'all', ownerCue: 'all', evidenceState: 'all' }}) === '', 'filter params should omit default filters');
+assert(filters.buildFilterParams(defaultFilters) === '', 'filter params should omit default filters');
 const activeEntries = filters.activeFilterEntries({{ query: 'privacy controls', reviewStatus: 'Review ready', tagCategory: 'control', ownerCue: 'missing', evidenceState: 'referenced' }});
 assert(activeEntries.map(entry => `${{entry.key}}=${{entry.label}}`).join('|') === 'query=Search: privacy controls|reviewStatus=Status: Review ready|tagCategory=Tag: control|ownerCue=Owner cues: missing|evidenceState=Evidence: referenced', 'active filter entries should preserve labels and clear keys');
 assert(filters.activeFilterLabels({{ query: 'privacy controls', reviewStatus: 'Review ready', tagCategory: 'control', ownerCue: 'missing', evidenceState: 'referenced' }}).join('|') === 'Search: privacy controls|Status: Review ready|Tag: control|Owner cues: missing|Evidence: referenced', 'active filter labels should expose canonical active filter labels');

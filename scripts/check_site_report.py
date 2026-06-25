@@ -154,6 +154,8 @@ def main() -> None:
         "filterSections",
         "parseFilterParams",
         "buildFilterParams",
+        "defaultFilterState",
+        "isDefaultFilterState",
         "sectionMatches",
         "statusQuickFilterCounts",
         "setMetadataStates",
@@ -208,6 +210,7 @@ def main() -> None:
         "updateStatusQuickFilters(sections, filters)",
         "button.dataset.statusFilter",
         "status.value = targetStatus",
+        "sectionFilters.isDefaultFilterState ? sectionFilters.isDefaultFilterState(filters)",
         "sectionFilters.summarizeFilterResults(count, total, filters)",
         "empty.textContent = count === 0",
         "emptyResults",
@@ -232,6 +235,14 @@ def main() -> None:
     for guard in duplicate_filter_lookup_guards:
         if guard in filters_js:
             fail(f"filters.js still duplicates filter option lookup: {guard}")
+
+    duplicate_filter_default_guards = (
+        "count === total && !search.value && status.value === 'all' && tag.value === 'all' && owner.value === 'all' && evidence.value === 'all'",
+        "query: '', reviewStatus: 'all', tagCategory: 'all', ownerCue: 'all', evidenceState: 'all'",
+    )
+    for guard in duplicate_filter_default_guards:
+        if guard in filters_js + app_js:
+            fail(f"site still duplicates filter default state: {guard}")
 
     required_filter_layout = (
         ".filter-controls",

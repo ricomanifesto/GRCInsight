@@ -406,6 +406,7 @@
 
     function applyFilters() {
       const filters = currentFilters();
+      const isDefaultState = sectionFilters.isDefaultFilterState ? sectionFilters.isDefaultFilterState(filters) : filterControlBindings.every(binding => binding.control.value === binding.defaultValue);
       const matches = new Set(sectionFilters.filterSections(sections, filters));
       sections.forEach(section => {
         const visible = matches.has(section);
@@ -425,7 +426,7 @@
       empty.textContent = count === 0
         ? `${summary.textContent}. Clear filters to return to the full report.`
         : 'No matching sections. Clear filters to return to the full report.';
-      clear.disabled = count === total && !search.value && status.value === 'all' && tag.value === 'all' && owner.value === 'all' && evidence.value === 'all';
+      clear.disabled = count === total && isDefaultState;
       updateStatusQuickFilters(sections, filters);
       updateWorkspaceOverview(Array.from(matches));
       updateAuditSummary(Array.from(matches));
