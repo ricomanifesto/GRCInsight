@@ -32,9 +32,15 @@
   function buildReviewMetrics(reviewContext) {
     const context = reviewContext || {};
     const summary = context.summary || {};
-    const provenanceSummary = context.provenanceSummary || {};
     const totalSections = Number(summary.totalSections) || 0;
     const actionRequired = Number(summary.actionRequired) || 0;
+    const evidenceReady = Number(summary.evidenceReady) || 0;
+    const evidenceGaps = Number(summary.evidenceGaps) || 0;
+    const provenanceSummary = context.provenanceSummary || {
+      value: totalSections ? `${evidenceReady}/${totalSections}` : 'No data',
+      state: totalSections && evidenceGaps === 0 ? 'ready' : (totalSections ? 'gap' : 'empty'),
+      sourceGaps: evidenceGaps,
+    };
     const sourceGaps = Number(provenanceSummary.sourceGaps) || 0;
     const tagCategories = Array.from(new Set(context.tagCategories || []));
     if (!totalSections && !tagCategories.length) return [];

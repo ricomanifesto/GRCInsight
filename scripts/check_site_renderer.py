@@ -104,6 +104,19 @@ assert(archiveReviewMetrics[0].value === '4', 'archive review metrics should exp
 assert(archiveReviewMetrics[2].value === '3/4', 'archive review metrics should expose evidence readiness coverage');
 assert(archiveReviewMetrics[3].state === 'gap', 'archive review metrics should flag source-trail gaps');
 assert(archiveReviewMetrics[4].value === '3', 'archive review metrics should count unique tag categories');
+const summaryOnlyArchiveReports = archive.buildReports(archiveMarkdown, {{
+  summary: {{
+    totalSections: 4,
+    actionRequired: 2,
+    evidenceReady: 3,
+    evidenceGaps: 1,
+  }},
+}});
+const summaryOnlyArchiveMetrics = summaryOnlyArchiveReports[0].reviewMetrics;
+assert(summaryOnlyArchiveMetrics[2].value === '3/4', 'archive metrics should preserve summary-only evidence readiness');
+assert(summaryOnlyArchiveMetrics[2].state === 'gap', 'archive metrics should preserve summary-only evidence gap state');
+assert(summaryOnlyArchiveMetrics[3].value === '1', 'archive metrics should preserve summary-only source gap count');
+assert(summaryOnlyArchiveMetrics[3].state === 'gap', 'archive metrics should preserve summary-only source gap state');
 assert(renderer.sanitizeMarkdownUrl('https://example.com/a') === 'https://example.com/a', 'https links should be allowed');
 assert(renderer.sanitizeMarkdownUrl('/reports/current') === '/reports/current', 'root-relative links should be allowed');
 assert(renderer.sanitizeMarkdownUrl('controls/nist') === 'controls/nist', 'relative links should be allowed');
