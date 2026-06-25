@@ -423,6 +423,7 @@ async def run_grc_analysis_endpoint(feed_url: str, config: GRCAnalysisConfig) ->
         # Step 6: Generate comprehensive report
         logger.info("Step 6: Generating comprehensive GRC report")
         report_content = ""
+        used_fallback_report = False
 
         if used_model_analysis and model_service is not None:
             report_content = await model_service.generate_grc_report(analysis_results, feed_data)
@@ -438,6 +439,7 @@ async def run_grc_analysis_endpoint(feed_url: str, config: GRCAnalysisConfig) ->
                 analysis_results,
                 fallback_reason,
             )
+            used_fallback_report = True
             logger.warning("Generated fallback report because model output was unavailable")
 
         # Step 7: Create response
@@ -454,6 +456,8 @@ async def run_grc_analysis_endpoint(feed_url: str, config: GRCAnalysisConfig) ->
         metadata = ReportMetadata(
             article_count=len(articles),
             grc_article_count=grc_article_count,
+            analysis_mode="fallback" if used_fallback_report else "model",
+            fallback_reason=fallback_reason if used_fallback_report else None,
             regulations_mentioned=analysis_data.get("regulations_mentioned", []),
             frameworks_referenced=analysis_data.get("frameworks_referenced", []),
             industries_affected=analysis_data.get("industries_affected", []),

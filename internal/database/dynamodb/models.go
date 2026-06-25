@@ -7,21 +7,23 @@ import (
 
 // Report represents a GRC intelligence report for DynamoDB
 type Report struct {
-	ReportID    string          `dynamodbav:"report_id" json:"report_id"`
-	Title       string          `dynamodbav:"title" json:"title"`
-	Content     string          `dynamodbav:"content" json:"content"`
-	Status      string          `dynamodbav:"status" json:"status"`
-	SourceURL   string          `dynamodbav:"source_url,omitempty" json:"source_url,omitempty"`
-	GeneratedAt *time.Time      `dynamodbav:"generated_at,omitempty" json:"generated_at,omitempty"`
-	CreatedAt   string          `dynamodbav:"created_at" json:"created_at"`
-	UpdatedAt   string          `dynamodbav:"updated_at" json:"updated_at"`
-	Metadata    ReportMetadata  `dynamodbav:"metadata" json:"metadata"`
+	ReportID    string         `dynamodbav:"report_id" json:"report_id"`
+	Title       string         `dynamodbav:"title" json:"title"`
+	Content     string         `dynamodbav:"content" json:"content"`
+	Status      string         `dynamodbav:"status" json:"status"`
+	SourceURL   string         `dynamodbav:"source_url,omitempty" json:"source_url,omitempty"`
+	GeneratedAt *time.Time     `dynamodbav:"generated_at,omitempty" json:"generated_at,omitempty"`
+	CreatedAt   string         `dynamodbav:"created_at" json:"created_at"`
+	UpdatedAt   string         `dynamodbav:"updated_at" json:"updated_at"`
+	Metadata    ReportMetadata `dynamodbav:"metadata" json:"metadata"`
 }
 
 // ReportMetadata holds additional information about the report
 type ReportMetadata struct {
 	ArticleCount         int      `dynamodbav:"article_count" json:"article_count"`
 	GRCArticleCount      int      `dynamodbav:"grc_article_count" json:"grc_article_count"`
+	AnalysisMode         string   `dynamodbav:"analysis_mode,omitempty" json:"analysis_mode,omitempty"`
+	FallbackReason       string   `dynamodbav:"fallback_reason,omitempty" json:"fallback_reason,omitempty"`
 	RegulationsMentioned []string `dynamodbav:"regulations_mentioned" json:"regulations_mentioned"`
 	FrameworksReferenced []string `dynamodbav:"frameworks_referenced" json:"frameworks_referenced"`
 	IndustriesAffected   []string `dynamodbav:"industries_affected" json:"industries_affected"`
@@ -30,32 +32,32 @@ type ReportMetadata struct {
 
 // ReportStatus constants
 const (
-    StatusPending    = "pending"
-    StatusProcessing = "processing"
-    StatusCompleted  = "completed"
-    StatusFailed     = "failed"
+	StatusPending    = "pending"
+	StatusProcessing = "processing"
+	StatusCompleted  = "completed"
+	StatusFailed     = "failed"
 )
 
 // Article represents an article stored in DynamoDB
 type Article struct {
-    ArticleID     string    `dynamodbav:"article_id" json:"article_id"`
-    NumericID     uint32    `dynamodbav:"numeric_id" json:"numeric_id"`
-    ReportID      string    `dynamodbav:"report_id" json:"report_id"`
-    Title         string    `dynamodbav:"title" json:"title"`
-    URL           string    `dynamodbav:"url" json:"url"`
-    Content       string    `dynamodbav:"content" json:"content"`
-    Summary       string    `dynamodbav:"summary" json:"summary"`
-    Source        string    `dynamodbav:"source" json:"source"`
-    Published     string    `dynamodbav:"published" json:"published"`
-    CreatedAt     string    `dynamodbav:"created_at" json:"created_at"`
-    UpdatedAt     string    `dynamodbav:"updated_at" json:"updated_at"`
+	ArticleID string `dynamodbav:"article_id" json:"article_id"`
+	NumericID uint32 `dynamodbav:"numeric_id" json:"numeric_id"`
+	ReportID  string `dynamodbav:"report_id" json:"report_id"`
+	Title     string `dynamodbav:"title" json:"title"`
+	URL       string `dynamodbav:"url" json:"url"`
+	Content   string `dynamodbav:"content" json:"content"`
+	Summary   string `dynamodbav:"summary" json:"summary"`
+	Source    string `dynamodbav:"source" json:"source"`
+	Published string `dynamodbav:"published" json:"published"`
+	CreatedAt string `dynamodbav:"created_at" json:"created_at"`
+	UpdatedAt string `dynamodbav:"updated_at" json:"updated_at"`
 
-    // GRC Analysis results
-    HasGRCContent bool      `dynamodbav:"has_grc_content" json:"has_grc_content"`
-    Regulations   []string  `dynamodbav:"regulations" json:"regulations"`
-    Frameworks    []string  `dynamodbav:"frameworks" json:"frameworks"`
-    Industries    []string  `dynamodbav:"industries" json:"industries"`
-    RegulatoryBodies []string `dynamodbav:"regulatory_bodies" json:"regulatory_bodies"`
+	// GRC Analysis results
+	HasGRCContent    bool     `dynamodbav:"has_grc_content" json:"has_grc_content"`
+	Regulations      []string `dynamodbav:"regulations" json:"regulations"`
+	Frameworks       []string `dynamodbav:"frameworks" json:"frameworks"`
+	Industries       []string `dynamodbav:"industries" json:"industries"`
+	RegulatoryBodies []string `dynamodbav:"regulatory_bodies" json:"regulatory_bodies"`
 }
 
 // GenerateReportID creates a unique ID for a new report

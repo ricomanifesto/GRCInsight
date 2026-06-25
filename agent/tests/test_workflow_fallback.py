@@ -61,6 +61,67 @@ def test_run_grc_analysis_endpoint_falls_back_when_model_is_unavailable(monkeypa
     assert response.metadata is not None
     assert response.metadata.article_count == 1
     assert response.metadata.grc_article_count >= 1
+    assert response.metadata.analysis_mode == "fallback"
+    assert response.metadata.fallback_reason == "Error code: 429 - insufficient_quota"
+
+
+def test_run_grc_analysis_endpoint_marks_model_backed_reports(monkeypatch):
+    async def fake_fetch_feed(_feed_url):
+        return {
+            "title": "Test Feed",
+            "entries": [
+                {
+                    "title": "NIST publishes new control guidance",
+                    "link": "https://example.com/nist",
+                    "description": "Framework control update",
+                    "published": "Thu, 20 Mar 2026 00:00:00 GMT",
+                    "content": "NIST control guidance for regulated teams.",
+                }
+            ],
+        }
+
+    async def fake_enrich_articles(articles):
+        return articles
+
+    class FakeGRCModelService:
+        def __init__(self):
+            pass
+
+        async def analyze_articles_for_grc(self, articles):
+            return {
+                "grc_articles": [{"title": articles[0].title, "url": articles[0].url}],
+                "summary": {
+                    "total_articles": len(articles),
+                    "grc_relevant_count": 1,
+                    "confidence_score": 0.9,
+                },
+                "analysis": {
+                    "regulations_mentioned": [],
+                    "frameworks_referenced": ["NIST"],
+                    "industries_affected": [],
+                    "regulatory_bodies": ["NIST"],
+                    "risk_categories": ["Control governance"],
+                },
+            }
+
+        async def generate_grc_report(self, _analysis_results, _feed_data):
+            return "# Model-backed GRC Intelligence Report\n\n1) Executive Summary\n- Model output."
+
+    monkeypatch.setattr(workflow_mod.rss_service, "fetch_feed", fake_fetch_feed)
+    monkeypatch.setattr(workflow_mod.rss_service, "enrich_articles", fake_enrich_articles)
+    monkeypatch.setattr(workflow_mod, "GRCModelService", FakeGRCModelService)
+
+    response = asyncio.run(
+        workflow_mod.run_grc_analysis_endpoint(
+            "https://example.com/feed.xml",
+            GRCAnalysisConfig(),
+        )
+    )
+
+    assert response.status == "completed"
+    assert response.metadata is not None
+    assert response.metadata.analysis_mode == "model"
+    assert response.metadata.fallback_reason is None
 
 
 def test_rss_service_fetch_feed_survives_multiple_event_loops(monkeypatch):

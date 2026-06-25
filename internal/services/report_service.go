@@ -94,6 +94,8 @@ func (s *ReportService) GenerateReport(req *apiModels.GenerateReportRequest) (*m
 				report.Metadata = models.ReportMetadata{
 					ArticleCount:         workflowResp.Metadata.ArticleCount,
 					GRCArticleCount:      workflowResp.Metadata.GRCArticleCount,
+					AnalysisMode:         workflowResp.Metadata.AnalysisMode,
+					FallbackReason:       workflowResp.Metadata.FallbackReason,
 					RegulationsMentioned: ensureNonNilSlice(workflowResp.Metadata.RegulationsMentioned),
 					FrameworksReferenced: ensureNonNilSlice(workflowResp.Metadata.FrameworksReferenced),
 					IndustriesAffected:   ensureNonNilSlice(workflowResp.Metadata.IndustriesAffected),

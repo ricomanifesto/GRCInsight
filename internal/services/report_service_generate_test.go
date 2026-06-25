@@ -75,9 +75,14 @@ func TestGenerateReport_PersistsReportAndArticles(t *testing.T) {
 	logger := logrus.New()
 	logger.SetOutput(io.Discard)
 	pc := &fakePythonClient{resp: &apimodels.WorkflowResponse{
-		Status:   "completed",
-		Report:   &apimodels.Report{Title: "GRC Report", Content: "Hello", GeneratedAt: time.Now()},
-		Metadata: &apimodels.Metadata{ArticleCount: 1, GRCArticleCount: 1},
+		Status: "completed",
+		Report: &apimodels.Report{Title: "GRC Report", Content: "Hello", GeneratedAt: time.Now()},
+		Metadata: &apimodels.Metadata{
+			ArticleCount:    1,
+			GRCArticleCount: 1,
+			AnalysisMode:    "fallback",
+			FallbackReason:  "model quota exceeded",
+		},
 		Articles: []apimodels.ArticleRecord{{
 			Title: "A1", URL: "https://ex.com/1", Source: "Feed", Summary: "S",
 			Published: time.Now(), HasGRCContent: true,
@@ -103,6 +108,12 @@ func TestGenerateReport_PersistsReportAndArticles(t *testing.T) {
 	}
 	if fr.updated == nil || fr.updated.Content == "" {
 		t.Fatalf("report not updated or content missing")
+	}
+	if fr.updated.Metadata.AnalysisMode != "fallback" {
+		t.Fatalf("expected analysis mode to persist, got %q", fr.updated.Metadata.AnalysisMode)
+	}
+	if fr.updated.Metadata.FallbackReason != "model quota exceeded" {
+		t.Fatalf("expected fallback reason to persist, got %q", fr.updated.Metadata.FallbackReason)
 	}
 	if fa.calls == 0 {
 		t.Fatalf("expected articles to be persisted")
