@@ -465,11 +465,17 @@
     }
 
     function clearSingleFilter(filterKey) {
-      if (filterKey === 'query') search.value = '';
-      if (filterKey === 'reviewStatus') status.value = 'all';
-      if (filterKey === 'tagCategory') tag.value = 'all';
-      if (filterKey === 'ownerCue') owner.value = 'all';
-      if (filterKey === 'evidenceState') evidence.value = 'all';
+      const filterStateOptions = sectionFilters.filterStateOptions || [];
+      const option = filterStateOptions.find(option => option.key === filterKey);
+      const controlByFilterKey = {
+        query: search,
+        reviewStatus: status,
+        tagCategory: tag,
+        ownerCue: owner,
+        evidenceState: evidence,
+      };
+      const control = controlByFilterKey[filterKey];
+      if (option && control) control.value = option.defaultValue;
       applyFilters();
     }
 

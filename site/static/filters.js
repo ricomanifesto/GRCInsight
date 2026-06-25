@@ -47,6 +47,18 @@
     return ['all', 'referenced', 'missing'];
   }
 
+  const filterStateOptions = Object.freeze([
+    Object.freeze({ key: 'query', param: 'q', defaultValue: '', labelPrefix: 'Search' }),
+    Object.freeze({ key: 'reviewStatus', param: 'status', defaultValue: 'all', labelPrefix: 'Status' }),
+    Object.freeze({ key: 'tagCategory', param: 'tag', defaultValue: 'all', labelPrefix: 'Tag' }),
+    Object.freeze({ key: 'ownerCue', param: 'owner', defaultValue: 'all', labelPrefix: 'Owner cues' }),
+    Object.freeze({ key: 'evidenceState', param: 'evidence', defaultValue: 'all', labelPrefix: 'Evidence' }),
+  ]);
+
+  function filterStateOption(key) {
+    return filterStateOptions.find(option => option.key === key);
+  }
+
   function ownerSearchTokens(metadata) {
     return metadata.owners === metadataStates.detection.detected ? 'owner owners owner cues' : '';
   }
@@ -155,28 +167,38 @@
 
   function parseFilterParams(searchParams) {
     const params = new URLSearchParams(String(searchParams || '').replace(/^\?/, ''));
+    const queryOption = filterStateOption('query');
+    const statusOption = filterStateOption('reviewStatus');
+    const tagOption = filterStateOption('tagCategory');
+    const ownerOption = filterStateOption('ownerCue');
+    const evidenceOption = filterStateOption('evidenceState');
     return {
-      query: String(params.get('q') || '').trim(),
-      reviewStatus: safeValue(params.get('status') || 'all', allowedReviewStatusValues(), 'all'),
-      tagCategory: safeValue(params.get('tag') || 'all', allowedTagCategories, 'all'),
-      ownerCue: safeValue(params.get('owner') || 'all', allowedOwnerCues, 'all'),
-      evidenceState: safeValue(params.get('evidence') || 'all', allowedEvidenceStates, 'all'),
+      query: String(params.get(queryOption.param) || queryOption.defaultValue).trim(),
+      reviewStatus: safeValue(params.get(statusOption.param) || statusOption.defaultValue, allowedReviewStatusValues(), statusOption.defaultValue),
+      tagCategory: safeValue(params.get(tagOption.param) || tagOption.defaultValue, allowedTagCategories, tagOption.defaultValue),
+      ownerCue: safeValue(params.get(ownerOption.param) || ownerOption.defaultValue, allowedOwnerCues, ownerOption.defaultValue),
+      evidenceState: safeValue(params.get(evidenceOption.param) || evidenceOption.defaultValue, allowedEvidenceStates, evidenceOption.defaultValue),
     };
   }
 
   function buildFilterParams(filters) {
     const active = filters || {};
     const params = new URLSearchParams();
-    const query = String(active.query || '').trim();
-    const reviewStatus = safeValue(active.reviewStatus || 'all', allowedReviewStatusValues(), 'all');
-    const tagCategory = safeValue(active.tagCategory || 'all', allowedTagCategories, 'all');
-    const ownerCue = safeValue(active.ownerCue || 'all', allowedOwnerCues, 'all');
-    const evidenceState = safeValue(active.evidenceState || 'all', allowedEvidenceStates, 'all');
-    if (query) params.set('q', query);
-    if (reviewStatus !== 'all') params.set('status', reviewStatus);
-    if (tagCategory !== 'all') params.set('tag', tagCategory);
-    if (ownerCue !== 'all') params.set('owner', ownerCue);
-    if (evidenceState !== 'all') params.set('evidence', evidenceState);
+    const queryOption = filterStateOption('query');
+    const statusOption = filterStateOption('reviewStatus');
+    const tagOption = filterStateOption('tagCategory');
+    const ownerOption = filterStateOption('ownerCue');
+    const evidenceOption = filterStateOption('evidenceState');
+    const query = String(active.query || queryOption.defaultValue).trim();
+    const reviewStatus = safeValue(active.reviewStatus || statusOption.defaultValue, allowedReviewStatusValues(), statusOption.defaultValue);
+    const tagCategory = safeValue(active.tagCategory || tagOption.defaultValue, allowedTagCategories, tagOption.defaultValue);
+    const ownerCue = safeValue(active.ownerCue || ownerOption.defaultValue, allowedOwnerCues, ownerOption.defaultValue);
+    const evidenceState = safeValue(active.evidenceState || evidenceOption.defaultValue, allowedEvidenceStates, evidenceOption.defaultValue);
+    if (query) params.set(queryOption.param, query);
+    if (reviewStatus !== statusOption.defaultValue) params.set(statusOption.param, reviewStatus);
+    if (tagCategory !== tagOption.defaultValue) params.set(tagOption.param, tagCategory);
+    if (ownerCue !== ownerOption.defaultValue) params.set(ownerOption.param, ownerCue);
+    if (evidenceState !== evidenceOption.defaultValue) params.set(evidenceOption.param, evidenceState);
     const serialized = params.toString();
     return serialized ? `?${serialized}` : '';
   }
@@ -184,16 +206,21 @@
   function activeFilterEntries(filters) {
     const active = filters || {};
     const entries = [];
-    const query = String(active.query || '').trim();
-    const reviewStatus = safeValue(active.reviewStatus || 'all', allowedReviewStatusValues(), 'all');
-    const tagCategory = safeValue(active.tagCategory || 'all', allowedTagCategories, 'all');
-    const ownerCue = safeValue(active.ownerCue || 'all', allowedOwnerCues, 'all');
-    const evidenceState = safeValue(active.evidenceState || 'all', allowedEvidenceStates, 'all');
-    if (query) entries.push({ key: 'query', label: `Search: ${query}` });
-    if (reviewStatus !== 'all') entries.push({ key: 'reviewStatus', label: `Status: ${reviewStatus}` });
-    if (tagCategory !== 'all') entries.push({ key: 'tagCategory', label: `Tag: ${tagCategory}` });
-    if (ownerCue !== 'all') entries.push({ key: 'ownerCue', label: `Owner cues: ${ownerCue}` });
-    if (evidenceState !== 'all') entries.push({ key: 'evidenceState', label: `Evidence: ${evidenceState}` });
+    const queryOption = filterStateOption('query');
+    const statusOption = filterStateOption('reviewStatus');
+    const tagOption = filterStateOption('tagCategory');
+    const ownerOption = filterStateOption('ownerCue');
+    const evidenceOption = filterStateOption('evidenceState');
+    const query = String(active.query || queryOption.defaultValue).trim();
+    const reviewStatus = safeValue(active.reviewStatus || statusOption.defaultValue, allowedReviewStatusValues(), statusOption.defaultValue);
+    const tagCategory = safeValue(active.tagCategory || tagOption.defaultValue, allowedTagCategories, tagOption.defaultValue);
+    const ownerCue = safeValue(active.ownerCue || ownerOption.defaultValue, allowedOwnerCues, ownerOption.defaultValue);
+    const evidenceState = safeValue(active.evidenceState || evidenceOption.defaultValue, allowedEvidenceStates, evidenceOption.defaultValue);
+    if (query) entries.push({ key: queryOption.key, label: `${queryOption.labelPrefix}: ${query}` });
+    if (reviewStatus !== statusOption.defaultValue) entries.push({ key: statusOption.key, label: `${statusOption.labelPrefix}: ${reviewStatus}` });
+    if (tagCategory !== tagOption.defaultValue) entries.push({ key: tagOption.key, label: `${tagOption.labelPrefix}: ${tagCategory}` });
+    if (ownerCue !== ownerOption.defaultValue) entries.push({ key: ownerOption.key, label: `${ownerOption.labelPrefix}: ${ownerCue}` });
+    if (evidenceState !== evidenceOption.defaultValue) entries.push({ key: evidenceOption.key, label: `${evidenceOption.labelPrefix}: ${evidenceState}` });
     return entries;
   }
 
@@ -218,6 +245,7 @@
     allowedReviewStatusValues,
     buildFilterParams,
     evidenceStateValues,
+    filterStateOptions,
     filterSections,
     normalize,
     parseFilterParams,

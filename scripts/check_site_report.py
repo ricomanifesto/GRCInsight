@@ -148,6 +148,7 @@ def main() -> None:
 
     required_filter_guards = (
         "window.GRCInsightFilters",
+        "filterStateOptions",
         "filterSections",
         "parseFilterParams",
         "buildFilterParams",
@@ -191,7 +192,9 @@ def main() -> None:
         "const disabled = count === 0 && !selected",
         "data-clear-filter",
         "renderActiveFilterChips(filters)",
-        "clearSingleFilter(clearButton.dataset.clearFilter)",
+        "filterStateOptions.find(option => option.key === filterKey)",
+        "controlByFilterKey[filterKey]",
+        "control.value = option.defaultValue",
         "data-status-filter",
         "updateStatusQuickFilters(sections, filters)",
         "button.dataset.statusFilter",
