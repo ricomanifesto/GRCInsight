@@ -240,6 +240,8 @@ def main() -> None:
         "installAuditSummary",
         "updateAuditSummary",
         "updateAuditSummary(Array.from(matches))",
+        "function sectionHeadingTitle(heading)",
+        "clone.querySelectorAll('.anchor-link, .heading-actions').forEach(node => node.remove())",
         "summarizeSections",
         "renderAuditSummary",
         "data-obligations",

@@ -272,6 +272,13 @@
     });
   }
 
+  function sectionHeadingTitle(heading) {
+    if (!heading) return '';
+    const clone = heading.cloneNode(true);
+    clone.querySelectorAll('.anchor-link, .heading-actions').forEach(node => node.remove());
+    return clone.textContent.trim();
+  }
+
   function collectSection(card) {
     const heading = card.querySelector('h2');
     const metadataEl = card.querySelector('.section-meta');
@@ -283,7 +290,7 @@
     contentClone.querySelectorAll('.section-meta, .heading-actions').forEach(node => node.remove());
     return {
       id: heading ? heading.id : '',
-      title: heading ? (heading.childNodes[0]?.textContent || '').trim() : '',
+      title: sectionHeadingTitle(heading),
       text: contentClone.textContent || '',
       tagCategories: Array.from(new Set(sectionTagCategories)),
       tagTerms: pills.map(pill => pill.textContent.trim()).filter(Boolean),
