@@ -68,6 +68,12 @@ assert(typeof filters.summarizeFilterResults === 'function', 'filters should sum
 assert(typeof filters.activeFilterEntries === 'function', 'filters should expose active filter entries for UI chips');
 assert(typeof filters.activeFilterLabels === 'function', 'filters should expose active filter labels for summaries and UI chips');
 assert(typeof metadata.buildProvenanceSummary === 'function', 'metadata should expose canonical provenance summaries');
+assert(Array.isArray(metadata.reviewStatusOptions), 'metadata should expose canonical review status options');
+assert(metadata.reviewStatusOptions.map(option => option.value).join('|') === 'Action required|Review ready|Needs review', 'review status options should use stable values');
+assert(metadata.reviewStatusOptions.map(option => option.label).join('|') === 'Action|Ready|Needs review', 'review status options should use stable short labels');
+assert(typeof filters.setReviewStatusOptions === 'function', 'filters should accept canonical review status options');
+filters.setReviewStatusOptions(metadata.reviewStatusOptions);
+assert(filters.allowedReviewStatusValues().join('|') === 'all|Action required|Review ready|Needs review', 'filters should expose canonical review status values');
 const archiveMarkdown = `# GRC Intelligence Report - 2026-06-23
 **Generated:** 2026-06-23T12:00:00Z
 
