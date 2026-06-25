@@ -115,12 +115,47 @@
     const obligationSignals = summary.obligations || 0;
     const gapSignals = summary.gaps || 0;
     const deadlineSignals = summary.deadlines || 0;
+    const emptyNote = 'No visible sections are available for this coverage check.';
+    if (!total) {
+      return [
+        {
+          label: 'Generated sections',
+          value: '0',
+          state: 'empty',
+          note: 'No generated sections match the active filters.',
+        },
+        {
+          label: 'Source provenance',
+          value: 'No data',
+          state: 'empty',
+          note: 'No generated sections available for provenance review.',
+        },
+        {
+          label: 'Obligations',
+          value: 'No data',
+          state: 'empty',
+          note: emptyNote,
+        },
+        {
+          label: 'Ownership cues',
+          value: 'No data',
+          state: 'empty',
+          note: emptyNote,
+        },
+        {
+          label: 'Gaps and deadlines',
+          value: 'No data',
+          state: 'empty',
+          note: emptyNote,
+        },
+      ];
+    }
     return [
       {
         label: 'Generated sections',
         value: String(total),
-        state: total ? 'ready' : 'empty',
-        note: total ? 'Rendered report sections available for review.' : 'No generated sections match the active filters.',
+        state: 'ready',
+        note: 'Rendered report sections available for review.',
       },
       {
         label: 'Source provenance',

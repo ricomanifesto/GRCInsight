@@ -167,7 +167,12 @@ const emptyFilteredAuditSummary = metadata.summarizeSections([]);
 assert(emptyFilteredAuditSummary.totalSections === 0, 'empty filtered audit summary should count zero sections');
 assert(emptyFilteredAuditSummary.auditReady === false, 'empty filtered audit summary should not be audit-ready');
 assert(metadata.coverageRows(emptyFilteredAuditSummary)[0].value === '0', 'empty coverage rows should preserve zero generated sections');
+const emptyCoverageRows = metadata.coverageRows(emptyFilteredAuditSummary);
+assert(emptyCoverageRows[1].value === 'No data', 'empty source provenance row should not expose 0/0 coverage');
+assert(emptyCoverageRows[1].state === 'empty', 'empty source provenance row should use empty state');
+assert(emptyCoverageRows[1].note === 'No generated sections available for provenance review.', 'empty source provenance row should avoid complete-coverage wording');
 assert(metadata.renderWorkspaceOverview(emptyFilteredAuditSummary).includes('No generated sections match the active filters'), 'empty workspace overview should expose empty filtered state');
+assert(!metadata.renderWorkspaceOverview(emptyFilteredAuditSummary).includes('Every visible section includes source evidence language'), 'empty workspace overview should not claim complete provenance coverage');
 assert(metadata.renderAuditSummary(emptyFilteredAuditSummary).includes('0 sections reviewed'), 'empty filtered audit summary renderer should expose zero matched sections');
 const sections = [
   {{
