@@ -10,6 +10,27 @@
       'Regulatory and risk priorities stay tied to the current report snapshot.',
     ],
   };
+  const defaultReviewSignalStates = Object.freeze({
+    ready: 'ready',
+    gap: 'gap',
+    empty: 'empty',
+    attention: 'attention',
+  });
+  let reviewSignalStates = defaultReviewSignalStates;
+
+  function normalizeReviewSignalStates(states) {
+    const source = states || {};
+    return {
+      ready: String(source.ready || defaultReviewSignalStates.ready).trim(),
+      gap: String(source.gap || defaultReviewSignalStates.gap).trim(),
+      empty: String(source.empty || defaultReviewSignalStates.empty).trim(),
+      attention: String(source.attention || defaultReviewSignalStates.attention).trim(),
+    };
+  }
+
+  function setReviewSignalStates(states) {
+    reviewSignalStates = normalizeReviewSignalStates(states);
+  }
 
   function extractTableValue(markdown, label) {
     const escaped = label.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -38,7 +59,9 @@
     const evidenceGaps = Number(summary.evidenceGaps) || 0;
     const provenanceSummary = context.provenanceSummary || {
       value: totalSections ? `${evidenceReady}/${totalSections}` : 'No data',
-      state: totalSections && evidenceGaps === 0 ? 'ready' : (totalSections ? 'gap' : 'empty'),
+      state: totalSections && evidenceGaps === 0
+        ? reviewSignalStates.ready
+        : (totalSections ? reviewSignalStates.gap : reviewSignalStates.empty),
       sourceGaps: evidenceGaps,
     };
     const sourceGaps = Number(provenanceSummary.sourceGaps) || 0;
@@ -48,27 +71,29 @@
       {
         label: 'Sections',
         value: String(totalSections),
-        state: totalSections ? 'ready' : 'empty',
+        state: totalSections ? reviewSignalStates.ready : reviewSignalStates.empty,
       },
       {
         label: 'Action required',
         value: String(actionRequired),
-        state: actionRequired ? 'attention' : 'ready',
+        state: actionRequired ? reviewSignalStates.attention : reviewSignalStates.ready,
       },
       {
         label: 'Evidence ready',
         value: provenanceSummary.value || 'No data',
-        state: provenanceSummary.state || 'empty',
+        state: provenanceSummary.state || reviewSignalStates.empty,
       },
       {
         label: 'Source-trail gaps',
         value: totalSections ? String(sourceGaps) : 'No data',
-        state: sourceGaps ? 'gap' : (totalSections ? 'ready' : 'empty'),
+        state: sourceGaps
+          ? reviewSignalStates.gap
+          : (totalSections ? reviewSignalStates.ready : reviewSignalStates.empty),
       },
       {
         label: 'Tag categories',
         value: String(tagCategories.length),
-        state: tagCategories.length ? 'ready' : 'empty',
+        state: tagCategories.length ? reviewSignalStates.ready : reviewSignalStates.empty,
       },
     ];
   }
@@ -89,5 +114,6 @@
     buildReviewMetrics,
     deriveCurrentReportMetadata,
     buildReports,
+    setReviewSignalStates,
   };
 })();

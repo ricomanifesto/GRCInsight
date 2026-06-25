@@ -25,6 +25,12 @@
       needsSourceTrail: 'Needs source trail',
     }),
   });
+  const reviewSignalStates = Object.freeze({
+    ready: 'ready',
+    gap: 'gap',
+    empty: 'empty',
+    attention: 'attention',
+  });
 
   function detected(pattern, value) {
     return pattern.test(value);
@@ -137,7 +143,7 @@
         sourceReady: 0,
         sourceGaps: 0,
         value: 'No data',
-        state: 'empty',
+        state: reviewSignalStates.empty,
         note: 'No generated sections available for provenance review.',
       };
     }
@@ -148,7 +154,7 @@
       sourceReady,
       sourceGaps: evidenceGaps,
       value: `${sourceReady}/${total}`,
-      state: evidenceGaps === 0 ? 'ready' : 'gap',
+      state: evidenceGaps === 0 ? reviewSignalStates.ready : reviewSignalStates.gap,
       note: evidenceGaps
         ? `${evidenceGaps} sections still need source trails.`
         : 'Every visible section includes source evidence language.',
@@ -176,26 +182,26 @@
         {
           label: 'Generated sections',
           value: '0',
-          state: 'empty',
+          state: reviewSignalStates.empty,
           note: 'No generated sections match the active filters.',
         },
         sourceProvenanceCoverageRow(summary),
         {
           label: 'Obligations',
           value: 'No data',
-          state: 'empty',
+          state: reviewSignalStates.empty,
           note: emptyNote,
         },
         {
           label: 'Ownership cues',
           value: 'No data',
-          state: 'empty',
+          state: reviewSignalStates.empty,
           note: emptyNote,
         },
         {
           label: 'Gaps and deadlines',
           value: 'No data',
-          state: 'empty',
+          state: reviewSignalStates.empty,
           note: emptyNote,
         },
       ];
@@ -204,26 +210,26 @@
       {
         label: 'Generated sections',
         value: String(total),
-        state: 'ready',
+        state: reviewSignalStates.ready,
         note: 'Rendered report sections available for review.',
       },
       sourceProvenanceCoverageRow(summary),
       {
         label: 'Obligations',
         value: String(obligationSignals),
-        state: obligationSignals ? 'attention' : 'empty',
+        state: obligationSignals ? reviewSignalStates.attention : reviewSignalStates.empty,
         note: obligationSignals ? 'Mandatory or required-action language detected.' : 'No obligation language detected in visible sections.',
       },
       {
         label: 'Ownership cues',
         value: String(summary.owners || 0),
-        state: summary.owners ? 'ready' : 'gap',
+        state: summary.owners ? reviewSignalStates.ready : reviewSignalStates.gap,
         note: summary.owners ? 'At least one section names accountability cues.' : 'No explicit owner cues detected.',
       },
       {
         label: 'Gaps and deadlines',
         value: String(gapSignals + deadlineSignals),
-        state: (gapSignals || deadlineSignals) ? 'attention' : 'ready',
+        state: (gapSignals || deadlineSignals) ? reviewSignalStates.attention : reviewSignalStates.ready,
         note: (gapSignals || deadlineSignals)
           ? `${gapSignals} gap signals and ${deadlineSignals} deadline signals need review.`
           : 'No gap or deadline signals detected in visible sections.',
@@ -324,6 +330,7 @@
     metadataStates,
     renderSectionMetadata,
     renderWorkspaceOverview,
+    reviewSignalStates,
     reviewStatusOptions,
     summarizeSections,
     renderAuditSummary,

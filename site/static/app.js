@@ -21,6 +21,9 @@
   if (sectionFilters && sectionMetadata && sectionMetadata.metadataStates && sectionFilters.setMetadataStates) {
     sectionFilters.setMetadataStates(sectionMetadata.metadataStates);
   }
+  if (archiveDigest && sectionMetadata && sectionMetadata.reviewSignalStates && archiveDigest.setReviewSignalStates) {
+    archiveDigest.setReviewSignalStates(sectionMetadata.reviewSignalStates);
+  }
 
   function escapeHtml(s) {
     return s.replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
@@ -33,6 +36,7 @@
   function renderArchiveDigest(markdown, sections) {
     const container = document.getElementById('archiveDigest');
     if (!container || !archiveDigest || !archiveDigest.buildReports) return;
+    const reviewSignalStates = sectionMetadata && sectionMetadata.reviewSignalStates || {};
     const summary = sectionMetadata && sectionMetadata.summarizeSections
       ? sectionMetadata.summarizeSections(normalizeSummarySections(sections || []))
       : null;
@@ -65,7 +69,7 @@
           </div>
           <div class="archive-entry-meta">
             <time datetime="${escapeAttribute(report.generatedAt || '')}">${escapeHtml((report.generatedAt || '').slice(0, 10) || 'Unknown date')}</time>
-            ${reviewMetrics.length ? `<dl class="archive-review-metrics">${reviewMetrics.map(row => `<div data-review-metric-state="${escapeAttribute(row.state || 'ready')}"><dt>${escapeHtml(row.label)}</dt><dd>${escapeHtml(row.value)}</dd></div>`).join('')}</dl>` : ''}
+            ${reviewMetrics.length ? `<dl class="archive-review-metrics">${reviewMetrics.map(row => `<div data-review-metric-state="${escapeAttribute(row.state || reviewSignalStates.ready || 'ready')}"><dt>${escapeHtml(row.label)}</dt><dd>${escapeHtml(row.value)}</dd></div>`).join('')}</dl>` : ''}
             <div class="archive-tags">${tags.map(tag => `<span>${escapeHtml(tag)}</span>`).join('')}</div>
           </div>
         </article>
