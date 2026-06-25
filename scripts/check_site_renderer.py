@@ -64,10 +64,13 @@ assert(typeof archive.deriveCurrentReportMetadata === 'function', 'archive shoul
 assert(typeof filters.parseFilterParams === 'function', 'filters should parse URL filter params');
 assert(typeof filters.buildFilterParams === 'function', 'filters should build URL filter params');
 assert(Array.isArray(filters.filterStateOptions), 'filters should expose canonical filter state options');
+assert(filters.filterStateOptionMap && typeof filters.filterStateOptionMap === 'object', 'filters should expose canonical filter state option lookup map');
 assert(filters.filterStateOptions.map(option => option.key).join('|') === 'query|reviewStatus|tagCategory|ownerCue|evidenceState', 'filter state options should use stable keys');
 assert(filters.filterStateOptions.map(option => option.param).join('|') === 'q|status|tag|owner|evidence', 'filter state options should use stable URL params');
 assert(filters.filterStateOptions.map(option => option.defaultValue).join('|') === '|all|all|all|all', 'filter state options should use stable defaults');
 assert(filters.filterStateOptions.map(option => option.labelPrefix).join('|') === 'Search|Status|Tag|Owner cues|Evidence', 'filter state options should use stable labels');
+assert(filters.filterStateOptionMap.query.param === 'q', 'filter state option lookup should expose query params by key');
+assert(filters.filterStateOptionMap.reviewStatus.defaultValue === 'all', 'filter state option lookup should expose defaults by key');
 assert(typeof filters.statusQuickFilterCounts === 'function', 'filters should expose context-aware status quick-filter counts');
 assert(typeof filters.summarizeFilterResults === 'function', 'filters should summarize active filter results');
 assert(typeof filters.activeFilterEntries === 'function', 'filters should expose active filter entries for UI chips');
