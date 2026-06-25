@@ -105,6 +105,8 @@ type Report struct {
 type Metadata struct {
 	ArticleCount         int      `json:"article_count"`
 	GRCArticleCount      int      `json:"grc_article_count"`
+	AnalysisMode         string   `json:"analysis_mode,omitempty"`
+	FallbackReason       string   `json:"fallback_reason,omitempty"`
 	RegulationsMentioned []string `json:"regulations_mentioned"`
 	FrameworksReferenced []string `json:"frameworks_referenced"`
 	IndustriesAffected   []string `json:"industries_affected"`

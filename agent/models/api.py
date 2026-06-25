@@ -1,7 +1,7 @@
 """Pydantic models for API requests and responses."""
 
 from datetime import datetime
-from typing import List, Optional, Dict, Any
+from typing import List, Optional, Dict, Any, Literal
 from pydantic import BaseModel, Field
 
 
@@ -94,6 +94,8 @@ class ReportMetadata(BaseModel):
 
     article_count: int
     grc_article_count: int
+    analysis_mode: Optional[Literal["model", "fallback"]] = None
+    fallback_reason: Optional[str] = None
     regulations_mentioned: List[str] = Field(default_factory=list)
     frameworks_referenced: List[str] = Field(default_factory=list)
     industries_affected: List[str] = Field(default_factory=list)

@@ -146,6 +146,8 @@ def handler(event, context):
                             metadata = {
                                 "article_count": md.article_count,
                                 "grc_article_count": md.grc_article_count,
+                                "analysis_mode": md.analysis_mode,
+                                "fallback_reason": md.fallback_reason,
                                 "regulations_mentioned": md.regulations_mentioned or [],
                                 "frameworks_referenced": md.frameworks_referenced or [],
                                 "industries_affected": md.industries_affected or [],
