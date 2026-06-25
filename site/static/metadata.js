@@ -15,6 +15,16 @@
     reviewReady: reviewStatusOptions[1].value,
     needsReview: reviewStatusOptions[2].value,
   });
+  const metadataStates = Object.freeze({
+    detection: Object.freeze({
+      detected: 'Detected',
+      notDetected: 'Not detected',
+    }),
+    evidence: Object.freeze({
+      sourceReferenced: 'Source referenced',
+      needsSourceTrail: 'Needs source trail',
+    }),
+  });
 
   function detected(pattern, value) {
     return pattern.test(value);
@@ -38,11 +48,11 @@
 
     return {
       reviewStatus,
-      obligations: hasObligations ? 'Detected' : 'Not detected',
-      gaps: hasGaps ? 'Detected' : 'Not detected',
-      deadlines: hasDeadlines ? 'Detected' : 'Not detected',
-      owners: hasOwners ? 'Detected' : 'Not detected',
-      evidence: hasEvidence ? 'Source referenced' : 'Needs source trail',
+      obligations: hasObligations ? metadataStates.detection.detected : metadataStates.detection.notDetected,
+      gaps: hasGaps ? metadataStates.detection.detected : metadataStates.detection.notDetected,
+      deadlines: hasDeadlines ? metadataStates.detection.detected : metadataStates.detection.notDetected,
+      owners: hasOwners ? metadataStates.detection.detected : metadataStates.detection.notDetected,
+      evidence: hasEvidence ? metadataStates.evidence.sourceReferenced : metadataStates.evidence.needsSourceTrail,
     };
   }
 
@@ -82,16 +92,16 @@
   function summarizeSections(sections) {
     const normalized = Array.isArray(sections) ? sections : [];
     const gapTitles = normalized
-      .filter(section => section.metadata && section.metadata.evidence === 'Needs source trail')
+      .filter(section => section.metadata && section.metadata.evidence === metadataStates.evidence.needsSourceTrail)
       .map(section => section.title || 'Untitled section');
     const evidenceTitles = normalized
-      .filter(section => section.metadata && section.metadata.evidence === 'Source referenced')
+      .filter(section => section.metadata && section.metadata.evidence === metadataStates.evidence.sourceReferenced)
       .map(section => section.title || 'Untitled section');
     const actionTitles = normalized
       .filter(section => section.metadata && section.metadata.reviewStatus === REVIEW_STATUS.actionRequired)
       .map(section => section.title || 'Untitled section');
     const ownerTitles = normalized
-      .filter(section => section.metadata && section.metadata.owners === 'Detected')
+      .filter(section => section.metadata && section.metadata.owners === metadataStates.detection.detected)
       .map(section => section.title || 'Untitled section');
     const evidenceGaps = gapTitles.length;
     return {
@@ -99,11 +109,11 @@
       actionRequired: countByValue(normalized, 'reviewStatus', REVIEW_STATUS.actionRequired),
       reviewReady: countByValue(normalized, 'reviewStatus', REVIEW_STATUS.reviewReady),
       needsReview: countByValue(normalized, 'reviewStatus', REVIEW_STATUS.needsReview),
-      obligations: countByValue(normalized, 'obligations', 'Detected'),
-      gaps: countByValue(normalized, 'gaps', 'Detected'),
-      deadlines: countByValue(normalized, 'deadlines', 'Detected'),
-      owners: countByValue(normalized, 'owners', 'Detected'),
-      evidenceReady: countByValue(normalized, 'evidence', 'Source referenced'),
+      obligations: countByValue(normalized, 'obligations', metadataStates.detection.detected),
+      gaps: countByValue(normalized, 'gaps', metadataStates.detection.detected),
+      deadlines: countByValue(normalized, 'deadlines', metadataStates.detection.detected),
+      owners: countByValue(normalized, 'owners', metadataStates.detection.detected),
+      evidenceReady: countByValue(normalized, 'evidence', metadataStates.evidence.sourceReferenced),
       evidenceGaps,
       auditReady: normalized.length > 0 && evidenceGaps === 0 && countByValue(normalized, 'reviewStatus', REVIEW_STATUS.needsReview) === 0,
       gapTitles,
@@ -311,6 +321,7 @@
     buildProvenanceSummary,
     coverageRows,
     deriveSectionMetadata,
+    metadataStates,
     renderSectionMetadata,
     renderWorkspaceOverview,
     reviewStatusOptions,

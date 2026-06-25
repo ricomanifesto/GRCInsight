@@ -11,8 +11,44 @@
     return String(value || '').replace(/\b(?:Status|Obligations|Gaps|Deadlines|Owners|Evidence)\s*(?:Detected|Not detected|Action required|Review ready|Needs review|Source referenced|Needs source trail)\b/gi, ' ');
   }
 
+  const defaultMetadataStates = Object.freeze({
+    detection: Object.freeze({
+      detected: 'Detected',
+      notDetected: 'Not detected',
+    }),
+    evidence: Object.freeze({
+      sourceReferenced: 'Source referenced',
+      needsSourceTrail: 'Needs source trail',
+    }),
+  });
+  let metadataStates = defaultMetadataStates;
+
+  function normalizeMetadataStates(states) {
+    const source = states || {};
+    const detection = source.detection || {};
+    const evidence = source.evidence || {};
+    return {
+      detection: {
+        detected: String(detection.detected || defaultMetadataStates.detection.detected).trim(),
+        notDetected: String(detection.notDetected || defaultMetadataStates.detection.notDetected).trim(),
+      },
+      evidence: {
+        sourceReferenced: String(evidence.sourceReferenced || defaultMetadataStates.evidence.sourceReferenced).trim(),
+        needsSourceTrail: String(evidence.needsSourceTrail || defaultMetadataStates.evidence.needsSourceTrail).trim(),
+      },
+    };
+  }
+
+  function setMetadataStates(states) {
+    metadataStates = normalizeMetadataStates(states);
+  }
+
+  function evidenceStateValues() {
+    return ['all', 'referenced', 'missing'];
+  }
+
   function ownerSearchTokens(metadata) {
-    return metadata.owners === 'Detected' ? 'owner owners owner cues' : '';
+    return metadata.owners === metadataStates.detection.detected ? 'owner owners owner cues' : '';
   }
 
   function searchableText(section) {
@@ -48,12 +84,12 @@
       if (!normalizedTokens(section.tagCategories).includes(tagCategory)) return false;
     }
     if (ownerCue && ownerCue !== 'all') {
-      const hasOwnerCue = normalize(section.metadata && section.metadata.owners) === 'detected';
+      const hasOwnerCue = normalize(section.metadata && section.metadata.owners) === normalize(metadataStates.detection.detected);
       if (ownerCue === 'detected' && !hasOwnerCue) return false;
       if (ownerCue === 'missing' && hasOwnerCue) return false;
     }
     if (evidenceState && evidenceState !== 'all') {
-      const hasEvidence = normalize(section.metadata && section.metadata.evidence) === 'source referenced';
+      const hasEvidence = normalize(section.metadata && section.metadata.evidence) === normalize(metadataStates.evidence.sourceReferenced);
       if (evidenceState === 'referenced' && !hasEvidence) return false;
       if (evidenceState === 'missing' && hasEvidence) return false;
     }
@@ -111,7 +147,7 @@
 
   const allowedTagCategories = new Set(['all', 'framework', 'regulation', 'risk', 'control', 'agency']);
   const allowedOwnerCues = new Set(['all', 'detected', 'missing']);
-  const allowedEvidenceStates = new Set(['all', 'referenced', 'missing']);
+  const allowedEvidenceStates = new Set(evidenceStateValues());
 
   function safeValue(value, allowed, fallback) {
     return allowed.includes ? (allowed.includes(value) ? value : fallback) : (allowed.has(value) ? value : fallback);
@@ -181,10 +217,12 @@
     activeFilterLabels,
     allowedReviewStatusValues,
     buildFilterParams,
+    evidenceStateValues,
     filterSections,
     normalize,
     parseFilterParams,
     sectionMatches,
+    setMetadataStates,
     setReviewStatusOptions,
     statusQuickFilterCounts,
     summarizeFilterResults,
