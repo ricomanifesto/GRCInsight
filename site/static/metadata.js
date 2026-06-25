@@ -108,9 +108,30 @@
     return items.slice(0, 4).map(item => `<li>${escapeHtml(item)}</li>`).join('');
   }
 
+  function sourceProvenanceCoverageRow(summary) {
+    const total = summary.totalSections || 0;
+    if (total <= 0) {
+      return {
+        label: 'Source provenance',
+        value: 'No data',
+        state: 'empty',
+        note: 'No generated sections available for provenance review.',
+      };
+    }
+    const sourceReady = summary.evidenceReady || 0;
+    const evidenceGaps = summary.evidenceGaps || 0;
+    return {
+      label: 'Source provenance',
+      value: `${sourceReady}/${total}`,
+      state: evidenceGaps === 0 ? 'ready' : 'gap',
+      note: evidenceGaps
+        ? `${evidenceGaps} sections still need source trails.`
+        : 'Every visible section includes source evidence language.',
+    };
+  }
+
   function coverageRows(summary) {
     const total = summary.totalSections || 0;
-    const sourceReady = summary.evidenceReady || 0;
     const obligationSignals = summary.obligations || 0;
     const gapSignals = summary.gaps || 0;
     const deadlineSignals = summary.deadlines || 0;
@@ -123,12 +144,7 @@
           state: 'empty',
           note: 'No generated sections match the active filters.',
         },
-        {
-          label: 'Source provenance',
-          value: 'No data',
-          state: 'empty',
-          note: 'No generated sections available for provenance review.',
-        },
+        sourceProvenanceCoverageRow(summary),
         {
           label: 'Obligations',
           value: 'No data',
@@ -156,14 +172,7 @@
         state: 'ready',
         note: 'Rendered report sections available for review.',
       },
-      {
-        label: 'Source provenance',
-        value: `${sourceReady}/${total}`,
-        state: total && summary.evidenceGaps === 0 ? 'ready' : 'gap',
-        note: summary.evidenceGaps
-          ? `${summary.evidenceGaps} sections still need source trails.`
-          : 'Every visible section includes source evidence language.',
-      },
+      sourceProvenanceCoverageRow(summary),
       {
         label: 'Obligations',
         value: String(obligationSignals),
