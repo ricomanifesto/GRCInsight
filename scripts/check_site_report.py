@@ -149,6 +149,8 @@ def main() -> None:
     required_filter_guards = (
         "window.GRCInsightFilters",
         "filterStateOptions",
+        "filterStateOptionMap",
+        "function filterStateOption(key)",
         "filterSections",
         "parseFilterParams",
         "buildFilterParams",
@@ -193,6 +195,7 @@ def main() -> None:
         "data-clear-filter",
         "renderActiveFilterChips(filters)",
         "const filterControlBindings = filterStateOptions.map(option =>",
+        "const filterStateOptionMap = sectionFilters.filterStateOptionMap ||",
         "function setFilterControlValue(binding, value)",
         "function setFilterControlDefaults()",
         "function currentFilters()",
@@ -218,6 +221,17 @@ def main() -> None:
     for guard in required_filter_ui:
         if guard not in html + app_js:
             fail(f"site missing section filter UI guard: {guard}")
+
+    duplicate_filter_lookup_guards = (
+        "const queryOption = filterStateOption('query')",
+        "const statusOption = filterStateOption('reviewStatus')",
+        "const tagOption = filterStateOption('tagCategory')",
+        "const ownerOption = filterStateOption('ownerCue')",
+        "const evidenceOption = filterStateOption('evidenceState')",
+    )
+    for guard in duplicate_filter_lookup_guards:
+        if guard in filters_js:
+            fail(f"filters.js still duplicates filter option lookup: {guard}")
 
     required_filter_layout = (
         ".filter-controls",

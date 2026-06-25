@@ -354,9 +354,14 @@
       { key: 'ownerCue', defaultValue: 'all' },
       { key: 'evidenceState', defaultValue: 'all' },
     ];
+    const fallbackFilterStateOptionMap = fallbackFilterStateOptions.reduce((options, option) => {
+      options[option.key] = option;
+      return options;
+    }, {});
     const filterStateOptions = Array.isArray(sectionFilters.filterStateOptions)
       ? sectionFilters.filterStateOptions
       : fallbackFilterStateOptions;
+    const filterStateOptionMap = sectionFilters.filterStateOptionMap || fallbackFilterStateOptionMap;
     const filterControlByKey = {
       query: search,
       reviewStatus: status,
@@ -367,7 +372,7 @@
     const filterControlBindings = filterStateOptions.map(option => ({
       key: option.key,
       control: filterControlByKey[option.key],
-      defaultValue: option.defaultValue,
+      defaultValue: (filterStateOptionMap[option.key] || option).defaultValue,
     })).filter(binding => binding.control);
 
     function setFilterControlValue(binding, value) {

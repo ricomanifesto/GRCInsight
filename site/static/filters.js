@@ -54,9 +54,13 @@
     Object.freeze({ key: 'ownerCue', param: 'owner', defaultValue: 'all', labelPrefix: 'Owner cues' }),
     Object.freeze({ key: 'evidenceState', param: 'evidence', defaultValue: 'all', labelPrefix: 'Evidence' }),
   ]);
+  const filterStateOptionMap = Object.freeze(filterStateOptions.reduce((options, option) => {
+    options[option.key] = option;
+    return options;
+  }, {}));
 
   function filterStateOption(key) {
-    return filterStateOptions.find(option => option.key === key);
+    return filterStateOptionMap[key];
   }
 
   function ownerSearchTokens(metadata) {
@@ -167,38 +171,30 @@
 
   function parseFilterParams(searchParams) {
     const params = new URLSearchParams(String(searchParams || '').replace(/^\?/, ''));
-    const queryOption = filterStateOption('query');
-    const statusOption = filterStateOption('reviewStatus');
-    const tagOption = filterStateOption('tagCategory');
-    const ownerOption = filterStateOption('ownerCue');
-    const evidenceOption = filterStateOption('evidenceState');
+    const options = filterStateOptionMap;
     return {
-      query: String(params.get(queryOption.param) || queryOption.defaultValue).trim(),
-      reviewStatus: safeValue(params.get(statusOption.param) || statusOption.defaultValue, allowedReviewStatusValues(), statusOption.defaultValue),
-      tagCategory: safeValue(params.get(tagOption.param) || tagOption.defaultValue, allowedTagCategories, tagOption.defaultValue),
-      ownerCue: safeValue(params.get(ownerOption.param) || ownerOption.defaultValue, allowedOwnerCues, ownerOption.defaultValue),
-      evidenceState: safeValue(params.get(evidenceOption.param) || evidenceOption.defaultValue, allowedEvidenceStates, evidenceOption.defaultValue),
+      query: String(params.get(options.query.param) || options.query.defaultValue).trim(),
+      reviewStatus: safeValue(params.get(options.reviewStatus.param) || options.reviewStatus.defaultValue, allowedReviewStatusValues(), options.reviewStatus.defaultValue),
+      tagCategory: safeValue(params.get(options.tagCategory.param) || options.tagCategory.defaultValue, allowedTagCategories, options.tagCategory.defaultValue),
+      ownerCue: safeValue(params.get(options.ownerCue.param) || options.ownerCue.defaultValue, allowedOwnerCues, options.ownerCue.defaultValue),
+      evidenceState: safeValue(params.get(options.evidenceState.param) || options.evidenceState.defaultValue, allowedEvidenceStates, options.evidenceState.defaultValue),
     };
   }
 
   function buildFilterParams(filters) {
     const active = filters || {};
     const params = new URLSearchParams();
-    const queryOption = filterStateOption('query');
-    const statusOption = filterStateOption('reviewStatus');
-    const tagOption = filterStateOption('tagCategory');
-    const ownerOption = filterStateOption('ownerCue');
-    const evidenceOption = filterStateOption('evidenceState');
-    const query = String(active.query || queryOption.defaultValue).trim();
-    const reviewStatus = safeValue(active.reviewStatus || statusOption.defaultValue, allowedReviewStatusValues(), statusOption.defaultValue);
-    const tagCategory = safeValue(active.tagCategory || tagOption.defaultValue, allowedTagCategories, tagOption.defaultValue);
-    const ownerCue = safeValue(active.ownerCue || ownerOption.defaultValue, allowedOwnerCues, ownerOption.defaultValue);
-    const evidenceState = safeValue(active.evidenceState || evidenceOption.defaultValue, allowedEvidenceStates, evidenceOption.defaultValue);
-    if (query) params.set(queryOption.param, query);
-    if (reviewStatus !== statusOption.defaultValue) params.set(statusOption.param, reviewStatus);
-    if (tagCategory !== tagOption.defaultValue) params.set(tagOption.param, tagCategory);
-    if (ownerCue !== ownerOption.defaultValue) params.set(ownerOption.param, ownerCue);
-    if (evidenceState !== evidenceOption.defaultValue) params.set(evidenceOption.param, evidenceState);
+    const options = filterStateOptionMap;
+    const query = String(active.query || options.query.defaultValue).trim();
+    const reviewStatus = safeValue(active.reviewStatus || options.reviewStatus.defaultValue, allowedReviewStatusValues(), options.reviewStatus.defaultValue);
+    const tagCategory = safeValue(active.tagCategory || options.tagCategory.defaultValue, allowedTagCategories, options.tagCategory.defaultValue);
+    const ownerCue = safeValue(active.ownerCue || options.ownerCue.defaultValue, allowedOwnerCues, options.ownerCue.defaultValue);
+    const evidenceState = safeValue(active.evidenceState || options.evidenceState.defaultValue, allowedEvidenceStates, options.evidenceState.defaultValue);
+    if (query) params.set(options.query.param, query);
+    if (reviewStatus !== options.reviewStatus.defaultValue) params.set(options.reviewStatus.param, reviewStatus);
+    if (tagCategory !== options.tagCategory.defaultValue) params.set(options.tagCategory.param, tagCategory);
+    if (ownerCue !== options.ownerCue.defaultValue) params.set(options.ownerCue.param, ownerCue);
+    if (evidenceState !== options.evidenceState.defaultValue) params.set(options.evidenceState.param, evidenceState);
     const serialized = params.toString();
     return serialized ? `?${serialized}` : '';
   }
@@ -206,21 +202,17 @@
   function activeFilterEntries(filters) {
     const active = filters || {};
     const entries = [];
-    const queryOption = filterStateOption('query');
-    const statusOption = filterStateOption('reviewStatus');
-    const tagOption = filterStateOption('tagCategory');
-    const ownerOption = filterStateOption('ownerCue');
-    const evidenceOption = filterStateOption('evidenceState');
-    const query = String(active.query || queryOption.defaultValue).trim();
-    const reviewStatus = safeValue(active.reviewStatus || statusOption.defaultValue, allowedReviewStatusValues(), statusOption.defaultValue);
-    const tagCategory = safeValue(active.tagCategory || tagOption.defaultValue, allowedTagCategories, tagOption.defaultValue);
-    const ownerCue = safeValue(active.ownerCue || ownerOption.defaultValue, allowedOwnerCues, ownerOption.defaultValue);
-    const evidenceState = safeValue(active.evidenceState || evidenceOption.defaultValue, allowedEvidenceStates, evidenceOption.defaultValue);
-    if (query) entries.push({ key: queryOption.key, label: `${queryOption.labelPrefix}: ${query}` });
-    if (reviewStatus !== statusOption.defaultValue) entries.push({ key: statusOption.key, label: `${statusOption.labelPrefix}: ${reviewStatus}` });
-    if (tagCategory !== tagOption.defaultValue) entries.push({ key: tagOption.key, label: `${tagOption.labelPrefix}: ${tagCategory}` });
-    if (ownerCue !== ownerOption.defaultValue) entries.push({ key: ownerOption.key, label: `${ownerOption.labelPrefix}: ${ownerCue}` });
-    if (evidenceState !== evidenceOption.defaultValue) entries.push({ key: evidenceOption.key, label: `${evidenceOption.labelPrefix}: ${evidenceState}` });
+    const options = filterStateOptionMap;
+    const query = String(active.query || options.query.defaultValue).trim();
+    const reviewStatus = safeValue(active.reviewStatus || options.reviewStatus.defaultValue, allowedReviewStatusValues(), options.reviewStatus.defaultValue);
+    const tagCategory = safeValue(active.tagCategory || options.tagCategory.defaultValue, allowedTagCategories, options.tagCategory.defaultValue);
+    const ownerCue = safeValue(active.ownerCue || options.ownerCue.defaultValue, allowedOwnerCues, options.ownerCue.defaultValue);
+    const evidenceState = safeValue(active.evidenceState || options.evidenceState.defaultValue, allowedEvidenceStates, options.evidenceState.defaultValue);
+    if (query) entries.push({ key: options.query.key, label: `${options.query.labelPrefix}: ${query}` });
+    if (reviewStatus !== options.reviewStatus.defaultValue) entries.push({ key: options.reviewStatus.key, label: `${options.reviewStatus.labelPrefix}: ${reviewStatus}` });
+    if (tagCategory !== options.tagCategory.defaultValue) entries.push({ key: options.tagCategory.key, label: `${options.tagCategory.labelPrefix}: ${tagCategory}` });
+    if (ownerCue !== options.ownerCue.defaultValue) entries.push({ key: options.ownerCue.key, label: `${options.ownerCue.labelPrefix}: ${ownerCue}` });
+    if (evidenceState !== options.evidenceState.defaultValue) entries.push({ key: options.evidenceState.key, label: `${options.evidenceState.labelPrefix}: ${evidenceState}` });
     return entries;
   }
 
@@ -245,6 +237,8 @@
     allowedReviewStatusValues,
     buildFilterParams,
     evidenceStateValues,
+    filterStateOption,
+    filterStateOptionMap,
     filterStateOptions,
     filterSections,
     normalize,
