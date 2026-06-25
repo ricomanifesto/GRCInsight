@@ -347,21 +347,49 @@
 
     const sections = Array.from(document.querySelectorAll('#report .card')).map(collectSection);
     const total = sections.length;
+    const fallbackFilterStateOptions = [
+      { key: 'query', defaultValue: '' },
+      { key: 'reviewStatus', defaultValue: 'all' },
+      { key: 'tagCategory', defaultValue: 'all' },
+      { key: 'ownerCue', defaultValue: 'all' },
+      { key: 'evidenceState', defaultValue: 'all' },
+    ];
+    const filterStateOptions = Array.isArray(sectionFilters.filterStateOptions)
+      ? sectionFilters.filterStateOptions
+      : fallbackFilterStateOptions;
+    const filterControlByKey = {
+      query: search,
+      reviewStatus: status,
+      tagCategory: tag,
+      ownerCue: owner,
+      evidenceState: evidence,
+    };
+    const filterControlBindings = filterStateOptions.map(option => ({
+      key: option.key,
+      control: filterControlByKey[option.key],
+      defaultValue: option.defaultValue,
+    })).filter(binding => binding.control);
+
+    function setFilterControlValue(binding, value) {
+      binding.control.value = value || binding.defaultValue;
+    }
+
+    function setFilterControlDefaults() {
+      filterControlBindings.forEach(binding => {
+        setFilterControlValue(binding, binding.defaultValue);
+      });
+    }
+
     const initialFilters = sectionFilters.parseFilterParams ? sectionFilters.parseFilterParams(window.location.search) : {};
-    search.value = initialFilters.query || '';
-    status.value = initialFilters.reviewStatus || 'all';
-    tag.value = initialFilters.tagCategory || 'all';
-    owner.value = initialFilters.ownerCue || 'all';
-    evidence.value = initialFilters.evidenceState || 'all';
+    filterControlBindings.forEach(binding => {
+      setFilterControlValue(binding, initialFilters[binding.key]);
+    });
 
     function currentFilters() {
-      return {
-        query: search.value,
-        reviewStatus: status.value,
-        tagCategory: tag.value,
-        ownerCue: owner.value,
-        evidenceState: evidence.value,
-      };
+      return filterControlBindings.reduce((filters, binding) => {
+        filters[binding.key] = binding.control.value;
+        return filters;
+      }, {});
     }
 
     function syncFilterParams(filters) {
@@ -455,27 +483,15 @@
       control.addEventListener('change', applyFilters);
     });
     function resetFilters() {
-      search.value = '';
-      status.value = 'all';
-      tag.value = 'all';
-      owner.value = 'all';
-      evidence.value = 'all';
+      setFilterControlDefaults();
       applyFilters();
       search.focus();
     }
 
     function clearSingleFilter(filterKey) {
-      const filterStateOptions = sectionFilters.filterStateOptions || [];
       const option = filterStateOptions.find(option => option.key === filterKey);
-      const controlByFilterKey = {
-        query: search,
-        reviewStatus: status,
-        tagCategory: tag,
-        ownerCue: owner,
-        evidenceState: evidence,
-      };
-      const control = controlByFilterKey[filterKey];
-      if (option && control) control.value = option.defaultValue;
+      const binding = filterControlBindings.find(binding => binding.key === filterKey);
+      if (option && binding) setFilterControlValue(binding, option.defaultValue);
       applyFilters();
     }
 
