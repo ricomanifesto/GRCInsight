@@ -368,6 +368,7 @@
         : 'No matching sections. Clear filters to return to the full report.';
       clear.disabled = count === total && !search.value && status.value === 'all' && tag.value === 'all' && owner.value === 'all' && evidence.value === 'all';
       updateStatusQuickFilters(sections, filters);
+      updateWorkspaceOverview(Array.from(matches));
       updateAuditSummary(Array.from(matches));
       updateNavigationContext(count, total);
       buildSidebar();
@@ -481,13 +482,13 @@
   }
 
   function installAuditSummary() {
-    updateAuditSummary(Array.from(document.querySelectorAll('#report .card')).map(collectSection));
+    const sections = Array.from(document.querySelectorAll('#report .card')).map(collectSection);
+    updateWorkspaceOverview(sections);
+    updateAuditSummary(sections);
   }
 
-  function updateAuditSummary(sections) {
-    const container = document.getElementById('auditSummary');
-    if (!container || !sectionMetadata || !sectionMetadata.summarizeSections || !sectionMetadata.renderAuditSummary) return;
-    const auditSections = (sections || []).map(section => ({
+  function normalizeSummarySections(sections) {
+    return (sections || []).map(section => ({
       title: section.title || 'Untitled section',
       metadata: {
         reviewStatus: section.metadata && section.metadata.reviewStatus || 'Needs review',
@@ -498,7 +499,18 @@
         evidence: section.metadata && section.metadata.evidence || 'Needs source trail',
       },
     }));
-    container.innerHTML = sectionMetadata.renderAuditSummary(sectionMetadata.summarizeSections(auditSections));
+  }
+
+  function updateWorkspaceOverview(sections) {
+    const container = document.getElementById('workspaceOverview');
+    if (!container || !sectionMetadata || !sectionMetadata.summarizeSections || !sectionMetadata.renderWorkspaceOverview) return;
+    container.innerHTML = sectionMetadata.renderWorkspaceOverview(sectionMetadata.summarizeSections(normalizeSummarySections(sections)));
+  }
+
+  function updateAuditSummary(sections) {
+    const container = document.getElementById('auditSummary');
+    if (!container || !sectionMetadata || !sectionMetadata.summarizeSections || !sectionMetadata.renderAuditSummary) return;
+    container.innerHTML = sectionMetadata.renderAuditSummary(sectionMetadata.summarizeSections(normalizeSummarySections(sections)));
   }
 
 

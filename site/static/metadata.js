@@ -108,6 +108,140 @@
     return items.slice(0, 4).map(item => `<li>${escapeHtml(item)}</li>`).join('');
   }
 
+  function sourceProvenanceCoverageRow(summary) {
+    const total = summary.totalSections || 0;
+    if (total <= 0) {
+      return {
+        label: 'Source provenance',
+        value: 'No data',
+        state: 'empty',
+        note: 'No generated sections available for provenance review.',
+      };
+    }
+    const sourceReady = summary.evidenceReady || 0;
+    const evidenceGaps = summary.evidenceGaps || 0;
+    return {
+      label: 'Source provenance',
+      value: `${sourceReady}/${total}`,
+      state: evidenceGaps === 0 ? 'ready' : 'gap',
+      note: evidenceGaps
+        ? `${evidenceGaps} sections still need source trails.`
+        : 'Every visible section includes source evidence language.',
+    };
+  }
+
+  function coverageRows(summary) {
+    const total = summary.totalSections || 0;
+    const obligationSignals = summary.obligations || 0;
+    const gapSignals = summary.gaps || 0;
+    const deadlineSignals = summary.deadlines || 0;
+    const emptyNote = 'No visible sections are available for this coverage check.';
+    if (!total) {
+      return [
+        {
+          label: 'Generated sections',
+          value: '0',
+          state: 'empty',
+          note: 'No generated sections match the active filters.',
+        },
+        sourceProvenanceCoverageRow(summary),
+        {
+          label: 'Obligations',
+          value: 'No data',
+          state: 'empty',
+          note: emptyNote,
+        },
+        {
+          label: 'Ownership cues',
+          value: 'No data',
+          state: 'empty',
+          note: emptyNote,
+        },
+        {
+          label: 'Gaps and deadlines',
+          value: 'No data',
+          state: 'empty',
+          note: emptyNote,
+        },
+      ];
+    }
+    return [
+      {
+        label: 'Generated sections',
+        value: String(total),
+        state: 'ready',
+        note: 'Rendered report sections available for review.',
+      },
+      sourceProvenanceCoverageRow(summary),
+      {
+        label: 'Obligations',
+        value: String(obligationSignals),
+        state: obligationSignals ? 'attention' : 'empty',
+        note: obligationSignals ? 'Mandatory or required-action language detected.' : 'No obligation language detected in visible sections.',
+      },
+      {
+        label: 'Ownership cues',
+        value: String(summary.owners || 0),
+        state: summary.owners ? 'ready' : 'gap',
+        note: summary.owners ? 'At least one section names accountability cues.' : 'No explicit owner cues detected.',
+      },
+      {
+        label: 'Gaps and deadlines',
+        value: String(gapSignals + deadlineSignals),
+        state: (gapSignals || deadlineSignals) ? 'attention' : 'ready',
+        note: (gapSignals || deadlineSignals)
+          ? `${gapSignals} gap signals and ${deadlineSignals} deadline signals need review.`
+          : 'No gap or deadline signals detected in visible sections.',
+      },
+    ];
+  }
+
+  function renderCoverageTable(summary) {
+    const rows = coverageRows(summary).map(row => `
+      <tr class="coverage-row" data-coverage-state="${escapeAttribute(row.state)}">
+        <th scope="row">${escapeHtml(row.label)}</th>
+        <td><strong>${escapeHtml(row.value)}</strong></td>
+        <td>${escapeHtml(row.note)}</td>
+      </tr>
+    `).join('');
+    return `
+      <div class="coverage-table">
+        <table>
+          <caption>Coverage matrix</caption>
+          <thead>
+            <tr>
+              <th scope="col">Contract</th>
+              <th scope="col">Coverage</th>
+              <th scope="col">Review note</th>
+            </tr>
+          </thead>
+          <tbody>${rows}</tbody>
+        </table>
+      </div>
+    `;
+  }
+
+  function renderWorkspaceOverview(summary) {
+    const readiness = summary.totalSections === 0
+      ? 'No generated sections match the active filters'
+      : (summary.auditReady ? 'Audit-ready visible set' : 'Compliance review workspace');
+    return `
+      <div class="workspace-overview-card">
+        <div class="workspace-heading-block">
+          <p class="workspace-kicker">Generated compliance archive</p>
+          <h2>${escapeHtml(readiness)}</h2>
+          <p class="workspace-copy">${summary.totalSections} visible sections mapped across obligations, controls, gaps, owner cues, and source provenance.</p>
+        </div>
+        <div class="workspace-actions" aria-label="Workspace actions">
+          <a href="#auditSummary">Audit summary</a>
+          <a href="#report">Generated sections</a>
+          <a href="#toc">Section index</a>
+        </div>
+        ${renderCoverageTable(summary)}
+      </div>
+    `;
+  }
+
   function renderAuditSummary(summary) {
     const readiness = summary.auditReady ? 'Audit-ready' : 'Needs source trail';
     return `
@@ -125,6 +259,7 @@
           <span><strong>${summary.owners}</strong> owner cues</span>
           <span><strong>${summary.evidenceGaps}</strong> source-trail gaps</span>
         </div>
+        ${renderCoverageTable(summary)}
         <div class="audit-lists">
           <div>
             <h3>Action focus</h3>
@@ -148,8 +283,10 @@
   }
 
   window.GRCInsightMetadata = {
+    coverageRows,
     deriveSectionMetadata,
     renderSectionMetadata,
+    renderWorkspaceOverview,
     summarizeSections,
     renderAuditSummary,
   };
