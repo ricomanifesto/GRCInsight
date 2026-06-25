@@ -108,6 +108,8 @@ body.light .archive-entry { border-color: rgba(0,0,0,0.08); background: rgba(0,0
 body.light .archive-entry.current { border-color: rgba(49, 81, 62, 0.32); background: rgba(49, 81, 62, 0.08); }
 body.light .archive-review-metrics div { border-color: rgba(0,0,0,0.08); background: rgba(0,0,0,0.035); }
 body.light .archive-review-metrics dd { color: #31513e; }
+body.light .archive-review-metrics [data-review-metric-state="attention"] dd { color: #8a5b00; }
+body.light .archive-review-metrics [data-review-metric-state="gap"] dd { color: #9f2f2f; }
 body.light .archive-tags span { border-color: rgba(0,0,0,0.08); background: rgba(0,0,0,0.04); color: #31513e; }
 @media (max-width: 760px) {
   .archive-entry { grid-template-columns: 1fr; }

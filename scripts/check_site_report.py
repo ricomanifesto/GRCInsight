@@ -245,6 +245,14 @@ def main() -> None:
     if ".archive-entry.current" not in style_css:
         fail("style.css missing archive current-entry styling")
 
+    required_archive_metric_styles = (
+        'body.light .archive-review-metrics [data-review-metric-state="attention"] dd',
+        'body.light .archive-review-metrics [data-review-metric-state="gap"] dd',
+    )
+    for guard in required_archive_metric_styles:
+        if guard not in style_css:
+            fail(f"style.css missing archive metric state styling: {guard}")
+
     required_audit_summary_ui = (
         "workspaceOverview",
         "updateWorkspaceOverview",
