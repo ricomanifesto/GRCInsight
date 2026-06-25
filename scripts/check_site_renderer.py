@@ -82,6 +82,13 @@ assert(metadata.metadataStates.evidence.needsSourceTrail === 'Needs source trail
 assert(typeof filters.setMetadataStates === 'function', 'filters should accept canonical metadata states');
 filters.setMetadataStates(metadata.metadataStates);
 assert(filters.evidenceStateValues().join('|') === 'all|referenced|missing', 'filters should expose stable evidence query values');
+assert(metadata.reviewSignalStates, 'metadata should expose canonical review signal states');
+assert(metadata.reviewSignalStates.ready === 'ready', 'review signal states should expose ready');
+assert(metadata.reviewSignalStates.gap === 'gap', 'review signal states should expose gap');
+assert(metadata.reviewSignalStates.empty === 'empty', 'review signal states should expose empty');
+assert(metadata.reviewSignalStates.attention === 'attention', 'review signal states should expose attention');
+assert(typeof archive.setReviewSignalStates === 'function', 'archive should accept canonical review signal states');
+archive.setReviewSignalStates(metadata.reviewSignalStates);
 const archiveMarkdown = `# GRC Intelligence Report - 2026-06-23
 **Generated:** 2026-06-23T12:00:00Z
 
