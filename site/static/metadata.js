@@ -5,6 +5,16 @@
   const deadlinePattern = /\b(deadline|due|within|0.{0,3}30|30.{0,3}90|90.{0,3}180|days|weekly|monthly|quarterly|immediate|begins|passed|q[1-4]\s+\d{4})\b/i;
   const actionPattern = /\b(action|priority|owner|remediation|implement|conduct|validate|update|establish)\b/i;
   const ownerPattern = /\b(owner|owners|owned by|accountable|accountability|responsible|assigned to)\b/i;
+  const reviewStatusOptions = Object.freeze([
+    Object.freeze({ value: 'Action required', label: 'Action' }),
+    Object.freeze({ value: 'Review ready', label: 'Ready' }),
+    Object.freeze({ value: 'Needs review', label: 'Needs review' }),
+  ]);
+  const REVIEW_STATUS = Object.freeze({
+    actionRequired: reviewStatusOptions[0].value,
+    reviewReady: reviewStatusOptions[1].value,
+    needsReview: reviewStatusOptions[2].value,
+  });
 
   function detected(pattern, value) {
     return pattern.test(value);
@@ -19,11 +29,11 @@
     const hasActions = detected(actionPattern, content);
     const hasOwners = detected(ownerPattern, content);
 
-    let reviewStatus = 'Needs review';
+    let reviewStatus = REVIEW_STATUS.needsReview;
     if (hasActions || hasObligations || hasGaps || hasDeadlines) {
-      reviewStatus = 'Action required';
+      reviewStatus = REVIEW_STATUS.actionRequired;
     } else if (hasEvidence) {
-      reviewStatus = 'Review ready';
+      reviewStatus = REVIEW_STATUS.reviewReady;
     }
 
     return {
@@ -78,7 +88,7 @@
       .filter(section => section.metadata && section.metadata.evidence === 'Source referenced')
       .map(section => section.title || 'Untitled section');
     const actionTitles = normalized
-      .filter(section => section.metadata && section.metadata.reviewStatus === 'Action required')
+      .filter(section => section.metadata && section.metadata.reviewStatus === REVIEW_STATUS.actionRequired)
       .map(section => section.title || 'Untitled section');
     const ownerTitles = normalized
       .filter(section => section.metadata && section.metadata.owners === 'Detected')
@@ -86,16 +96,16 @@
     const evidenceGaps = gapTitles.length;
     return {
       totalSections: normalized.length,
-      actionRequired: countByValue(normalized, 'reviewStatus', 'Action required'),
-      reviewReady: countByValue(normalized, 'reviewStatus', 'Review ready'),
-      needsReview: countByValue(normalized, 'reviewStatus', 'Needs review'),
+      actionRequired: countByValue(normalized, 'reviewStatus', REVIEW_STATUS.actionRequired),
+      reviewReady: countByValue(normalized, 'reviewStatus', REVIEW_STATUS.reviewReady),
+      needsReview: countByValue(normalized, 'reviewStatus', REVIEW_STATUS.needsReview),
       obligations: countByValue(normalized, 'obligations', 'Detected'),
       gaps: countByValue(normalized, 'gaps', 'Detected'),
       deadlines: countByValue(normalized, 'deadlines', 'Detected'),
       owners: countByValue(normalized, 'owners', 'Detected'),
       evidenceReady: countByValue(normalized, 'evidence', 'Source referenced'),
       evidenceGaps,
-      auditReady: normalized.length > 0 && evidenceGaps === 0 && countByValue(normalized, 'reviewStatus', 'Needs review') === 0,
+      auditReady: normalized.length > 0 && evidenceGaps === 0 && countByValue(normalized, 'reviewStatus', REVIEW_STATUS.needsReview) === 0,
       gapTitles,
       evidenceTitles,
       actionTitles,
@@ -303,6 +313,7 @@
     deriveSectionMetadata,
     renderSectionMetadata,
     renderWorkspaceOverview,
+    reviewStatusOptions,
     summarizeSections,
     renderAuditSummary,
   };

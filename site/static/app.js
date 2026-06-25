@@ -15,6 +15,9 @@
   const sectionMetadata = window.GRCInsightMetadata;
   const sectionFilters = window.GRCInsightFilters;
   const archiveDigest = window.GRCInsightArchive;
+  if (sectionFilters && sectionMetadata && Array.isArray(sectionMetadata.reviewStatusOptions) && sectionFilters.setReviewStatusOptions) {
+    sectionFilters.setReviewStatusOptions(sectionMetadata.reviewStatusOptions);
+  }
 
   function escapeHtml(s) {
     return s.replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
@@ -395,18 +398,23 @@
 
     function updateStatusQuickFilters(sections, filters) {
       if (!quickFilters) return;
-      const statuses = [
-        ['Action required', 'Action'],
-        ['Review ready', 'Ready'],
-        ['Needs review', 'Needs review'],
-      ];
+      const statusOptions = sectionMetadata && Array.isArray(sectionMetadata.reviewStatusOptions)
+        ? sectionMetadata.reviewStatusOptions
+        : [
+            { value: 'Action required', label: 'Action' },
+            { value: 'Review ready', label: 'Ready' },
+            { value: 'Needs review', label: 'Needs review' },
+          ];
       const counts = sectionFilters.statusQuickFilterCounts
         ? sectionFilters.statusQuickFilterCounts(sections, filters)
-        : statuses.reduce((fallbackCounts, [value]) => {
+        : statusOptions.reduce((fallbackCounts, option) => {
+          const value = option.value;
           fallbackCounts[value] = sections.filter(section => section.metadata && section.metadata.reviewStatus === value).length;
           return fallbackCounts;
         }, {});
-      quickFilters.innerHTML = statuses.map(([value, label]) => {
+      quickFilters.innerHTML = statusOptions.map(option => {
+        const value = option.value;
+        const label = option.label;
         const count = Number(counts[value]) || 0;
         const selected = status.value === value;
         const disabled = count === 0 && !selected;

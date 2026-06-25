@@ -64,13 +64,41 @@
     return (sections || []).filter(section => sectionMatches(section, filters));
   }
 
+  const defaultReviewStatusOptions = Object.freeze([
+    Object.freeze({ value: 'Action required', label: 'Action' }),
+    Object.freeze({ value: 'Review ready', label: 'Ready' }),
+    Object.freeze({ value: 'Needs review', label: 'Needs review' }),
+  ]);
+  let reviewStatusOptions = defaultReviewStatusOptions.slice();
+
+  function normalizeReviewStatusOptions(options) {
+    const normalized = (Array.isArray(options) ? options : [])
+      .map(option => ({
+        value: String(option && option.value || '').trim(),
+        label: String(option && option.label || option && option.value || '').trim(),
+      }))
+      .filter(option => option.value);
+    return normalized.length ? normalized : defaultReviewStatusOptions.slice();
+  }
+
+  function reviewStatusValues() {
+    return reviewStatusOptions.map(option => option.value);
+  }
+
+  function allowedReviewStatusValues() {
+    return ['all'].concat(reviewStatusValues());
+  }
+
+  function setReviewStatusOptions(options) {
+    reviewStatusOptions = normalizeReviewStatusOptions(options);
+  }
+
   function statusQuickFilterCounts(sections, filters) {
     const active = filters || {};
-    const counts = {
-      'Action required': 0,
-      'Review ready': 0,
-      'Needs review': 0,
-    };
+    const counts = reviewStatusValues().reduce((accumulator, value) => {
+      accumulator[value] = 0;
+      return accumulator;
+    }, {});
     (sections || []).forEach(section => {
       const status = section.metadata && section.metadata.reviewStatus;
       if (!Object.prototype.hasOwnProperty.call(counts, status)) return;
@@ -81,20 +109,19 @@
     return counts;
   }
 
-  const allowedReviewStatuses = new Set(['all', 'Action required', 'Review ready', 'Needs review']);
   const allowedTagCategories = new Set(['all', 'framework', 'regulation', 'risk', 'control', 'agency']);
   const allowedOwnerCues = new Set(['all', 'detected', 'missing']);
   const allowedEvidenceStates = new Set(['all', 'referenced', 'missing']);
 
   function safeValue(value, allowed, fallback) {
-    return allowed.has(value) ? value : fallback;
+    return allowed.includes ? (allowed.includes(value) ? value : fallback) : (allowed.has(value) ? value : fallback);
   }
 
   function parseFilterParams(searchParams) {
     const params = new URLSearchParams(String(searchParams || '').replace(/^\?/, ''));
     return {
       query: String(params.get('q') || '').trim(),
-      reviewStatus: safeValue(params.get('status') || 'all', allowedReviewStatuses, 'all'),
+      reviewStatus: safeValue(params.get('status') || 'all', allowedReviewStatusValues(), 'all'),
       tagCategory: safeValue(params.get('tag') || 'all', allowedTagCategories, 'all'),
       ownerCue: safeValue(params.get('owner') || 'all', allowedOwnerCues, 'all'),
       evidenceState: safeValue(params.get('evidence') || 'all', allowedEvidenceStates, 'all'),
@@ -105,7 +132,7 @@
     const active = filters || {};
     const params = new URLSearchParams();
     const query = String(active.query || '').trim();
-    const reviewStatus = safeValue(active.reviewStatus || 'all', allowedReviewStatuses, 'all');
+    const reviewStatus = safeValue(active.reviewStatus || 'all', allowedReviewStatusValues(), 'all');
     const tagCategory = safeValue(active.tagCategory || 'all', allowedTagCategories, 'all');
     const ownerCue = safeValue(active.ownerCue || 'all', allowedOwnerCues, 'all');
     const evidenceState = safeValue(active.evidenceState || 'all', allowedEvidenceStates, 'all');
@@ -122,7 +149,7 @@
     const active = filters || {};
     const entries = [];
     const query = String(active.query || '').trim();
-    const reviewStatus = safeValue(active.reviewStatus || 'all', allowedReviewStatuses, 'all');
+    const reviewStatus = safeValue(active.reviewStatus || 'all', allowedReviewStatusValues(), 'all');
     const tagCategory = safeValue(active.tagCategory || 'all', allowedTagCategories, 'all');
     const ownerCue = safeValue(active.ownerCue || 'all', allowedOwnerCues, 'all');
     const evidenceState = safeValue(active.evidenceState || 'all', allowedEvidenceStates, 'all');
@@ -152,11 +179,13 @@
   window.GRCInsightFilters = {
     activeFilterEntries,
     activeFilterLabels,
+    allowedReviewStatusValues,
     buildFilterParams,
     filterSections,
     normalize,
     parseFilterParams,
     sectionMatches,
+    setReviewStatusOptions,
     statusQuickFilterCounts,
     summarizeFilterResults,
   };
