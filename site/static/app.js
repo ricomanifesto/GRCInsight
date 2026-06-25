@@ -215,7 +215,7 @@
     Array.from(node.querySelectorAll('.card')).forEach(c => {
       const h2 = c.querySelector('h2');
       if (!h2) return;
-      const title = (h2.childNodes[0]?.textContent || '').trim();
+      const title = sectionHeadingTitle(h2);
       const metadata = sectionMetadata.deriveSectionMetadata(title, c.textContent || '');
       h2.insertAdjacentHTML('afterend', sectionMetadata.renderSectionMetadata(metadata));
     });
@@ -510,7 +510,7 @@
     // Build nested outline: for each H2, collect following H3s until next H2
     const blocks = h2s.map(h2 => {
       const id = h2.id;
-      const title = h2.childNodes[0].textContent.trim();
+      const title = sectionHeadingTitle(h2);
       const h3s = [];
       for (let i = all.indexOf(h2) + 1; i < all.length; i++) {
         const el = all[i];
@@ -549,7 +549,7 @@
     if (mobileToc) {
       mobileToc.innerHTML = '<option value="">Jump to section</option>' +
         (h2s.length
-          ? h2s.map(h => `<option value="${h.id}">${h.childNodes[0].textContent.trim()}</option>`).join('')
+          ? h2s.map(h => `<option value="${h.id}">${sectionHeadingTitle(h)}</option>`).join('')
           : '<option value="" disabled>No sections in filtered view</option>');
       mobileToc.onchange = e => {
         const v = e.target.value;
@@ -581,7 +581,7 @@
     if (!bar) return;
     const h2s = visibleSectionHeadings();
     bar.innerHTML = h2s.length
-      ? h2s.map(h => `<a class="chip" href="#${h.id}"><span class="chip-icon">§</span>${h.childNodes[0].textContent.trim()}</a>`).join('')
+      ? h2s.map(h => `<a class="chip" href="#${h.id}"><span class="chip-icon">§</span>${sectionHeadingTitle(h)}</a>`).join('')
       : '<span class="nav-empty">No sections in filtered view</span>';
     const chips = Array.from(bar.querySelectorAll('.chip'));
     const map = new Map(h2s.map(h => [h.id, chips.find(c => c.getAttribute('href') === `#${h.id}`)]));
@@ -606,7 +606,7 @@
     cards.forEach((c, idx) => {
       const h2 = c.querySelector('h2'); if (!h2) return;
       const id = h2.id;
-      const title = (h2.childNodes[0]?.textContent || '').trim().toLowerCase();
+      const title = sectionHeadingTitle(h2).toLowerCase();
       const isExec = /executive\s+summary/.test(title);
       const hasSaved = Object.prototype.hasOwnProperty.call(map, id);
       let collapsed;
@@ -633,7 +633,7 @@
     currentSectionObserver = new IntersectionObserver(entries => {
       entries.forEach(e => {
         if (e.isIntersecting) {
-          const title = e.target.childNodes[0].textContent.trim();
+          const title = sectionHeadingTitle(e.target);
           lbl.textContent = `Current section: ${title}`;
         }
       });

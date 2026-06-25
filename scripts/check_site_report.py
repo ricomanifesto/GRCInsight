@@ -266,6 +266,9 @@ def main() -> None:
     if "matches.has(section.id)" in app_js:
         fail("app.js keys filtered section visibility by section id")
 
+    if "childNodes[0]" in app_js:
+        fail("app.js reads partial heading text instead of the section heading title helper")
+
     required_filtered_navigation_guards = (
         "function visibleSectionHeadings()",
         "#report .card:not(.filtered-out) h2",
