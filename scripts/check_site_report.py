@@ -775,6 +775,22 @@ def main() -> None:
         if guard not in style_css:
             fail(f"style.css missing compliance resource reference aesthetic refinement guard: {guard}")
 
+    required_compliance_workspace_card_rhythm_aesthetic_contract = (
+        "--card-rhythm-heading-gap",
+        "--card-rhythm-meta-margin",
+        "--card-rhythm-table-margin",
+        "--card-rhythm-subheading-margin",
+        ".card h2 { gap: var(--card-rhythm-heading-gap); line-height: 1.08; }",
+        ".section-meta { margin: var(--card-rhythm-meta-margin); }",
+        ".card > .table-wrap { margin: var(--card-rhythm-table-margin); }",
+        ".card h4 { margin: var(--card-rhythm-subheading-margin); color: #f5e8c8; }",
+        "body.light .card h4 { color: #31513e; }",
+        ".card > p + .table-wrap, .card > ul + .table-wrap, .card > ol + .table-wrap { margin-top: 6px; }",
+    )
+    for guard in required_compliance_workspace_card_rhythm_aesthetic_contract:
+        if guard not in style_css:
+            fail(f"style.css missing compliance workspace card rhythm aesthetic guard: {guard}")
+
     required_archive_guards = (
         "window.GRCInsightArchive",
         "currentReportId",
