@@ -562,6 +562,24 @@ def main() -> None:
         if guard not in style_css:
             fail(f"style.css missing compliance workspace aesthetic alignment guard: {guard}")
 
+    required_evidence_source_coverage_aesthetic_visual_contract = (
+        "--evidence-table-gap",
+        ".coverage-table { border-left: 3px solid var(--workspace-rail); }",
+        ".coverage-table caption { display: flex; align-items: center; gap: var(--evidence-table-gap); }",
+        ".coverage-table caption::before { content: \"\"; width: 8px; height: 8px; border-radius: 999px; background: var(--workspace-rail); }",
+        ".coverage-row strong { border-radius: 999px; padding: 2px 7px; background: rgba(255,255,255,0.055); }",
+        ".coverage-row[data-coverage-state=\"gap\"] strong { background: rgba(239,68,68,0.16); }",
+        ".coverage-row[data-coverage-state=\"ready\"] strong { background: rgba(22,163,74,0.16); }",
+        ".table-wrap { border-left: 3px solid rgba(214,160,77,0.46); }",
+        "body.light .table-wrap { border-left-color: var(--workspace-rail); }",
+        ".table-wrap th:first-child, .table-wrap td:first-child { width: 24%; }",
+        ".coverage-table caption { align-items: flex-start; }",
+        ".coverage-row strong { white-space: normal; }",
+    )
+    for guard in required_evidence_source_coverage_aesthetic_visual_contract:
+        if guard not in style_css:
+            fail(f"style.css missing evidence source coverage aesthetic guard: {guard}")
+
     required_archive_guards = (
         "window.GRCInsightArchive",
         "currentReportId",
