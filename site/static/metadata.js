@@ -171,7 +171,7 @@
     };
   }
 
-  function coverageRows(summary) {
+  function coverageMetricEntries(summary) {
     const total = summary.totalSections || 0;
     const obligationSignals = summary.obligations || 0;
     const gapSignals = summary.gaps || 0;
@@ -180,25 +180,32 @@
     if (!total) {
       return [
         {
+          key: 'generatedSections',
           label: 'Generated sections',
           value: '0',
           state: reviewSignalStates.empty,
           note: 'No generated sections match the active filters.',
         },
-        sourceProvenanceCoverageRow(summary),
         {
+          key: 'sourceProvenance',
+          ...sourceProvenanceCoverageRow(summary),
+        },
+        {
+          key: 'obligations',
           label: 'Obligations',
           value: 'No data',
           state: reviewSignalStates.empty,
           note: emptyNote,
         },
         {
+          key: 'ownershipCues',
           label: 'Ownership cues',
           value: 'No data',
           state: reviewSignalStates.empty,
           note: emptyNote,
         },
         {
+          key: 'gapsAndDeadlines',
           label: 'Gaps and deadlines',
           value: 'No data',
           state: reviewSignalStates.empty,
@@ -208,25 +215,32 @@
     }
     return [
       {
+        key: 'generatedSections',
         label: 'Generated sections',
         value: String(total),
         state: reviewSignalStates.ready,
         note: 'Rendered report sections available for review.',
       },
-      sourceProvenanceCoverageRow(summary),
       {
+        key: 'sourceProvenance',
+        ...sourceProvenanceCoverageRow(summary),
+      },
+      {
+        key: 'obligations',
         label: 'Obligations',
         value: String(obligationSignals),
         state: obligationSignals ? reviewSignalStates.attention : reviewSignalStates.empty,
         note: obligationSignals ? 'Mandatory or required-action language detected.' : 'No obligation language detected in visible sections.',
       },
       {
+        key: 'ownershipCues',
         label: 'Ownership cues',
         value: String(summary.owners || 0),
         state: summary.owners ? reviewSignalStates.ready : reviewSignalStates.gap,
         note: summary.owners ? 'At least one section names accountability cues.' : 'No explicit owner cues detected.',
       },
       {
+        key: 'gapsAndDeadlines',
         label: 'Gaps and deadlines',
         value: String(gapSignals + deadlineSignals),
         state: (gapSignals || deadlineSignals) ? reviewSignalStates.attention : reviewSignalStates.ready,
@@ -237,8 +251,12 @@
     ];
   }
 
+  function coverageRows(summary) {
+    return coverageMetricEntries(summary);
+  }
+
   function renderCoverageTable(summary) {
-    const rows = coverageRows(summary).map(row => `
+    const rows = coverageMetricEntries(summary).map(row => `
       <tr class="coverage-row" data-coverage-state="${escapeAttribute(row.state)}">
         <th scope="row">${escapeHtml(row.label)}</th>
         <td><strong>${escapeHtml(row.value)}</strong></td>
@@ -325,6 +343,7 @@
 
   window.GRCInsightMetadata = {
     buildProvenanceSummary,
+    coverageMetricEntries,
     coverageRows,
     deriveSectionMetadata,
     metadataStates,
