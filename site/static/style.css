@@ -38,6 +38,12 @@
   --review-state-active-bg: rgba(34,211,238,0.13);
   --review-state-note-line-height: 1.42;
   --empty-state-rail: rgba(245,158,11,0.70);
+  --empty-guidance-padding: 12px 14px;
+  --empty-guidance-radius: 7px;
+  --empty-guidance-line-height: 1.48;
+  --empty-guidance-marker-size: 7px;
+  --empty-guidance-nav-padding: 5px 9px;
+  --empty-guidance-clear-bg: rgba(214,160,77,0.16);
   --visual-continuity-gap: 8px;
   --visual-continuity-panel-inset: 14px;
   --visual-continuity-chip-gap: 5px;
@@ -124,6 +130,12 @@ body.light {
   --review-state-active-bg: rgba(49,81,62,0.085);
   --review-state-note-line-height: 1.42;
   --empty-state-rail: rgba(245,158,11,0.70);
+  --empty-guidance-padding: 12px 14px;
+  --empty-guidance-radius: 7px;
+  --empty-guidance-line-height: 1.48;
+  --empty-guidance-marker-size: 7px;
+  --empty-guidance-nav-padding: 5px 9px;
+  --empty-guidance-clear-bg: rgba(49,81,62,0.075);
   --visual-continuity-gap: 8px;
   --visual-continuity-panel-inset: 14px;
   --visual-continuity-chip-gap: 5px;
@@ -424,7 +436,14 @@ body.light .audit-lists > div[data-audit-list="evidenceGaps"][data-audit-list-st
 }
 .empty-results { margin-top: 14px; padding: 14px 16px; border: 1px solid rgba(245, 158, 11, 0.35); border-radius: 8px; background: rgba(245, 158, 11, 0.10); color: #fde68a; }
 .empty-results { border-left: 4px solid var(--empty-state-rail); font-weight: 700; }
+.empty-results { display: flex; align-items: flex-start; gap: 9px; padding: var(--empty-guidance-padding); border-radius: var(--empty-guidance-radius); line-height: var(--empty-guidance-line-height); }
+.empty-results[hidden] { display: none; }
+.empty-results::before { content: ""; flex: 0 0 auto; width: var(--empty-guidance-marker-size); height: var(--empty-guidance-marker-size); margin-top: 0.42em; border-radius: 999px; background: var(--empty-state-rail); }
+.nav-empty { padding: var(--empty-guidance-nav-padding); line-height: var(--empty-guidance-line-height); }
+.topbar .nav-empty { padding: var(--empty-guidance-nav-padding); }
+.clear-filters:not(:disabled) { background: var(--empty-guidance-clear-bg); }
 body.light .empty-results { color: #92400e; background: rgba(245, 158, 11, 0.12); border-color: rgba(245, 158, 11, 0.42); }
+body.light .clear-filters:not(:disabled) { background: var(--empty-guidance-clear-bg); }
 
 .layout { display: grid; grid-template-columns: 240px 1fr; gap: 14px; align-items: start; }
 .layout { grid-template-columns: var(--workspace-index-width) minmax(0, 1fr); }
