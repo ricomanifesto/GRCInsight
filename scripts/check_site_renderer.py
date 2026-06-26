@@ -105,6 +105,7 @@ assert(typeof metadata.coverageMetricEntries === 'function', 'metadata should ex
 assert(typeof metadata.renderCoverageTableRows === 'function', 'metadata should expose canonical coverage table row renderer');
 assert(typeof metadata.auditSummaryMetricEntries === 'function', 'metadata should expose canonical audit summary metric entries');
 assert(typeof metadata.auditSummaryListSections === 'function', 'metadata should expose canonical audit summary list sections');
+assert(typeof metadata.auditSummaryReadiness === 'function', 'metadata should expose canonical audit summary readiness projection');
 assert(typeof metadata.workspaceActionEntries === 'function', 'metadata should expose canonical workspace action entries');
 assert(typeof archive.setReviewSignalStates === 'function', 'archive should accept canonical review signal states');
 archive.setReviewSignalStates(metadata.reviewSignalStates);
@@ -226,6 +227,10 @@ assert(auditListSections[0].items.join('|') === 'PCI remediation', 'action focus
 assert(auditListSections[1].items.join('|') === 'Evidence backed overview', 'evidence trail list should project evidence-backed titles');
 assert(auditListSections[2].items.join('|') === 'PCI remediation', 'owner cues list should project owner titles');
 assert(auditListSections[3].items.join('|') === 'PCI remediation|Unmapped overview', 'evidence gaps list should project source gap titles');
+const needsReadiness = metadata.auditSummaryReadiness(auditSummary);
+assert(needsReadiness.state === 'needsSourceTrail', 'readiness projection should flag source-trail gaps');
+assert(needsReadiness.workspaceHeading === 'Compliance review workspace', 'readiness projection should expose review workspace heading');
+assert(needsReadiness.auditHeading === 'Needs source trail', 'readiness projection should expose source-trail audit heading');
 const workspaceActions = metadata.workspaceActionEntries();
 assert(Array.isArray(workspaceActions) && workspaceActions.length === 3, 'workspace action entries should expose compact action links');
 assert(workspaceActions.map(row => row.key).join('|') === 'auditSummary|generatedSections|sectionIndex', 'workspace action entries should use stable keys');
@@ -274,6 +279,10 @@ assert(filteredAuditSummary.actionRequired === 0, 'filtered audit summary should
 assert(filteredAuditSummary.reviewReady === 1, 'filtered audit summary should count matched review-ready sections');
 assert(filteredAuditSummary.evidenceGaps === 0, 'filtered audit summary should not retain hidden source-trail gaps');
 assert(filteredAuditSummary.auditReady === true, 'filtered audit summary should evaluate readiness from matched sections');
+const readyReadiness = metadata.auditSummaryReadiness(filteredAuditSummary);
+assert(readyReadiness.state === 'ready', 'readiness projection should flag audit-ready summaries');
+assert(readyReadiness.workspaceHeading === 'Audit-ready visible set', 'readiness projection should expose ready workspace heading');
+assert(readyReadiness.auditHeading === 'Audit-ready', 'readiness projection should expose ready audit heading');
 const completeProvenanceSummary = metadata.buildProvenanceSummary(filteredAuditSummary);
 assert(completeProvenanceSummary.value === '1/1', 'complete provenance summary should expose full coverage');
 assert(completeProvenanceSummary.state === 'ready', 'complete provenance summary should be ready');
@@ -282,6 +291,10 @@ assert(metadata.renderAuditSummary(filteredAuditSummary).includes('1 sections re
 const emptyFilteredAuditSummary = metadata.summarizeSections([]);
 assert(emptyFilteredAuditSummary.totalSections === 0, 'empty filtered audit summary should count zero sections');
 assert(emptyFilteredAuditSummary.auditReady === false, 'empty filtered audit summary should not be audit-ready');
+const emptyReadiness = metadata.auditSummaryReadiness(emptyFilteredAuditSummary);
+assert(emptyReadiness.state === 'empty', 'readiness projection should flag empty summaries');
+assert(emptyReadiness.workspaceHeading === 'No generated sections match the active filters', 'readiness projection should expose empty workspace heading');
+assert(emptyReadiness.auditHeading === 'Needs source trail', 'readiness projection should keep empty audit heading explicit');
 assert(metadata.auditSummaryMetricEntries(emptyFilteredAuditSummary).map(row => row.value).join('|') === '0|0|0|0|0|0', 'empty audit summary metrics should preserve zero counts');
 const emptyAuditListSections = metadata.auditSummaryListSections(emptyFilteredAuditSummary);
 assert(emptyAuditListSections.every(section => section.items.length === 0), 'empty audit summary list sections should preserve empty item lists');
