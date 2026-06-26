@@ -517,6 +517,12 @@ def main() -> None:
     for guard in required_mobile_workspace_polish_visual_contract:
         if guard not in style_css:
             fail(f"style.css missing mobile workspace polish visual contract guard: {guard}")
+    base_markdown_table_index = style_css.find(".table-wrap table { min-width: 680px;")
+    mobile_markdown_table_index = style_css.rfind(".table-wrap table { min-width: 560px; }")
+    if base_markdown_table_index == -1 or mobile_markdown_table_index == -1:
+        fail("style.css missing mobile markdown table cascade guard")
+    if mobile_markdown_table_index < base_markdown_table_index:
+        fail("style.css mobile markdown table override must follow the base markdown table rule")
 
     required_archive_guards = (
         "window.GRCInsightArchive",
