@@ -672,12 +672,30 @@ def main() -> None:
         ".coverage-table caption { padding: 8px 10px; }",
         ".coverage-row td:last-child { line-height: var(--visual-continuity-row-line-height); }",
         ".workspace-overview-card, .archive-card, .audit-summary-card { padding-top: var(--visual-continuity-panel-inset); padding-bottom: var(--visual-continuity-panel-inset); }",
+        ".audit-summary-card { gap: var(--visual-continuity-gap); }",
+        ".audit-summary-card { padding-top: var(--visual-continuity-panel-inset); padding-bottom: var(--visual-continuity-panel-inset); }",
         ".filter-field:first-child { grid-column: 1 / -1; }",
         ".filter-controls { grid-template-columns: repeat(2, minmax(0, 1fr)); }",
     )
     for guard in required_compliance_visual_reference_continuity_aesthetic_contract:
         if guard not in style_css:
             fail(f"style.css missing compliance visual reference continuity aesthetic guard: {guard}")
+
+    audit_surface_gap = ".audit-summary-card { gap: var(--surface-continuity-gap); }"
+    audit_visual_gap = ".audit-summary-card { gap: var(--visual-continuity-gap); }"
+    audit_visual_padding = ".audit-summary-card { padding-top: var(--visual-continuity-panel-inset); padding-bottom: var(--visual-continuity-panel-inset); }"
+    css_lines = style_css.splitlines()
+    try:
+        audit_surface_gap_line = css_lines.index(audit_surface_gap)
+    except ValueError:
+        fail(f"style.css missing audit summary surface continuity guard: {audit_surface_gap}")
+    for guard in (audit_visual_gap, audit_visual_padding):
+        try:
+            guard_line = css_lines.index(guard, audit_surface_gap_line + 1)
+        except ValueError:
+            fail(f"style.css missing later audit summary visual continuity guard: {guard}")
+        if guard_line <= audit_surface_gap_line:
+            fail(f"style.css audit summary visual continuity guard appears before audit surface rule: {guard}")
 
     required_archive_guards = (
         "window.GRCInsightArchive",
