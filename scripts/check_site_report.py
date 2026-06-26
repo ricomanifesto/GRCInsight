@@ -127,6 +127,7 @@ def main() -> None:
         "renderSectionMetadata",
         "summarizeSections",
         "coverageMetricEntries",
+        "renderCoverageTableRows",
         "auditSummaryMetricEntries",
         "auditSummaryListSections",
         "workspaceActionEntries",
@@ -300,6 +301,13 @@ def main() -> None:
     for guard in duplicate_coverage_metric_guards:
         if guard in metadata_js:
             fail(f"metadata.js still duplicates coverage metric projection: {guard}")
+
+    duplicate_coverage_row_renderer_guards = (
+        "function renderCoverageTable(summary) {\n    const rows = coverageMetricEntries(summary).map(row =>",
+    )
+    for guard in duplicate_coverage_row_renderer_guards:
+        if guard in metadata_js:
+            fail(f"metadata.js still duplicates coverage table row rendering: {guard}")
 
     duplicate_audit_summary_metric_guards = (
         "<span><strong>${summary.actionRequired}</strong> action required</span>",

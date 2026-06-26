@@ -255,14 +255,17 @@
     return coverageMetricEntries(summary);
   }
 
-  function renderCoverageTable(summary) {
-    const rows = coverageMetricEntries(summary).map(row => `
+  function renderCoverageTableRows(summary) {
+    return coverageMetricEntries(summary).map(row => `
       <tr class="coverage-row" data-coverage-state="${escapeAttribute(row.state)}">
         <th scope="row">${escapeHtml(row.label)}</th>
         <td><strong>${escapeHtml(row.value)}</strong></td>
         <td>${escapeHtml(row.note)}</td>
       </tr>
     `).join('');
+  }
+
+  function renderCoverageTable(summary) {
     return `
       <div class="coverage-table">
         <table>
@@ -274,7 +277,7 @@
               <th scope="col">Review note</th>
             </tr>
           </thead>
-          <tbody>${rows}</tbody>
+          <tbody>${renderCoverageTableRows(summary)}</tbody>
         </table>
       </div>
     `;
@@ -434,6 +437,7 @@
     coverageRows,
     deriveSectionMetadata,
     metadataStates,
+    renderCoverageTableRows,
     renderSectionMetadata,
     renderWorkspaceOverview,
     reviewSignalStates,
