@@ -791,6 +791,25 @@ def main() -> None:
         if guard not in style_css:
             fail(f"style.css missing compliance workspace card rhythm aesthetic guard: {guard}")
 
+    required_compliance_source_table_rhythm_aesthetic_contract = (
+        "--source-table-rail",
+        "--source-table-header-bg",
+        "--source-table-first-col-width",
+        "--source-table-first-col-min-width",
+        "--source-table-row-gap-border",
+        ".table-wrap { border-left-color: var(--source-table-rail); }",
+        ".table-wrap thead { background: var(--source-table-header-bg); }",
+        ".table-wrap th:first-child, .table-wrap td:first-child { width: var(--source-table-first-col-width); min-width: var(--source-table-first-col-min-width); }",
+        ".table-wrap tbody tr + tr td, .table-wrap tbody tr + tr th { border-top: 1px solid var(--source-table-row-gap-border); }",
+        ".table-wrap td:first-child { color: #f5e8c8; }",
+        "body.light .table-wrap { border-left-color: var(--source-table-rail); }",
+        "body.light .table-wrap thead { background: var(--source-table-header-bg); }",
+        "body.light .table-wrap td:first-child { color: #31513e; }",
+    )
+    for guard in required_compliance_source_table_rhythm_aesthetic_contract:
+        if guard not in style_css:
+            fail(f"style.css missing compliance source table rhythm aesthetic guard: {guard}")
+
     required_archive_guards = (
         "window.GRCInsightArchive",
         "currentReportId",
