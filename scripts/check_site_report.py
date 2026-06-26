@@ -397,6 +397,25 @@ def main() -> None:
     if style_css.index(sidebar_base) > style_css.index(sidebar_tablet_override):
         fail("style.css applies tablet sidebar flow override before the base sticky sidebar rule")
 
+    required_resource_reference_visual_contract = (
+        "--workspace-hairline",
+        "--workspace-focus",
+        ".workspace-overview-card, .archive-card, .audit-summary-card, .card {",
+        ".workspace-heading-block {",
+        ".workspace-actions a {",
+        ".section-meta-item {",
+        ".coverage-table table {",
+        ".table-wrap table {",
+        ".sidebar nav a.active, .topbar .chip.active {",
+        "body.light .sidebar nav a.active, body.light .topbar .chip.active { color: #31513e; }",
+        ".archive-entry.current {",
+        "@media (max-width: 760px)",
+        ".workspace-actions {",
+    )
+    for guard in required_resource_reference_visual_contract:
+        if guard not in style_css:
+            fail(f"style.css missing resource-reference visual aesthetic guard: {guard}")
+
     required_archive_guards = (
         "window.GRCInsightArchive",
         "currentReportId",
