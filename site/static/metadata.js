@@ -280,6 +280,48 @@
     `;
   }
 
+  function auditSummaryMetricEntries(summary) {
+    const normalized = summary || {};
+    return [
+      {
+        key: 'actionRequired',
+        label: 'action required',
+        value: String(normalized.actionRequired || 0),
+      },
+      {
+        key: 'obligations',
+        label: 'obligations',
+        value: String(normalized.obligations || 0),
+      },
+      {
+        key: 'gaps',
+        label: 'gaps',
+        value: String(normalized.gaps || 0),
+      },
+      {
+        key: 'deadlines',
+        label: 'deadlines',
+        value: String(normalized.deadlines || 0),
+      },
+      {
+        key: 'owners',
+        label: 'owner cues',
+        value: String(normalized.owners || 0),
+      },
+      {
+        key: 'evidenceGaps',
+        label: 'source-trail gaps',
+        value: String(normalized.evidenceGaps || 0),
+      },
+    ];
+  }
+
+  function renderAuditSummaryMetrics(summary) {
+    return auditSummaryMetricEntries(summary).map(row =>
+      `<span><strong>${escapeHtml(row.value)}</strong> ${escapeHtml(row.label)}</span>`
+    ).join('');
+  }
+
   function renderWorkspaceOverview(summary) {
     const readiness = summary.totalSections === 0
       ? 'No generated sections match the active filters'
@@ -311,12 +353,7 @@
           <p class="audit-summary-copy">${summary.totalSections} sections reviewed for obligations, gaps, deadlines, and evidence trails.</p>
         </div>
         <div class="audit-metrics">
-          <span><strong>${summary.actionRequired}</strong> action required</span>
-          <span><strong>${summary.obligations}</strong> obligations</span>
-          <span><strong>${summary.gaps}</strong> gaps</span>
-          <span><strong>${summary.deadlines}</strong> deadlines</span>
-          <span><strong>${summary.owners}</strong> owner cues</span>
-          <span><strong>${summary.evidenceGaps}</strong> source-trail gaps</span>
+          ${renderAuditSummaryMetrics(summary)}
         </div>
         ${renderCoverageTable(summary)}
         <div class="audit-lists">
@@ -342,6 +379,7 @@
   }
 
   window.GRCInsightMetadata = {
+    auditSummaryMetricEntries,
     buildProvenanceSummary,
     coverageMetricEntries,
     coverageRows,
