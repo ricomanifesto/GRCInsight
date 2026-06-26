@@ -639,6 +639,24 @@ def main() -> None:
         if guard not in style_css:
             fail(f"style.css missing compliance workspace reference aesthetic guard: {guard}")
 
+    required_compliance_filtered_workspace_state_aesthetic_contract = (
+        "--filtered-state-rail",
+        "--filtered-state-gap",
+        "--filtered-state-note-bg",
+        "--empty-state-rail",
+        ".filter-state { display: inline-flex; align-items: center; min-height: 30px; padding: 5px 9px 5px 12px; border-left: 3px solid var(--filtered-state-rail); border-radius: 6px; background: var(--filtered-state-note-bg); font-weight: 700; }",
+        ".active-filter-chips, .status-quick-filters { gap: var(--filtered-state-gap); align-items: center; }",
+        ".status-quick-filter strong { min-width: 18px; text-align: center; }",
+        ".empty-results { border-left: 4px solid var(--empty-state-rail); font-weight: 700; }",
+        ".nav-empty { display: inline-flex; min-height: 30px; align-items: center; padding: 5px 8px; border-left: 3px solid var(--empty-state-rail); border-radius: 6px; background: rgba(245,158,11,0.10); }",
+        ".topbar .nav-filter-state { display: inline-flex; min-height: 30px; align-items: center; border-left: 3px solid var(--filtered-state-rail); border-radius: 6px; background: var(--filtered-state-note-bg); padding: 5px 8px 5px 10px; }",
+        ".topbar .nav-empty { margin: 0 12px; }",
+        "body.light .nav-empty { background: rgba(245,158,11,0.12); color: #92400e; }",
+    )
+    for guard in required_compliance_filtered_workspace_state_aesthetic_contract:
+        if guard not in style_css:
+            fail(f"style.css missing compliance filtered workspace state aesthetic guard: {guard}")
+
     required_archive_guards = (
         "window.GRCInsightArchive",
         "currentReportId",
