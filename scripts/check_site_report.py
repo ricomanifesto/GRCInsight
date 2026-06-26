@@ -130,6 +130,7 @@ def main() -> None:
         "renderCoverageTableRows",
         "auditSummaryMetricEntries",
         "auditSummaryListSections",
+        "auditSummaryReadiness",
         "workspaceActionEntries",
         "coverageRows",
         "renderWorkspaceOverview",
@@ -324,6 +325,14 @@ def main() -> None:
     for guard in duplicate_audit_summary_list_guards:
         if guard in metadata_js:
             fail(f"metadata.js still duplicates audit summary list projection: {guard}")
+
+    duplicate_audit_summary_readiness_guards = (
+        "const readiness = summary.totalSections === 0\n      ? 'No generated sections match the active filters'\n      : (summary.auditReady ? 'Audit-ready visible set' : 'Compliance review workspace');",
+        "const readiness = summary.auditReady ? 'Audit-ready' : 'Needs source trail';",
+    )
+    for guard in duplicate_audit_summary_readiness_guards:
+        if guard in metadata_js:
+            fail(f"metadata.js still duplicates audit summary readiness projection: {guard}")
 
     duplicate_workspace_action_guards = (
         "<a href=\"#auditSummary\">Audit summary</a>",

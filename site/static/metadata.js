@@ -390,15 +390,35 @@
     ).join('');
   }
 
+  function auditSummaryReadiness(summary) {
+    if (!summary.totalSections) {
+      return {
+        state: reviewSignalStates.empty,
+        workspaceHeading: 'No generated sections match the active filters',
+        auditHeading: 'Needs source trail',
+      };
+    }
+    if (summary.auditReady) {
+      return {
+        state: reviewSignalStates.ready,
+        workspaceHeading: 'Audit-ready visible set',
+        auditHeading: 'Audit-ready',
+      };
+    }
+    return {
+      state: reviewSignalStates.gap,
+      workspaceHeading: 'Compliance review workspace',
+      auditHeading: 'Needs source trail',
+    };
+  }
+
   function renderWorkspaceOverview(summary) {
-    const readiness = summary.totalSections === 0
-      ? 'No generated sections match the active filters'
-      : (summary.auditReady ? 'Audit-ready visible set' : 'Compliance review workspace');
+    const readiness = auditSummaryReadiness(summary);
     return `
       <div class="workspace-overview-card">
         <div class="workspace-heading-block">
           <p class="workspace-kicker">Generated compliance archive</p>
-          <h2>${escapeHtml(readiness)}</h2>
+          <h2>${escapeHtml(readiness.workspaceHeading)}</h2>
           <p class="workspace-copy">${summary.totalSections} visible sections mapped across obligations, controls, gaps, owner cues, and source provenance.</p>
         </div>
         <div class="workspace-actions" aria-label="Workspace actions">
@@ -410,12 +430,12 @@
   }
 
   function renderAuditSummary(summary) {
-    const readiness = summary.auditReady ? 'Audit-ready' : 'Needs source trail';
+    const readiness = auditSummaryReadiness(summary);
     return `
       <div class="audit-summary-card">
         <div>
           <p class="audit-kicker">Audit-ready summary</p>
-          <h2>${escapeHtml(readiness)}</h2>
+          <h2>${escapeHtml(readiness.auditHeading)}</h2>
           <p class="audit-summary-copy">${summary.totalSections} sections reviewed for obligations, gaps, deadlines, and evidence trails.</p>
         </div>
         <div class="audit-metrics">
@@ -432,6 +452,7 @@
   window.GRCInsightMetadata = {
     auditSummaryListSections,
     auditSummaryMetricEntries,
+    auditSummaryReadiness,
     buildProvenanceSummary,
     coverageMetricEntries,
     coverageRows,
