@@ -524,6 +524,23 @@ def main() -> None:
     if mobile_markdown_table_index < base_markdown_table_index:
         fail("style.css mobile markdown table override must follow the base markdown table rule")
 
+    required_section_detail_aesthetic_visual_contract = (
+        "--section-detail-gap",
+        ".card { display: grid; gap: var(--section-detail-gap); }",
+        ".card > p { margin: 0 0 8px; }",
+        ".card > ul, .card > ol { margin-top: 0; }",
+        ".section-meta { padding: 8px; border: 1px solid var(--workspace-hairline); border-radius: 8px; background: rgba(255,255,255,0.028); }",
+        ".section-meta-item { min-height: 28px; padding: 5px 8px; }",
+        ".card h2 .heading-actions { margin-left: auto; }",
+        ".heading-actions { display: inline-grid; grid-auto-flow: column; align-items: center; gap: 4px; flex: 0 0 auto; }",
+        ".card > .table-wrap { margin: 10px 0 12px; }",
+        "blockquote { margin: 10px 0 12px; }",
+        ".card h2 .heading-actions { margin-left: 0; }",
+    )
+    for guard in required_section_detail_aesthetic_visual_contract:
+        if guard not in style_css:
+            fail(f"style.css missing section detail aesthetic visual contract guard: {guard}")
+
     required_archive_guards = (
         "window.GRCInsightArchive",
         "currentReportId",
