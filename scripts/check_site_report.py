@@ -131,6 +131,7 @@ def main() -> None:
         "auditSummaryMetricEntries",
         "auditSummaryListSections",
         "auditSummaryReadiness",
+        "auditSummaryCopy",
         "workspaceActionEntries",
         "coverageRows",
         "renderWorkspaceOverview",
@@ -333,6 +334,14 @@ def main() -> None:
     for guard in duplicate_audit_summary_readiness_guards:
         if guard in metadata_js:
             fail(f"metadata.js still duplicates audit summary readiness projection: {guard}")
+
+    duplicate_audit_summary_copy_guards = (
+        '<p class="workspace-copy">${summary.totalSections} visible sections mapped across obligations, controls, gaps, owner cues, and source provenance.</p>',
+        '<p class="audit-summary-copy">${summary.totalSections} sections reviewed for obligations, gaps, deadlines, and evidence trails.</p>',
+    )
+    for guard in duplicate_audit_summary_copy_guards:
+        if guard in metadata_js:
+            fail(f"metadata.js still duplicates audit summary body copy: {guard}")
 
     duplicate_workspace_action_guards = (
         "<a href=\"#auditSummary\">Audit summary</a>",

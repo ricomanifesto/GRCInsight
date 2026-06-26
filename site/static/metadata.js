@@ -412,14 +412,22 @@
     };
   }
 
+  function auditSummaryCopy(summary) {
+    return {
+      workspaceCopy: `${summary.totalSections} visible sections mapped across obligations, controls, gaps, owner cues, and source provenance.`,
+      auditCopy: `${summary.totalSections} sections reviewed for obligations, gaps, deadlines, and evidence trails.`,
+    };
+  }
+
   function renderWorkspaceOverview(summary) {
     const readiness = auditSummaryReadiness(summary);
+    const summaryCopy = auditSummaryCopy(summary);
     return `
       <div class="workspace-overview-card">
         <div class="workspace-heading-block">
           <p class="workspace-kicker">Generated compliance archive</p>
           <h2>${escapeHtml(readiness.workspaceHeading)}</h2>
-          <p class="workspace-copy">${summary.totalSections} visible sections mapped across obligations, controls, gaps, owner cues, and source provenance.</p>
+          <p class="workspace-copy">${escapeHtml(summaryCopy.workspaceCopy)}</p>
         </div>
         <div class="workspace-actions" aria-label="Workspace actions">
           ${renderWorkspaceActions()}
@@ -431,12 +439,13 @@
 
   function renderAuditSummary(summary) {
     const readiness = auditSummaryReadiness(summary);
+    const summaryCopy = auditSummaryCopy(summary);
     return `
       <div class="audit-summary-card">
         <div>
           <p class="audit-kicker">Audit-ready summary</p>
           <h2>${escapeHtml(readiness.auditHeading)}</h2>
-          <p class="audit-summary-copy">${summary.totalSections} sections reviewed for obligations, gaps, deadlines, and evidence trails.</p>
+          <p class="audit-summary-copy">${escapeHtml(summaryCopy.auditCopy)}</p>
         </div>
         <div class="audit-metrics">
           ${renderAuditSummaryMetrics(summary)}
@@ -450,6 +459,7 @@
   }
 
   window.GRCInsightMetadata = {
+    auditSummaryCopy,
     auditSummaryListSections,
     auditSummaryMetricEntries,
     auditSummaryReadiness,
