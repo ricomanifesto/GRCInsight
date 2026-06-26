@@ -137,7 +137,7 @@ body.light .mobile-toc { background: rgba(0,0,0,0.04); color: #0b1220; border-co
 .archive-review-metrics [data-review-metric-state="gap"] dd { color: #fca5a5; }
 .archive-tags { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
 .archive-tags span { display: inline-flex; min-height: 24px; align-items: center; padding: 3px 7px; font-weight: 700; border-radius: 999px; border: 1px solid rgba(255,255,255,0.10); background: rgba(255,255,255,0.05); color: #f5e8c8; font-size: 12px; }
-body.light .workspace-overview-card, body.light .archive-card { border-color: rgba(0,0,0,0.08); box-shadow: 0 6px 18px rgba(0,0,0,0.08); }
+body.light .workspace-overview-card, body.light .archive-card { border-color: rgba(0,0,0,0.08); box-shadow: var(--workspace-card-shadow); }
 body.light .workspace-overview-card h2, body.light .archive-card h2, body.light .archive-entry h3 { color: #31513e; }
 body.light .workspace-actions a { color: #31513e; background: rgba(49,81,62,0.08); border-color: rgba(49,81,62,0.22); }
 body.light .archive-entry { border-color: rgba(0,0,0,0.08); background: rgba(0,0,0,0.025); }
@@ -172,7 +172,7 @@ body.light .active-filter-chip-clear { background: rgba(49,81,62,0.12); }
 body.light .status-quick-filter strong { color: #31513e; }
 body.light .status-quick-filter.active { border-color: rgba(49,81,62,0.55); color: #31513e; background: rgba(49,81,62,0.08); }
 .audit-summary { margin-top: 14px; }
-.audit-summary-card { position: relative; display: grid; gap: 14px; background: linear-gradient(180deg, var(--panel), var(--panel-2)); border: 1px solid var(--line); border-radius: 8px; padding: 18px 20px 18px 24px; box-shadow: 0 6px 18px rgba(0,0,0,0.18); overflow: hidden; }
+.audit-summary-card { position: relative; display: grid; gap: 14px; background: linear-gradient(180deg, var(--panel), var(--panel-2)); border: 1px solid var(--line); border-radius: 8px; padding: 18px 20px 18px 24px; box-shadow: var(--workspace-card-shadow); overflow: hidden; }
 .audit-summary-card::before { content: ""; position: absolute; inset: 0 auto 0 0; width: 4px; background: rgba(20,184,166,0.58); }
 .audit-kicker { margin: 0; color: var(--muted); font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0; }
 .audit-summary-card h2 { margin: 4px 0 0; color: #f5e8c8; font-size: 20px; }
@@ -198,7 +198,7 @@ body.light .status-quick-filter.active { border-color: rgba(49,81,62,0.55); colo
 .coverage-row[data-coverage-state="attention"] strong { color: #fde68a; }
 .coverage-row[data-coverage-state="gap"] strong { color: #fca5a5; }
 body.light .coverage-table caption, body.light .coverage-table tbody th, body.light .coverage-row strong { color: #31513e; }
-body.light .audit-summary-card { border-color: rgba(0,0,0,0.08); box-shadow: 0 6px 18px rgba(0,0,0,0.08); }
+body.light .audit-summary-card { border-color: rgba(0,0,0,0.08); box-shadow: var(--workspace-card-shadow); }
 body.light .audit-summary-card h2, body.light .audit-metrics strong, body.light .audit-lists h3 { color: #31513e; }
 body.light .audit-metrics span, body.light .audit-lists > div { border-color: rgba(0,0,0,0.08); background: rgba(0,0,0,0.03); }
 @media (max-width: 760px) {
@@ -243,7 +243,7 @@ body.light .sidebar details[open] > summary { background: rgba(49, 81, 62, 0.10)
 .sidebar details ul a:hover { color: var(--text); }
 
 .card { position: relative; background: linear-gradient(180deg, var(--panel), var(--panel-2)); border: 1px solid var(--line); border-radius: 8px; padding: 14px 16px; box-shadow: 0 6px 18px rgba(0,0,0,0.25); }
-.card { border-color: var(--workspace-hairline); box-shadow: 0 10px 24px rgba(0,0,0,0.18); }
+.card { border-color: var(--workspace-hairline); box-shadow: var(--workspace-card-shadow); }
 .card::before { content: ""; position: absolute; inset: 0 auto 0 0; width: 3px; border-radius: 8px 0 0 8px; background: rgba(49,81,62,0.55); }
 .card.filtered-out { display: none; }
 .card.collapsed > :not(h2) { display: none; }
@@ -266,7 +266,7 @@ body.light .section-meta[data-evidence="Needs source trail"] .section-meta-item:
 body.light .card.temp-outline { border-color: rgba(245, 158, 11, 0.55); }
 body.light .card.temp-outline h2 { color: #b45309; }
 body.light .temp-note { color: #b45309; }
-body.light .card { border-color: var(--workspace-hairline); box-shadow: 0 8px 20px rgba(0,0,0,0.08); }
+body.light .card { border-color: var(--workspace-hairline); box-shadow: var(--workspace-card-shadow); }
 body.light .card h2, body.light .card h3 { color: #31513e; }
 body.light .card h2::before { background: #31513e; box-shadow: 0 0 0 3px rgba(49,81,62,0.10); }
 
