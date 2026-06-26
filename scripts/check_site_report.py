@@ -935,6 +935,23 @@ def main() -> None:
         if guard not in style_css:
             fail(f"style.css missing compliance review summary stack rhythm aesthetic guard: {guard}")
 
+    required_compliance_sidebar_filter_context_rhythm_aesthetic_contract = (
+        "--nav-context-link-gap",
+        "--nav-context-state-margin",
+        "--nav-context-empty-margin",
+        "--nav-context-inline-margin",
+        "--nav-context-mobile-margin",
+        ".sidebar .nav-filter-state { display: inline-flex; align-items: center; min-height: 30px; padding: var(--review-state-note-padding); border-left: 3px solid var(--filtered-state-rail); border-radius: 6px; background: var(--filtered-state-note-bg); line-height: var(--review-state-note-line-height); }",
+        ".nav-filter-state { margin: 0 0 var(--nav-context-state-margin); }",
+        ".sidebar nav { display: grid; gap: var(--nav-context-link-gap); }",
+        ".nav-empty { margin: var(--nav-context-empty-margin); }",
+        ".topbar .nav-filter-state, .topbar .nav-empty { margin: 0 var(--nav-context-inline-margin); flex: 0 0 auto; }",
+        ".mobile-toc { margin-top: var(--nav-context-mobile-margin); }",
+    )
+    for guard in required_compliance_sidebar_filter_context_rhythm_aesthetic_contract:
+        if guard not in style_css:
+            fail(f"style.css missing compliance sidebar filter context rhythm aesthetic guard: {guard}")
+
     required_archive_guards = (
         "window.GRCInsightArchive",
         "currentReportId",
