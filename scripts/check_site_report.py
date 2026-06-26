@@ -601,6 +601,24 @@ def main() -> None:
         if guard not in style_css:
             fail(f"style.css missing compliance archive surface continuity guard: {guard}")
 
+    required_compliance_review_action_affordance_visual_contract = (
+        "--review-action-min-target",
+        "--review-action-focus-ring",
+        ".workspace-actions a, .status-quick-filter, .active-filter-chip { min-height: var(--review-action-min-target); }",
+        ".workspace-actions a:hover, .workspace-actions a:focus-visible { box-shadow: var(--review-action-focus-ring); }",
+        ".status-quick-filter.active, .active-filter-chip:focus-visible { box-shadow: var(--review-action-focus-ring); }",
+        ".archive-entry.current { box-shadow: inset 3px 0 0 var(--workspace-rail), 0 10px 20px rgba(0,0,0,0.14); }",
+        ".copy-link, .collapse-toggle, .focus-toggle { min-width: var(--review-action-min-target); min-height: var(--review-action-min-target); }",
+        ".copy-link:focus-visible, .collapse-toggle:focus-visible, .focus-toggle:focus-visible { box-shadow: var(--review-action-focus-ring); color: #f5e8c8; }",
+        "body.light .copy-link:focus-visible, body.light .collapse-toggle:focus-visible, body.light .focus-toggle:focus-visible { color: #31513e; }",
+        ".archive-entry.current h3 a:focus-visible { outline: 2px solid var(--workspace-rail); outline-offset: 3px; border-radius: 4px; }",
+        ".active-filter-chip-clear { width: 18px; height: 18px; }",
+        ".workspace-actions a { justify-content: center; }",
+    )
+    for guard in required_compliance_review_action_affordance_visual_contract:
+        if guard not in style_css:
+            fail(f"style.css missing compliance review action affordance guard: {guard}")
+
     required_archive_guards = (
         "window.GRCInsightArchive",
         "currentReportId",
