@@ -619,6 +619,26 @@ def main() -> None:
         if guard not in style_css:
             fail(f"style.css missing compliance review action affordance guard: {guard}")
 
+    required_compliance_workspace_reference_aesthetic_alignment_contract = (
+        "--reference-editorial-heading-size",
+        "--reference-context-line-height",
+        "--reference-action-row-gap",
+        "--reference-card-density",
+        ".workspace-overview-card h2 { font-size: var(--reference-editorial-heading-size); line-height: 1.02; }",
+        ".workspace-heading-block { gap: 6px; padding-bottom: 10px; }",
+        ".workspace-copy, .archive-summary, .audit-summary-copy { line-height: var(--reference-context-line-height); }",
+        ".workspace-actions { gap: var(--reference-action-row-gap); padding-top: 2px; }",
+        ".sidebar nav a.active { box-shadow: inset 3px 0 0 var(--workspace-rail); }",
+        ".audit-lists > div, .archive-entry { padding: var(--reference-card-density); }",
+        ".card { padding: 15px 18px 15px 20px; }",
+        ".coverage-row[data-coverage-state=\"gap\"] td:last-child { box-shadow: inset 3px 0 0 rgba(239,68,68,0.34); font-weight: 600; }",
+        ".coverage-row[data-coverage-state=\"ready\"] td:last-child { box-shadow: inset 3px 0 0 rgba(22,163,74,0.30); }",
+        ".workspace-overview-card h2 { font-size: 26px; line-height: 1.04; }",
+    )
+    for guard in required_compliance_workspace_reference_aesthetic_alignment_contract:
+        if guard not in style_css:
+            fail(f"style.css missing compliance workspace reference aesthetic guard: {guard}")
+
     required_archive_guards = (
         "window.GRCInsightArchive",
         "currentReportId",
