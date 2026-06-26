@@ -541,6 +541,27 @@ def main() -> None:
         if guard not in style_css:
             fail(f"style.css missing section detail aesthetic visual contract guard: {guard}")
 
+    required_compliance_workspace_aesthetic_alignment_visual_contract = (
+        "--workspace-action-gap",
+        "--workspace-index-width",
+        "--workspace-table-density",
+        ".app-header .title { max-width: 960px; font-size: 52px; line-height: 0.94; }",
+        ".control-buttons { gap: var(--workspace-action-gap); align-content: end; }",
+        ".action-btn { min-height: 32px; padding: 5px 8px; }",
+        ".layout { grid-template-columns: var(--workspace-index-width) minmax(0, 1fr); }",
+        ".sidebar { border-left: 3px solid var(--workspace-rail); padding: 10px; }",
+        "body.light .sidebar { border-left-color: var(--workspace-rail); }",
+        ".workspace-overview-card { padding: 18px 20px 18px 26px; }",
+        ".audit-metrics span { min-height: 52px; padding: 8px; }",
+        ".coverage-table th, .coverage-table td { padding: var(--workspace-table-density) 10px; }",
+        ".coverage-row strong { display: inline-flex; min-height: 22px; align-items: center; }",
+        ".topbar .chip { min-height: 30px; display: inline-flex; align-items: center; }",
+        ".app-header .title { font-size: 34px; line-height: 0.98; }",
+    )
+    for guard in required_compliance_workspace_aesthetic_alignment_visual_contract:
+        if guard not in style_css:
+            fail(f"style.css missing compliance workspace aesthetic alignment guard: {guard}")
+
     required_archive_guards = (
         "window.GRCInsightArchive",
         "currentReportId",
