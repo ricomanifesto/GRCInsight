@@ -107,6 +107,7 @@ assert(typeof metadata.auditSummaryMetricEntries === 'function', 'metadata shoul
 assert(typeof metadata.auditSummaryListSections === 'function', 'metadata should expose canonical audit summary list sections');
 assert(typeof metadata.auditSummaryReadiness === 'function', 'metadata should expose canonical audit summary readiness projection');
 assert(typeof metadata.auditSummaryCopy === 'function', 'metadata should expose canonical audit summary copy projection');
+assert(typeof metadata.renderSummaryHeader === 'function', 'metadata should expose canonical summary header renderer');
 assert(typeof metadata.workspaceActionEntries === 'function', 'metadata should expose canonical workspace action entries');
 assert(typeof archive.setReviewSignalStates === 'function', 'archive should accept canonical review signal states');
 archive.setReviewSignalStates(metadata.reviewSignalStates);
@@ -235,6 +236,28 @@ assert(needsReadiness.auditHeading === 'Needs source trail', 'readiness projecti
 const needsCopy = metadata.auditSummaryCopy(auditSummary);
 assert(needsCopy.workspaceCopy === '3 visible sections mapped across obligations, controls, gaps, owner cues, and source provenance.', 'summary copy projection should expose workspace copy');
 assert(needsCopy.auditCopy === '3 sections reviewed for obligations, gaps, deadlines, and evidence trails.', 'summary copy projection should expose audit copy');
+const workspaceHeader = metadata.renderSummaryHeader({{
+  className: 'workspace-heading-block',
+  kickerClassName: 'workspace-kicker',
+  copyClassName: 'workspace-copy',
+  kicker: 'Generated compliance archive',
+  heading: needsReadiness.workspaceHeading,
+  copy: needsCopy.workspaceCopy,
+}});
+assert(workspaceHeader.includes('class="workspace-heading-block"'), 'summary header renderer should preserve wrapper class');
+assert(workspaceHeader.includes('<p class="workspace-kicker">Generated compliance archive</p>'), 'summary header renderer should render kicker copy');
+assert(workspaceHeader.includes('<h2>Compliance review workspace</h2>'), 'summary header renderer should render heading copy');
+assert(workspaceHeader.includes(needsCopy.workspaceCopy), 'summary header renderer should render body copy');
+const escapedHeader = metadata.renderSummaryHeader({{
+  className: 'workspace-heading-block" onclick="bad',
+  kickerClassName: 'workspace-kicker',
+  copyClassName: 'workspace-copy',
+  kicker: '<unsafe>',
+  heading: '<heading>',
+  copy: '<copy>',
+}});
+assert(!escapedHeader.includes('<unsafe>') && escapedHeader.includes('&lt;unsafe&gt;'), 'summary header renderer should escape kicker text');
+assert(!escapedHeader.includes('onclick="bad'), 'summary header renderer should escape class attributes');
 const workspaceActions = metadata.workspaceActionEntries();
 assert(Array.isArray(workspaceActions) && workspaceActions.length === 3, 'workspace action entries should expose compact action links');
 assert(workspaceActions.map(row => row.key).join('|') === 'auditSummary|generatedSections|sectionIndex', 'workspace action entries should use stable keys');

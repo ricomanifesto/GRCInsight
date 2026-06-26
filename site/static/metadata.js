@@ -419,16 +419,29 @@
     };
   }
 
+  function renderSummaryHeader({ className, kickerClassName, copyClassName, kicker, heading, copy }) {
+    return `
+        <div class="${escapeAttribute(className)}">
+          <p class="${escapeAttribute(kickerClassName)}">${escapeHtml(kicker)}</p>
+          <h2>${escapeHtml(heading)}</h2>
+          <p class="${escapeAttribute(copyClassName)}">${escapeHtml(copy)}</p>
+        </div>
+    `;
+  }
+
   function renderWorkspaceOverview(summary) {
     const readiness = auditSummaryReadiness(summary);
     const summaryCopy = auditSummaryCopy(summary);
     return `
       <div class="workspace-overview-card">
-        <div class="workspace-heading-block">
-          <p class="workspace-kicker">Generated compliance archive</p>
-          <h2>${escapeHtml(readiness.workspaceHeading)}</h2>
-          <p class="workspace-copy">${escapeHtml(summaryCopy.workspaceCopy)}</p>
-        </div>
+        ${renderSummaryHeader({
+          className: 'workspace-heading-block',
+          kickerClassName: 'workspace-kicker',
+          copyClassName: 'workspace-copy',
+          kicker: 'Generated compliance archive',
+          heading: readiness.workspaceHeading,
+          copy: summaryCopy.workspaceCopy,
+        })}
         <div class="workspace-actions" aria-label="Workspace actions">
           ${renderWorkspaceActions()}
         </div>
@@ -442,11 +455,14 @@
     const summaryCopy = auditSummaryCopy(summary);
     return `
       <div class="audit-summary-card">
-        <div>
-          <p class="audit-kicker">Audit-ready summary</p>
-          <h2>${escapeHtml(readiness.auditHeading)}</h2>
-          <p class="audit-summary-copy">${escapeHtml(summaryCopy.auditCopy)}</p>
-        </div>
+        ${renderSummaryHeader({
+          className: 'audit-summary-heading',
+          kickerClassName: 'audit-kicker',
+          copyClassName: 'audit-summary-copy',
+          kicker: 'Audit-ready summary',
+          heading: readiness.auditHeading,
+          copy: summaryCopy.auditCopy,
+        })}
         <div class="audit-metrics">
           ${renderAuditSummaryMetrics(summary)}
         </div>
@@ -470,6 +486,7 @@
     metadataStates,
     renderCoverageTableRows,
     renderSectionMetadata,
+    renderSummaryHeader,
     renderWorkspaceOverview,
     reviewSignalStates,
     reviewStatusOptions,

@@ -132,6 +132,7 @@ def main() -> None:
         "auditSummaryListSections",
         "auditSummaryReadiness",
         "auditSummaryCopy",
+        "renderSummaryHeader",
         "workspaceActionEntries",
         "coverageRows",
         "renderWorkspaceOverview",
@@ -342,6 +343,14 @@ def main() -> None:
     for guard in duplicate_audit_summary_copy_guards:
         if guard in metadata_js:
             fail(f"metadata.js still duplicates audit summary body copy: {guard}")
+
+    duplicate_summary_header_guards = (
+        "<div class=\"workspace-heading-block\">\n          <p class=\"workspace-kicker\">Generated compliance archive</p>\n          <h2>${escapeHtml(readiness.workspaceHeading)}</h2>\n          <p class=\"workspace-copy\">${escapeHtml(summaryCopy.workspaceCopy)}</p>\n        </div>",
+        "<div>\n          <p class=\"audit-kicker\">Audit-ready summary</p>\n          <h2>${escapeHtml(readiness.auditHeading)}</h2>\n          <p class=\"audit-summary-copy\">${escapeHtml(summaryCopy.auditCopy)}</p>\n        </div>",
+    )
+    for guard in duplicate_summary_header_guards:
+        if guard in metadata_js:
+            fail(f"metadata.js still duplicates summary header rendering: {guard}")
 
     duplicate_workspace_action_guards = (
         "<a href=\"#auditSummary\">Audit summary</a>",
