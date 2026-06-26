@@ -711,6 +711,26 @@ def main() -> None:
     if section_card_visual_gap_line <= section_card_gap_line:
         fail(f"style.css section card visual continuity guard appears before section detail rule: {section_card_visual_gap}")
 
+    required_compliance_evidence_review_surface_aesthetic_contract = (
+        "--evidence-review-caption-bg",
+        "--evidence-review-cell-padding-block",
+        "--evidence-review-row-line-height",
+        "--evidence-review-table-min-width",
+        "--evidence-review-mobile-table-min-width",
+        ".coverage-table caption { line-height: 1.35; background: var(--evidence-review-caption-bg); border-bottom: 1px solid var(--workspace-hairline); }",
+        ".coverage-table th, .coverage-table td { padding-top: var(--evidence-review-cell-padding-block); padding-bottom: var(--evidence-review-cell-padding-block); line-height: var(--evidence-review-row-line-height); }",
+        ".coverage-row[data-coverage-state=\"ready\"] th:first-child { box-shadow: inset 3px 0 0 rgba(22,163,74,0.34); }",
+        ".coverage-row[data-coverage-state=\"gap\"] th:first-child { box-shadow: inset 3px 0 0 rgba(239,68,68,0.38); }",
+        ".table-wrap table { min-width: var(--evidence-review-table-min-width); }",
+        ".table-wrap th, .table-wrap td { padding-top: var(--evidence-review-cell-padding-block); padding-bottom: var(--evidence-review-cell-padding-block); line-height: var(--evidence-review-row-line-height); }",
+        ".table-wrap th:first-child, .table-wrap td:first-child { width: 22%; font-weight: 700; }",
+        ".table-wrap, .coverage-table { background: var(--evidence-review-caption-bg); }",
+        ".table-wrap table { min-width: var(--evidence-review-mobile-table-min-width); }",
+    )
+    for guard in required_compliance_evidence_review_surface_aesthetic_contract:
+        if guard not in style_css:
+            fail(f"style.css missing compliance evidence review surface aesthetic guard: {guard}")
+
     required_archive_guards = (
         "window.GRCInsightArchive",
         "currentReportId",
