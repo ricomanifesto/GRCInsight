@@ -234,14 +234,13 @@
 
   function activeFilterEntries(filters) {
     const active = normalizeFilterState(filters);
-    const entries = [];
-    const options = filterStateOptionMap;
-    if (active.query) entries.push({ key: options.query.key, label: `${options.query.labelPrefix}: ${active.query}` });
-    if (active.reviewStatus !== options.reviewStatus.defaultValue) entries.push({ key: options.reviewStatus.key, label: `${options.reviewStatus.labelPrefix}: ${active.reviewStatus}` });
-    if (active.tagCategory !== options.tagCategory.defaultValue) entries.push({ key: options.tagCategory.key, label: `${options.tagCategory.labelPrefix}: ${active.tagCategory}` });
-    if (active.ownerCue !== options.ownerCue.defaultValue) entries.push({ key: options.ownerCue.key, label: `${options.ownerCue.labelPrefix}: ${active.ownerCue}` });
-    if (active.evidenceState !== options.evidenceState.defaultValue) entries.push({ key: options.evidenceState.key, label: `${options.evidenceState.labelPrefix}: ${active.evidenceState}` });
-    return entries;
+    return filterStateOptions.reduce((entries, option) => {
+      const value = active[option.key];
+      if (value !== option.defaultValue) {
+        entries.push({ key: option.key, label: `${option.labelPrefix}: ${value}` });
+      }
+      return entries;
+    }, []);
   }
 
   function activeFilterLabels(filters) {
