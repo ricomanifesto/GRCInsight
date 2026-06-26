@@ -186,7 +186,6 @@ body.light .status-quick-filter.active { border-color: rgba(49,81,62,0.55); colo
 .audit-lists ul { margin: 0 0 0 18px; }
 .coverage-table { overflow-x: auto; border: 1px solid var(--workspace-hairline); border-radius: 8px; background: var(--surface); box-shadow: inset 0 1px 0 rgba(255,255,255,0.04); }
 .table-wrap, .coverage-table { max-width: 100%; min-width: 0; }
-.table-wrap, .coverage-table { box-shadow: inset 0 1px 0 rgba(255,255,255,0.04), 0 8px 18px rgba(0,0,0,0.12); }
 .coverage-table table { min-width: 620px; margin: 0; border-collapse: separate; border-spacing: 0; }
 .coverage-table caption { text-align: left; padding: 10px 12px; color: #f5e8c8; font-size: 12px; font-weight: 800; text-transform: uppercase; border-bottom: 1px solid var(--line); background: rgba(255,255,255,0.025); }
 .coverage-table th, .coverage-table td { padding: 9px 12px; vertical-align: top; }
@@ -280,6 +279,7 @@ body.light hr { border-color: rgba(0,0,0,0.1); }
 
 /* Tables */
 .table-wrap { overflow-x: auto; margin: 16px 0; border-radius: 8px; border: 1px solid var(--workspace-hairline); background: var(--surface); box-shadow: inset 0 1px 0 rgba(255,255,255,0.04); }
+.table-wrap, .coverage-table { box-shadow: inset 0 1px 0 rgba(255,255,255,0.04), 0 8px 18px rgba(0,0,0,0.12); }
 body.light .table-wrap { border-color: rgba(0,0,0,0.1); }
 table { width: 100%; border-collapse: collapse; font-size: 14px; }
 .table-wrap table { min-width: 680px; border-collapse: separate; border-spacing: 0; }
