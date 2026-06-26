@@ -269,6 +269,17 @@ def main() -> None:
         if guard in filters_js:
             fail(f"filters.js still duplicates filter URL param serialization: {guard}")
 
+    duplicate_active_filter_entry_guards = (
+        "if (active.query) entries.push({ key: options.query.key, label: `${options.query.labelPrefix}: ${active.query}` });",
+        "if (active.reviewStatus !== options.reviewStatus.defaultValue) entries.push({ key: options.reviewStatus.key, label: `${options.reviewStatus.labelPrefix}: ${active.reviewStatus}` });",
+        "if (active.tagCategory !== options.tagCategory.defaultValue) entries.push({ key: options.tagCategory.key, label: `${options.tagCategory.labelPrefix}: ${active.tagCategory}` });",
+        "if (active.ownerCue !== options.ownerCue.defaultValue) entries.push({ key: options.ownerCue.key, label: `${options.ownerCue.labelPrefix}: ${active.ownerCue}` });",
+        "if (active.evidenceState !== options.evidenceState.defaultValue) entries.push({ key: options.evidenceState.key, label: `${options.evidenceState.labelPrefix}: ${active.evidenceState}` });",
+    )
+    for guard in duplicate_active_filter_entry_guards:
+        if guard in filters_js:
+            fail(f"filters.js still duplicates active filter entry projection: {guard}")
+
     required_filter_layout = (
         ".filter-controls",
         "repeat(4, minmax(120px, 0.8fr))",
