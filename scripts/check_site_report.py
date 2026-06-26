@@ -464,6 +464,7 @@ def main() -> None:
         ".archive-entry-main { display: grid; gap: 6px; min-width: 0; }",
         ".archive-entry.current .archive-entry-kicker { color: #f5e8c8; }",
         ".archive-entry.current h3 { color: #fde68a; }",
+        ".archive-entry h3 a { color: inherit; }",
         ".archive-review-metrics div { display: grid; align-content: center; min-height: 48px;",
         ".archive-tags span { display: inline-flex; min-height: 24px; align-items: center; padding: 3px 7px; font-weight: 700;",
         ".card h2 { display: flex; align-items: center; gap: 8px; scroll-margin-top: 90px; flex-wrap: wrap; }",

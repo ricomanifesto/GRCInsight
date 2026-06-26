@@ -120,6 +120,7 @@ body.light .mobile-toc { background: rgba(0,0,0,0.04); color: #0b1220; border-co
 .archive-entry.current .archive-entry-kicker { color: #f5e8c8; }
 .archive-entry.current h3 { color: #fde68a; }
 .archive-entry h3 { margin: 4px 0 6px; font-size: 17px; color: #f5e8c8; }
+.archive-entry h3 a { color: inherit; }
 .archive-entry p { margin: 0 0 8px; color: var(--text); }
 .archive-entry ul { margin: 8px 0 0 18px; }
 .archive-entry-meta { display: grid; gap: 10px; justify-items: end; align-content: start; color: var(--muted); font-size: 13px; }
