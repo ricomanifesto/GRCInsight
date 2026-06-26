@@ -385,14 +385,14 @@ def main() -> None:
         ".workspace-overview-card { position: relative;",
         ".workspace-overview-card::before",
         ".audit-metrics { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr));",
-        ".sidebar { position: sticky; top: 84px;",
+        ".sidebar { position: sticky; top: 76px;",
         ".card { position: relative;",
         "@media (max-width: 760px)",
     )
     for guard in required_workspace_visual_contract:
         if guard not in style_css:
             fail(f"style.css missing compliance workspace visual contract guard: {guard}")
-    sidebar_base = ".sidebar { position: sticky; top: 84px;"
+    sidebar_base = ".sidebar { position: sticky; top: 76px;"
     sidebar_tablet_override = ".sidebar { position: static; max-height: none; }"
     if style_css.index(sidebar_base) > style_css.index(sidebar_tablet_override):
         fail("style.css applies tablet sidebar flow override before the base sticky sidebar rule")
@@ -436,6 +436,27 @@ def main() -> None:
     for guard in required_evidence_surface_visual_contract:
         if guard not in style_css:
             fail(f"style.css missing evidence-surface visual QA guard: {guard}")
+
+    required_scan_density_visual_contract = (
+        "--workspace-density-gap",
+        ".app-header { background: linear-gradient(180deg, #131a17 0%, #0f1412 100%); color: white; padding: 24px 0 14px;",
+        ".controls { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: var(--workspace-density-gap);",
+        ".filter-field input, .filter-field select { width: 100%; min-height: 34px;",
+        ".action-btn { border: 1px solid rgba(255,255,255,0.25); background: transparent; color: #fff; border-radius: 6px; padding: 6px 9px;",
+        ".report { display: grid; gap: 12px;",
+        ".workspace-overview-card, .archive-card { display: grid; gap: 12px;",
+        ".archive-entry { display: grid; grid-template-columns: minmax(0, 1fr) minmax(140px, auto); gap: 10px; padding: 12px;",
+        ".layout { display: grid; grid-template-columns: 240px 1fr; gap: 14px;",
+        ".sidebar { position: sticky; top: 76px;",
+        ".sidebar nav a { display: block; padding: 5px 7px;",
+        ".topbar .topbar-scroll { display: flex; gap: 6px; overflow-x: auto; padding: 8px 0;",
+        ".topbar .chip { white-space: nowrap; padding: 5px 9px;",
+        "@media (max-width: 760px)",
+        ".app-header { padding: 24px 0 14px; }",
+    )
+    for guard in required_scan_density_visual_contract:
+        if guard not in style_css:
+            fail(f"style.css missing compliance workspace scan-density guard: {guard}")
 
     required_archive_guards = (
         "window.GRCInsightArchive",
