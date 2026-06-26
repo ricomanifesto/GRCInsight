@@ -452,7 +452,7 @@ def main() -> None:
         ".topbar .topbar-scroll { display: flex; gap: 6px; overflow-x: auto; padding: 8px 0;",
         ".topbar .chip { white-space: nowrap; padding: 5px 9px;",
         "@media (max-width: 760px)",
-        ".app-header { padding: 24px 0 14px; }",
+        ".app-header { padding: 20px 0 12px; }",
     )
     for guard in required_scan_density_visual_contract:
         if guard not in style_css:
@@ -497,6 +497,26 @@ def main() -> None:
     for guard in required_editorial_workspace_aesthetic_visual_contract:
         if guard not in style_css:
             fail(f"style.css missing editorial workspace aesthetic visual contract guard: {guard}")
+
+    required_mobile_workspace_polish_visual_contract = (
+        "--mobile-workspace-gap",
+        "@media (max-width: 760px)",
+        ".app-header { padding: 20px 0 12px; }",
+        ".app-header .container { grid-template-columns: 1fr; gap: 8px; }",
+        ".controls { padding: 8px; gap: var(--mobile-workspace-gap); }",
+        ".filter-controls { gap: var(--mobile-workspace-gap); }",
+        ".control-buttons { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--mobile-workspace-gap); }",
+        ".control-buttons .action-btn, .clear-filters { width: 100%; min-height: 38px; }",
+        ".mobile-toc { min-height: 38px; border-radius: 8px; padding: 8px 10px; }",
+        ".topbar { box-shadow: 0 8px 18px rgba(0,0,0,0.18); }",
+        ".topbar .topbar-scroll { padding: 7px 0; scroll-padding-inline: 12px; }",
+        ".workspace-overview-card, .archive-card, .audit-summary-card, .card { border-radius: 8px; }",
+        ".coverage-table table { min-width: 560px; }",
+        ".table-wrap table { min-width: 560px; }",
+    )
+    for guard in required_mobile_workspace_polish_visual_contract:
+        if guard not in style_css:
+            fail(f"style.css missing mobile workspace polish visual contract guard: {guard}")
 
     required_archive_guards = (
         "window.GRCInsightArchive",
