@@ -19,6 +19,8 @@
   --evidence-table-gap: 6px;
   --surface-continuity-gap: 10px;
   --surface-rail-width: 4px;
+  --review-action-min-target: 34px;
+  --review-action-focus-ring: 0 0 0 3px var(--workspace-focus);
   --workspace-card-shadow: 0 12px 26px rgba(0,0,0,0.20);
   --workspace-control-surface: rgba(236,231,220,0.055);
   --evidence-ready: rgba(22,163,74,0.20);
@@ -52,6 +54,8 @@ body.light {
   --evidence-table-gap: 6px;
   --surface-continuity-gap: 10px;
   --surface-rail-width: 4px;
+  --review-action-min-target: 34px;
+  --review-action-focus-ring: 0 0 0 3px var(--workspace-focus);
   --workspace-card-shadow: 0 10px 22px rgba(27,35,43,0.08);
   --workspace-control-surface: rgba(49,81,62,0.045);
   --evidence-ready: rgba(22,163,74,0.12);
@@ -134,7 +138,9 @@ body.light .mobile-toc { background: rgba(0,0,0,0.04); color: #0b1220; border-co
 .workspace-copy { max-width: 720px; margin: 0; color: var(--muted); }
 .workspace-actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
 .workspace-actions a { min-height: 32px; display: inline-flex; align-items: center; border: 1px solid rgba(214,160,77,0.38); border-radius: 6px; background: var(--workspace-focus); color: #f5e8c8; padding: 6px 10px; font-size: 12px; font-weight: 800; text-decoration: none; text-transform: uppercase; letter-spacing: 0; }
+.workspace-actions a { justify-content: center; }
 .workspace-actions a:hover { background: rgba(197,138,53,0.16); text-decoration: none; }
+.workspace-actions a:hover, .workspace-actions a:focus-visible { box-shadow: var(--review-action-focus-ring); }
 .archive-card { position: relative; overflow: hidden; padding-left: 24px; }
 .archive-card::before { content: ""; position: absolute; inset: 0 auto 0 0; width: 4px; background: var(--workspace-rail); }
 .archive-kicker, .archive-entry-kicker { margin: 0; color: var(--muted); font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0; }
@@ -144,11 +150,13 @@ body.light .mobile-toc { background: rgba(0,0,0,0.04); color: #0b1220; border-co
 .archive-entry { display: grid; grid-template-columns: minmax(0, 1fr) minmax(140px, auto); gap: 10px; padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.035); }
 .archive-entry, .audit-lists > div, .section-meta { border-color: var(--workspace-hairline); }
 .archive-entry.current { border-color: rgba(214,160,77,0.52); background: linear-gradient(180deg, rgba(214,160,77,0.13), rgba(214,160,77,0.06)); }
+.archive-entry.current { box-shadow: inset 3px 0 0 var(--workspace-rail), 0 10px 20px rgba(0,0,0,0.14); }
 .archive-entry-main { display: grid; gap: 6px; min-width: 0; }
 .archive-entry.current .archive-entry-kicker { color: #f5e8c8; }
 .archive-entry.current h3 { color: #fde68a; }
 .archive-entry h3 { margin: 4px 0 6px; font-size: 17px; color: #f5e8c8; }
 .archive-entry h3 a { color: inherit; }
+.archive-entry.current h3 a:focus-visible { outline: 2px solid var(--workspace-rail); outline-offset: 3px; border-radius: 4px; }
 .archive-entry p { margin: 0 0 8px; color: var(--text); }
 .archive-entry ul { margin: 8px 0 0 18px; }
 .archive-entry-meta { display: grid; gap: 10px; justify-items: end; align-content: start; color: var(--muted); font-size: 13px; }
@@ -184,9 +192,12 @@ body.light .archive-tags span { border-color: rgba(0,0,0,0.08); background: rgba
 .active-filter-chips[hidden] { display: none; }
 .active-filter-chip { display: inline-flex; align-items: center; gap: 8px; max-width: 100%; min-height: 32px; border: 1px solid rgba(34,211,238,0.34); border-radius: 8px; background: rgba(34,211,238,0.09); color: #dff8ff; padding: 6px 9px; font: inherit; font-size: 12px; font-weight: 700; cursor: pointer; }
 .workspace-actions a, .status-quick-filter, .active-filter-chip { border-radius: 6px; }
+.workspace-actions a, .status-quick-filter, .active-filter-chip { min-height: var(--review-action-min-target); }
 .active-filter-chip span:first-child { overflow-wrap: anywhere; text-align: left; }
 .active-filter-chip-clear { display: inline-flex; align-items: center; justify-content: center; width: 16px; height: 16px; border-radius: 999px; background: rgba(255,255,255,0.13); color: currentColor; line-height: 1; flex: 0 0 auto; }
+.active-filter-chip-clear { width: 18px; height: 18px; }
 .active-filter-chip:hover, .active-filter-chip:focus-visible { border-color: rgba(34,211,238,0.7); background: rgba(34,211,238,0.16); }
+.status-quick-filter.active, .active-filter-chip:focus-visible { box-shadow: var(--review-action-focus-ring); }
 .status-quick-filters { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
 .status-quick-filter { display: inline-flex; align-items: center; gap: 8px; min-height: 34px; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; background: var(--panel); color: var(--muted); padding: 7px 10px; font: inherit; font-size: 12px; font-weight: 700; cursor: pointer; }
 .status-quick-filter { border-radius: 6px; }
@@ -416,9 +427,12 @@ a:hover { text-decoration: underline; }
 
 /* Section action buttons (icon-only) */
 .copy-link, .collapse-toggle, .focus-toggle { border: 1px solid rgba(255,255,255,0.15); background: transparent; color: var(--muted); border-radius: 6px; padding: 4px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; }
+.copy-link, .collapse-toggle, .focus-toggle { min-width: var(--review-action-min-target); min-height: var(--review-action-min-target); }
 body.light .copy-link, body.light .collapse-toggle, body.light .focus-toggle { border-color: rgba(0,0,0,0.12); }
 .copy-link:hover, .collapse-toggle:hover, .focus-toggle:hover { background: rgba(255,255,255,0.08); color: #f5e8c8; }
 body.light .copy-link:hover, body.light .collapse-toggle:hover, body.light .focus-toggle:hover { background: rgba(0,0,0,0.06); color: #31513e; }
+.copy-link:focus-visible, .collapse-toggle:focus-visible, .focus-toggle:focus-visible { box-shadow: var(--review-action-focus-ring); color: #f5e8c8; }
+body.light .copy-link:focus-visible, body.light .collapse-toggle:focus-visible, body.light .focus-toggle:focus-visible { color: #31513e; }
 @media (max-width: 760px) {
   .card h2 { align-items: flex-start; }
   .card h2 .heading-actions { margin-left: 0; }
