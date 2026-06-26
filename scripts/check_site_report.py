@@ -130,6 +130,7 @@ def main() -> None:
         "renderCoverageTableRows",
         "auditSummaryMetricEntries",
         "auditSummaryListSections",
+        "data-audit-list-state",
         "auditSummaryReadiness",
         "auditSummaryCopy",
         "renderSummaryHeader",
@@ -730,6 +731,31 @@ def main() -> None:
     for guard in required_compliance_evidence_review_surface_aesthetic_contract:
         if guard not in style_css:
             fail(f"style.css missing compliance evidence review surface aesthetic guard: {guard}")
+
+    required_compliance_audit_summary_gap_hierarchy_contract = (
+        "--audit-summary-list-gap",
+        "--audit-summary-note-line-height",
+        "--audit-summary-gap-rail",
+        ".audit-lists { gap: var(--audit-summary-list-gap); }",
+        ".audit-lists > div { display: grid; gap: 7px; align-content: start; }",
+        ".audit-lists > div[data-audit-list=\"evidenceGaps\"][data-audit-list-state=\"gap\"] { border-left: 3px solid var(--audit-summary-gap-rail); background: var(--evidence-gap); }",
+        ".audit-lists h3 { display: flex; align-items: center; gap: 6px; }",
+        ".audit-lists h3::before { content: \"\"; width: 7px; height: 7px; border-radius: 999px; background: var(--workspace-rail); }",
+        ".audit-lists li { margin: 3px 0; line-height: var(--audit-summary-note-line-height); }",
+        "body.light .audit-lists > div[data-audit-list=\"evidenceGaps\"][data-audit-list-state=\"gap\"] { background: var(--evidence-gap); border-left-color: var(--audit-summary-gap-rail); }",
+    )
+    for guard in required_compliance_audit_summary_gap_hierarchy_contract:
+        if guard not in style_css:
+            fail(f"style.css missing compliance audit summary gap hierarchy guard: {guard}")
+
+    required_audit_summary_gap_state_guards = (
+        "state: (normalized.gapTitles || []).length ? reviewSignalStates.gap : reviewSignalStates.ready",
+        "data-audit-list=\"${escapeAttribute(section.key)}\"",
+        "data-audit-list-state=\"${escapeAttribute(section.state || reviewSignalStates.ready)}\"",
+    )
+    for guard in required_audit_summary_gap_state_guards:
+        if guard not in metadata_js:
+            fail(f"metadata.js missing audit summary gap state guard: {guard}")
 
     required_archive_guards = (
         "window.GRCInsightArchive",

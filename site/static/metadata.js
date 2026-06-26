@@ -351,13 +351,14 @@
         heading: 'Evidence gaps',
         items: normalized.gapTitles || [],
         emptyText: 'No missing source trails detected',
+        state: (normalized.gapTitles || []).length ? reviewSignalStates.gap : reviewSignalStates.ready,
       },
     ];
   }
 
   function renderAuditSummaryLists(summary) {
     return auditSummaryListSections(summary).map(section => `
-      <div>
+      <div data-audit-list="${escapeAttribute(section.key)}" data-audit-list-state="${escapeAttribute(section.state || reviewSignalStates.ready)}">
         <h3>${escapeHtml(section.heading)}</h3>
         <ul>${renderList(section.items, section.emptyText)}</ul>
       </div>
