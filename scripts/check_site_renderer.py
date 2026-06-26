@@ -103,6 +103,7 @@ assert(metadata.reviewSignalStates.empty === 'empty', 'review signal states shou
 assert(metadata.reviewSignalStates.attention === 'attention', 'review signal states should expose attention');
 assert(typeof metadata.coverageMetricEntries === 'function', 'metadata should expose canonical coverage metric entries');
 assert(typeof metadata.auditSummaryMetricEntries === 'function', 'metadata should expose canonical audit summary metric entries');
+assert(typeof metadata.auditSummaryListSections === 'function', 'metadata should expose canonical audit summary list sections');
 assert(typeof archive.setReviewSignalStates === 'function', 'archive should accept canonical review signal states');
 archive.setReviewSignalStates(metadata.reviewSignalStates);
 const archiveMarkdown = `# GRC Intelligence Report - 2026-06-23
@@ -215,6 +216,14 @@ assert(Array.isArray(auditMetrics) && auditMetrics.length === 6, 'audit summary 
 assert(auditMetrics.map(row => row.key).join('|') === 'actionRequired|obligations|gaps|deadlines|owners|evidenceGaps', 'audit summary metrics should use stable keys');
 assert(auditMetrics.map(row => row.label).join('|') === 'action required|obligations|gaps|deadlines|owner cues|source-trail gaps', 'audit summary metrics should use stable labels');
 assert(auditMetrics.map(row => row.value).join('|') === '1|1|1|1|1|2', 'audit summary metrics should project summary counts in order');
+const auditListSections = metadata.auditSummaryListSections(auditSummary);
+assert(Array.isArray(auditListSections) && auditListSections.length === 4, 'audit summary list sections should expose compact list groups');
+assert(auditListSections.map(row => row.key).join('|') === 'actionFocus|evidenceTrail|ownerCues|evidenceGaps', 'audit summary list sections should use stable keys');
+assert(auditListSections.map(row => row.heading).join('|') === 'Action focus|Evidence trail|Owner cues|Evidence gaps', 'audit summary list sections should use stable headings');
+assert(auditListSections[0].items.join('|') === 'PCI remediation', 'action focus list should project action titles');
+assert(auditListSections[1].items.join('|') === 'Evidence backed overview', 'evidence trail list should project evidence-backed titles');
+assert(auditListSections[2].items.join('|') === 'PCI remediation', 'owner cues list should project owner titles');
+assert(auditListSections[3].items.join('|') === 'PCI remediation|Unmapped overview', 'evidence gaps list should project source gap titles');
 const coverageMetrics = metadata.coverageMetricEntries(auditSummary);
 assert(Array.isArray(coverageMetrics) && coverageMetrics.length === 5, 'coverage metrics should expose generated section coverage');
 assert(coverageMetrics.map(row => row.key).join('|') === 'generatedSections|sourceProvenance|obligations|ownershipCues|gapsAndDeadlines', 'coverage metrics should use stable keys');
@@ -257,6 +266,9 @@ const emptyFilteredAuditSummary = metadata.summarizeSections([]);
 assert(emptyFilteredAuditSummary.totalSections === 0, 'empty filtered audit summary should count zero sections');
 assert(emptyFilteredAuditSummary.auditReady === false, 'empty filtered audit summary should not be audit-ready');
 assert(metadata.auditSummaryMetricEntries(emptyFilteredAuditSummary).map(row => row.value).join('|') === '0|0|0|0|0|0', 'empty audit summary metrics should preserve zero counts');
+const emptyAuditListSections = metadata.auditSummaryListSections(emptyFilteredAuditSummary);
+assert(emptyAuditListSections.every(section => section.items.length === 0), 'empty audit summary list sections should preserve empty item lists');
+assert(emptyAuditListSections.map(section => section.emptyText).join('|') === 'No action-required sections detected|No source-backed sections detected|No owner cues detected|No missing source trails detected', 'empty audit summary list sections should expose stable empty text');
 assert(metadata.coverageMetricEntries(emptyFilteredAuditSummary)[0].value === '0', 'empty coverage metrics should preserve zero generated sections');
 const emptyCoverageMetrics = metadata.coverageMetricEntries(emptyFilteredAuditSummary);
 assert(emptyCoverageMetrics.every(row => row.state === 'empty'), 'empty coverage metrics should use empty states');
