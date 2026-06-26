@@ -903,6 +903,23 @@ def main() -> None:
         if guard not in style_css:
             fail(f"style.css missing compliance filter control form rhythm aesthetic guard: {guard}")
 
+    required_compliance_active_filter_chip_density_aesthetic_contract = (
+        "--active-chip-density-gap",
+        "--active-chip-row-margin",
+        "--active-chip-padding",
+        "--active-chip-clear-size",
+        "--active-chip-max-width",
+        "--active-chip-mobile-max-width",
+        ".active-filter-chips { gap: var(--active-chip-density-gap); margin-top: var(--active-chip-row-margin); }",
+        ".active-filter-chip { max-width: var(--active-chip-max-width); padding: var(--active-chip-padding); }",
+        ".active-filter-chip-clear { width: var(--active-chip-clear-size); height: var(--active-chip-clear-size); }",
+        ".status-quick-filters { gap: var(--active-chip-density-gap); margin-top: var(--active-chip-row-margin); }",
+        "@media (max-width: 760px) {\n  .active-filter-chips, .status-quick-filters { gap: var(--active-chip-density-gap); }\n  .active-filter-chip { max-width: var(--active-chip-mobile-max-width); }\n}",
+    )
+    for guard in required_compliance_active_filter_chip_density_aesthetic_contract:
+        if guard not in style_css:
+            fail(f"style.css missing compliance active filter chip density aesthetic guard: {guard}")
+
     required_archive_guards = (
         "window.GRCInsightArchive",
         "currentReportId",
