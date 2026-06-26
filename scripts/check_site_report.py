@@ -373,6 +373,30 @@ def main() -> None:
         if guard not in style_css:
             fail(f"style.css missing section filter layout guard: {guard}")
 
+    required_workspace_visual_contract = (
+        "--workspace-accent",
+        "--workspace-rail",
+        ".app-header .container { position: relative; display: grid;",
+        ".theme-toggle { grid-column: 2; grid-row: 1;",
+        ".controls { display: grid; grid-template-columns: minmax(0, 1fr) auto;",
+        "@media (max-width: 1080px)",
+        ".control-buttons { justify-content: flex-start; }",
+        ".sidebar { position: static; max-height: none; }",
+        ".workspace-overview-card { position: relative;",
+        ".workspace-overview-card::before",
+        ".audit-metrics { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr));",
+        ".sidebar { position: sticky; top: 84px;",
+        ".card { position: relative;",
+        "@media (max-width: 760px)",
+    )
+    for guard in required_workspace_visual_contract:
+        if guard not in style_css:
+            fail(f"style.css missing compliance workspace visual contract guard: {guard}")
+    sidebar_base = ".sidebar { position: sticky; top: 84px;"
+    sidebar_tablet_override = ".sidebar { position: static; max-height: none; }"
+    if style_css.index(sidebar_base) > style_css.index(sidebar_tablet_override):
+        fail("style.css applies tablet sidebar flow override before the base sticky sidebar rule")
+
     required_archive_guards = (
         "window.GRCInsightArchive",
         "currentReportId",
