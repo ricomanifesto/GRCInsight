@@ -829,6 +829,25 @@ def main() -> None:
         if guard not in style_css:
             fail(f"style.css missing compliance coverage matrix detail aesthetic guard: {guard}")
 
+    required_compliance_audit_summary_metric_density_aesthetic_contract = (
+        "--audit-metric-min-height",
+        "--audit-metric-padding",
+        "--audit-metric-value-size",
+        "--audit-metric-label-size",
+        "--audit-metric-value-line-height",
+        "--status-quick-filter-padding",
+        "--status-quick-filter-count-size",
+        ".audit-metrics span { min-height: var(--audit-metric-min-height); padding: var(--audit-metric-padding); }",
+        ".audit-metrics strong { font-size: var(--audit-metric-value-size); line-height: var(--audit-metric-value-line-height); }",
+        ".audit-metrics span { font-size: var(--audit-metric-label-size); }",
+        ".status-quick-filter { padding: var(--status-quick-filter-padding); }",
+        ".status-quick-filter strong { font-size: var(--status-quick-filter-count-size); }",
+        "body.light .audit-metrics span { background: rgba(49,81,62,0.035); }",
+    )
+    for guard in required_compliance_audit_summary_metric_density_aesthetic_contract:
+        if guard not in style_css:
+            fail(f"style.css missing compliance audit summary metric density aesthetic guard: {guard}")
+
     required_archive_guards = (
         "window.GRCInsightArchive",
         "currentReportId",
