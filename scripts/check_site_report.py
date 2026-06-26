@@ -920,6 +920,21 @@ def main() -> None:
         if guard not in style_css:
             fail(f"style.css missing compliance active filter chip density aesthetic guard: {guard}")
 
+    required_compliance_review_summary_stack_rhythm_aesthetic_contract = (
+        "--review-summary-stack-gap",
+        "--review-summary-stack-margin",
+        "--review-summary-stack-empty-margin",
+        "--review-summary-stack-empty-gap",
+        ".filter-state { margin-top: var(--review-summary-stack-margin); }",
+        ".active-filter-chips, .status-quick-filters { margin-top: var(--review-summary-stack-gap); }",
+        ".empty-results { margin-top: var(--review-summary-stack-empty-margin); }",
+        ".empty-results { gap: var(--review-summary-stack-empty-gap); }",
+        "@media (max-width: 760px) {\n  .filter-state, .empty-results { width: 100%; }\n}",
+    )
+    for guard in required_compliance_review_summary_stack_rhythm_aesthetic_contract:
+        if guard not in style_css:
+            fail(f"style.css missing compliance review summary stack rhythm aesthetic guard: {guard}")
+
     required_archive_guards = (
         "window.GRCInsightArchive",
         "currentReportId",
