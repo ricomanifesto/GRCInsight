@@ -16,6 +16,7 @@
   --workspace-action-gap: 6px;
   --workspace-index-width: 256px;
   --workspace-table-density: 8px;
+  --evidence-table-gap: 6px;
   --workspace-card-shadow: 0 12px 26px rgba(0,0,0,0.20);
   --workspace-control-surface: rgba(236,231,220,0.055);
   --evidence-ready: rgba(22,163,74,0.20);
@@ -46,6 +47,7 @@ body.light {
   --workspace-action-gap: 6px;
   --workspace-index-width: 256px;
   --workspace-table-density: 8px;
+  --evidence-table-gap: 6px;
   --workspace-card-shadow: 0 10px 22px rgba(27,35,43,0.08);
   --workspace-control-surface: rgba(49,81,62,0.045);
   --evidence-ready: rgba(22,163,74,0.12);
@@ -200,20 +202,26 @@ body.light .status-quick-filter.active { border-color: rgba(49,81,62,0.55); colo
 .audit-lists h3 { margin: 0 0 8px; color: #f5e8c8; font-size: 14px; }
 .audit-lists ul { margin: 0 0 0 18px; }
 .coverage-table { overflow-x: auto; border: 1px solid var(--workspace-hairline); border-radius: 8px; background: var(--surface); box-shadow: inset 0 1px 0 rgba(255,255,255,0.04); }
+.coverage-table { border-left: 3px solid var(--workspace-rail); }
 .table-wrap, .coverage-table { max-width: 100%; min-width: 0; }
 .coverage-table table { min-width: 620px; margin: 0; border-collapse: separate; border-spacing: 0; }
 .coverage-table caption { text-align: left; padding: 10px 12px; color: #f5e8c8; font-size: 12px; font-weight: 800; text-transform: uppercase; border-bottom: 1px solid var(--line); background: rgba(255,255,255,0.025); }
+.coverage-table caption { display: flex; align-items: center; gap: var(--evidence-table-gap); }
+.coverage-table caption::before { content: ""; width: 8px; height: 8px; border-radius: 999px; background: var(--workspace-rail); }
 .coverage-table th, .coverage-table td { padding: 9px 12px; vertical-align: top; }
 .coverage-table th, .coverage-table td { padding: var(--workspace-table-density) 10px; }
 .coverage-table tbody th { width: 190px; color: #f5e8c8; white-space: normal; }
 .coverage-row { background: rgba(255,255,255,0.018); }
 .coverage-row strong { color: #f5e8c8; }
 .coverage-row strong { display: inline-flex; min-height: 22px; align-items: center; }
+.coverage-row strong { border-radius: 999px; padding: 2px 7px; background: rgba(255,255,255,0.055); }
 .coverage-row[data-coverage-state="ready"] { background: var(--evidence-ready); }
 .coverage-row[data-coverage-state="gap"] { background: var(--evidence-gap); }
 .coverage-row[data-coverage-state="ready"] strong { color: #86efac; }
+.coverage-row[data-coverage-state="ready"] strong { background: rgba(22,163,74,0.16); }
 .coverage-row[data-coverage-state="attention"] strong { color: #fde68a; }
 .coverage-row[data-coverage-state="gap"] strong { color: #fca5a5; }
+.coverage-row[data-coverage-state="gap"] strong { background: rgba(239,68,68,0.16); }
 body.light .coverage-table caption, body.light .coverage-table tbody th, body.light .coverage-row strong { color: #31513e; }
 body.light .audit-summary-card { border-color: rgba(0,0,0,0.08); box-shadow: var(--workspace-card-shadow); }
 body.light .audit-summary-card h2, body.light .audit-metrics strong, body.light .audit-lists h3 { color: #31513e; }
@@ -313,13 +321,18 @@ body.light hr { border-color: rgba(0,0,0,0.1); }
 
 /* Tables */
 .table-wrap { overflow-x: auto; margin: 16px 0; border-radius: 8px; border: 1px solid var(--workspace-hairline); background: var(--surface); box-shadow: inset 0 1px 0 rgba(255,255,255,0.04); }
+.table-wrap { border-left: 3px solid rgba(214,160,77,0.46); }
 .card > .table-wrap { margin: 10px 0 12px; }
 .table-wrap, .coverage-table { box-shadow: inset 0 1px 0 rgba(255,255,255,0.04), 0 8px 18px rgba(0,0,0,0.12); }
 body.light .table-wrap { border-color: rgba(0,0,0,0.1); }
+body.light .table-wrap { border-left-color: var(--workspace-rail); }
 table { width: 100%; border-collapse: collapse; font-size: 14px; }
 .table-wrap table { min-width: 680px; border-collapse: separate; border-spacing: 0; }
+.table-wrap th:first-child, .table-wrap td:first-child { width: 24%; }
 @media (max-width: 760px) {
   .table-wrap table { min-width: 560px; }
+  .coverage-table caption { align-items: flex-start; }
+  .coverage-row strong { white-space: normal; }
 }
 thead { background: rgba(49, 81, 62, 0.18); }
 body.light thead { background: rgba(49, 81, 62, 0.08); }
