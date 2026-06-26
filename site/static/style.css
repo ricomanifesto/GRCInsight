@@ -44,6 +44,12 @@
   --empty-guidance-marker-size: 7px;
   --empty-guidance-nav-padding: 5px 9px;
   --empty-guidance-clear-bg: rgba(214,160,77,0.16);
+  --filter-control-form-gap: 7px;
+  --filter-control-field-gap: 5px;
+  --filter-control-input-min-height: 36px;
+  --filter-control-input-padding: 6px 9px;
+  --filter-control-search-min-width: 214px;
+  --filter-control-clear-padding: 6px 10px;
   --visual-continuity-gap: 8px;
   --visual-continuity-panel-inset: 14px;
   --visual-continuity-chip-gap: 5px;
@@ -136,6 +142,12 @@ body.light {
   --empty-guidance-marker-size: 7px;
   --empty-guidance-nav-padding: 5px 9px;
   --empty-guidance-clear-bg: rgba(49,81,62,0.075);
+  --filter-control-form-gap: 7px;
+  --filter-control-field-gap: 5px;
+  --filter-control-input-min-height: 36px;
+  --filter-control-input-padding: 6px 9px;
+  --filter-control-search-min-width: 214px;
+  --filter-control-clear-padding: 6px 10px;
   --visual-continuity-gap: 8px;
   --visual-continuity-panel-inset: 14px;
   --visual-continuity-chip-gap: 5px;
@@ -444,6 +456,16 @@ body.light .audit-lists > div[data-audit-list="evidenceGaps"][data-audit-list-st
 .clear-filters:not(:disabled) { background: var(--empty-guidance-clear-bg); }
 body.light .empty-results { color: #92400e; background: rgba(245, 158, 11, 0.12); border-color: rgba(245, 158, 11, 0.42); }
 body.light .clear-filters:not(:disabled) { background: var(--empty-guidance-clear-bg); }
+.filter-controls { gap: var(--filter-control-form-gap); }
+.filter-field { gap: var(--filter-control-field-gap); }
+.filter-field:first-child { min-width: var(--filter-control-search-min-width); }
+.filter-field input, .filter-field select { min-height: var(--filter-control-input-min-height); padding: var(--filter-control-input-padding); }
+.clear-filters { min-height: var(--filter-control-input-min-height); padding: var(--filter-control-clear-padding); }
+@media (max-width: 760px) {
+  .filter-controls { gap: var(--filter-control-form-gap); }
+  .filter-field:first-child { min-width: 0; }
+  .clear-filters { min-height: 38px; }
+}
 
 .layout { display: grid; grid-template-columns: 240px 1fr; gap: 14px; align-items: start; }
 .layout { grid-template-columns: var(--workspace-index-width) minmax(0, 1fr); }

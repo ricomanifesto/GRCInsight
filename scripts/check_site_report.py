@@ -885,6 +885,24 @@ def main() -> None:
         if guard not in style_css:
             fail(f"style.css missing compliance empty results guidance aesthetic guard: {guard}")
 
+    required_compliance_filter_control_form_rhythm_aesthetic_contract = (
+        "--filter-control-form-gap",
+        "--filter-control-field-gap",
+        "--filter-control-input-min-height",
+        "--filter-control-input-padding",
+        "--filter-control-search-min-width",
+        "--filter-control-clear-padding",
+        ".filter-controls { gap: var(--filter-control-form-gap); }",
+        ".filter-field { gap: var(--filter-control-field-gap); }",
+        ".filter-field:first-child { min-width: var(--filter-control-search-min-width); }",
+        ".filter-field input, .filter-field select { min-height: var(--filter-control-input-min-height); padding: var(--filter-control-input-padding); }",
+        ".clear-filters { min-height: var(--filter-control-input-min-height); padding: var(--filter-control-clear-padding); }",
+        "@media (max-width: 760px) {\n  .filter-controls { gap: var(--filter-control-form-gap); }\n  .filter-field:first-child { min-width: 0; }\n  .clear-filters { min-height: 38px; }\n}",
+    )
+    for guard in required_compliance_filter_control_form_rhythm_aesthetic_contract:
+        if guard not in style_css:
+            fail(f"style.css missing compliance filter control form rhythm aesthetic guard: {guard}")
+
     required_archive_guards = (
         "window.GRCInsightArchive",
         "currentReportId",
