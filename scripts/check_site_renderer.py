@@ -66,6 +66,7 @@ assert(typeof filters.buildFilterParams === 'function', 'filters should build UR
 assert(typeof filters.defaultFilterState === 'function', 'filters should build canonical default filter state');
 assert(typeof filters.isDefaultFilterState === 'function', 'filters should detect canonical default filter state');
 assert(typeof filters.filterParamEntries === 'function', 'filters should expose canonical URL param entries');
+assert(typeof filters.nonDefaultFilterEntries === 'function', 'filters should expose canonical non-default filter entries');
 assert(typeof filters.normalizeFilterValue === 'function', 'filters should normalize canonical active filter values');
 assert(typeof filters.normalizeFilterState === 'function', 'filters should normalize canonical active filter state');
 assert(Array.isArray(filters.filterStateOptions), 'filters should expose canonical filter state options');
@@ -372,6 +373,9 @@ assert(filters.isDefaultFilterState({{ query: ' ', reviewStatus: 'all', tagCateg
 assert(!filters.isDefaultFilterState({{ query: 'privacy controls', reviewStatus: 'all', tagCategory: 'all', ownerCue: 'all', evidenceState: 'all' }}), 'active query should not be detected as default');
 const activeParamEntries = filters.filterParamEntries({{ query: ' privacy controls ', reviewStatus: 'Review ready', tagCategory: 'control', ownerCue: 'detected', evidenceState: 'referenced' }});
 assert(activeParamEntries.map(entry => `${{entry.key}}:${{entry.param}}=${{entry.value}}`).join('|') === 'query:q=privacy controls|reviewStatus:status=Review ready|tagCategory:tag=control|ownerCue:owner=detected|evidenceState:evidence=referenced', 'filter param entries should preserve canonical option order and active values');
+const nonDefaultEntries = filters.nonDefaultFilterEntries({{ query: ' privacy controls ', reviewStatus: 'Review ready', tagCategory: 'control', ownerCue: 'detected', evidenceState: 'referenced' }});
+assert(nonDefaultEntries.map(entry => `${{entry.key}}:${{entry.param}}:${{entry.labelPrefix}}=${{entry.value}}`).join('|') === 'query:q:Search=privacy controls|reviewStatus:status:Status=Review ready|tagCategory:tag:Tag=control|ownerCue:owner:Owner cues=detected|evidenceState:evidence:Evidence=referenced', 'non-default filter entries should expose option metadata and normalized active values');
+assert(filters.nonDefaultFilterEntries({{ query: '', reviewStatus: 'Bad', tagCategory: 'unknown', ownerCue: 'unclear', evidenceState: 'maybe' }}).length === 0, 'non-default filter entries should omit defaults and invalid values');
 assert(filters.filterParamEntries({{ query: '', reviewStatus: 'Bad', tagCategory: 'unknown', ownerCue: 'unclear', evidenceState: 'maybe' }}).length === 0, 'filter param entries should omit defaults and invalid values');
 assert(filters.buildFilterParams({{ query: 'privacy controls', reviewStatus: 'Review ready', tagCategory: 'control', ownerCue: 'detected', evidenceState: 'referenced' }}) === '?q=privacy+controls&status=Review+ready&tag=control&owner=detected&evidence=referenced', 'filter params should serialize active filters');
 assert(filters.buildFilterParams(defaultFilters) === '', 'filter params should omit default filters');
