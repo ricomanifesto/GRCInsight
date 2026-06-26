@@ -129,6 +129,7 @@ def main() -> None:
         "coverageMetricEntries",
         "auditSummaryMetricEntries",
         "auditSummaryListSections",
+        "workspaceActionEntries",
         "coverageRows",
         "renderWorkspaceOverview",
         "renderAuditSummary",
@@ -315,6 +316,15 @@ def main() -> None:
     for guard in duplicate_audit_summary_list_guards:
         if guard in metadata_js:
             fail(f"metadata.js still duplicates audit summary list projection: {guard}")
+
+    duplicate_workspace_action_guards = (
+        "<a href=\"#auditSummary\">Audit summary</a>",
+        "<a href=\"#report\">Generated sections</a>",
+        "<a href=\"#toc\">Section index</a>",
+    )
+    for guard in duplicate_workspace_action_guards:
+        if guard in metadata_js:
+            fail(f"metadata.js still duplicates workspace action projection: {guard}")
 
     required_filter_layout = (
         ".filter-controls",

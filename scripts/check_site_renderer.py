@@ -104,6 +104,7 @@ assert(metadata.reviewSignalStates.attention === 'attention', 'review signal sta
 assert(typeof metadata.coverageMetricEntries === 'function', 'metadata should expose canonical coverage metric entries');
 assert(typeof metadata.auditSummaryMetricEntries === 'function', 'metadata should expose canonical audit summary metric entries');
 assert(typeof metadata.auditSummaryListSections === 'function', 'metadata should expose canonical audit summary list sections');
+assert(typeof metadata.workspaceActionEntries === 'function', 'metadata should expose canonical workspace action entries');
 assert(typeof archive.setReviewSignalStates === 'function', 'archive should accept canonical review signal states');
 archive.setReviewSignalStates(metadata.reviewSignalStates);
 const archiveMarkdown = `# GRC Intelligence Report - 2026-06-23
@@ -224,6 +225,11 @@ assert(auditListSections[0].items.join('|') === 'PCI remediation', 'action focus
 assert(auditListSections[1].items.join('|') === 'Evidence backed overview', 'evidence trail list should project evidence-backed titles');
 assert(auditListSections[2].items.join('|') === 'PCI remediation', 'owner cues list should project owner titles');
 assert(auditListSections[3].items.join('|') === 'PCI remediation|Unmapped overview', 'evidence gaps list should project source gap titles');
+const workspaceActions = metadata.workspaceActionEntries();
+assert(Array.isArray(workspaceActions) && workspaceActions.length === 3, 'workspace action entries should expose compact action links');
+assert(workspaceActions.map(row => row.key).join('|') === 'auditSummary|generatedSections|sectionIndex', 'workspace action entries should use stable keys');
+assert(workspaceActions.map(row => row.label).join('|') === 'Audit summary|Generated sections|Section index', 'workspace action entries should use stable labels');
+assert(workspaceActions.map(row => row.href).join('|') === '#auditSummary|#report|#toc', 'workspace action entries should use stable anchors');
 const coverageMetrics = metadata.coverageMetricEntries(auditSummary);
 assert(Array.isArray(coverageMetrics) && coverageMetrics.length === 5, 'coverage metrics should expose generated section coverage');
 assert(coverageMetrics.map(row => row.key).join('|') === 'generatedSections|sourceProvenance|obligations|ownershipCues|gapsAndDeadlines', 'coverage metrics should use stable keys');
@@ -243,6 +249,10 @@ assert(provenanceSummary.note === '2 sections still need source trails.', 'prove
 assert(metadata.renderWorkspaceOverview(auditSummary).includes('workspace-overview-card'), 'workspace overview renderer should produce a workspace card');
 assert(metadata.renderWorkspaceOverview(auditSummary).includes('coverage-table'), 'workspace overview should expose the coverage matrix');
 assert(metadata.renderWorkspaceOverview(auditSummary).includes('Source provenance'), 'workspace overview should name source provenance coverage');
+assert(metadata.renderWorkspaceOverview(auditSummary).includes('aria-label="Workspace actions"'), 'workspace overview should render the action row');
+assert(metadata.renderWorkspaceOverview(auditSummary).includes('href="#auditSummary"'), 'workspace overview should render audit summary action link');
+assert(metadata.renderWorkspaceOverview(auditSummary).includes('href="#report"'), 'workspace overview should render generated sections action link');
+assert(metadata.renderWorkspaceOverview(auditSummary).includes('href="#toc"'), 'workspace overview should render section index action link');
 assert(metadata.renderAuditSummary(auditSummary).includes('audit-summary-card'), 'audit summary renderer should produce a summary card');
 assert(metadata.renderAuditSummary(auditSummary).includes('Needs source trail'), 'audit summary renderer should expose missing evidence state');
 assert(metadata.renderAuditSummary(auditSummary).includes('Evidence trail'), 'audit summary renderer should expose evidence trail list');

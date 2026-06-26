@@ -361,6 +361,32 @@
     `).join('');
   }
 
+  function workspaceActionEntries() {
+    return [
+      {
+        key: 'auditSummary',
+        label: 'Audit summary',
+        href: '#auditSummary',
+      },
+      {
+        key: 'generatedSections',
+        label: 'Generated sections',
+        href: '#report',
+      },
+      {
+        key: 'sectionIndex',
+        label: 'Section index',
+        href: '#toc',
+      },
+    ];
+  }
+
+  function renderWorkspaceActions() {
+    return workspaceActionEntries().map(action =>
+      `<a href="${escapeAttribute(action.href)}">${escapeHtml(action.label)}</a>`
+    ).join('');
+  }
+
   function renderWorkspaceOverview(summary) {
     const readiness = summary.totalSections === 0
       ? 'No generated sections match the active filters'
@@ -373,9 +399,7 @@
           <p class="workspace-copy">${summary.totalSections} visible sections mapped across obligations, controls, gaps, owner cues, and source provenance.</p>
         </div>
         <div class="workspace-actions" aria-label="Workspace actions">
-          <a href="#auditSummary">Audit summary</a>
-          <a href="#report">Generated sections</a>
-          <a href="#toc">Section index</a>
+          ${renderWorkspaceActions()}
         </div>
         ${renderCoverageTable(summary)}
       </div>
@@ -416,5 +440,6 @@
     reviewStatusOptions,
     summarizeSections,
     renderAuditSummary,
+    workspaceActionEntries,
   };
 })();
