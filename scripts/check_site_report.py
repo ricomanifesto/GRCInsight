@@ -477,6 +477,22 @@ def main() -> None:
         if guard not in style_css:
             fail(f"style.css missing archive card hierarchy visual contract guard: {guard}")
 
+    required_editorial_workspace_aesthetic_visual_contract = (
+        "--workspace-card-shadow",
+        "--workspace-control-surface",
+        ".app-header .title { max-width: 900px; margin: 0; font-size: 46px; line-height: 0.96; letter-spacing: 0; text-wrap: balance; }",
+        ".app-header .subtitle { max-width: 760px; margin: 8px 0 0; opacity: 0.86; grid-column: 1 / -1; font-size: 15px; line-height: 1.55; }",
+        ".controls { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: var(--workspace-density-gap); margin-top: 14px; align-items: end; grid-column: 1 / -1; padding: 10px; border: 1px solid rgba(255,255,255,0.10); border-radius: 8px; background: var(--workspace-control-surface); }",
+        "body.light .controls { border-color: rgba(49,81,62,0.14); }",
+        ".workspace-overview-card, .archive-card, .audit-summary-card, .card { border-color: var(--workspace-hairline); box-shadow: var(--workspace-card-shadow); }",
+        ".coverage-table caption { text-align: left; padding: 10px 12px; color: #f5e8c8; font-size: 12px; font-weight: 800; text-transform: uppercase;",
+        ".table-wrap, .coverage-table { box-shadow: inset 0 1px 0 rgba(255,255,255,0.04), 0 8px 18px rgba(0,0,0,0.12); }",
+        ".app-header .title { font-size: 32px; line-height: 1; }",
+    )
+    for guard in required_editorial_workspace_aesthetic_visual_contract:
+        if guard not in style_css:
+            fail(f"style.css missing editorial workspace aesthetic visual contract guard: {guard}")
+
     required_archive_guards = (
         "window.GRCInsightArchive",
         "currentReportId",
