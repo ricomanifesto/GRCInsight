@@ -757,6 +757,24 @@ def main() -> None:
         if guard not in metadata_js:
             fail(f"metadata.js missing audit summary gap state guard: {guard}")
 
+    required_compliance_resource_reference_aesthetic_refinement_contract = (
+        "--reference-nav-gap",
+        "--reference-nav-chip-padding",
+        "--reference-nav-scroll-padding",
+        ".sidebar-title { display: flex; align-items: center; gap: var(--reference-nav-gap); text-transform: uppercase; letter-spacing: 0; }",
+        ".sidebar-title::before { content: \"\"; width: 7px; height: 7px; border-radius: 999px; background: var(--workspace-rail); }",
+        ".sidebar nav a { padding: var(--reference-nav-chip-padding); }",
+        ".sidebar details > summary { padding: var(--reference-nav-chip-padding); }",
+        ".mobile-toc { min-height: var(--review-action-min-target); border-radius: 6px; padding: var(--reference-nav-chip-padding); }",
+        ".mobile-toc { border-radius: 6px; padding: var(--reference-nav-chip-padding); }",
+        ".topbar .topbar-scroll { gap: var(--reference-nav-gap); padding: var(--reference-nav-scroll-padding); }",
+        ".topbar .chip { padding: var(--reference-nav-chip-padding); border-radius: 6px; }",
+        "body.light .topbar { background: linear-gradient(90deg, var(--panel), var(--panel-2)); border-bottom-color: var(--workspace-hairline); }",
+    )
+    for guard in required_compliance_resource_reference_aesthetic_refinement_contract:
+        if guard not in style_css:
+            fail(f"style.css missing compliance resource reference aesthetic refinement guard: {guard}")
+
     required_archive_guards = (
         "window.GRCInsightArchive",
         "currentReportId",
