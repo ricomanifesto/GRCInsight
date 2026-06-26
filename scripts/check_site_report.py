@@ -126,6 +126,7 @@ def main() -> None:
         "buildProvenanceSummary",
         "renderSectionMetadata",
         "summarizeSections",
+        "coverageMetricEntries",
         "coverageRows",
         "renderWorkspaceOverview",
         "renderAuditSummary",
@@ -288,6 +289,14 @@ def main() -> None:
     for guard in duplicate_non_default_filter_projection_guards:
         if guard in filters_js:
             fail(f"filters.js still duplicates non-default filter projection: {guard}")
+
+    duplicate_coverage_metric_guards = (
+        "function renderCoverageTable(summary) {\n    const rows = coverageRows(summary).map(row =>",
+        "function coverageRows(summary) {\n    const total = summary.totalSections || 0;",
+    )
+    for guard in duplicate_coverage_metric_guards:
+        if guard in metadata_js:
+            fail(f"metadata.js still duplicates coverage metric projection: {guard}")
 
     required_filter_layout = (
         ".filter-controls",

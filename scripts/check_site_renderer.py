@@ -101,6 +101,7 @@ assert(metadata.reviewSignalStates.ready === 'ready', 'review signal states shou
 assert(metadata.reviewSignalStates.gap === 'gap', 'review signal states should expose gap');
 assert(metadata.reviewSignalStates.empty === 'empty', 'review signal states should expose empty');
 assert(metadata.reviewSignalStates.attention === 'attention', 'review signal states should expose attention');
+assert(typeof metadata.coverageMetricEntries === 'function', 'metadata should expose canonical coverage metric entries');
 assert(typeof archive.setReviewSignalStates === 'function', 'archive should accept canonical review signal states');
 archive.setReviewSignalStates(metadata.reviewSignalStates);
 const archiveMarkdown = `# GRC Intelligence Report - 2026-06-23
@@ -208,11 +209,15 @@ assert(auditSummary.auditReady === false, 'audit summary should not be audit-rea
 assert(auditSummary.evidenceTitles.includes('Evidence backed overview'), 'audit summary should name source-backed sections');
 assert(auditSummary.gapTitles.includes('PCI remediation') && auditSummary.gapTitles.includes('Unmapped overview'), 'audit summary should name source-trail gaps');
 assert(auditSummary.ownerTitles.includes('PCI remediation'), 'audit summary should name sections with owner cues');
+const coverageMetrics = metadata.coverageMetricEntries(auditSummary);
+assert(Array.isArray(coverageMetrics) && coverageMetrics.length === 5, 'coverage metrics should expose generated section coverage');
+assert(coverageMetrics.map(row => row.key).join('|') === 'generatedSections|sourceProvenance|obligations|ownershipCues|gapsAndDeadlines', 'coverage metrics should use stable keys');
+assert(coverageMetrics.map(row => row.label).join('|') === 'Generated sections|Source provenance|Obligations|Ownership cues|Gaps and deadlines', 'coverage metrics should use stable labels');
+assert(coverageMetrics[0].value === '3', 'coverage metrics should expose generated section count');
+assert(coverageMetrics[1].value === '1/3', 'source provenance metric should expose source-ready coverage');
+assert(coverageMetrics[1].state === 'gap', 'source provenance metric should flag missing source trails');
 const coverageRows = metadata.coverageRows(auditSummary);
-assert(Array.isArray(coverageRows) && coverageRows.length === 5, 'coverage rows should expose generated section coverage');
-assert(coverageRows.map(row => row.label).join('|') === 'Generated sections|Source provenance|Obligations|Ownership cues|Gaps and deadlines', 'coverage rows should use stable labels');
-assert(coverageRows[1].value === '1/3', 'source provenance row should expose source-ready coverage');
-assert(coverageRows[1].state === 'gap', 'source provenance row should flag missing source trails');
+assert(JSON.stringify(coverageRows) === JSON.stringify(coverageMetrics), 'coverage rows should remain a compatibility alias for coverage metrics');
 const provenanceSummary = metadata.buildProvenanceSummary(auditSummary);
 assert(provenanceSummary.totalSections === 3, 'provenance summary should expose total section count');
 assert(provenanceSummary.sourceReady === 1, 'provenance summary should expose source-ready section count');
@@ -245,11 +250,11 @@ assert(metadata.renderAuditSummary(filteredAuditSummary).includes('1 sections re
 const emptyFilteredAuditSummary = metadata.summarizeSections([]);
 assert(emptyFilteredAuditSummary.totalSections === 0, 'empty filtered audit summary should count zero sections');
 assert(emptyFilteredAuditSummary.auditReady === false, 'empty filtered audit summary should not be audit-ready');
-assert(metadata.coverageRows(emptyFilteredAuditSummary)[0].value === '0', 'empty coverage rows should preserve zero generated sections');
-const emptyCoverageRows = metadata.coverageRows(emptyFilteredAuditSummary);
-assert(emptyCoverageRows[1].value === 'No data', 'empty source provenance row should not expose 0/0 coverage');
-assert(emptyCoverageRows[1].state === 'empty', 'empty source provenance row should use empty state');
-assert(emptyCoverageRows[1].note === 'No generated sections available for provenance review.', 'empty source provenance row should avoid complete-coverage wording');
+assert(metadata.coverageMetricEntries(emptyFilteredAuditSummary)[0].value === '0', 'empty coverage metrics should preserve zero generated sections');
+const emptyCoverageMetrics = metadata.coverageMetricEntries(emptyFilteredAuditSummary);
+assert(emptyCoverageMetrics.every(row => row.state === 'empty'), 'empty coverage metrics should use empty states');
+assert(emptyCoverageMetrics[1].value === 'No data', 'empty source provenance metric should not expose 0/0 coverage');
+assert(emptyCoverageMetrics[1].note === 'No generated sections available for provenance review.', 'empty source provenance metric should avoid complete-coverage wording');
 const emptyProvenanceSummary = metadata.buildProvenanceSummary(emptyFilteredAuditSummary);
 assert(emptyProvenanceSummary.value === 'No data', 'empty provenance summary should not expose 0/0 coverage');
 assert(emptyProvenanceSummary.state === 'empty', 'empty provenance summary should use empty state');
@@ -260,7 +265,7 @@ assert(metadata.renderAuditSummary(emptyFilteredAuditSummary).includes('0 sectio
 const obligationOnlySummary = metadata.summarizeSections([
   {{ title: 'Obligation only', metadata: obligationOnlyMetadata }},
 ]);
-const obligationOnlyRows = metadata.coverageRows(obligationOnlySummary);
+const obligationOnlyRows = metadata.coverageMetricEntries(obligationOnlySummary);
 assert(obligationOnlySummary.actionRequired === 1, 'obligation-only summary should retain action-required count');
 assert(obligationOnlyRows[4].value === '0', 'gap/deadline row should not count generic action-required signals');
 assert(obligationOnlyRows[4].state === 'ready', 'gap/deadline row should stay ready when only obligation/action wording is present');
