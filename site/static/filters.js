@@ -212,15 +212,28 @@
     return normalizeFilterState(active);
   }
 
-  function filterParamEntries(filters) {
+  function nonDefaultFilterEntries(filters) {
     const active = normalizeFilterState(filters);
     return filterStateOptions.reduce((entries, option) => {
       const value = active[option.key];
       if (value !== option.defaultValue) {
-        entries.push({ key: option.key, param: option.param, value });
+        entries.push({
+          key: option.key,
+          labelPrefix: option.labelPrefix,
+          param: option.param,
+          value,
+        });
       }
       return entries;
     }, []);
+  }
+
+  function filterParamEntries(filters) {
+    return nonDefaultFilterEntries(filters).map(entry => ({
+      key: entry.key,
+      param: entry.param,
+      value: entry.value,
+    }));
   }
 
   function buildFilterParams(filters) {
@@ -233,14 +246,10 @@
   }
 
   function activeFilterEntries(filters) {
-    const active = normalizeFilterState(filters);
-    return filterStateOptions.reduce((entries, option) => {
-      const value = active[option.key];
-      if (value !== option.defaultValue) {
-        entries.push({ key: option.key, label: `${option.labelPrefix}: ${value}` });
-      }
-      return entries;
-    }, []);
+    return nonDefaultFilterEntries(filters).map(entry => ({
+      key: entry.key,
+      label: `${entry.labelPrefix}: ${entry.value}`,
+    }));
   }
 
   function activeFilterLabels(filters) {
@@ -274,6 +283,7 @@
     normalize,
     normalizeFilterState,
     normalizeFilterValue,
+    nonDefaultFilterEntries,
     parseFilterParams,
     sectionMatches,
     setMetadataStates,

@@ -155,6 +155,7 @@ def main() -> None:
         "parseFilterParams",
         "buildFilterParams",
         "filterParamEntries",
+        "nonDefaultFilterEntries",
         "defaultFilterState",
         "isDefaultFilterState",
         "normalizeFilterValue",
@@ -279,6 +280,14 @@ def main() -> None:
     for guard in duplicate_active_filter_entry_guards:
         if guard in filters_js:
             fail(f"filters.js still duplicates active filter entry projection: {guard}")
+
+    duplicate_non_default_filter_projection_guards = (
+        "function filterParamEntries(filters) {\n    const active = normalizeFilterState(filters);",
+        "function activeFilterEntries(filters) {\n    const active = normalizeFilterState(filters);",
+    )
+    for guard in duplicate_non_default_filter_projection_guards:
+        if guard in filters_js:
+            fail(f"filters.js still duplicates non-default filter projection: {guard}")
 
     required_filter_layout = (
         ".filter-controls",
