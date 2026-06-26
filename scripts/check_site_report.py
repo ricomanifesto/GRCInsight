@@ -810,6 +810,25 @@ def main() -> None:
         if guard not in style_css:
             fail(f"style.css missing compliance source table rhythm aesthetic guard: {guard}")
 
+    required_compliance_coverage_matrix_detail_aesthetic_contract = (
+        "--coverage-matrix-caption-padding",
+        "--coverage-matrix-caption-bg",
+        "--coverage-matrix-label-width",
+        "--coverage-matrix-value-width",
+        "--coverage-matrix-note-line-height",
+        "--coverage-matrix-row-border",
+        ".coverage-table caption { padding: var(--coverage-matrix-caption-padding); background: var(--coverage-matrix-caption-bg); }",
+        ".coverage-table tbody th { width: var(--coverage-matrix-label-width); }",
+        ".coverage-table tbody td:nth-child(2) { width: var(--coverage-matrix-value-width); }",
+        ".coverage-row td:last-child { line-height: var(--coverage-matrix-note-line-height); }",
+        ".coverage-table tbody tr + tr th, .coverage-table tbody tr + tr td { border-top: 1px solid var(--coverage-matrix-row-border); }",
+        ".coverage-row[data-coverage-state=\"gap\"] td:last-child { background: rgba(239,68,68,0.08); }",
+        "body.light .coverage-row[data-coverage-state=\"gap\"] td:last-child { background: rgba(185,28,28,0.065); }",
+    )
+    for guard in required_compliance_coverage_matrix_detail_aesthetic_contract:
+        if guard not in style_css:
+            fail(f"style.css missing compliance coverage matrix detail aesthetic guard: {guard}")
+
     required_archive_guards = (
         "window.GRCInsightArchive",
         "currentReportId",
