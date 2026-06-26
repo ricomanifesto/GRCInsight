@@ -580,6 +580,27 @@ def main() -> None:
         if guard not in style_css:
             fail(f"style.css missing evidence source coverage aesthetic guard: {guard}")
 
+    required_compliance_archive_surface_aesthetic_continuity_contract = (
+        "--surface-continuity-gap",
+        "--surface-rail-width",
+        ".workspace-overview-card, .archive-card, .audit-summary-card { gap: var(--surface-continuity-gap); }",
+        ".workspace-overview-card::before, .archive-card::before, .audit-summary-card::before { width: var(--surface-rail-width); background: var(--workspace-rail); }",
+        ".archive-entry, .audit-lists > div, .section-meta { border-color: var(--workspace-hairline); }",
+        ".archive-review-metrics, .audit-metrics { gap: var(--workspace-action-gap); }",
+        ".workspace-actions a, .status-quick-filter, .active-filter-chip { border-radius: 6px; }",
+        ".status-quick-filter { border-radius: 6px; }",
+        ".card::before { width: 3px; background: var(--workspace-rail); }",
+        "body.light .card::before { background: var(--workspace-rail); }",
+        ".archive-entry-meta { gap: var(--surface-continuity-gap); }",
+        ".audit-lists { gap: var(--surface-continuity-gap); }",
+        ".audit-lists > div { border-color: var(--workspace-hairline); }",
+        ".audit-summary-card { gap: var(--surface-continuity-gap); }",
+        ".audit-summary-card::before { width: var(--surface-rail-width); background: var(--workspace-rail); }",
+    )
+    for guard in required_compliance_archive_surface_aesthetic_continuity_contract:
+        if guard not in style_css:
+            fail(f"style.css missing compliance archive surface continuity guard: {guard}")
+
     required_archive_guards = (
         "window.GRCInsightArchive",
         "currentReportId",
