@@ -128,6 +128,7 @@ def main() -> None:
         "summarizeSections",
         "coverageMetricEntries",
         "auditSummaryMetricEntries",
+        "auditSummaryListSections",
         "coverageRows",
         "renderWorkspaceOverview",
         "renderAuditSummary",
@@ -306,6 +307,14 @@ def main() -> None:
     for guard in duplicate_audit_summary_metric_guards:
         if guard in metadata_js:
             fail(f"metadata.js still duplicates audit summary metric projection: {guard}")
+
+    duplicate_audit_summary_list_guards = (
+        "<h3>Action focus</h3>\n            <ul>${renderList(summary.actionTitles, 'No action-required sections detected')}</ul>",
+        "<h3>Evidence gaps</h3>\n            <ul>${renderList(summary.gapTitles, 'No missing source trails detected')}</ul>",
+    )
+    for guard in duplicate_audit_summary_list_guards:
+        if guard in metadata_js:
+            fail(f"metadata.js still duplicates audit summary list projection: {guard}")
 
     required_filter_layout = (
         ".filter-controls",

@@ -322,6 +322,45 @@
     ).join('');
   }
 
+  function auditSummaryListSections(summary) {
+    const normalized = summary || {};
+    return [
+      {
+        key: 'actionFocus',
+        heading: 'Action focus',
+        items: normalized.actionTitles || [],
+        emptyText: 'No action-required sections detected',
+      },
+      {
+        key: 'evidenceTrail',
+        heading: 'Evidence trail',
+        items: normalized.evidenceTitles || [],
+        emptyText: 'No source-backed sections detected',
+      },
+      {
+        key: 'ownerCues',
+        heading: 'Owner cues',
+        items: normalized.ownerTitles || [],
+        emptyText: 'No owner cues detected',
+      },
+      {
+        key: 'evidenceGaps',
+        heading: 'Evidence gaps',
+        items: normalized.gapTitles || [],
+        emptyText: 'No missing source trails detected',
+      },
+    ];
+  }
+
+  function renderAuditSummaryLists(summary) {
+    return auditSummaryListSections(summary).map(section => `
+      <div>
+        <h3>${escapeHtml(section.heading)}</h3>
+        <ul>${renderList(section.items, section.emptyText)}</ul>
+      </div>
+    `).join('');
+  }
+
   function renderWorkspaceOverview(summary) {
     const readiness = summary.totalSections === 0
       ? 'No generated sections match the active filters'
@@ -357,28 +396,14 @@
         </div>
         ${renderCoverageTable(summary)}
         <div class="audit-lists">
-          <div>
-            <h3>Action focus</h3>
-            <ul>${renderList(summary.actionTitles, 'No action-required sections detected')}</ul>
-          </div>
-          <div>
-            <h3>Evidence trail</h3>
-            <ul>${renderList(summary.evidenceTitles, 'No source-backed sections detected')}</ul>
-          </div>
-          <div>
-            <h3>Owner cues</h3>
-            <ul>${renderList(summary.ownerTitles, 'No owner cues detected')}</ul>
-          </div>
-          <div>
-            <h3>Evidence gaps</h3>
-            <ul>${renderList(summary.gapTitles, 'No missing source trails detected')}</ul>
-          </div>
+          ${renderAuditSummaryLists(summary)}
         </div>
       </div>
     `;
   }
 
   window.GRCInsightMetadata = {
+    auditSummaryListSections,
     auditSummaryMetricEntries,
     buildProvenanceSummary,
     coverageMetricEntries,
