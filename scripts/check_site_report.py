@@ -657,6 +657,60 @@ def main() -> None:
         if guard not in style_css:
             fail(f"style.css missing compliance filtered workspace state aesthetic guard: {guard}")
 
+    required_compliance_visual_reference_continuity_aesthetic_contract = (
+        "--visual-continuity-gap",
+        "--visual-continuity-panel-inset",
+        "--visual-continuity-chip-gap",
+        "--visual-continuity-row-line-height",
+        ".workspace-overview-card, .archive-card, .audit-summary-card, .card { gap: var(--visual-continuity-gap); }",
+        ".layout { gap: var(--visual-continuity-gap); }",
+        ".sidebar { padding: var(--visual-continuity-panel-inset); }",
+        ".sidebar details > summary, .sidebar nav > a { min-height: 30px; display: flex; align-items: center; }",
+        ".sidebar details ul a { min-height: auto; display: block; align-items: initial; }",
+        ".section-meta { margin: -2px 0 10px; gap: var(--visual-continuity-chip-gap); }",
+        ".section-meta-item { min-height: 26px; padding: 4px 7px; }",
+        ".card > .table-wrap { margin: 8px 0 10px; }",
+        ".coverage-table caption { padding: 8px 10px; }",
+        ".coverage-row td:last-child { line-height: var(--visual-continuity-row-line-height); }",
+        ".workspace-overview-card, .archive-card, .audit-summary-card { padding-top: var(--visual-continuity-panel-inset); padding-bottom: var(--visual-continuity-panel-inset); }",
+        ".audit-summary-card { gap: var(--visual-continuity-gap); }",
+        ".audit-summary-card { padding-top: var(--visual-continuity-panel-inset); padding-bottom: var(--visual-continuity-panel-inset); }",
+        ".filter-field:first-child { grid-column: 1 / -1; }",
+        ".filter-controls { grid-template-columns: repeat(2, minmax(0, 1fr)); }",
+    )
+    for guard in required_compliance_visual_reference_continuity_aesthetic_contract:
+        if guard not in style_css:
+            fail(f"style.css missing compliance visual reference continuity aesthetic guard: {guard}")
+
+    audit_surface_gap = ".audit-summary-card { gap: var(--surface-continuity-gap); }"
+    audit_visual_gap = ".audit-summary-card { gap: var(--visual-continuity-gap); }"
+    audit_visual_padding = ".audit-summary-card { padding-top: var(--visual-continuity-panel-inset); padding-bottom: var(--visual-continuity-panel-inset); }"
+    css_lines = style_css.splitlines()
+    try:
+        audit_surface_gap_line = css_lines.index(audit_surface_gap)
+    except ValueError:
+        fail(f"style.css missing audit summary surface continuity guard: {audit_surface_gap}")
+    for guard in (audit_visual_gap, audit_visual_padding):
+        try:
+            guard_line = css_lines.index(guard, audit_surface_gap_line + 1)
+        except ValueError:
+            fail(f"style.css missing later audit summary visual continuity guard: {guard}")
+        if guard_line <= audit_surface_gap_line:
+            fail(f"style.css audit summary visual continuity guard appears before audit surface rule: {guard}")
+
+    section_card_gap = ".card { display: grid; gap: var(--section-detail-gap); }"
+    section_card_visual_gap = ".card { gap: var(--visual-continuity-gap); }"
+    try:
+        section_card_gap_line = css_lines.index(section_card_gap)
+    except ValueError:
+        fail(f"style.css missing section card detail gap guard: {section_card_gap}")
+    try:
+        section_card_visual_gap_line = css_lines.index(section_card_visual_gap, section_card_gap_line + 1)
+    except ValueError:
+        fail(f"style.css missing later section card visual continuity gap guard: {section_card_visual_gap}")
+    if section_card_visual_gap_line <= section_card_gap_line:
+        fail(f"style.css section card visual continuity guard appears before section detail rule: {section_card_visual_gap}")
+
     required_archive_guards = (
         "window.GRCInsightArchive",
         "currentReportId",
