@@ -458,6 +458,24 @@ def main() -> None:
         if guard not in style_css:
             fail(f"style.css missing compliance workspace scan-density guard: {guard}")
 
+    required_archive_card_hierarchy_visual_contract = (
+        ".archive-card { position: relative; overflow: hidden; padding-left: 24px;",
+        ".archive-card::before { content: \"\"; position: absolute; inset: 0 auto 0 0; width: 4px; background: var(--workspace-rail); }",
+        ".archive-entry-main { display: grid; gap: 6px; min-width: 0; }",
+        ".archive-entry.current .archive-entry-kicker { color: #f5e8c8; }",
+        ".archive-entry.current h3 { color: #fde68a; }",
+        ".archive-review-metrics div { display: grid; align-content: center; min-height: 48px;",
+        ".archive-tags span { display: inline-flex; min-height: 24px; align-items: center; padding: 3px 7px; font-weight: 700;",
+        ".card h2 { display: flex; align-items: center; gap: 8px; scroll-margin-top: 90px; flex-wrap: wrap; }",
+        ".card h2::before { content: \"\"; flex: 0 0 auto;",
+        "body.light .card h2::before { background: #31513e;",
+        "body.light .archive-entry.current .archive-entry-kicker { color: #31513e; }",
+        ".card h2 { align-items: flex-start; }",
+    )
+    for guard in required_archive_card_hierarchy_visual_contract:
+        if guard not in style_css:
+            fail(f"style.css missing archive card hierarchy visual contract guard: {guard}")
+
     required_archive_guards = (
         "window.GRCInsightArchive",
         "currentReportId",
