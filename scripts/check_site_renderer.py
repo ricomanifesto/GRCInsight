@@ -102,6 +102,7 @@ assert(metadata.reviewSignalStates.gap === 'gap', 'review signal states should e
 assert(metadata.reviewSignalStates.empty === 'empty', 'review signal states should expose empty');
 assert(metadata.reviewSignalStates.attention === 'attention', 'review signal states should expose attention');
 assert(typeof metadata.coverageMetricEntries === 'function', 'metadata should expose canonical coverage metric entries');
+assert(typeof metadata.renderCoverageTableRows === 'function', 'metadata should expose canonical coverage table row renderer');
 assert(typeof metadata.auditSummaryMetricEntries === 'function', 'metadata should expose canonical audit summary metric entries');
 assert(typeof metadata.auditSummaryListSections === 'function', 'metadata should expose canonical audit summary list sections');
 assert(typeof metadata.workspaceActionEntries === 'function', 'metadata should expose canonical workspace action entries');
@@ -239,6 +240,12 @@ assert(coverageMetrics[1].value === '1/3', 'source provenance metric should expo
 assert(coverageMetrics[1].state === 'gap', 'source provenance metric should flag missing source trails');
 const coverageRows = metadata.coverageRows(auditSummary);
 assert(JSON.stringify(coverageRows) === JSON.stringify(coverageMetrics), 'coverage rows should remain a compatibility alias for coverage metrics');
+const coverageTableRows = metadata.renderCoverageTableRows(auditSummary);
+assert(coverageTableRows.includes('data-coverage-state="ready"'), 'coverage table rows should render ready state');
+assert(coverageTableRows.includes('data-coverage-state="gap"'), 'coverage table rows should render gap state');
+assert(coverageTableRows.includes('<th scope="row">Generated sections</th>'), 'coverage table rows should render metric labels');
+assert(coverageTableRows.includes('<td><strong>3</strong></td>'), 'coverage table rows should render metric values');
+assert(coverageTableRows.includes('Rendered report sections available for review.'), 'coverage table rows should render metric notes');
 const provenanceSummary = metadata.buildProvenanceSummary(auditSummary);
 assert(provenanceSummary.totalSections === 3, 'provenance summary should expose total section count');
 assert(provenanceSummary.sourceReady === 1, 'provenance summary should expose source-ready section count');
