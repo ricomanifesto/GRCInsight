@@ -866,6 +866,25 @@ def main() -> None:
         if guard not in style_css:
             fail(f"style.css missing compliance review state control aesthetic guard: {guard}")
 
+    required_compliance_empty_results_guidance_aesthetic_contract = (
+        "--empty-guidance-padding",
+        "--empty-guidance-radius",
+        "--empty-guidance-line-height",
+        "--empty-guidance-marker-size",
+        "--empty-guidance-nav-padding",
+        "--empty-guidance-clear-bg",
+        ".empty-results { display: flex; align-items: flex-start; gap: 9px; padding: var(--empty-guidance-padding); border-radius: var(--empty-guidance-radius); line-height: var(--empty-guidance-line-height); }",
+        ".empty-results[hidden] { display: none; }",
+        ".empty-results::before { content: \"\"; flex: 0 0 auto; width: var(--empty-guidance-marker-size); height: var(--empty-guidance-marker-size); margin-top: 0.42em; border-radius: 999px; background: var(--empty-state-rail); }",
+        ".nav-empty { padding: var(--empty-guidance-nav-padding); line-height: var(--empty-guidance-line-height); }",
+        ".topbar .nav-empty { padding: var(--empty-guidance-nav-padding); }",
+        ".clear-filters:not(:disabled) { background: var(--empty-guidance-clear-bg); }",
+        "body.light .clear-filters:not(:disabled) { background: var(--empty-guidance-clear-bg); }",
+    )
+    for guard in required_compliance_empty_results_guidance_aesthetic_contract:
+        if guard not in style_css:
+            fail(f"style.css missing compliance empty results guidance aesthetic guard: {guard}")
+
     required_archive_guards = (
         "window.GRCInsightArchive",
         "currentReportId",
