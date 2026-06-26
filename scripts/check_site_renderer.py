@@ -228,7 +228,7 @@ assert(auditListSections[1].items.join('|') === 'Evidence backed overview', 'evi
 assert(auditListSections[2].items.join('|') === 'PCI remediation', 'owner cues list should project owner titles');
 assert(auditListSections[3].items.join('|') === 'PCI remediation|Unmapped overview', 'evidence gaps list should project source gap titles');
 const needsReadiness = metadata.auditSummaryReadiness(auditSummary);
-assert(needsReadiness.state === 'needsSourceTrail', 'readiness projection should flag source-trail gaps');
+assert(needsReadiness.state === 'gap', 'readiness projection should flag source-trail gaps with canonical gap state');
 assert(needsReadiness.workspaceHeading === 'Compliance review workspace', 'readiness projection should expose review workspace heading');
 assert(needsReadiness.auditHeading === 'Needs source trail', 'readiness projection should expose source-trail audit heading');
 const workspaceActions = metadata.workspaceActionEntries();

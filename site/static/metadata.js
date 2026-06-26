@@ -406,7 +406,7 @@
       };
     }
     return {
-      state: 'needsSourceTrail',
+      state: reviewSignalStates.gap,
       workspaceHeading: 'Compliance review workspace',
       auditHeading: 'Needs source trail',
     };
