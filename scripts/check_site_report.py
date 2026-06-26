@@ -848,6 +848,24 @@ def main() -> None:
         if guard not in style_css:
             fail(f"style.css missing compliance audit summary metric density aesthetic guard: {guard}")
 
+    required_compliance_review_state_control_aesthetic_contract = (
+        "--review-state-control-gap",
+        "--review-state-chip-min-height",
+        "--review-state-chip-padding",
+        "--review-state-note-padding",
+        "--review-state-active-bg",
+        "--review-state-note-line-height",
+        ".active-filter-chips, .status-quick-filters { gap: var(--review-state-control-gap); }",
+        ".active-filter-chip, .status-quick-filter { min-height: var(--review-state-chip-min-height); padding: var(--review-state-chip-padding); }",
+        ".filter-state, .topbar .nav-filter-state { padding: var(--review-state-note-padding); line-height: var(--review-state-note-line-height); }",
+        ".status-quick-filter.active, .active-filter-chip:hover, .active-filter-chip:focus-visible { background: var(--review-state-active-bg); }",
+        "body.light .status-quick-filter.active, body.light .active-filter-chip:hover, body.light .active-filter-chip:focus-visible { background: var(--review-state-active-bg); }",
+        ".empty-results, .nav-empty { line-height: var(--review-state-note-line-height); }",
+    )
+    for guard in required_compliance_review_state_control_aesthetic_contract:
+        if guard not in style_css:
+            fail(f"style.css missing compliance review state control aesthetic guard: {guard}")
+
     required_archive_guards = (
         "window.GRCInsightArchive",
         "currentReportId",
