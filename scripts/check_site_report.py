@@ -416,6 +416,27 @@ def main() -> None:
         if guard not in style_css:
             fail(f"style.css missing resource-reference visual aesthetic guard: {guard}")
 
+    required_evidence_surface_visual_contract = (
+        "--evidence-ready",
+        "--evidence-gap",
+        ".coverage-row {",
+        ".coverage-row[data-coverage-state=\"ready\"] {",
+        ".coverage-row[data-coverage-state=\"gap\"] {",
+        ".section-meta[data-evidence=\"Source referenced\"] .section-meta-item:nth-child(6)",
+        ".section-meta[data-evidence=\"Needs source trail\"] .section-meta-item:nth-child(6)",
+        ".table-wrap { overflow-x: auto; margin: 16px 0; border-radius: 8px; border: 1px solid var(--workspace-hairline);",
+        ".card, .content, .report { min-width: 0; }",
+        ".table-wrap, .coverage-table { max-width: 100%; min-width: 0; }",
+        ".table-wrap table { min-width: 680px;",
+        ".table-wrap tbody tr:nth-child(even), .coverage-table tbody tr:nth-child(even)",
+        "body.light .app-header { background: linear-gradient(180deg, #fbfaf7 0%, #eef3ed 100%);",
+        "body.light .section-meta[data-evidence=\"Needs source trail\"] .section-meta-item:nth-child(6)",
+        "@media (max-width: 760px)",
+    )
+    for guard in required_evidence_surface_visual_contract:
+        if guard not in style_css:
+            fail(f"style.css missing evidence-surface visual QA guard: {guard}")
+
     required_archive_guards = (
         "window.GRCInsightArchive",
         "currentReportId",
