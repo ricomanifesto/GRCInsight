@@ -1,6 +1,6 @@
 # GRC Intelligence Report - 2026-06-27
-**Generated:** 2026-06-27T07:14:54.051433Z
-**Generated:** 2026-06-27T07:14:53.884561Z
+**Generated:** 2026-06-27T07:15:18.719456Z
+**Generated:** 2026-06-27T07:15:18.712827Z
 
 **Analysis Period:** Current Quarter (June 2026)
 **Date of Issue:** June 2026
