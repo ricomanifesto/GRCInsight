@@ -1,5 +1,5 @@
 # GRC Intelligence Report - 2026-06-27
-**Generated:** 2026-06-27T12:37:14.886688Z
+**Generated:** 2026-06-27T13:00:23.674078Z
 
 **Analysis Period:** Current Quarter (June 2026)
 **Date of Issue:** June 2026
@@ -26,7 +26,7 @@ Implications for Business
 - Organizations in regulated or data-intensive sectors should expect the same cyber events to trigger legal, contractual, and supervisory scrutiny.
 
 4) Risk Assessment
-- Identity and access security: Example signals include FBI: Russian hackers now target Signal backup recovery keys, Cisco Adds NHI to Security Stack With Astrix, WideField Acquisitions.
+- Identity and access security: Example signals include OpenAI Previews GPT-5.6 Sol With Restricted Access and Stronger Cyber Safeguards, FBI: Russian hackers now target Signal backup recovery keys.
 - Vulnerability and patch management: Example signals include CISA sets urgent deadline to fix Cisco flaw exploited in attacks, Cisco Adds NHI to Security Stack With Astrix, WideField Acquisitions.
 - Ransomware and malware operations: Example signals include FBI: Russian hackers now target Signal backup recovery keys, FBI Warns Russian Intelligence Hackers Target Signal Backup Recovery Keys.
 - Regulatory and enforcement activity: Example signals include FBI: Russian hackers now target Signal backup recovery keys, CISA sets urgent deadline to fix Cisco flaw exploited in attacks.
@@ -39,12 +39,12 @@ Implications for Business
 - Track regulator and enforcement updates from bodies such as CISA, the FBI, OFAC, and relevant privacy authorities.
 
 6) Source Highlights
+- [OpenAI Previews GPT-5.6 Sol With Restricted Access and Stronger Cyber Safeguards](https://thehackernews.com/2026/06/openai-limits-gpt-56-rollout-as-sol.html) - Risk themes: Identity and access security.
 - [FBI: Russian hackers now target Signal backup recovery keys](https://www.bleepingcomputer.com/news/security/fbi-russian-hackers-now-target-signal-backup-recovery-keys/) - Regulatory bodies: CISA.
 - [CISA sets urgent deadline to fix Cisco flaw exploited in attacks](https://www.bleepingcomputer.com/news/security/cisa-sets-urgent-deadline-to-fix-cisco-flaw-exploited-in-attacks/) - Regulatory bodies: CISA.
 - [FBI Warns Russian Intelligence Hackers Target Signal Backup Recovery Keys](https://thehackernews.com/2026/06/fbi-warns-russian-intelligence-hackers.html) - Regulatory bodies: CISA.
 - [New SharkLoader Malware Deploys Cobalt Strike in StrikeShark Cyberattacks](https://thehackernews.com/2026/06/new-sharkloader-malware-deploys-cobalt.html) - Risk themes: Ransomware and malware operations.
 - [Polymarket customers lose $3 million in supply-chain attack](https://www.bleepingcomputer.com/news/security/polymarket-customers-lose-3-million-in-supply-chain-attack/) - Risk themes: Third-party and supply chain exposure.
-- [Cisco Adds NHI to Security Stack With Astrix, WideField Acquisitions](https://www.darkreading.com/identity-access-management-security/cisco-adds-nhi-security-stack-with-astrix-widefield) - Risk themes: Identity and access security, Vulnerability and patch management.
 
 Notes and limitations
 - This fallback keeps the report current using feed content plus local entity extraction while AI generation is unavailable.
