@@ -809,7 +809,7 @@ body.light .copy-link:focus-visible, body.light .collapse-toggle:focus-visible, 
 .topbar .chip { white-space: nowrap; padding: 5px 9px; border-radius: 999px; border: 1px solid rgba(255,255,255,0.12); color: var(--text); text-decoration: none; font-size: 12px; }
 .topbar .chip { padding: var(--reference-nav-chip-padding); border-radius: 6px; }
 .topbar .chip { min-height: 30px; display: inline-flex; align-items: center; }
-.topbar .chip.active { background: rgba(197, 138, 53, 0.18); border-color: rgba(197, 138, 53, 0.3); }
+.topbar .chip.active { background: var(--section-trail-active-bg); border-color: rgba(197, 138, 53, 0.3); }
 .topbar .nav-filter-state { display: inline-flex; min-height: 30px; align-items: center; border-left: 3px solid var(--filtered-state-rail); border-radius: 6px; background: var(--filtered-state-note-bg); padding: 5px 8px 5px 10px; }
 .topbar .nav-empty { margin: 0 12px; }
 .filter-state, .topbar .nav-filter-state { padding: var(--review-state-note-padding); line-height: var(--review-state-note-line-height); }
