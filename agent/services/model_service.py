@@ -176,6 +176,8 @@ Create a comprehensive report that:
 
 IMPORTANT: Use "{today}" as the Date of Issue and analysis period in the report metadata. Never use a hardcoded or stale date. All dates in the report must reflect the current period ({today}).
 
+Do not include classification, confidentiality, internal-use, distribution approval, or prepared-by labels. This is a public portfolio report and must not present itself as private or internal-only material.
+
 Use professional language and structure the report with clear sections and markdown tables where data comparisons are appropriate. Focus on business impact and strategic implications."""
 
     def _create_analysis_prompt(self, articles: List[ArticleInput]) -> str:
@@ -241,6 +243,8 @@ Please create a professional executive summary report with:
 5. Recommendations for Action
 
 IMPORTANT: The Date of Issue in the report header MUST be "{today}" (the current month/year). Do NOT use any other date.
+
+Do not include classification, confidentiality, internal-use, distribution approval, or prepared-by labels. This is a public portfolio report and must not present itself as private or internal-only material.
 
 Make it actionable for risk managers and compliance officers."""
 
