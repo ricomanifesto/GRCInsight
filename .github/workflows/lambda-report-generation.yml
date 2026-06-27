@@ -306,11 +306,11 @@ jobs:
 
     - name: Upload Pages artifact
       if: steps.get-report.conclusion == 'success'
-      uses: actions/upload-pages-artifact@v3
+      uses: actions/upload-pages-artifact@v5
       with:
         path: site
 
     - name: Deploy to GitHub Pages
       if: steps.get-report.conclusion == 'success'
       id: deployment
-      uses: actions/deploy-pages@v4
+      uses: actions/deploy-pages@v5

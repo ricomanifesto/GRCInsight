@@ -88,8 +88,18 @@ def test_workflows_use_current_node_runtime_action_pins():
 
     assert "actions/checkout@v7" in workflow_text
     assert "aws-actions/configure-aws-credentials@v6" in workflow_text
+    assert "actions/setup-python@v6" in workflow_text
+    assert "actions/cache@v6" in workflow_text
+    assert "hashicorp/setup-terraform@v4" in workflow_text
+    assert "actions/upload-pages-artifact@v5" in workflow_text
+    assert "actions/deploy-pages@v5" in workflow_text
     assert "actions/checkout@v4" not in workflow_text
     assert "aws-actions/configure-aws-credentials@v4" not in workflow_text
+    assert "actions/setup-python@v5" not in workflow_text
+    assert "actions/cache@v4" not in workflow_text
+    assert "hashicorp/setup-terraform@v3" not in workflow_text
+    assert "actions/upload-pages-artifact@v3" not in workflow_text
+    assert "actions/deploy-pages@v4" not in workflow_text
 
 
 def test_lambda_deploy_smoke_test_fails_unhealthy_response():
