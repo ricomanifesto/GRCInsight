@@ -76,6 +76,12 @@
   --evidence-handoff-row-gap: rgba(236,231,220,0.090);
   --evidence-handoff-gap-note-padding: 12px;
   --evidence-handoff-gap-note-rail: 4px;
+  --filter-recovery-state-margin: 10px;
+  --filter-recovery-control-gap: 6px;
+  --filter-recovery-empty-padding: 11px 13px;
+  --filter-recovery-reset-min-width: 96px;
+  --filter-recovery-reset-border: rgba(214,160,77,0.34);
+  --filter-recovery-mobile-stack-gap: 7px;
   --visual-continuity-gap: 8px;
   --visual-continuity-panel-inset: 14px;
   --visual-continuity-chip-gap: 5px;
@@ -200,6 +206,12 @@ body.light {
   --evidence-handoff-row-gap: rgba(27,35,43,0.090);
   --evidence-handoff-gap-note-padding: 12px;
   --evidence-handoff-gap-note-rail: 4px;
+  --filter-recovery-state-margin: 10px;
+  --filter-recovery-control-gap: 6px;
+  --filter-recovery-empty-padding: 11px 13px;
+  --filter-recovery-reset-min-width: 96px;
+  --filter-recovery-reset-border: rgba(49,81,62,0.24);
+  --filter-recovery-mobile-stack-gap: 7px;
   --visual-continuity-gap: 8px;
   --visual-continuity-panel-inset: 14px;
   --visual-continuity-chip-gap: 5px;
@@ -550,6 +562,15 @@ body.light .clear-filters:not(:disabled) { background: var(--empty-guidance-clea
 .sidebar nav { display: grid; gap: var(--nav-context-link-gap); }
 .nav-empty { margin: var(--nav-context-empty-margin); }
 .mobile-toc { margin-top: var(--nav-context-mobile-margin); }
+.filter-state { margin-top: var(--filter-recovery-state-margin); }
+.active-filter-chips, .status-quick-filters { gap: var(--filter-recovery-control-gap); }
+.empty-results { padding: var(--filter-recovery-empty-padding); gap: var(--filter-recovery-control-gap); }
+.clear-filters:not(:disabled) { min-width: var(--filter-recovery-reset-min-width); border-color: var(--filter-recovery-reset-border); }
+body.light .clear-filters:not(:disabled) { border-color: var(--filter-recovery-reset-border); }
+@media (max-width: 760px) {
+  .active-filter-chips, .status-quick-filters, .empty-results { gap: var(--filter-recovery-mobile-stack-gap); }
+  .clear-filters:not(:disabled) { min-width: 0; }
+}
 
 .layout { display: grid; grid-template-columns: 240px 1fr; gap: 14px; align-items: start; }
 .layout { grid-template-columns: var(--workspace-index-width) minmax(0, 1fr); }
