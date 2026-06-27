@@ -1045,6 +1045,25 @@ def main() -> None:
         if guard not in style_css:
             fail(f"style.css missing compliance workspace masthead density aesthetic guard: {guard}")
 
+    required_compliance_workspace_overview_cadence_aesthetic_contract = (
+        "--overview-cadence-section-gap",
+        "--overview-cadence-panel-gap",
+        "--overview-cadence-heading-gap",
+        "--overview-cadence-copy-line-height",
+        "--overview-cadence-action-gap",
+        "--overview-cadence-mobile-section-gap",
+        ".workspace-overview { margin-top: var(--overview-cadence-section-gap); }",
+        ".archive-digest, .audit-summary { margin-top: var(--overview-cadence-section-gap); }",
+        ".workspace-overview-card, .archive-card, .audit-summary-card { gap: var(--overview-cadence-panel-gap); }",
+        ".workspace-heading-block { gap: var(--overview-cadence-heading-gap); }",
+        ".workspace-copy, .archive-summary, .audit-summary-copy { line-height: var(--overview-cadence-copy-line-height); }",
+        ".workspace-actions { gap: var(--overview-cadence-action-gap); }",
+        "@media (max-width: 760px) {\n  .workspace-overview, .archive-digest, .audit-summary { margin-top: var(--overview-cadence-mobile-section-gap); }\n}",
+    )
+    for guard in required_compliance_workspace_overview_cadence_aesthetic_contract:
+        if guard not in style_css:
+            fail(f"style.css missing compliance workspace overview cadence aesthetic guard: {guard}")
+
     required_archive_guards = (
         "window.GRCInsightArchive",
         "currentReportId",
