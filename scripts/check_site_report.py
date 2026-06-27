@@ -1025,6 +1025,26 @@ def main() -> None:
         if guard not in style_css:
             fail(f"style.css missing compliance workspace section trail aesthetic guard: {guard}")
 
+    required_compliance_workspace_masthead_density_aesthetic_contract = (
+        "--masthead-title-size",
+        "--masthead-title-line-height",
+        "--masthead-mobile-title-size",
+        "--masthead-meta-margin",
+        "--masthead-controls-margin",
+        "--masthead-theme-min-height",
+        ".app-header { padding: var(--masthead-header-padding); }",
+        ".app-header .container { gap: var(--masthead-grid-gap); }",
+        ".app-header .title { max-width: var(--masthead-title-width); font-size: var(--masthead-title-size); line-height: var(--masthead-title-line-height); }",
+        ".app-header .subtitle { margin: var(--masthead-meta-margin); line-height: var(--masthead-meta-line-height); }",
+        ".theme-toggle { min-height: var(--masthead-theme-min-height); padding: var(--masthead-theme-padding); }",
+        ".controls { margin-top: var(--masthead-controls-margin); }",
+        ".app-header .title { font-size: var(--masthead-mobile-title-size); line-height: var(--masthead-mobile-title-line-height); }",
+        ".theme-toggle { min-height: var(--masthead-theme-min-height); }",
+    )
+    for guard in required_compliance_workspace_masthead_density_aesthetic_contract:
+        if guard not in style_css:
+            fail(f"style.css missing compliance workspace masthead density aesthetic guard: {guard}")
+
     required_archive_guards = (
         "window.GRCInsightArchive",
         "currentReportId",
