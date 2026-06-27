@@ -6,7 +6,9 @@ AGENT_PYPROJECT = REPO_ROOT / "agent" / "pyproject.toml"
 DEPLOY_SCRIPT = REPO_ROOT / "scripts" / "deploy-lambda.sh"
 DEPLOY_WORKFLOW = REPO_ROOT / ".github" / "workflows" / "deploy-lambda.yml"
 REPORT_WORKFLOW = REPO_ROOT / ".github" / "workflows" / "lambda-report-generation.yml"
+CI_WORKFLOW = REPO_ROOT / ".github" / "workflows" / "ci.yml"
 SITE_REPORT_CHECK = REPO_ROOT / "scripts" / "check_site_report.py"
+WORKFLOWS = (CI_WORKFLOW, DEPLOY_WORKFLOW, REPORT_WORKFLOW)
 
 
 def test_report_generation_workflow_accepts_repository_dispatch_payloads():
@@ -79,6 +81,15 @@ def test_python_lambda_packaging_keeps_runtime_interface_client():
     dependencies = pyproject["project"]["dependencies"]
 
     assert any(dependency.split("==", 1)[0] == "awslambdaric" for dependency in dependencies)
+
+
+def test_workflows_use_current_node_runtime_action_pins():
+    workflow_text = "\n".join(workflow.read_text() for workflow in WORKFLOWS)
+
+    assert "actions/checkout@v7" in workflow_text
+    assert "aws-actions/configure-aws-credentials@v6" in workflow_text
+    assert "actions/checkout@v4" not in workflow_text
+    assert "aws-actions/configure-aws-credentials@v4" not in workflow_text
 
 
 def test_lambda_deploy_smoke_test_fails_unhealthy_response():
