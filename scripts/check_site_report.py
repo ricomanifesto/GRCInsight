@@ -988,6 +988,24 @@ def main() -> None:
         if guard not in style_css:
             fail(f"style.css missing compliance evidence handoff rhythm aesthetic guard: {guard}")
 
+    required_compliance_review_filter_recovery_aesthetic_contract = (
+        "--filter-recovery-state-margin",
+        "--filter-recovery-control-gap",
+        "--filter-recovery-empty-padding",
+        "--filter-recovery-reset-min-width",
+        "--filter-recovery-reset-border",
+        "--filter-recovery-mobile-stack-gap",
+        ".filter-state { margin-top: var(--filter-recovery-state-margin); }",
+        ".active-filter-chips, .status-quick-filters { gap: var(--filter-recovery-control-gap); }",
+        ".empty-results { padding: var(--filter-recovery-empty-padding); gap: var(--filter-recovery-control-gap); }",
+        ".clear-filters:not(:disabled) { min-width: var(--filter-recovery-reset-min-width); border-color: var(--filter-recovery-reset-border); }",
+        "body.light .clear-filters:not(:disabled) { border-color: var(--filter-recovery-reset-border); }",
+        "@media (max-width: 760px) {\n  .active-filter-chips, .status-quick-filters, .empty-results { gap: var(--filter-recovery-mobile-stack-gap); }\n  .clear-filters:not(:disabled) { min-width: 0; }\n}",
+    )
+    for guard in required_compliance_review_filter_recovery_aesthetic_contract:
+        if guard not in style_css:
+            fail(f"style.css missing compliance review filter recovery aesthetic guard: {guard}")
+
     required_archive_guards = (
         "window.GRCInsightArchive",
         "currentReportId",
