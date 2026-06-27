@@ -799,7 +799,6 @@ body.light .copy-link:focus-visible, body.light .collapse-toggle:focus-visible, 
   .card h2 .heading-actions { margin-left: 0; }
   .heading-actions { margin-left: 0; }
   .heading-actions { gap: var(--section-trail-action-gap); }
-  .topbar .chip.active { box-shadow: inset 0 calc(-1 * var(--section-trail-active-rail-width)) 0 var(--workspace-rail); }
 }
 
 /* Mobile top bar */
@@ -816,6 +815,7 @@ body.light .copy-link:focus-visible, body.light .collapse-toggle:focus-visible, 
 .topbar .nav-filter-state, .topbar .nav-empty { margin: 0 var(--nav-context-inline-margin); flex: 0 0 auto; }
 body.light .topbar { background: linear-gradient(90deg, var(--panel), var(--panel-2)); border-bottom-color: var(--workspace-hairline); }
 @media (max-width: 900px) { .topbar { display: block; } .sidebar { display: none; } }
+@media (max-width: 900px) { .topbar .chip.active { box-shadow: inset 0 calc(-1 * var(--section-trail-active-rail-width)) 0 var(--workspace-rail); } }
 @media (max-width: 760px) {
   .topbar { box-shadow: 0 8px 18px rgba(0,0,0,0.18); }
   .topbar .topbar-scroll { padding: 7px 0; scroll-padding-inline: 12px; }

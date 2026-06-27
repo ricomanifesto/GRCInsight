@@ -1019,7 +1019,7 @@ def main() -> None:
         ".nav-fab { width: var(--section-trail-fab-size); height: var(--section-trail-fab-size); border-color: var(--section-trail-fab-rail); }",
         "body.light .nav-fab { border-color: var(--section-trail-fab-rail); }",
         ".topbar .chip.active { background: var(--section-trail-active-bg); border-color: rgba(197, 138, 53, 0.3); }",
-        ".topbar .chip.active { box-shadow: inset 0 calc(-1 * var(--section-trail-active-rail-width)) 0 var(--workspace-rail); }",
+        "@media (max-width: 900px) { .topbar .chip.active { box-shadow: inset 0 calc(-1 * var(--section-trail-active-rail-width)) 0 var(--workspace-rail); } }",
     )
     for guard in required_compliance_workspace_section_trail_aesthetic_contract:
         if guard not in style_css:
