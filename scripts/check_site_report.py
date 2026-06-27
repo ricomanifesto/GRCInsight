@@ -971,6 +971,23 @@ def main() -> None:
         if guard not in style_css:
             fail(f"style.css missing compliance archive review continuity aesthetic guard: {guard}")
 
+    required_compliance_evidence_handoff_rhythm_aesthetic_contract = (
+        "--evidence-handoff-table-margin",
+        "--evidence-handoff-caption-gap",
+        "--evidence-handoff-row-gap",
+        "--evidence-handoff-gap-note-padding",
+        "--evidence-handoff-gap-note-rail",
+        ".card > .table-wrap { margin: var(--evidence-handoff-table-margin); }",
+        ".coverage-table caption { gap: var(--evidence-handoff-caption-gap); }",
+        ".coverage-table tbody tr + tr th, .coverage-table tbody tr + tr td { border-top: 1px solid var(--evidence-handoff-row-gap); }",
+        ".coverage-row[data-coverage-state=\"gap\"] td:last-child { box-shadow: inset var(--evidence-handoff-gap-note-rail) 0 0 rgba(239,68,68,0.38); padding-inline-start: var(--evidence-handoff-gap-note-padding); }",
+        "body.light .coverage-row[data-coverage-state=\"gap\"] td:last-child { box-shadow: inset var(--evidence-handoff-gap-note-rail) 0 0 rgba(185,28,28,0.28); }",
+        "@media (max-width: 760px) {\n  .card > .table-wrap { margin: var(--evidence-handoff-table-margin); }\n  .coverage-row[data-coverage-state=\"gap\"] td:last-child { padding-inline-start: var(--evidence-handoff-gap-note-padding); }\n}",
+    )
+    for guard in required_compliance_evidence_handoff_rhythm_aesthetic_contract:
+        if guard not in style_css:
+            fail(f"style.css missing compliance evidence handoff rhythm aesthetic guard: {guard}")
+
     required_archive_guards = (
         "window.GRCInsightArchive",
         "currentReportId",
