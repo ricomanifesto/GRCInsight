@@ -207,7 +207,14 @@ jobs:
             fi
             echo "# ${SAFE_TITLE}" > site/index.md
             echo "**Generated:** ${SAFE_GENERATED}" >> site/index.md
-            REPORT_BODY=$(printf '%s\n' "$SAFE_CONTENT" | awk 'BEGIN { dropped = 0 } !dropped && /^# / { dropped = 1; next } { print }')
+            REPORT_BODY=$(printf '%s\n' "$SAFE_CONTENT" | awk '
+              BEGIN { dropped_title = 0; seen_generated = 0 }
+              !dropped_title && /^# / { dropped_title = 1; next }
+              /^\*\*Generated:\*\*/ {
+                if (seen_generated == 0) { seen_generated = 1; next }
+              }
+              { print }
+            ')
             echo "${REPORT_BODY}" >> site/index.md
 
             echo "Report files created successfully"

@@ -169,6 +169,49 @@ assert(renderer.sanitizeMarkdownUrl('data:text/html,test') === null, 'data links
 assert(renderer.sanitizeMarkdownUrl('https://example.com/"bad') === null, 'quote-bearing links should be blocked');
 assert(renderer.renderMarkdownLink('Safe', 'https://example.com') === '<a href="https://example.com" target="_blank" rel="noopener">Safe</a>', 'safe link should render as anchor');
 assert(renderer.renderMarkdownLink('Unsafe', 'javascript:alert(1)') === 'Unsafe', 'unsafe link should render as text');
+assert(typeof renderer.normalizeReportMarkdown === 'function', 'renderer should expose report markdown normalization');
+const fallbackMarkdown = `# GRC Intelligence Report - 2026-06-27
+**Generated:** 2026-06-27T07:15:18Z
+
+1) Executive Summary
+- Current fallback summary.
+
+2) Risk Assessment
+- Current fallback risk.
+
+3. Recommendations for Action
+- Current fallback actions.
+
+1. Review vendor contracts.
+`;
+const normalizedFallbackMarkdown = renderer.normalizeReportMarkdown(fallbackMarkdown);
+assert(normalizedFallbackMarkdown.includes('## Executive Summary'), 'numbered fallback section labels should normalize to h2 headings');
+assert(normalizedFallbackMarkdown.includes('## Risk Assessment'), 'numbered fallback section labels should normalize each fallback section heading');
+assert(normalizedFallbackMarkdown.includes('## Recommendations for Action'), 'dotted numbered fallback section labels should normalize to h2 headings');
+assert(normalizedFallbackMarkdown.includes('1. Review vendor contracts.'), 'normalization should not promote numbered action items into h2 headings');
+const canonicalMarkdown = `# GRC Intelligence Report
+
+## Executive Summary
+
+1) Keep this paragraph text unchanged.
+`;
+const normalizedCanonicalMarkdown = renderer.normalizeReportMarkdown(canonicalMarkdown);
+assert(normalizedCanonicalMarkdown.includes('## Executive Summary'), 'canonical h2 report headings should remain intact');
+assert(normalizedCanonicalMarkdown.includes('1) Keep this paragraph text unchanged.'), 'normalization should not rewrite numbered prose when h2 sections exist');
+const mixedMarkdown = `# GRC Intelligence Report
+
+## Executive Summary
+- Canonical heading.
+
+2. Key Regulatory Developments
+- Numbered heading from fallback output.
+
+1. Review vendor contracts.
+`;
+const normalizedMixedMarkdown = renderer.normalizeReportMarkdown(mixedMarkdown);
+assert(normalizedMixedMarkdown.includes('## Executive Summary'), 'mixed reports should preserve existing h2 sections');
+assert(normalizedMixedMarkdown.includes('## Key Regulatory Developments'), 'mixed reports should normalize numbered section labels even when h2 sections exist');
+assert(normalizedMixedMarkdown.includes('1. Review vendor contracts.'), 'mixed report normalization should not promote numbered action items');
 const frameworks = tags.categories.find(category => category.key === 'frameworks');
 const regulations = tags.categories.find(category => category.key === 'regulations');
 const risks = tags.categories.find(category => category.key === 'risks');
