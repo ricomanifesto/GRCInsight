@@ -167,10 +167,26 @@ jobs:
 
       - name: Smoke test Go Lambda health
         run: |
+          set -e
           aws lambda invoke \
             --function-name "$GO_FUNCTION_NAME" \
             --payload '{"httpMethod":"GET","path":"/health"}' \
             --cli-binary-format raw-in-base64-out \
             --region "$AWS_REGION" \
             health.json >/dev/null
-          cat health.json || true
+
+          STATUS_CODE=$(jq -r '.statusCode // empty' health.json)
+          BODY=$(jq -r '.body // empty' health.json)
+          if [ -n "$BODY" ] && [ "$BODY" != "null" ]; then
+            HEALTH_STATUS=$(printf '%s' "$BODY" | jq -r '.status // empty' 2>/dev/null || echo "unknown")
+          else
+            HEALTH_STATUS="unknown"
+          fi
+
+          echo "Lambda status code: ${STATUS_CODE:-unknown}"
+          echo "Lambda health status: ${HEALTH_STATUS:-unknown}"
+
+          if [ "$STATUS_CODE" != "200" ] || [ "$HEALTH_STATUS" != "healthy" ]; then
+            echo "Lambda health smoke test failed" >&2
+            exit 1
+          fi
