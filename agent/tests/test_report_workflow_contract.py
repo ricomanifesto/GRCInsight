@@ -44,6 +44,13 @@ def test_report_generation_workflow_strips_duplicate_report_title():
     assert 'echo "${REPORT_BODY}" >> site/index.md' in workflow
 
 
+def test_report_generation_workflow_strips_duplicate_generated_timestamp():
+    workflow = REPORT_WORKFLOW.read_text()
+
+    assert "seen_generated = 0" in workflow
+    assert "/^\\*\\*Generated:\\*\\*/" in workflow
+
+
 def test_python_lambda_packaging_keeps_runtime_interface_client():
     pyproject = tomllib.loads(AGENT_PYPROJECT.read_text())
     dependencies = pyproject["project"]["dependencies"]

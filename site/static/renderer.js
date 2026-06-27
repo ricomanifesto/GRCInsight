@@ -21,9 +21,28 @@
     return `<a href="${escapeAttribute(safeUrl)}" target="_blank" rel="noopener">${text}</a>`;
   }
 
+  function normalizeReportMarkdown(markdown) {
+    if (typeof markdown !== 'string') return markdown;
+
+    const expectedSectionTitles = new Set([
+      'Executive Summary',
+      'Key Regulatory Developments',
+      'Industry Impact Analysis',
+      'Risk Assessment',
+      'Recommendations for Action',
+      'Source Highlights',
+    ]);
+    const numberedSectionPattern = /^\d{1,2}[\).]\s+([^\n]+)$/gm;
+    return markdown.replace(numberedSectionPattern, (line, title) => {
+      const normalizedTitle = title.trim();
+      return expectedSectionTitles.has(normalizedTitle) ? `## ${normalizedTitle}` : line;
+    });
+  }
+
   window.GRCInsightRenderer = {
     escapeHtml,
     escapeAttribute,
+    normalizeReportMarkdown,
     sanitizeMarkdownUrl,
     renderMarkdownLink,
   };

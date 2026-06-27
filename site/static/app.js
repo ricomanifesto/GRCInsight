@@ -32,6 +32,7 @@
   const renderMarkdownLink = window.GRCInsightRenderer.renderMarkdownLink;
   const sanitizeMarkdownUrl = window.GRCInsightRenderer.sanitizeMarkdownUrl;
   const escapeAttribute = window.GRCInsightRenderer.escapeAttribute;
+  const normalizeReportMarkdown = window.GRCInsightRenderer.normalizeReportMarkdown;
 
   function renderArchiveDigest(markdown, sections) {
     const container = document.getElementById('archiveDigest');
@@ -128,6 +129,8 @@
   }
 
   function mdToHtml(md) {
+    md = normalizeReportMarkdown(md);
+
     // Try to extract generated timestamp from the first lines
     const genMatch = md.match(/\*\*Generated:\*\*\s*(.+)/);
     if (genMatch) el.generated.textContent = `Generated ${genMatch[1].trim()}`;
