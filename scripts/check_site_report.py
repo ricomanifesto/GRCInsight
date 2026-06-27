@@ -176,6 +176,24 @@ def main() -> None:
         if guard not in metadata_js:
             fail(f"metadata.js missing section metadata guard: {guard}")
 
+    required_generated_section_cadence = (
+        "--generated-section-cadence-gap",
+        "--generated-section-heading-gap",
+        "--generated-section-meta-margin",
+        "--generated-section-body-gap",
+        "--generated-section-subheading-margin",
+        "--generated-section-mobile-padding",
+        ".card { gap: var(--generated-section-cadence-gap);",
+        ".card h2 { gap: var(--generated-section-heading-gap);",
+        ".section-meta { margin: var(--generated-section-meta-margin);",
+        ".card > p { margin: 0 0 var(--generated-section-body-gap);",
+        ".card h4 { margin: var(--generated-section-subheading-margin);",
+        ".card { padding: var(--generated-section-mobile-padding);",
+    )
+    for guard in required_generated_section_cadence:
+        if guard not in style_css:
+            fail(f"style.css missing generated section cadence guard: {guard}")
+
     required_filter_guards = (
         "window.GRCInsightFilters",
         "filterStateOptions",

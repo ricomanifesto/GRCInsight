@@ -133,6 +133,12 @@
   --card-rhythm-meta-margin: -3px 0 8px;
   --card-rhythm-table-margin: 7px 0 9px;
   --card-rhythm-subheading-margin: 14px 0 6px;
+  --generated-section-cadence-gap: 9px;
+  --generated-section-heading-gap: 7px;
+  --generated-section-meta-margin: -2px 0 7px;
+  --generated-section-body-gap: 7px;
+  --generated-section-subheading-margin: 13px 0 5px;
+  --generated-section-mobile-padding: 14px 15px 14px 18px;
   --source-table-rail: rgba(214,160,77,0.62);
   --source-table-header-bg: rgba(214,160,77,0.10);
   --source-table-first-col-width: 21%;
@@ -287,6 +293,12 @@ body.light {
   --card-rhythm-meta-margin: -3px 0 8px;
   --card-rhythm-table-margin: 7px 0 9px;
   --card-rhythm-subheading-margin: 14px 0 6px;
+  --generated-section-cadence-gap: 9px;
+  --generated-section-heading-gap: 7px;
+  --generated-section-meta-margin: -2px 0 7px;
+  --generated-section-body-gap: 7px;
+  --generated-section-subheading-margin: 13px 0 5px;
+  --generated-section-mobile-padding: 14px 15px 14px 18px;
   --source-table-rail: rgba(49,81,62,0.62);
   --source-table-header-bg: rgba(49,81,62,0.075);
   --source-table-first-col-width: 21%;
@@ -681,6 +693,7 @@ body.light .sidebar details[open] > summary { background: rgba(49, 81, 62, 0.10)
 .card { padding: 15px 18px 15px 20px; }
 .card { display: grid; gap: var(--section-detail-gap); }
 .card { gap: var(--visual-continuity-gap); }
+.card { gap: var(--generated-section-cadence-gap); }
 .card { border-color: var(--workspace-hairline); box-shadow: var(--workspace-card-shadow); }
 .card::before { content: ""; position: absolute; inset: 0 auto 0 0; width: 3px; border-radius: 8px 0 0 8px; background: rgba(49,81,62,0.55); }
 .card::before { width: 3px; background: var(--workspace-rail); }
@@ -689,12 +702,14 @@ body.light .sidebar details[open] > summary { background: rgba(49, 81, 62, 0.10)
 .card h2, .card h3 { margin-top: 0; color: #f5e8c8; }
 .card h2 { display: flex; align-items: center; gap: 8px; scroll-margin-top: 90px; flex-wrap: wrap; }
 .card h2 { gap: var(--card-rhythm-heading-gap); line-height: 1.08; }
+.card h2 { gap: var(--generated-section-heading-gap); line-height: 1.07; }
 .card h2 .heading-actions { margin-left: auto; }
 .card h2::before { content: ""; flex: 0 0 auto; width: 8px; height: 8px; border-radius: 999px; background: var(--workspace-rail); box-shadow: 0 0 0 3px var(--workspace-focus); }
 .section-meta { display: flex; flex-wrap: wrap; gap: 6px; margin: -4px 0 14px; color: var(--muted); font-size: 12px; }
 .section-meta { padding: 8px; border: 1px solid var(--workspace-hairline); border-radius: 8px; background: rgba(255,255,255,0.028); }
 .section-meta { margin: -2px 0 10px; gap: var(--visual-continuity-chip-gap); }
 .section-meta { margin: var(--card-rhythm-meta-margin); }
+.section-meta { margin: var(--generated-section-meta-margin); }
 .section-meta-item { display: inline-flex; align-items: center; gap: 4px; min-height: 26px; padding: 4px 8px; border-radius: 6px; border: 1px solid var(--workspace-hairline); background: rgba(255,255,255,0.045); }
 .section-meta-item { min-height: 28px; padding: 5px 8px; }
 .section-meta-item { min-height: 26px; padding: 4px 7px; }
@@ -719,6 +734,7 @@ body.light .card::before { background: var(--workspace-rail); }
 
 p, li { line-height: 1.65; }
 .card > p { margin: 0 0 8px; }
+.card > p { margin: 0 0 var(--generated-section-body-gap); }
 ul { margin: 8px 0 8px 22px; padding: 0; }
 .card > ul, .card > ol { margin-top: 0; }
 
@@ -794,6 +810,7 @@ body.light blockquote { background: rgba(49, 81, 62, 0.06); }
 /* H4 */
 .card h4 { margin: 18px 0 8px; font-size: 15px; color: var(--text); font-weight: 600; }
 .card h4 { margin: var(--card-rhythm-subheading-margin); color: #f5e8c8; }
+.card h4 { margin: var(--generated-section-subheading-margin); }
 body.light .card h4 { color: #31513e; }
 
 /* Code blocks */
@@ -848,6 +865,7 @@ body.light .copy-link:hover, body.light .collapse-toggle:hover, body.light .focu
 body.light .copy-link:focus-visible, body.light .collapse-toggle:focus-visible, body.light .focus-toggle:focus-visible { color: #31513e; }
 @media (max-width: 760px) {
   .card h2 { align-items: flex-start; }
+  .card { padding: var(--generated-section-mobile-padding); }
   .card h2 .heading-actions { margin-left: 0; }
   .heading-actions { margin-left: 0; }
   .heading-actions { gap: var(--section-trail-action-gap); }
