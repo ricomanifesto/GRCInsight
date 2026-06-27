@@ -42,16 +42,24 @@ fi
 print_status "AWS Account ID: $AWS_ACCOUNT_ID"
 print_status "AWS Region: $AWS_REGION"
 
-# Ensure model gateway settings are present for Python Lambda
+# Ensure model settings are present for Python Lambda
 if [ -z "${LLM_MODEL}" ]; then
     print_error "LLM_MODEL is not set. Export LLM_MODEL before deploying."
     exit 1
 fi
 
-if [ -z "${OPENCODE_BASE_URL}" ]; then
-    print_error "OPENCODE_BASE_URL is not set. Export OPENCODE_BASE_URL before deploying."
+if [ -z "${OPENROUTER_API_KEY}" ]; then
+    print_error "OPENROUTER_API_KEY is not set. Export OPENROUTER_API_KEY before deploying."
     exit 1
 fi
+
+case "$LLM_MODEL" in
+    openrouter/*) ;;
+    *)
+        print_error "LLM_MODEL must use openrouter/provider-model format for direct Lambda model-backed analysis."
+        exit 1
+        ;;
+esac
 
 # Step 1: Create ECR repositories if they don't exist
 print_status "Creating ECR repositories..."
@@ -171,12 +179,16 @@ if aws lambda get-function --function-name $GO_FUNCTION_NAME --region $AWS_REGIO
     aws lambda update-function-code \
         --function-name $GO_FUNCTION_NAME \
         --image-uri $GO_IMAGE_URI \
-        --region $AWS_REGION
+        --region $AWS_REGION \
+        --query 'FunctionName' \
+        --output text
     # Ensure environment variables are configured
     aws lambda update-function-configuration \
         --function-name $GO_FUNCTION_NAME \
         --region $AWS_REGION \
-        --environment Variables="{\n            GO_ENV=production,\n            GIN_MODE=release,\n            PYTHON_LAMBDA_FUNCTION_NAME=$PYTHON_FUNCTION_NAME,\n            PYTHON_INVOKE_ASYNC=true\n        }"
+        --environment Variables="{\n            GO_ENV=production,\n            GIN_MODE=release,\n            PYTHON_LAMBDA_FUNCTION_NAME=$PYTHON_FUNCTION_NAME,\n            PYTHON_INVOKE_ASYNC=true\n        }" \
+        --query 'FunctionName' \
+        --output text
 else
     print_warning "Creating new Go Lambda function..."
     aws lambda create-function \
@@ -187,7 +199,9 @@ else
         --timeout 900 \
         --memory-size 1024 \
         --region $AWS_REGION \
-        --environment Variables="{\n            GO_ENV=production,\n            GIN_MODE=release,\n            PYTHON_LAMBDA_FUNCTION_NAME=$PYTHON_FUNCTION_NAME,\n            PYTHON_INVOKE_ASYNC=true\n        }"
+        --environment Variables="{\n            GO_ENV=production,\n            GIN_MODE=release,\n            PYTHON_LAMBDA_FUNCTION_NAME=$PYTHON_FUNCTION_NAME,\n            PYTHON_INVOKE_ASYNC=true\n        }" \
+        --query 'FunctionName' \
+        --output text
 fi
 
 # Create/update Python Lambda function
@@ -197,12 +211,16 @@ if aws lambda get-function --function-name $PYTHON_FUNCTION_NAME --region $AWS_R
     aws lambda update-function-code \
         --function-name $PYTHON_FUNCTION_NAME \
         --image-uri $PYTHON_IMAGE_URI \
-        --region $AWS_REGION
+        --region $AWS_REGION \
+        --query 'FunctionName' \
+        --output text
     # Ensure environment variables are configured
     aws lambda update-function-configuration \
         --function-name $PYTHON_FUNCTION_NAME \
         --region $AWS_REGION \
-        --environment Variables="{\n            LLM_MODEL=${LLM_MODEL},\n            OPENCODE_BASE_URL=${OPENCODE_BASE_URL},\n            LOG_LEVEL=INFO,\n            DDB_TABLE_NAME=grcinsight-reports\n        }"
+        --environment Variables="{\n            LLM_MODEL=${LLM_MODEL},\n            OPENROUTER_API_KEY=${OPENROUTER_API_KEY},\n            LOG_LEVEL=INFO,\n            DDB_TABLE_NAME=grcinsight-reports\n        }" \
+        --query 'FunctionName' \
+        --output text
 else
     print_warning "Creating new Python Lambda function..."
     aws lambda create-function \
@@ -213,7 +231,9 @@ else
         --timeout 900 \
         --memory-size 2048 \
         --region $AWS_REGION \
-        --environment Variables="{\n            LLM_MODEL=${LLM_MODEL},\n            OPENCODE_BASE_URL=${OPENCODE_BASE_URL},\n            LOG_LEVEL=INFO,\n            DDB_TABLE_NAME=grcinsight-reports\n        }"
+        --environment Variables="{\n            LLM_MODEL=${LLM_MODEL},\n            OPENROUTER_API_KEY=${OPENROUTER_API_KEY},\n            LOG_LEVEL=INFO,\n            DDB_TABLE_NAME=grcinsight-reports\n        }" \
+        --query 'FunctionName' \
+        --output text
 fi
 
 # Ensure IAM policy for DynamoDB and Lambda invoke is attached to the role

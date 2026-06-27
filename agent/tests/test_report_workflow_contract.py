@@ -3,6 +3,7 @@ import tomllib
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 AGENT_PYPROJECT = REPO_ROOT / "agent" / "pyproject.toml"
+DEPLOY_SCRIPT = REPO_ROOT / "scripts" / "deploy-lambda.sh"
 DEPLOY_WORKFLOW = REPO_ROOT / ".github" / "workflows" / "deploy-lambda.yml"
 REPORT_WORKFLOW = REPO_ROOT / ".github" / "workflows" / "lambda-report-generation.yml"
 SITE_REPORT_CHECK = REPO_ROOT / "scripts" / "check_site_report.py"
@@ -27,7 +28,9 @@ def test_report_generation_payload_uses_provider_model_runtime_config():
     workflow = REPORT_WORKFLOW.read_text()
 
     assert "LLM_MODEL: ${{ vars.LLM_MODEL" in workflow
-    assert "Invalid LLM_MODEL; expected provider/model format" in workflow
+    assert (
+        "Invalid LLM_MODEL; report generation requires openrouter/provider-model format" in workflow
+    )
     assert '--arg model "$LLM_MODEL"' in workflow
     assert "model: $model" in workflow
     assert "claude-opus-4-6" not in workflow
@@ -89,11 +92,46 @@ def test_lambda_deploy_smoke_test_fails_unhealthy_response():
 
 def test_lambda_deploy_sets_explicit_model_runtime_environment():
     workflow = DEPLOY_WORKFLOW.read_text()
+    global_env = workflow.split("jobs:", 1)[0]
 
     assert "LLM_MODEL: ${{ vars.LLM_MODEL" in workflow
-    assert "OPENCODE_BASE_URL: ${{ vars.OPENCODE_BASE_URL }}" in workflow
-    assert "OPENCODE_BASE_URL repository variable is required" in workflow
+    assert "OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}" not in global_env
+    assert workflow.count("OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}") == 2
+    assert "OPENROUTER_API_KEY secret is required" in workflow
     assert "Invalid LLM_MODEL; expected provider/model format" in workflow
+    assert (
+        "direct Lambda model-backed analysis requires openrouter/provider-model format" in workflow
+    )
     assert "LLM_MODEL=$LLM_MODEL" in workflow
-    assert "OPENCODE_BASE_URL=$OPENCODE_BASE_URL" in workflow
+    assert "OPENROUTER_API_KEY=$OPENROUTER_API_KEY" in workflow
+    assert "OPENCODE_BASE_URL=" not in workflow
     assert "ANTHROPIC_API_KEY=" not in workflow
+
+
+def test_manual_lambda_deploy_uses_openrouter_secret():
+    script = DEPLOY_SCRIPT.read_text()
+
+    assert "OPENROUTER_API_KEY is not set" in script
+    assert "openrouter/provider-model format" in script
+    assert "OPENROUTER_API_KEY=${OPENROUTER_API_KEY}" in script
+    assert "OPENCODE_BASE_URL=${OPENCODE_BASE_URL}" not in script
+
+
+def test_lambda_configuration_updates_do_not_dump_openrouter_secret():
+    workflow = DEPLOY_WORKFLOW.read_text()
+    script = DEPLOY_SCRIPT.read_text()
+
+    assert "OPENROUTER_API_KEY=$OPENROUTER_API_KEY" in workflow
+    workflow_mutations = (
+        workflow.count("aws lambda update-function-code")
+        + workflow.count("aws lambda update-function-configuration")
+        + workflow.count("aws lambda create-function")
+    )
+    assert workflow.count("--query 'FunctionName'") >= workflow_mutations
+    assert "OPENROUTER_API_KEY=${OPENROUTER_API_KEY}" in script
+    script_mutations = (
+        script.count("aws lambda update-function-code")
+        + script.count("aws lambda update-function-configuration")
+        + script.count("aws lambda create-function")
+    )
+    assert script.count("--query 'FunctionName'") >= script_mutations

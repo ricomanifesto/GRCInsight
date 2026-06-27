@@ -8,6 +8,7 @@ from loguru import logger
 from config.settings import settings
 from models.api import ArticleInput
 from services.opencode_client import OpenCodeClient, parse_model_selection
+from services.openrouter_client import OpenRouterClient
 
 
 class GRCModelService:
@@ -18,9 +19,23 @@ class GRCModelService:
         configured_model = model_name or settings.llm_model
         configured_max_tokens = max_tokens or settings.llm_max_tokens
         self.model = parse_model_selection(configured_model)
-        self.client = OpenCodeClient(timeout=max(120.0, float(configured_max_tokens) / 20))
+        self.max_tokens = configured_max_tokens
+        timeout = max(120.0, float(configured_max_tokens) / 20)
+        if settings.openrouter_api_key and self.model.provider_id != "openrouter":
+            raise ValueError("OpenRouter direct Lambda model calls require an openrouter/* model")
+        if settings.openrouter_api_key:
+            self.client = OpenRouterClient(
+                api_key=settings.openrouter_api_key,
+                max_tokens=configured_max_tokens,
+                timeout=timeout,
+            )
+            self.client_kind = "openrouter"
+        else:
+            self.client = OpenCodeClient(timeout=timeout)
+            self.client_kind = "opencode"
         logger.info(
-            "Initialized model service with provider=%s model=%s",
+            "Initialized model service with client=%s provider=%s model=%s",
+            self.client_kind,
             self.model.provider_id,
             self.model.model_id,
         )
@@ -42,7 +57,7 @@ class GRCModelService:
         return str(content)
 
     async def _invoke(self, *, system_prompt: str, user_prompt: str, title: str) -> str:
-        """Invoke the configured model through OpenCode."""
+        """Invoke the configured model through the selected model client."""
         return await self.client.generate(
             system_prompt=system_prompt,
             user_prompt=user_prompt,
