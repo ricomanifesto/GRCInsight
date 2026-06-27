@@ -13,10 +13,12 @@ from services.opencode_client import OpenCodeClient, parse_model_selection
 class GRCModelService:
     """Service for model-powered GRC analysis."""
 
-    def __init__(self):
+    def __init__(self, model_name: str | None = None, max_tokens: int | None = None):
         """Initialize model service."""
-        self.model = parse_model_selection(settings.llm_model)
-        self.client = OpenCodeClient(timeout=max(120.0, float(settings.llm_max_tokens) / 20))
+        configured_model = model_name or settings.llm_model
+        configured_max_tokens = max_tokens or settings.llm_max_tokens
+        self.model = parse_model_selection(configured_model)
+        self.client = OpenCodeClient(timeout=max(120.0, float(configured_max_tokens) / 20))
         logger.info(
             "Initialized model service with provider=%s model=%s",
             self.model.provider_id,

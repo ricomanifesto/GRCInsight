@@ -369,7 +369,10 @@ async def run_grc_analysis_endpoint(feed_url: str, config: GRCAnalysisConfig) ->
         model_service = None
 
         try:
-            model_service = GRCModelService()
+            model_service = GRCModelService(
+                model_name=config.model,
+                max_tokens=config.max_tokens,
+            )
         except ValueError as e:
             fallback_reason = str(e)
             logger.warning(f"Model service unavailable, falling back to local analysis: {e}")

@@ -48,5 +48,6 @@ make check
 
 - Deploy: push to `main` or run `.github/workflows/deploy-lambda.yml`
 - Secrets: `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`
-- Runtime env: `LLM_MODEL`, `OPENCODE_BASE_URL`
+- Runtime variables: `LLM_MODEL=provider/model`, `OPENCODE_BASE_URL=https://...`
+- Lambda model-backed analysis requires `OPENCODE_BASE_URL` to be reachable from AWS Lambda; `http://127.0.0.1:4096` only works for local development.
 - Reports: `.github/workflows/lambda-report-generation.yml` writes to `site/` and deploys Pages

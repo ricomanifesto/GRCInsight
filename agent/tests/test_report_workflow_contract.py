@@ -5,6 +5,7 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 AGENT_PYPROJECT = REPO_ROOT / "agent" / "pyproject.toml"
 DEPLOY_WORKFLOW = REPO_ROOT / ".github" / "workflows" / "deploy-lambda.yml"
 REPORT_WORKFLOW = REPO_ROOT / ".github" / "workflows" / "lambda-report-generation.yml"
+SITE_REPORT_CHECK = REPO_ROOT / "scripts" / "check_site_report.py"
 
 
 def test_report_generation_workflow_accepts_repository_dispatch_payloads():
@@ -20,6 +21,25 @@ def test_report_generation_payload_treats_feed_url_as_json_data():
     assert "Invalid FEED_URL; expected http(s) URL without whitespace" in workflow
     assert "jq -n --arg feed_url" in workflow
     assert '\\"feed_url\\": \\"${{ steps.feed-url.outputs.FEED_URL }}\\"' not in workflow
+
+
+def test_report_generation_payload_uses_provider_model_runtime_config():
+    workflow = REPORT_WORKFLOW.read_text()
+
+    assert "LLM_MODEL: ${{ vars.LLM_MODEL" in workflow
+    assert "Invalid LLM_MODEL; expected provider/model format" in workflow
+    assert '--arg model "$LLM_MODEL"' in workflow
+    assert "model: $model" in workflow
+    assert "claude-opus-4-6" not in workflow
+
+
+def test_site_report_check_accepts_fallback_numbered_sections():
+    check_script = SITE_REPORT_CHECK.read_text()
+
+    assert "REPORT_SECTION_LABELS" in check_script
+    assert "NUMBERED_SECTION_PATTERN" in check_script
+    assert "is_report_section" in check_script
+    assert "1) Executive Summary" not in check_script
 
 
 def test_report_generation_workflow_does_not_dump_lambda_response_body():
@@ -65,3 +85,15 @@ def test_lambda_deploy_smoke_test_fails_unhealthy_response():
     assert "Lambda health status: ${HEALTH_STATUS:-unknown}" in workflow
     assert "Lambda health smoke test failed" in workflow
     assert "cat health.json || true" not in workflow
+
+
+def test_lambda_deploy_sets_explicit_model_runtime_environment():
+    workflow = DEPLOY_WORKFLOW.read_text()
+
+    assert "LLM_MODEL: ${{ vars.LLM_MODEL" in workflow
+    assert "OPENCODE_BASE_URL: ${{ vars.OPENCODE_BASE_URL }}" in workflow
+    assert "OPENCODE_BASE_URL repository variable is required" in workflow
+    assert "Invalid LLM_MODEL; expected provider/model format" in workflow
+    assert "LLM_MODEL=$LLM_MODEL" in workflow
+    assert "OPENCODE_BASE_URL=$OPENCODE_BASE_URL" in workflow
+    assert "ANTHROPIC_API_KEY=" not in workflow
