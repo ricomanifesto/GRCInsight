@@ -24,7 +24,7 @@ def test_run_grc_analysis_endpoint_falls_back_when_model_is_unavailable(monkeypa
         return articles
 
     class FakeGRCModelService:
-        def __init__(self):
+        def __init__(self, model_name=None, max_tokens=None):
             pass
 
         async def analyze_articles_for_grc(self, articles):
@@ -84,7 +84,7 @@ def test_run_grc_analysis_endpoint_marks_model_backed_reports(monkeypatch):
         return articles
 
     class FakeGRCModelService:
-        def __init__(self):
+        def __init__(self, model_name=None, max_tokens=None):
             pass
 
         async def analyze_articles_for_grc(self, articles):
@@ -122,6 +122,68 @@ def test_run_grc_analysis_endpoint_marks_model_backed_reports(monkeypatch):
     assert response.metadata is not None
     assert response.metadata.analysis_mode == "model"
     assert response.metadata.fallback_reason is None
+
+
+def test_run_grc_analysis_endpoint_passes_request_model_config(monkeypatch):
+    captured_configs = []
+
+    async def fake_fetch_feed(_feed_url):
+        return {
+            "title": "Test Feed",
+            "entries": [
+                {
+                    "title": "SEC updates cyber disclosure expectations",
+                    "link": "https://example.com/sec",
+                    "description": "Disclosure and risk governance update",
+                    "published": "Thu, 20 Mar 2026 00:00:00 GMT",
+                    "content": "SEC disclosure guidance for cyber governance and risk oversight.",
+                }
+            ],
+        }
+
+    async def fake_enrich_articles(articles):
+        return articles
+
+    class FakeGRCModelService:
+        def __init__(self, model_name=None, max_tokens=None):
+            captured_configs.append((model_name, max_tokens))
+
+        async def analyze_articles_for_grc(self, articles):
+            return {
+                "grc_articles": [{"title": articles[0].title, "url": articles[0].url}],
+                "summary": {
+                    "total_articles": len(articles),
+                    "grc_relevant_count": 1,
+                    "confidence_score": 0.9,
+                },
+                "analysis": {
+                    "regulations_mentioned": ["SEC"],
+                    "frameworks_referenced": [],
+                    "industries_affected": ["Financial services"],
+                    "regulatory_bodies": ["SEC"],
+                    "risk_categories": ["Disclosure"],
+                },
+            }
+
+        async def generate_grc_report(self, _analysis_results, _feed_data):
+            return "# Model-backed GRC Intelligence Report\n\n1) Executive Summary\n- Model output."
+
+    monkeypatch.setattr(workflow_mod.rss_service, "fetch_feed", fake_fetch_feed)
+    monkeypatch.setattr(workflow_mod.rss_service, "enrich_articles", fake_enrich_articles)
+    monkeypatch.setattr(workflow_mod, "GRCModelService", FakeGRCModelService)
+
+    response = asyncio.run(
+        workflow_mod.run_grc_analysis_endpoint(
+            "https://example.com/feed.xml",
+            GRCAnalysisConfig(
+                model="openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
+                max_tokens=4096,
+            ),
+        )
+    )
+
+    assert response.status == "completed"
+    assert captured_configs == [("openrouter/nvidia/nemotron-3-ultra-550b-a55b:free", 4096)]
 
 
 def test_rss_service_fetch_feed_survives_multiple_event_loops(monkeypatch):

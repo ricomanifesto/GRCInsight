@@ -19,6 +19,7 @@ env:
   AWS_REGION: us-east-1
   GO_FUNCTION_NAME: grcinsight-go-function
   PYTHON_FUNCTION_NAME: grcinsight-python-function
+  LLM_MODEL: ${{ vars.LLM_MODEL || 'openrouter/nvidia/nemotron-3-ultra-550b-a55b:free' }}
 
 jobs:
   generate-report:
@@ -110,9 +111,18 @@ jobs:
       env:
         FEED_URL: ${{ steps.feed-url.outputs.FEED_URL }}
       run: |
+        case "$LLM_MODEL" in
+          */*) ;;
+          *)
+            echo "Invalid LLM_MODEL; expected provider/model format" >&2
+            exit 1
+            ;;
+        esac
+        echo "Using LLM_MODEL=$LLM_MODEL"
+
         # Create payload for Lambda invocation
-        BODY=$(jq -n --arg feed_url "$FEED_URL" -c \
-          '{feed_url: $feed_url, config: {model: "claude-opus-4-6", max_tokens: 16000, focus_areas: ["governance", "compliance", "risk"]}}')
+        BODY=$(jq -n --arg feed_url "$FEED_URL" --arg model "$LLM_MODEL" -c \
+          '{feed_url: $feed_url, config: {model: $model, max_tokens: 16000, focus_areas: ["governance", "compliance", "risk"]}}')
         PAYLOAD=$(jq -n --arg body "$BODY" -c \
           '{httpMethod: "POST", path: "/api/v1/reports/generate", headers: {"Content-Type": "application/json"}, body: $body}')
 

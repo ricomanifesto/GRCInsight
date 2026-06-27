@@ -11,7 +11,8 @@ Go Lambda orchestrates API and DynamoDB. Python Lambda analyzes feeds and writes
 ## CI Deploy (recommended)
 
 - Add repo secrets: `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`
-- Configure runtime env: `LLM_MODEL`, `OPENCODE_BASE_URL`
+- Configure repo variables: `LLM_MODEL=provider/model`, `OPENCODE_BASE_URL=https://...`
+- `OPENCODE_BASE_URL` must point to an OpenCode gateway reachable from AWS Lambda. A localhost URL only works outside Lambda.
 - Run `.github/workflows/deploy-lambda.yml` (manual or push to `main`)
 - Workflow builds both images with `DOCKER_BUILDKIT=0`, pushes to ECR, updates Lambdas, and smoke‑tests `/health`
 
@@ -19,7 +20,7 @@ Go Lambda orchestrates API and DynamoDB. Python Lambda analyzes feeds and writes
 
 ```bash
 export LLM_MODEL=openrouter/nvidia/nemotron-3-ultra-550b-a55b:free
-export OPENCODE_BASE_URL=http://localhost:4096
+export OPENCODE_BASE_URL=https://opencode.example.com
 export AWS_REGION=us-east-1
 export DOCKER_BUILDKIT=0
 ./scripts/deploy-lambda.sh

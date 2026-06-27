@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Validate the committed GitHub Pages report artifact."""
 
+import re
 from pathlib import Path
 
 
@@ -14,6 +15,15 @@ TAGS_JS = SITE_DIR / "static" / "tags.js"
 METADATA_JS = SITE_DIR / "static" / "metadata.js"
 FILTERS_JS = SITE_DIR / "static" / "filters.js"
 ARCHIVE_JS = SITE_DIR / "static" / "archive.js"
+REPORT_SECTION_LABELS = {
+    "Executive Summary",
+    "Key Regulatory Developments",
+    "Industry Impact Analysis",
+    "Risk Assessment",
+    "Recommendations for Action",
+    "Source Highlights",
+}
+NUMBERED_SECTION_PATTERN = re.compile(r"^\d+[\).]\s+(.+)$")
 
 
 def fail(message: str) -> None:
@@ -24,6 +34,17 @@ def read_text(path: Path) -> str:
     if not path.exists():
         fail(f"missing {path.relative_to(REPO_ROOT)}")
     return path.read_text(encoding="utf-8")
+
+
+def is_report_section(line: str) -> bool:
+    if line.startswith("## "):
+        return True
+
+    match = NUMBERED_SECTION_PATTERN.match(line)
+    if not match:
+        return False
+
+    return match.group(1).strip() in REPORT_SECTION_LABELS
 
 
 def main() -> None:
@@ -64,8 +85,8 @@ def main() -> None:
     if h1_count != 1:
         fail("index.md must contain exactly one top-level report title")
 
-    h2_count = sum(1 for line in lines if line.startswith("## "))
-    if h2_count < 2:
+    section_count = sum(1 for line in lines if is_report_section(line))
+    if section_count < 2:
         fail("index.md must contain at least two report sections")
 
     if "Temporary placeholder" in markdown or "Temporary Outline" in markdown:
