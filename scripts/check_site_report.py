@@ -952,6 +952,25 @@ def main() -> None:
         if guard not in style_css:
             fail(f"style.css missing compliance sidebar filter context rhythm aesthetic guard: {guard}")
 
+    required_compliance_archive_review_continuity_aesthetic_contract = (
+        "--archive-review-entry-gap",
+        "--archive-review-meta-gap",
+        "--archive-review-metric-min-height",
+        "--archive-review-metric-padding",
+        "--archive-review-tag-gap",
+        "--archive-review-current-rail-width",
+        ".archive-list { gap: var(--archive-review-entry-gap); }",
+        ".archive-entry { gap: var(--archive-review-entry-gap); }",
+        ".archive-entry-meta { gap: var(--archive-review-meta-gap); }",
+        ".archive-entry.current { box-shadow: inset var(--archive-review-current-rail-width) 0 0 var(--workspace-rail), 0 10px 20px rgba(0,0,0,0.14); }",
+        ".archive-review-metrics div { min-height: var(--archive-review-metric-min-height); padding: var(--archive-review-metric-padding); }",
+        ".archive-tags { gap: var(--archive-review-tag-gap); }",
+        "@media (max-width: 760px) {\n  .archive-entry-meta { gap: var(--archive-review-meta-gap); }\n  .archive-tags { gap: var(--archive-review-tag-gap); }\n}",
+    )
+    for guard in required_compliance_archive_review_continuity_aesthetic_contract:
+        if guard not in style_css:
+            fail(f"style.css missing compliance archive review continuity aesthetic guard: {guard}")
+
     required_archive_guards = (
         "window.GRCInsightArchive",
         "currentReportId",
