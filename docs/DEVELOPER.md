@@ -25,8 +25,8 @@ Set environment variables for the services:
 
 ## Environment Variables
 - Python agent
-  - `LLM_MODEL=provider/model` and `OPENCODE_BASE_URL` (required for model-backed analysis)
-  - For Lambda, `OPENCODE_BASE_URL` must be reachable from AWS Lambda; local loopback URLs are only valid for local development.
+  - `LLM_MODEL=openrouter/provider-model` and `OPENROUTER_API_KEY` for Lambda model-backed analysis
+  - `OPENCODE_BASE_URL` is still supported for local OpenCode-backed development when `OPENROUTER_API_KEY` is unset.
   - `CORS_ALLOWED_ORIGINS` (optional; comma‑separated, or use `.env` with `cors_allowed_origins`)
   - `DDB_TABLE_NAME`, `ARTICLES_TABLE_NAME` if running in Lambda mode and using the status/async paths
 - Go API

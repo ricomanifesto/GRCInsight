@@ -6,13 +6,12 @@ Go Lambda orchestrates API and DynamoDB. Python Lambda analyzes feeds and writes
 
 - AWS account with ECR and Lambda access
 - AWS CLI and Docker installed
-- OpenCode server reachable by the Python Lambda
+- OpenRouter API key for Python Lambda model-backed analysis
 
 ## CI Deploy (recommended)
 
-- Add repo secrets: `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`
-- Configure repo variables: `LLM_MODEL=provider/model`, `OPENCODE_BASE_URL=https://...`
-- `OPENCODE_BASE_URL` must point to an OpenCode gateway reachable from AWS Lambda. A localhost URL only works outside Lambda.
+- Add repo secrets: `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `OPENROUTER_API_KEY`
+- Configure repo variable: `LLM_MODEL=openrouter/provider-model`
 - Run `.github/workflows/deploy-lambda.yml` (manual or push to `main`)
 - Workflow builds both images with `DOCKER_BUILDKIT=0`, pushes to ECR, updates Lambdas, and smoke‑tests `/health`
 
@@ -20,7 +19,7 @@ Go Lambda orchestrates API and DynamoDB. Python Lambda analyzes feeds and writes
 
 ```bash
 export LLM_MODEL=openrouter/nvidia/nemotron-3-ultra-550b-a55b:free
-export OPENCODE_BASE_URL=https://opencode.example.com
+export OPENROUTER_API_KEY=...
 export AWS_REGION=us-east-1
 export DOCKER_BUILDKIT=0
 ./scripts/deploy-lambda.sh
@@ -71,3 +70,4 @@ aws iam delete-role --role-name grcinsight-lambda-role
 
 - Local: `cmd/server/main.go`, `agent/main.py`
 - Lambda: `cmd/lambda/main.go`, `agent/lambda_main.py`
+- Local model calls can still use OpenCode with `OPENCODE_BASE_URL`. Lambda model calls use OpenRouter directly when `OPENROUTER_API_KEY` is set.

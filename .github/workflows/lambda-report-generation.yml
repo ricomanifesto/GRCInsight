@@ -112,9 +112,9 @@ jobs:
         FEED_URL: ${{ steps.feed-url.outputs.FEED_URL }}
       run: |
         case "$LLM_MODEL" in
-          */*) ;;
+          openrouter/*) ;;
           *)
-            echo "Invalid LLM_MODEL; expected provider/model format" >&2
+            echo "Invalid LLM_MODEL; report generation requires openrouter/provider-model format" >&2
             exit 1
             ;;
         esac

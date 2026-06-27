@@ -12,7 +12,6 @@ env:
   GO_FUNCTION_NAME: grcinsight-go-function
   PYTHON_FUNCTION_NAME: grcinsight-python-function
   LLM_MODEL: ${{ vars.LLM_MODEL || 'openrouter/nvidia/nemotron-3-ultra-550b-a55b:free' }}
-  OPENCODE_BASE_URL: ${{ vars.OPENCODE_BASE_URL }}
 
 jobs:
   deploy:
@@ -32,6 +31,8 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
 
       - name: Validate model runtime configuration
+        env:
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
         run: |
           set -e
           case "$LLM_MODEL" in
@@ -41,14 +42,14 @@ jobs:
               exit 1
               ;;
           esac
-          if [ -z "$OPENCODE_BASE_URL" ]; then
-            echo "OPENCODE_BASE_URL repository variable is required for Lambda model-backed analysis" >&2
+          if [ -z "$OPENROUTER_API_KEY" ]; then
+            echo "OPENROUTER_API_KEY secret is required for Lambda model-backed analysis" >&2
             exit 1
           fi
-          case "$OPENCODE_BASE_URL" in
-            http://*|https://*) ;;
+          case "$LLM_MODEL" in
+            openrouter/*) ;;
             *)
-              echo "Invalid OPENCODE_BASE_URL; expected http(s) URL" >&2
+              echo "Invalid LLM_MODEL; direct Lambda model-backed analysis requires openrouter/provider-model format" >&2
               exit 1
               ;;
           esac
@@ -147,31 +148,41 @@ jobs:
           aws lambda update-function-code \
             --function-name "$GO_FUNCTION_NAME" \
             --image-uri "$GO_IMAGE_SHA" \
-            --region "$AWS_REGION"
+            --region "$AWS_REGION" \
+            --query 'FunctionName' \
+            --output text
           aws lambda wait function-updated \
             --function-name "$GO_FUNCTION_NAME" \
             --region "$AWS_REGION"
           aws lambda update-function-configuration \
             --function-name "$GO_FUNCTION_NAME" \
             --region "$AWS_REGION" \
-            --environment "Variables={GO_ENV=production,GIN_MODE=release,PYTHON_LAMBDA_FUNCTION_NAME=$PYTHON_FUNCTION_NAME,PYTHON_INVOKE_ASYNC=true,DDB_TABLE_NAME=grcinsight-reports,ARTICLES_TABLE_NAME=grcinsight-articles,SERVICE_VERSION=${{ github.sha }},SERVER_ALLOWED_ORIGINS=https://ricomanifesto.github.io}"
+            --environment "Variables={GO_ENV=production,GIN_MODE=release,PYTHON_LAMBDA_FUNCTION_NAME=$PYTHON_FUNCTION_NAME,PYTHON_INVOKE_ASYNC=true,DDB_TABLE_NAME=grcinsight-reports,ARTICLES_TABLE_NAME=grcinsight-articles,SERVICE_VERSION=${{ github.sha }},SERVER_ALLOWED_ORIGINS=https://ricomanifesto.github.io}" \
+            --query 'FunctionName' \
+            --output text
           aws lambda wait function-updated \
             --function-name "$GO_FUNCTION_NAME" \
             --region "$AWS_REGION"
 
       - name: Update Python Lambda to new image
+        env:
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
         run: |
           aws lambda update-function-code \
             --function-name "$PYTHON_FUNCTION_NAME" \
             --image-uri "$PYTHON_IMAGE_SHA" \
-            --region "$AWS_REGION"
+            --region "$AWS_REGION" \
+            --query 'FunctionName' \
+            --output text
           aws lambda wait function-updated \
             --function-name "$PYTHON_FUNCTION_NAME" \
             --region "$AWS_REGION"
           aws lambda update-function-configuration \
             --function-name "$PYTHON_FUNCTION_NAME" \
             --region "$AWS_REGION" \
-            --environment "Variables={LLM_MODEL=$LLM_MODEL,OPENCODE_BASE_URL=$OPENCODE_BASE_URL,LOG_LEVEL=INFO,DDB_TABLE_NAME=grcinsight-reports,ARTICLES_TABLE_NAME=grcinsight-articles}"
+            --environment "Variables={LLM_MODEL=$LLM_MODEL,OPENROUTER_API_KEY=$OPENROUTER_API_KEY,LOG_LEVEL=INFO,DDB_TABLE_NAME=grcinsight-reports,ARTICLES_TABLE_NAME=grcinsight-articles}" \
+            --query 'FunctionName' \
+            --output text
           aws lambda wait function-updated \
             --function-name "$PYTHON_FUNCTION_NAME" \
             --region "$AWS_REGION"

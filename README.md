@@ -25,7 +25,7 @@ Automated GRC intelligence: monitor RSS feeds, extract regulatory signals, and p
 
 - Python agent deps: `cd agent && uv sync`
 - Model gateway: run OpenCode and set `OPENCODE_BASE_URL`
-- Model: set `LLM_MODEL=provider/model`
+- Model: set `LLM_MODEL=openrouter/provider-model`
 - Go config: edit `configs/config.yaml`
 
 ## Use Locally
@@ -47,7 +47,7 @@ make check
 ## Production
 
 - Deploy: push to `main` or run `.github/workflows/deploy-lambda.yml`
-- Secrets: `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`
-- Runtime variables: `LLM_MODEL=provider/model`, `OPENCODE_BASE_URL=https://...`
-- Lambda model-backed analysis requires `OPENCODE_BASE_URL` to be reachable from AWS Lambda; `http://127.0.0.1:4096` only works for local development.
+- Secrets: `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `OPENROUTER_API_KEY`
+- Runtime variables: `LLM_MODEL=openrouter/provider-model`
+- Lambda model-backed analysis calls OpenRouter directly when `OPENROUTER_API_KEY` is configured. Local development can still use OpenCode with `OPENCODE_BASE_URL`.
 - Reports: `.github/workflows/lambda-report-generation.yml` writes to `site/` and deploys Pages

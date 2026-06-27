@@ -16,6 +16,7 @@ class Settings(BaseSettings):
     # Model configuration
     llm_model: str = "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free"
     llm_max_tokens: int = 16000
+    openrouter_api_key: str = ""
 
     # RSS configuration
     rss_timeout: int = 30
