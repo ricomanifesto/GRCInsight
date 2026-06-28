@@ -272,6 +272,10 @@ jobs:
           echo
         done
 
+    - name: Validate generated site report
+      if: steps.get-report.conclusion == 'success'
+      run: python3 scripts/check_site_report.py
+
     - name: Commit and push report
       if: steps.get-report.conclusion == 'success'
       run: |
@@ -290,6 +294,7 @@ jobs:
         while [ $attempts -le $max_attempts ]; do
           git fetch origin "$GITHUB_REF_NAME"
           git rebase -X theirs "origin/$GITHUB_REF_NAME"
+          python3 scripts/check_site_report.py
 
           if git push origin HEAD:"$GITHUB_REF_NAME"; then
             exit 0

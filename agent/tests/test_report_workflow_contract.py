@@ -1,4 +1,5 @@
 from pathlib import Path
+import runpy
 import tomllib
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
@@ -8,6 +9,7 @@ DEPLOY_WORKFLOW = REPO_ROOT / ".github" / "workflows" / "deploy-lambda.yml"
 REPORT_WORKFLOW = REPO_ROOT / ".github" / "workflows" / "lambda-report-generation.yml"
 CI_WORKFLOW = REPO_ROOT / ".github" / "workflows" / "ci.yml"
 SITE_REPORT_CHECK = REPO_ROOT / "scripts" / "check_site_report.py"
+MODEL_SERVICE = REPO_ROOT / "agent" / "services" / "model_service.py"
 WORKFLOWS = (CI_WORKFLOW, DEPLOY_WORKFLOW, REPORT_WORKFLOW)
 
 
@@ -74,6 +76,176 @@ def test_report_generation_workflow_strips_duplicate_generated_timestamp():
 
     assert "seen_generated = 0" in workflow
     assert "/^\\*\\*Generated:\\*\\*/" in workflow
+
+
+def test_report_generation_workflow_validates_generated_site_before_publish():
+    workflow = REPORT_WORKFLOW.read_text()
+
+    assert "Validate generated site report" in workflow
+    assert workflow.count("python3 scripts/check_site_report.py") >= 2
+    assert workflow.index("Validate generated site report") < workflow.index(
+        "Commit and push report"
+    )
+    assert workflow.index("Validate generated site report") < workflow.index(
+        "Upload Pages artifact"
+    )
+    rebase_index = workflow.index('git rebase -X theirs "origin/$GITHUB_REF_NAME"')
+    assert workflow.index("python3 scripts/check_site_report.py", rebase_index) < workflow.index(
+        "git push origin HEAD"
+    )
+
+
+def test_site_report_check_rejects_internal_distribution_labels():
+    check_script = SITE_REPORT_CHECK.read_text()
+
+    assert "find_public_report_forbidden_label" in check_script
+    assert "FORBIDDEN_METADATA_FIELDS" in check_script
+    assert "PRIVATE_VALUE_FIELDS" in check_script
+    assert "PRIVATE_VALUE_TERMS" in check_script
+    assert "normalize_label_text" in check_script
+    assert r"\bCONFIDENTIAL\b" not in check_script
+
+
+def test_site_report_forbidden_detector_covers_public_label_variants():
+    namespace = runpy.run_path(str(SITE_REPORT_CHECK))
+    find_forbidden_label = namespace["find_public_report_forbidden_label"]
+
+    blocked_cases = (
+        "| **Classification** | Internal |",
+        "**Classification:** Internal Use Only",
+        "**Classification**: Internal",
+        "Data Classification: Confidential",
+        "Report Classification: Internal",
+        "**Audience:** Internal stakeholders",
+        "| Intended Audience | Internal Use Only |",
+        "| **Distribution** | Internal |",
+        "| Classification | Internal - Executive Distribution |",
+        "| Distribution | Non-public |",
+        "**Distribution:** Internal",
+        "**Classification:** Nonpublic",
+        "**Distribution:** Nonpublic",
+        "Internal Use Only",
+        "Internal Use Only:",
+        "Internal use only: do not distribute",
+        "*Internal-only*",
+        "*For internal use only.*",
+        "For internal use only - do not distribute",
+        "**For internal use only:**",
+        "*For internal distribution only*",
+        "This report is intended for internal use only.",
+        "*This report is intended for internal use only. Distribution outside the organization requires approval.*",
+        "Internal distribution only",
+        "Confidential: Yes",
+        "Confidential - Internal Use Only",
+        "**Confidential – Internal Distribution**",
+        "Company Confidential",
+        "Highly Confidential",
+        "Sensitive Confidential",
+        "Strictly Confidential",
+        "Confidential and Proprietary",
+        "Internal & Confidential",
+        "**PROPRIETARY**",
+        "**PRIVATE**",
+        "**RESTRICTED**",
+        "**NON-PUBLIC**",
+        "**PRIVATE & CONFIDENTIAL**",
+        "**Proprietary and Confidential**",
+        "This report contains confidential and proprietary information.",
+        "Unauthorized distribution is prohibited.",
+        "**Internal – Executive Distribution**",
+        "**Internal Distribution**",
+        "**CONFIDENTIAL**",
+        "## Classification: Internal Use Only",
+        "1. **Classification:** Internal Use Only",
+        "1) **Distribution:** Internal",
+        "2. ## Confidential - Internal Distribution",
+        "### Confidential - Internal Distribution",
+        "| **Distribution Approval** | Required |",
+        "**Distribution Approval:** Required",
+        "**Distribution-Approval:** Required",
+        "## Distribution Approval: Required",
+        "*Distribution outside the organization requires approval*",
+        "**Classification Level:** Internal",
+        "**Confidentiality Level:** Confidential",
+        "**Confidentiality:** Yes",
+        "| Confidentiality | Yes |",
+        "**Distribution Approval Status:** Required",
+        "**Classification:** Private",
+        "**Classification:** Restricted",
+        "**Confidentiality:** Proprietary",
+        "**Distribution:** Non-public",
+        "> ### Confidential - Internal Distribution",
+        "- ## Classification: Internal Use Only",
+        "| **Prepared By** | Senior GRC Analyst |",
+        "**Report Prepared By:** Senior GRC Analyst",
+        "| **Report Prepared By** | Senior GRC Analyst |",
+        "\n".join(
+            (
+                "| Date | Classification | Distribution |",
+                "|------|----------------|--------------|",
+                "| June 2026 | Internal | Internal |",
+            )
+        ),
+        "\n".join(
+            (
+                "| Date | Classification | Distribution |",
+                "|------|----------------|--------------|",
+                "| June 2026 | Public | External |",
+                "| July 2026 | Internal | Internal |",
+            )
+        ),
+        "\n".join(
+            (
+                "Field | Detail",
+                "------|-------",
+                "Classification | Confidential",
+            )
+        ),
+        "\n".join(
+            (
+                "| Date | Report Classification | Intended Audience |",
+                "|------|-----------------------|-------------------|",
+                "| June 2026 | Internal | Internal stakeholders |",
+            )
+        ),
+    )
+    for markdown in blocked_cases:
+        assert find_forbidden_label(markdown), markdown
+
+    allowed_cases = (
+        "The report discusses confidential data handling obligations.",
+        "Internal controls are mapped to the cited regulatory obligations.",
+        "The source describes an internal-only system boundary.",
+        "The analysis covers internal distribution system controls.",
+        "Ensure distribution outside the organization requires approval before release.",
+        "Distribution of policy updates requires approval by Legal.",
+        "| Classification | Data classification comparison |",
+        "**Classification:** Public report grouping",
+        "| Classification | Internal control taxonomy |",
+        "\n".join(
+            (
+                "| Classification | Control Area |",
+                "|----------------|--------------|",
+                "| Internal control taxonomy | SOX |",
+            )
+        ),
+        "\n".join(
+            (
+                "| Asset | Classification |",
+                "|-------|----------------|",
+                "| Customer records | Confidential |",
+            )
+        ),
+    )
+    for markdown in allowed_cases:
+        assert not find_forbidden_label(markdown), markdown
+
+
+def test_model_report_prompt_avoids_internal_classification_labels():
+    model_service = MODEL_SERVICE.read_text()
+
+    assert "Do not include classification, confidentiality, internal-use" in model_service
+    assert "public portfolio report" in model_service
 
 
 def test_python_lambda_packaging_keeps_runtime_interface_client():
