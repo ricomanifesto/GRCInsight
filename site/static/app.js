@@ -1,261 +1,98 @@
-// Minimal markdown renderer and enhancer for the report
+// Page controller for the GRC report: load the generated Markdown, render it
+// through the canonical renderer, wrap sections into cards, and wire the
+// reading aids (contents index, navigation, theme, collapse).
 (function () {
-  const el = {
-    generated: document.getElementById('generated'),
-    report: document.getElementById('report'),
-  };
+  const reportEl = document.getElementById('report');
+  const generatedEl = document.getElementById('generated');
   const themeBtn = document.getElementById('themeToggle');
   const mobileToc = document.getElementById('mobileToc');
-  let originalMd = null;
+
+  const renderer = window.GRCInsightRenderer;
+  const tagCategories = window.GRCInsightTags.categories;
+
+  const escapeHtml = renderer.escapeHtml;
   let sidebarObserver = null;
   let topbarObserver = null;
-  let currentSectionObserver = null;
 
-  const tagCategories = window.GRCInsightTags.categories;
-  const sectionMetadata = window.GRCInsightMetadata;
-  const sectionFilters = window.GRCInsightFilters;
-  const archiveDigest = window.GRCInsightArchive;
-  if (sectionFilters && sectionMetadata && Array.isArray(sectionMetadata.reviewStatusOptions) && sectionFilters.setReviewStatusOptions) {
-    sectionFilters.setReviewStatusOptions(sectionMetadata.reviewStatusOptions);
-  }
-  if (sectionFilters && sectionMetadata && sectionMetadata.metadataStates && sectionFilters.setMetadataStates) {
-    sectionFilters.setMetadataStates(sectionMetadata.metadataStates);
-  }
-  if (archiveDigest && sectionMetadata && sectionMetadata.reviewSignalStates && archiveDigest.setReviewSignalStates) {
-    archiveDigest.setReviewSignalStates(sectionMetadata.reviewSignalStates);
+  const ICON_COLLAPSE = '<svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M7 10l5-5 5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  const ICON_EXPAND = '<svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M7 14l5 5 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+  function slugify(text) {
+    return text.trim().toLowerCase().replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-');
   }
 
-  function escapeHtml(s) {
-    return s.replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+  function sectionHeadingTitle(heading) {
+    if (!heading) return '';
+    const clone = heading.cloneNode(true);
+    clone.querySelectorAll('.anchor-link, .heading-actions').forEach(node => node.remove());
+    return clone.textContent.trim();
   }
 
-  const renderMarkdownLink = window.GRCInsightRenderer.renderMarkdownLink;
-  const sanitizeMarkdownUrl = window.GRCInsightRenderer.sanitizeMarkdownUrl;
-  const escapeAttribute = window.GRCInsightRenderer.escapeAttribute;
-  const normalizeReportMarkdown = window.GRCInsightRenderer.normalizeReportMarkdown;
-
-  function renderArchiveDigest(markdown, sections) {
-    const container = document.getElementById('archiveDigest');
-    if (!container || !archiveDigest || !archiveDigest.buildReports) return;
-    const reviewSignalStates = sectionMetadata && sectionMetadata.reviewSignalStates || {};
-    const summary = sectionMetadata && sectionMetadata.summarizeSections
-      ? sectionMetadata.summarizeSections(normalizeSummarySections(sections || []))
-      : null;
-    const tagCategorySet = new Set();
-    (sections || []).forEach(section => {
-      (section.tagCategories || []).forEach(category => tagCategorySet.add(category));
-    });
-    const provenanceSummary = sectionMetadata && sectionMetadata.buildProvenanceSummary
-      ? sectionMetadata.buildProvenanceSummary(summary)
-      : null;
-    const reports = archiveDigest.buildReports(markdown || '', {
-      summary,
-      provenanceSummary,
-      tagCategories: Array.from(tagCategorySet),
-    });
-    if (!reports.find(report => report.id === archiveDigest.currentReportId)) return;
-    const entries = reports.map(report => {
-      const isCurrent = report.id === archiveDigest.currentReportId;
-      const tags = Array.isArray(report.tags) ? report.tags : [];
-      const highlights = Array.isArray(report.highlights) ? report.highlights : [];
-      const reviewMetrics = Array.isArray(report.reviewMetrics) ? report.reviewMetrics : [];
-      const href = sanitizeMarkdownUrl(report.href || '#') || '#';
-      return `
-        <article class="archive-entry${isCurrent ? ' current' : ''}">
-          <div class="archive-entry-main">
-            <div class="archive-entry-kicker">${escapeHtml(report.status || 'Archived')} · ${escapeHtml(report.period || 'Unspecified period')}</div>
-            <h3><a href="${escapeAttribute(href)}">${escapeHtml(report.title || 'Untitled report')}</a></h3>
-            <p>${escapeHtml(report.summary || 'No digest summary available.')}</p>
-            <ul>${highlights.map(item => `<li>${escapeHtml(item)}</li>`).join('')}</ul>
-          </div>
-          <div class="archive-entry-meta">
-            <time datetime="${escapeAttribute(report.generatedAt || '')}">${escapeHtml((report.generatedAt || '').slice(0, 10) || 'Unknown date')}</time>
-            ${reviewMetrics.length ? `<dl class="archive-review-metrics">${reviewMetrics.map(row => `<div data-review-metric-state="${escapeAttribute(row.state || reviewSignalStates.ready || 'ready')}"><dt>${escapeHtml(row.label)}</dt><dd>${escapeHtml(row.value)}</dd></div>`).join('')}</dl>` : ''}
-            <div class="archive-tags">${tags.map(tag => `<span>${escapeHtml(tag)}</span>`).join('')}</div>
-          </div>
-        </article>
-      `;
-    }).join('');
-    container.innerHTML = `
-      <div class="archive-card">
-        <div>
-          <p class="archive-kicker">Digest archive</p>
-          <h2>Current report and archive trail</h2>
-        </div>
-        <p class="archive-summary">The latest generated report remains the default view. This digest trail keeps report metadata, highlights, and review context explicit as snapshots are added.</p>
-        <div class="archive-list">${entries}</div>
-      </div>
-    `;
+  function setGeneratedLabel(md) {
+    const match = md.match(/\*\*Generated:\*\*\s*(.+)/);
+    if (!match || !generatedEl) return;
+    const raw = match[1].trim();
+    const parsed = new Date(raw);
+    const pretty = isNaN(parsed.getTime())
+      ? raw
+      : parsed.toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' });
+    generatedEl.textContent = `Generated ${pretty}`;
   }
 
-  function renderNestedList(block) {
-    const lines = block.trim().split(/\n/).filter(l => /^\s*-\s+/.test(l));
-    let html = '';
-    let level = 0;
-    const open = n => { for (let i = 0; i < n; i++) html += '<ul>'; };
-    const close = n => { for (let i = 0; i < n; i++) html += '</ul>'; };
-    lines.forEach((line, idx) => {
-      const m = line.match(/^(\s*)-\s+(.*)$/);
-      const indent = Math.floor((m[1] || '').length / 2) + 1; // 2 spaces per level, base 1
-      const content = m[2];
-      if (idx === 0) { open(indent); level = indent; }
-      else if (indent > level) { open(indent - level); level = indent; }
-      else if (indent < level) { close(level - indent); level = indent; }
-      html += `<li>${content}</li>`;
-    });
-    close(level);
-    return html;
-  }
-
-  function renderTable(block) {
-    const rows = block.trim().split('\n').filter(r => r.trim());
-    if (rows.length < 2) return block;
-    const parseRow = r => r.replace(/^\|/, '').replace(/\|$/, '').split('|').map(c => c.trim());
-    const headers = parseRow(rows[0]);
-    // Skip separator row (row[1] is dashes like |---|---|)
-    const isSep = rows[1] && /^\s*\|?[\s\-:|]+\|?\s*$/.test(rows[1]);
-    const startIdx = isSep ? 2 : 1;
-    let html = '<div class="table-wrap"><table><thead><tr>';
-    headers.forEach(h => { html += `<th>${h}</th>`; });
-    html += '</tr></thead><tbody>';
-    for (let i = startIdx; i < rows.length; i++) {
-      const cells = parseRow(rows[i]);
-      html += '<tr>';
-      cells.forEach(c => { html += `<td>${c}</td>`; });
-      html += '</tr>';
-    }
-    html += '</tbody></table></div>';
-    return html;
-  }
-
-  function mdToHtml(md) {
-    md = normalizeReportMarkdown(md);
-
-    // Try to extract generated timestamp from the first lines
-    const genMatch = md.match(/\*\*Generated:\*\*\s*(.+)/);
-    if (genMatch) el.generated.textContent = `Generated ${genMatch[1].trim()}`;
-
-    // Pre-process: extract fenced code blocks before HTML-escaping
-    const codeBlocks = [];
-    md = md.replace(/^```[\s\S]*?^```/gm, m => {
-      const code = m.replace(/^```\w*\n?/, '').replace(/\n?```$/, '');
-      codeBlocks.push(code);
-      return `%%CODEBLOCK_${codeBlocks.length - 1}%%`;
-    });
-
-    // Basic markdown transforms: headings, lists, bold
-    let html = escapeHtml(md);
-
-    // Restore code blocks as <pre>
-    html = html.replace(/%%CODEBLOCK_(\d+)%%/g, (_, i) =>
-      `<pre><code>${escapeHtml(codeBlocks[+i])}</code></pre>`);
-
-    // Bold
-    html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-    // Italic
-    html = html.replace(/\*([^*]+)\*/g, '<em>$1</em>');
-    // Headings (#### before ### before ## before #)
-    html = html.replace(/^####\s+(.*)$/gm, '<h4>$1</h4>');
-    html = html.replace(/^###\s+(.*)$/gm, '<h3>$1</h3>');
-    html = html.replace(/^##\s+(.*)$/gm, '<h2>$1</h2>');
-    html = html.replace(/^#\s+(.*)$/gm, '<h1>$1</h1>');
-    // Markdown tables: consecutive lines starting with | (must run before HR to avoid eating separator rows)
-    html = html.replace(/^(?:\|.+\|(?:\n|$)){2,}/gm, m => renderTable(m));
-    // Horizontal rules (--- or ___ or ***)
-    html = html.replace(/^-{3,}$/gm, '<hr>');
-    html = html.replace(/^_{3,}$/gm, '<hr>');
-    html = html.replace(/^\*{3,}$/gm, '<hr>');
-    // Blockquotes (> lines)
-    html = html.replace(/^(?:&gt;\s?.*(?:\n|$))+/gm, m => {
-      const inner = m.replace(/^&gt;\s?/gm, '').trim();
-      return `<blockquote>${inner}</blockquote>`;
-    });
-    // Links: [text](url)
-    html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_, text, url) => renderMarkdownLink(text, url));
-    // Unordered lists (support nested lists via indentation, 2 spaces per level)
-    html = html.replace(/^(?:\s*-\s+.*(?:\n|$))+?/gm, m => renderNestedList(m));
-    // Ordered lists (consecutive lines starting with digits)
-    html = html.replace(/^(?:\d+\.\s+.*(?:\n|$))+/gm, m => {
-      const items = m.trim().split(/\n/).filter(l => /^\d+\.\s+/.test(l));
-      return '<ol>' + items.map(l => `<li>${l.replace(/^\d+\.\s+/, '')}</li>`).join('') + '</ol>';
-    });
-    // Simple paragraphs
-    html = html
-      .split(/\n\n+/)
-      .map(block => /<(h\d|ul|ol|li|strong|table|div|hr|pre|blockquote)/.test(block) ? block : `<p>${block.trim()}</p>`)
-      .join('\n');
-    // Clean up empty paragraphs
-    html = html.replace(/<p>\s*<\/p>/g, '');
-    return html;
-  }
-
+  // Wrap everything under each h2 into a card and attach heading actions
+  // (anchor link, copy link, collapse). Content before the first h2 is dropped.
   function wrapSections(node) {
-    // Wrap content under each h2 into a card; drop any leading content before first h2
     const fragment = document.createDocumentFragment();
     let card = null;
-    let started = false;
-    Array.from(node.childNodes).forEach(n => {
-      if (n.nodeType === 1 && n.tagName === 'H2') {
-        started = true;
+    Array.from(node.childNodes).forEach(child => {
+      if (child.nodeType === 1 && child.tagName === 'H2') {
         if (card) fragment.appendChild(card);
         card = document.createElement('div');
         card.className = 'card';
-        // Add id + anchor link
-        const id = n.textContent.trim().toLowerCase().replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-');
-        n.id = id;
-        const a = document.createElement('a');
-        a.href = `#${id}`;
-        a.className = 'anchor-link';
-        a.textContent = '#';
-        n.appendChild(a);
-        // Wrap action buttons in a container that shows on hover
+        child.id = slugify(child.textContent);
+
+        const anchor = document.createElement('a');
+        anchor.href = `#${child.id}`;
+        anchor.className = 'anchor-link';
+        anchor.textContent = '#';
+        child.appendChild(anchor);
+
         const actions = document.createElement('span');
         actions.className = 'heading-actions';
+
         const copy = document.createElement('button');
         copy.className = 'copy-link';
         copy.type = 'button';
-        copy.setAttribute('data-target', id);
+        copy.setAttribute('data-target', child.id);
         copy.title = 'Copy link';
         copy.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M15 3H6a2 2 0 0 0-2 2v9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><rect x="9" y="9" width="12" height="12" rx="2" stroke="currentColor" stroke-width="2"/></svg>';
         actions.appendChild(copy);
+
         const toggle = document.createElement('button');
         toggle.className = 'collapse-toggle';
         toggle.type = 'button';
         toggle.setAttribute('aria-expanded', 'true');
         toggle.title = 'Collapse section';
-        toggle.innerHTML = '<svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M7 10l5-5 5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+        toggle.innerHTML = ICON_COLLAPSE;
         actions.appendChild(toggle);
-        const focus = document.createElement('button');
-        focus.className = 'focus-toggle';
-        focus.type = 'button';
-        focus.title = 'Focus this section';
-        focus.innerHTML = '<svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
-        actions.appendChild(focus);
-        n.appendChild(actions);
-        card.appendChild(n);
-      } else if (started && card) {
-        card.appendChild(n);
+
+        child.appendChild(actions);
+        card.appendChild(child);
+      } else if (card) {
+        card.appendChild(child);
       }
-      // else: drop preface content before first H2
     });
     if (card) fragment.appendChild(card);
     node.innerHTML = '';
     node.appendChild(fragment);
-    Array.from(node.querySelectorAll('.card')).forEach(c => {
-      const h2 = c.querySelector('h2');
-      if (!h2) return;
-      const title = sectionHeadingTitle(h2);
-      const metadata = sectionMetadata.deriveSectionMetadata(title, c.textContent || '');
-      h2.insertAdjacentHTML('afterend', sectionMetadata.renderSectionMetadata(metadata));
-    });
   }
 
+  // Highlight known compliance terms inline as pills.
   function highlightPills(node) {
     const terms = tagCategories
       .flatMap(category => category.terms.map(term => ({ term, pillClass: category.pillClass })))
       .sort((a, b) => b.term.length - a.term.length);
     if (!terms.length) return;
-
     const escapeRegExp = value => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     const pattern = new RegExp(`\\b(${terms.map(item => escapeRegExp(item.term)).join('|')})\\b`, 'gi');
     const termMap = new Map(terms.map(item => [item.term.toLowerCase(), item.pillClass]));
@@ -288,333 +125,38 @@
     });
   }
 
-  function visibleSectionHeadings() {
-    return Array.from(document.querySelectorAll('#report .card:not(.filtered-out) h2'));
+  function sectionHeadings() {
+    return Array.from(document.querySelectorAll('#report .card h2'));
   }
-
-  function clearFocusMode() {
-    document.body.classList.remove('focus-mode');
-    document.querySelectorAll('.card').forEach(card => card.classList.remove('focused'));
-    document.querySelectorAll('.focus-toggle').forEach(button => {
-      button.textContent = 'Focus';
-      button.title = 'Focus this section';
-    });
-  }
-
-  function sectionHeadingTitle(heading) {
-    if (!heading) return '';
-    const clone = heading.cloneNode(true);
-    clone.querySelectorAll('.anchor-link, .heading-actions').forEach(node => node.remove());
-    return clone.textContent.trim();
-  }
-
-  function collectSection(card) {
-    const heading = card.querySelector('h2');
-    const metadataEl = card.querySelector('.section-meta');
-    const pills = Array.from(card.querySelectorAll('.pill'));
-    const pillClasses = tagCategories.map(category => category.pillClass);
-    const sectionTagCategories = pills
-      .flatMap(pill => pillClasses.filter(name => pill.classList.contains(name)));
-    const contentClone = card.cloneNode(true);
-    contentClone.querySelectorAll('.section-meta, .heading-actions').forEach(node => node.remove());
-    return {
-      id: heading ? heading.id : '',
-      title: sectionHeadingTitle(heading),
-      text: contentClone.textContent || '',
-      tagCategories: Array.from(new Set(sectionTagCategories)),
-      tagTerms: pills.map(pill => pill.textContent.trim()).filter(Boolean),
-      metadata: {
-        reviewStatus: metadataEl ? metadataEl.getAttribute('data-review-status') : '',
-        obligations: metadataEl ? metadataEl.getAttribute('data-obligations') : '',
-        gaps: metadataEl ? metadataEl.getAttribute('data-gaps') : '',
-        deadlines: metadataEl ? metadataEl.getAttribute('data-deadlines') : '',
-        owners: metadataEl ? metadataEl.getAttribute('data-owners') : '',
-        evidence: metadataEl ? metadataEl.getAttribute('data-evidence') : '',
-      },
-      element: card,
-    };
-  }
-
-  function installSectionFilters() {
-    const search = document.getElementById('sectionSearch');
-    const status = document.getElementById('statusFilter');
-    const tag = document.getElementById('tagFilter');
-    const owner = document.getElementById('ownerFilter');
-    const evidence = document.getElementById('evidenceFilter');
-    const clear = document.getElementById('clearFilters');
-    const summary = document.getElementById('filterSummary');
-    const activeChips = document.getElementById('activeFilterChips');
-    const empty = document.getElementById('emptyResults');
-    const quickFilters = document.getElementById('statusQuickFilters');
-    if (!search || !status || !tag || !owner || !evidence || !summary || !empty || !sectionFilters) return;
-
-    const sections = Array.from(document.querySelectorAll('#report .card')).map(collectSection);
-    const total = sections.length;
-    const fallbackFilterStateOptions = [
-      { key: 'query', defaultValue: '' },
-      { key: 'reviewStatus', defaultValue: 'all' },
-      { key: 'tagCategory', defaultValue: 'all' },
-      { key: 'ownerCue', defaultValue: 'all' },
-      { key: 'evidenceState', defaultValue: 'all' },
-    ];
-    const fallbackFilterStateOptionMap = fallbackFilterStateOptions.reduce((options, option) => {
-      options[option.key] = option;
-      return options;
-    }, {});
-    const filterStateOptions = Array.isArray(sectionFilters.filterStateOptions)
-      ? sectionFilters.filterStateOptions
-      : fallbackFilterStateOptions;
-    const filterStateOptionMap = sectionFilters.filterStateOptionMap || fallbackFilterStateOptionMap;
-    const filterControlByKey = {
-      query: search,
-      reviewStatus: status,
-      tagCategory: tag,
-      ownerCue: owner,
-      evidenceState: evidence,
-    };
-    const filterControlBindings = filterStateOptions.map(option => ({
-      key: option.key,
-      control: filterControlByKey[option.key],
-      defaultValue: (filterStateOptionMap[option.key] || option).defaultValue,
-    })).filter(binding => binding.control);
-
-    function setFilterControlValue(binding, value) {
-      binding.control.value = value || binding.defaultValue;
-    }
-
-    function setFilterControlDefaults() {
-      filterControlBindings.forEach(binding => {
-        setFilterControlValue(binding, binding.defaultValue);
-      });
-    }
-
-    const initialFilters = sectionFilters.parseFilterParams ? sectionFilters.parseFilterParams(window.location.search) : {};
-    filterControlBindings.forEach(binding => {
-      setFilterControlValue(binding, initialFilters[binding.key]);
-    });
-
-    function currentFilters() {
-      return filterControlBindings.reduce((filters, binding) => {
-        filters[binding.key] = binding.control.value;
-        return filters;
-      }, {});
-    }
-
-    function syncFilterParams(filters) {
-      if (!sectionFilters.buildFilterParams || !window.history || !window.history.replaceState) return;
-      const nextSearch = sectionFilters.buildFilterParams(filters);
-      const nextUrl = `${window.location.pathname}${nextSearch}${window.location.hash}`;
-      window.history.replaceState(null, '', nextUrl);
-    }
-
-    function applyFilters() {
-      const filters = currentFilters();
-      const isDefaultState = sectionFilters.isDefaultFilterState ? sectionFilters.isDefaultFilterState(filters) : filterControlBindings.every(binding => binding.control.value === binding.defaultValue);
-      const matches = new Set(sectionFilters.filterSections(sections, filters));
-      sections.forEach(section => {
-        const visible = matches.has(section);
-        section.element.classList.toggle('filtered-out', !visible);
-        section.element.setAttribute('aria-hidden', String(!visible));
-      });
-      const focusedCard = document.querySelector('.card.focused');
-      if (focusedCard && focusedCard.classList.contains('filtered-out')) {
-        clearFocusMode();
-      }
-      const count = matches.size;
-      summary.textContent = sectionFilters.summarizeFilterResults
-        ? sectionFilters.summarizeFilterResults(count, total, filters)
-        : (count === total ? `Showing all ${total} sections` : `Showing ${count} of ${total} sections`);
-      renderActiveFilterChips(filters);
-      empty.hidden = count !== 0;
-      empty.textContent = count === 0
-        ? `${summary.textContent}. Clear filters to return to the full report.`
-        : 'No matching sections. Clear filters to return to the full report.';
-      clear.disabled = count === total && isDefaultState;
-      updateStatusQuickFilters(sections, filters);
-      updateWorkspaceOverview(Array.from(matches));
-      updateAuditSummary(Array.from(matches));
-      updateNavigationContext(count, total);
-      buildSidebar();
-      buildTopbar();
-      updateCurrentSection();
-      syncFilterParams(filters);
-    }
-
-    function updateStatusQuickFilters(sections, filters) {
-      if (!quickFilters) return;
-      const statusOptions = sectionMetadata && Array.isArray(sectionMetadata.reviewStatusOptions)
-        ? sectionMetadata.reviewStatusOptions
-        : [
-            { value: 'Action required', label: 'Action' },
-            { value: 'Review ready', label: 'Ready' },
-            { value: 'Needs review', label: 'Needs review' },
-          ];
-      const counts = sectionFilters.statusQuickFilterCounts
-        ? sectionFilters.statusQuickFilterCounts(sections, filters)
-        : statusOptions.reduce((fallbackCounts, option) => {
-          const value = option.value;
-          fallbackCounts[value] = sections.filter(section => section.metadata && section.metadata.reviewStatus === value).length;
-          return fallbackCounts;
-        }, {});
-      quickFilters.innerHTML = statusOptions.map(option => {
-        const value = option.value;
-        const label = option.label;
-        const count = Number(counts[value]) || 0;
-        const selected = status.value === value;
-        const disabled = count === 0 && !selected;
-        return `<button class="status-quick-filter${selected ? ' active' : ''}" type="button" data-status-filter="${value}" aria-label="${label}: ${count} sections" aria-pressed="${selected}" ${disabled ? 'disabled' : ''}><span>${label}</span><strong>${count}</strong></button>`;
-      }).join('');
-    }
-
-    function renderActiveFilterChips(filters) {
-      if (!activeChips || !sectionFilters.activeFilterEntries) return;
-      const entries = sectionFilters.activeFilterEntries(filters);
-      activeChips.hidden = entries.length === 0;
-      activeChips.replaceChildren(...entries.map(entry => {
-        const button = document.createElement('button');
-        button.className = 'active-filter-chip';
-        button.type = 'button';
-        button.dataset.clearFilter = entry.key;
-        button.setAttribute('aria-label', `Clear ${entry.label}`);
-        const label = document.createElement('span');
-        label.textContent = entry.label;
-        const clearMark = document.createElement('span');
-        clearMark.className = 'active-filter-chip-clear';
-        clearMark.setAttribute('aria-hidden', 'true');
-        clearMark.textContent = 'x';
-        button.append(label, clearMark);
-        return button;
-      }));
-    }
-
-    [search, status, tag, owner, evidence].forEach(control => {
-      control.addEventListener('input', applyFilters);
-      control.addEventListener('change', applyFilters);
-    });
-    function resetFilters() {
-      setFilterControlDefaults();
-      applyFilters();
-      search.focus();
-    }
-
-    function clearSingleFilter(filterKey) {
-      const option = filterStateOptions.find(option => option.key === filterKey);
-      const binding = filterControlBindings.find(binding => binding.key === filterKey);
-      if (option && binding) setFilterControlValue(binding, option.defaultValue);
-      applyFilters();
-    }
-
-    document.addEventListener('click', event => {
-      if (event.target.closest && event.target.closest('#clearFilters')) resetFilters();
-      const clearButton = event.target.closest && event.target.closest('[data-clear-filter]');
-      if (clearButton) {
-        clearSingleFilter(clearButton.dataset.clearFilter);
-        return;
-      }
-      const button = event.target.closest && event.target.closest('[data-status-filter]');
-      if (button) {
-        const targetStatus = button.dataset.statusFilter || 'all';
-        if (status.value === targetStatus) {
-          status.value = 'all';
-        } else {
-          status.value = targetStatus;
-        }
-        applyFilters();
-      }
-    });
-    clear.addEventListener('keydown', event => {
-      if (event.key === 'Enter' || event.key === ' ') {
-        event.preventDefault();
-        resetFilters();
-      }
-    });
-    applyFilters();
-  }
-
-  function updateNavigationContext(count, total) {
-    const text = count === total
-      ? `All ${total} sections`
-      : (count === 0 ? 'No sections in filtered view' : `${count} filtered sections`);
-    ['sidebarFilterState', 'topbarFilterState'].forEach(id => {
-      const node = document.getElementById(id);
-      if (!node) return;
-      node.textContent = text;
-      node.dataset.filterState = count === total ? 'all' : (count === 0 ? 'empty' : 'filtered');
-    });
-  }
-
-  function installAuditSummary() {
-    const sections = Array.from(document.querySelectorAll('#report .card')).map(collectSection);
-    updateWorkspaceOverview(sections);
-    updateAuditSummary(sections);
-  }
-
-  function normalizeSummarySections(sections) {
-    const metadataStates = sectionMetadata && sectionMetadata.metadataStates;
-    const detection = metadataStates && metadataStates.detection || {};
-    const evidence = metadataStates && metadataStates.evidence || {};
-    return (sections || []).map(section => ({
-      title: section.title || 'Untitled section',
-      metadata: {
-        reviewStatus: section.metadata && section.metadata.reviewStatus || 'Needs review',
-        obligations: section.metadata && section.metadata.obligations || detection.notDetected || 'Not detected',
-        gaps: section.metadata && section.metadata.gaps || detection.notDetected || 'Not detected',
-        deadlines: section.metadata && section.metadata.deadlines || detection.notDetected || 'Not detected',
-        owners: section.metadata && section.metadata.owners || detection.notDetected || 'Not detected',
-        evidence: section.metadata && section.metadata.evidence || evidence.needsSourceTrail || 'Needs source trail',
-      },
-    }));
-  }
-
-  function updateWorkspaceOverview(sections) {
-    const container = document.getElementById('workspaceOverview');
-    if (!container || !sectionMetadata || !sectionMetadata.summarizeSections || !sectionMetadata.renderWorkspaceOverview) return;
-    container.innerHTML = sectionMetadata.renderWorkspaceOverview(sectionMetadata.summarizeSections(normalizeSummarySections(sections)));
-  }
-
-  function updateAuditSummary(sections) {
-    const container = document.getElementById('auditSummary');
-    if (!container || !sectionMetadata || !sectionMetadata.summarizeSections || !sectionMetadata.renderAuditSummary) return;
-    container.innerHTML = sectionMetadata.renderAuditSummary(sectionMetadata.summarizeSections(normalizeSummarySections(sections)));
-  }
-
 
   function buildSidebar() {
     const toc = document.getElementById('toc');
     if (!toc) return;
-    const h2s = visibleSectionHeadings();
-    const all = Array.from(document.querySelectorAll('#report .card:not(.filtered-out) h2, #report .card:not(.filtered-out) h3'));
-    // Build nested outline: for each H2, collect following H3s until next H2
+    const h2s = sectionHeadings();
+    const all = Array.from(document.querySelectorAll('#report .card h2, #report .card h3'));
     const blocks = h2s.map(h2 => {
-      const id = h2.id;
-      const title = sectionHeadingTitle(h2);
-      const h3s = [];
+      const subs = [];
       for (let i = all.indexOf(h2) + 1; i < all.length; i++) {
-        const el = all[i];
-        if (el.tagName === 'H2') break;
-        if (el.tagName === 'H3') {
-          const hid = el.id || el.textContent.trim().toLowerCase().replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-');
-          el.id = hid;
-          h3s.push({ id: hid, title: el.textContent.trim() });
-        }
+        if (all[i].tagName === 'H2') break;
+        const sub = all[i];
+        sub.id = sub.id || slugify(sub.textContent);
+        subs.push({ id: sub.id, title: sub.textContent.trim() });
       }
-      return { id, title, h3s };
+      return { id: h2.id, title: sectionHeadingTitle(h2), subs };
     });
 
     toc.innerHTML = blocks.map(b => {
-      const sub = b.h3s.map(s => `<li><a href="#${s.id}">${escapeHtml(s.title)}</a></li>`).join('');
+      const sub = b.subs.map(s => `<li><a href="#${s.id}">${escapeHtml(s.title)}</a></li>`).join('');
       return `<details><summary><a href="#${b.id}">${escapeHtml(b.title)}</a></summary>${sub ? `<ul>${sub}</ul>` : ''}</details>`;
-    }).join('') || '<p class="nav-empty">No sections in filtered view</p>';
+    }).join('');
 
-    // Highlight on scroll
     const links = Array.from(toc.querySelectorAll('a'));
-    const map = new Map(h2s.map((h, i) => [h.id, links.find(l => l.getAttribute('href') === `#${h.id}`)]));
+    const linkFor = new Map(h2s.map(h => [h.id, links.find(l => l.getAttribute('href') === `#${h.id}`)]));
     if (sidebarObserver) sidebarObserver.disconnect();
     sidebarObserver = new IntersectionObserver(entries => {
       entries.forEach(e => {
-        const link = map.get(e.target.id);
-        if (!link) return;
-        if (e.isIntersecting) {
+        const link = linkFor.get(e.target.id);
+        if (link && e.isIntersecting) {
           links.forEach(l => l.classList.remove('active'));
           link.classList.add('active');
         }
@@ -622,29 +164,20 @@
     }, { rootMargin: '0px 0px -70% 0px', threshold: 0.1 });
     h2s.forEach(h => sidebarObserver.observe(h));
 
-    // Mobile TOC
     if (mobileToc) {
       mobileToc.innerHTML = '<option value="">Jump to section</option>' +
-        (h2s.length
-          ? h2s.map(h => `<option value="${h.id}">${escapeHtml(sectionHeadingTitle(h))}</option>`).join('')
-          : '<option value="" disabled>No sections in filtered view</option>');
+        h2s.map(h => `<option value="${h.id}">${escapeHtml(sectionHeadingTitle(h))}</option>`).join('');
       mobileToc.onchange = e => {
-        const v = e.target.value;
-        if (v) document.getElementById(v)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        if (e.target.value) document.getElementById(e.target.value)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
         e.target.value = '';
       };
     }
 
-    // Restore open state from storage. Default: desktop open, mobile collapsed
     const isMobile = window.matchMedia('(max-width: 900px)').matches;
     const stored = JSON.parse(localStorage.getItem('tocOpen') || '{}');
     Array.from(toc.querySelectorAll('details')).forEach((d, idx) => {
       const id = blocks[idx]?.id || `sec-${idx}`;
-      if (stored[id] !== undefined) {
-        d.open = !!stored[id];
-      } else {
-        d.open = !isMobile || idx === 0;
-      }
+      d.open = stored[id] !== undefined ? !!stored[id] : (!isMobile || idx === 0);
       d.addEventListener('toggle', () => {
         const map = JSON.parse(localStorage.getItem('tocOpen') || '{}');
         map[id] = d.open;
@@ -656,18 +189,15 @@
   function buildTopbar() {
     const bar = document.getElementById('topbarLinks');
     if (!bar) return;
-    const h2s = visibleSectionHeadings();
-    bar.innerHTML = h2s.length
-      ? h2s.map(h => `<a class="chip" href="#${h.id}"><span class="chip-icon">§</span>${escapeHtml(sectionHeadingTitle(h))}</a>`).join('')
-      : '<span class="nav-empty">No sections in filtered view</span>';
+    const h2s = sectionHeadings();
+    bar.innerHTML = h2s.map(h => `<a class="chip" href="#${h.id}"><span class="chip-icon">§</span>${escapeHtml(sectionHeadingTitle(h))}</a>`).join('');
     const chips = Array.from(bar.querySelectorAll('.chip'));
-    const map = new Map(h2s.map(h => [h.id, chips.find(c => c.getAttribute('href') === `#${h.id}`)]));
+    const chipFor = new Map(h2s.map(h => [h.id, chips.find(c => c.getAttribute('href') === `#${h.id}`)]));
     if (topbarObserver) topbarObserver.disconnect();
     topbarObserver = new IntersectionObserver(entries => {
       entries.forEach(e => {
-        const chip = map.get(e.target.id);
-        if (!chip) return;
-        if (e.isIntersecting) {
+        const chip = chipFor.get(e.target.id);
+        if (chip && e.isIntersecting) {
           chips.forEach(c => c.classList.remove('active'));
           chip.classList.add('active');
         }
@@ -678,222 +208,106 @@
 
   function applyCollapsedState() {
     const map = JSON.parse(localStorage.getItem('cardCollapsed') || '{}');
-    const cards = Array.from(document.querySelectorAll('.card'));
     const isMobile = window.matchMedia('(max-width: 900px)').matches;
-    cards.forEach((c, idx) => {
-      const h2 = c.querySelector('h2'); if (!h2) return;
-      const id = h2.id;
-      const title = sectionHeadingTitle(h2).toLowerCase();
-      const isExec = /executive\s+summary/.test(title);
-      const hasSaved = Object.prototype.hasOwnProperty.call(map, id);
-      let collapsed;
-      if (hasSaved) collapsed = !!map[id];
-      else collapsed = isMobile ? idx !== 0 : false;
-      if (isExec && !hasSaved) collapsed = false; // default expand Executive Summary
-      c.classList.toggle('collapsed', !!collapsed);
-      const btn = h2.querySelector('.collapse-toggle');
-      if (btn) {
-        btn.setAttribute('aria-expanded', String(!collapsed));
-        btn.innerHTML = collapsed
-          ? '<svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M7 14l5 5 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>'
-          : '<svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M7 10l5-5 5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-        btn.title = collapsed ? 'Expand section' : 'Collapse section';
+    Array.from(document.querySelectorAll('#report .card')).forEach((card, idx) => {
+      const h2 = card.querySelector('h2');
+      if (!h2) return;
+      const collapsed = Object.prototype.hasOwnProperty.call(map, h2.id)
+        ? !!map[h2.id]
+        : (isMobile && idx !== 0);
+      setCardCollapsed(card, collapsed, false);
+    });
+  }
+
+  function setCardCollapsed(card, collapsed, persist) {
+    card.classList.toggle('collapsed', collapsed);
+    const toggle = card.querySelector('.collapse-toggle');
+    if (toggle) {
+      toggle.setAttribute('aria-expanded', String(!collapsed));
+      toggle.innerHTML = collapsed ? ICON_EXPAND : ICON_COLLAPSE;
+      toggle.title = collapsed ? 'Expand section' : 'Collapse section';
+    }
+    if (persist) {
+      const map = JSON.parse(localStorage.getItem('cardCollapsed') || '{}');
+      const h2 = card.querySelector('h2');
+      if (h2) { map[h2.id] = collapsed; localStorage.setItem('cardCollapsed', JSON.stringify(map)); }
+    }
+  }
+
+  function installInteractions() {
+    document.addEventListener('click', e => {
+      const toggle = e.target.closest && e.target.closest('.collapse-toggle');
+      if (toggle) {
+        const card = toggle.closest('.card');
+        if (card) setCardCollapsed(card, !card.classList.contains('collapsed'), true);
+        return;
+      }
+      const copy = e.target.closest && e.target.closest('.copy-link');
+      if (copy) {
+        const url = new URL(window.location.href);
+        url.hash = copy.getAttribute('data-target');
+        navigator.clipboard && navigator.clipboard.writeText(url.toString());
+        const original = copy.title;
+        copy.title = 'Copied';
+        setTimeout(() => { copy.title = original; }, 800);
       }
     });
-  }
 
-  function updateCurrentSection() {
-    const lbl = document.getElementById('currentSection');
-    if (!lbl) return;
-    const h2s = visibleSectionHeadings();
-    if (currentSectionObserver) currentSectionObserver.disconnect();
-    currentSectionObserver = new IntersectionObserver(entries => {
-      entries.forEach(e => {
-        if (e.isIntersecting) {
-          const title = sectionHeadingTitle(e.target);
-          lbl.textContent = `Current section: ${title}`;
-        }
-      });
-    }, { rootMargin: '-10% 0px -70% 0px', threshold: 0.1 });
-    h2s.forEach(h => currentSectionObserver.observe(h));
-  }
-
-  function installNavFabs() {
-    const left = document.createElement('button');
-    left.id = 'navPrev'; left.className = 'nav-fab left'; left.setAttribute('aria-label', 'Previous section');
-    left.innerHTML = '\u2190';
-    const right = document.createElement('button');
-    right.id = 'navNext'; right.className = 'nav-fab right'; right.setAttribute('aria-label', 'Next section');
-    right.innerHTML = '\u2192';
-    document.body.appendChild(left); document.body.appendChild(right);
-    const getH2s = visibleSectionHeadings;
-    function currentIndex() {
-      const h2s = getH2s();
-      const y = window.scrollY + 100;
-      let idx = 0;
-      for (let i = 0; i < h2s.length; i++) { if (h2s[i].getBoundingClientRect().top + window.scrollY - 90 <= y) idx = i; }
-      return idx;
-    }
-    left.addEventListener('click', () => {
-      const h2s = getH2s(); const idx = Math.max(0, currentIndex() - 1); h2s[idx]?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    });
-    right.addEventListener('click', () => {
-      const h2s = getH2s(); const idx = Math.min(getH2s().length - 1, currentIndex() + 1); h2s[idx]?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    });
-  }
-
-  function installFocusAndShortcuts() {
-    // Focus mode toggle buttons are created in wrapSections
-    document.addEventListener('click', e => {
-      const t = e.target.closest && e.target.closest('.focus-toggle');
-      if (!t) return;
-      const card = t.closest('.card');
-      if (!card) return;
-      const isActive = document.body.classList.toggle('focus-mode');
-      document.querySelectorAll('.card').forEach(c => c.classList.remove('focused'));
-      if (isActive) card.classList.add('focused');
-      // Update all buttons text
-      document.querySelectorAll('.focus-toggle').forEach(b => b.textContent = 'Focus');
-      t.textContent = isActive ? 'Unfocus' : 'Focus';
-    });
-
-    // Collapse/expand individual card + persist state
-    document.addEventListener('click', e => {
-      const t = e.target.closest && e.target.closest('.collapse-toggle');
-      if (!t) return;
-      const card = t.closest('.card');
-      const h2 = card && card.querySelector('h2');
-      if (!card || !h2) return;
-      const collapsed = card.classList.toggle('collapsed');
-      t.setAttribute('aria-expanded', String(!collapsed));
-      t.innerHTML = collapsed
-        ? '<svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M7 14l5 5 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>'
-        : '<svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M7 10l5-5 5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-      t.title = collapsed ? 'Expand section' : 'Collapse section';
-      const map = JSON.parse(localStorage.getItem('cardCollapsed') || '{}');
-      map[h2.id] = collapsed;
-      localStorage.setItem('cardCollapsed', JSON.stringify(map));
-    });
-
-    // Expand/Collapse all
-    const expandAll = document.getElementById('expandAll');
-    const collapseAll = document.getElementById('collapseAll');
-    expandAll && expandAll.addEventListener('click', () => {
-      const map = {};
-      document.querySelectorAll('.card').forEach(c => c.classList.remove('collapsed'));
-      document.querySelectorAll('.collapse-toggle').forEach(b => { b.innerHTML = '<svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M7 10l5-5 5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>'; b.setAttribute('aria-expanded', 'true'); b.title = 'Collapse section'; });
-      localStorage.setItem('cardCollapsed', JSON.stringify(map));
-    });
-    collapseAll && collapseAll.addEventListener('click', () => {
-      const map = {};
-      document.querySelectorAll('.card').forEach(c => {
-        c.classList.add('collapsed');
-        const h2 = c.querySelector('h2'); if (h2) map[h2.id] = true;
-      });
-      document.querySelectorAll('.collapse-toggle').forEach(b => { b.innerHTML = '<svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M7 14l5 5 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>'; b.setAttribute('aria-expanded', 'false'); b.title = 'Expand section'; });
-      localStorage.setItem('cardCollapsed', JSON.stringify(map));
-    });
-
-    // Keyboard shortcuts
     document.addEventListener('keydown', e => {
       const tag = (e.target.tagName || '').toLowerCase();
-      if (tag === 'input' || tag === 'textarea' || tag === 'select' || tag === 'button') return;
-      const h2s = visibleSectionHeadings();
+      if (['input', 'textarea', 'select', 'button'].includes(tag)) return;
+      const h2s = sectionHeadings();
       if (!h2s.length) return;
-      const y = window.scrollY + 100; let idx = 0;
-      for (let i = 0; i < h2s.length; i++) { if (h2s[i].getBoundingClientRect().top + window.scrollY - 90 <= y) idx = i; }
-      if (['j','ArrowDown'].includes(e.key)) { e.preventDefault(); h2s[Math.min(h2s.length-1, idx+1)]?.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
-      if (['k','ArrowUp'].includes(e.key)) { e.preventDefault(); h2s[Math.max(0, idx-1)]?.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
-      if (e.key === 'f') { e.preventDefault(); const btn = h2s[idx]?.querySelector('.focus-toggle'); btn && btn.click(); }
-      if (e.key === 'Escape') { clearFocusMode(); }
-      if (e.key === 'c') { const btn = h2s[idx]?.querySelector('.collapse-toggle'); btn && btn.click(); }
+      const y = window.scrollY + 100;
+      let idx = 0;
+      for (let i = 0; i < h2s.length; i++) {
+        if (h2s[i].getBoundingClientRect().top + window.scrollY - 90 <= y) idx = i;
+      }
+      if (['j', 'ArrowDown'].includes(e.key)) { e.preventDefault(); h2s[Math.min(h2s.length - 1, idx + 1)]?.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+      if (['k', 'ArrowUp'].includes(e.key)) { e.preventDefault(); h2s[Math.max(0, idx - 1)]?.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+      if (e.key === 'c') { const card = h2s[idx]?.closest('.card'); if (card) setCardCollapsed(card, !card.classList.contains('collapsed'), true); }
     });
   }
 
+  function renderReport(md) {
+    setGeneratedLabel(md);
+    reportEl.innerHTML = renderer.renderMarkdown(md);
+    wrapSections(reportEl);
+    applyCollapsedState();
+    highlightPills(reportEl);
+    buildSidebar();
+    buildTopbar();
+    installInteractions();
+  }
 
+  reportEl.innerHTML = '<div class="card report-status"><p>Loading report…</p></div>';
   fetch('index.md', { cache: 'no-store' })
-    .then(r => r.text())
-    .then(md => {
-      originalMd = md;
-      const html = mdToHtml(md);
-      el.report.innerHTML = html;
-      wrapSections(el.report);
-      // Mark and handle temporary outline placeholder if present
-      (function handleTempOutline() {
-        const h2s = Array.from(document.querySelectorAll('#report h2'));
-        const temp = h2s.find(h => /temporary\s+outline/i.test(h.textContent));
-        if (!temp) return;
-        const card = temp.parentElement;
-        if (!card || !card.classList.contains('card')) return;
-        card.classList.add('temp-outline');
-        // Add a small note under the heading
-        const note = document.createElement('p');
-        note.className = 'temp-note';
-        note.textContent = 'Temporary placeholder — the full report content will replace this automatically on the next successful run.';
-        card.insertBefore(note, temp.nextSibling);
-        // If other sections exist, remove the placeholder entirely
-        const cards = Array.from(document.querySelectorAll('#report .card'));
-        if (cards.length > 1) {
-          card.remove();
-        }
-      })();
-      applyCollapsedState();
-      highlightPills(el.report);
-      const fullSections = Array.from(document.querySelectorAll('#report .card')).map(collectSection);
-      renderArchiveDigest(md, fullSections);
-      installAuditSummary();
-      installSectionFilters();
-      buildSidebar();
-      buildTopbar();
-      updateCurrentSection();
-      installNavFabs();
-      installFocusAndShortcuts();
-    })
+    .then(r => { if (!r.ok) throw new Error(`HTTP ${r.status}`); return r.text(); })
+    .then(renderReport)
     .catch(() => {
-      el.report.innerHTML = '<div class="card"><p>Unable to load report.</p></div>';
+      reportEl.innerHTML = '<div class="card report-status"><p>Unable to load the report. Please refresh to try again.</p></div>';
     });
 
-  // Theme toggle
+  // Theme toggle (persisted; dark is the default).
   function applyTheme(mode) {
-    if (mode === 'light') document.body.classList.add('light');
-    else document.body.classList.remove('light');
+    document.body.classList.toggle('light', mode === 'light');
   }
-  const saved = localStorage.getItem('theme') || 'dark';
-  applyTheme(saved);
+  applyTheme(localStorage.getItem('theme') || 'dark');
   themeBtn && themeBtn.addEventListener('click', () => {
     const next = document.body.classList.contains('light') ? 'dark' : 'light';
     localStorage.setItem('theme', next);
     applyTheme(next);
   });
 
-  // Back to top
+  // Back-to-top button and reading-progress bar.
   const back = document.getElementById('backToTop');
-  const onScroll = () => {
+  const progress = document.getElementById('progress');
+  window.addEventListener('scroll', () => {
     const y = window.scrollY || document.documentElement.scrollTop;
-    if (y > 280) back?.classList.add('show'); else back?.classList.remove('show');
-    // Progress bar
+    if (back) back.classList.toggle('show', y > 280);
     const doc = document.documentElement;
-    const h = doc.scrollHeight - doc.clientHeight;
-    const p = h > 0 ? Math.min(100, (y / h) * 100) : 0;
-    const bar = document.getElementById('progress');
-    if (bar) bar.style.width = p + '%';
-  };
-  window.addEventListener('scroll', onScroll, { passive: true });
+    const scrollable = doc.scrollHeight - doc.clientHeight;
+    if (progress) progress.style.width = (scrollable > 0 ? Math.min(100, (y / scrollable) * 100) : 0) + '%';
+  }, { passive: true });
   back && back.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
-
-  // Copy link buttons
-  document.addEventListener('click', e => {
-    const btn = e.target.closest && e.target.closest('.copy-link');
-    if (!btn) return;
-    const id = btn.getAttribute('data-target');
-    const url = new URL(window.location.href);
-    url.hash = id;
-    navigator.clipboard && navigator.clipboard.writeText(url.toString());
-    btn.textContent = 'Copied';
-    setTimeout(() => { btn.textContent = 'Copy'; }, 800);
-  });
-
-  // Collapse per-section handled earlier with persistence and icons
-
-  // Expand/Collapse all handled in installFocusAndShortcuts (with persistence)
 })();

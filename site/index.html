@@ -4,8 +4,6 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>GRC Intelligence Report</title>
-    <link rel="icon" href="static/favicon.png" type="image/png" />
-    <link rel="apple-touch-icon" href="static/favicon.png" />
     <link rel="stylesheet" href="static/style.css" />
   </head>
   <body>
@@ -18,67 +16,11 @@
           <span class="mode dark">Dark</span>
           <span class="mode light">Light</span>
         </button>
-        <div class="controls" role="group" aria-label="Report controls">
-          <div class="filter-controls" role="search" aria-label="Section filters">
-            <label class="filter-field" for="sectionSearch">
-              <span>Search</span>
-              <input id="sectionSearch" type="search" placeholder="Section text or tag" autocomplete="off" />
-            </label>
-            <label class="filter-field" for="statusFilter">
-              <span>Status</span>
-              <select id="statusFilter">
-                <option value="all">All statuses</option>
-                <option value="Action required">Action required</option>
-                <option value="Review ready">Review ready</option>
-                <option value="Needs review">Needs review</option>
-              </select>
-            </label>
-            <label class="filter-field" for="tagFilter">
-              <span>Tag</span>
-              <select id="tagFilter">
-                <option value="all">All tags</option>
-                <option value="framework">Framework</option>
-                <option value="regulation">Regulation</option>
-                <option value="risk">Risk</option>
-                <option value="control">Control</option>
-                <option value="agency">Agency</option>
-              </select>
-            </label>
-            <label class="filter-field" for="ownerFilter">
-              <span>Owner cues</span>
-              <select id="ownerFilter">
-                <option value="all">All owner cues</option>
-                <option value="detected">Owner cue detected</option>
-                <option value="missing">Missing owner cue</option>
-              </select>
-            </label>
-            <label class="filter-field" for="evidenceFilter">
-              <span>Evidence</span>
-              <select id="evidenceFilter">
-                <option value="all">All evidence states</option>
-                <option value="referenced">Source referenced</option>
-                <option value="missing">Needs source trail</option>
-              </select>
-            </label>
-            <button id="clearFilters" class="action-btn clear-filters" type="button">Clear</button>
-          </div>
-          <div class="control-buttons" role="group" aria-label="View actions">
-            <button id="expandAll" class="action-btn" type="button">
-              <svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M7 10l5-5 5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              <span>Expand all</span>
-            </button>
-            <button id="collapseAll" class="action-btn" type="button">
-              <svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M7 14l5 5 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              <span>Collapse all</span>
-            </button>
-          </div>
-        </div>
       </div>
     </header>
     <div class="topbar" id="topbar">
       <div class="container">
         <div class="topbar-scroll" id="topbarLinks" aria-label="Sections"></div>
-        <div id="topbarFilterState" class="nav-filter-state">All sections</div>
         <select id="mobileToc" class="mobile-toc" aria-label="Jump to section"></select>
       </div>
     </div>
@@ -86,19 +28,9 @@
       <div class="layout">
         <aside class="sidebar" id="sidebar">
           <h2 class="sidebar-title">Contents</h2>
-          <p id="sidebarFilterState" class="nav-filter-state">All sections</p>
           <nav id="toc"></nav>
         </aside>
         <section class="content">
-          <section id="workspaceOverview" class="workspace-overview" aria-label="Compliance workspace overview"></section>
-          <section id="archiveDigest" class="archive-digest" aria-label="Report archive and digest"></section>
-          <section id="auditSummary" class="audit-summary" aria-label="Audit-ready summary"></section>
-          <div class="filter-state" aria-live="polite">
-            <span id="filterSummary">Showing all sections</span>
-          </div>
-          <div id="activeFilterChips" class="active-filter-chips" aria-label="Active filters" hidden></div>
-          <div id="statusQuickFilters" class="status-quick-filters" aria-label="Review status quick filters"></div>
-          <div id="emptyResults" class="empty-results" hidden>No matching sections. Clear filters to return to the full report.</div>
           <div id="report" class="report"></div>
         </section>
       </div>
@@ -109,9 +41,6 @@
       </div>
     </footer>
     <script src="static/tags.js"></script>
-    <script src="static/metadata.js"></script>
-    <script src="static/filters.js"></script>
-    <script src="static/archive.js"></script>
     <script src="static/renderer.js"></script>
     <script src="static/app.js"></script>
     <button id="backToTop" class="back-to-top" aria-label="Back to top" title="Back to top">
@@ -121,4 +50,4 @@
       </svg>
     </button>
   </body>
-  </html>
+</html>
