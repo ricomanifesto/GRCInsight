@@ -13,6 +13,43 @@ MODEL_SERVICE = REPO_ROOT / "agent" / "services" / "model_service.py"
 WORKFLOWS = (CI_WORKFLOW, DEPLOY_WORKFLOW, REPORT_WORKFLOW)
 
 
+def test_model_report_prompt_requires_supported_entities_and_readable_summary():
+    from services.model_service import GRCModelService
+
+    service = GRCModelService(model_name="openrouter/nvidia/nemotron-3-ultra-550b-a55b:free")
+    prompt = service._create_report_prompt(
+        {
+            "summary": {"total_articles": 3, "grc_relevant_count": 3},
+            "source_evidence": [
+                {
+                    "title": "Exploit activity targets edge appliances",
+                    "url": "https://example.com/cve",
+                    "snippet": "CVE-2026-1234 and CVE-2026-5678 were exploited by a named group.",
+                    "cves": ["CVE-2026-1234", "CVE-2026-5678"],
+                    "threat_actors": ["APT99"],
+                }
+            ],
+            "analysis": {
+                "regulations_mentioned": ["NIST"],
+                "industries_affected": ["Technology"],
+                "risk_categories": ["Vulnerability and patch management"],
+            },
+        },
+        {"title": "Cybersecurity News Aggregator"},
+    )
+
+    assert "Executive Summary must be 2-4 short paragraphs" in prompt
+    assert "Threat Actor Activities" in prompt
+    assert "article-supported threat actor" in prompt
+    assert "Do not reuse stale actor names" in prompt
+    assert "FishMonger" in prompt
+    assert "List every article-supported CVE" in prompt
+    assert "Do not cap the CVE section at one item" in prompt
+    assert "Source Evidence for Entity Sections" in prompt
+    assert "CVE-2026-1234, CVE-2026-5678" in prompt
+    assert "Threat Actors: APT99" in prompt
+
+
 def test_report_generation_workflow_accepts_repository_dispatch_payloads():
     workflow = REPORT_WORKFLOW.read_text()
 
@@ -42,10 +79,15 @@ def test_report_generation_payload_uses_provider_model_runtime_config():
 
 def test_site_report_check_accepts_fallback_numbered_sections():
     check_script = SITE_REPORT_CHECK.read_text()
+    renderer = (REPO_ROOT / "site" / "static" / "renderer.js").read_text()
 
     assert "REPORT_SECTION_LABELS" in check_script
     assert "NUMBERED_SECTION_PATTERN" in check_script
     assert "is_report_section" in check_script
+    assert "Threat Actor Activities" in check_script
+    assert "CVE and Vulnerability Highlights" in check_script
+    assert "Threat Actor Activities" in renderer
+    assert "CVE and Vulnerability Highlights" in renderer
     assert "1) Executive Summary" not in check_script
 
 

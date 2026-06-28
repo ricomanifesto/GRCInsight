@@ -2,6 +2,7 @@
 
 from collections import Counter
 from datetime import datetime, timezone
+import re
 from typing import Dict, Any, List
 from loguru import logger
 
@@ -20,6 +21,8 @@ from core.entities import analyze_article_grc_content
 
 # Initialize services
 rss_service = RSSService()
+SOURCE_EVIDENCE_LIMIT = 12
+REPORT_CVE_LIMIT = 10
 
 
 def _utc_now() -> datetime:
@@ -111,6 +114,92 @@ def _build_article_reason(local: Dict[str, Any], risk_categories: List[str]) -> 
     if risk_categories:
         return f"Risk themes: {', '.join(risk_categories[:2])}"
     return "Operational and compliance monitoring signal"
+
+
+def _extract_cves(text: str) -> List[str]:
+    """Extract CVE identifiers from article text while preserving first-seen order."""
+    seen = set()
+    cves = []
+    for match in re.finditer(r"\bCVE-\d{4}-\d{4,}\b", text, re.IGNORECASE):
+        cve = match.group(0).upper()
+        if cve not in seen:
+            seen.add(cve)
+            cves.append(cve)
+    return cves
+
+
+def _extract_threat_actors(text: str) -> List[str]:
+    """Extract explicit threat actor names from source text."""
+    seen = set()
+    actors = []
+    patterns = (
+        r"\b(?:threat actor|threat group|actor|group)\s+(?:known as|tracked as|called|named)\s+([A-Z][A-Za-z0-9_-]{2,40}(?:\s+[A-Z][A-Za-z0-9_-]{2,40}){0,2})\b",
+        r"\b((?:APT|TA|UNC|FIN|DEV)[ -]?\d{2,}[A-Za-z0-9_-]*)\b",
+        r"\b(Volt Typhoon|Scattered Spider)\b",
+    )
+    for pattern in patterns:
+        for match in re.finditer(pattern, text):
+            actor = re.sub(r"\s+", " ", match.group(1).strip())
+            if actor.lower() in {"the", "and", "with", "from", "this"}:
+                continue
+            if actor not in seen:
+                seen.add(actor)
+                actors.append(actor)
+
+    return [
+        actor
+        for actor in actors
+        if not any(
+            actor != other and actor in other.split(" also known as ")[0] for other in actors
+        )
+    ]
+
+
+def _build_source_evidence(enriched_articles: List[ArticleInput]) -> List[Dict[str, Any]]:
+    """Build bounded article evidence for model report entity sections."""
+    evidence = []
+    for article in enriched_articles:
+        text = "\n".join(filter(None, [article.title, article.summary, article.content]))
+        snippet = re.sub(r"\s+", " ", text).strip()[:700]
+        evidence.append(
+            {
+                "title": article.title,
+                "url": article.url,
+                "snippet": snippet,
+                "cves": _extract_cves(text),
+                "threat_actors": _extract_threat_actors(text),
+            }
+        )
+
+    selected = []
+    selected_ids = set()
+    selected_cves = set()
+
+    def add(item: Dict[str, Any]) -> bool:
+        if len(selected) >= SOURCE_EVIDENCE_LIMIT:
+            return False
+        item_id = id(item)
+        if item_id in selected_ids:
+            return False
+        selected.append(item)
+        selected_ids.add(item_id)
+        return True
+
+    for item in evidence:
+        if len(selected_cves) >= REPORT_CVE_LIMIT:
+            break
+        new_cves = [cve for cve in item["cves"] if cve not in selected_cves]
+        if new_cves and add(item):
+            selected_cves.update(new_cves)
+
+    for item in evidence:
+        if item["threat_actors"]:
+            add(item)
+
+    for item in evidence:
+        add(item)
+
+    return selected
 
 
 def _build_local_analysis(enriched_articles: List[ArticleInput]):
@@ -390,6 +479,7 @@ async def run_grc_analysis_endpoint(feed_url: str, config: GRCAnalysisConfig) ->
 
         grc_article_count = analysis_results.get("summary", {}).get("grc_relevant_count", 0)
         logger.info(f"Found {grc_article_count} articles with GRC content")
+        analysis_results["source_evidence"] = _build_source_evidence(enriched_articles)
 
         # Build per-article output
         identified = set()
