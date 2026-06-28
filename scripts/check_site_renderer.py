@@ -179,7 +179,13 @@ const fallbackMarkdown = `# GRC Intelligence Report - 2026-06-27
 2) Risk Assessment
 - Current fallback risk.
 
-3. Recommendations for Action
+3. Threat Actor Activities
+- Current actor activity.
+
+4. CVE and Vulnerability Highlights
+- CVE coverage.
+
+5. Recommendations for Action
 - Current fallback actions.
 
 1. Review vendor contracts.
@@ -187,6 +193,8 @@ const fallbackMarkdown = `# GRC Intelligence Report - 2026-06-27
 const normalizedFallbackMarkdown = renderer.normalizeReportMarkdown(fallbackMarkdown);
 assert(normalizedFallbackMarkdown.includes('## Executive Summary'), 'numbered fallback section labels should normalize to h2 headings');
 assert(normalizedFallbackMarkdown.includes('## Risk Assessment'), 'numbered fallback section labels should normalize each fallback section heading');
+assert(normalizedFallbackMarkdown.includes('## Threat Actor Activities'), 'threat actor fallback section should normalize to an h2 heading');
+assert(normalizedFallbackMarkdown.includes('## CVE and Vulnerability Highlights'), 'CVE fallback section should normalize to an h2 heading');
 assert(normalizedFallbackMarkdown.includes('## Recommendations for Action'), 'dotted numbered fallback section labels should normalize to h2 headings');
 assert(normalizedFallbackMarkdown.includes('1. Review vendor contracts.'), 'normalization should not promote numbered action items into h2 headings');
 const canonicalMarkdown = `# GRC Intelligence Report

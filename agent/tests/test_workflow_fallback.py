@@ -1,8 +1,168 @@
 import asyncio
+from datetime import datetime, timezone
 
 from core import workflow as workflow_mod
-from models.api import GRCAnalysisConfig
+from models.api import ArticleInput, GRCAnalysisConfig
 from services.rss_service import RSSService
+
+
+def test_source_evidence_preserves_later_cve_articles():
+    published = datetime(2026, 3, 20, tzinfo=timezone.utc)
+    articles = [
+        ArticleInput(
+            title=f"Governance update {index}",
+            url=f"https://example.com/governance-{index}",
+            summary="Compliance governance update without a vulnerability identifier.",
+            published=published,
+            content="Risk oversight and control monitoring guidance.",
+        )
+        for index in range(12)
+    ]
+    articles.append(
+        ArticleInput(
+            title="Vendor patch advisory",
+            url="https://example.com/cve",
+            summary="Emergency patch guidance for CVE-2026-9999.",
+            published=published,
+            content="CVE-2026-9999 affects regulated environments.",
+        )
+    )
+
+    evidence = workflow_mod._build_source_evidence(articles)
+
+    assert len(evidence) == 12
+    assert evidence[0]["title"] == "Vendor patch advisory"
+    assert evidence[0]["cves"] == ["CVE-2026-9999"]
+
+
+def test_source_evidence_preserves_actor_articles_when_cve_volume_is_high():
+    published = datetime(2026, 3, 20, tzinfo=timezone.utc)
+    articles = [
+        ArticleInput(
+            title=f"Vendor patch advisory {index}",
+            url=f"https://example.com/cve-{index}",
+            summary=f"Patch guidance for CVE-2026-{1000 + index}.",
+            published=published,
+            content=f"CVE-2026-{1000 + index} affects regulated environments.",
+        )
+        for index in range(12)
+    ]
+    articles.append(
+        ArticleInput(
+            title="Threat group activity update",
+            url="https://example.com/actor",
+            summary="Threat actor APT99 targeted regulated environments.",
+            published=published,
+            content="APT99 used credential theft against compliance teams.",
+        )
+    )
+
+    evidence = workflow_mod._build_source_evidence(articles)
+
+    assert len(evidence) == 12
+    assert any(item["threat_actors"] == ["APT99"] for item in evidence)
+
+
+def test_source_evidence_skips_duplicate_cve_articles_for_new_cve_sources():
+    published = datetime(2026, 3, 20, tzinfo=timezone.utc)
+    articles = [
+        ArticleInput(
+            title=f"Duplicate vendor advisory {index}",
+            url=f"https://example.com/duplicate-cve-{index}",
+            summary="Patch guidance for CVE-2026-1000.",
+            published=published,
+            content="CVE-2026-1000 affects regulated environments.",
+        )
+        for index in range(12)
+    ]
+    articles.append(
+        ArticleInput(
+            title="Different CVE advisory",
+            url="https://example.com/new-cve",
+            summary="Patch guidance for CVE-2026-2000.",
+            published=published,
+            content="CVE-2026-2000 affects regulated environments.",
+        )
+    )
+
+    evidence = workflow_mod._build_source_evidence(articles)
+
+    assert any(item["cves"] == ["CVE-2026-2000"] for item in evidence)
+
+
+def test_source_evidence_uses_full_multiword_actor_names():
+    published = datetime(2026, 3, 20, tzinfo=timezone.utc)
+    article = ArticleInput(
+        title="Threat Actor Volt Typhoon Targets Agencies",
+        url="https://example.com/actor",
+        summary="Threat actor Volt Typhoon targeted regulated environments.",
+        published=published,
+        content="Volt Typhoon used credential theft against compliance teams.",
+    )
+
+    evidence = workflow_mod._build_source_evidence([article])
+
+    assert evidence[0]["threat_actors"] == ["Volt Typhoon"]
+
+
+def test_source_evidence_does_not_overcapture_headline_words_as_actor_names():
+    published = datetime(2026, 3, 20, tzinfo=timezone.utc)
+    article = ArticleInput(
+        title="Threat Actor APT99 Targets Banks",
+        url="https://example.com/actor-headline",
+        summary="APT99 targeted regulated banks.",
+        published=published,
+        content="APT99 used credential theft against compliance teams.",
+    )
+
+    evidence = workflow_mod._build_source_evidence([article])
+
+    assert evidence[0]["threat_actors"] == ["APT99"]
+
+
+def test_source_evidence_ignores_non_actor_storm_center_mentions():
+    published = datetime(2026, 3, 20, tzinfo=timezone.utc)
+    article = ArticleInput(
+        title="SANS Internet Storm Center update",
+        url="https://example.com/storm-center",
+        summary="SANS Internet Storm Center published a defensive update.",
+        published=published,
+        content="No threat actor activity was attributed in the article.",
+    )
+
+    evidence = workflow_mod._build_source_evidence([article])
+
+    assert evidence[0]["threat_actors"] == []
+
+
+def test_source_evidence_does_not_classify_finra_as_actor():
+    published = datetime(2026, 3, 20, tzinfo=timezone.utc)
+    article = ArticleInput(
+        title="SEC and FINRA issue cybersecurity guidance",
+        url="https://example.com/finra",
+        summary="SEC and FINRA issued routine cybersecurity guidance.",
+        published=published,
+        content="The regulatory update did not attribute threat actor activity.",
+    )
+
+    evidence = workflow_mod._build_source_evidence([article])
+
+    assert evidence[0]["threat_actors"] == []
+
+
+def test_source_evidence_accepts_long_cve_identifiers():
+    published = datetime(2026, 3, 20, tzinfo=timezone.utc)
+    article = ArticleInput(
+        title="Long CVE advisory",
+        url="https://example.com/long-cve",
+        summary="Patch guidance for CVE-2026-12345678.",
+        published=published,
+        content="CVE-2026-12345678 affects regulated environments.",
+    )
+
+    evidence = workflow_mod._build_source_evidence([article])
+
+    assert evidence[0]["cves"] == ["CVE-2026-12345678"]
 
 
 def test_run_grc_analysis_endpoint_falls_back_when_model_is_unavailable(monkeypatch):
@@ -66,6 +226,8 @@ def test_run_grc_analysis_endpoint_falls_back_when_model_is_unavailable(monkeypa
 
 
 def test_run_grc_analysis_endpoint_marks_model_backed_reports(monkeypatch):
+    captured_report_inputs = []
+
     async def fake_fetch_feed(_feed_url):
         return {
             "title": "Test Feed",
@@ -75,7 +237,7 @@ def test_run_grc_analysis_endpoint_marks_model_backed_reports(monkeypatch):
                     "link": "https://example.com/nist",
                     "description": "Framework control update",
                     "published": "Thu, 20 Mar 2026 00:00:00 GMT",
-                    "content": "NIST control guidance for regulated teams.",
+                    "content": "NIST control guidance for regulated teams references CVE-2026-1234.",
                 }
             ],
         }
@@ -104,7 +266,8 @@ def test_run_grc_analysis_endpoint_marks_model_backed_reports(monkeypatch):
                 },
             }
 
-        async def generate_grc_report(self, _analysis_results, _feed_data):
+        async def generate_grc_report(self, analysis_results, _feed_data):
+            captured_report_inputs.append(analysis_results)
             return "# Model-backed GRC Intelligence Report\n\n1) Executive Summary\n- Model output."
 
     monkeypatch.setattr(workflow_mod.rss_service, "fetch_feed", fake_fetch_feed)
@@ -122,6 +285,12 @@ def test_run_grc_analysis_endpoint_marks_model_backed_reports(monkeypatch):
     assert response.metadata is not None
     assert response.metadata.analysis_mode == "model"
     assert response.metadata.fallback_reason is None
+    assert captured_report_inputs
+    assert captured_report_inputs[0]["source_evidence"][0]["cves"] == ["CVE-2026-1234"]
+    assert (
+        "NIST publishes new control guidance"
+        in captured_report_inputs[0]["source_evidence"][0]["title"]
+    )
 
 
 def test_run_grc_analysis_endpoint_passes_request_model_config(monkeypatch):
