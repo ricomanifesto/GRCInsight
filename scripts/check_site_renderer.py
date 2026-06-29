@@ -74,6 +74,28 @@ assert(boldParagraph.trim().startsWith('<p>') && boldParagraph.trim().endsWith('
 assert((boldParagraph.match(/<p>/g) || []).length === 1, 'a single source paragraph should produce exactly one <p>');
 assert(!/^\\s*<strong>/.test(boldParagraph), 'bold paragraphs must not leak <strong> as a top-level node');
 
+// Regression: paragraphs adjacent to lists keep their own <p>. Block constructs
+// consume the newline that ended their last line, collapsing the blank-line
+// separator and merging an adjacent paragraph into the block; that leaked the
+// paragraph out unwrapped (lone-comma fragments in the card grid).
+const paraThenList = renderer.renderMarkdown('Intro with commas, A, B, and C.\\n\\n- first item\\n- second item');
+assert(paraThenList.includes('<p>Intro with commas, A, B, and C.</p>'), 'a paragraph before a list must stay wrapped in its own <p>');
+assert(paraThenList.includes('<ul><li>first item</li><li>second item</li></ul>'), 'the following list must still render as a <ul>');
+assert(!/,\\s*<\\/p>\\s*$/.test(paraThenList), 'the paragraph must not be truncated at a trailing comma');
+
+const listThenPara = renderer.renderMarkdown('- first item\\n- second item\\n\\n**Takeaway:** a closing, comma-bearing paragraph.');
+assert(listThenPara.includes('<ul><li>first item</li><li>second item</li></ul>'), 'the list before a paragraph must render as a <ul>');
+assert(listThenPara.includes('<p><strong>Takeaway:</strong> a closing, comma-bearing paragraph.</p>'), 'a paragraph after a list must stay wrapped in its own <p>');
+
+const orderedThenPara = renderer.renderMarkdown('1. step one\\n2. step two\\n\\nClosing paragraph with a, comma.');
+assert(orderedThenPara.includes('<ol><li>step one</li><li>step two</li></ol>'), 'the ordered list before a paragraph must render as an <ol>');
+assert(orderedThenPara.includes('<p>Closing paragraph with a, comma.</p>'), 'a paragraph after an ordered list must stay wrapped in its own <p>');
+
+// A multi-line fenced code block survives paragraph assembly intact.
+const withCode = renderer.renderMarkdown('Intro line.\\n\\n```\\nrow one\\nrow two\\n```\\n\\nAfter the block.');
+assert(withCode.includes('<pre><code>row one\\nrow two</code></pre>'), 'multi-line code blocks must render as a single pre/code with their newlines intact');
+assert(withCode.includes('<p>Intro line.</p>') && withCode.includes('<p>After the block.</p>'), 'paragraphs around a code block must each stay wrapped');
+
 // Tag catalog shape.
 const byKey = Object.fromEntries(tags.categories.map(c => [c.key, c]));
 assert(byKey.frameworks && byKey.frameworks.pillClass === 'framework' && byKey.frameworks.terms.includes('NIST'), 'framework category should expose framework pills');
