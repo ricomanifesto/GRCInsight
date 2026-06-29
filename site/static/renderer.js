@@ -93,7 +93,6 @@
     });
 
     let html = escapeHtml(md);
-    html = html.replace(/%%CODEBLOCK_(\d+)%%/g, (_, i) => `<pre><code>${escapeHtml(codeBlocks[+i])}</code></pre>`);
     html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
     html = html.replace(/\*([^*]+)\*/g, '<em>$1</em>');
     html = html.replace(/^####\s+(.*)$/gm, '<h4>$1</h4>');
@@ -107,19 +106,38 @@
     html = html.replace(/^\*{3,}$/gm, '<hr>');
     html = html.replace(/^(?:&gt;\s?.*(?:\n|$))+/gm, m => `<blockquote>${m.replace(/^&gt;\s?/gm, '').trim()}</blockquote>`);
     html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_, text, url) => renderMarkdownLink(text, url));
-    html = html.replace(/^(?:\s*-\s+.*(?:\n|$))+/gm, m => renderNestedList(m));
+    // Leading indent is horizontal whitespace only ([ \t]*, not \s*) so the
+    // pattern never reaches across the blank line that precedes a list.
+    html = html.replace(/^(?:[ \t]*-\s+.*(?:\n|$))+/gm, m => renderNestedList(m));
     html = html.replace(/^(?:\d+\.\s+.*(?:\n|$))+/gm, m => {
       const items = m.trim().split(/\n/).filter(l => /^\d+\.\s+/.test(l));
       return '<ol>' + items.map(l => `<li>${l.replace(/^\d+\.\s+/, '')}</li>`).join('') + '</ol>';
     });
-    // Wrap remaining blocks in <p>. A block is left alone only when it already
-    // carries a block-level tag; inline-only content (including bold-only
-    // paragraphs) must be wrapped so it does not leak out as loose nodes.
-    html = html
-      .split(/\n\n+/)
-      .map(block => /<(h\d|ul|ol|li|table|div|hr|pre|blockquote)/.test(block) ? block : `<p>${block.trim()}</p>`)
-      .join('\n');
-    return html.replace(/<p>\s*<\/p>/g, '');
+    // Assemble paragraphs line by line rather than by blank-line splitting.
+    // Each block construct above consumes the newline that ended its last line,
+    // which can collapse the blank line separating it from an adjacent
+    // paragraph; grouping by line keeps that paragraph in its own <p> instead
+    // of leaking it out as loose inline nodes. Block-level lines (and the
+    // single-line code-block placeholders) pass through untouched.
+    const blockLine = /^\s*(?:<(?:h\d|ul|ol|li|table|div|hr|pre|blockquote)|%%CODEBLOCK_\d+%%)/;
+    const assembled = [];
+    let paragraph = [];
+    const flushParagraph = () => {
+      if (!paragraph.length) return;
+      const text = paragraph.join('\n').trim();
+      if (text) assembled.push(`<p>${text}</p>`);
+      paragraph = [];
+    };
+    html.split('\n').forEach(line => {
+      if (!line.trim()) { flushParagraph(); return; }
+      if (blockLine.test(line)) { flushParagraph(); assembled.push(line); return; }
+      paragraph.push(line);
+    });
+    flushParagraph();
+    html = assembled.join('\n');
+    // Restore fenced code blocks last so their internal newlines never affect
+    // paragraph assembly.
+    return html.replace(/%%CODEBLOCK_(\d+)%%/g, (_, i) => `<pre><code>${escapeHtml(codeBlocks[+i])}</code></pre>`);
   }
 
   window.GRCInsightRenderer = {
