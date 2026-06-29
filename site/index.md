@@ -1,5 +1,5 @@
 # GRC Intelligence Report - 2026-06-29
-**Generated:** 2026-06-29T14:25:46.492791Z
+**Generated:** 2026-06-29T16:25:36.040807Z
 
 **Analysis Period:** Current Quarter (June 2026)
 **Date of Issue:** June 2026
@@ -18,8 +18,8 @@ Unable to generate report: OpenRouter response did not include choices.
 
 2) Key Regulatory Developments
 Observations
-- Explicit regulation references detected: PCI-DSS, GDPR, CCPA, ISO 27001, NIST.
-- Framework references detected: NIST, ISO 27001.
+- Explicit regulation references detected: GDPR, NIST.
+- Framework references detected: NIST.
 Implications for Business
 - Teams should treat major cyber incidents, sanctions activity, and regulator advisories as compliance-relevant events even when source articles are operational in nature.
 - Evidence capture, executive escalation, and breach-notification decision support remain priority governance controls.
