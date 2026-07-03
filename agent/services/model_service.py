@@ -220,6 +220,28 @@ Focus only on content with clear governance, risk, or compliance implications.""
         regulations = analysis_data.get("analysis", {}).get("regulations_mentioned", [])
         industries = analysis_data.get("analysis", {}).get("industries_affected", [])
         risks = analysis_data.get("analysis", {}).get("risk_categories", [])
+        source_evidence = analysis_data.get("source_evidence", [])
+
+        source_lines = []
+        for index, evidence in enumerate(source_evidence, 1):
+            cves = evidence.get("cves", []) or []
+            threat_actors = evidence.get("threat_actors", []) or []
+            source_lines.append(
+                "\n".join(
+                    [
+                        f"{index}. {evidence.get('title', 'Untitled source')}",
+                        f"   URL: {evidence.get('url', 'No URL')}",
+                        f"   CVEs: {', '.join(cves) if cves else 'None detected'}",
+                        f"   Threat Actors: {', '.join(threat_actors) if threat_actors else 'None detected'}",
+                        f"   Snippet: {evidence.get('snippet', 'No snippet available')}",
+                    ]
+                )
+            )
+        source_evidence_text = (
+            "\n\n".join(source_lines)
+            if source_lines
+            else "No source evidence snippets were provided."
+        )
 
         return f"""Create a GRC Intelligence Report based on this analysis:
 
@@ -235,12 +257,23 @@ Key Findings:
 - Industries Affected: {', '.join(industries) if industries else 'Multiple sectors'}
 - Risk Categories: {', '.join(risks) if risks else 'Various risk types'}
 
+Source Evidence for Entity Sections:
+{source_evidence_text}
+
 Please create a professional executive summary report with:
 1. Executive Summary
 2. Key Regulatory Developments
 3. Industry Impact Analysis
-4. Risk Assessment
-5. Recommendations for Action
+4. Threat Actor Activities
+5. CVE and Vulnerability Highlights
+6. Risk Assessment
+7. Recommendations for Action
+
+Executive Summary must be 2-4 short paragraphs, separated by blank lines. Keep each paragraph focused on one executive decision theme; do not write the summary as one long block.
+
+Threat Actor Activities must include only article-supported threat actor activity. Do not reuse stale actor names, examples, or prior report content; for example, do not mention FishMonger unless it appears in the current source articles. If no article-supported threat actor activity appears, state that no article-supported threat actor activity was identified in this reporting period.
+
+CVE and Vulnerability Highlights: List every article-supported CVE identifier up to 10 items with a short business-impact note. Do not cap the CVE section at one item when multiple CVEs appear in the source articles. If no CVE identifiers are present, state that no article-supported CVEs were identified.
 
 IMPORTANT: The Date of Issue in the report header MUST be "{today}" (the current month/year). Do NOT use any other date.
 
