@@ -1,5 +1,5 @@
 # GRC Intelligence Report - 2026-07-04
-**Generated:** 2026-07-04T14:26:27.048083Z
+**Generated:** 2026-07-04T16:09:17.336213Z
 
 **Analysis Period:** Current Quarter (July 2026)
 **Date of Issue:** July 2026
@@ -9,7 +9,7 @@
 ---
 
 1) Executive Summary
-- This report was generated using deterministic local analysis because AI generation was temporarily unavailable: OpenRouter response did not include choices.
+- This report was generated using deterministic local analysis because AI generation was temporarily unavailable: peer closed connection without sending complete message body (incomplete chunked read).
 - The monitored feed continues to surface material GRC monitoring signals across 30 current articles.
 - Dominant themes in the current batch include Identity and access security, Ransomware and malware operations, Vulnerability and patch management.
 - Business impact remains concentrated in incident response readiness, disclosure obligations, control effectiveness, and board-level risk oversight.
