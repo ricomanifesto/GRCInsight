@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 """Validate the committed GitHub Pages report artifact."""
 
+import json
 import re
+import xml.etree.ElementTree as ET
 from pathlib import Path
 
 
@@ -9,9 +11,16 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 SITE_DIR = REPO_ROOT / "site"
 INDEX_HTML = SITE_DIR / "index.html"
 INDEX_MD = SITE_DIR / "index.md"
+SITEMAP_XML = SITE_DIR / "sitemap.xml"
 APP_JS = SITE_DIR / "static" / "app.js"
 RENDERER_JS = SITE_DIR / "static" / "renderer.js"
 TAGS_JS = SITE_DIR / "static" / "tags.js"
+PUBLIC_SITE_URL = "https://ricomanifesto.github.io/GRCInsight/"
+PUBLIC_DESCRIPTION = (
+    "GRCInsight turns regulatory and security feeds into audit-ready GRC "
+    "intelligence, with framework mapping, agency signals, industry relevance, "
+    "and concise action-oriented reports."
+)
 REPORT_SECTION_LABELS = {
     "Executive Summary",
     "Key Regulatory Developments",
@@ -309,12 +318,67 @@ def is_report_section(line: str) -> bool:
     return match.group(1).strip() in REPORT_SECTION_LABELS
 
 
+def validate_site_identity(html: str, sitemap_xml: str) -> None:
+    expected_html = (
+        f'<meta name="description" content="{PUBLIC_DESCRIPTION}">',
+        f'<link rel="canonical" href="{PUBLIC_SITE_URL}">',
+        f'<meta property="og:url" content="{PUBLIC_SITE_URL}">',
+        '<meta name="twitter:card" content="summary">',
+        'href="https://ricomanifesto.com/">Michael Rico</a>',
+        '<noscript>',
+    )
+    for expected in expected_html:
+        if expected not in html:
+            fail(f"index.html missing public identity contract: {expected}")
+
+    match = re.search(
+        r'<script type="application/ld\+json">(.*?)</script>', html, re.DOTALL
+    )
+    if match is None:
+        fail("index.html missing JSON-LD project identity")
+    try:
+        identity = json.loads(match.group(1))
+    except json.JSONDecodeError as error:
+        fail(f"index.html JSON-LD is invalid: {error}")
+
+    expected_author = {
+        "@type": "Person",
+        "name": "Michael Rico",
+        "url": "https://ricomanifesto.com/",
+    }
+    if (
+        identity.get("@context") != "https://schema.org"
+        or identity.get("@type") != "WebSite"
+        or identity.get("name") != "GRCInsight"
+        or identity.get("url") != PUBLIC_SITE_URL
+        or identity.get("description") != PUBLIC_DESCRIPTION
+        or identity.get("author") != expected_author
+        or identity.get("sameAs")
+        != "https://github.com/ricomanifesto/GRCInsight"
+    ):
+        fail("index.html JSON-LD does not match the public GRCInsight identity contract")
+
+    try:
+        sitemap = ET.fromstring(sitemap_xml)
+    except ET.ParseError as error:
+        fail(f"sitemap.xml is invalid XML: {error}")
+    namespace = {"s": "http://www.sitemaps.org/schemas/sitemap/0.9"}
+    locations = [
+        element.text for element in sitemap.findall("s:url/s:loc", namespace)
+    ]
+    if locations != [PUBLIC_SITE_URL]:
+        fail("sitemap.xml must contain only the canonical GRCInsight project URL")
+
+
 def main() -> None:
     html = read_text(INDEX_HTML)
     markdown = read_text(INDEX_MD)
+    sitemap_xml = read_text(SITEMAP_XML)
     app_js = read_text(APP_JS)
     renderer_js = read_text(RENDERER_JS)
     tags_js = read_text(TAGS_JS)
+
+    validate_site_identity(html, sitemap_xml)
 
     # The page loads exactly one script per concern: the tag catalog, the
     # canonical renderer, and the page controller.
