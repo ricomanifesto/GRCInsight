@@ -1,5 +1,5 @@
 terraform {
-  required_version = ">= 1.5.0"
+  required_version = ">= 1.6.0"
   required_providers {
     aws = {
       source  = "hashicorp/aws"
@@ -48,4 +48,3 @@ resource "aws_dynamodb_table" "articles" {
 
   tags = var.tags
 }
-
