@@ -80,6 +80,11 @@ payload*.b64
 .cache/
 .pytest_cache/
 
+# Terraform local state and provider cache
+.terraform/
+*.tfstate
+*.tfstate.*
+
 # Coverage reports
 htmlcov/
 .coverage
