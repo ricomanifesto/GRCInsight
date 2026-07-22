@@ -1,11 +1,17 @@
 """Configuration settings for the FastAPI application."""
 
-from pydantic_settings import BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
 from typing import List
 
 
 class Settings(BaseSettings):
     """Application settings."""
+
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        env_file_encoding="utf-8",
+        extra="ignore",
+    )
 
     # Server configuration
     host: str = "0.0.0.0"
@@ -35,11 +41,6 @@ class Settings(BaseSettings):
 
     # CORS configuration
     cors_allowed_origins: List[str] = ["*"]
-
-    class Config:
-        env_file = ".env"
-        env_file_encoding = "utf-8"
-        extra = "ignore"  # Ignore extra fields from .env file
 
 
 # Global settings instance
