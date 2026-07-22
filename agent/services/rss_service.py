@@ -29,6 +29,8 @@ class RSSService:
 
             # Parse the feed
             feed = feedparser.parse(response.text)
+            if feed.bozo and not feed.entries:
+                raise ValueError(f"RSS feed parsing failed: {feed.bozo_exception}")
 
             # Extract entries
             entries = []

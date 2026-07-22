@@ -5,6 +5,32 @@ from models.api import GRCAnalysisConfig
 from services.rss_service import RSSService
 
 
+class StaticFeedResponse:
+    status_code = 200
+
+    def __init__(self, text):
+        self.text = text
+
+    def raise_for_status(self):
+        return None
+
+
+class StaticFeedAsyncClient:
+    response_text = ""
+
+    def __init__(self, *args, **kwargs):
+        pass
+
+    async def __aenter__(self):
+        return self
+
+    async def __aexit__(self, exc_type, exc_val, exc_tb):
+        return None
+
+    async def get(self, _url, timeout=None):
+        return StaticFeedResponse(type(self).response_text)
+
+
 def test_run_grc_analysis_endpoint_falls_back_when_model_is_unavailable(monkeypatch):
     async def fake_fetch_feed(_feed_url):
         return {
@@ -234,3 +260,35 @@ def test_rss_service_fetch_feed_survives_multiple_event_loops(monkeypatch):
 
     assert first_result["entry_count"] == 1
     assert second_result["entry_count"] == 1
+
+
+def test_unrecoverable_malformed_feed_maps_to_rss_fetch_failure(monkeypatch):
+    StaticFeedAsyncClient.response_text = "not xml at all"
+    monkeypatch.setattr("services.rss_service.httpx.AsyncClient", StaticFeedAsyncClient)
+
+    response = asyncio.run(
+        workflow_mod.run_grc_analysis_endpoint(
+            "https://example.com/feed.xml",
+            GRCAnalysisConfig(),
+        )
+    )
+
+    assert response.status == "failed"
+    assert response.error is not None
+    assert response.error.code == "RSS_FETCH_FAILED"
+    assert "RSS feed parsing failed" in (response.error.details or "")
+
+
+def test_malformed_feed_with_recoverable_entries_remains_usable(monkeypatch):
+    StaticFeedAsyncClient.response_text = (
+        "<rss><channel><title>Recovered</title><item><title>One</title>"
+        "<link>https://example.com/one</link>"
+    )
+    monkeypatch.setattr("services.rss_service.httpx.AsyncClient", StaticFeedAsyncClient)
+
+    result = asyncio.run(RSSService().fetch_feed("https://example.com/feed.xml"))
+
+    assert "error" not in result
+    assert result["title"] == "Recovered"
+    assert result["entry_count"] == 1
+    assert result["entries"][0]["title"] == "One"
