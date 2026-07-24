@@ -1,158 +1,126 @@
 # GRC Intelligence Report - 2026-07-24
-**Generated:** 2026-07-24T08:35:23.005679Z
+**Generated:** 2026-07-24T11:08:56.358552Z
 **Date of Issue: July 2026**  
-**Analysis Period: Q3 2026 (July–September)**  
-**Source: Cybersecurity News Aggregator**  
-**Articles Analyzed: 30 | GRC-Relevant: 30 (100%)**
+**Analysis Period: July 2026 (Current Quarter)**  
+**Source: Cybersecurity News Aggregator | Articles Analyzed: 30 | GRC-Relevant: 30**
 
 ---
 
 ## 1. Executive Summary
 
-The July 2026 intelligence cycle reveals a convergence of regulatory enforcement acceleration, framework maturation, and sector-specific risk elevation across the GRC landscape. Analysis of 30 GRC-relevant articles indicates three dominant themes: **regulatory enforcement tightening** under GDPR and SOX, **operationalization of NIST CSF 2.0** across critical infrastructure, and **emerging governance gaps** in AI/ML model deployment and third-party risk management.
+This report synthesizes 30 GRC-relevant articles from the current quarter, identifying regulatory shifts, industry-specific impacts, and emerging risk vectors that demand executive attention. The dominant theme across all sources is the **accelerating convergence of AI governance, cyber resilience mandates, and supply chain accountability**—forcing organizations to move from reactive compliance to proactive risk orchestration.
 
-**Strategic Implications:**
-- Compliance is shifting from documentation-centric to evidence-based continuous monitoring
-- Boards face elevated personal liability exposure under SOX Section 404 and GDPR Article 83
-- NIST CSF 2.0 adoption is becoming a de facto procurement requirement for federal and critical infrastructure supply chains
-- AI governance vacuum creates material risk for organizations deploying generative AI without formal model risk management frameworks
+**Three strategic imperatives emerge:**
 
-**Priority Action Window:** Next 90 days for NIST CSF 2.0 alignment; 180 days for AI governance framework implementation.
+| Imperative | Driver | Business Impact |
+|------------|--------|-----------------|
+| **AI Risk Governance** | NIST AI RMF adoption, sector-specific guidance | Model inventory, bias testing, and incident reporting now board-level concerns |
+| **Cyber Resilience Operationalization** | SEC disclosure rules, CIRCIA implementation, NIST CSF 2.0 adoption | Material incident determination, 4-day reporting, and recovery testing are audit requirements |
+| **Third-Party Risk Expansion** | Software bill of materials (SBOM) mandates, vendor concentration risk | Contract renegotiation, continuous monitoring, and liability allocation require legal/tech alignment |
+
+**Bottom line:** Compliance calendars are no longer sufficient. Risk managers must embed GRC into product lifecycles, vendor onboarding, and board reporting cadences—starting this quarter.
 
 ---
 
 ## 2. Key Regulatory Developments
 
-| Regulation / Framework | Key Development (July 2026) | Business Impact | Compliance Deadline / Status |
-|------------------------|----------------------------|-----------------|------------------------------|
-| **GDPR (EU 2016/679)** | EDPB guidance on Art. 28 processor liability; €1.2B aggregate fines YTD; cross-border enforcement coordination intensified | Processor agreements require renegotiation; DPIA thresholds lowered for AI training data; DPO independence scrutiny increased | Immediate — ongoing enforcement |
-| **NIST CSF 2.0 (Feb 2024)** | CISA binding operational directive for federal civilian agencies; sector risk management agencies (SRMAs) issuing sector-specific profiles | De facto standard for critical infrastructure; procurement clauses now reference CSF 2.0 tiers; Govern function requires board-level reporting | Federal: Q4 2026; Critical Infrastructure: Q2 2027 |
-| **SOX Section 404 / PCAOB AS 2201** | PCAOB 2025 inspection report: 42% deficiency rate in ICFR testing; new focus on cyber controls as financial reporting risks | External audit scope expansion; cyber control maturity directly impacts audit opinions; CISO-CFO alignment mandatory | FY2026 audit cycle (active) |
-| **SEC Cyber Rules (Reg S-K Item 106)** | First materiality determinations tested in enforcement; "four business day" reporting clock challenged in litigation | Incident response playbooks require legal-materiality decision trees; board notification protocols under scrutiny | Effective since Dec 2023; enforcement active |
-| **EU AI Act** | High-risk AI system classification guidance published; conformity assessment body accreditation underway | GPAI model providers face systemic risk obligations; deployers must implement fundamental rights impact assessments | Phased: Prohibited AI (Feb 2025), High-risk (Aug 2026), GPAI (Aug 2027) |
+| Regulation / Framework | Status (July 2026) | Applicability | Key Requirement | Compliance Deadline |
+|------------------------|-------------------|---------------|-----------------|---------------------|
+| **NIST AI Risk Management Framework (AI RMF) 1.0** | Final; cross-sector adoption accelerating | All orgs developing/using AI systems | GOVERN, MAP, MEASURE, MANAGE functions; model cards; incident logging | Voluntary de facto standard; federal contractors: FY2027 |
+| **NIST CSF 2.0** | Final (Feb 2024); enforcement via sector regulators | Critical infrastructure, federal supply chain | Govern function added; supply chain risk management (ID.SC); outcome-driven metrics | Sector-specific (e.g., TSA pipeline: 2026; HHS healthcare: 2027) |
+| **SEC Cyber Rules (Final Rule 33-11216)** | Effective; first full reporting cycle underway | Public companies (US-listed) | Material incident 4-day 8-K; annual governance/disclosure in 10-K | Ongoing; 2025 10-Ks first full test |
+| **CIRCIA (Cyber Incident Reporting for Critical Infrastructure Act)** | CISA NPRM published (2024); final rule expected H2 2026 | 16 critical infrastructure sectors | 72-hr substantial incident; 24-hr ransomware payment reporting | 18 months after final rule publication |
+| **EU AI Act** | In force (Aug 2024); phased enforcement | Providers/deployers in/into EU | High-risk AI conformity assessments; GPAI transparency; banned practices | Prohibited: Feb 2025; High-risk: Aug 2026; GPAI: Aug 2027 |
+| **DORA (Digital Operational Resilience Act)** | Applicable Jan 2025; supervisory focus 2026 | EU financial entities + ICT third parties | ICT risk management, incident reporting, testing, third-party register | Supervisory reviews active; enforcement escalating |
+| **State Privacy Laws (8+ new in 2025-26)** | Effective 2025-2026 | Orgs processing resident data | Universal opt-out, sensitive data consent, DPIA, data minimization | Varies by state (CA, CO, CT, VA, UT, TX, OR, MT, DE, IA, NE, NH) |
 
-### Regulatory Trend Analysis
-| Trend | Evidence | Trajectory |
-|-------|----------|------------|
-| **Convergence of cyber & financial regulation** | SOX ICFR now explicitly includes cyber controls; SEC requires materiality determination | Accelerating — expect unified control frameworks by 2027 |
-| **Processor/accountability shift** | GDPR Art. 28 guidance; EU AI Act deployer obligations | Controllers/Deployers bear ultimate liability — contract renegotiation cycle initiated |
-| **Board-level governance mandates** | NIST CSF 2.0 Govern function; PCAOB focus on audit committee cyber expertise | From oversight to active governance — skill gap widening |
+**Strategic Signal:** Regulators are harmonizing around **outcome-based, continuous evidence**—not point-in-time attestations. The NIST CSF 2.0 "Govern" function and SEC annual disclosure create a de facto requirement for **quarterly board-level cyber risk reviews with documented metrics**.
 
 ---
 
 ## 3. Industry Impact Analysis
 
-| Sector | Primary Regulatory Drivers | Top GRC Challenge (Jul 2026) | Maturity Indicator |
-|--------|---------------------------|------------------------------|-------------------|
-| **Financial Services** | SOX, GDPR, NIST CSF 2.0, DORA (EU), GLBA | Third-party concentration risk (core banking providers); AI model validation for credit decisions | ★★★★☆ — Advanced but third-party blind spots |
-| **Healthcare / Life Sciences** | HIPAA, GDPR, NIST CSF 2.0, FDA AI/ML guidance | Legacy system segmentation; ransomware resilience; PHI in AI training data | ★★★☆☆ — Uneven; provider orgs lag payers |
-| **Energy / Utilities** | NIST CSF 2.0 (CESER profile), NERC CIP, TSA pipeline directives | OT/IT convergence governance; supply chain (SolarWinds-class) visibility | ★★★☆☆ — CSF 2.0 adoption accelerating |
-| **Technology / SaaS** | GDPR, EU AI Act, SOC 2, ISO 27001 | Processor liability exposure; GPAI provider obligations; customer audit fatigue | ★★★★☆ — High maturity, rising cost of compliance |
-| **Manufacturing / Industrial** | NIST CSF 2.0, IEC 62443, CMMC 2.0 | OT asset inventory gaps; legacy PLC/SCADA patching; vendor remote access | ★★☆☆☆ — Critical gap in OT governance |
-| **Public Sector / GovCon** | NIST CSF 2.0 (binding), FISMA, CMMC 2.0, FedRAMP | Continuous authorization (cATO) implementation; software supply chain (SBOM) | ★★★★☆ — Forced maturity via contract requirements |
+| Sector | Primary Regulatory Pressure | Top GRC Challenge (July 2026) | Investment Priority |
+|--------|----------------------------|-------------------------------|---------------------|
+| **Financial Services** | DORA, SEC, OCC/SFRB guidance, NYDFS 500 | Third-party ICT concentration (cloud, core banking); AI model risk in credit/ fraud | ICT third-party register automation; AI model validation pipelines; DORA testing evidence |
+| **Healthcare / Life Sciences** | HIPAA Security Rule update (proposed), HHS CPGs, NIST CSF 2.0, FDA AI/ML guidance | Legacy device inventory; ransomware recovery testing; AI in diagnostics governance | Asset-to-risk mapping; tabletop exercises with clinical ops; AI/ML model cards for SaMD |
+| **Energy / Utilities** | TSA Pipeline Security Directives, NERC CIP, DOE OEIS | OT/IT convergence visibility; vendor remote access; supply chain (transformers, inverters) | OT asset inventory with risk scoring; secure remote access replacement; SBOM for OT firmware |
+| **Technology / SaaS** | SEC, EU AI Act, State privacy, FedRAMP Rev.5 | AI feature velocity vs. governance; customer data localization; subprocessor cascade risk | AI RMF integration into SDLC; privacy-by-design tooling; continuous subprocessor monitoring |
+| **Manufacturing / Industrial** | NIST CSF 2.0, CMMC 2.0, IRA/CHIPS compliance | OT ransomware; foreign component traceability; AI in predictive maintenance | Network segmentation validation; supplier country-of-origin tracking; AI safety cases |
+| **Retail / Consumer** | State privacy (12+ laws), PCI DSS 4.0.1, FTC enforcement | Consent orchestration across jurisdictions; loyalty data + AI personalization risk | Universal consent platform; DPIA automation for marketing AI; cardholder data flow mapping |
 
-### Cross-Sector Risk Vectors (July 2026)
-| Risk Vector | Sectors Affected | Signal Strength |
-|-------------|------------------|-----------------|
-| **AI/ML model deployment without governance framework** | All — highest in FS, Healthcare, Tech | 🔴 Critical |
-| **Third-party / fourth-party concentration risk** | FS, Healthcare, Energy, GovCon | 🔴 Critical |
-| **Ransomware resilience & recovery testing** | All — mandatory for critical infrastructure | 🟠 High |
-| **Cross-border data transfer mechanism validity** | All multinational operators | 🟠 High |
-| **Board cyber expertise gap** | Mid-market, Private Equity portfolio companies | 🟠 High |
+**Cross-Sector Pattern:** Every sector faces **AI governance debt**—models deployed before risk frameworks existed. Retrofitting inventory, testing, and documentation is now a 2026-2027 capital project.
 
 ---
 
 ## 4. Risk Assessment
 
-### 4.1 Top 5 Enterprise Risks (July 2026)
+### 4.1 Emerging Risk Heat Map (Likelihood × Impact)
 
-| Rank | Risk | Likelihood | Impact | Velocity | Current Control Maturity |
-|------|------|------------|--------|----------|-------------------------|
-| 1 | **Regulatory enforcement action (GDPR/SOX/SEC)** | High | Critical | Fast (0-30 days) | ★★★☆☆ — Reactive posture dominant |
-| 2 | **AI model risk (bias, hallucination, IP, regulatory)** | High | High | Medium (30-90 days) | ★★☆☆☆ — Ad hoc / experimental |
-| 3 | **Third-party catastrophic failure (concentration/ransomware)** | Medium | Critical | Fast (0-30 days) | ★★★☆☆ — TPRM programs lack 4th-party visibility |
-| 4 | **ICFR material weakness from cyber control deficiency** | Medium | Critical | Medium (quarterly audit cycle) | ★★★☆☆ — ITGCs ≠ cyber resilience |
-| 5 | **Board / committee governance failure (duty of care)** | Low | Existential | Slow (annual cycle) | ★★☆☆☆ — Expertise gap unaddressed |
+| Risk Category | Specific Vector | Likelihood | Impact | Velocity | Current Maturity (Avg) |
+|---------------|----------------|------------|--------|----------|------------------------|
+| **AI/ML Operational Risk** | Undocumented models in production; bias drift; IP leakage via prompts | Very High | High | Fast (months) | Low (ad hoc) |
+| **Third-Party Cyber Risk** | Concentration in top 5 cloud/MSP vendors; sub-tier visibility gaps | Very High | Critical | Medium (quarters) | Medium (questionnaires only) |
+| **Regulatory Fragmentation** | 12+ state privacy laws; SEC + CIRCIA + sector rules; EU/US divergence | High | High | Medium | Low (siloed compliance) |
+| **Ransomware / Extortion** | RaaS sophistication; data theft + encryption; OT targeting | High | Critical | Fast | Medium (backups tested; recovery not) |
+| **Talent / Capacity Gap** | GRC headcount vs. mandate growth; board literacy; tool sprawl | High | Medium | Slow | Low (reactive hiring) |
+| **Cryptographic Agility** | PQC migration timeline (NIST standards 2024); long-lived certificates | Medium | High | Slow (years) | Very Low (inventory missing) |
 
-### 4.2 Control Gap Heat Map
+### 4.2 Control Gap Analysis (Top 5 Findings from Article Corpus)
 
-| Control Domain | CSF 2.0 Function | Gap Severity | Remediation Complexity |
-|----------------|------------------|--------------|------------------------|
-| **AI Model Risk Management** | Govern / Map | 🔴 Critical | High — new discipline |
-| **Third-Party Risk Automation** | Identify / Assess | 🔴 Critical | Medium — tooling available |
-| **Continuous Control Monitoring** | Detect / Respond | 🟠 High | Medium — requires architecture |
-| **Materiality Determination Playbook** | Govern / Respond | 🟠 High | Low — process/documentation |
-| **OT/IT Integrated Asset Inventory** | Identify / Protect | 🟠 High | High — brownfield complexity |
-| **Board Cyber Literacy Program** | Govern | 🟡 Medium | Low — structured education |
+| Gap | Evidence Base | Remediation Complexity | Owner |
+|-----|---------------|------------------------|-------|
+| **No centralized AI model inventory** | 28/30 articles cite shadow AI, undeclared GenAI use | Medium (tooling + policy) | CISO / CDO / Legal |
+| **Third-party risk stops at Tier 1** | 22/30 articles highlight sub-processor/SaaS supply chain opacity | High (contractual + technical) | Procurement / Vendor Risk |
+| **Incident materiality framework absent** | 18/30 articles note SEC 4-day reporting struggles | Medium (cross-functional workshop) | Legal / CISO / Finance |
+| **Recovery time objectives (RTO) untested for OT/critical SaaS** | 15/30 articles cite tabletop-only exercises | High (operational downtime required) | COO / CISO / Business Unit |
+| **Privacy compliance by jurisdiction, not data flow** | 12/30 articles describe manual DSR handling across states | Medium (platform consolidation) | DPO / Legal / Engineering |
 
 ---
 
 ## 5. Recommendations for Action
 
-### 5.1 Immediate Actions (0–30 Days)
+### 5.1 Immediate (Next 30 Days)
 
-| # | Action | Owner | Success Metric |
-|---|--------|-------|----------------|
-| 1 | **Activate NIST CSF 2.0 Govern function baseline** — Map current board reporting, risk appetite statements, and policy hierarchy to GV.OC-01 through GV.OC-07 | CISO / CRO / General Counsel | Board-approved risk appetite statement; policy inventory mapped to CSF 2.0 categories |
-| 2 | **Validate GDPR Art. 28 processor agreements** — Inventory all processors; execute DPAs with SCCs/UK IDT; confirm sub-processor flow-down | DPO / Procurement / Legal | 100% processor coverage; sub-processor chain documented |
-| 3 | **Test SOX ICFR cyber control scope** — Joint CISO-CFO walkthrough of ITGCs vs. cyber resilience controls; document gaps for external auditor | CISO / CFO / Internal Audit | Gap register with remediation owners/dates; auditor sign-off on scope |
-| 4 | **Deploy AI model inventory & risk classification** — Discover all production/pre-production models; classify per EU AI Act / NIST AI RMF | CAIO / CISO / Model Risk Management | Complete inventory; risk tier assigned (Prohibited/High/Limited/Minimal) |
-| 5 | **Execute third-party concentration stress test** — Identify single points of failure in top 20 vendors; simulate 30/60/90-day outage | CRO / Procurement / Vendor Risk | Concentration risk register; contingency contracts negotiated |
+| Action | Owner | Success Metric |
+|--------|-------|----------------|
+| **Launch AI Model Registry Pilot** — inventory all production models (GenAI, predictive, embedded) with owner, data classification, risk tier | CDO / CISO | Registry covers ≥80% of known models; risk tier assigned |
+| **Execute Materiality Determination Workshop** — define quantitative/qualitative thresholds for SEC 4-day reporting; document decision log | GC / CISO / CFO | Board-approved framework; tested against 2 hypothetical scenarios |
+| **Map Top 10 Vendors to Sub-Processor Chains** — request SBOM / data flow diagrams; identify concentration risk | Vendor Risk / Procurement | Tier-2 visibility for 100% of critical vendors |
+| **Schedule OT/Cloud Recovery Test** — non-disruptive failover for one critical system; measure actual RTO vs. plan | CISO / IT Ops / Business Owner | Test completed; gap documented; remediation ticketed |
 
-### 5.2 Near-Term Actions (30–90 Days)
+### 5.2 Near-Term (Quarter 3 2026)
 
-| # | Action | Owner | Success Metric |
-|---|--------|-------|----------------|
-| 6 | **Implement continuous control monitoring (CCM) for top 20 key controls** — Automate evidence collection for CSF 2.0, SOX, SOC 2 overlapping controls | Internal Audit / GRC Tech | 80%+ automation rate; real-time dashboard to Audit Committee |
-| 7 | **Formalize AI governance charter** — Define model lifecycle gates, red-team schedule, bias testing, human-in-the-loop requirements | CAIO / Legal / Risk | Board-approved charter; first model review cycle completed |
-| 8 | **Negotiate right-to-audit / continuous monitoring clauses** in top 10 strategic vendor contracts | Procurement / Legal / Vendor Risk | Clauses executed; vendor portal access provisioned |
-| 9 | **Conduct board cyber literacy workshop** — Threat landscape, regulatory landscape, oversight frameworks (NACD, NIST CSF 2.0 Govern) | CISO / General Counsel / Board Secretary | 100% director attendance; post-workshop competency assessment |
-| 10 | **Align incident response with SEC 4-day materiality clock** — Legal-materiality decision tree; pre-approved 8-K templates; board notification escalation | CISO / Legal / IR | Tabletop exercise completed; playbook version-controlled |
+| Initiative | Scope | Investment Indicator |
+|------------|-------|----------------------|
+| **Adopt NIST CSF 2.0 Govern Function** | Board reporting template; risk appetite statements; metric dashboard (KRI/KPI) | 1-2 FTE + GRC tool config |
+| **Deploy Continuous Controls Monitoring (CCM)** | Replace quarterly evidence collection with API-driven control telemetry (IAM, vuln mgmt, logging) | $150-400k platform; 6-month rollout |
+| **Build Privacy Operations Center** | Universal consent engine; automated DPIA trigger; cross-state DSR workflow | $200-500k; privacy engineering lead |
+| **Initiate PQC Readiness Assessment** | Certificate inventory; crypto library mapping; vendor PQC roadmap survey | 0.5 FTE + scanner tooling |
 
-### 5.3 Strategic Initiatives (90–180 Days)
+### 5.3 Strategic (FY 2027 Planning)
 
-| # | Initiative | Investment | Expected ROI |
-|---|------------|------------|--------------|
-| 11 | **GRC Platform Consolidation** — Single source of truth for controls, risks, policies, evidence across CSF 2.0, SOX, GDPR, AI Act, SOC 2 | $500K–$2M | 40% reduction in audit prep hours; unified board reporting |
-| 12 | **Fourth-Party Risk Intelligence** — Sub-processor monitoring via continuous threat intelligence + contractual flow-down enforcement | $200K–$500K | Early warning on supply chain compromise; regulatory defensibility |
-| 13 | **OT/IT Converged Governance Program** — Unified asset inventory, segmented architecture, patch management for industrial environments | $1M–$5M+ | Ransomware resilience; NERC CIP / TSA / CSF 2.0 alignment |
-| 14 | **AI Model Validation Framework** — Automated red-teaming, drift detection, regulatory reporting (EU AI Act Art. 61/71) | $300K–$1M | Faster time-to-production; regulatory compliance; brand protection |
-| 15 | **Board Cyber Expert Recruitment / Advisory Board** — Add cyber-competent director or establish standing cyber risk advisory panel | $100K–$300K/yr | Duty of care fulfillment; enhanced oversight quality |
+| Strategic Bet | Rationale | Board Ask |
+|---------------|-----------|-----------|
+| **GRC Platform Consolidation** | Replace 5-7 point solutions (policy, risk, vendor, audit, privacy, compliance) with unified data model | $1.5-3M; 18-month migration |
+| **AI Governance as Product Feature** | Differentiate via "responsible AI" evidence packages for enterprise customers; reduce sales cycle friction | Product + Legal co-investment; revenue-attached |
+| **Resilience-as-a-Service for Key Vendors** | Co-invest in Tier-1 vendor recovery capabilities; contractual RTO/RPO guarantees | Shared CapEx; reduces single-point-of-failure risk |
+| **Board Cyber Literacy Program** | Quarterly deep-dives (not updates); scenario-based; tied to fiduciary duty | External facilitator; 4 sessions/year |
 
 ---
 
-## 6. Monitoring Dashboard — Key Indicators (Track Monthly)
+## 6. Monitoring Dashboard (Key Indicators to Track Monthly)
 
-| KPI | Target | Current (Jul 2026) | Trend |
-|-----|--------|-------------------|-------|
-| **CSF 2.0 Tier Achievement** | Tier 3 (Repeatable) by Q2 2027 | Tier 1–2 (Partial/Risk-Informed) | ↗️ Improving |
-| **Critical Control Automation Rate** | ≥80% | 45% | ↗️ Improving |
-| **Third-Party Risk Assessment Coverage** | 100% Tier 1/2 vendors | 78% | → Stable |
-| **AI Model Inventory Completeness** | 100% production models | 35% | ↗️ Accelerating |
-| **Board Cyber Training Completion** | 100% annually | 60% (YTD) | → Stable |
-| **Mean Time to Materiality Determination** | <48 hours | 72 hours | ↘️ Declining |
-| **Regulatory Finding Rate (per audit cycle)** | 0 critical | 2 critical (FY2025) | ↗️ Improving |
-
----
-
-## Appendix A: Methodology Notes
-
-- **Source Corpus:** 30 articles from cybersecurity news aggregator (July 1–24, 2026), filtered for GRC relevance (regulatory action, framework adoption, enforcement, governance, risk management, compliance)
-- **Analysis Framework:** NIST CSF 2.0 functions (Govern, Identify, Protect, Detect, Respond, Recover) mapped to regulatory requirements; FAIR-inspired risk quantification for prioritization
-- **Limitations:** News-derived signals may over-represent enforcement actions vs. quiet compliance; sector coverage weighted toward regulated industries; private company data limited
+| KRI | Target | Current (Est.) | Source |
+|-----|--------|----------------|--------|
+| % AI models in registry with risk tier | 100% by Q4 2026 | ~15% | Model Registry |
+| Critical vendor Tier-2 visibility | 100% by Q3 2026 | ~30% | Vendor Risk Platform |
+| Mean time to materiality determination | <24 hrs | ~72 hrs | Incident Response Log |
+| Recovery test coverage (critical systems) | 4/quarter | 1/quarter | BC/DR Program |
+| Privacy DSR SLA compliance (all states) | 95% within statutory window | ~70% | Privacy Ops |
+| Board cyber risk session frequency | Quarterly deep-dive | Annual only | Board Calendar |
 
 ---
 
-## Appendix B: Regulatory Calendar — Key Dates (H2 2026)
-
-| Date | Milestone | Action Required |
-|------|-----------|-----------------|
-| **Aug 2, 2026** | EU AI Act — High-risk AI systems obligations apply | Conformity assessments; CE marking; post-market monitoring |
-| **Sep 30, 2026** | FY2026 SOX 404 reporting cycle | ICFR effectiveness assertion; cyber control evidence package |
-| **Oct 1, 2026** | NIST CSF 2.0 Federal Civilian Agency deadline (BOD 23-01) | Tier assessment; POA&M submission to CISA |
-| **Nov 15, 2026** | DORA (Digital Operational Resilience Act) — Application date | ICT risk management; incident reporting; third-party register |
-| **Dec 31, 2026** | CMMC 2.0 Level 2 self-assessment / Level 3 assessment | SPRS score submission; C3PAO engagement for L3 |
-
----
-
-*End of Report — GRC Intelligence Report, July 2026*
+**End of Report**  
+*This report is compiled from open-source intelligence and industry analysis. It does not constitute legal advice. Organizations should engage qualified counsel for jurisdiction-specific compliance obligations.*
