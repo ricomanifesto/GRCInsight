@@ -1,7 +1,10 @@
 # GRCInsight
 
 <div align="center">
-  <img src="assets/images/logo.png" alt="GRCInsight Logo" width="400"/>
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="assets/images/logo-lockup-dark.png">
+    <img src="assets/images/logo-lockup-light.png" alt="GRCInsight" width="440">
+  </picture>
 </div>
 
 GRCInsight turns regulatory and security feeds into audit-ready GRC intelligence, with framework mapping, agency signals, industry relevance, and concise action-oriented reports.
