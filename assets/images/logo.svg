@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="GRCInsight logo">
+  <defs>
+    <linearGradient id="grcg" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="512" y2="512">
+      <stop offset="0" stop-color="#43936c"/>
+      <stop offset="1" stop-color="#31513e"/>
+    </linearGradient>
+    <mask id="grceye">
+      <path fill="#ffffff" d="M76 256 Q256 96 436 256 Q256 416 76 256 Z"/>
+      <circle cx="256" cy="256" r="78" fill="#000000"/>
+    </mask>
+  </defs>
+  <rect width="512" height="512" fill="url(#grcg)" mask="url(#grceye)"/>
+  <path d="M216 258 L246 288 L302 226" fill="none" stroke="url(#grcg)" stroke-width="26" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

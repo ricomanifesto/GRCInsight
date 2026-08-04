@@ -323,7 +323,7 @@ def validate_site_identity(html: str, sitemap_xml: str) -> None:
         f'<meta name="description" content="{PUBLIC_DESCRIPTION}">',
         f'<link rel="canonical" href="{PUBLIC_SITE_URL}">',
         f'<meta property="og:url" content="{PUBLIC_SITE_URL}">',
-        '<meta name="twitter:card" content="summary">',
+        '<meta name="twitter:card" content="summary_large_image">',
         'href="https://ricomanifesto.com/">Michael Rico</a>',
         '<noscript>',
     )
