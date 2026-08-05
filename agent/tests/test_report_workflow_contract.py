@@ -194,7 +194,7 @@ def test_source_evidence_preserves_distinct_cves_and_safe_actor_context():
 
 def test_actor_id_extraction_excludes_mitre_attack_tactics():
     actor_ids = workflow_mod._extract_actor_ids(
-        "MITRE ATT&CK maps initial access to TA0001. Threat actor TA505 remains active."
+        "MITRE ATT&CK maps tactics TA0001 and TA-0002. Threat actor TA505 remains active."
     )
 
     assert actor_ids == ["TA505"]
