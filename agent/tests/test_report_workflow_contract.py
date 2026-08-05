@@ -1,6 +1,11 @@
+from datetime import datetime, timezone
 from pathlib import Path
 import runpy
 import tomllib
+
+from core import workflow as workflow_mod
+from models.api import ArticleInput
+from services.model_service import GRCModelService
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 AGENT_PYPROJECT = REPO_ROOT / "agent" / "pyproject.toml"
@@ -10,7 +15,9 @@ REPORT_WORKFLOW = REPO_ROOT / ".github" / "workflows" / "lambda-report-generatio
 CI_WORKFLOW = REPO_ROOT / ".github" / "workflows" / "ci.yml"
 SITE_REPORT_CHECK = REPO_ROOT / "scripts" / "check_site_report.py"
 MODEL_SERVICE = REPO_ROOT / "agent" / "services" / "model_service.py"
+RENDERER_JS = REPO_ROOT / "site" / "static" / "renderer.js"
 WORKFLOWS = (CI_WORKFLOW, DEPLOY_WORKFLOW, REPORT_WORKFLOW)
+PUBLISHED_AT = datetime(2026, 6, 1, tzinfo=timezone.utc)
 
 
 def test_report_generation_workflow_accepts_repository_dispatch_payloads():
@@ -47,6 +54,178 @@ def test_site_report_check_accepts_fallback_numbered_sections():
     assert "NUMBERED_SECTION_PATTERN" in check_script
     assert "is_report_section" in check_script
     assert "1) Executive Summary" not in check_script
+
+
+def test_report_prompt_requires_current_source_entities_and_readable_summary():
+    service = GRCModelService.__new__(GRCModelService)
+    prompt = service._create_report_prompt(
+        {
+            "summary": {"total_articles": 2, "grc_relevant_count": 2},
+            "analysis": {
+                "regulations_mentioned": ["SEC"],
+                "industries_affected": ["Financial services"],
+                "risk_categories": ["Vulnerability and patch management"],
+            },
+            "source_evidence": [
+                {
+                    "title": "APT1 exploits CVE-2026-12345 in bank systems",
+                    "url": "https://example.com/apt1",
+                    "snippet": "Threat actor APT1 exploited CVE-2026-12345 against banks.",
+                    "cves": ["CVE-2026-12345"],
+                    "actor_ids": ["APT1"],
+                },
+                {
+                    "title": "Cloud Security Alliance publishes guidance",
+                    "url": "https://example.com/guidance",
+                    "snippet": "The industry group called Cloud Security Alliance published guidance.",
+                    "cves": [],
+                    "actor_ids": [],
+                },
+            ],
+        },
+        {"title": "Test Feed"},
+    )
+
+    assert "Source Evidence for Entity Sections:" in prompt
+    assert "Threat Actor Activities" in prompt
+    assert "CVE and Vulnerability Highlights" in prompt
+    assert "Executive Summary must be 2-4 short paragraphs" in prompt
+    assert "APT1" in prompt
+    assert "CVE-2026-12345" in prompt
+    assert "structured actor identifiers are hints, not an exhaustive actor list" in prompt
+    assert "Do not classify industry, standards, regulatory, or working groups" in prompt
+    assert "List every article-supported CVE identifier up to 10 items" in prompt
+
+
+def test_source_evidence_preserves_distinct_cves_and_safe_actor_context():
+    articles = [
+        ArticleInput(
+            title=f"Duplicate CVE article {index}",
+            url=f"https://example.com/duplicate-{index}",
+            content="CVE-2026-11111 affects a common appliance.",
+            summary="",
+            published=PUBLISHED_AT,
+        )
+        for index in range(12)
+    ]
+    articles.extend(
+        [
+            ArticleInput(
+                title="Threat actor APT1 targets banks",
+                url="https://example.com/apt1",
+                content="The threat actor APT1 exploited CVE-2026-22222. FIN7 assisted.",
+                summary="FINRA issued unrelated cybersecurity guidance.",
+                published=PUBLISHED_AT,
+            ),
+            ArticleInput(
+                title="Volt Typhoon targets agencies",
+                url="https://example.com/named-actor",
+                content="The threat actor Volt Typhoon targeted government agencies.",
+                summary="",
+                published=PUBLISHED_AT,
+            ),
+            ArticleInput(
+                title="Long CVE sequence",
+                url="https://example.com/long-cve",
+                content="Researchers documented CVE-2026-12345678 in a gateway.",
+                summary="",
+                published=PUBLISHED_AT,
+            ),
+            ArticleInput(
+                title="Standards group update",
+                url="https://example.com/benign-group",
+                content="The industry group called Cloud Security Alliance published guidance.",
+                summary="",
+                published=PUBLISHED_AT,
+            ),
+        ]
+    )
+
+    evidence = workflow_mod._build_source_evidence(articles)
+    evidence_urls = {item["url"] for item in evidence}
+    cves = {cve for item in evidence for cve in item["cves"]}
+    actor_ids = {actor for item in evidence for actor in item["actor_ids"]}
+
+    assert len(evidence) <= workflow_mod.SOURCE_EVIDENCE_LIMIT
+    assert "https://example.com/apt1" in evidence_urls
+    assert "https://example.com/named-actor" in evidence_urls
+    assert "https://example.com/long-cve" in evidence_urls
+    assert {"CVE-2026-11111", "CVE-2026-22222", "CVE-2026-12345678"} <= cves
+    assert {"APT1", "FIN7"} <= actor_ids
+    assert "FINRA" not in actor_ids
+    assert "Cloud Security Alliance" not in actor_ids
+    named_actor_evidence = next(
+        item for item in evidence if item["url"] == "https://example.com/named-actor"
+    )
+    assert named_actor_evidence["has_threat_context"] is True
+    assert (
+        workflow_mod._has_threat_actor_context(
+            "The industry group called Cloud Security Alliance published guidance."
+        )
+        is False
+    )
+
+
+def test_source_evidence_reserves_room_for_actor_context_after_cve_volume():
+    articles = [
+        ArticleInput(
+            title=f"CVE source {index}",
+            url=f"https://example.com/cve-{index}",
+            content=f"CVE-2026-{10000 + index} affects an appliance.",
+            summary="",
+            published=PUBLISHED_AT,
+        )
+        for index in range(14)
+    ]
+    articles.append(
+        ArticleInput(
+            title="Named actor source",
+            url="https://example.com/named-actor-late",
+            content="The threat actor Volt Typhoon targeted government agencies.",
+            summary="",
+            published=PUBLISHED_AT,
+        )
+    )
+
+    evidence = workflow_mod._build_source_evidence(articles)
+
+    assert len(evidence) == workflow_mod.SOURCE_EVIDENCE_LIMIT
+    assert any(item["url"] == "https://example.com/named-actor-late" for item in evidence)
+
+
+def test_fallback_report_does_not_infer_named_actor_aliases():
+    articles = [
+        ArticleInput(
+            title="Volt Typhoon targets agencies",
+            url="https://example.com/named-actor",
+            content="The threat actor Volt Typhoon targeted government agencies.",
+            summary="",
+            published=PUBLISHED_AT,
+        )
+    ]
+    local_signals, analysis = workflow_mod._build_local_analysis(articles)
+
+    report = workflow_mod._build_fallback_report(
+        {"title": "Test Feed"},
+        articles,
+        local_signals,
+        analysis,
+        "model unavailable",
+    )
+
+    assert "4) Threat Actor Activities" in report
+    assert "5) CVE and Vulnerability Highlights" in report
+    assert "does not infer actor names" in report
+    assert "Volt Typhoon: Article-supported activity" not in report
+
+
+def test_renderer_and_site_check_recognize_entity_sections():
+    check_script = SITE_REPORT_CHECK.read_text()
+    renderer = RENDERER_JS.read_text()
+
+    for section in ("Threat Actor Activities", "CVE and Vulnerability Highlights"):
+        assert section in check_script
+        assert section in renderer
 
 
 def test_report_generation_workflow_does_not_dump_lambda_response_body():
