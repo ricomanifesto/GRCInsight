@@ -228,6 +228,49 @@ def test_source_evidence_reserves_room_for_actor_context_after_cve_volume():
     assert any(item["url"] == "https://example.com/named-actor-late" for item in evidence)
 
 
+def test_threat_actor_context_matches_normalized_state_actor_phrases():
+    assert workflow_mod._has_threat_actor_context(
+        "Nation-state actor Volt Typhoon targeted government agencies."
+    )
+    assert workflow_mod._has_threat_actor_context(
+        "A state-sponsored group targeted critical infrastructure."
+    )
+
+
+def test_fallback_report_links_named_actor_context_to_its_reserved_source():
+    articles = [
+        ArticleInput(
+            title=f"CVE source {index}",
+            url=f"https://example.com/cve-{index}",
+            content=f"CVE-2026-{10000 + index} affects an appliance.",
+            summary="",
+            published=PUBLISHED_AT,
+        )
+        for index in range(12)
+    ]
+    articles.append(
+        ArticleInput(
+            title="Late actor source",
+            url="https://example.com/late-actor",
+            content="Nation-state actor Volt Typhoon targeted government agencies.",
+            summary="",
+            published=PUBLISHED_AT,
+        )
+    )
+    local_signals, analysis = workflow_mod._build_local_analysis(articles)
+
+    report = workflow_mod._build_fallback_report(
+        {"title": "Test Feed"},
+        articles,
+        local_signals,
+        analysis,
+        "model unavailable",
+    )
+
+    assert "[Late actor source](https://example.com/late-actor)" in report
+    assert "does not infer actor names" in report
+
+
 def test_fallback_report_does_not_infer_named_actor_aliases():
     articles = [
         ArticleInput(

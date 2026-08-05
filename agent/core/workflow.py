@@ -150,8 +150,8 @@ def _has_threat_actor_context(text: str) -> bool:
     normalized_text = re.sub(r"[-‐‑‒–—]+", " ", text)
     return bool(
         re.search(
-            r"\b(?:threat actors?|threat groups?|nation-state actors?|"
-            r"state-sponsored (?:actors?|groups?)|cyber ?espionage groups?|"
+            r"\b(?:threat actors?|threat groups?|nation state actors?|"
+            r"state sponsored (?:actors?|groups?)|cyber ?espionage groups?|"
             r"ransomware (?:groups?|gangs?)|hacking groups?)\b",
             normalized_text,
             re.IGNORECASE,
@@ -346,11 +346,16 @@ def _build_fallback_report(
                 "context before relying on the attribution."
             )
     elif any(item.get("has_threat_context") for item in source_evidence):
-        actor_lines = [
-            "- Current source evidence contains threat-actor context, but this "
-            "deterministic fallback does not infer actor names; review Source "
-            "Highlights for attribution."
-        ]
+        actor_lines = []
+        for item in source_evidence:
+            if not item.get("has_threat_context"):
+                continue
+            source = f"[{item['title']}]({item['url']})" if item["url"] else item["title"]
+            actor_lines.append(
+                f"- Named actor context appears in {source}; this deterministic "
+                "fallback does not infer actor names, so review the source before "
+                "relying on the attribution."
+            )
     else:
         actor_lines = [
             "- No article-supported threat actor activity was identified in this reporting period."
