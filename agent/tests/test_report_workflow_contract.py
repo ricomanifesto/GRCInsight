@@ -196,7 +196,7 @@ def test_source_evidence_preserves_distinct_cves_and_safe_actor_context():
 def test_actor_id_extraction_excludes_mitre_attack_tactics():
     actor_ids = workflow_mod._extract_actor_ids(
         "MITRE ATT&CK maps tactics TA0001, TA-0002, and TA 0003. "
-        "Threat actor TA 505 remains active."
+        "Ubuntu apt 2.6 received a package update. Threat actor TA 505 remains active."
     )
 
     assert actor_ids == ["TA505"]
