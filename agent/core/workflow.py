@@ -147,12 +147,13 @@ def _extract_actor_ids(text: str) -> List[str]:
 
 def _has_threat_actor_context(text: str) -> bool:
     """Return whether source text explicitly discusses malicious actor activity."""
+    normalized_text = re.sub(r"[-‐‑‒–—]+", " ", text)
     return bool(
         re.search(
             r"\b(?:threat actors?|threat groups?|nation-state actors?|"
             r"state-sponsored (?:actors?|groups?)|cyber ?espionage groups?|"
             r"ransomware (?:groups?|gangs?)|hacking groups?)\b",
-            text,
+            normalized_text,
             re.IGNORECASE,
         )
     )

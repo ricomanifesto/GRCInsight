@@ -1,6 +1,7 @@
 """Provider-switchable model service for GRC analysis."""
 
 from datetime import datetime, timezone
+import re
 from typing import List, Dict, Any
 
 from loguru import logger
@@ -11,6 +12,33 @@ from services.opencode_client import OpenCodeClient, parse_model_selection
 from services.openrouter_client import OpenRouterClient
 
 REPORT_CVE_LIMIT = 10
+CVE_PATTERN = re.compile(r"\bCVE-\d{4}-\d{4,}\b", re.IGNORECASE)
+CVE_OMISSION_MARKER = "[additional CVE omitted]"
+
+
+def _collect_prompt_cves(source_evidence: List[Dict[str, Any]]) -> List[str]:
+    """Collect the globally bounded CVE set exposed to report generation."""
+    cves = []
+    seen = set()
+    for evidence in source_evidence:
+        for value in evidence.get("cves", []) or []:
+            cve = str(value).upper()
+            if CVE_PATTERN.fullmatch(cve) and cve not in seen:
+                seen.add(cve)
+                cves.append(cve)
+                if len(cves) >= REPORT_CVE_LIMIT:
+                    return cves
+    return cves
+
+
+def _sanitize_evidence_text(value: Any, allowed_cves: set[str]) -> str:
+    """Remove CVE identifiers outside the globally bounded prompt set."""
+
+    def replace(match: re.Match[str]) -> str:
+        cve = match.group(0).upper()
+        return cve if cve in allowed_cves else CVE_OMISSION_MARKER
+
+    return CVE_PATTERN.sub(replace, str(value))
 
 
 class GRCModelService:
@@ -225,22 +253,28 @@ Focus only on content with clear governance, risk, or compliance implications.""
         source_evidence = analysis_data.get("source_evidence", [])
 
         source_lines = []
-        prompt_cves = set()
+        allowed_cves = set(_collect_prompt_cves(source_evidence))
+        listed_cves = set()
         for index, evidence in enumerate(source_evidence, 1):
             cves = []
             for cve in evidence.get("cves", []) or []:
-                if cve not in prompt_cves and len(prompt_cves) < REPORT_CVE_LIMIT:
-                    prompt_cves.add(cve)
-                    cves.append(cve)
+                normalized_cve = str(cve).upper()
+                if normalized_cve in allowed_cves and normalized_cve not in listed_cves:
+                    listed_cves.add(normalized_cve)
+                    cves.append(normalized_cve)
             actor_ids = evidence.get("actor_ids", []) or []
+            title = _sanitize_evidence_text(evidence.get("title", "Untitled source"), allowed_cves)
+            snippet = _sanitize_evidence_text(
+                evidence.get("snippet", "No snippet available"), allowed_cves
+            )
             source_lines.append(
                 "\n".join(
                     [
-                        f"{index}. {evidence.get('title', 'Untitled source')}",
+                        f"{index}. {title}",
                         f"   URL: {evidence.get('url', 'No URL')}",
                         f"   CVEs: {', '.join(cves) if cves else 'None detected'}",
                         f"   Structured actor IDs: {', '.join(actor_ids) if actor_ids else 'None detected'}",
-                        f"   Snippet: {evidence.get('snippet', 'No snippet available')}",
+                        f"   Snippet: {snippet}",
                     ]
                 )
             )

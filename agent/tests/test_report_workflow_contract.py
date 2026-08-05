@@ -109,7 +109,7 @@ def test_report_prompt_globally_bounds_cve_evidence():
                 {
                     "title": "Patch roundup",
                     "url": "https://example.com/roundup",
-                    "snippet": "A vendor published a security patch roundup.",
+                    "snippet": "A vendor published fixes for " + ", ".join(cves) + ".",
                     "cves": cves,
                     "actor_ids": [],
                 }
@@ -121,6 +121,7 @@ def test_report_prompt_globally_bounds_cve_evidence():
     assert cves[9] in prompt
     assert cves[10] not in prompt
     assert cves[11] not in prompt
+    assert "[additional CVE omitted]" in prompt
 
 
 def test_source_evidence_preserves_distinct_cves_and_safe_actor_context():
@@ -215,7 +216,7 @@ def test_source_evidence_reserves_room_for_actor_context_after_cve_volume():
         ArticleInput(
             title="Named actor source",
             url="https://example.com/named-actor-late",
-            content="The threat actor Volt Typhoon targeted government agencies.",
+            content="The threat-actor group Volt Typhoon targeted government agencies.",
             summary="",
             published=PUBLISHED_AT,
         )
