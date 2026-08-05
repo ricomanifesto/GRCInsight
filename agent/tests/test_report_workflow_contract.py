@@ -271,6 +271,40 @@ def test_fallback_report_links_named_actor_context_to_its_reserved_source():
     assert "does not infer actor names" in report
 
 
+def test_fallback_report_includes_structured_and_named_only_actor_sources():
+    articles = [
+        ArticleInput(
+            title="APT1 targets banks",
+            url="https://example.com/apt1",
+            content="Threat actor APT1 targeted bank systems.",
+            summary="",
+            published=PUBLISHED_AT,
+        ),
+        ArticleInput(
+            title="Volt Typhoon targets agencies",
+            url="https://example.com/volt-typhoon",
+            content="Nation-state actor Volt Typhoon targeted government agencies.",
+            summary="",
+            published=PUBLISHED_AT,
+        ),
+    ]
+    local_signals, analysis = workflow_mod._build_local_analysis(articles)
+
+    report = workflow_mod._build_fallback_report(
+        {"title": "Test Feed"},
+        articles,
+        local_signals,
+        analysis,
+        "model unavailable",
+    )
+    actor_section = report.split("4) Threat Actor Activities", 1)[1].split(
+        "5) CVE and Vulnerability Highlights", 1
+    )[0]
+
+    assert "APT1: Mentioned in [APT1 targets banks](https://example.com/apt1)" in actor_section
+    assert "[Volt Typhoon targets agencies](https://example.com/volt-typhoon)" in actor_section
+
+
 def test_fallback_report_does_not_infer_named_actor_aliases():
     articles = [
         ArticleInput(

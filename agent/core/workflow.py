@@ -337,26 +337,23 @@ def _build_fallback_report(
 
     source_evidence = _build_source_evidence(enriched_articles)
     cves, actor_sources = _collect_source_entities(source_evidence)
-    if actor_sources:
-        actor_lines = []
-        for item in actor_sources:
-            source = f"[{item['title']}]({item['url']})" if item["url"] else item["title"]
-            actor_lines.append(
-                f"- {item['actor_id']}: Mentioned in {source}; review the source "
-                "context before relying on the attribution."
-            )
-    elif any(item.get("has_threat_context") for item in source_evidence):
-        actor_lines = []
-        for item in source_evidence:
-            if not item.get("has_threat_context"):
-                continue
-            source = f"[{item['title']}]({item['url']})" if item["url"] else item["title"]
-            actor_lines.append(
-                f"- Named actor context appears in {source}; this deterministic "
-                "fallback does not infer actor names, so review the source before "
-                "relying on the attribution."
-            )
-    else:
+    actor_lines = []
+    for item in actor_sources:
+        source = f"[{item['title']}]({item['url']})" if item["url"] else item["title"]
+        actor_lines.append(
+            f"- {item['actor_id']}: Mentioned in {source}; review the source "
+            "context before relying on the attribution."
+        )
+    for item in source_evidence:
+        if not item.get("has_threat_context") or item.get("actor_ids"):
+            continue
+        source = f"[{item['title']}]({item['url']})" if item["url"] else item["title"]
+        actor_lines.append(
+            f"- Named actor context appears in {source}; this deterministic "
+            "fallback does not infer actor names, so review the source before "
+            "relying on the attribution."
+        )
+    if not actor_lines:
         actor_lines = [
             "- No article-supported threat actor activity was identified in this reporting period."
         ]
