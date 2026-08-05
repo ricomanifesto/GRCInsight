@@ -58,6 +58,9 @@ const normalized = renderer.normalizeReportMarkdown('1. Executive Summary\\n1. R
 assert(normalized.includes('## Executive Summary'), 'numbered known section labels should normalize to h2 headings');
 assert(normalized.includes('1. Review vendor contracts.'), 'numbered prose must not be promoted to a heading');
 assert(renderer.normalizeReportMarkdown('## Executive Summary').includes('## Executive Summary'), 'existing h2 headings should be preserved');
+const entitySections = renderer.normalizeReportMarkdown('4. Threat Actor Activities\\n5. CVE and Vulnerability Highlights');
+assert(entitySections.includes('## Threat Actor Activities'), 'threat actor section should normalize to h2');
+assert(entitySections.includes('## CVE and Vulnerability Highlights'), 'CVE section should normalize to h2');
 
 // Markdown rendering: headings, tables, lists, code.
 assert(renderer.renderMarkdown('## Risk Assessment').includes('<h2>Risk Assessment</h2>'), 'h2 markdown should render as an h2 element');

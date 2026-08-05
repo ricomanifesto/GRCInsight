@@ -2,6 +2,7 @@
 
 from collections import Counter
 from datetime import datetime, timezone
+import re
 from typing import Dict, Any, List
 from loguru import logger
 
@@ -20,6 +21,10 @@ from core.entities import analyze_article_grc_content
 
 # Initialize services
 rss_service = RSSService()
+
+SOURCE_EVIDENCE_LIMIT = 12
+REPORT_CVE_LIMIT = 10
+REPORT_CVE_EVIDENCE_LIMIT = min(REPORT_CVE_LIMIT, SOURCE_EVIDENCE_LIMIT - 2)
 
 
 def _utc_now() -> datetime:
@@ -111,6 +116,123 @@ def _build_article_reason(local: Dict[str, Any], risk_categories: List[str]) -> 
     if risk_categories:
         return f"Risk themes: {', '.join(risk_categories[:2])}"
     return "Operational and compliance monitoring signal"
+
+
+def _extract_cves(text: str) -> List[str]:
+    """Extract valid-shape CVE identifiers while preserving first-seen order."""
+    seen = set()
+    cves = []
+    for match in re.finditer(r"\bCVE-\d{4}-\d{4,}\b", text, re.IGNORECASE):
+        cve = match.group(0).upper()
+        if cve not in seen:
+            seen.add(cve)
+            cves.append(cve)
+    return cves
+
+
+def _extract_actor_ids(text: str) -> List[str]:
+    """Extract structured actor identifiers without guessing natural-language aliases."""
+    seen = set()
+    actor_ids = []
+    pattern = r"\b(APT|TA|UNC|FIN|DEV)[ -]?(\d+)\b"
+    for match in re.finditer(pattern, text):
+        actor_id = f"{match.group(1)}{match.group(2)}"
+        if re.fullmatch(r"TA00\d{2}", actor_id):
+            continue
+        if actor_id not in seen:
+            seen.add(actor_id)
+            actor_ids.append(actor_id)
+    return actor_ids
+
+
+def _has_threat_actor_context(text: str) -> bool:
+    """Return whether source text explicitly discusses malicious actor activity."""
+    normalized_text = re.sub(r"[-‐‑‒–—]+", " ", text)
+    return bool(
+        re.search(
+            r"\b(?:threat actors?|threat groups?|nation state actors?|"
+            r"state sponsored (?:actors?|groups?)|cyber ?espionage groups?|"
+            r"ransomware (?:groups?|gangs?)|hacking groups?)\b",
+            normalized_text,
+            re.IGNORECASE,
+        )
+    )
+
+
+def _build_source_evidence(enriched_articles: List[ArticleInput]) -> List[Dict[str, Any]]:
+    """Build bounded current-source evidence without inferring actor names."""
+    evidence: List[Dict[str, Any]] = []
+    for article in enriched_articles:
+        text = "\n".join(filter(None, [article.title, article.summary, article.content]))
+        evidence.append(
+            {
+                "title": article.title,
+                "url": article.url,
+                "snippet": re.sub(r"\s+", " ", text).strip()[:700],
+                "cves": _extract_cves(text),
+                "actor_ids": _extract_actor_ids(text),
+                "has_threat_context": _has_threat_actor_context(text),
+            }
+        )
+
+    selected_indices = []
+    selected_index_set = set()
+    selected_cves = set()
+
+    def add(index: int) -> bool:
+        if len(selected_indices) >= SOURCE_EVIDENCE_LIMIT or index in selected_index_set:
+            return False
+        selected_indices.append(index)
+        selected_index_set.add(index)
+        return True
+
+    # Preserve evidence for distinct CVEs across the entire feed. Repeated
+    # coverage of one CVE must not consume the bounded evidence budget.
+    for index, item in enumerate(evidence):
+        if len(selected_cves) >= REPORT_CVE_LIMIT:
+            break
+        new_cves = [cve for cve in item["cves"] if cve not in selected_cves]
+        if new_cves and add(index):
+            selected_cves.update(new_cves[: REPORT_CVE_LIMIT - len(selected_cves)])
+        if len(selected_indices) >= REPORT_CVE_EVIDENCE_LIMIT:
+            break
+
+    # Reserve room for explicit threat context, including named actors that
+    # cannot be safely reduced to a deterministic alias by regex.
+    for index, item in enumerate(evidence):
+        if item["actor_ids"] or item["has_threat_context"]:
+            add(index)
+
+    for index in range(len(evidence)):
+        add(index)
+
+    return [evidence[index] for index in selected_indices]
+
+
+def _collect_source_entities(
+    source_evidence: List[Dict[str, Any]],
+) -> tuple[List[str], List[Dict[str, str]]]:
+    """Collect bounded CVEs and source-linked structured actor identifiers."""
+    cves = []
+    actor_sources = []
+    seen_cves = set()
+    seen_actors = set()
+    for item in source_evidence:
+        for cve in item.get("cves", []):
+            if cve not in seen_cves and len(cves) < REPORT_CVE_LIMIT:
+                seen_cves.add(cve)
+                cves.append(cve)
+        for actor_id in item.get("actor_ids", []):
+            if actor_id not in seen_actors:
+                seen_actors.add(actor_id)
+                actor_sources.append(
+                    {
+                        "actor_id": actor_id,
+                        "title": item.get("title", "source article"),
+                        "url": item.get("url", ""),
+                    }
+                )
+    return cves, actor_sources
 
 
 def _build_local_analysis(enriched_articles: List[ArticleInput]):
@@ -213,6 +335,35 @@ def _build_fallback_report(
             "- Current source articles emphasize operational cyber risk and compliance monitoring."
         )
 
+    source_evidence = _build_source_evidence(enriched_articles)
+    cves, actor_sources = _collect_source_entities(source_evidence)
+    actor_lines = []
+    for item in actor_sources:
+        source = f"[{item['title']}]({item['url']})" if item["url"] else item["title"]
+        actor_lines.append(
+            f"- {item['actor_id']}: Mentioned in {source}; review the source "
+            "context before relying on the attribution."
+        )
+    for item in source_evidence:
+        if not item.get("has_threat_context") or item.get("actor_ids"):
+            continue
+        source = f"[{item['title']}]({item['url']})" if item["url"] else item["title"]
+        actor_lines.append(
+            f"- Named actor context appears in {source}; this deterministic "
+            "fallback does not infer actor names, so review the source before "
+            "relying on the attribution."
+        )
+    if not actor_lines:
+        actor_lines = [
+            "- No article-supported threat actor activity was identified in this reporting period."
+        ]
+
+    cve_lines = (
+        [f"- {cve}: Review business impact, exposure, and remediation ownership." for cve in cves]
+        if cves
+        else ["- No article-supported CVEs were identified in this reporting period."]
+    )
+
     recommendation_lines = [
         "- Maintain incident response, disclosure, and evidence-retention readiness for high-severity cyber events.",
         "- Prioritize vulnerability remediation, privileged access hygiene, and external attack-surface review for internet-facing services.",
@@ -266,10 +417,9 @@ def _build_fallback_report(
             "---",
             "",
             "1) Executive Summary",
-            f"- This report was generated using deterministic local analysis because AI generation was temporarily unavailable: {limitation}.",
-            f"- The monitored feed continues to surface material GRC monitoring signals across {total_count} current articles.",
-            f"- Dominant themes in the current batch include {', '.join(risk_categories[:3]) if risk_categories else 'operational cyber risk, third-party exposure, and regulatory monitoring'}.",
-            "- Business impact remains concentrated in incident response readiness, disclosure obligations, control effectiveness, and board-level risk oversight.",
+            f"This report was generated using deterministic local analysis because AI generation was temporarily unavailable: {limitation}. The monitored feed continues to surface material GRC monitoring signals across {total_count} current articles.",
+            "",
+            f"Dominant themes in the current batch include {', '.join(risk_categories[:3]) if risk_categories else 'operational cyber risk, third-party exposure, and regulatory monitoring'}. Business impact remains concentrated in incident response readiness, disclosure obligations, control effectiveness, and board-level risk oversight.",
             "",
             "2) Key Regulatory Developments",
             "Observations",
@@ -282,13 +432,19 @@ def _build_fallback_report(
             *industry_lines,
             "- Organizations in regulated or data-intensive sectors should expect the same cyber events to trigger legal, contractual, and supervisory scrutiny.",
             "",
-            "4) Risk Assessment",
+            "4) Threat Actor Activities",
+            *actor_lines,
+            "",
+            "5) CVE and Vulnerability Highlights",
+            *cve_lines,
+            "",
+            "6) Risk Assessment",
             *risk_lines,
             "",
-            "5) Recommendations for Action",
+            "7) Recommendations for Action",
             *recommendation_lines,
             "",
-            "6) Source Highlights",
+            "8) Source Highlights",
             *highlights,
             "",
             "Notes and limitations",
@@ -389,6 +545,7 @@ async def run_grc_analysis_endpoint(feed_url: str, config: GRCAnalysisConfig) ->
                 used_model_analysis = True
 
         grc_article_count = analysis_results.get("summary", {}).get("grc_relevant_count", 0)
+        analysis_results["source_evidence"] = _build_source_evidence(enriched_articles)
         logger.info(f"Found {grc_article_count} articles with GRC content")
 
         # Build per-article output
