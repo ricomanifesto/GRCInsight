@@ -279,6 +279,56 @@ def test_unrecoverable_malformed_feed_maps_to_rss_fetch_failure(monkeypatch):
     assert "RSS feed parsing failed" in (response.error.details or "")
 
 
+def test_blank_feed_body_maps_to_rss_fetch_failure(monkeypatch):
+    StaticFeedAsyncClient.response_text = "   \n\t"
+    monkeypatch.setattr("services.rss_service.httpx.AsyncClient", StaticFeedAsyncClient)
+
+    response = asyncio.run(
+        workflow_mod.run_grc_analysis_endpoint(
+            "https://example.com/feed.xml",
+            GRCAnalysisConfig(),
+        )
+    )
+
+    assert response.status == "failed"
+    assert response.error is not None
+    assert response.error.code == "RSS_FETCH_FAILED"
+    assert "RSS feed response was empty" in (response.error.details or "")
+
+
+def test_non_feed_payload_maps_to_rss_fetch_failure(monkeypatch):
+    StaticFeedAsyncClient.response_text = "<html><body>service unavailable</body></html>"
+    monkeypatch.setattr("services.rss_service.httpx.AsyncClient", StaticFeedAsyncClient)
+
+    response = asyncio.run(
+        workflow_mod.run_grc_analysis_endpoint(
+            "https://example.com/feed.xml",
+            GRCAnalysisConfig(),
+        )
+    )
+
+    assert response.status == "failed"
+    assert response.error is not None
+    assert response.error.code == "RSS_FETCH_FAILED"
+    assert "no feed metadata or entries" in (response.error.details or "")
+
+
+def test_valid_empty_feed_remains_usable(monkeypatch):
+    StaticFeedAsyncClient.response_text = (
+        "<rss><channel><title>Quiet Feed</title>"
+        "<link>https://example.com/</link>"
+        "<description>No current entries</description></channel></rss>"
+    )
+    monkeypatch.setattr("services.rss_service.httpx.AsyncClient", StaticFeedAsyncClient)
+
+    result = asyncio.run(RSSService().fetch_feed("https://example.com/feed.xml"))
+
+    assert "error" not in result
+    assert result["title"] == "Quiet Feed"
+    assert result["entry_count"] == 0
+    assert result["entries"] == []
+
+
 def test_malformed_feed_with_recoverable_entries_remains_usable(monkeypatch):
     StaticFeedAsyncClient.response_text = (
         "<rss><channel><title>Recovered</title><item><title>One</title>"

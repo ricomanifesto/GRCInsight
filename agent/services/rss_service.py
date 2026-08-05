@@ -27,10 +27,21 @@ class RSSService:
                 response = await client.get(feed_url)
                 response.raise_for_status()
 
+            response_text = response.text
+            if not response_text.strip():
+                raise ValueError("RSS feed response was empty")
+
             # Parse the feed
-            feed = feedparser.parse(response.text)
+            feed = feedparser.parse(response_text)
             if feed.bozo and not feed.entries:
                 raise ValueError(f"RSS feed parsing failed: {feed.bozo_exception}")
+            metadata_keys = set(feed.feed.keys())
+            has_feed_metadata = any(
+                field in metadata_keys and str(feed.feed[field]).strip()
+                for field in ("title", "link", "subtitle", "updated", "id")
+            )
+            if not feed.entries and not has_feed_metadata:
+                raise ValueError("RSS payload contained no feed metadata or entries")
 
             # Extract entries
             entries = []
