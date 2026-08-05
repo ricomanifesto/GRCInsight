@@ -11,12 +11,13 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 AGENT_PYPROJECT = REPO_ROOT / "agent" / "pyproject.toml"
 DEPLOY_SCRIPT = REPO_ROOT / "scripts" / "deploy-lambda.sh"
 DEPLOY_WORKFLOW = REPO_ROOT / ".github" / "workflows" / "deploy-lambda.yml"
+DEPLOY_SITE_WORKFLOW = REPO_ROOT / ".github" / "workflows" / "deploy-site.yml"
 REPORT_WORKFLOW = REPO_ROOT / ".github" / "workflows" / "lambda-report-generation.yml"
 CI_WORKFLOW = REPO_ROOT / ".github" / "workflows" / "ci.yml"
 SITE_REPORT_CHECK = REPO_ROOT / "scripts" / "check_site_report.py"
 MODEL_SERVICE = REPO_ROOT / "agent" / "services" / "model_service.py"
 RENDERER_JS = REPO_ROOT / "site" / "static" / "renderer.js"
-WORKFLOWS = (CI_WORKFLOW, DEPLOY_WORKFLOW, REPORT_WORKFLOW)
+WORKFLOWS = (CI_WORKFLOW, DEPLOY_WORKFLOW, DEPLOY_SITE_WORKFLOW, REPORT_WORKFLOW)
 PUBLISHED_AT = datetime(2026, 6, 1, tzinfo=timezone.utc)
 
 
@@ -25,6 +26,16 @@ def test_report_generation_workflow_accepts_repository_dispatch_payloads():
 
     assert "repository_dispatch:" in workflow
     assert "github.event.client_payload.feed_url" in workflow
+
+
+def test_static_site_deploys_main_branch_site_changes():
+    workflow = DEPLOY_SITE_WORKFLOW.read_text()
+
+    assert "push:" in workflow
+    assert "branches: [ main ]" in workflow
+    assert "- 'site/**'" in workflow
+    assert "workflow_dispatch:" in workflow
+    assert "group: github-pages" in workflow
 
 
 def test_report_generation_payload_treats_feed_url_as_json_data():

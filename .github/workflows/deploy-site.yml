@@ -1,6 +1,10 @@
 name: Deploy Static Site
 
 on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'site/**'
   workflow_dispatch:
 
 permissions:
