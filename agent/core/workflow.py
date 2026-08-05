@@ -134,10 +134,10 @@ def _extract_actor_ids(text: str) -> List[str]:
     """Extract structured actor identifiers without guessing natural-language aliases."""
     seen = set()
     actor_ids = []
-    pattern = r"\b(?:APT|TA|UNC|FIN|DEV)[ -]?\d+\b"
+    pattern = r"\b(APT|TA|UNC|FIN|DEV)[ -]?(\d+)\b"
     for match in re.finditer(pattern, text, re.IGNORECASE):
-        actor_id = match.group(0).upper()
-        if re.fullmatch(r"TA-?00\d{2}", actor_id):
+        actor_id = f"{match.group(1).upper()}{match.group(2)}"
+        if re.fullmatch(r"TA00\d{2}", actor_id):
             continue
         if actor_id not in seen:
             seen.add(actor_id)
