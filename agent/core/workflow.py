@@ -137,6 +137,8 @@ def _extract_actor_ids(text: str) -> List[str]:
     pattern = r"\b(?:APT|TA|UNC|FIN|DEV)[ -]?\d+\b"
     for match in re.finditer(pattern, text, re.IGNORECASE):
         actor_id = match.group(0).upper()
+        if re.fullmatch(r"TA00\d{2}", actor_id):
+            continue
         if actor_id not in seen:
             seen.add(actor_id)
             actor_ids.append(actor_id)

@@ -10,6 +10,8 @@ from models.api import ArticleInput
 from services.opencode_client import OpenCodeClient, parse_model_selection
 from services.openrouter_client import OpenRouterClient
 
+REPORT_CVE_LIMIT = 10
+
 
 class GRCModelService:
     """Service for model-powered GRC analysis."""
@@ -223,8 +225,13 @@ Focus only on content with clear governance, risk, or compliance implications.""
         source_evidence = analysis_data.get("source_evidence", [])
 
         source_lines = []
+        prompt_cves = set()
         for index, evidence in enumerate(source_evidence, 1):
-            cves = evidence.get("cves", []) or []
+            cves = []
+            for cve in evidence.get("cves", []) or []:
+                if cve not in prompt_cves and len(prompt_cves) < REPORT_CVE_LIMIT:
+                    prompt_cves.add(cve)
+                    cves.append(cve)
             actor_ids = evidence.get("actor_ids", []) or []
             source_lines.append(
                 "\n".join(

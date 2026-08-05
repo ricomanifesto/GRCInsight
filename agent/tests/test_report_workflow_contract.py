@@ -97,6 +97,32 @@ def test_report_prompt_requires_current_source_entities_and_readable_summary():
     assert "List every article-supported CVE identifier up to 10 items" in prompt
 
 
+def test_report_prompt_globally_bounds_cve_evidence():
+    service = GRCModelService.__new__(GRCModelService)
+    cves = [f"CVE-2026-{10000 + index}" for index in range(12)]
+
+    prompt = service._create_report_prompt(
+        {
+            "summary": {"total_articles": 1, "grc_relevant_count": 1},
+            "analysis": {},
+            "source_evidence": [
+                {
+                    "title": "Patch roundup",
+                    "url": "https://example.com/roundup",
+                    "snippet": "A vendor published a security patch roundup.",
+                    "cves": cves,
+                    "actor_ids": [],
+                }
+            ],
+        },
+        {"title": "Test Feed"},
+    )
+
+    assert cves[9] in prompt
+    assert cves[10] not in prompt
+    assert cves[11] not in prompt
+
+
 def test_source_evidence_preserves_distinct_cves_and_safe_actor_context():
     articles = [
         ArticleInput(
@@ -164,6 +190,14 @@ def test_source_evidence_preserves_distinct_cves_and_safe_actor_context():
         )
         is False
     )
+
+
+def test_actor_id_extraction_excludes_mitre_attack_tactics():
+    actor_ids = workflow_mod._extract_actor_ids(
+        "MITRE ATT&CK maps initial access to TA0001. Threat actor TA505 remains active."
+    )
+
+    assert actor_ids == ["TA505"]
 
 
 def test_source_evidence_reserves_room_for_actor_context_after_cve_volume():
