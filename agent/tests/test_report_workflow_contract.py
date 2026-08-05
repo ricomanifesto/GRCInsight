@@ -36,6 +36,7 @@ def test_static_site_deploys_main_branch_site_changes():
     assert "- 'site/**'" in workflow
     assert "workflow_dispatch:" in workflow
     assert "group: github-pages" in workflow
+    assert "run: make check-site" in workflow
 
 
 def test_report_generation_payload_treats_feed_url_as_json_data():

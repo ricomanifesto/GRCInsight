@@ -27,7 +27,7 @@ jobs:
         uses: actions/checkout@v7
 
       - name: Validate site artifact
-        run: python3 scripts/check_site_report.py
+        run: make check-site
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v5
