@@ -264,6 +264,7 @@ Focus only on content with clear governance, risk, or compliance implications.""
                     cves.append(normalized_cve)
             actor_ids = evidence.get("actor_ids", []) or []
             title = _sanitize_evidence_text(evidence.get("title", "Untitled source"), allowed_cves)
+            url = _sanitize_evidence_text(evidence.get("url", "No URL"), allowed_cves)
             snippet = _sanitize_evidence_text(
                 evidence.get("snippet", "No snippet available"), allowed_cves
             )
@@ -271,7 +272,7 @@ Focus only on content with clear governance, risk, or compliance implications.""
                 "\n".join(
                     [
                         f"{index}. {title}",
-                        f"   URL: {evidence.get('url', 'No URL')}",
+                        f"   URL: {url}",
                         f"   CVEs: {', '.join(cves) if cves else 'None detected'}",
                         f"   Structured actor IDs: {', '.join(actor_ids) if actor_ids else 'None detected'}",
                         f"   Snippet: {snippet}",

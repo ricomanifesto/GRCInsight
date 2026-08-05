@@ -108,7 +108,7 @@ def test_report_prompt_globally_bounds_cve_evidence():
             "source_evidence": [
                 {
                     "title": "Patch roundup",
-                    "url": "https://example.com/roundup",
+                    "url": f"https://example.com/advisory/{cves[10]}",
                     "snippet": "A vendor published fixes for " + ", ".join(cves) + ".",
                     "cves": cves,
                     "actor_ids": [],
