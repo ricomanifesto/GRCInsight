@@ -1,145 +1,132 @@
 # GRC Intelligence Report - 2026-08-09
-**Generated:** 2026-08-09T09:48:54.523851Z
-**Date of Issue:** August 2026  
-**Analysis Period:** August 2026  
-**Source:** Cybersecurity News Aggregator  
-**Articles Analyzed:** 30 (30 GRC-relevant)
+**Generated:** 2026-08-09T13:06:54.221169Z
+**Date of Issue: August 2026**  
+**Analysis Period: August 2026**  
+**Articles Analyzed: 30 | GRC-Relevant: 30**
 
 ---
 
 ## Executive Summary
 
-**Escalating Targeted Extortion Campaigns Against Financial Services**  
-A coordinated vishing and data extortion campaign by UNC6671—linked to the BlackFile threat group—is actively targeting hedge funds, private equity firms, and professional services organizations. The group's reliance on voice-based social engineering against personal devices represents a significant bypass of traditional enterprise perimeter controls, requiring immediate revision of identity verification and mobile device management policies.
+**Evolving Social Engineering Threat Landscape**  
+A coordinated vishing campaign by the UNC6671 data extortion group is targeting financial services, private equity, and professional services firms through personal phone channels to compromise SaaS credentials. This shift toward voice-based social engineering bypasses traditional email security controls and exploits trust in personal communication devices, requiring immediate updates to identity verification protocols and employee awareness programs.
 
-**Software Supply Chain and Zero-Day Exploitation Accelerating**  
-Multiple critical zero-day vulnerabilities are under active exploitation across widely deployed enterprise platforms including Metabase (business intelligence), N-able N-central (RMM), Progress Kemp LoadMaster (load balancing), and Atlassian Rovo (AI assistant). The Metabase SQL injection flaw has already resulted in confirmed customer data theft at Framework and Tally, while the Kemp LoadMaster vulnerability has attracted 792 exploit attempts and CISA KEV listing—indicating high-volume automated exploitation.
+**Supply Chain and Software Supply Risk Escalation**  
+Multiple high-impact supply chain incidents emerged this period, including the TeamPCP campaign compromising internet-facing Redis infrastructure since 2020, the TrueConf video conferencing software trojanization by the Head Mare hacktivist group, and active exploitation of a critical Metabase zero-day affecting business intelligence platforms. These incidents demonstrate persistent adversary focus on widely deployed enterprise software and managed service provider ecosystems.
 
-**Systemic Law Enforcement Coordination Gap Persists**  
-Threat actors continue to outpace defensive coordination, operating across jurisdictions with infrastructure persistence dating back to 2020 (TeamPCP Redis compromises). The fragmentation of law enforcement response creates an operational advantage for adversaries who rapidly rotate infrastructure, monetize stolen data through extortion, and exploit the delay between vulnerability disclosure and organizational patching.
+**Critical Vulnerability Exploitation in Core Infrastructure**  
+CISA added a Progress Kemp LoadMaster flaw to its Known Exploited Vulnerabilities catalog after 792 reported exploit attempts, while N-able issued emergency hotfixes for active RMM platform exploitation. The Atlassian Rovo AI assistant vulnerability enabling data exfiltration from Jira and Confluence, alongside novel CSS-based webmail attacks spanning major providers, signals expanding attack surfaces in collaboration and identity infrastructure.
 
-**Healthcare and SaaS Data Exposure at Scale**  
-The Unlimited Technology Systems breach affecting 3.8 million individuals underscores the cascading impact of third-party software vendor compromises in regulated sectors. Simultaneously, novel CSS-based webmail attacks affecting Outlook, Gmail, Proton Mail, and other major providers demonstrate that email security boundaries remain fundamentally vulnerable to client-side exploitation techniques.
+**Regulatory and Compliance Pressure Mounting**  
+The 3.8 million-record healthcare data breach at Unlimited Technology Systems (occurring October 2025, disclosed this period) underscores extended breach notification timelines and GDPR/NIST alignment challenges. Combined with law enforcement coordination gaps highlighted in recent analysis, organizations face growing pressure to demonstrate proactive risk governance, incident response readiness, and supply chain due diligence to regulators and stakeholders.
 
 ---
 
 ## Key Regulatory Developments
 
-| Regulation/Framework | Relevance to Current Threat Landscape | Compliance Implications |
-|---------------------|--------------------------------------|------------------------|
-| **GDPR** | 3.8M-record healthcare breach (Unlimited Technology Systems); Metabase data theft affecting EU customers | 72-hour breach notification timelines triggered; potential Article 32 security-of-processing failures; cross-border data transfer scrutiny |
-| **CCPA/CPRA** | Financial services targeting (UNC6671); California-based hedge funds and PE firms affected | Consumer notification obligations; "reasonable security" standard testing; private right of action exposure for credential theft |
-| **NIST CSF 2.0** | Supply chain risks (TeamPCP, N-able RMM, TrueConf); zero-day exploitation across critical infrastructure | Governance (GV) and Supply Chain Risk Management (ID.SC) categories directly implicated; continuous monitoring gaps exposed |
-| **PCI-DSS v4.0** | Financial services sector targeting; payment-adjacent data in hedge fund/PE environments | Requirement 6 (vulnerability management) and 12 (risk assessment) pressure; compensation controls for unpatchable zero-days |
-| **SOX** | Data integrity risks from Metabase BI platform compromise; financial reporting system access | Section 404 internal control deficiencies potential; auditor scrutiny of BI tool access controls and change management |
+| Regulation / Framework | Development | Business Impact |
+|------------------------|-------------|-----------------|
+| **GDPR** | Extended breach notification scrutiny following 3.8M-record healthcare breach (Unlimited Technology Systems) | Organizations must validate breach detection-to-notification timelines; cross-border data transfer mechanisms under review |
+| **NIST CSF / 800-53** | Alignment expectations for supply chain risk management (CISA KEV additions, RMM exploitation) | Control implementation evidence required for SA/CA supplier assessments; continuous monitoring maturity gaps exposed |
+| **CISA KEV Catalog** | Progress Kemp LoadMaster CVE added after 792 exploit attempts | Mandatory remediation for FCEB agencies; de facto standard for critical infrastructure and vendor risk programs |
+| **Sector-Specific (Healthcare/Financial)** | Hedge fund and PE targeting by UNC6671; healthcare software breach | SEC cyber disclosure rules, NYDFS 500, HIPAA enforcement precedence—board-level reporting obligations triggered |
 
-**Regulatory Trend:** Regulators are increasingly treating unpatched known-exploited vulnerabilities (CISA KEV-listed) as per se evidence of unreasonable security practices. The Kemp LoadMaster CISA KEV addition with 792 exploit attempts creates a de facto compliance deadline for affected organizations.
+**Strategic Implication:** Regulatory focus is converging on **supply chain accountability**, **timely breach disclosure**, and **evidence-based control effectiveness**. Organizations relying on third-party SaaS, RMM, and collaboration platforms must document due diligence, contractual security requirements, and incident response coordination with vendors.
 
 ---
 
 ## Industry Impact Analysis
 
-| Sector | Primary Threat Vectors | Business Impact | Regulatory Exposure |
-|--------|----------------------|-----------------|---------------------|
-| **Financial Services / Hedge Funds / Private Equity** | UNC6671 vishing, social engineering, data extortion | Direct financial theft, investor confidence erosion, fund operational disruption | SEC disclosure rules, SOX, PCI-DSS, state cybersecurity regulations (NYDFS, etc.) |
-| **Healthcare Technology / SaaS** | Unlimited Technology Systems breach (3.8M records); TrueConf supply chain | Patient data exposure, HIPAA breach notification cascade, vendor liability | HIPAA, HITECH, state breach laws, GDPR (if EU data subjects) |
-| **Enterprise Software / BI & Analytics** | Metabase zero-day (SQLi, auth bypass); Framework/Tally data theft | Customer data exfiltration, intellectual property loss, contractual liability | GDPR, CCPA, SOC 2 Type II control failures, vendor risk management gaps |
-| **Managed Services / MSPs** | N-able N-central RMM exploitation; TeamPCP Redis/supply chain | Downstream customer compromise, service availability, trust erosion | Contractual SLAs, NIST CSF supply chain requirements, cyber insurance implications |
-| **Technology / Collaboration Platforms** | Atlassian Rovo data exfiltration; CSS webmail attacks (all major providers) | Proprietary data leakage, credential harvesting, business email compromise | GDPR, CCPA, SEC cyber rules for public companies, industry-specific regs |
+| Sector | Key Incidents | Primary Risk Vectors | Estimated Exposure |
+|--------|---------------|---------------------|-------------------|
+| **Financial Services / Private Equity / Hedge Funds** | UNC6671 vishing & data extortion campaign (Articles 1, 4) | Social engineering (vishing), SaaS credential theft, data exfiltration | High—direct targeting of capital markets participants; regulatory reporting cascades |
+| **Healthcare Technology** | Unlimited Technology Systems breach (3.8M records, Article 12) | Legacy data retention, delayed disclosure (Oct 2025 → Aug 2026) | Severe—HIPAA/GDPR penalties, class action litigation, patient trust erosion |
+| **Managed Services / MSPs** | N-able N-central RMM exploitation (Article 9) | RMM platform compromise → downstream managed system access | Critical—cascading risk to MSP client bases; supply chain amplification |
+| **Enterprise Software / SaaS** | Metabase zero-day (Articles 8, 11), Atlassian Rovo (Article 6), TrueConf (Article 5), Progress Kemp LoadMaster (Article 10) | Zero-day exploitation, AI assistant prompt injection, supply chain trojanization, load balancer compromise | High—ubiquitous deployment across sectors; rapid weaponization |
+| **Technology / Communications** | TeamPCP Redis infrastructure compromise since 2020 (Article 2), CSS webmail attacks (Article 7) | Long-dormant infrastructure compromise, client-side email rendering flaws | Moderate-High—foundational infrastructure exposure; broad email user base impact |
+
+**Cross-Sector Theme:** Attackers are chaining **initial access (vishing, zero-day, supply chain)** → **credential/SaaS data theft** → **extortion**, bypassing perimeter defenses. Identity and data governance are now the primary control plane.
 
 ---
 
 ## Threat Actor Activities
 
-### UNC6671 (Data Extortion Group / BlackFile-Linked)
-- **Activity:** Vishing campaigns targeting personal phones of employees at financial services, private equity, and professional services firms
-- **Objective:** Credential theft and SaaS data access for extortion
-- **TTPs:** Voice-based social engineering bypassing MFA; personal device targeting; data extortion without ransomware deployment
-- **Attribution:** Linked to BlackFile threat group per BleepingComputer reporting
-- **Business Impact:** Direct targeting of high-value financial decision-makers; bypasses conventional email security controls
+The following threat actors are explicitly described as malicious groups in the current reporting period's source articles:
 
-### TeamPCP
-- **Activity:** Redis server compromises dating to 2020; later supply chain campaign activity
-- **Objective:** Internet-facing infrastructure compromise; persistent access for follow-on operations
-- **TTPs:** Long-term infrastructure persistence (4+ years); Redis exploitation; supply chain pivot
-- **Business Impact:** Demonstrates multi-year dwell time capability; supply chain risk to downstream users of compromised infrastructure
+| Actor | Type | Observed Activity | Target Sectors | Attribution Confidence |
+|-------|------|-------------------|----------------|------------------------|
+| **UNC6671** | Data extortion group (linked to BlackFile) | Vishing campaigns targeting personal phones to steal SaaS credentials; data theft and extortion | Financial services, private equity, hedge funds, professional services | High—multiple independent sources (The Hacker News, BleepingComputer) |
+| **TeamPCP** | Cybercrime threat actor | Redis server compromise since 2020; later supply chain campaign activity | Internet-facing infrastructure operators, downstream supply chain | Moderate—single analysis report; historical activity confirmed |
+| **Head Mare** | Hacktivist group | Exploitation of unpatched TrueConf servers; trojanized client installers delivering backdoors | Video conferencing users, TrueConf customer base | Moderate—single source; hacktivist motivation noted |
 
-### Head Mare (Hacktivist Group)
-- **Activity:** TrueConf video conferencing server exploitation; client installer trojanization with backdoors
-- **Objective:** Software supply chain compromise; backdoor deployment to client organizations
-- **TTPs:** Unpatched server exploitation; legitimate software modification; trusted distribution channel abuse
-- **Business Impact:** Video conferencing software used across enterprise and government; installer trust model violated
+**Note:** No additional article-supported threat actor activity was identified in this reporting period. The "coordination gap" analysis (Article 3) describes law enforcement challenges but does not name specific threat actors beyond the groups above.
 
 ---
 
 ## CVE and Vulnerability Highlights
 
-**No article-supported CVE identifiers were identified in the source materials.** All 12 analyzed articles reference vulnerabilities without providing CVE identifiers. The following vulnerabilities are tracked by vendor advisory or CISA KEV listing only:
+No article-supported CVE identifiers were identified in the source evidence for this reporting period. All 12 articles explicitly indicate "CVEs: None detected" in their structured metadata. Vulnerabilities are referenced descriptively (e.g., "Metabase zero-day," "Progress Kemp LoadMaster flaw," "N-central security flaw," "Atlassian Rovo vulnerability," "CSS attacks") without CVE assignments in the available snippets.
 
-| Vulnerability | Affected Product | Exploitation Status | Business Impact |
-|--------------|------------------|---------------------|-----------------|
-| **Metabase SQL Injection / Auth Bypass** | Metabase BI Platform | Zero-day, exploited in wild (Framework, Tally breached) | Admin access without auth; customer data theft; BI platform compromise |
-| **Progress Kemp LoadMaster** | LoadMaster Load Balancer | CISA KEV listed; 792 exploit attempts observed | Critical infrastructure exposure; network traffic interception; lateral movement enabler |
-| **N-able N-central RMM** | N-central RMM Platform | Active exploitation; Hotfix 2 issued | MSP compromise cascading to managed clients; persistent access to managed endpoints |
-| **Atlassian Rovo Data Exfiltration** | Atlassian Rovo (AI Assistant) | Proof-of-concept demonstrated; Jira/Confluence data access | AI assistant manipulation for data exfiltration; insider threat amplification |
-| **CSS Webmail Boundary Escape** | Outlook, Gmail, Fastmail, Proton Mail, Yahoo Mail | Research demonstrated across major providers | Client-side credential/token theft; email content manipulation; MFA bypass potential |
-| **TrueConf Server / Installer** | TrueConf Video Conferencing | Actively exploited; installers trojanized | Supply chain backdoor delivery; enterprise communication compromise |
-
-**Action Required:** Organizations using any affected products should treat these as de facto CISA KEV-equivalent priorities regardless of formal CVE assignment. Apply vendor hotfixes immediately; implement compensating controls (network segmentation, application allowlisting, enhanced monitoring) where patching is delayed.
+**Action:** Security teams should monitor NVD, CISA KEV, and vendor advisories for CVE assignments to the following actively exploited vulnerabilities:
+- Metabase SQL injection (zero-day, exploited in wild)
+- Progress Kemp LoadMaster (CISA KEV addition, 792 exploit attempts)
+- N-able N-central RMM platform (active exploitation, Hotfix 2 released)
+- Atlassian Rovo AI assistant (prompt injection → data exfiltration)
+- TrueConf video conferencing server (unpatched RCE → installer trojanization)
+- Redis server vulnerabilities (TeamPCP campaign, 2020–present)
+- Webmail CSS injection (Outlook, Gmail, Fastmail, Proton Mail, Yahoo Mail)
 
 ---
 
 ## Risk Assessment
 
-| Risk Scenario | Likelihood | Impact | Risk Rating | Key Drivers |
-|--------------|------------|--------|-------------|-------------|
-| **Financial services vishing extortion (UNC6671)** | High | Critical | **CRITICAL** | Active campaign; high-value targets; MFA bypass via voice; personal device gap |
-| **Metabase BI platform data theft** | High | High | **HIGH** | Zero-day exploited; confirmed breaches; BI platforms contain aggregated sensitive data |
-| **RMM supply chain compromise (N-able)** | Medium | Critical | **HIGH** | MSP multiplier effect; persistent access; Hotfix 2 indicates ongoing exploitation |
-| **Kemp LoadMaster network appliance compromise** | High | High | **HIGH** | CISA KEV; 792 attempts; load balancers are high-value network choke points |
-| **Webmail credential harvesting via CSS** | Medium | High | **MEDIUM-HIGH** | Universal provider impact; client-side; bypasses gateway controls; research-stage |
-| **Atlassian Rovo AI data exfiltration** | Low-Medium | High | **MEDIUM** | Requires user interaction; limited to Rovo-enabled tenants; emerging attack surface |
-| **Healthcare SaaS third-party breach cascade** | Medium | Critical | **HIGH** | 3.8M records; regulatory cascade; vendor concentration risk |
+| Risk Category | Likelihood | Impact | Velocity | Current Control Maturity | Residual Risk |
+|---------------|------------|--------|----------|--------------------------|---------------|
+| **Social Engineering (Vishing/Smishing)** | Very High | High | Fast (hours) | Low—email-centric controls; personal device gap | **Critical** |
+| **Software Supply Chain Compromise** | High | Critical | Medium (weeks-months) | Moderate—vendor assessments; limited runtime verification | **High** |
+| **Zero-Day Exploitation of Enterprise SaaS** | High | High | Fast (days) | Low-Moderate—patch management; WAF/WAAP coverage gaps | **High** |
+| **RMM/MSP Platform Abuse** | High | Critical | Medium | Moderate—hotfix deployment; MSP oversight variability | **High** |
+| **AI Assistant Prompt Injection** | Emerging | High | Fast | Very Low—new attack surface; limited detection | **High** |
+| **Client-Side Email Rendering Attacks** | Moderate | Moderate | Medium | Low—browser/email client dependencies; user-facing | **Medium** |
+| **Regulatory Non-Compliance (Breach Notification)** | Moderate | High | Slow (months) | Moderate—processes exist; evidence gaps in extended timelines | **Medium** |
+| **Law Enforcement Coordination Gap** | High | Moderate | Slow | Low—external dependency; limited organizational control | **Medium** |
 
-**Emerging Risk Themes:**
-1. **Personal Device Targeting:** UNC6671's vishing success signals adversary shift to unmanaged personal devices as enterprise credential gateways
-2. **AI Assistant Weaponization:** Atlassian Rovo manipulation demonstrates new data exfiltration vector through authorized AI tools with broad data access
-3. **Multi-Year Infrastructure Persistence:** TeamPCP's 2020-origin Redis compromises reveal adversary patience and infrastructure investment exceeding typical detection windows
-4. **Client-Side Email Boundary Failure:** CSS attacks prove webmail providers cannot fully isolate message content from application chrome
+**Key Risk Interdependencies:**  
+- Vishing → SaaS credential theft → data extortion (UNC6671 chain)  
+- RMM compromise → lateral movement to managed clients → ransomware/extortion  
+- Zero-day in BI/collaboration tools → data exfiltration → regulatory exposure  
+- Supply chain trojanization → persistent access → delayed detection
 
 ---
 
 ## Recommendations for Action
 
-### Immediate (0-30 Days)
+### Immediate (0–30 Days)
+| Action | Owner | Evidence Base |
+|--------|-------|---------------|
+| Deploy vishing-resistant MFA (phishing-resistant authenticators, number verification) for all SaaS/admin access | IAM / Security Engineering | UNC6671 vishing campaign (Articles 1, 4) |
+| Apply N-able N-central Hotfix 2; audit all RMM-administered systems for persistence | IT Operations / MSP Management | N-able active exploitation (Article 9) |
+| Patch/mitigate Progress Kemp LoadMaster per CISA KEV binding operational directive | Network / Infra Security | CISA KEV addition, 792 exploits (Article 10) |
+| Block/Monitor Atlassian Rovo external data exfiltration vectors; review AI assistant permissions | AppSec / Platform Teams | Rovo prompt injection (Article 6) |
+| Initiate Metabase emergency patching; validate no unauthorized admin accounts created | Data Platform / SecOps | Metabase zero-day exploited (Articles 8, 11) |
 
-| Action | Owner | Rationale |
-|--------|-------|-----------|
-| **Deploy anti-vishing controls:** Implement verified callback procedures for all financial transaction approvals; issue employee advisories on personal device targeting | CISO / Fraud Prevention | UNC6671 actively exploiting voice channel; standard MFA ineffective |
-| **Patch/mitigate all KEV-listed vulnerabilities:** Prioritize Kemp LoadMaster, Metabase, N-able N-central per CISA Binding Operational Directive timelines | Vulnerability Management | Active exploitation confirmed; regulatory exposure for delays |
-| **Audit Metabase and BI platform access:** Review admin accounts, API keys, and data export logs for unauthorized access indicators | Data Platform Team / SOC | Confirmed zero-day exploitation with data theft at multiple customers |
-| **Block/Monitor TrueConf traffic:** Restrict TrueConf server communications; verify installer integrity via hash validation | Endpoint / Network Security | Active supply chain backdoor campaign via trojanized installers |
-| **Enable Atlassian Rovo data loss prevention:** Configure Rovo access policies; monitor for anomalous data export patterns | IT / Atlassian Admin | Demonstrated AI assistant manipulation for Jira/Confluence data exfiltration |
-
-### Near-Term (30-90 Days)
-
-| Action | Owner | Rationale |
-|--------|-------|-----------|
-| **Implement personal device risk program:** Extend MDM/EDR to BYOD accessing SaaS; deploy phishing-resistant auth (FIDO2/WebAuthn) for high-risk roles | Identity & Access Management | UNC6671 proves personal phones are credential theft vector |
-| **Supply chain vendor reassessment:** Map all RMM, BI, video conferencing, and load balancer vendors; require SBOMs and patch SLAs in contracts | Vendor Risk Management | TeamPCP (4-year persistence), N-able, TrueConf, Kemp demonstrate vendor concentration risk |
-| **Email client hardening:** Deploy webmail client security policies (CSP, iframe sandboxing); evaluate email security solutions with client-side analysis | Email Security | CSS attacks bypass gateway controls; require client-side defense |
-| **Law enforcement liaison establishment:** Formalize relationships with FBI InfraGard, CISA, and sector ISACs for faster threat intelligence sharing | CISO / Legal | Coordination gap identified; early warning critical for zero-day response |
-| **Tabletop exercise:** Simulate UNC6671-style vishing + data extortion scenario with executive leadership | Crisis Management | Extortion without encryption changes decision calculus; test notification timelines |
+### Near-Term (30–90 Days)
+| Action | Owner | Evidence Base |
+|--------|-------|---------------|
+| Conduct supply chain risk reassessment for all critical SaaS/RMM/collaboration vendors; require SBOM/attestation | Vendor Risk / Procurement | TeamPCP (Redis), TrueConf, Metabase, N-able, Atlassian, Progress Kemp |
+| Implement client-side email security controls (CSP, content isolation) for webmail access | Email Security / Endpoint | CSS webmail attacks across providers (Article 7) |
+| Update breach notification playbooks for GDPR/SEC/HIPAA alignment; test 72-hour/4-day reporting | Legal / Compliance / Privacy | Unlimited Technology Systems delayed disclosure (Article 12) |
+| Deploy vishing simulation and personal-device awareness training; update acceptable use policies | Security Awareness / HR | UNC6671 personal phone targeting (Articles 1, 4) |
+| Establish threat intelligence sharing with sector ISACs and CISA; address law enforcement coordination gaps | Threat Intel / CISO Office | Coordination gap analysis (Article 3) |
 
 ### Strategic (90+ Days)
-
-| Action | Owner | Rationale |
-|--------|-------|-----------|
-| **Zero Trust Architecture acceleration:** Eliminate implicit trust for personal devices; enforce device posture checks for all SaaS access | Security Architecture | Perimeter erosion complete; identity is the new control plane |
-| **AI Governance Framework:** Establish policies for AI assistant data access, prompt injection monitoring, and data exfiltration detection | AI Governance / Privacy | Rovo incident proves AI tools are high-privilege attack surface |
-| **Regulatory readiness program:** Align vulnerability management metrics with SEC cyber disclosure rules, NYDFS, and GDPR accountability requirements | Compliance / Legal | Regulators treating KEV delays as negligence; documentation critical |
-| **Cyber insurance policy review:** Validate coverage for vishing/social engineering, supply chain, and AI-related data loss; negotiate sub-limits | Risk Management / Finance | Emerging attack vectors may fall outside traditional policy language |
-| **Threat hunting program expansion:** Dedicate resources to hunt for TeamPCP-style long-dwell infrastructure (Redis, RMM, BI platforms) | SOC / Threat Intelligence | 4-year persistence proves conventional detection misses strategic adversaries |
+| Action | Owner | Evidence Base |
+|--------|-------|---------------|
+| Adopt zero-trust architecture for SaaS and identity plane; eliminate implicit trust in personal devices | Architecture / Security Engineering | UNC6671, RMM abuse, AI assistant risks |
+| Implement software supply chain security program: SLSA/SSDF alignment, runtime integrity monitoring | DevSecOps / Supply Chain Security | TeamPCP, TrueConf, multiple zero-days |
+| Build AI/ML assistant governance framework: prompt injection testing, data loss prevention, audit logging | AI Governance / Platform | Atlassian Rovo vulnerability (Article 6) |
+| Commission red team exercises simulating vishing→SaaS→extortion and supply chain compromise chains | Offensive Security | UNC6671, Metabase, N-able attack patterns |
+| Align board reporting with SEC cyber rules and NIST CSF 2.0 governance outcomes | GRC / CISO / Board Liaison | Regulatory convergence, breach disclosure pressure |
 
 ---
 
@@ -147,18 +134,18 @@ The Unlimited Technology Systems breach affecting 3.8 million individuals unders
 
 | # | Title | Source | Key Entities |
 |---|-------|--------|--------------|
-| 1 | UNC6671 Vishing Attacks Target Personal Phones to Steal SaaS Data | The Hacker News | UNC6671, Financial Services, Private Equity |
+| 1 | UNC6671 Vishing Attacks Target Personal Phones to Steal SaaS Data | The Hacker News | UNC6671, Financial Services, PE, Professional Services |
 | 2 | TeamPCP Linked To Redis Attacks Dating Back To 2020 | The Hacker News | TeamPCP, Redis, Supply Chain |
 | 3 | The Coordination Gap: Attackers Outpacing Law Enforcement | Dark Reading | Law Enforcement, Cybercrime |
-| 4 | Hedge Fund Cyberattacks Tied to BlackFile-Linked UNC6671 | BleepingComputer | UNC6671, BlackFile, Hedge Funds |
-| 5 | Hackers Breach TrueConf to Trojanize Client Installers | BleepingComputer | Head Mare, TrueConf, Supply Chain |
-| 6 | Atlassian Rovo Can Be Tricked Into Sending Jira/Confluence Data | The Hacker News | Atlassian, Rovo, AI, Data Exfiltration |
-| 7 | New CSS Attacks Can Break Webmail Defenses | The Hacker News | CSS, Webmail, Outlook, Gmail, Proton |
-| 8 | Metabase Zero-Day Exploited in Wild Allows Admin Access | The Hacker News | Metabase, Zero-Day, SQLi |
-| 9 | N-able Issues N-central Hotfix 2 as Attackers Persist | The Hacker News | N-able, N-central, RMM |
-| 10 | Progress Kemp LoadMaster Flaw Hits CISA KEV | The Hacker News | Progress, Kemp, CISA KEV |
-| 11 | Metabase SQLi Zero-Day Exploited in Data Theft Attacks | BleepingComputer | Metabase, Framework, Tally |
-| 12 | Unlimited Technology Systems Breach Impacts 3.8M People | BleepingComputer | Unlimited Technology Systems, Healthcare |
+| 4 | Hedge Fund Cyberattacks Tied to BlackFile-linked UNC6671 | BleepingComputer | UNC6671, BlackFile, Hedge Funds, PE |
+| 5 | Hackers Breach TrueConf to Trojanize Client Installers | BleepingComputer | Head Mare, TrueConf, Backdoors |
+| 6 | Atlassian Rovo Can Be Tricked Into Sending Jira/Confluence Data | The Hacker News | Atlassian, Rovo, AI Assistant, Prompt Injection |
+| 7 | New CSS Attacks Can Break Webmail Defenses | The Hacker News | CSS Injection, Outlook, Gmail, Proton, Yahoo, Fastmail |
+| 8 | Metabase Zero-Day Exploited in Wild Allows Admin Access | The Hacker News | Metabase, Zero-Day, SQLi, BI Platform |
+| 9 | N-able Issues N-central Hotfix 2 as Attackers Reach Managed Systems | The Hacker News | N-able, N-central, RMM, MSP |
+| 10 | Progress Kemp LoadMaster Flaw Hits CISA KEV After 792 Exploits | The Hacker News | Progress Kemp, LoadMaster, CISA KEV |
+| 11 | Metabase SQLi Zero-Day Exploited in Customer Data-Theft Attacks | BleepingComputer | Metabase, Framework, Tally, Data Theft |
+| 12 | Unlimited Technology Systems Breach Impacts 3.8 Million People | BleepingComputer | Unlimited Technology Systems, Healthcare, 3.8M Records |
 
 ---
 
