@@ -1,10 +1,10 @@
 # GRC Intelligence Report - 2026-08-10
-**Generated:** 2026-08-10T07:49:33.02015Z
+**Generated:** 2026-08-10T10:20:48.114112Z
 
 **Analysis Period:** Current Quarter (August 2026)
 **Date of Issue:** August 2026
 **Source:** Cybersecurity News Aggregator
-**Total Articles Analyzed:** 30 (Locally flagged as GRC-relevant: 26)
+**Total Articles Analyzed:** 30 (Locally flagged as GRC-relevant: 25)
 
 ---
 
