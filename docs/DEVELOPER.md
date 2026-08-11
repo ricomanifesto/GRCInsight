@@ -25,8 +25,8 @@ Set environment variables for the services:
 
 ## Environment Variables
 - Python agent
-  - `LLM_MODEL=openrouter/provider-model` and `OPENROUTER_API_KEY` for Lambda model-backed analysis
-  - `OPENCODE_BASE_URL` is still supported for local OpenCode-backed development when `OPENROUTER_API_KEY` is unset.
+  - `OPENAI_API_KEY` for model-backed analysis
+  - `LLM_MODEL=gpt-5.6-sol` and `OPENAI_REASONING_EFFORT=xhigh` are the defaults.
   - `CORS_ALLOWED_ORIGINS` (optional; comma‑separated, or use `.env` with `cors_allowed_origins`)
   - `DDB_TABLE_NAME`, `ARTICLES_TABLE_NAME` if running in Lambda mode and using the status/async paths
 - Go API
@@ -83,6 +83,6 @@ The script:
 - GET `/api/v1/reports/{id}/articles`
 
 ## Notes
-- Default model is `openrouter/nvidia/nemotron-3-ultra-550b-a55b:free` (runtime fallback is handled in code if unavailable).
+- Default model is `gpt-5.6-sol` with `xhigh` reasoning through the OpenAI Responses API.
 - Articles table benefits from GSIs (`by-report-id`, `by-url`); the Terraform module creates these.
 - For serverless, use `agent/lambda_main.py` packaged behind API Gateway or direct Lambda invokes.

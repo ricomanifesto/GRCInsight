@@ -1,4 +1,4 @@
-"""Provider-switchable model service for GRC analysis."""
+"""OpenAI model service for GRC analysis."""
 
 from datetime import datetime, timezone
 import re
@@ -8,8 +8,7 @@ from loguru import logger
 
 from config.settings import settings
 from models.api import ArticleInput
-from services.opencode_client import OpenCodeClient, parse_model_selection
-from services.openrouter_client import OpenRouterClient
+from services.openai_client import OpenAIClient
 
 REPORT_CVE_LIMIT = 10
 CVE_PATTERN = re.compile(r"\bCVE-\d{4}-\d{4,}\b", re.IGNORECASE)
@@ -48,26 +47,25 @@ class GRCModelService:
         """Initialize model service."""
         configured_model = model_name or settings.llm_model
         configured_max_tokens = max_tokens or settings.llm_max_tokens
-        self.model = parse_model_selection(configured_model)
+        self.model = configured_model.strip()
+        if not self.model:
+            raise ValueError("LLM_MODEL must name an OpenAI model")
+        if not settings.openai_api_key.strip():
+            raise ValueError("OPENAI_API_KEY is required for model generation")
         self.max_tokens = configured_max_tokens
         timeout = max(120.0, float(configured_max_tokens) / 20)
-        if settings.openrouter_api_key and self.model.provider_id != "openrouter":
-            raise ValueError("OpenRouter direct Lambda model calls require an openrouter/* model")
-        if settings.openrouter_api_key:
-            self.client = OpenRouterClient(
-                api_key=settings.openrouter_api_key,
-                max_tokens=configured_max_tokens,
-                timeout=timeout,
-            )
-            self.client_kind = "openrouter"
-        else:
-            self.client = OpenCodeClient(timeout=timeout)
-            self.client_kind = "opencode"
+        self.client = OpenAIClient(
+            api_key=settings.openai_api_key,
+            max_output_tokens=configured_max_tokens,
+            reasoning_effort=settings.openai_reasoning_effort,
+            timeout=timeout,
+        )
+        self.client_kind = "openai"
         logger.info(
-            "Initialized model service with client=%s provider=%s model=%s",
+            "Initialized model service with client=%s model=%s reasoning=%s",
             self.client_kind,
-            self.model.provider_id,
-            self.model.model_id,
+            self.model,
+            settings.openai_reasoning_effort,
         )
 
     def _extract_text(self, response) -> str:

@@ -48,8 +48,9 @@ uv sync
 Configure model access:
 
 ```bash
-export OPENCODE_BASE_URL=http://127.0.0.1:4096
-export LLM_MODEL=openrouter/provider-model
+export OPENAI_API_KEY=...
+export LLM_MODEL=gpt-5.6-sol
+export OPENAI_REASONING_EFFORT=xhigh
 ```
 
 Edit Go service configuration in `configs/config.yaml`.
@@ -78,8 +79,7 @@ make check
 ## Production
 
 - Deploy by pushing to `main` or running `.github/workflows/deploy-lambda.yml`.
-- Required secrets: `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `OPENROUTER_API_KEY`.
-- Runtime variable: `LLM_MODEL=openrouter/provider-model`.
-- Lambda model-backed analysis calls OpenRouter directly when `OPENROUTER_API_KEY` is configured.
-- Local development can still use OpenCode with `OPENCODE_BASE_URL`.
+- Required secrets: `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `OPENAI_API_KEY`.
+- Runtime variables: `LLM_MODEL=gpt-5.6-sol` and `OPENAI_REASONING_EFFORT=xhigh`.
+- Model-backed analysis uses the official OpenAI SDK and Responses API.
 - `.github/workflows/lambda-report-generation.yml` writes reports to `site/` and deploys GitHub Pages.

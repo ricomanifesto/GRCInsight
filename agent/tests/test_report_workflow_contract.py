@@ -47,13 +47,11 @@ def test_report_generation_payload_treats_feed_url_as_json_data():
     assert '\\"feed_url\\": \\"${{ steps.feed-url.outputs.FEED_URL }}\\"' not in workflow
 
 
-def test_report_generation_payload_uses_provider_model_runtime_config():
+def test_report_generation_payload_uses_openai_model_runtime_config():
     workflow = REPORT_WORKFLOW.read_text()
 
     assert "LLM_MODEL: ${{ vars.LLM_MODEL" in workflow
-    assert (
-        "Invalid LLM_MODEL; report generation requires openrouter/provider-model format" in workflow
-    )
+    assert "Invalid LLM_MODEL; report generation requires an OpenAI GPT model" in workflow
     assert '--arg model "$LLM_MODEL"' in workflow
     assert "model: $model" in workflow
     assert "claude-opus-4-6" not in workflow
@@ -594,40 +592,41 @@ def test_lambda_deploy_sets_explicit_model_runtime_environment():
     global_env = workflow.split("jobs:", 1)[0]
 
     assert "LLM_MODEL: ${{ vars.LLM_MODEL" in workflow
-    assert "OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}" not in global_env
-    assert workflow.count("OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}") == 2
-    assert "OPENROUTER_API_KEY secret is required" in workflow
-    assert "Invalid LLM_MODEL; expected provider/model format" in workflow
-    assert (
-        "direct Lambda model-backed analysis requires openrouter/provider-model format" in workflow
-    )
+    assert "OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}" not in global_env
+    assert workflow.count("OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}") == 2
+    assert "OPENAI_API_KEY secret is required" in workflow
+    assert "Invalid LLM_MODEL; expected an OpenAI GPT model" in workflow
     assert "LLM_MODEL=$LLM_MODEL" in workflow
-    assert "OPENROUTER_API_KEY=$OPENROUTER_API_KEY" in workflow
+    assert "OPENAI_API_KEY=$OPENAI_API_KEY" in workflow
+    assert "OPENAI_REASONING_EFFORT=$OPENAI_REASONING_EFFORT" in workflow
+    assert "OPENROUTER_API_KEY" not in workflow
     assert "OPENCODE_BASE_URL=" not in workflow
     assert "ANTHROPIC_API_KEY=" not in workflow
 
 
-def test_manual_lambda_deploy_uses_openrouter_secret():
+def test_manual_lambda_deploy_uses_openai_secret():
     script = DEPLOY_SCRIPT.read_text()
 
-    assert "OPENROUTER_API_KEY is not set" in script
-    assert "openrouter/provider-model format" in script
-    assert "OPENROUTER_API_KEY=${OPENROUTER_API_KEY}" in script
+    assert "OPENAI_API_KEY is not set" in script
+    assert "LLM_MODEL must name an OpenAI GPT model" in script
+    assert "OPENAI_API_KEY=${OPENAI_API_KEY}" in script
+    assert "OPENAI_REASONING_EFFORT=${OPENAI_REASONING_EFFORT:-xhigh}" in script
+    assert "OPENROUTER_API_KEY" not in script
     assert "OPENCODE_BASE_URL=${OPENCODE_BASE_URL}" not in script
 
 
-def test_lambda_configuration_updates_do_not_dump_openrouter_secret():
+def test_lambda_configuration_updates_do_not_dump_openai_secret():
     workflow = DEPLOY_WORKFLOW.read_text()
     script = DEPLOY_SCRIPT.read_text()
 
-    assert "OPENROUTER_API_KEY=$OPENROUTER_API_KEY" in workflow
+    assert "OPENAI_API_KEY=$OPENAI_API_KEY" in workflow
     workflow_mutations = (
         workflow.count("aws lambda update-function-code")
         + workflow.count("aws lambda update-function-configuration")
         + workflow.count("aws lambda create-function")
     )
     assert workflow.count("--query 'FunctionName'") >= workflow_mutations
-    assert "OPENROUTER_API_KEY=${OPENROUTER_API_KEY}" in script
+    assert "OPENAI_API_KEY=${OPENAI_API_KEY}" in script
     script_mutations = (
         script.count("aws lambda update-function-code")
         + script.count("aws lambda update-function-configuration")

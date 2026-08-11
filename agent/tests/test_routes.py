@@ -61,7 +61,7 @@ def test_analyze_with_fake_model_service(monkeypatch):
             }
         ],
         "config": {
-            "model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
+            "model": "gpt-5.6-sol",
             "max_tokens": 16000,
             "focus_areas": [],
         },
@@ -146,11 +146,7 @@ def test_health_deep_true_with_fake_model_service(monkeypatch):
 
     class FakeGRCModelService:
         def __init__(self):
-            class Model:
-                provider_id = "openai"
-                model_id = "gpt-5"
-
-            self.model = Model()
+            self.model = "gpt-5.6-sol"
 
         async def _invoke(self, **_kwargs):
             return "ok"
@@ -162,3 +158,4 @@ def test_health_deep_true_with_fake_model_service(monkeypatch):
     data = resp.json()
     assert data["services"]["llm"]["status"] == "healthy"
     assert data["services"]["llm"]["provider"] == "openai"
+    assert data["services"]["llm"]["model"] == "gpt-5.6-sol"

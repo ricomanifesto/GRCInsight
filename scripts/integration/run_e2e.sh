@@ -39,7 +39,7 @@ echo "[STEP] Generate report"
 GEN_PAYLOAD=$(cat <<JSON
 {
   "feed_url": "$FEED_URL",
-  "config": {"model": "gpt-5", "max_tokens": 4000, "focus_areas": ["governance","compliance","risk"]}
+  "config": {"model": "gpt-5.6-sol", "max_tokens": 16000, "focus_areas": ["governance","compliance","risk"]}
 }
 JSON
 )
@@ -82,4 +82,3 @@ ART_RESP=$(curl -fsSL "$API_URL/api/v1/reports/$RID/articles?page=1&per_page=20"
 echo "$ART_RESP" | jq .
 COUNT=$(echo "$ART_RESP" | jq -r '.articles | length')
 echo "[SUCCESS] Retrieved $COUNT articles for report $RID"
-

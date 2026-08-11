@@ -48,15 +48,15 @@ if [ -z "${LLM_MODEL}" ]; then
     exit 1
 fi
 
-if [ -z "${OPENROUTER_API_KEY}" ]; then
-    print_error "OPENROUTER_API_KEY is not set. Export OPENROUTER_API_KEY before deploying."
+if [ -z "${OPENAI_API_KEY}" ]; then
+    print_error "OPENAI_API_KEY is not set. Export OPENAI_API_KEY before deploying."
     exit 1
 fi
 
 case "$LLM_MODEL" in
-    openrouter/*) ;;
+    gpt-*) ;;
     *)
-        print_error "LLM_MODEL must use openrouter/provider-model format for direct Lambda model-backed analysis."
+        print_error "LLM_MODEL must name an OpenAI GPT model."
         exit 1
         ;;
 esac
@@ -218,7 +218,7 @@ if aws lambda get-function --function-name $PYTHON_FUNCTION_NAME --region $AWS_R
     aws lambda update-function-configuration \
         --function-name $PYTHON_FUNCTION_NAME \
         --region $AWS_REGION \
-        --environment Variables="{\n            LLM_MODEL=${LLM_MODEL},\n            OPENROUTER_API_KEY=${OPENROUTER_API_KEY},\n            LOG_LEVEL=INFO,\n            DDB_TABLE_NAME=grcinsight-reports\n        }" \
+        --environment Variables="{\n            LLM_MODEL=${LLM_MODEL},\n            OPENAI_API_KEY=${OPENAI_API_KEY},\n            OPENAI_REASONING_EFFORT=${OPENAI_REASONING_EFFORT:-xhigh},\n            LOG_LEVEL=INFO,\n            DDB_TABLE_NAME=grcinsight-reports\n        }" \
         --query 'FunctionName' \
         --output text
 else
@@ -231,7 +231,7 @@ else
         --timeout 900 \
         --memory-size 2048 \
         --region $AWS_REGION \
-        --environment Variables="{\n            LLM_MODEL=${LLM_MODEL},\n            OPENROUTER_API_KEY=${OPENROUTER_API_KEY},\n            LOG_LEVEL=INFO,\n            DDB_TABLE_NAME=grcinsight-reports\n        }" \
+        --environment Variables="{\n            LLM_MODEL=${LLM_MODEL},\n            OPENAI_API_KEY=${OPENAI_API_KEY},\n            OPENAI_REASONING_EFFORT=${OPENAI_REASONING_EFFORT:-xhigh},\n            LOG_LEVEL=INFO,\n            DDB_TABLE_NAME=grcinsight-reports\n        }" \
         --query 'FunctionName' \
         --output text
 fi

@@ -49,23 +49,23 @@ async def health_check(
                 )
                 services["llm"] = {
                     "status": "healthy",
-                    "provider": model_service.model.provider_id,
-                    "model": model_service.model.model_id,
+                    "provider": "openai",
+                    "model": model_service.model,
                     "deep": True,
                 }
             except Exception as llm_err:
                 services["llm"] = {
                     "status": "unhealthy",
-                    "provider": model_service.model.provider_id,
-                    "model": model_service.model.model_id,
+                    "provider": "openai",
+                    "model": model_service.model,
                     "error": str(llm_err),
                 }
                 overall = "unhealthy"
         else:
             services["llm"] = {
                 "status": "healthy",
-                "provider": model_service.model.provider_id,
-                "model": model_service.model.model_id,
+                "provider": "openai",
+                "model": model_service.model,
             }
     except Exception as e:
         services["llm"] = {"status": "unhealthy", "error": str(e)}
