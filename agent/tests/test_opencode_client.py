@@ -7,6 +7,20 @@ from services.opencode_client import OpenCodeClient, parse_model_selection
 from services.openrouter_client import OpenRouterClient
 
 
+class SlowOpenRouterTransport(httpx.AsyncBaseTransport):
+    def __init__(self):
+        self.attempts = 0
+
+    async def handle_async_request(self, request):
+        self.attempts += 1
+        await asyncio.sleep(0.05)
+        return httpx.Response(
+            200,
+            json={"choices": [{"message": {"content": "Too late"}}]},
+            request=request,
+        )
+
+
 def test_opencode_client_posts_explicit_provider_model():
     requests = []
 
@@ -224,6 +238,32 @@ def test_openrouter_client_retries_transient_provider_error_once():
 
     assert result == "Generated report"
     assert len(requests) == 2
+
+
+def test_openrouter_client_enforces_wall_clock_deadline_per_attempt():
+    transport = SlowOpenRouterTransport()
+    client = OpenRouterClient(
+        api_key="test-key",
+        max_tokens=4096,
+        base_url="https://openrouter.test/api/v1",
+        transport=transport,
+        timeout=0.01,
+    )
+
+    try:
+        asyncio.run(
+            client.generate(
+                system_prompt="system",
+                user_prompt="user",
+                model=parse_model_selection("openrouter/openrouter/free"),
+                title="test",
+            )
+        )
+    except Exception as exc:
+        assert "OpenRouter request deadline exceeded" in str(exc)
+        assert transport.attempts == 2
+    else:
+        raise AssertionError("slow OpenRouter attempts must be cancelled at the deadline")
 
 
 def test_openrouter_error_redacts_response_body():

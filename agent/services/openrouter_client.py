@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import asyncio
 import json
 from typing import Any
 
@@ -66,20 +67,28 @@ class OpenRouterClient:
         ) as client:
             for attempt in range(self.max_attempts):
                 try:
-                    response = await client.post(
-                        "/chat/completions",
-                        json={
-                            "model": model.model_id,
-                            "max_tokens": self.max_tokens,
-                            "stream": False,
-                            "messages": [
-                                {"role": "system", "content": system_prompt},
-                                {"role": "user", "content": user_prompt},
-                            ],
-                        },
-                    )
+                    async with asyncio.timeout(self.timeout):
+                        response = await client.post(
+                            "/chat/completions",
+                            json={
+                                "model": model.model_id,
+                                "max_tokens": self.max_tokens,
+                                "stream": False,
+                                "messages": [
+                                    {"role": "system", "content": system_prompt},
+                                    {"role": "user", "content": user_prompt},
+                                ],
+                            },
+                        )
                     self._raise_for_status(response)
                     return self._extract_text(self._decode_payload(response))
+                except TimeoutError as exc:
+                    error = OpenRouterError(
+                        "OpenRouter request deadline exceeded",
+                        retryable=True,
+                    )
+                    if attempt + 1 >= self.max_attempts:
+                        raise error from exc
                 except httpx.RequestError as exc:
                     error = OpenRouterError("OpenRouter request failed", retryable=True)
                     if attempt + 1 >= self.max_attempts:
