@@ -3,14 +3,31 @@
 from __future__ import annotations
 
 import asyncio
+from collections.abc import Callable
+from dataclasses import dataclass
 import json
+import time
 from typing import Any
 
 import httpx
 
-from services.opencode_client import ModelSelection
-
 OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"
+
+
+@dataclass(frozen=True)
+class OpenRouterModel:
+    """Validated OpenRouter provider and model identifiers."""
+
+    model_id: str
+    provider_id: str = "openrouter"
+
+
+def parse_openrouter_model(model_name: str) -> OpenRouterModel:
+    """Parse the required openrouter/provider-model configuration."""
+    provider, separator, model_id = model_name.partition("/")
+    if provider != "openrouter" or not separator or not model_id:
+        raise ValueError("Model must use openrouter/provider-model format")
+    return OpenRouterModel(model_id=model_id)
 
 
 class OpenRouterError(RuntimeError):
@@ -31,30 +48,38 @@ class OpenRouterClient:
         max_tokens: int,
         base_url: str = OPENROUTER_BASE_URL,
         timeout: float = 120.0,
+        total_timeout: float | None = None,
+        deadline: float | None = None,
         transport: httpx.AsyncBaseTransport | None = None,
         max_attempts: int = 2,
+        clock: Callable[[], float] = time.monotonic,
     ) -> None:
         if max_attempts < 1:
             raise ValueError("max_attempts must be at least 1")
+        if timeout <= 0:
+            raise ValueError("timeout must be greater than zero")
+        if total_timeout is not None and total_timeout <= 0:
+            raise ValueError("total_timeout must be greater than zero")
         self.api_key = api_key
         self.max_tokens = max_tokens
         self.base_url = base_url.rstrip("/")
         self.timeout = timeout
+        self.total_timeout = total_timeout
         self.transport = transport
         self.max_attempts = max_attempts
+        self.clock = clock
+        self._deadline = deadline
+        self._total_timeout_applied = False
 
     async def generate(
         self,
         *,
         system_prompt: str,
         user_prompt: str,
-        model: ModelSelection,
+        model: OpenRouterModel,
         title: str,
     ) -> str:
         """Generate text through OpenRouter."""
-        if model.provider_id != "openrouter":
-            raise OpenRouterError("OpenRouter direct calls require an openrouter/* model")
-
         async with httpx.AsyncClient(
             base_url=self.base_url,
             timeout=self.timeout,
@@ -67,7 +92,7 @@ class OpenRouterClient:
         ) as client:
             for attempt in range(self.max_attempts):
                 try:
-                    async with asyncio.timeout(self.timeout):
+                    async with asyncio.timeout(self._remaining_timeout()):
                         response = await client.post(
                             "/chat/completions",
                             json={
@@ -98,6 +123,24 @@ class OpenRouterClient:
                         raise
 
         raise OpenRouterError("OpenRouter request failed")
+
+    def _remaining_timeout(self) -> float:
+        """Return this attempt's limit within all workflow runtime budgets."""
+        now = self.clock()
+        if self.total_timeout is not None and not self._total_timeout_applied:
+            total_deadline = now + self.total_timeout
+            self._deadline = (
+                total_deadline if self._deadline is None else min(self._deadline, total_deadline)
+            )
+            self._total_timeout_applied = True
+
+        if self._deadline is None:
+            return self.timeout
+
+        remaining = self._deadline - now
+        if remaining <= 0:
+            raise OpenRouterError("OpenRouter total request budget exceeded")
+        return min(self.timeout, remaining)
 
     def _raise_for_status(self, response: httpx.Response) -> None:
         if response.is_success:

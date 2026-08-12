@@ -3,10 +3,16 @@
 import os
 from typing import Any
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Request
 from loguru import logger
 
 from models.api import WorkflowRequest, WorkflowResponse, APIError
+from core.runtime import (
+    CALLER_DEADLINE_HEADER,
+    deadline_from_unix_ms,
+    earliest_deadline,
+    get_model_deadline,
+)
 from core.workflow import run_grc_analysis_endpoint
 
 boto3: Any | None = None
@@ -21,13 +27,21 @@ router = APIRouter()
 
 
 @router.post("/workflow/run", response_model=WorkflowResponse)
-async def run_workflow(request: WorkflowRequest):
+async def run_workflow(request: WorkflowRequest, http_request: Request):
     """Execute the complete GRC analysis workflow."""
     logger.info(f"Starting workflow execution for feed: {request.feed_url}")
 
     try:
         # Execute the real GRC analysis workflow
-        result = await run_grc_analysis_endpoint(request.feed_url, request.config)
+        model_deadline = earliest_deadline(
+            get_model_deadline(),
+            deadline_from_unix_ms(http_request.headers.get(CALLER_DEADLINE_HEADER)),
+        )
+        result = await run_grc_analysis_endpoint(
+            request.feed_url,
+            request.config,
+            model_deadline=model_deadline,
+        )
 
         logger.info("Workflow execution completed successfully")
         return result

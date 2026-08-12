@@ -48,8 +48,8 @@ uv sync
 Configure model access:
 
 ```bash
-export OPENCODE_BASE_URL=http://127.0.0.1:4096
-export LLM_MODEL=openrouter/provider-model
+export OPENROUTER_API_KEY=your-openrouter-api-key
+export LLM_MODEL=openrouter/openrouter/free
 ```
 
 Edit Go service configuration in `configs/config.yaml`.
@@ -80,6 +80,5 @@ make check
 - Deploy by pushing to `main` or running `.github/workflows/deploy-lambda.yml`.
 - Required secrets: `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `OPENROUTER_API_KEY`.
 - Runtime variable: `LLM_MODEL=openrouter/provider-model`.
-- Lambda model-backed analysis calls OpenRouter directly when `OPENROUTER_API_KEY` is configured.
-- Local development can still use OpenCode with `OPENCODE_BASE_URL`.
+- Model-backed analysis calls OpenRouter directly in local and Lambda environments.
 - `.github/workflows/lambda-report-generation.yml` writes reports to `site/` and deploys GitHub Pages.

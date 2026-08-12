@@ -1,11 +1,13 @@
 from pathlib import Path
 
 from config.settings import Settings
-from models.api import GRCAnalysisConfig
+import lambda_main
+from core.runtime import get_model_deadline
+from lambda_main import _lambda_model_deadline
+from models.api import GRCAnalysisConfig, WorkflowResponse
 from services import model_service
 from services.model_service import GRCModelService
-from services.opencode_client import parse_model_selection
-from services.openrouter_client import OpenRouterClient
+from services.openrouter_client import OpenRouterClient, parse_openrouter_model
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 
@@ -30,14 +32,14 @@ def test_analysis_config_default_uses_free_openrouter_report_model():
 
 
 def test_free_router_model_parses_to_openrouter_model_slug():
-    model = parse_model_selection("openrouter/openrouter/free")
+    model = parse_openrouter_model("openrouter/openrouter/free")
 
     assert model.provider_id == "openrouter"
     assert model.model_id == "openrouter/free"
 
 
 def test_openrouter_report_model_parses_to_provider_and_nested_model_id():
-    model = parse_model_selection("openrouter/nvidia/nemotron-3-ultra-550b-a55b:free")
+    model = parse_openrouter_model("openrouter/nvidia/nemotron-3-ultra-550b-a55b:free")
 
     assert model.provider_id == "openrouter"
     assert model.model_id == "nvidia/nemotron-3-ultra-550b-a55b:free"
@@ -51,7 +53,6 @@ def test_model_service_uses_openrouter_client_when_api_key_is_configured(monkeyp
         max_tokens=4096,
     )
 
-    assert service.client_kind == "openrouter"
     assert isinstance(service.client, OpenRouterClient)
     assert service.client.max_tokens == 4096
 
@@ -66,18 +67,99 @@ def test_model_service_bounds_openrouter_retries_within_lambda_budget(monkeypatc
 
     assert isinstance(service.client, OpenRouterClient)
     assert service.client.max_attempts == 2
-    assert service.client.timeout == 180.0
+    assert service.client.timeout == 360.0
+    assert service.client.total_timeout == 780.0
 
 
-def test_model_service_keeps_opencode_for_local_runs_without_openrouter_key(monkeypatch):
-    monkeypatch.setattr(model_service.settings, "openrouter_api_key", "")
+def test_lambda_deadline_reserves_writeback_for_async_reports():
+    class LambdaContext:
+        def get_remaining_time_in_millis(self):
+            return 900_000
 
-    service = GRCModelService(
-        model_name="openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
-        max_tokens=4096,
+    deadline = _lambda_model_deadline(LambdaContext(), clock=lambda: 100.0)
+
+    assert deadline == 880.0
+
+
+def test_lambda_deadline_honors_a_tighter_synchronous_caller():
+    class LambdaContext:
+        def get_remaining_time_in_millis(self):
+            return 900_000
+
+    deadline = _lambda_model_deadline(
+        LambdaContext(),
+        caller_deadline_unix_ms=400_000,
+        clock=lambda: 100.0,
+        wall_clock=lambda: 100.0,
     )
 
-    assert service.client_kind == "opencode"
+    assert deadline == 370.0
+
+
+def test_direct_lambda_passes_the_caller_aware_deadline(monkeypatch):
+    captured_deadlines = []
+
+    async def fake_workflow(_feed_url, _config, model_deadline=None):
+        captured_deadlines.append(model_deadline)
+        return WorkflowResponse(status="completed")
+
+    monkeypatch.setattr("core.workflow.run_grc_analysis_endpoint", fake_workflow)
+    monkeypatch.setattr(lambda_main, "_lambda_model_deadline", lambda _context, _deadline: 370.0)
+
+    response = lambda_main.handler(
+        {
+            "feed_url": "https://example.com/feed.xml",
+            "caller_deadline_unix_ms": 400_000,
+        },
+        object(),
+    )
+
+    assert response["statusCode"] == 200
+    assert captured_deadlines == [370.0]
+
+
+def test_api_gateway_lambda_sets_and_resets_the_runtime_deadline(monkeypatch):
+    captured_deadlines = []
+
+    def fake_mangum_handler(_event, _context):
+        captured_deadlines.append(get_model_deadline())
+        return {"statusCode": 200}
+
+    monkeypatch.setattr(lambda_main, "_lambda_model_deadline", lambda _context: 700.0)
+    monkeypatch.setattr(lambda_main, "mangum_handler", fake_mangum_handler)
+
+    response = lambda_main.handler({"httpMethod": "POST"}, object())
+
+    assert response == {"statusCode": 200}
+    assert captured_deadlines == [700.0]
+    assert get_model_deadline() is None
+
+
+def test_model_service_uses_the_invocation_deadline(monkeypatch):
+    monkeypatch.setattr(model_service.settings, "openrouter_api_key", "test-key")
+
+    service = GRCModelService(
+        model_name="openrouter/openrouter/free",
+        max_tokens=16000,
+        model_deadline=700.0,
+    )
+
+    assert isinstance(service.client, OpenRouterClient)
+    assert service.client._deadline == 700.0
+
+
+def test_model_service_requires_an_openrouter_key(monkeypatch):
+    monkeypatch.setattr(model_service.settings, "openrouter_api_key", "")
+
+    try:
+        GRCModelService(
+            model_name="openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
+            max_tokens=4096,
+        )
+    except ValueError as exc:
+        assert "OPENROUTER_API_KEY is required" in str(exc)
+    else:
+        raise AssertionError("model-backed analysis must require OpenRouter credentials")
 
 
 def test_model_service_rejects_non_openrouter_models_when_api_key_is_configured(monkeypatch):
@@ -86,6 +168,14 @@ def test_model_service_rejects_non_openrouter_models_when_api_key_is_configured(
     try:
         GRCModelService(model_name="anthropic/claude-sonnet-4-6", max_tokens=4096)
     except ValueError as exc:
-        assert "openrouter/* model" in str(exc)
+        assert "openrouter/provider-model" in str(exc)
     else:
         raise AssertionError("OpenRouter Lambda config must reject non-OpenRouter models")
+
+
+def test_local_runtime_configuration_is_openrouter_only():
+    compose = (REPO_ROOT / "docker-compose.yml").read_text()
+    readme = (REPO_ROOT / "README.md").read_text()
+
+    assert "OPENROUTER_API_KEY" in compose
+    assert "OPENROUTER_API_KEY" in readme

@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"strconv"
 	"strings"
 	"time"
 
@@ -18,6 +19,12 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/lambda"
 	"github.com/aws/aws-sdk-go-v2/service/lambda/types"
 	"github.com/sirupsen/logrus"
+)
+
+const (
+	callerDeadlineField    = "caller_deadline_unix_ms"
+	callerDeadlineHeader   = "X-GRC-Caller-Deadline-Unix-Ms"
+	defaultWorkflowTimeout = 5 * time.Minute
 )
 
 // PythonServiceClient handles communication with the Python agent service
@@ -108,6 +115,48 @@ func (c *PythonServiceClient) RunWorkflow(req *models.WorkflowRequest) (*models.
 	return c.invokeHTTPWorkflow(req)
 }
 
+func (c *PythonServiceClient) workflowTimeout() time.Duration {
+	if c.httpClient != nil && c.httpClient.Timeout > 0 {
+		return c.httpClient.Timeout
+	}
+	return defaultWorkflowTimeout
+}
+
+func (c *PythonServiceClient) newCallerBoundRequest(
+	method string,
+	url string,
+	body []byte,
+) (*http.Request, context.CancelFunc, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), c.workflowTimeout())
+	callerDeadline, _ := ctx.Deadline()
+	httpReq, err := http.NewRequestWithContext(ctx, method, url, bytes.NewReader(body))
+	if err != nil {
+		cancel()
+		return nil, nil, err
+	}
+	httpReq.Header.Set("Content-Type", "application/json")
+	httpReq.Header.Set(callerDeadlineHeader, strconv.FormatInt(callerDeadline.UnixMilli(), 10))
+	return httpReq, cancel, nil
+}
+
+func marshalWorkflowPayload(
+	req *models.WorkflowRequest,
+	reportID string,
+	callerDeadline time.Time,
+) ([]byte, error) {
+	payload := map[string]interface{}{
+		"feed_url": req.FeedURL,
+		"config":   req.Config,
+	}
+	if reportID != "" {
+		payload["report_id"] = reportID
+	}
+	if !callerDeadline.IsZero() {
+		payload[callerDeadlineField] = callerDeadline.UnixMilli()
+	}
+	return json.Marshal(payload)
+}
+
 // RunWorkflowAsync triggers the Python Lambda asynchronously (no response expected)
 func (c *PythonServiceClient) RunWorkflowAsync(req *models.WorkflowRequest, reportID string) error {
 	if !c.isLambdaMode {
@@ -123,13 +172,7 @@ func (c *PythonServiceClient) RunWorkflowAsync(req *models.WorkflowRequest, repo
 		"report_id":     reportID,
 	}).Info("Invoking Python Lambda function asynchronously")
 
-	payload := map[string]interface{}{
-		"report_id": reportID,
-		"feed_url":  req.FeedURL,
-		"config":    req.Config,
-	}
-
-	payloadBytes, err := json.Marshal(payload)
+	payloadBytes, err := marshalWorkflowPayload(req, reportID, time.Time{})
 	if err != nil {
 		return fmt.Errorf("failed to marshal Lambda payload: %w", err)
 	}
@@ -158,22 +201,16 @@ func (c *PythonServiceClient) IsAsync() bool { return c.invokeAsync }
 func (c *PythonServiceClient) invokeLambdaWorkflow(req *models.WorkflowRequest) (*models.WorkflowResponse, error) {
 	c.logger.WithField("function_name", c.functionName).Info("Invoking Python Lambda function")
 
-	// Create the payload for Lambda invocation
-	payload := map[string]interface{}{
-		"feed_url": req.FeedURL,
-		"config":   req.Config,
-	}
+	ctx, cancel := context.WithTimeout(context.Background(), c.workflowTimeout())
+	defer cancel()
+	callerDeadline, _ := ctx.Deadline()
 
-	payloadBytes, err := json.Marshal(payload)
+	payloadBytes, err := marshalWorkflowPayload(req, "", callerDeadline)
 	if err != nil {
 		return nil, fmt.Errorf("failed to marshal Lambda payload: %w", err)
 	}
 
 	c.logger.WithField("payload_size", len(payloadBytes)).Debug("Invoking Lambda function")
-
-	// Create context with timeout
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Minute)
-	defer cancel()
 
 	// Invoke the Lambda function
 	input := &lambda.InvokeInput{
@@ -233,11 +270,11 @@ func (c *PythonServiceClient) AnalyzeArticles(req *models.AnalysisRequest) (*mod
 		return nil, fmt.Errorf("failed to marshal analysis request: %w", err)
 	}
 
-	httpReq, err := http.NewRequest(http.MethodPost, url, bytes.NewReader(bodyBytes))
+	httpReq, cancel, err := c.newCallerBoundRequest(http.MethodPost, url, bodyBytes)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create request: %w", err)
 	}
-	httpReq.Header.Set("Content-Type", "application/json")
+	defer cancel()
 
 	resp, err := c.httpClient.Do(httpReq)
 	if err != nil {
@@ -315,11 +352,11 @@ func (c *PythonServiceClient) invokeHTTPWorkflow(req *models.WorkflowRequest) (*
 		return nil, fmt.Errorf("failed to marshal workflow request: %w", err)
 	}
 
-	httpReq, err := http.NewRequest(http.MethodPost, url, bytes.NewReader(bodyBytes))
+	httpReq, cancel, err := c.newCallerBoundRequest(http.MethodPost, url, bodyBytes)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create request: %w", err)
 	}
-	httpReq.Header.Set("Content-Type", "application/json")
+	defer cancel()
 
 	resp, err := c.httpClient.Do(httpReq)
 	if err != nil {

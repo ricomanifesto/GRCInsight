@@ -2,6 +2,7 @@
 
 import os
 from contextlib import asynccontextmanager
+import time
 from typing import Any
 
 from fastapi import FastAPI
@@ -13,6 +14,37 @@ from api.routes import workflow, analysis, health, rss
 import boto3
 from datetime import datetime, timezone
 from config.settings import settings
+from core.runtime import (
+    deadline_from_unix_ms,
+    earliest_deadline,
+    reset_model_deadline,
+    set_model_deadline,
+)
+
+LAMBDA_WRITEBACK_RESERVE_SECONDS = 120.0
+
+
+def _lambda_model_deadline(
+    context,
+    caller_deadline_unix_ms=None,
+    *,
+    clock=time.monotonic,
+    wall_clock=time.time,
+) -> float | None:
+    """Apply the earliest Lambda or synchronous-caller model deadline."""
+    lambda_deadline = None
+    get_remaining_time = getattr(context, "get_remaining_time_in_millis", None)
+    if callable(get_remaining_time):
+        remaining_seconds = max(0.0, float(get_remaining_time()) / 1000.0)
+        model_seconds = max(0.0, remaining_seconds - LAMBDA_WRITEBACK_RESERVE_SECONDS)
+        lambda_deadline = clock() + model_seconds
+
+    caller_deadline = deadline_from_unix_ms(
+        caller_deadline_unix_ms,
+        monotonic_clock=clock,
+        wall_clock=wall_clock,
+    )
+    return earliest_deadline(lambda_deadline, caller_deadline)
 
 
 @asynccontextmanager
@@ -127,7 +159,16 @@ def handler(event, context):
 
                 # Run the workflow
                 logger.info(f"Starting GRC workflow for {feed_url}")
-                result = asyncio.run(run_grc_analysis_endpoint(feed_url, config))
+                result = asyncio.run(
+                    run_grc_analysis_endpoint(
+                        feed_url,
+                        config,
+                        model_deadline=_lambda_model_deadline(
+                            context,
+                            event.get("caller_deadline_unix_ms"),
+                        ),
+                    )
+                )
 
                 # If invoked with report_id, perform DynamoDB writeback (async pattern)
                 report_id = event.get("report_id")
@@ -287,7 +328,11 @@ def handler(event, context):
         }
 
     # API Gateway event - use Mangum
-    return mangum_handler(event, context)
+    deadline_token = set_model_deadline(_lambda_model_deadline(context))
+    try:
+        return mangum_handler(event, context)
+    finally:
+        reset_model_deadline(deadline_token)
 
 
 # For local testing

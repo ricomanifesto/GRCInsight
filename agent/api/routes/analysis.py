@@ -1,6 +1,6 @@
 """GRC analysis endpoints."""
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Request
 from loguru import logger
 
 from models.api import (
@@ -12,18 +12,28 @@ from models.api import (
 )
 from services.model_service import GRCModelService
 from core.entities import analyze_article_grc_content
+from core.runtime import (
+    CALLER_DEADLINE_HEADER,
+    deadline_from_unix_ms,
+    earliest_deadline,
+    get_model_deadline,
+)
 
 router = APIRouter()
 
 
 @router.post("/analyze", response_model=AnalysisResponse)
-async def analyze_ar(request: AnalysisRequest):
+async def analyze_ar(request: AnalysisRequest, http_request: Request):
     """Analyze articles for GRC content using the configured model service."""
     logger.info(f"Starting analysis of {len(request.articles)} articles")
 
     try:
         try:
-            model_service = GRCModelService()
+            model_deadline = earliest_deadline(
+                get_model_deadline(),
+                deadline_from_unix_ms(http_request.headers.get(CALLER_DEADLINE_HEADER)),
+            )
+            model_service = GRCModelService(model_deadline=model_deadline)
         except ValueError as init_err:
             logger.error(f"Model service initialization failed: {init_err}")
             return AnalysisResponse(

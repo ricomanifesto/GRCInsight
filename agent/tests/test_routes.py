@@ -32,7 +32,7 @@ def test_analyze_with_fake_model_service(monkeypatch):
     from api.routes import analysis as analysis_route
 
     class FakeGRCModelService:
-        def __init__(self):
+        def __init__(self, model_deadline=None):
             pass
 
         async def analyze_articles_for_grc(self, articles):
@@ -74,6 +74,40 @@ def test_analyze_with_fake_model_service(monkeypatch):
     assert data["summary"]["total_articles"] == 1
     assert data["summary"]["grc_articles"] == 1
     assert isinstance(data["results"], list) and len(data["results"]) == 1
+
+
+def test_analyze_route_uses_the_tighter_caller_deadline(monkeypatch):
+    from api.routes import analysis as analysis_route
+    from core.runtime import reset_model_deadline, set_model_deadline
+
+    captured_deadlines = []
+
+    class FakeGRCModelService:
+        def __init__(self, model_deadline=None):
+            captured_deadlines.append(model_deadline)
+
+        async def analyze_articles_for_grc(self, articles):
+            return {
+                "grc_articles": [],
+                "summary": {"total_articles": len(articles), "grc_relevant_count": 0},
+                "analysis": {},
+            }
+
+    monkeypatch.setattr(analysis_route, "GRCModelService", FakeGRCModelService)
+    monkeypatch.setattr(analysis_route, "deadline_from_unix_ms", lambda _value: 370.0)
+    token = set_model_deadline(700.0)
+    try:
+        resp = request(
+            "POST",
+            "/api/v1/analyze",
+            headers={"X-GRC-Caller-Deadline-Unix-Ms": "400000"},
+            json={"articles": []},
+        )
+    finally:
+        reset_model_deadline(token)
+
+    assert resp.status_code == 200
+    assert captured_deadlines == [370.0]
 
 
 def test_workflow_status_success(monkeypatch):
@@ -119,6 +153,34 @@ def test_workflow_status_success(monkeypatch):
     data = resp.json()
     assert data["report_id"] == "rep123"
     assert data["status"] == "completed"
+
+
+def test_workflow_route_uses_the_tighter_caller_deadline(monkeypatch):
+    from api.routes import workflow as wf_route
+    from core.runtime import reset_model_deadline, set_model_deadline
+    from models.api import WorkflowResponse
+
+    captured_deadlines = []
+
+    async def fake_workflow(_feed_url, _config, model_deadline=None):
+        captured_deadlines.append(model_deadline)
+        return WorkflowResponse(status="completed")
+
+    monkeypatch.setattr(wf_route, "run_grc_analysis_endpoint", fake_workflow)
+    monkeypatch.setattr(wf_route, "deadline_from_unix_ms", lambda _value: 370.0)
+    token = set_model_deadline(700.0)
+    try:
+        resp = request(
+            "POST",
+            "/api/v1/workflow/run",
+            headers={"X-GRC-Caller-Deadline-Unix-Ms": "400000"},
+            json={"feed_url": "https://example.com/feed.xml"},
+        )
+    finally:
+        reset_model_deadline(token)
+
+    assert resp.status_code == 200
+    assert captured_deadlines == [370.0]
 
 
 def test_workflow_status_not_found(monkeypatch):
