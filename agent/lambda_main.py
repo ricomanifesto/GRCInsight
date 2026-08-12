@@ -119,7 +119,7 @@ def handler(event, context):
                 config = GRCAnalysisConfig(
                     model=config_data.get(
                         "model",
-                        "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
+                        "openrouter/openrouter/free",
                     ),
                     max_tokens=config_data.get("max_tokens", 16000),
                     focus_areas=focus_areas,

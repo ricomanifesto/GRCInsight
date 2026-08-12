@@ -14,6 +14,7 @@ from services.openrouter_client import OpenRouterClient
 REPORT_CVE_LIMIT = 10
 CVE_PATTERN = re.compile(r"\bCVE-\d{4}-\d{4,}\b", re.IGNORECASE)
 CVE_OMISSION_MARKER = "[additional CVE omitted]"
+OPENROUTER_ATTEMPT_TIMEOUT_SECONDS = 180.0
 
 
 def _collect_prompt_cves(source_evidence: List[Dict[str, Any]]) -> List[str]:
@@ -57,7 +58,9 @@ class GRCModelService:
             self.client = OpenRouterClient(
                 api_key=settings.openrouter_api_key,
                 max_tokens=configured_max_tokens,
-                timeout=timeout,
+                # A workflow can make two model calls with one retry each. Keep
+                # the four possible attempts within Lambda's 900-second budget.
+                timeout=min(timeout, OPENROUTER_ATTEMPT_TIMEOUT_SECONDS),
             )
             self.client_kind = "openrouter"
         else:

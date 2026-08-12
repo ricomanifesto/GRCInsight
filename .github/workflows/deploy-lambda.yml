@@ -11,7 +11,7 @@ env:
   PYTHON_REPO_NAME: grcinsight-python
   GO_FUNCTION_NAME: grcinsight-go-function
   PYTHON_FUNCTION_NAME: grcinsight-python-function
-  LLM_MODEL: ${{ vars.LLM_MODEL || 'openrouter/nvidia/nemotron-3-ultra-550b-a55b:free' }}
+  LLM_MODEL: ${{ vars.LLM_MODEL || 'openrouter/openrouter/free' }}
 
 jobs:
   deploy:
