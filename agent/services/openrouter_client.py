@@ -34,6 +34,7 @@ class OpenRouterClient:
         base_url: str = OPENROUTER_BASE_URL,
         timeout: float = 120.0,
         total_timeout: float | None = None,
+        deadline: float | None = None,
         transport: httpx.AsyncBaseTransport | None = None,
         max_attempts: int = 2,
         clock: Callable[[], float] = time.monotonic,
@@ -52,7 +53,7 @@ class OpenRouterClient:
         self.transport = transport
         self.max_attempts = max_attempts
         self.clock = clock
-        self._deadline: float | None = None
+        self._deadline = deadline
 
     async def generate(
         self,

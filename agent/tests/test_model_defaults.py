@@ -1,6 +1,7 @@
 from pathlib import Path
 
 from config.settings import Settings
+from lambda_main import _lambda_model_deadline
 from models.api import GRCAnalysisConfig
 from services import model_service
 from services.model_service import GRCModelService
@@ -68,6 +69,29 @@ def test_model_service_bounds_openrouter_retries_within_lambda_budget(monkeypatc
     assert service.client.max_attempts == 2
     assert service.client.timeout == 360.0
     assert service.client.total_timeout == 780.0
+
+
+def test_lambda_deadline_reserves_writeback_before_preprocessing():
+    class LambdaContext:
+        def get_remaining_time_in_millis(self):
+            return 900_000
+
+    deadline = _lambda_model_deadline(LambdaContext(), clock=lambda: 100.0)
+
+    assert deadline == 880.0
+
+
+def test_model_service_uses_invocation_deadline(monkeypatch):
+    monkeypatch.setattr(model_service.settings, "openrouter_api_key", "test-key")
+
+    service = GRCModelService(
+        model_name="openrouter/openrouter/free",
+        max_tokens=16000,
+        model_deadline=700.0,
+    )
+
+    assert isinstance(service.client, OpenRouterClient)
+    assert service.client._deadline == 700.0
 
 
 def test_model_service_keeps_opencode_for_local_runs_without_openrouter_key(monkeypatch):

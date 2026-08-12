@@ -2,6 +2,7 @@
 
 import os
 from contextlib import asynccontextmanager
+import time
 from typing import Any
 
 from fastapi import FastAPI
@@ -13,6 +14,18 @@ from api.routes import workflow, analysis, health, rss
 import boto3
 from datetime import datetime, timezone
 from config.settings import settings
+
+LAMBDA_WRITEBACK_RESERVE_SECONDS = 120.0
+
+
+def _lambda_model_deadline(context, clock=time.monotonic) -> float | None:
+    """Reserve time for fallback persistence and DynamoDB writeback."""
+    get_remaining_time = getattr(context, "get_remaining_time_in_millis", None)
+    if not callable(get_remaining_time):
+        return None
+    remaining_seconds = max(0.0, float(get_remaining_time()) / 1000.0)
+    model_seconds = max(0.0, remaining_seconds - LAMBDA_WRITEBACK_RESERVE_SECONDS)
+    return clock() + model_seconds
 
 
 @asynccontextmanager
@@ -127,7 +140,13 @@ def handler(event, context):
 
                 # Run the workflow
                 logger.info(f"Starting GRC workflow for {feed_url}")
-                result = asyncio.run(run_grc_analysis_endpoint(feed_url, config))
+                result = asyncio.run(
+                    run_grc_analysis_endpoint(
+                        feed_url,
+                        config,
+                        model_deadline=_lambda_model_deadline(context),
+                    )
+                )
 
                 # If invoked with report_id, perform DynamoDB writeback (async pattern)
                 report_id = event.get("report_id")

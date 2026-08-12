@@ -50,7 +50,7 @@ def test_run_grc_analysis_endpoint_falls_back_when_model_is_unavailable(monkeypa
         return articles
 
     class FakeGRCModelService:
-        def __init__(self, model_name=None, max_tokens=None):
+        def __init__(self, model_name=None, max_tokens=None, model_deadline=None):
             pass
 
         async def analyze_articles_for_grc(self, articles):
@@ -110,7 +110,7 @@ def test_run_grc_analysis_endpoint_marks_model_backed_reports(monkeypatch):
         return articles
 
     class FakeGRCModelService:
-        def __init__(self, model_name=None, max_tokens=None):
+        def __init__(self, model_name=None, max_tokens=None, model_deadline=None):
             pass
 
         async def analyze_articles_for_grc(self, articles):
@@ -171,8 +171,8 @@ def test_run_grc_analysis_endpoint_passes_request_model_config(monkeypatch):
         return articles
 
     class FakeGRCModelService:
-        def __init__(self, model_name=None, max_tokens=None):
-            captured_configs.append((model_name, max_tokens))
+        def __init__(self, model_name=None, max_tokens=None, model_deadline=None):
+            captured_configs.append((model_name, max_tokens, model_deadline))
 
         async def analyze_articles_for_grc(self, articles):
             return {
@@ -205,11 +205,12 @@ def test_run_grc_analysis_endpoint_passes_request_model_config(monkeypatch):
                 model="openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
                 max_tokens=4096,
             ),
+            model_deadline=750.0,
         )
     )
 
     assert response.status == "completed"
-    assert captured_configs == [("openrouter/nvidia/nemotron-3-ultra-550b-a55b:free", 4096)]
+    assert captured_configs == [("openrouter/nvidia/nemotron-3-ultra-550b-a55b:free", 4096, 750.0)]
 
 
 def test_rss_service_fetch_feed_survives_multiple_event_loops(monkeypatch):
