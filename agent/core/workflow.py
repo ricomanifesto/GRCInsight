@@ -454,7 +454,11 @@ def _build_fallback_report(
     )
 
 
-async def run_grc_analysis_endpoint(feed_url: str, config: GRCAnalysisConfig) -> WorkflowResponse:
+async def run_grc_analysis_endpoint(
+    feed_url: str,
+    config: GRCAnalysisConfig,
+    model_deadline: float | None = None,
+) -> WorkflowResponse:
     """
     Main workflow endpoint that orchestrates the complete GRC analysis.
     """
@@ -528,6 +532,7 @@ async def run_grc_analysis_endpoint(feed_url: str, config: GRCAnalysisConfig) ->
             model_service = GRCModelService(
                 model_name=config.model,
                 max_tokens=config.max_tokens,
+                model_deadline=model_deadline,
             )
         except ValueError as e:
             fallback_reason = str(e)

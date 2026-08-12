@@ -21,6 +21,17 @@ class SlowOpenRouterTransport(httpx.AsyncBaseTransport):
         )
 
 
+class FakeClock:
+    def __init__(self):
+        self.now = 100.0
+
+    def __call__(self):
+        return self.now
+
+    def advance(self, seconds):
+        self.now += seconds
+
+
 def test_opencode_client_posts_explicit_provider_model():
     requests = []
 
@@ -264,6 +275,55 @@ def test_openrouter_client_enforces_wall_clock_deadline_per_attempt():
         assert transport.attempts == 2
     else:
         raise AssertionError("slow OpenRouter attempts must be cancelled at the deadline")
+
+
+def test_openrouter_client_shares_total_budget_across_model_calls():
+    clock = FakeClock()
+    client = OpenRouterClient(
+        api_key="test-key",
+        max_tokens=4096,
+        timeout=360.0,
+        total_timeout=780.0,
+        clock=clock,
+    )
+
+    assert client._remaining_timeout() == 360.0
+
+    clock.advance(500.0)
+
+    assert client._remaining_timeout() == 280.0
+
+    clock.advance(281.0)
+
+    try:
+        client._remaining_timeout()
+    except Exception as exc:
+        assert "OpenRouter total request budget exceeded" in str(exc)
+    else:
+        raise AssertionError("the shared OpenRouter budget must be enforced")
+
+
+def test_openrouter_client_keeps_the_tighter_external_deadline():
+    clock = FakeClock()
+    client = OpenRouterClient(
+        api_key="test-key",
+        max_tokens=4096,
+        timeout=360.0,
+        total_timeout=780.0,
+        deadline=370.0,
+        clock=clock,
+    )
+
+    assert client._remaining_timeout() == 270.0
+
+    clock.advance(271.0)
+
+    try:
+        client._remaining_timeout()
+    except Exception as exc:
+        assert "OpenRouter total request budget exceeded" in str(exc)
+    else:
+        raise AssertionError("the caller deadline must cap the model budget")
 
 
 def test_openrouter_error_redacts_response_body():

@@ -1,7 +1,10 @@
 from pathlib import Path
 
 from config.settings import Settings
-from models.api import GRCAnalysisConfig
+import lambda_main
+from core.runtime import get_model_deadline
+from lambda_main import _lambda_model_deadline
+from models.api import GRCAnalysisConfig, WorkflowResponse
 from services import model_service
 from services.model_service import GRCModelService
 from services.opencode_client import parse_model_selection
@@ -66,7 +69,85 @@ def test_model_service_bounds_openrouter_retries_within_lambda_budget(monkeypatc
 
     assert isinstance(service.client, OpenRouterClient)
     assert service.client.max_attempts == 2
-    assert service.client.timeout == 180.0
+    assert service.client.timeout == 360.0
+    assert service.client.total_timeout == 780.0
+
+
+def test_lambda_deadline_reserves_writeback_for_async_reports():
+    class LambdaContext:
+        def get_remaining_time_in_millis(self):
+            return 900_000
+
+    deadline = _lambda_model_deadline(LambdaContext(), clock=lambda: 100.0)
+
+    assert deadline == 880.0
+
+
+def test_lambda_deadline_honors_a_tighter_synchronous_caller():
+    class LambdaContext:
+        def get_remaining_time_in_millis(self):
+            return 900_000
+
+    deadline = _lambda_model_deadline(
+        LambdaContext(),
+        caller_deadline_unix_ms=400_000,
+        clock=lambda: 100.0,
+        wall_clock=lambda: 100.0,
+    )
+
+    assert deadline == 370.0
+
+
+def test_direct_lambda_passes_the_caller_aware_deadline(monkeypatch):
+    captured_deadlines = []
+
+    async def fake_workflow(_feed_url, _config, model_deadline=None):
+        captured_deadlines.append(model_deadline)
+        return WorkflowResponse(status="completed")
+
+    monkeypatch.setattr("core.workflow.run_grc_analysis_endpoint", fake_workflow)
+    monkeypatch.setattr(lambda_main, "_lambda_model_deadline", lambda _context, _deadline: 370.0)
+
+    response = lambda_main.handler(
+        {
+            "feed_url": "https://example.com/feed.xml",
+            "caller_deadline_unix_ms": 400_000,
+        },
+        object(),
+    )
+
+    assert response["statusCode"] == 200
+    assert captured_deadlines == [370.0]
+
+
+def test_api_gateway_lambda_sets_and_resets_the_runtime_deadline(monkeypatch):
+    captured_deadlines = []
+
+    def fake_mangum_handler(_event, _context):
+        captured_deadlines.append(get_model_deadline())
+        return {"statusCode": 200}
+
+    monkeypatch.setattr(lambda_main, "_lambda_model_deadline", lambda _context: 700.0)
+    monkeypatch.setattr(lambda_main, "mangum_handler", fake_mangum_handler)
+
+    response = lambda_main.handler({"httpMethod": "POST"}, object())
+
+    assert response == {"statusCode": 200}
+    assert captured_deadlines == [700.0]
+    assert get_model_deadline() is None
+
+
+def test_model_service_uses_the_invocation_deadline(monkeypatch):
+    monkeypatch.setattr(model_service.settings, "openrouter_api_key", "test-key")
+
+    service = GRCModelService(
+        model_name="openrouter/openrouter/free",
+        max_tokens=16000,
+        model_deadline=700.0,
+    )
+
+    assert isinstance(service.client, OpenRouterClient)
+    assert service.client._deadline == 700.0
 
 
 def test_model_service_keeps_opencode_for_local_runs_without_openrouter_key(monkeypatch):
