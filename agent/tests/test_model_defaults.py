@@ -56,6 +56,19 @@ def test_model_service_uses_openrouter_client_when_api_key_is_configured(monkeyp
     assert service.client.max_tokens == 4096
 
 
+def test_model_service_bounds_openrouter_retries_within_lambda_budget(monkeypatch):
+    monkeypatch.setattr(model_service.settings, "openrouter_api_key", "test-key")
+
+    service = GRCModelService(
+        model_name="openrouter/openrouter/free",
+        max_tokens=16000,
+    )
+
+    assert isinstance(service.client, OpenRouterClient)
+    assert service.client.max_attempts == 2
+    assert service.client.timeout == 180.0
+
+
 def test_model_service_keeps_opencode_for_local_runs_without_openrouter_key(monkeypatch):
     monkeypatch.setattr(model_service.settings, "openrouter_api_key", "")
 
