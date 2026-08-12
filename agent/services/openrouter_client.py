@@ -3,7 +3,9 @@
 from __future__ import annotations
 
 import asyncio
+from collections.abc import Callable
 import json
+import time
 from typing import Any
 
 import httpx
@@ -31,17 +33,26 @@ class OpenRouterClient:
         max_tokens: int,
         base_url: str = OPENROUTER_BASE_URL,
         timeout: float = 120.0,
+        total_timeout: float | None = None,
         transport: httpx.AsyncBaseTransport | None = None,
         max_attempts: int = 2,
+        clock: Callable[[], float] = time.monotonic,
     ) -> None:
         if max_attempts < 1:
             raise ValueError("max_attempts must be at least 1")
+        if timeout <= 0:
+            raise ValueError("timeout must be greater than zero")
+        if total_timeout is not None and total_timeout <= 0:
+            raise ValueError("total_timeout must be greater than zero")
         self.api_key = api_key
         self.max_tokens = max_tokens
         self.base_url = base_url.rstrip("/")
         self.timeout = timeout
+        self.total_timeout = total_timeout
         self.transport = transport
         self.max_attempts = max_attempts
+        self.clock = clock
+        self._deadline: float | None = None
 
     async def generate(
         self,
@@ -67,7 +78,7 @@ class OpenRouterClient:
         ) as client:
             for attempt in range(self.max_attempts):
                 try:
-                    async with asyncio.timeout(self.timeout):
+                    async with asyncio.timeout(self._remaining_timeout()):
                         response = await client.post(
                             "/chat/completions",
                             json={
@@ -98,6 +109,20 @@ class OpenRouterClient:
                         raise
 
         raise OpenRouterError("OpenRouter request failed")
+
+    def _remaining_timeout(self) -> float:
+        """Return this attempt's wall-clock limit within the shared model budget."""
+        if self.total_timeout is None:
+            return self.timeout
+
+        now = self.clock()
+        if self._deadline is None:
+            self._deadline = now + self.total_timeout
+
+        remaining = self._deadline - now
+        if remaining <= 0:
+            raise OpenRouterError("OpenRouter total request budget exceeded")
+        return min(self.timeout, remaining)
 
     def _raise_for_status(self, response: httpx.Response) -> None:
         if response.is_success:

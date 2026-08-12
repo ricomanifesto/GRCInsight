@@ -66,7 +66,8 @@ def test_model_service_bounds_openrouter_retries_within_lambda_budget(monkeypatc
 
     assert isinstance(service.client, OpenRouterClient)
     assert service.client.max_attempts == 2
-    assert service.client.timeout == 180.0
+    assert service.client.timeout == 360.0
+    assert service.client.total_timeout == 780.0
 
 
 def test_model_service_keeps_opencode_for_local_runs_without_openrouter_key(monkeypatch):
