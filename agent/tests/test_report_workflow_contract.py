@@ -618,7 +618,6 @@ def test_lambda_deploy_sets_explicit_model_runtime_environment():
     )
     assert "LLM_MODEL=$LLM_MODEL" in workflow
     assert "OPENROUTER_API_KEY=$OPENROUTER_API_KEY" in workflow
-    assert "OPENCODE_BASE_URL=" not in workflow
     assert "ANTHROPIC_API_KEY=" not in workflow
 
 
@@ -628,7 +627,6 @@ def test_manual_lambda_deploy_uses_openrouter_secret():
     assert "OPENROUTER_API_KEY is not set" in script
     assert "openrouter/provider-model format" in script
     assert "OPENROUTER_API_KEY=${OPENROUTER_API_KEY}" in script
-    assert "OPENCODE_BASE_URL=${OPENCODE_BASE_URL}" not in script
 
 
 def test_lambda_configuration_updates_do_not_dump_openrouter_secret():

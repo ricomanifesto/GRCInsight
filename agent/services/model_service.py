@@ -1,4 +1,4 @@
-"""Provider-switchable model service for GRC analysis."""
+"""OpenRouter model service for GRC analysis."""
 
 from datetime import datetime, timezone
 import re
@@ -8,8 +8,7 @@ from loguru import logger
 
 from config.settings import settings
 from models.api import ArticleInput
-from services.opencode_client import OpenCodeClient, parse_model_selection
-from services.openrouter_client import OpenRouterClient
+from services.openrouter_client import OpenRouterClient, parse_openrouter_model
 
 REPORT_CVE_LIMIT = 10
 CVE_PATTERN = re.compile(r"\bCVE-\d{4}-\d{4,}\b", re.IGNORECASE)
@@ -55,26 +54,20 @@ class GRCModelService:
         """Initialize model service."""
         configured_model = model_name or settings.llm_model
         configured_max_tokens = max_tokens or settings.llm_max_tokens
-        self.model = parse_model_selection(configured_model)
+        self.model = parse_openrouter_model(configured_model)
         self.max_tokens = configured_max_tokens
         timeout = max(120.0, float(configured_max_tokens) / 20)
-        if settings.openrouter_api_key and self.model.provider_id != "openrouter":
-            raise ValueError("OpenRouter direct Lambda model calls require an openrouter/* model")
-        if settings.openrouter_api_key:
-            self.client = OpenRouterClient(
-                api_key=settings.openrouter_api_key,
-                max_tokens=configured_max_tokens,
-                timeout=min(timeout, OPENROUTER_ATTEMPT_TIMEOUT_SECONDS),
-                total_timeout=OPENROUTER_TOTAL_TIMEOUT_SECONDS,
-                deadline=model_deadline,
-            )
-            self.client_kind = "openrouter"
-        else:
-            self.client = OpenCodeClient(timeout=timeout)
-            self.client_kind = "opencode"
+        if not settings.openrouter_api_key:
+            raise ValueError("OPENROUTER_API_KEY is required for model-backed analysis")
+        self.client = OpenRouterClient(
+            api_key=settings.openrouter_api_key,
+            max_tokens=configured_max_tokens,
+            timeout=min(timeout, OPENROUTER_ATTEMPT_TIMEOUT_SECONDS),
+            total_timeout=OPENROUTER_TOTAL_TIMEOUT_SECONDS,
+            deadline=model_deadline,
+        )
         logger.info(
-            "Initialized model service with client=%s provider=%s model=%s",
-            self.client_kind,
+            "Initialized model service with provider=%s model=%s",
             self.model.provider_id,
             self.model.model_id,
         )

@@ -4,15 +4,30 @@ from __future__ import annotations
 
 import asyncio
 from collections.abc import Callable
+from dataclasses import dataclass
 import json
 import time
 from typing import Any
 
 import httpx
 
-from services.opencode_client import ModelSelection
-
 OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"
+
+
+@dataclass(frozen=True)
+class OpenRouterModel:
+    """Validated OpenRouter provider and model identifiers."""
+
+    model_id: str
+    provider_id: str = "openrouter"
+
+
+def parse_openrouter_model(model_name: str) -> OpenRouterModel:
+    """Parse the required openrouter/provider-model configuration."""
+    provider, separator, model_id = model_name.partition("/")
+    if provider != "openrouter" or not separator or not model_id:
+        raise ValueError("Model must use openrouter/provider-model format")
+    return OpenRouterModel(model_id=model_id)
 
 
 class OpenRouterError(RuntimeError):
@@ -61,13 +76,10 @@ class OpenRouterClient:
         *,
         system_prompt: str,
         user_prompt: str,
-        model: ModelSelection,
+        model: OpenRouterModel,
         title: str,
     ) -> str:
         """Generate text through OpenRouter."""
-        if model.provider_id != "openrouter":
-            raise OpenRouterError("OpenRouter direct calls require an openrouter/* model")
-
         async with httpx.AsyncClient(
             base_url=self.base_url,
             timeout=self.timeout,

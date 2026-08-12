@@ -3,8 +3,7 @@ import json
 
 import httpx
 
-from services.opencode_client import OpenCodeClient, parse_model_selection
-from services.openrouter_client import OpenRouterClient
+from services.openrouter_client import OpenRouterClient, parse_openrouter_model
 
 
 class SlowOpenRouterTransport(httpx.AsyncBaseTransport):
@@ -32,83 +31,13 @@ class FakeClock:
         self.now += seconds
 
 
-def test_opencode_client_posts_explicit_provider_model():
-    requests = []
-
-    def handler(request):
-        requests.append(request)
-        if request.url.path == "/session":
-            return httpx.Response(200, json={"id": "session-1"})
-        if request.url.path == "/session/session-1/message":
-            payload = json.loads(request.content.decode())
-            assert payload["model"] == {
-                "providerID": "openrouter",
-                "modelID": "nvidia/nemotron-3-ultra-550b-a55b:free",
-            }
-            return httpx.Response(
-                200,
-                json={
-                    "info": {"id": "message-1"},
-                    "parts": [{"type": "text", "text": "Generated report"}],
-                },
-            )
-        return httpx.Response(404)
-
-    client = OpenCodeClient(
-        base_url="http://opencode.test",
-        transport=httpx.MockTransport(handler),
-    )
-
-    result = asyncio.run(
-        client.generate(
-            system_prompt="system",
-            user_prompt="user",
-            model=parse_model_selection("openrouter/nvidia/nemotron-3-ultra-550b-a55b:free"),
-            title="test",
-        )
-    )
-
-    assert result == "Generated report"
-    assert [request.url.path for request in requests] == [
-        "/session",
-        "/session/session-1/message",
-    ]
-
-
-def test_parse_model_selection_rejects_bare_model():
+def test_parse_openrouter_model_rejects_bare_model():
     try:
-        parse_model_selection("claude-sonnet-4-5-20250929")
+        parse_openrouter_model("claude-sonnet-4-5-20250929")
     except ValueError as exc:
-        assert "provider/model" in str(exc)
+        assert "openrouter/provider-model" in str(exc)
     else:
         raise AssertionError("bare models must be rejected")
-
-
-def test_opencode_error_redacts_response_body():
-    def handler(request):
-        if request.url.path == "/session":
-            return httpx.Response(503, text="provider leaked request payload")
-        return httpx.Response(404)
-
-    client = OpenCodeClient(
-        base_url="http://opencode.test",
-        transport=httpx.MockTransport(handler),
-    )
-
-    try:
-        asyncio.run(
-            client.generate(
-                system_prompt="system",
-                user_prompt="user",
-                model=parse_model_selection("openrouter/nvidia/nemotron-3-ultra-550b-a55b:free"),
-                title="test",
-            )
-        )
-    except Exception as exc:
-        assert "Failed to create OpenCode session: HTTP 503" in str(exc)
-        assert "provider leaked request payload" not in str(exc)
-    else:
-        raise AssertionError("failed OpenCode responses must raise")
 
 
 def test_openrouter_client_posts_chat_completion_with_nested_model_id():
@@ -142,7 +71,7 @@ def test_openrouter_client_posts_chat_completion_with_nested_model_id():
         client.generate(
             system_prompt="system",
             user_prompt="user",
-            model=parse_model_selection("openrouter/nvidia/nemotron-3-ultra-550b-a55b:free"),
+            model=parse_openrouter_model("openrouter/nvidia/nemotron-3-ultra-550b-a55b:free"),
             title="test",
         )
     )
@@ -174,7 +103,7 @@ def test_openrouter_client_retries_invalid_json_once():
         client.generate(
             system_prompt="system",
             user_prompt="user",
-            model=parse_model_selection("openrouter/openrouter/free"),
+            model=parse_openrouter_model("openrouter/openrouter/free"),
             title="test",
         )
     )
@@ -200,7 +129,7 @@ def test_openrouter_invalid_json_error_redacts_response_body():
             client.generate(
                 system_prompt="system",
                 user_prompt="user",
-                model=parse_model_selection("openrouter/openrouter/free"),
+                model=parse_openrouter_model("openrouter/openrouter/free"),
                 title="test",
             )
         )
@@ -242,7 +171,7 @@ def test_openrouter_client_retries_transient_provider_error_once():
         client.generate(
             system_prompt="system",
             user_prompt="user",
-            model=parse_model_selection("openrouter/openrouter/free"),
+            model=parse_openrouter_model("openrouter/openrouter/free"),
             title="test",
         )
     )
@@ -266,7 +195,7 @@ def test_openrouter_client_enforces_wall_clock_deadline_per_attempt():
             client.generate(
                 system_prompt="system",
                 user_prompt="user",
-                model=parse_model_selection("openrouter/openrouter/free"),
+                model=parse_openrouter_model("openrouter/openrouter/free"),
                 title="test",
             )
         )
@@ -345,7 +274,7 @@ def test_openrouter_error_redacts_response_body():
             client.generate(
                 system_prompt="system",
                 user_prompt="user",
-                model=parse_model_selection("openrouter/nvidia/nemotron-3-ultra-550b-a55b:free"),
+                model=parse_openrouter_model("openrouter/nvidia/nemotron-3-ultra-550b-a55b:free"),
                 title="test",
             )
         )

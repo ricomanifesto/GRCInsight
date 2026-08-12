@@ -70,4 +70,4 @@ aws iam delete-role --role-name grcinsight-lambda-role
 
 - Local: `cmd/server/main.go`, `agent/main.py`
 - Lambda: `cmd/lambda/main.go`, `agent/lambda_main.py`
-- Local model calls can still use OpenCode with `OPENCODE_BASE_URL`. Lambda model calls use OpenRouter directly when `OPENROUTER_API_KEY` is set.
+- Local and Lambda model calls use OpenRouter directly with `OPENROUTER_API_KEY`.
