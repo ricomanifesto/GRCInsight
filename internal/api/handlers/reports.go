@@ -1,11 +1,11 @@
 package handlers
 
 import (
-    "net/http"
-    "strconv"
+	"net/http"
+	"strconv"
 
-    "grcinsight/internal/models"
-    "grcinsight/internal/services"
+	"grcinsight/internal/models"
+	"grcinsight/internal/services"
 
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
@@ -13,8 +13,8 @@ import (
 
 // ReportsHandler handles report-related endpoints
 type ReportsHandler struct {
-    reportService *services.ReportService
-    logger        *logrus.Logger
+	reportService *services.ReportService
+	logger        *logrus.Logger
 }
 
 // NewReportsHandler creates a new reports handler
@@ -31,7 +31,7 @@ func (h *ReportsHandler) GenerateReport(c *gin.Context) {
 	if err := c.ShouldBindJSON(&req); err != nil {
 		h.logger.WithError(err).Error("Invalid request body")
 		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "Invalid request body",
+			"error":   "Invalid request body",
 			"details": err.Error(),
 		})
 		return
@@ -43,42 +43,42 @@ func (h *ReportsHandler) GenerateReport(c *gin.Context) {
 	if err != nil {
 		h.logger.WithError(err).Error("Failed to generate report")
 		c.JSON(http.StatusInternalServerError, gin.H{
-			"error": "Failed to generate report",
+			"error":   "Failed to generate report",
 			"details": err.Error(),
 		})
 		return
 	}
 
-    response := models.GenerateReportResponse{
-        ReportID: report.ID,
-        Status:   report.Status,
-        Message:  "Report generation started",
-    }
+	response := models.GenerateReportResponse{
+		ReportID: report.ID,
+		Status:   report.Status,
+		Message:  "Report generation started",
+	}
 
-    if report.Status == "completed" {
-        response.Message = "Report generated successfully"
-    }
+	if report.Status == "completed" {
+		response.Message = "Report generated successfully"
+	}
 
-    // If still processing (async mode), return 202 Accepted; otherwise 201 Created
-    statusCode := http.StatusCreated
-    if report.Status == "processing" {
-        statusCode = http.StatusAccepted
-    }
+	// If still processing (async mode), return 202 Accepted; otherwise 201 Created
+	statusCode := http.StatusCreated
+	if report.Status == "processing" {
+		statusCode = http.StatusAccepted
+	}
 
-    c.JSON(statusCode, response)
+	c.JSON(statusCode, response)
 }
 
 // GetReport retrieves a specific report
 func (h *ReportsHandler) GetReport(c *gin.Context) {
-    id := c.Param("id")
-    report, err := h.reportService.GetReport(id)
-    if err != nil {
-        h.logger.WithError(err).WithField("report_id", id).Error("Failed to get report")
-        c.JSON(http.StatusNotFound, gin.H{
-            "error": "Report not found",
-        })
-        return
-    }
+	id := c.Param("id")
+	report, err := h.reportService.GetReport(id)
+	if err != nil {
+		h.logger.WithError(err).WithField("report_id", id).Error("Failed to get report")
+		c.JSON(http.StatusNotFound, gin.H{
+			"error": "Report not found",
+		})
+		return
+	}
 
 	c.JSON(http.StatusOK, report)
 }
@@ -115,14 +115,14 @@ func (h *ReportsHandler) ListReports(c *gin.Context) {
 
 // DeleteReport deletes a specific report
 func (h *ReportsHandler) DeleteReport(c *gin.Context) {
-    id := c.Param("id")
-    if err := h.reportService.DeleteReport(id); err != nil {
-        h.logger.WithError(err).WithField("report_id", id).Error("Failed to delete report")
-        c.JSON(http.StatusInternalServerError, gin.H{
-            "error": "Failed to delete report",
-        })
-        return
-    }
+	id := c.Param("id")
+	if err := h.reportService.DeleteReport(id); err != nil {
+		h.logger.WithError(err).WithField("report_id", id).Error("Failed to delete report")
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": "Failed to delete report",
+		})
+		return
+	}
 
 	c.JSON(http.StatusOK, gin.H{
 		"message": "Report deleted successfully",
@@ -131,46 +131,46 @@ func (h *ReportsHandler) DeleteReport(c *gin.Context) {
 
 // GetReportStatus gets the status of a specific report
 func (h *ReportsHandler) GetReportStatus(c *gin.Context) {
-    id := c.Param("id")
-    report, err := h.reportService.GetReport(id)
-    if err != nil {
-        c.JSON(http.StatusNotFound, gin.H{
-            "error": "Report not found",
-        })
-        return
-    }
+	id := c.Param("id")
+	report, err := h.reportService.GetReport(id)
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{
+			"error": "Report not found",
+		})
+		return
+	}
 
-    c.JSON(http.StatusOK, gin.H{
-        "id":           report.ID,
-        "status":       report.Status,
-        "created_at":   report.CreatedAt,
-        "generated_at": report.GeneratedAt,
-    })
+	c.JSON(http.StatusOK, gin.H{
+		"id":           report.ID,
+		"status":       report.Status,
+		"created_at":   report.CreatedAt,
+		"generated_at": report.GeneratedAt,
+	})
 }
 
 // ListReportArticles lists the articles associated with a report
 func (h *ReportsHandler) ListReportArticles(c *gin.Context) {
-    id := c.Param("id")
+	id := c.Param("id")
 
-    // Pagination params
-    page := 1
-    perPage := 20
-    if v := c.Query("page"); v != "" {
-        if p, err := strconv.Atoi(v); err == nil && p > 0 {
-            page = p
-        }
-    }
-    if v := c.Query("per_page"); v != "" {
-        if p, err := strconv.Atoi(v); err == nil && p > 0 && p <= 100 {
-            perPage = p
-        }
-    }
+	// Pagination params
+	page := 1
+	perPage := 20
+	if v := c.Query("page"); v != "" {
+		if p, err := strconv.Atoi(v); err == nil && p > 0 {
+			page = p
+		}
+	}
+	if v := c.Query("per_page"); v != "" {
+		if p, err := strconv.Atoi(v); err == nil && p > 0 && p <= 100 {
+			perPage = p
+		}
+	}
 
-    resp, err := h.reportService.ListReportArticles(id, page, perPage)
-    if err != nil {
-        h.logger.WithError(err).WithField("report_id", id).Error("Failed to list report articles")
-        c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to list report articles"})
-        return
-    }
-    c.JSON(http.StatusOK, resp)
+	resp, err := h.reportService.ListReportArticles(id, page, perPage)
+	if err != nil {
+		h.logger.WithError(err).WithField("report_id", id).Error("Failed to list report articles")
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to list report articles"})
+		return
+	}
+	c.JSON(http.StatusOK, resp)
 }

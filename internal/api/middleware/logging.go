@@ -12,16 +12,16 @@ func LoggingMiddleware(logger *logrus.Logger) gin.HandlerFunc {
 	return gin.LoggerWithFormatter(func(param gin.LogFormatterParams) string {
 		// Log the request
 		logger.WithFields(logrus.Fields{
-			"timestamp":   param.TimeStamp.Format(time.RFC3339),
-			"status":      param.StatusCode,
-			"latency":     param.Latency,
-			"client_ip":   param.ClientIP,
-			"method":      param.Method,
-			"path":        param.Path,
-			"user_agent":  param.Request.UserAgent(),
-			"error":       param.ErrorMessage,
+			"timestamp":  param.TimeStamp.Format(time.RFC3339),
+			"status":     param.StatusCode,
+			"latency":    param.Latency,
+			"client_ip":  param.ClientIP,
+			"method":     param.Method,
+			"path":       param.Path,
+			"user_agent": param.Request.UserAgent(),
+			"error":      param.ErrorMessage,
 		}).Info("HTTP request")
-		
+
 		// Return empty string since we're logging directly
 		return ""
 	})
@@ -34,7 +34,7 @@ func RequestIDMiddleware() gin.HandlerFunc {
 		if requestID == "" {
 			requestID = generateRequestID()
 		}
-		
+
 		c.Set("request_id", requestID)
 		c.Header("X-Request-ID", requestID)
 		c.Next()

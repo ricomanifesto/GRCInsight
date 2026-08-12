@@ -35,13 +35,3 @@ func NewLogger(cfg config.LoggingConfig) *logrus.Logger {
 
 	return logger
 }
-
-// WithRequestID adds a request ID to the logger context
-func WithRequestID(logger *logrus.Logger, requestID string) *logrus.Entry {
-	return logger.WithField("request_id", requestID)
-}
-
-// WithUserID adds a user ID to the logger context
-func WithUserID(logger *logrus.Logger, userID string) *logrus.Entry {
-	return logger.WithField("user_id", userID)
-}

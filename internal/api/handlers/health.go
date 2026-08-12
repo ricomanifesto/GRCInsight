@@ -23,12 +23,12 @@ func NewHealthHandler(healthService *services.HealthService) *HealthHandler {
 // HealthCheck performs a comprehensive health check
 func (h *HealthHandler) HealthCheck(c *gin.Context) {
 	health := h.healthService.CheckHealth()
-	
+
 	statusCode := http.StatusOK
 	if health.Status != "healthy" {
 		statusCode = http.StatusServiceUnavailable
 	}
-	
+
 	c.JSON(statusCode, health)
 }
 
@@ -41,7 +41,7 @@ func (h *HealthHandler) DatabaseHealthCheck(c *gin.Context) {
 		})
 		return
 	}
-	
+
 	c.JSON(http.StatusOK, gin.H{
 		"status": "healthy",
 	})
@@ -56,7 +56,7 @@ func (h *HealthHandler) PythonServiceHealthCheck(c *gin.Context) {
 		})
 		return
 	}
-	
+
 	c.JSON(http.StatusOK, gin.H{
 		"status": "healthy",
 	})

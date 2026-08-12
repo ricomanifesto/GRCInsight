@@ -21,28 +21,7 @@ func NewReportRepository(repo *dynamodb.Repository) ReportRepository {
 // Create creates a new report
 func (r *reportRepository) Create(report *models.Report) error {
 	ctx := context.Background()
-
-	// Convert models.Report to DynamoDB format
-	dynamoReport := &dynamodb.Report{
-		Title:     report.Title,
-		Content:   report.Content,
-		Status:    report.Status,
-		SourceURL: report.SourceURL,
-		Metadata: dynamodb.ReportMetadata{
-			ArticleCount:         report.Metadata.ArticleCount,
-			GRCArticleCount:      report.Metadata.GRCArticleCount,
-			AnalysisMode:         report.Metadata.AnalysisMode,
-			FallbackReason:       report.Metadata.FallbackReason,
-			RegulationsMentioned: report.Metadata.RegulationsMentioned,
-			FrameworksReferenced: report.Metadata.FrameworksReferenced,
-			IndustriesAffected:   report.Metadata.IndustriesAffected,
-			RegulatoryBodies:     report.Metadata.RegulatoryBodies,
-		},
-	}
-
-	if report.GeneratedAt != nil {
-		dynamoReport.GeneratedAt = report.GeneratedAt
-	}
+	dynamoReport := reportToDynamo(report)
 
 	if err := r.repo.CreateReport(ctx, dynamoReport); err != nil {
 		return err
@@ -50,8 +29,8 @@ func (r *reportRepository) Create(report *models.Report) error {
 
 	// Update the original report with the generated ID (string)
 	report.ID = dynamoReport.ReportID
-	report.CreatedAt = r.parseTime(dynamoReport.CreatedAt)
-	report.UpdatedAt = r.parseTime(dynamoReport.UpdatedAt)
+	report.CreatedAt = parseDynamoTime(dynamoReport.CreatedAt)
+	report.UpdatedAt = parseDynamoTime(dynamoReport.UpdatedAt)
 
 	return nil
 }
@@ -66,32 +45,7 @@ func (r *reportRepository) GetByID(id string) (*models.Report, error) {
 		return nil, err
 	}
 
-	// Convert DynamoDB result to models.Report
-	report := &models.Report{
-		ID:        dynamoReport.ReportID,
-		Title:     dynamoReport.Title,
-		Content:   dynamoReport.Content,
-		Status:    dynamoReport.Status,
-		SourceURL: dynamoReport.SourceURL,
-		CreatedAt: r.parseTime(dynamoReport.CreatedAt),
-		UpdatedAt: r.parseTime(dynamoReport.UpdatedAt),
-		Metadata: models.ReportMetadata{
-			ArticleCount:         dynamoReport.Metadata.ArticleCount,
-			GRCArticleCount:      dynamoReport.Metadata.GRCArticleCount,
-			AnalysisMode:         dynamoReport.Metadata.AnalysisMode,
-			FallbackReason:       dynamoReport.Metadata.FallbackReason,
-			RegulationsMentioned: dynamoReport.Metadata.RegulationsMentioned,
-			FrameworksReferenced: dynamoReport.Metadata.FrameworksReferenced,
-			IndustriesAffected:   dynamoReport.Metadata.IndustriesAffected,
-			RegulatoryBodies:     dynamoReport.Metadata.RegulatoryBodies,
-		},
-	}
-
-	if dynamoReport.GeneratedAt != nil {
-		report.GeneratedAt = dynamoReport.GeneratedAt
-	}
-
-	return report, nil
+	return reportFromDynamo(dynamoReport), nil
 }
 
 // List retrieves reports with pagination
@@ -107,31 +61,7 @@ func (r *reportRepository) List(limit, offset int) ([]*models.Report, int64, err
 
 	var reports []*models.Report
 	for _, dynamoReport := range dynamoReports {
-		report := &models.Report{
-			ID:        dynamoReport.ReportID,
-			Title:     dynamoReport.Title,
-			Content:   dynamoReport.Content,
-			Status:    dynamoReport.Status,
-			SourceURL: dynamoReport.SourceURL,
-			CreatedAt: r.parseTime(dynamoReport.CreatedAt),
-			UpdatedAt: r.parseTime(dynamoReport.UpdatedAt),
-			Metadata: models.ReportMetadata{
-				ArticleCount:         dynamoReport.Metadata.ArticleCount,
-				GRCArticleCount:      dynamoReport.Metadata.GRCArticleCount,
-				AnalysisMode:         dynamoReport.Metadata.AnalysisMode,
-				FallbackReason:       dynamoReport.Metadata.FallbackReason,
-				RegulationsMentioned: dynamoReport.Metadata.RegulationsMentioned,
-				FrameworksReferenced: dynamoReport.Metadata.FrameworksReferenced,
-				IndustriesAffected:   dynamoReport.Metadata.IndustriesAffected,
-				RegulatoryBodies:     dynamoReport.Metadata.RegulatoryBodies,
-			},
-		}
-
-		if dynamoReport.GeneratedAt != nil {
-			report.GeneratedAt = dynamoReport.GeneratedAt
-		}
-
-		reports = append(reports, report)
+		reports = append(reports, reportFromDynamo(&dynamoReport))
 	}
 
 	// Return count as length since DynamoDB pagination is different
@@ -142,31 +72,9 @@ func (r *reportRepository) List(limit, offset int) ([]*models.Report, int64, err
 // Update updates an existing report
 func (r *reportRepository) Update(report *models.Report) error {
 	ctx := context.Background()
-
-	// Convert models.Report to DynamoDB format
-	dynamoReport := &dynamodb.Report{
-		ReportID:  report.ID,
-		Title:     report.Title,
-		Content:   report.Content,
-		Status:    report.Status,
-		SourceURL: report.SourceURL,
-		CreatedAt: dynamodb.ToISO8601(report.CreatedAt), // Preserve original created_at
-		Metadata: dynamodb.ReportMetadata{
-			ArticleCount:         report.Metadata.ArticleCount,
-			GRCArticleCount:      report.Metadata.GRCArticleCount,
-			AnalysisMode:         report.Metadata.AnalysisMode,
-			FallbackReason:       report.Metadata.FallbackReason,
-			RegulationsMentioned: report.Metadata.RegulationsMentioned,
-			FrameworksReferenced: report.Metadata.FrameworksReferenced,
-			IndustriesAffected:   report.Metadata.IndustriesAffected,
-			RegulatoryBodies:     report.Metadata.RegulatoryBodies,
-		},
-	}
-
-	if report.GeneratedAt != nil {
-		dynamoReport.GeneratedAt = report.GeneratedAt
-	}
-
+	dynamoReport := reportToDynamo(report)
+	dynamoReport.ReportID = report.ID
+	dynamoReport.CreatedAt = dynamodb.ToISO8601(report.CreatedAt)
 	return r.repo.UpdateReport(ctx, dynamoReport)
 }
 
@@ -192,41 +100,58 @@ func (r *reportRepository) GetByStatus(status string) ([]*models.Report, error) 
 		if dynamoReport.Status != status {
 			continue
 		}
-
-		report := &models.Report{
-			ID:        dynamoReport.ReportID,
-			Title:     dynamoReport.Title,
-			Content:   dynamoReport.Content,
-			Status:    dynamoReport.Status,
-			SourceURL: dynamoReport.SourceURL,
-			CreatedAt: r.parseTime(dynamoReport.CreatedAt),
-			UpdatedAt: r.parseTime(dynamoReport.UpdatedAt),
-			Metadata: models.ReportMetadata{
-				ArticleCount:         dynamoReport.Metadata.ArticleCount,
-				GRCArticleCount:      dynamoReport.Metadata.GRCArticleCount,
-				AnalysisMode:         dynamoReport.Metadata.AnalysisMode,
-				FallbackReason:       dynamoReport.Metadata.FallbackReason,
-				RegulationsMentioned: dynamoReport.Metadata.RegulationsMentioned,
-				FrameworksReferenced: dynamoReport.Metadata.FrameworksReferenced,
-				IndustriesAffected:   dynamoReport.Metadata.IndustriesAffected,
-				RegulatoryBodies:     dynamoReport.Metadata.RegulatoryBodies,
-			},
-		}
-
-		if dynamoReport.GeneratedAt != nil {
-			report.GeneratedAt = dynamoReport.GeneratedAt
-		}
-
-		reports = append(reports, report)
+		reports = append(reports, reportFromDynamo(&dynamoReport))
 	}
 
 	return reports, nil
 }
 
-// parseTime is a helper function to parse ISO8601 strings back to time.Time
-func (r *reportRepository) parseTime(timeStr string) time.Time {
+func reportToDynamo(report *models.Report) *dynamodb.Report {
+	return &dynamodb.Report{
+		Title:       report.Title,
+		Content:     report.Content,
+		Status:      report.Status,
+		SourceURL:   report.SourceURL,
+		GeneratedAt: report.GeneratedAt,
+		Metadata: dynamodb.ReportMetadata{
+			ArticleCount:         report.Metadata.ArticleCount,
+			GRCArticleCount:      report.Metadata.GRCArticleCount,
+			AnalysisMode:         report.Metadata.AnalysisMode,
+			FallbackReason:       report.Metadata.FallbackReason,
+			RegulationsMentioned: report.Metadata.RegulationsMentioned,
+			FrameworksReferenced: report.Metadata.FrameworksReferenced,
+			IndustriesAffected:   report.Metadata.IndustriesAffected,
+			RegulatoryBodies:     report.Metadata.RegulatoryBodies,
+		},
+	}
+}
+
+func reportFromDynamo(report *dynamodb.Report) *models.Report {
+	return &models.Report{
+		ID:          report.ReportID,
+		Title:       report.Title,
+		Content:     report.Content,
+		Status:      report.Status,
+		SourceURL:   report.SourceURL,
+		GeneratedAt: report.GeneratedAt,
+		CreatedAt:   parseDynamoTime(report.CreatedAt),
+		UpdatedAt:   parseDynamoTime(report.UpdatedAt),
+		Metadata: models.ReportMetadata{
+			ArticleCount:         report.Metadata.ArticleCount,
+			GRCArticleCount:      report.Metadata.GRCArticleCount,
+			AnalysisMode:         report.Metadata.AnalysisMode,
+			FallbackReason:       report.Metadata.FallbackReason,
+			RegulationsMentioned: report.Metadata.RegulationsMentioned,
+			FrameworksReferenced: report.Metadata.FrameworksReferenced,
+			IndustriesAffected:   report.Metadata.IndustriesAffected,
+			RegulatoryBodies:     report.Metadata.RegulatoryBodies,
+		},
+	}
+}
+
+func parseDynamoTime(timeStr string) time.Time {
 	if t, err := dynamodb.FromISO8601(timeStr); err == nil {
 		return t
 	}
-	return time.Now() // Fallback to current time if parsing fails
+	return time.Now()
 }

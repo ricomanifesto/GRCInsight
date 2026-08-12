@@ -1,9 +1,6 @@
 package models
 
 import (
-	"database/sql/driver"
-	"encoding/json"
-	"errors"
 	"time"
 )
 
@@ -59,40 +56,7 @@ type Article struct {
 
 // ReportStatus constants
 const (
-	StatusPending    = "pending"
 	StatusProcessing = "processing"
 	StatusCompleted  = "completed"
 	StatusFailed     = "failed"
 )
-
-// BeforeCreate sets default values before creating a report
-func (r *Report) BeforeCreate() error {
-	if r.Status == "" {
-		r.Status = StatusPending
-	}
-	return nil
-}
-
-// Value implements the database/sql/driver.Valuer interface for ReportMetadata
-func (m ReportMetadata) Value() (driver.Value, error) {
-	return json.Marshal(m)
-}
-
-// Scan implements the database/sql.Scanner interface for ReportMetadata
-func (m *ReportMetadata) Scan(value interface{}) error {
-	if value == nil {
-		return nil
-	}
-
-	var bytes []byte
-	switch v := value.(type) {
-	case []byte:
-		bytes = v
-	case string:
-		bytes = []byte(v)
-	default:
-		return errors.New("type assertion to []byte failed")
-	}
-
-	return json.Unmarshal(bytes, &m)
-}

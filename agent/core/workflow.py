@@ -642,11 +642,3 @@ async def run_grc_analysis_endpoint(
                 code="WORKFLOW_EXECUTION_ERROR", message="Workflow execution failed", details=str(e)
             ),
         )
-
-
-def extract_from_analysis(analysis_results: Dict[str, Any], key: str) -> List[str]:
-    """Extract specific data from analysis results."""
-    try:
-        return analysis_results.get(key, [])
-    except Exception:
-        return []
