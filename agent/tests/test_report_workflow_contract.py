@@ -62,7 +62,7 @@ def test_report_generation_payload_uses_provider_model_runtime_config():
 def test_integration_report_payload_uses_openrouter_provider_model():
     integration_script = (REPO_ROOT / "scripts" / "integration" / "run_e2e.sh").read_text()
 
-    assert '"model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free"' in integration_script
+    assert '"model": "openrouter/openrouter/free"' in integration_script
     assert '"model": "gpt-5"' not in integration_script
 
 
@@ -372,6 +372,14 @@ def test_report_generation_workflow_does_not_dump_failed_report_body():
 
     assert "cat report-data.json" not in workflow
     assert "Report status is 'failed'. Aborting early." in workflow
+
+
+def test_report_generation_workflow_refuses_fallback_reports():
+    workflow = REPORT_WORKFLOW.read_text()
+
+    assert "ANALYSIS_MODE=$(jq -r '.metadata.analysis_mode // empty' report-data.json)" in workflow
+    assert 'if [ "$ANALYSIS_MODE" != "model" ]; then' in workflow
+    assert "Refusing to publish a fallback-mode report" in workflow
 
 
 def test_report_generation_workflow_strips_duplicate_report_title():

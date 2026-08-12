@@ -19,7 +19,7 @@ env:
   AWS_REGION: us-east-1
   GO_FUNCTION_NAME: grcinsight-go-function
   PYTHON_FUNCTION_NAME: grcinsight-python-function
-  LLM_MODEL: ${{ vars.LLM_MODEL || 'openrouter/nvidia/nemotron-3-ultra-550b-a55b:free' }}
+  LLM_MODEL: ${{ vars.LLM_MODEL || 'openrouter/openrouter/free' }}
 
 jobs:
   generate-report:
@@ -187,6 +187,7 @@ jobs:
           TITLE=$(jq -r '.title // empty' report-data.json)
           CONTENT=$(jq -r '.content // empty' report-data.json)
           GENERATED_AT=$(jq -r '.generated_at // empty' report-data.json)
+          ANALYSIS_MODE=$(jq -r '.metadata.analysis_mode // empty' report-data.json)
 
           if [ "$STATUS" = "failed" ]; then
             echo "Report status is 'failed'. Aborting early." >&2
@@ -197,6 +198,10 @@ jobs:
           fi
 
           if [ "$STATUS" = "completed" ]; then
+            if [ "$ANALYSIS_MODE" != "model" ]; then
+              echo "Refusing to publish a fallback-mode report; keeping the last model-backed report." >&2
+              exit 1
+            fi
             echo "Report completed. Building site files..."
 
             # Create/refresh site directory and Markdown report only.
