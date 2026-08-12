@@ -9,7 +9,7 @@ from pydantic import BaseModel, Field
 class GRCAnalysisConfig(BaseModel):
     """Configuration for GRC analysis."""
 
-    model: str = "gpt-5.6-sol"
+    model: str = "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free"
     max_tokens: int = 16000
     focus_areas: List[str] = Field(default_factory=list)
 

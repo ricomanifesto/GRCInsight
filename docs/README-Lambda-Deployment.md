@@ -6,21 +6,20 @@ Go Lambda orchestrates API and DynamoDB. Python Lambda analyzes feeds and writes
 
 - AWS account with ECR and Lambda access
 - AWS CLI and Docker installed
-- OpenAI API key for Python Lambda model-backed analysis
+- OpenRouter API key for Python Lambda model-backed analysis
 
 ## CI Deploy (recommended)
 
-- Add repo secrets: `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `OPENAI_API_KEY`
-- Configure repo variable: `LLM_MODEL=gpt-5.6-sol`
+- Add repo secrets: `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `OPENROUTER_API_KEY`
+- Configure repo variable: `LLM_MODEL=openrouter/provider-model`
 - Run `.github/workflows/deploy-lambda.yml` (manual or push to `main`)
 - Workflow builds both images with `DOCKER_BUILDKIT=0`, pushes to ECR, updates Lambdas, and smoke‑tests `/health`
 
 ## Manual Deploy
 
 ```bash
-export LLM_MODEL=gpt-5.6-sol
-export OPENAI_API_KEY=...
-export OPENAI_REASONING_EFFORT=xhigh
+export LLM_MODEL=openrouter/nvidia/nemotron-3-ultra-550b-a55b:free
+export OPENROUTER_API_KEY=...
 export AWS_REGION=us-east-1
 export DOCKER_BUILDKIT=0
 ./scripts/deploy-lambda.sh
@@ -71,4 +70,4 @@ aws iam delete-role --role-name grcinsight-lambda-role
 
 - Local: `cmd/server/main.go`, `agent/main.py`
 - Lambda: `cmd/lambda/main.go`, `agent/lambda_main.py`
-- Local and Lambda model calls use the official OpenAI SDK and Responses API.
+- Local model calls can still use OpenCode with `OPENCODE_BASE_URL`. Lambda model calls use OpenRouter directly when `OPENROUTER_API_KEY` is set.

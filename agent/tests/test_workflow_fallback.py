@@ -202,14 +202,14 @@ def test_run_grc_analysis_endpoint_passes_request_model_config(monkeypatch):
         workflow_mod.run_grc_analysis_endpoint(
             "https://example.com/feed.xml",
             GRCAnalysisConfig(
-                model="gpt-5.6-sol",
+                model="openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
                 max_tokens=4096,
             ),
         )
     )
 
     assert response.status == "completed"
-    assert captured_configs == [("gpt-5.6-sol", 4096)]
+    assert captured_configs == [("openrouter/nvidia/nemotron-3-ultra-550b-a55b:free", 4096)]
 
 
 def test_rss_service_fetch_feed_survives_multiple_event_loops(monkeypatch):

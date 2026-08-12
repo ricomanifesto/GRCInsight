@@ -4,7 +4,7 @@ from typing import List, Dict, Any
 from datetime import datetime
 
 from config.settings import settings
-from services.openai_client import OpenAIClient
+from services.opencode_client import OpenCodeClient, parse_model_selection
 
 # Configure logging
 logging.basicConfig(
@@ -78,14 +78,14 @@ async def analyze_grc_content(
     logger.info(f"Analyzing GRC content in {len(articles)} articles")
 
     model_name = config.get("analysis", {}).get("model", settings.llm_model)
-    model = str(model_name).strip()
-    if not model:
-        error = "LLM_MODEL must name an OpenAI model"
-        logger.error(f"Invalid model configuration: {error}")
+    try:
+        model = parse_model_selection(model_name)
+    except ValueError as e:
+        logger.error(f"Invalid model configuration: {e}")
         return {
-            "grc_report": f"# Error: Invalid Model\n\n{error}",
+            "grc_report": f"# Error: Invalid Model\n\n{str(e)}",
             "date": datetime.now().strftime("%Y-%m-%d"),
-            "error": error,
+            "error": str(e),
         }
 
     # Prepare all article summaries
@@ -208,12 +208,7 @@ Generate a well-formatted GRC intelligence report following the structure above.
 
     # Call the AI model
     try:
-        client = OpenAIClient(
-            api_key=settings.openai_api_key,
-            max_output_tokens=settings.llm_max_tokens,
-            reasoning_effort=settings.openai_reasoning_effort,
-            timeout=max(120.0, float(settings.llm_max_tokens) / 20),
-        )
+        client = OpenCodeClient(timeout=max(120.0, float(settings.llm_max_tokens) / 20))
         grc_report = await client.generate(
             system_prompt="You are a GRC expert specializing in governance, risk, and compliance analysis. Your task is to create a comprehensive report on current GRC developments based on recent articles. Be extremely thorough in identifying ALL GRC-related content mentioned in the articles, including regulatory updates, compliance requirements, governance changes, and risk management developments.",
             user_prompt=prompt,

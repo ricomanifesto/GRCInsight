@@ -39,7 +39,7 @@ echo "[STEP] Generate report"
 GEN_PAYLOAD=$(cat <<JSON
 {
   "feed_url": "$FEED_URL",
-  "config": {"model": "gpt-5.6-sol", "max_tokens": 16000, "focus_areas": ["governance","compliance","risk"]}
+  "config": {"model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free", "max_tokens": 4000, "focus_areas": ["governance","compliance","risk"]}
 }
 JSON
 )

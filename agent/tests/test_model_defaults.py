@@ -1,52 +1,74 @@
-import pytest
-from pydantic import ValidationError
+from pathlib import Path
 
 from config.settings import Settings
 from models.api import GRCAnalysisConfig
 from services import model_service
 from services.model_service import GRCModelService
-from services.openai_client import OpenAIClient
+from services.opencode_client import parse_model_selection
+from services.openrouter_client import OpenRouterClient
+
+REPO_ROOT = Path(__file__).resolve().parents[2]
 
 
-def test_settings_default_uses_gpt_5_6_sol():
-    assert Settings.model_fields["llm_model"].default == "gpt-5.6-sol"
-    assert Settings.model_fields["openai_reasoning_effort"].default == "xhigh"
+def test_env_example_uses_openrouter_runtime_configuration():
+    env_example = (REPO_ROOT / ".env.example").read_text()
+
+    assert "OPENROUTER_API_KEY=" in env_example
+    assert "LLM_MODEL=openrouter/nvidia/nemotron-3-ultra-550b-a55b:free" in env_example
+    assert "OPENAI_API_KEY=" not in env_example
+    assert "ANTHROPIC_API_KEY=" not in env_example
 
 
-def test_settings_reject_unknown_reasoning_effort(monkeypatch):
-    monkeypatch.setenv("OPENAI_REASONING_EFFORT", "extreme")
+def test_settings_default_uses_free_openrouter_report_model():
+    assert (
+        Settings.model_fields["llm_model"].default
+        == "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free"
+    )
 
-    with pytest.raises(ValidationError):
-        Settings()
 
-
-def test_analysis_config_default_uses_gpt_5_6_sol():
+def test_analysis_config_default_uses_free_openrouter_report_model():
     config = GRCAnalysisConfig()
 
-    assert config.model == "gpt-5.6-sol"
+    assert config.model == "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free"
 
 
-def test_model_service_uses_openai_client(monkeypatch):
-    monkeypatch.setattr(model_service.settings, "openai_api_key", "test-key")
-    monkeypatch.setattr(model_service.settings, "openai_reasoning_effort", "xhigh")
+def test_openrouter_report_model_parses_to_provider_and_nested_model_id():
+    model = parse_model_selection("openrouter/nvidia/nemotron-3-ultra-550b-a55b:free")
+
+    assert model.provider_id == "openrouter"
+    assert model.model_id == "nvidia/nemotron-3-ultra-550b-a55b:free"
+
+
+def test_model_service_uses_openrouter_client_when_api_key_is_configured(monkeypatch):
+    monkeypatch.setattr(model_service.settings, "openrouter_api_key", "test-key")
 
     service = GRCModelService(
-        model_name="gpt-5.6-sol",
+        model_name="openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
         max_tokens=4096,
     )
 
-    assert service.client_kind == "openai"
-    assert isinstance(service.client, OpenAIClient)
-    assert service.client.max_output_tokens == 4096
-    assert service.client.reasoning_effort == "xhigh"
+    assert service.client_kind == "openrouter"
+    assert isinstance(service.client, OpenRouterClient)
+    assert service.client.max_tokens == 4096
 
 
-def test_model_service_requires_openai_api_key(monkeypatch):
-    monkeypatch.setattr(model_service.settings, "openai_api_key", "")
+def test_model_service_keeps_opencode_for_local_runs_without_openrouter_key(monkeypatch):
+    monkeypatch.setattr(model_service.settings, "openrouter_api_key", "")
+
+    service = GRCModelService(
+        model_name="openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
+        max_tokens=4096,
+    )
+
+    assert service.client_kind == "opencode"
+
+
+def test_model_service_rejects_non_openrouter_models_when_api_key_is_configured(monkeypatch):
+    monkeypatch.setattr(model_service.settings, "openrouter_api_key", "test-key")
 
     try:
-        GRCModelService(model_name="gpt-5.6-sol", max_tokens=4096)
+        GRCModelService(model_name="anthropic/claude-sonnet-4-6", max_tokens=4096)
     except ValueError as exc:
-        assert "OPENAI_API_KEY" in str(exc)
+        assert "openrouter/* model" in str(exc)
     else:
-        raise AssertionError("OpenAI configuration must require an API key")
+        raise AssertionError("OpenRouter Lambda config must reject non-OpenRouter models")

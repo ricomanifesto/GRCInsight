@@ -1,9 +1,7 @@
 """Configuration settings for the FastAPI application."""
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
-from typing import List, Literal
-
-OpenAIReasoningEffort = Literal["none", "minimal", "low", "medium", "high", "xhigh", "max"]
+from typing import List
 
 
 class Settings(BaseSettings):
@@ -22,10 +20,9 @@ class Settings(BaseSettings):
     log_level: str = "INFO"
 
     # Model configuration
-    llm_model: str = "gpt-5.6-sol"
+    llm_model: str = "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free"
     llm_max_tokens: int = 16000
-    openai_api_key: str = ""
-    openai_reasoning_effort: OpenAIReasoningEffort = "xhigh"
+    openrouter_api_key: str = ""
 
     # RSS configuration
     rss_timeout: int = 30
