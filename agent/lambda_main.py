@@ -14,6 +14,7 @@ from api.routes import workflow, analysis, health, rss
 import boto3
 from datetime import datetime, timezone
 from config.settings import settings
+from core.runtime import reset_model_deadline, set_model_deadline
 
 LAMBDA_WRITEBACK_RESERVE_SECONDS = 120.0
 
@@ -306,7 +307,11 @@ def handler(event, context):
         }
 
     # API Gateway event - use Mangum
-    return mangum_handler(event, context)
+    deadline_token = set_model_deadline(_lambda_model_deadline(context))
+    try:
+        return mangum_handler(event, context)
+    finally:
+        reset_model_deadline(deadline_token)
 
 
 # For local testing

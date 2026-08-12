@@ -121,6 +121,32 @@ def test_workflow_status_success(monkeypatch):
     assert data["status"] == "completed"
 
 
+def test_workflow_route_passes_invocation_model_deadline(monkeypatch):
+    from api.routes import workflow as wf_route
+    from core.runtime import reset_model_deadline, set_model_deadline
+    from models.api import WorkflowResponse
+
+    captured_deadlines = []
+
+    async def fake_workflow(_feed_url, _config, model_deadline=None):
+        captured_deadlines.append(model_deadline)
+        return WorkflowResponse(status="completed")
+
+    monkeypatch.setattr(wf_route, "run_grc_analysis_endpoint", fake_workflow)
+    token = set_model_deadline(700.0)
+    try:
+        resp = request(
+            "POST",
+            "/api/v1/workflow/run",
+            json={"feed_url": "https://example.com/feed.xml"},
+        )
+    finally:
+        reset_model_deadline(token)
+
+    assert resp.status_code == 200
+    assert captured_deadlines == [700.0]
+
+
 def test_workflow_status_not_found(monkeypatch):
     from api.routes import workflow as wf_route
 

@@ -7,6 +7,7 @@ from fastapi import APIRouter, HTTPException
 from loguru import logger
 
 from models.api import WorkflowRequest, WorkflowResponse, APIError
+from core.runtime import get_model_deadline
 from core.workflow import run_grc_analysis_endpoint
 
 boto3: Any | None = None
@@ -27,7 +28,11 @@ async def run_workflow(request: WorkflowRequest):
 
     try:
         # Execute the real GRC analysis workflow
-        result = await run_grc_analysis_endpoint(request.feed_url, request.config)
+        result = await run_grc_analysis_endpoint(
+            request.feed_url,
+            request.config,
+            model_deadline=get_model_deadline(),
+        )
 
         logger.info("Workflow execution completed successfully")
         return result

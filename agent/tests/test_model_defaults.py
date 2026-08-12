@@ -1,7 +1,9 @@
 from pathlib import Path
 
 from config.settings import Settings
+import lambda_main
 from lambda_main import _lambda_model_deadline
+from core.runtime import get_model_deadline
 from models.api import GRCAnalysisConfig
 from services import model_service
 from services.model_service import GRCModelService
@@ -79,6 +81,23 @@ def test_lambda_deadline_reserves_writeback_before_preprocessing():
     deadline = _lambda_model_deadline(LambdaContext(), clock=lambda: 100.0)
 
     assert deadline == 880.0
+
+
+def test_api_gateway_lambda_sets_invocation_model_deadline(monkeypatch):
+    captured_deadlines = []
+
+    def fake_mangum_handler(_event, _context):
+        captured_deadlines.append(get_model_deadline())
+        return {"statusCode": 200}
+
+    monkeypatch.setattr(lambda_main, "_lambda_model_deadline", lambda _context: 700.0)
+    monkeypatch.setattr(lambda_main, "mangum_handler", fake_mangum_handler)
+
+    response = lambda_main.handler({"httpMethod": "POST"}, object())
+
+    assert response == {"statusCode": 200}
+    assert captured_deadlines == [700.0]
+    assert get_model_deadline() is None
 
 
 def test_model_service_uses_invocation_deadline(monkeypatch):
