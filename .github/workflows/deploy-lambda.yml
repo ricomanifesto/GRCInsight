@@ -191,14 +191,25 @@ jobs:
         run: |
           for fn in "$GO_FUNCTION_NAME" "$PYTHON_FUNCTION_NAME"; do
             echo "Waiting for $fn to be Active..."
+            ready=false
             for i in {1..30}; do
               STATUS=$(aws lambda get-function --function-name "$fn" --query 'Configuration.[State,LastUpdateStatus]' --output text)
               echo "$fn -> $STATUS"
-              if echo "$STATUS" | grep -q "Active\tSuccessful"; then
+              read -r STATE UPDATE_STATUS <<< "$STATUS"
+              if [ "$STATE" = "Active" ] && [ "$UPDATE_STATUS" = "Successful" ]; then
+                ready=true
                 break
+              fi
+              if [ "$UPDATE_STATUS" = "Failed" ]; then
+                echo "$fn update failed" >&2
+                exit 1
               fi
               sleep 5
             done
+            if [ "$ready" != true ]; then
+              echo "$fn did not become Active/Successful before timeout" >&2
+              exit 1
+            fi
           done
 
       - name: Smoke test Go Lambda health

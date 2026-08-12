@@ -42,3 +42,13 @@ def test_removed_compatibility_helpers_stay_removed():
     assert "func (r *Report) BeforeCreate" not in report_model_source
     assert "func (m ReportMetadata) Value" not in report_model_source
     assert "func (m *ReportMetadata) Scan" not in report_model_source
+
+
+def test_lambda_deploy_wait_fails_closed():
+    workflow_source = (REPO_ROOT / ".github/workflows/deploy-lambda.yml").read_text(
+        encoding="utf-8"
+    )
+
+    assert 'grep -q "Active\\tSuccessful"' not in workflow_source
+    assert 'read -r STATE UPDATE_STATUS <<< "$STATUS"' in workflow_source
+    assert 'if [ "$ready" != true ]; then' in workflow_source
