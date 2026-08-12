@@ -51,6 +51,45 @@ func TestAnalyzeArticlesRedactsErrorResponseBody(t *testing.T) {
 	}
 }
 
+func TestAnalyzeArticlesPropagatesItsCallerDeadline(t *testing.T) {
+	var propagatedDeadline int64
+	timeout := 5 * time.Second
+	startedAt := time.Now()
+	client := &PythonServiceClient{
+		httpClient: &http.Client{
+			Timeout: timeout,
+			Transport: roundTripFunc(func(req *http.Request) (*http.Response, error) {
+				value := req.Header.Get(callerDeadlineHeader)
+				var err error
+				propagatedDeadline, err = strconv.ParseInt(value, 10, 64)
+				if err != nil {
+					t.Fatalf("parse propagated deadline %q: %v", value, err)
+				}
+				return &http.Response{
+					StatusCode: http.StatusOK,
+					Body: io.NopCloser(strings.NewReader(
+						`{"status":"success","results":[],"summary":{}}`,
+					)),
+					Header:  make(http.Header),
+					Request: req,
+				}, nil
+			}),
+		},
+		baseURL: "http://python-service.test",
+		logger:  logrus.New(),
+	}
+
+	if _, err := client.AnalyzeArticles(&models.AnalysisRequest{}); err != nil {
+		t.Fatalf("analyze articles: %v", err)
+	}
+
+	minimum := startedAt.Add(timeout - time.Second).UnixMilli()
+	maximum := time.Now().Add(timeout + time.Second).UnixMilli()
+	if propagatedDeadline < minimum || propagatedDeadline > maximum {
+		t.Fatalf("propagated deadline %d outside expected range [%d, %d]", propagatedDeadline, minimum, maximum)
+	}
+}
+
 func TestWorkflowPayloadIncludesDeadlineOnlyForSynchronousCalls(t *testing.T) {
 	req := &models.WorkflowRequest{FeedURL: "https://example.com/feed.xml"}
 	deadline := time.UnixMilli(1_800_000)

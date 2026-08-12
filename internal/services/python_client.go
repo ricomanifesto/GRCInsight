@@ -122,6 +122,23 @@ func (c *PythonServiceClient) workflowTimeout() time.Duration {
 	return defaultWorkflowTimeout
 }
 
+func (c *PythonServiceClient) newCallerBoundRequest(
+	method string,
+	url string,
+	body []byte,
+) (*http.Request, context.CancelFunc, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), c.workflowTimeout())
+	callerDeadline, _ := ctx.Deadline()
+	httpReq, err := http.NewRequestWithContext(ctx, method, url, bytes.NewReader(body))
+	if err != nil {
+		cancel()
+		return nil, nil, err
+	}
+	httpReq.Header.Set("Content-Type", "application/json")
+	httpReq.Header.Set(callerDeadlineHeader, strconv.FormatInt(callerDeadline.UnixMilli(), 10))
+	return httpReq, cancel, nil
+}
+
 func marshalWorkflowPayload(
 	req *models.WorkflowRequest,
 	reportID string,
@@ -253,11 +270,11 @@ func (c *PythonServiceClient) AnalyzeArticles(req *models.AnalysisRequest) (*mod
 		return nil, fmt.Errorf("failed to marshal analysis request: %w", err)
 	}
 
-	httpReq, err := http.NewRequest(http.MethodPost, url, bytes.NewReader(bodyBytes))
+	httpReq, cancel, err := c.newCallerBoundRequest(http.MethodPost, url, bodyBytes)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create request: %w", err)
 	}
-	httpReq.Header.Set("Content-Type", "application/json")
+	defer cancel()
 
 	resp, err := c.httpClient.Do(httpReq)
 	if err != nil {
@@ -329,22 +346,17 @@ func (c *PythonServiceClient) HealthCheck() error {
 
 // invokeHTTPWorkflow calls the Python FastAPI service synchronously
 func (c *PythonServiceClient) invokeHTTPWorkflow(req *models.WorkflowRequest) (*models.WorkflowResponse, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), c.workflowTimeout())
-	defer cancel()
-	callerDeadline, _ := ctx.Deadline()
-
 	url := c.baseURL + "/api/v1/workflow/run"
 	bodyBytes, err := json.Marshal(req)
 	if err != nil {
 		return nil, fmt.Errorf("failed to marshal workflow request: %w", err)
 	}
 
-	httpReq, err := http.NewRequestWithContext(ctx, http.MethodPost, url, bytes.NewReader(bodyBytes))
+	httpReq, cancel, err := c.newCallerBoundRequest(http.MethodPost, url, bodyBytes)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create request: %w", err)
 	}
-	httpReq.Header.Set("Content-Type", "application/json")
-	httpReq.Header.Set(callerDeadlineHeader, strconv.FormatInt(callerDeadline.UnixMilli(), 10))
+	defer cancel()
 
 	resp, err := c.httpClient.Do(httpReq)
 	if err != nil {
