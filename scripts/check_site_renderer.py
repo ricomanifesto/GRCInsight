@@ -20,6 +20,18 @@ def main() -> None:
     if not TAGS_JS.exists():
         fail("missing site/static/tags.js")
 
+    identity_title = r"Windows C:\[Temp] and C:\(Logs) advisory"
+    serialized_identity_title = (
+        identity_title.replace("\\", "\\\\")
+        .replace("[", "\\[")
+        .replace("]", "\\]")
+        .replace("(", "\\(")
+        .replace(")", "\\)")
+    )
+    serialized_identity_markdown = (
+        f"[{serialized_identity_title}](https://example.com/windows)"
+    )
+
     script = f"""
 const fs = require('fs');
 const vm = require('vm');
@@ -92,6 +104,8 @@ assert(escapedLabelHtml.includes('Microsoft [Update]</a>'), 'escaped link-label 
 const literalLabelHtml = renderer.renderMarkdown('[Critical *BSD* advisory](https://example.com/bsd)');
 assert(literalLabelHtml.includes('Critical *BSD* advisory</a>'), 'exact source-title asterisks should render literally');
 assert(!literalLabelHtml.includes('<em>BSD</em>'), 'source-title identity must not be rewritten as emphasis');
+const serializedIdentityHtml = renderer.renderMarkdown({json.dumps(serialized_identity_markdown)});
+assert(serializedIdentityHtml.includes({json.dumps(identity_title + "</a>")}), 'serialized label escapes should restore the exact source identity');
 
 // A complete report keeps provenance and section cards in the canonical
 // renderer so build-time HTML and browser rendering are identical.

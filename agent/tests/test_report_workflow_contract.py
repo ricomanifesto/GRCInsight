@@ -137,7 +137,7 @@ def test_report_prompt_requires_current_source_entities_and_readable_summary():
     assert "CVE-2026-12345" in prompt
     assert "structured actor identifiers are hints, not an exhaustive actor list" not in prompt
     assert "Do not classify industry, standards, regulatory, or working groups" not in prompt
-    assert "Use inline Markdown links with the exact source title and URL" in prompt
+    assert "Copy the exact Markdown Link supplied above" in prompt
     assert "Every report-specific regulatory and CVE claim" in prompt
     assert "Do not emit incomplete, truncated, or ellipsized CVE identifiers" in prompt
     assert "Use exact framework, standard, regulation, or publication names" in prompt
@@ -172,8 +172,42 @@ def test_report_prompt_globally_bounds_cve_evidence():
     assert prompt.count(cves[10]) == 1
     assert prompt.count(cves[11]) == 1
     assert f"Patch roundup for {cves[10]}" in prompt
-    assert f"URL: https://example.com/advisory/{cves[11]}" in prompt
+    assert (
+        f"Markdown Link: [Patch roundup for {cves[10]}]"
+        f"(https://example.com/advisory/{cves[11]})" in prompt
+    )
     assert "[additional CVE omitted]" in prompt
+
+
+def test_report_prompt_serializes_exact_source_titles_for_markdown_links():
+    service = GRCModelService.__new__(GRCModelService)
+    title = r"Windows C:\[Temp] and C:\(Logs) advisory"
+
+    prompt = service._create_report_prompt(
+        {
+            "summary": {"total_articles": 1, "grc_relevant_count": 1},
+            "analysis": {},
+            "source_evidence": [
+                {
+                    "title": title,
+                    "url": "https://example.com/windows",
+                    "snippet": "Review the affected Windows paths.",
+                    "cves": [],
+                }
+            ],
+        },
+        {"title": "Test Feed"},
+    )
+
+    escaped_title = (
+        title.replace("\\", "\\\\")
+        .replace("[", "\\[")
+        .replace("]", "\\]")
+        .replace("(", "\\(")
+        .replace(")", "\\)")
+    )
+    assert f"Markdown Link: [{escaped_title}](https://example.com/windows)" in prompt
+    assert "including every label escape and URL character" in prompt
 
 
 def test_source_evidence_preserves_distinct_cves_without_actor_priority():
@@ -681,6 +715,46 @@ def test_site_report_composer_decodes_escaped_evidence_url_delimiters():
 
     assert "[Evidence](HTTPS://example.com/O'Reilly/a\\)b)" in report
     assert http_url(evidence_url, "evidence URL") == "HTTPS://example.com/O%27Reilly/a%29b"
+
+
+def test_site_report_composer_decodes_serialized_source_title_identity():
+    namespace = runpy.run_path(str(SITE_REPORT_COMPOSER))
+    compose_report = namespace["compose_report"]
+    title = r"Windows C:\[Temp] and C:\(Logs) advisory"
+    escaped_title = (
+        title.replace("\\", "\\\\")
+        .replace("[", "\\[")
+        .replace("]", "\\]")
+        .replace("(", "\\(")
+        .replace(")", "\\)")
+    )
+    link = f"[{escaped_title}](https://example.com/windows)"
+
+    report = compose_report(
+        {
+            "status": "completed",
+            "title": "GRC Intelligence Report - 2026-08-13",
+            "generated_at": "2026-08-13T13:00:00Z",
+            "content": complete_report_body(
+                f"Review {link}.",
+                f"- {link}",
+            ),
+            "metadata": {
+                "analysis_mode": "model",
+                "source_name": "SentryDigest",
+                "source_url": "https://example.com/feed.xml",
+                "source_articles": [{"title": title, "url": "https://example.com/windows"}],
+                "analysis_period": "August 2026",
+                "article_count": 1,
+                "grc_article_count": 1,
+                "model": "openrouter/example/model",
+            },
+        },
+        "https://example.com/feed.xml",
+        "openrouter/example/model",
+    )
+
+    assert link in report
 
 
 def test_site_report_composer_rejects_invented_title_for_real_evidence_url():

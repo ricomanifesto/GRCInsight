@@ -42,6 +42,18 @@ def _sanitize_evidence_text(value: Any, allowed_cves: set[str]) -> str:
     return CVE_PATTERN.sub(replace, str(value))
 
 
+def _markdown_link_label(value: Any) -> str:
+    """Serialize an exact source title for use as a Markdown link label."""
+    return (
+        str(value)
+        .replace("\\", "\\\\")
+        .replace("[", "\\[")
+        .replace("]", "\\]")
+        .replace("(", "\\(")
+        .replace(")", "\\)")
+    )
+
+
 class GRCModelService:
     """Service for model-powered GRC analysis."""
 
@@ -265,17 +277,18 @@ Focus only on content with clear governance, risk, or compliance implications.""
                     listed_cves.add(normalized_cve)
                     cves.append(normalized_cve)
             # Title and URL form the exact evidence identity enforced by the
-            # publication manifest. Never rewrite them while bounding prose.
+            # publication manifest. Serialize the title as a copy-ready link
+            # label so literal backslashes cannot become Markdown escapes.
             title = str(evidence.get("title", "Untitled source"))
             url = str(evidence.get("url", "No URL"))
+            markdown_link = f"[{_markdown_link_label(title)}]({url})"
             snippet = _sanitize_evidence_text(
                 evidence.get("snippet", "No snippet available"), allowed_cves
             )
             source_lines.append(
                 "\n".join(
                     [
-                        f"{index}. {title}",
-                        f"   URL: {url}",
+                        f"{index}. Markdown Link: {markdown_link}",
                         f"   CVEs: {', '.join(cves) if cves else 'None detected'}",
                         f"   Snippet: {snippet}",
                     ]
@@ -319,7 +332,7 @@ Do not emit a top-level "# " heading; publication supplies the canonical report 
 
 Executive Summary must be 2-4 short paragraphs, separated by blank lines. Keep each paragraph focused on one executive decision theme; do not write the summary as one long block.
 
-Source linking: Every report-specific regulatory and CVE claim must cite the supporting item from Source Evidence in the same sentence, bullet, or table row. Use inline Markdown links with the exact source title and URL provided above; never invent, shorten, or alter a source URL. Add a Source column to regulatory tables, and include the source link wherever another section makes a CVE claim. End with a Source Highlights bullet list of the evidence links actually used. Never use superscript footnotes, numeric footnote markers, or bare bracketed cross-references. Omit a claim when the current evidence does not support it.
+Source linking: Every report-specific regulatory and CVE claim must cite the supporting item from Source Evidence in the same sentence, bullet, or table row. Copy the exact Markdown Link supplied above, including every label escape and URL character; those escapes preserve the literal source title. Never invent, shorten, or alter a source link. Add a Source column to regulatory tables, and include the source link wherever another section makes a CVE claim. End with a Source Highlights bullet list of the evidence links actually used. Never use superscript footnotes, numeric footnote markers, or bare bracketed cross-references. Omit a claim when the current evidence does not support it.
 
 Do not use placeholder citations such as Source 1 or Sources 2, 3. If a claim needs attribution, name and link the actual source from the supplied evidence.
 
