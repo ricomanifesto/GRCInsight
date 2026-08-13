@@ -47,7 +47,7 @@ def http_url(value: object, field: str) -> str:
     parsed = urlparse(url)
     if parsed.scheme not in {"http", "https"} or not parsed.netloc:
         fail(f"{field} must be an http(s) URL")
-    if re.search(r"[\s<>'\"]", url):
+    if re.search(r"[\s<>\"]", url):
         fail(f"{field} contains unsafe Markdown URL characters")
     # Parentheses are valid URL characters but delimit a Markdown destination.
     # Percent-encode them while preserving the remaining RFC 3986 delimiters.

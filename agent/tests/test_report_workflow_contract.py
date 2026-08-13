@@ -510,7 +510,8 @@ def test_site_report_composer_rejects_evidence_urls_absent_from_source_articles(
 def test_site_report_composer_decodes_escaped_evidence_url_delimiters():
     namespace = runpy.run_path(str(SITE_REPORT_COMPOSER))
     compose_report = namespace["compose_report"]
-    evidence_url = "https://example.com/a)b"
+    http_url = namespace["http_url"]
+    evidence_url = "https://example.com/O'Reilly/a)b"
     report = compose_report(
         {
             "status": "completed",
@@ -518,9 +519,9 @@ def test_site_report_composer_decodes_escaped_evidence_url_delimiters():
             "generated_at": "2026-08-13T13:00:00Z",
             "content": (
                 "## Executive Summary\n"
-                "[Evidence](https://example.com/a\\)b)\n\n"
+                "[Evidence](https://example.com/O'Reilly/a\\)b)\n\n"
                 "## Source Highlights\n"
-                "- [Evidence](https://example.com/a\\)b)"
+                "- [Evidence](https://example.com/O'Reilly/a\\)b)"
             ),
             "metadata": {
                 "analysis_mode": "model",
@@ -537,7 +538,8 @@ def test_site_report_composer_decodes_escaped_evidence_url_delimiters():
         "openrouter/example/model",
     )
 
-    assert "[Evidence](https://example.com/a\\)b)" in report
+    assert "[Evidence](https://example.com/O'Reilly/a\\)b)" in report
+    assert http_url(evidence_url, "evidence URL") == "https://example.com/O%27Reilly/a%29b"
 
 
 def test_site_report_composer_rejects_invented_title_for_real_evidence_url():
