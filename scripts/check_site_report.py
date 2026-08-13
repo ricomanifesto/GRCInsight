@@ -4,6 +4,7 @@
 import json
 import re
 import xml.etree.ElementTree as ET
+from datetime import datetime, timezone
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -525,17 +526,19 @@ def main() -> None:
 
     generated_at = metadata["generated"]
     try:
-        generated_date = generated_at.replace("Z", "+00:00")[:10]
-        if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", generated_date):
-            raise ValueError
+        generated = datetime.fromisoformat(generated_at.replace("Z", "+00:00"))
+        if generated.tzinfo is None:
+            generated = generated.replace(tzinfo=timezone.utc)
+        generated = generated.astimezone(timezone.utc)
     except ValueError:
-        fail("index.md Generated metadata must begin with an ISO date")
-    archived_markdown = read_text(ARCHIVE_DIR / generated_date / "report.md")
-    archived_page = read_text(ARCHIVE_DIR / generated_date / "index.html")
+        fail("index.md Generated metadata must be an ISO timestamp")
+    archive_key = generated.strftime("%Y-%m-%dT%H-%M-%SZ")
+    archived_markdown = read_text(ARCHIVE_DIR / archive_key / "report.md")
+    archived_page = read_text(ARCHIVE_DIR / archive_key / "index.html")
     if archived_markdown.rstrip() != markdown.rstrip():
-        fail("current report does not match its dated archive snapshot")
-    if f'href="{generated_date}/"' not in archive_html:
-        fail("archive index does not link the current dated report")
+        fail("current report does not match its timestamped archive snapshot")
+    if f'href="{archive_key}/"' not in archive_html:
+        fail("archive index does not link the current timestamped report")
     if 'class="card report-provenance"' not in archived_page:
         fail("archived report page is not pre-rendered with provenance")
     if 'href="archive/"' not in html or 'href="index.md"' not in html:

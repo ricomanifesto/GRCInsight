@@ -389,6 +389,18 @@ def test_site_builder_treats_report_backslashes_as_literal_content():
     assert "C:\\Windows" in built
 
 
+def test_site_builder_gives_same_day_reports_unique_archive_keys():
+    namespace = runpy.run_path(str(SITE_BUILDER))
+    archive_slug = namespace["archive_slug"]
+
+    morning = datetime(2026, 8, 13, 13, 0, 0, tzinfo=timezone.utc)
+    rerun = datetime(2026, 8, 13, 15, 45, 12, tzinfo=timezone.utc)
+
+    assert archive_slug(morning) == "2026-08-13T13-00-00Z"
+    assert archive_slug(rerun) == "2026-08-13T15-45-12Z"
+    assert archive_slug(morning) != archive_slug(rerun)
+
+
 def test_site_report_composer_rejects_provenance_mismatch():
     namespace = runpy.run_path(str(SITE_REPORT_COMPOSER))
     compose_report = namespace["compose_report"]

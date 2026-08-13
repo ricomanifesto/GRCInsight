@@ -63,6 +63,15 @@ def display_date(value: datetime) -> str:
     return f"{value.strftime('%B')} {value.day}, {value.year}"
 
 
+def display_timestamp(value: datetime) -> str:
+    hour = value.strftime("%I").lstrip("0") or "0"
+    return f"{display_date(value)} at {hour}{value.strftime(':%M:%S %p')} UTC"
+
+
+def archive_slug(value: datetime) -> str:
+    return value.strftime("%Y-%m-%dT%H-%M-%SZ")
+
+
 def render_report(markdown: str) -> str:
     node_script = r"""
 const fs = require('fs');
@@ -150,10 +159,10 @@ def archive_detail_html(markdown: str) -> str:
 """
 
 
-def archive_index_html(reports: list[tuple[str, str, str]]) -> str:
+def archive_index_html(reports: list[tuple[str, str, str, str]]) -> str:
     items = "\n".join(
-        f'<li><a href="{escape(report_date, quote=True)}/"><span>{escape(title)}</span><time datetime="{escape(report_date, quote=True)}">{escape(label)}</time></a></li>'
-        for report_date, title, label in reports
+        f'<li><a href="{escape(report_key, quote=True)}/"><span>{escape(title)}</span><time datetime="{escape(generated_at, quote=True)}">{escape(label)}</time></a></li>'
+        for report_key, title, generated_at, label in reports
     )
     if not items:
         items = "<li>No archived reports are available yet.</li>"
@@ -181,25 +190,29 @@ def archive_index_html(reports: list[tuple[str, str, str]]) -> str:
 
 def expected_outputs(markdown: str, template: str) -> dict[Path, str]:
     outputs = {INDEX_HTML: current_index_html(template, markdown)}
-    reports: list[tuple[str, str, str]] = []
+    reports: list[tuple[str, str, str, str]] = []
     if ARCHIVE_DIR.exists():
-        for report_md in sorted(ARCHIVE_DIR.glob("????-??-??/report.md"), reverse=True):
+        for report_md in sorted(
+            ARCHIVE_DIR.glob("????-??-??T??-??-??Z/report.md"), reverse=True
+        ):
             archived_markdown = read_text(report_md)
             fields = report_fields(archived_markdown)
             generated = parse_generated(fields.get("generated", ""))
-            report_date = report_md.parent.name
-            if generated.strftime("%Y-%m-%d") != report_date:
+            report_key = report_md.parent.name
+            if archive_slug(generated) != report_key:
                 fail(
-                    f"archive date does not match Generated metadata: {report_md.relative_to(REPO_ROOT)}"
+                    "archive timestamp does not match Generated metadata: "
+                    f"{report_md.relative_to(REPO_ROOT)}"
                 )
             outputs[report_md.parent / "index.html"] = archive_detail_html(
                 archived_markdown
             )
             reports.append(
                 (
-                    report_date,
+                    report_key,
                     fields.get("title", "GRC Intelligence Report"),
-                    display_date(generated),
+                    generated.isoformat().replace("+00:00", "Z"),
+                    display_timestamp(generated),
                 )
             )
     outputs[ARCHIVE_DIR / "index.html"] = archive_index_html(reports)
@@ -211,7 +224,7 @@ def main() -> None:
     parser.add_argument(
         "--archive-current",
         action="store_true",
-        help="Store the current report under its generated UTC date before building.",
+        help="Store the current report under its generated UTC timestamp before building.",
     )
     parser.add_argument(
         "--check",
@@ -224,7 +237,7 @@ def main() -> None:
     fields = report_fields(markdown)
     generated = parse_generated(fields.get("generated", ""))
     if args.archive_current:
-        report_md = ARCHIVE_DIR / generated.strftime("%Y-%m-%d") / "report.md"
+        report_md = ARCHIVE_DIR / archive_slug(generated) / "report.md"
         if args.check:
             fail("--archive-current and --check cannot be combined")
         report_md.parent.mkdir(parents=True, exist_ok=True)

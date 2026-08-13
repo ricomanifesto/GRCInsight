@@ -3,9 +3,11 @@
 The public report archive is available at
 [ricomanifesto.github.io/GRCInsight/archive/](https://ricomanifesto.github.io/GRCInsight/archive/).
 
-Model-backed reports are preserved under `site/archive/YYYY-MM-DD/` by the
-report-publication workflow. The archive begins August 13, 2026; earlier report
-commits remain in Git history but are not presented as a complete public archive.
+Model-backed reports are preserved under
+`site/archive/YYYY-MM-DDTHH-MM-SSZ/` by the report-publication workflow, so
+same-day reruns keep distinct snapshots. The archive begins August 13, 2026;
+earlier report commits remain in Git history but are not presented as a complete
+public archive.
 
 ## Latest Report
 
