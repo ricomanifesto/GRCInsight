@@ -157,6 +157,64 @@ def test_run_grc_analysis_endpoint_marks_model_backed_reports(monkeypatch):
     ]
 
 
+def test_run_grc_analysis_endpoint_skips_entries_without_linked_evidence(monkeypatch):
+    analyzed_titles = []
+
+    async def fake_fetch_feed(_feed_url):
+        return {
+            "title": "Test Feed",
+            "entries": [
+                {"title": "Linkless item", "link": "", "content": "Cannot cite this."},
+                {
+                    "title": "Linked item",
+                    "link": "https://example.com/linked",
+                    "content": "Can cite this.",
+                },
+            ],
+        }
+
+    async def fake_enrich_articles(articles):
+        return articles
+
+    class FakeGRCModelService:
+        def __init__(self, model_name=None, max_tokens=None, model_deadline=None):
+            pass
+
+        async def analyze_articles_for_grc(self, articles):
+            analyzed_titles.extend(article.title for article in articles)
+            return {
+                "grc_articles": [],
+                "summary": {
+                    "total_articles": len(articles),
+                    "grc_relevant_count": 0,
+                    "confidence_score": 0.9,
+                },
+                "analysis": {},
+            }
+
+        async def generate_grc_report(self, _analysis_results, _feed_data):
+            return "1) Executive Summary\n- Model output."
+
+    monkeypatch.setattr(workflow_mod.rss_service, "fetch_feed", fake_fetch_feed)
+    monkeypatch.setattr(workflow_mod.rss_service, "enrich_articles", fake_enrich_articles)
+    monkeypatch.setattr(workflow_mod, "GRCModelService", FakeGRCModelService)
+
+    response = asyncio.run(
+        workflow_mod.run_grc_analysis_endpoint(
+            "https://example.com/feed.xml",
+            GRCAnalysisConfig(),
+        )
+    )
+
+    assert response.status == "completed"
+    assert analyzed_titles == ["Linked item"]
+    assert response.metadata is not None
+    assert response.metadata.article_count == 1
+    assert response.metadata.source_articles == [
+        {"title": "Linked item", "url": "https://example.com/linked"}
+    ]
+
+
 def test_run_grc_analysis_endpoint_passes_request_model_config(monkeypatch):
     captured_configs = []
 

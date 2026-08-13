@@ -11,8 +11,12 @@
     return escapeHtml(s).replace(/"/g, '&quot;');
   }
 
+  function decodeMarkdownEscapes(value) {
+    return String(value).replace(/\\([\\\[\]()])/g, '$1');
+  }
+
   function sanitizeMarkdownUrl(url) {
-    const value = String(url).trim();
+    const value = decodeMarkdownEscapes(url).trim();
     if (!value || /[\s"'<>]/.test(value)) return null;
     if (/^(https?:\/\/|\/(?!\/)|\.{0,2}\/|#)/i.test(value)) return value;
     if (!/^[a-z][a-z0-9+.-]*:/i.test(value)) return value;
@@ -26,7 +30,7 @@
   }
 
   function renderInlineText(value) {
-    const decoded = String(value).replace(/\\([\\\[\]()])/g, '$1');
+    const decoded = decodeMarkdownEscapes(value);
     let html = escapeHtml(decoded);
     html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
     html = html.replace(/\*([^*]+)\*/g, '<em>$1</em>');

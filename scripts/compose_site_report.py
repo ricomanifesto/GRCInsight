@@ -182,6 +182,11 @@ def markdown_links(markdown: str) -> list[tuple[str, str]]:
     return links
 
 
+def markdown_inline_text(value: str) -> str:
+    """Decode the escapes used to serialize a Markdown link label."""
+    return re.sub(r"\\([\\[\]()])", r"\1", value)
+
+
 def source_articles(metadata: dict) -> list[dict[str, str]]:
     raw_sources = metadata.get("source_articles")
     if not isinstance(raw_sources, list) or not raw_sources:
@@ -191,6 +196,10 @@ def source_articles(metadata: dict) -> list[dict[str, str]]:
     for index, raw_source in enumerate(raw_sources):
         if not isinstance(raw_source, dict):
             fail(f"metadata.source_articles[{index}] must be an object")
+        if not str(raw_source.get("title") or "").strip() or not str(
+            raw_source.get("url") or ""
+        ).strip():
+            continue
         title = single_line(
             raw_source.get("title"), f"metadata.source_articles[{index}].title"
         )
@@ -199,23 +208,29 @@ def source_articles(metadata: dict) -> list[dict[str, str]]:
             continue
         seen_urls.add(url)
         sources.append({"title": title, "url": url})
+    if not sources:
+        fail("metadata.source_articles contains no usable linked evidence")
     return sources
 
 
 def validate_evidence_links(body: str, sources: list[dict[str, str]]) -> None:
-    allowed_urls = {source["url"] for source in sources}
+    allowed_pairs = {(source["title"], source["url"]) for source in sources}
     evidence_links = [
-        (label, http_url(url, "report evidence URL"))
+        (
+            markdown_inline_text(label),
+            http_url(markdown_inline_text(url), "report evidence URL"),
+        )
         for label, url in markdown_links(body)
         if url.startswith(("http://", "https://"))
     ]
     if not evidence_links:
         fail("report body contains no linked source evidence")
-    unknown_urls = sorted({url for _, url in evidence_links} - allowed_urls)
-    if unknown_urls:
+    unknown_pairs = sorted(set(evidence_links) - allowed_pairs)
+    if unknown_pairs:
+        label, url = unknown_pairs[0]
         fail(
-            "report contains evidence URL absent from source articles: "
-            + unknown_urls[0]
+            "report contains evidence title/URL pair absent from source articles: "
+            f"{label} ({url})"
         )
 
 

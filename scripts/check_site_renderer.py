@@ -76,6 +76,9 @@ assert(!queryLinkHtml.includes('&amp;amp;'), 'rendered links must not double-esc
 const parenthesizedLinkHtml = renderer.renderMarkdown('[Evidence](https://example.com/a_(b).html)');
 assert(parenthesizedLinkHtml.includes('href="https://example.com/a_(b).html"'), 'balanced parentheses should remain part of a link destination');
 assert(!parenthesizedLinkHtml.includes('.html)</p>'), 'balanced link destinations must not leak a trailing fragment into prose');
+const escapedDestinationHtml = renderer.renderMarkdown('[Evidence](https://example.com/a\\\\)b)');
+assert(escapedDestinationHtml.includes('href="https://example.com/a)b"'), 'escaped destination delimiters should be decoded before rendering');
+assert(!escapedDestinationHtml.includes('a/)b') && !escapedDestinationHtml.includes('%5C'), 'Markdown URL escapes must not alter browser navigation');
 const bareThenLinkedHtml = renderer.renderMarkdown('[Unresolved reference] then [Evidence](https://example.com/evidence)');
 assert(bareThenLinkedHtml.includes('[Unresolved reference] then <a href="https://example.com/evidence"'), 'a bare bracketed reference must not consume the next Markdown link');
 const nestedLabelHtml = renderer.renderMarkdown('[Microsoft [Update] advisory](https://example.com/advisory)');

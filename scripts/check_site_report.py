@@ -499,6 +499,11 @@ def canonical_http_url(url: str) -> str:
     return quote(url, safe=":/?#[]@!$&*+,;=%")
 
 
+def markdown_inline_text(value: str) -> str:
+    """Decode the escapes used to serialize a Markdown link label."""
+    return re.sub(r"\\([\\[\]()])", r"\1", value)
+
+
 def is_report_section(line: str) -> bool:
     if line.startswith("## "):
         return True
@@ -576,7 +581,7 @@ def validate_evidence_manifest(
     source_links = markdown_links(metadata["source"])
     if len(source_links) != 1 or canonical_http_url(
         str(manifest.get("feed_url", ""))
-    ) != canonical_http_url(source_links[0][3]):
+    ) != canonical_http_url(markdown_inline_text(source_links[0][3])):
         fail("evidence manifest feed URL does not match report provenance")
 
     raw_sources = manifest.get("sources")
@@ -602,15 +607,22 @@ def validate_evidence_manifest(
     body_start = markdown.find("\n## ")
     body = markdown[body_start + 1 :] if body_start >= 0 else ""
     body_links = [
-        (label, canonical_http_url(destination))
+        (
+            markdown_inline_text(label),
+            canonical_http_url(markdown_inline_text(destination)),
+        )
         for _, _, label, destination in markdown_links(body)
         if destination.startswith(("http://", "https://"))
     ]
     if not body_links:
         fail("report body has no evidence links")
-    unknown = sorted({destination for _, destination in body_links} - source_urls)
-    if unknown:
-        fail("report links evidence absent from source manifest: " + unknown[0])
+    unknown_pairs = sorted(set(body_links) - source_pairs)
+    if unknown_pairs:
+        label, url = unknown_pairs[0]
+        fail(
+            "report links evidence absent from source manifest: "
+            f"{label} ({url})"
+        )
 
     source_section = re.search(
         r"(?ms)^##\s+Source Highlights\s*$([\s\S]*?)(?=^##\s+|\Z)", body
@@ -619,8 +631,8 @@ def validate_evidence_manifest(
         fail("report has no Source Highlights section")
     highlighted_pairs = {
         (
-            label.replace("\\[", "[").replace("\\]", "]").replace("\\\\", "\\"),
-            canonical_http_url(destination),
+            markdown_inline_text(label),
+            canonical_http_url(markdown_inline_text(destination)),
         )
         for _, _, label, destination in markdown_links(source_section.group(1))
     }

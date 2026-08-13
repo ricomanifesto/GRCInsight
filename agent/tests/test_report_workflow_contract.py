@@ -350,7 +350,10 @@ def test_site_report_composer_owns_public_provenance_and_body_shape():
                 "analysis_mode": "model",
                 "source_name": "SentryDigest",
                 "source_url": "https://example.com/feed.xml",
-                "source_articles": [{"title": "Evidence", "url": "https://example.com/evidence"}],
+                "source_articles": [
+                    {"title": "Linkless item", "url": ""},
+                    {"title": "Evidence", "url": "https://example.com/evidence"},
+                ],
                 "analysis_period": "August 2026",
                 "article_count": 30,
                 "grc_article_count": 12,
@@ -502,6 +505,74 @@ def test_site_report_composer_rejects_evidence_urls_absent_from_source_articles(
         raise AssertionError("composer accepted an invented evidence URL")
 
 
+def test_site_report_composer_decodes_escaped_evidence_url_delimiters():
+    namespace = runpy.run_path(str(SITE_REPORT_COMPOSER))
+    compose_report = namespace["compose_report"]
+    evidence_url = "https://example.com/a)b"
+    report = compose_report(
+        {
+            "status": "completed",
+            "title": "GRC Intelligence Report - 2026-08-13",
+            "generated_at": "2026-08-13T13:00:00Z",
+            "content": (
+                "## Executive Summary\n"
+                "[Evidence](https://example.com/a\\)b)\n\n"
+                "## Source Highlights\n"
+                "- [Evidence](https://example.com/a\\)b)"
+            ),
+            "metadata": {
+                "analysis_mode": "model",
+                "source_name": "SentryDigest",
+                "source_url": "https://example.com/feed.xml",
+                "source_articles": [{"title": "Evidence", "url": evidence_url}],
+                "analysis_period": "August 2026",
+                "article_count": 1,
+                "grc_article_count": 1,
+                "model": "openrouter/example/model",
+            },
+        },
+        "https://example.com/feed.xml",
+        "openrouter/example/model",
+    )
+
+    assert "[Evidence](https://example.com/a\\)b)" in report
+
+
+def test_site_report_composer_rejects_invented_title_for_real_evidence_url():
+    namespace = runpy.run_path(str(SITE_REPORT_COMPOSER))
+    compose_report = namespace["compose_report"]
+    data = {
+        "status": "completed",
+        "title": "GRC Intelligence Report - 2026-08-13",
+        "generated_at": "2026-08-13T13:00:00Z",
+        "content": (
+            "## Executive Summary\n"
+            "[CISA mandates immediate shutdown](https://example.com/neutral)\n\n"
+            "## Source Highlights\n"
+            "- [Neutral advisory](https://example.com/neutral)"
+        ),
+        "metadata": {
+            "analysis_mode": "model",
+            "source_name": "SentryDigest",
+            "source_url": "https://example.com/feed.xml",
+            "source_articles": [
+                {"title": "Neutral advisory", "url": "https://example.com/neutral"}
+            ],
+            "analysis_period": "August 2026",
+            "article_count": 1,
+            "grc_article_count": 1,
+            "model": "openrouter/example/model",
+        },
+    }
+
+    try:
+        compose_report(data, "https://example.com/feed.xml", "openrouter/example/model")
+    except SystemExit as error:
+        assert "title/URL pair absent from source articles" in str(error)
+    else:
+        raise AssertionError("composer accepted an invented title for real evidence")
+
+
 def test_site_report_check_rejects_internal_distribution_labels():
     check_script = SITE_REPORT_CHECK.read_text()
 
@@ -587,6 +658,43 @@ def test_evidence_manifest_normalizes_parenthesized_urls():
     }
 
     validate_manifest(markdown, metadata, json.dumps(manifest))
+
+    escaped_markdown = markdown.replace("a_(b).html", "a_\\)b.html")
+    escaped_manifest = {
+        **manifest,
+        "sources": [{"title": "Evidence", "url": "https://example.com/a_%29b.html"}],
+    }
+    validate_manifest(escaped_markdown, metadata, json.dumps(escaped_manifest))
+
+
+def test_evidence_manifest_rejects_invented_title_for_real_url():
+    namespace = runpy.run_path(str(SITE_REPORT_CHECK))
+    validate_manifest = namespace["validate_evidence_manifest"]
+    markdown = (
+        "# Report\n"
+        "**Generated:** 2026-08-13T13:00:00Z\n"
+        "**Source:** [Feed](https://example.com/feed.xml)\n\n"
+        "## Executive Summary\n"
+        "[Invented claim](https://example.com/neutral)\n\n"
+        "## Source Highlights\n"
+        "- [Neutral advisory](https://example.com/neutral)"
+    )
+    metadata = {
+        "generated": "2026-08-13T13:00:00Z",
+        "source": "[Feed](https://example.com/feed.xml)",
+    }
+    manifest = {
+        "generated_at": "2026-08-13T13:00:00Z",
+        "feed_url": "https://example.com/feed.xml",
+        "sources": [{"title": "Neutral advisory", "url": "https://example.com/neutral"}],
+    }
+
+    try:
+        validate_manifest(markdown, metadata, json.dumps(manifest))
+    except SystemExit as error:
+        assert "Invented claim" in str(error)
+    else:
+        raise AssertionError("site check accepted an invented evidence title")
 
 
 def test_site_report_forbidden_detector_covers_public_label_variants():

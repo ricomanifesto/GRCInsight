@@ -4,6 +4,7 @@ from collections import Counter
 from datetime import datetime, timezone
 import re
 from typing import Dict, Any, List
+from urllib.parse import urlparse
 from loguru import logger
 
 from models.api import (
@@ -407,6 +408,12 @@ async def run_grc_analysis_endpoint(
 
         for entry in feed_data.get("entries", []):
             try:
+                title = str(entry.get("title") or "").strip()
+                url = str(entry.get("link") or "").strip()
+                parsed_url = urlparse(url)
+                if not title or parsed_url.scheme not in {"http", "https"} or not parsed_url.netloc:
+                    logger.warning("Skipping feed entry that cannot serve as linked evidence")
+                    continue
                 published_raw = entry.get("published", "")
                 published_dt = None
                 if published_raw:
@@ -421,8 +428,8 @@ async def run_grc_analysis_endpoint(
                             published_dt = None
 
                 article = ArticleInput(
-                    title=entry.get("title", ""),
-                    url=entry.get("link", ""),
+                    title=title,
+                    url=url,
                     content=entry.get("content", ""),
                     summary=entry.get("description", ""),
                     source=feed_data.get("title", "Unknown Source"),
@@ -434,6 +441,14 @@ async def run_grc_analysis_endpoint(
                 continue
 
         logger.info(f"Processed {len(articles)} articles from feed")
+        if not articles:
+            return WorkflowResponse(
+                status="failed",
+                error=APIError(
+                    code="NO_LINKED_ARTICLES",
+                    message="Feed contains no articles with usable evidence links",
+                ),
+            )
 
         # Step 3: Enrich articles with full content
         logger.info("Step 3: Enriching articles with full content")
