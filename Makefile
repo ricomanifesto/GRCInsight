@@ -32,6 +32,7 @@ check-go-format:
 	fi
 
 check-site:
+	$(PYTHON) scripts/build_site.py --check
 	$(PYTHON) scripts/check_site_report.py
 	$(PYTHON) scripts/check_site_renderer.py
 

@@ -16,6 +16,8 @@
 
   const ICON_COLLAPSE = '<svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M7 10l5-5 5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
   const ICON_EXPAND = '<svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M7 14l5 5 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  const ICON_COPY = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M15 3H6a2 2 0 0 0-2 2v9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><rect x="9" y="9" width="12" height="12" rx="2" stroke="currentColor" stroke-width="2"/></svg>';
+  const ICON_CHECK = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M5 12.5l4 4L19 6.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 
   function slugify(text) {
     return text.trim().toLowerCase().replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-');
@@ -35,61 +37,61 @@
     const parsed = new Date(raw);
     const pretty = isNaN(parsed.getTime())
       ? raw
-      : parsed.toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' });
+      : parsed.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        timeZone: 'UTC',
+      });
     generatedEl.textContent = `Generated ${pretty}`;
+    generatedEl.setAttribute('datetime', raw);
   }
 
-  // Wrap everything under each h2 into a card and attach heading actions
-  // (anchor link, copy link, collapse). Content before the first h2 is dropped.
-  function wrapSections(node) {
-    const fragment = document.createDocumentFragment();
-    let card = null;
-    Array.from(node.childNodes).forEach(child => {
-      if (child.nodeType === 1 && child.tagName === 'H2') {
-        if (card) fragment.appendChild(card);
-        card = document.createElement('div');
-        card.className = 'card';
-        child.id = slugify(child.textContent);
+  // The canonical renderer creates complete report cards for both the build
+  // and the browser. The controller only adds progressive heading controls.
+  function enhanceSections(node) {
+    Array.from(node.querySelectorAll('.card')).forEach(card => {
+      const child = card.querySelector('h2');
+      if (!child || child.querySelector('.heading-actions')) return;
+      const title = sectionHeadingTitle(child);
+      child.id = slugify(title);
 
-        const anchor = document.createElement('a');
-        anchor.href = `#${child.id}`;
-        anchor.className = 'anchor-link';
-        anchor.textContent = '#';
-        child.appendChild(anchor);
+      const anchor = document.createElement('a');
+      anchor.href = `#${child.id}`;
+      anchor.className = 'anchor-link';
+      anchor.textContent = '#';
+      anchor.setAttribute('aria-label', `Link to ${title}`);
+      child.appendChild(anchor);
 
-        const actions = document.createElement('span');
-        actions.className = 'heading-actions';
+      const actions = document.createElement('span');
+      actions.className = 'heading-actions';
 
-        const copy = document.createElement('button');
-        copy.className = 'copy-link';
-        copy.type = 'button';
-        copy.setAttribute('data-target', child.id);
-        copy.title = 'Copy link';
-        copy.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M15 3H6a2 2 0 0 0-2 2v9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><rect x="9" y="9" width="12" height="12" rx="2" stroke="currentColor" stroke-width="2"/></svg>';
-        actions.appendChild(copy);
+      const copy = document.createElement('button');
+      copy.className = 'copy-link';
+      copy.type = 'button';
+      copy.setAttribute('data-target', child.id);
+      copy.setAttribute('aria-label', `Copy link to ${title}`);
+      copy.title = 'Copy link';
+      copy.innerHTML = ICON_COPY;
+      actions.appendChild(copy);
 
+      if (!card.classList.contains('report-provenance')) {
         const toggle = document.createElement('button');
         toggle.className = 'collapse-toggle';
         toggle.type = 'button';
         toggle.setAttribute('aria-expanded', 'true');
+        toggle.setAttribute('aria-label', `Collapse ${title}`);
         toggle.title = 'Collapse section';
         toggle.innerHTML = ICON_COLLAPSE;
         actions.appendChild(toggle);
-
-        child.appendChild(actions);
-        card.appendChild(child);
-      } else if (card) {
-        card.appendChild(child);
       }
+
+      child.appendChild(actions);
     });
-    if (card) fragment.appendChild(card);
-    node.innerHTML = '';
-    node.appendChild(fragment);
   }
 
-  // Highlight known compliance terms inline as pills. Curated frameworks,
-  // regulations, and agencies link to authoritative references; general risks
-  // and controls stay non-clickable so the report remains readable.
+  // Highlight only terms with authoritative destinations. Anything that looks
+  // like a link must behave like one.
   function highlightPills(node) {
     const walker = document.createTreeWalker(node, NodeFilter.SHOW_TEXT, {
       acceptNode(textNode) {
@@ -113,19 +115,21 @@
         }
 
         const safeUrl = segment.url ? renderer.sanitizeMarkdownUrl(segment.url) : null;
-        const pill = document.createElement(safeUrl ? 'a' : 'span');
-        pill.className = `pill ${segment.pillClass}${safeUrl ? ' reference-link' : ''}`;
-        pill.textContent = segment.text;
-        if (safeUrl) {
-          pill.href = safeUrl;
-          pill.target = '_blank';
-          pill.rel = 'noopener';
-          pill.title = `Open the official ${segment.label} reference`;
-          pill.setAttribute(
-            'aria-label',
-            `${segment.text}: official ${segment.categoryLabel.toLowerCase()} reference`,
-          );
+        if (!safeUrl) {
+          fragment.appendChild(document.createTextNode(segment.text));
+          return;
         }
+        const pill = document.createElement('a');
+        pill.className = `pill ${segment.pillClass} reference-link`;
+        pill.textContent = segment.text;
+        pill.href = safeUrl;
+        pill.target = '_blank';
+        pill.rel = 'noopener';
+        pill.title = `Open the official ${segment.label} reference`;
+        pill.setAttribute(
+          'aria-label',
+          `${segment.text}: official ${segment.categoryLabel.toLowerCase()} reference`,
+        );
         fragment.appendChild(pill);
       });
       textNode.replaceWith(fragment);
@@ -216,7 +220,9 @@
   function applyCollapsedState() {
     const map = JSON.parse(localStorage.getItem('cardCollapsed') || '{}');
     const isMobile = window.matchMedia('(max-width: 900px)').matches;
-    Array.from(document.querySelectorAll('#report .card')).forEach((card, idx) => {
+    const collapsibleCards = Array.from(document.querySelectorAll('#report .card'))
+      .filter(card => !card.classList.contains('report-provenance'));
+    collapsibleCards.forEach((card, idx) => {
       const h2 = card.querySelector('h2');
       if (!h2) return;
       const collapsed = Object.prototype.hasOwnProperty.call(map, h2.id)
@@ -233,6 +239,8 @@
       toggle.setAttribute('aria-expanded', String(!collapsed));
       toggle.innerHTML = collapsed ? ICON_EXPAND : ICON_COLLAPSE;
       toggle.title = collapsed ? 'Expand section' : 'Collapse section';
+      const title = sectionHeadingTitle(card.querySelector('h2'));
+      toggle.setAttribute('aria-label', `${collapsed ? 'Expand' : 'Collapse'} ${title}`);
     }
     if (persist) {
       const map = JSON.parse(localStorage.getItem('cardCollapsed') || '{}');
@@ -242,7 +250,7 @@
   }
 
   function installInteractions() {
-    document.addEventListener('click', e => {
+    document.addEventListener('click', async e => {
       const toggle = e.target.closest && e.target.closest('.collapse-toggle');
       if (toggle) {
         const card = toggle.closest('.card');
@@ -253,16 +261,32 @@
       if (copy) {
         const url = new URL(window.location.href);
         url.hash = copy.getAttribute('data-target');
-        navigator.clipboard && navigator.clipboard.writeText(url.toString());
-        const original = copy.title;
-        copy.title = 'Copied';
-        setTimeout(() => { copy.title = original; }, 800);
+        const status = document.getElementById('copyStatus');
+        try {
+          if (!navigator.clipboard?.writeText) throw new Error('Clipboard unavailable');
+          await navigator.clipboard.writeText(url.toString());
+          copy.classList.add('copied');
+          copy.innerHTML = ICON_CHECK;
+          copy.title = 'Link copied';
+          copy.setAttribute('aria-label', 'Link copied');
+          if (status) status.textContent = 'Link copied';
+          setTimeout(() => {
+            copy.classList.remove('copied');
+            copy.innerHTML = ICON_COPY;
+            copy.title = 'Copy link';
+            const heading = copy.closest('h2');
+            copy.setAttribute('aria-label', `Copy link to ${sectionHeadingTitle(heading)}`);
+          }, 1500);
+        } catch (_) {
+          if (status) status.textContent = 'Unable to copy link';
+        }
       }
     });
 
     document.addEventListener('keydown', e => {
       const tag = (e.target.tagName || '').toLowerCase();
-      if (['input', 'textarea', 'select', 'button'].includes(tag)) return;
+      if (e.altKey || e.ctrlKey || e.metaKey || e.target.isContentEditable) return;
+      if (['a', 'input', 'textarea', 'select', 'button'].includes(tag)) return;
       const h2s = sectionHeadings();
       if (!h2s.length) return;
       const y = window.scrollY + 100;
@@ -270,36 +294,60 @@
       for (let i = 0; i < h2s.length; i++) {
         if (h2s[i].getBoundingClientRect().top + window.scrollY - 90 <= y) idx = i;
       }
-      if (['j', 'ArrowDown'].includes(e.key)) { e.preventDefault(); h2s[Math.min(h2s.length - 1, idx + 1)]?.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
-      if (['k', 'ArrowUp'].includes(e.key)) { e.preventDefault(); h2s[Math.max(0, idx - 1)]?.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
-      if (e.key === 'c') { const card = h2s[idx]?.closest('.card'); if (card) setCardCollapsed(card, !card.classList.contains('collapsed'), true); }
+      const key = e.key.toLowerCase();
+      if (key === 'j') { e.preventDefault(); h2s[Math.min(h2s.length - 1, idx + 1)]?.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+      if (key === 'k') { e.preventDefault(); h2s[Math.max(0, idx - 1)]?.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+      if (key === 'c') {
+        const card = h2s[idx]?.closest('.card');
+        if (card?.querySelector('.collapse-toggle')) {
+          e.preventDefault();
+          setCardCollapsed(card, !card.classList.contains('collapsed'), true);
+        }
+      }
     });
   }
 
   function renderReport(md) {
     setGeneratedLabel(md);
-    reportEl.innerHTML = renderer.renderMarkdown(md);
-    wrapSections(reportEl);
+    reportEl.innerHTML = renderer.renderReportDocument(md);
+    enhanceSections(reportEl);
     applyCollapsedState();
     highlightPills(reportEl);
     buildSidebar();
     buildTopbar();
-    installInteractions();
   }
 
-  reportEl.innerHTML = '<div class="card report-status"><p>Loading report…</p></div>';
+  const hasPrerenderedReport = reportEl.dataset.prerendered === 'true' && reportEl.querySelector('.card');
+  if (hasPrerenderedReport) {
+    enhanceSections(reportEl);
+    applyCollapsedState();
+    highlightPills(reportEl);
+    buildSidebar();
+    buildTopbar();
+  } else {
+    reportEl.innerHTML = '<div class="card report-status"><p>Loading report…</p></div>';
+  }
+  installInteractions();
   fetch('index.md', { cache: 'no-store' })
     .then(r => { if (!r.ok) throw new Error(`HTTP ${r.status}`); return r.text(); })
     .then(renderReport)
     .catch(() => {
-      reportEl.innerHTML = '<div class="card report-status"><p>Unable to load the report. Please refresh to try again.</p></div>';
+      if (!hasPrerenderedReport) {
+        reportEl.innerHTML = '<div class="card report-status"><p>Unable to load the report. Please refresh to try again.</p></div>';
+      }
     });
 
-  // Theme toggle (persisted; dark is the default).
+  // Theme toggle (persisted; otherwise follows the reader's system theme).
   function applyTheme(mode) {
     document.body.classList.toggle('light', mode === 'light');
+    if (themeBtn) {
+      const next = mode === 'light' ? 'dark' : 'light';
+      themeBtn.setAttribute('aria-label', `Switch to ${next} theme`);
+      themeBtn.title = `Switch to ${next} theme`;
+    }
   }
-  applyTheme(localStorage.getItem('theme') || 'dark');
+  const preferredTheme = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+  applyTheme(localStorage.getItem('theme') || preferredTheme);
   themeBtn && themeBtn.addEventListener('click', () => {
     const next = document.body.classList.contains('light') ? 'dark' : 'light';
     localStorage.setItem('theme', next);

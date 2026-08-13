@@ -1,6 +1,6 @@
 from datetime import datetime, timezone
+import json
 from pathlib import Path
-import re
 import runpy
 import tomllib
 
@@ -16,11 +16,31 @@ DEPLOY_SITE_WORKFLOW = REPO_ROOT / ".github" / "workflows" / "deploy-site.yml"
 REPORT_WORKFLOW = REPO_ROOT / ".github" / "workflows" / "lambda-report-generation.yml"
 CI_WORKFLOW = REPO_ROOT / ".github" / "workflows" / "ci.yml"
 SITE_REPORT_CHECK = REPO_ROOT / "scripts" / "check_site_report.py"
-SITE_REPORT = REPO_ROOT / "site" / "index.md"
+SITE_REPORT_COMPOSER = REPO_ROOT / "scripts" / "compose_site_report.py"
+SITE_BUILDER = REPO_ROOT / "scripts" / "build_site.py"
 MODEL_SERVICE = REPO_ROOT / "agent" / "services" / "model_service.py"
 RENDERER_JS = REPO_ROOT / "site" / "static" / "renderer.js"
 WORKFLOWS = (CI_WORKFLOW, DEPLOY_WORKFLOW, DEPLOY_SITE_WORKFLOW, REPORT_WORKFLOW)
 PUBLISHED_AT = datetime(2026, 6, 1, tzinfo=timezone.utc)
+
+
+def complete_report_body(
+    executive_content: str,
+    source_content: str,
+    *,
+    executive_heading: str = "## Executive Summary",
+    source_heading: str = "## Source Highlights",
+) -> str:
+    return "\n\n".join(
+        (
+            f"{executive_heading}\n{executive_content}",
+            "## Key Regulatory Developments\nCareful regulatory analysis.",
+            "## Industry Impact Analysis\nCareful industry analysis.",
+            "## Risk Assessment\nCareful risk analysis.",
+            "## Recommendations for Action\nCareful recommendations.",
+            f"{source_heading}\n{source_content}",
+        )
+    )
 
 
 def test_report_generation_workflow_accepts_repository_dispatch_payloads():
@@ -39,6 +59,10 @@ def test_static_site_deploys_main_branch_site_changes():
     assert "workflow_dispatch:" in workflow
     assert "group: github-pages" in workflow
     assert "run: make check-site" in workflow
+    assert "playwright@1.62.1 screenshot" in workflow
+    assert "--color-scheme dark" in workflow
+    assert "--color-scheme light" in workflow
+    assert "actions/upload-artifact@v7" in workflow
 
 
 def test_report_generation_payload_treats_feed_url_as_json_data():
@@ -113,10 +137,15 @@ def test_report_prompt_requires_current_source_entities_and_readable_summary():
     assert "CVE-2026-12345" in prompt
     assert "structured actor identifiers are hints, not an exhaustive actor list" not in prompt
     assert "Do not classify industry, standards, regulatory, or working groups" not in prompt
-    assert "Use Markdown links with the exact source title and URL" in prompt
+    assert "Copy the exact Markdown Link supplied above" in prompt
     assert "Every report-specific regulatory and CVE claim" in prompt
     assert "Do not emit incomplete, truncated, or ellipsized CVE identifiers" in prompt
     assert "Use exact framework, standard, regulation, or publication names" in prompt
+    assert "Source Highlights" in prompt
+    assert "Never use superscript footnotes" in prompt
+    assert "Do not invent counts" in prompt
+    assert "publication layer adds those values" in prompt
+    assert 'Do not emit a top-level "# " heading' in prompt
 
 
 def test_report_prompt_globally_bounds_cve_evidence():
@@ -129,8 +158,8 @@ def test_report_prompt_globally_bounds_cve_evidence():
             "analysis": {},
             "source_evidence": [
                 {
-                    "title": "Patch roundup",
-                    "url": f"https://example.com/advisory/{cves[10]}",
+                    "title": f"Patch roundup for {cves[10]}",
+                    "url": f"https://example.com/advisory/{cves[11]}",
                     "snippet": "A vendor published fixes for " + ", ".join(cves) + ".",
                     "cves": cves,
                 }
@@ -140,9 +169,49 @@ def test_report_prompt_globally_bounds_cve_evidence():
     )
 
     assert cves[9] in prompt
-    assert cves[10] not in prompt
-    assert cves[11] not in prompt
+    assert prompt.count(cves[10]) == 1
+    assert prompt.count(cves[11]) == 1
+    assert f"Patch roundup for {cves[10]}" in prompt
+    assert (
+        f"Markdown Link: [Patch roundup for {cves[10]}]"
+        f"(https://example.com/advisory/{cves[11]})" in prompt
+    )
     assert "[additional CVE omitted]" in prompt
+
+
+def test_report_prompt_serializes_exact_source_links_for_markdown():
+    service = GRCModelService.__new__(GRCModelService)
+    title = r"Windows C:\[Temp] and C:\(Logs) advisory"
+    url = "https://example.com/advisory)1?edition=(daily)"
+
+    prompt = service._create_report_prompt(
+        {
+            "summary": {"total_articles": 1, "grc_relevant_count": 1},
+            "analysis": {},
+            "source_evidence": [
+                {
+                    "title": title,
+                    "url": url,
+                    "snippet": "Review the affected Windows paths.",
+                    "cves": [],
+                }
+            ],
+        },
+        {"title": "Test Feed"},
+    )
+
+    escaped_title = (
+        title.replace("\\", "\\\\")
+        .replace("[", "\\[")
+        .replace("]", "\\]")
+        .replace("(", "\\(")
+        .replace(")", "\\)")
+    )
+    assert (
+        f"Markdown Link: [{escaped_title}]"
+        "(https://example.com/advisory%291?edition=%28daily%29)" in prompt
+    )
+    assert "including every label escape and URL character" in prompt
 
 
 def test_source_evidence_preserves_distinct_cves_without_actor_priority():
@@ -200,6 +269,54 @@ def test_source_evidence_preserves_distinct_cves_without_actor_priority():
     assert {"CVE-2026-11111", "CVE-2026-22222", "CVE-2026-12345678"} <= cves
     assert all("actor_ids" not in item for item in evidence)
     assert all("has_threat_context" not in item for item in evidence)
+
+
+def test_source_evidence_bounds_persisted_cves_to_prompt_limit():
+    articles = [
+        ArticleInput(
+            title=f"Advisory {index}",
+            url=f"https://example.com/advisory-{index}",
+            content=f"CVE-2026-{20000 + index} affects the product.",
+            summary="",
+            published=PUBLISHED_AT,
+        )
+        for index in range(12)
+    ]
+
+    evidence = workflow_mod._build_source_evidence(articles)
+    persisted_cves = {cve for item in evidence for cve in item["cves"]}
+
+    assert len(evidence) <= workflow_mod.SOURCE_EVIDENCE_LIMIT
+    assert len(persisted_cves) == workflow_mod.REPORT_CVE_LIMIT
+    assert all(set(item["cves"]) <= persisted_cves for item in evidence)
+
+
+def test_source_evidence_preserves_cves_in_exact_title_or_url_identity():
+    articles = [
+        ArticleInput(
+            title=f"Advisory {index}",
+            url=(
+                "https://example.com/CVE-2026-30010"
+                if index == 10
+                else f"https://example.com/advisory-{index}"
+            ),
+            content=(
+                "The identifier appears only in this source URL."
+                if index == 10
+                else f"CVE-2026-{30000 + index} affects the product."
+            ),
+            summary="",
+            published=PUBLISHED_AT,
+        )
+        for index in range(11)
+    ]
+
+    evidence = workflow_mod._build_source_evidence(articles)
+    identity_source = next(item for item in evidence if "CVE-2026-30010" in item["url"])
+
+    assert "CVE-2026-30010" not in identity_source["title"]
+    assert "CVE-2026-30010" not in identity_source["snippet"]
+    assert "CVE-2026-30010" in identity_source["cves"]
 
 
 def test_fallback_report_excludes_dedicated_threat_actor_section():
@@ -270,49 +387,6 @@ def test_renderer_and_site_check_enforce_the_current_report_sections():
     assert "'Threat Actor Activities'," not in renderer
 
 
-def test_public_report_has_no_unresolved_numeric_source_placeholders():
-    report = SITE_REPORT.read_text()
-
-    assert not re.search(
-        r"\bSources?\s+\d+(?:\s*(?:,|and|-)\s*\d+)*\b",
-        report,
-        re.IGNORECASE,
-    )
-
-
-def test_generation_and_publish_gates_reject_numeric_source_placeholders():
-    model_service = MODEL_SERVICE.read_text()
-    report_check = SITE_REPORT_CHECK.read_text()
-
-    assert "Do not use placeholder citations such as Source 1 or Sources 2, 3" in model_service
-    assert "DANGLING_SOURCE_REFERENCE_PATTERN" in report_check
-
-
-def test_generation_and_publish_gates_reject_leaked_model_deliberation():
-    model_service = MODEL_SERVICE.read_text()
-    namespace = runpy.run_path(str(SITE_REPORT_CHECK))
-    find_integrity_failure = namespace["find_public_report_integrity_failure"]
-
-    assert "Return only the final report Markdown" in model_service
-    assert find_integrity_failure("""# GRC Intelligence Report
-**Generated:** 2026-08-13T19:13:44Z
-
-Let me analyze the request carefully.
-
-## Executive Summary
-
-Final report text.
-""") == "leaked model deliberation: Let me analyze the request carefully."
-    assert find_integrity_failure("""# GRC Intelligence Report
-**Generated:** 2026-08-13T19:13:44Z
-
-## Executive Summary
-
-[table]
-""") == "unresolved report placeholder: [table]"
-    assert find_integrity_failure(SITE_REPORT.read_text()) is None
-
-
 def test_report_generation_workflow_does_not_dump_lambda_response_body():
     workflow = REPORT_WORKFLOW.read_text()
 
@@ -335,40 +409,427 @@ def test_report_generation_workflow_refuses_fallback_reports():
     assert "Refusing to publish a fallback-mode report" in workflow
 
 
-def test_report_generation_workflow_owns_the_only_top_level_report_title():
-    workflow = REPORT_WORKFLOW.read_text()
-    model_service = MODEL_SERVICE.read_text()
-
-    assert 'echo "# ${SAFE_TITLE}" > site/index.md' in workflow
-    assert "REPORT_BODY=$(printf '%s\\n' \"$SAFE_CONTENT\" | awk" in workflow
-    assert "/^# / { next }" in workflow
-    assert "dropped_title" not in workflow
-    assert 'echo "${REPORT_BODY}" >> site/index.md' in workflow
-    assert 'Do not emit a top-level "# " heading' in model_service
-
-
-def test_report_generation_workflow_strips_duplicate_generated_timestamp():
+def test_report_generation_workflow_uses_deterministic_report_composer():
     workflow = REPORT_WORKFLOW.read_text()
 
-    assert "seen_generated = 0" in workflow
-    assert "/^\\*\\*Generated:\\*\\*/" in workflow
+    assert "python3 scripts/compose_site_report.py" in workflow
+    assert "--input report-data.json" in workflow
+    assert '--feed-url "$FEED_URL"' in workflow
+    assert '--model "$LLM_MODEL"' in workflow
+
+
+def test_report_generation_workflow_builds_prerender_and_archive():
+    workflow = REPORT_WORKFLOW.read_text()
+
+    assert workflow.count("python3 scripts/build_site.py --archive-current") >= 2
+    assert (
+        "git add site/index.md site/index.html site/evidence-manifest.json site/archive" in workflow
+    )
+    assert "[skip ci]" not in workflow
+    assert "actions: write" in workflow
+    assert "gh workflow run deploy-site.yml" in workflow
+    assert "steps.publish.outputs.published == 'true'" in workflow
 
 
 def test_report_generation_workflow_validates_generated_site_before_publish():
     workflow = REPORT_WORKFLOW.read_text()
 
     assert "Validate generated site report" in workflow
-    assert workflow.count("python3 scripts/check_site_report.py") >= 2
+    assert workflow.count("make check-site") >= 2
     assert workflow.index("Validate generated site report") < workflow.index(
         "Commit and push report"
     )
-    assert workflow.index("Validate generated site report") < workflow.index(
-        "Upload Pages artifact"
-    )
+    assert "actions/upload-pages-artifact" not in workflow
+    assert "actions/deploy-pages" not in workflow
     rebase_index = workflow.index('git rebase -X theirs "origin/$GITHUB_REF_NAME"')
-    assert workflow.index("python3 scripts/check_site_report.py", rebase_index) < workflow.index(
-        "git push origin HEAD"
+    assert workflow.index("make check-site", rebase_index) < workflow.index("git push origin HEAD")
+
+
+def test_site_report_composer_owns_public_provenance_and_body_shape():
+    namespace = runpy.run_path(str(SITE_REPORT_COMPOSER))
+    compose_report = namespace["compose_report"]
+    report = compose_report(
+        {
+            "status": "completed",
+            "title": "GRC Intelligence Report - 2026-08-13",
+            "generated_at": "2026-08-13T13:00:00Z",
+            "content": (
+                "# Duplicate title\n**Generated:** stale\n\n"
+                + complete_report_body(
+                    "Careful analysis.\n\n---",
+                    "- [Evidence](https://example.com/evidence)",
+                    executive_heading="1. Executive Summary",
+                    source_heading="6) Source Highlights",
+                )
+            ),
+            "metadata": {
+                "analysis_mode": "model",
+                "source_name": "SentryDigest",
+                "source_url": "https://example.com/feed.xml",
+                "source_articles": [
+                    {"title": "Linkless item", "url": ""},
+                    {"title": "Evidence", "url": "https://example.com/evidence"},
+                ],
+                "analysis_period": "August 2026",
+                "article_count": 30,
+                "grc_article_count": 12,
+                "model": "openrouter/example/model",
+            },
+        },
+        "https://example.com/feed.xml",
+        "openrouter/example/model",
     )
+
+    assert report.count("# GRC Intelligence Report - 2026-08-13") == 1
+    assert report.count("**Generated:** 2026-08-13T13:00:00Z") == 1
+    assert "**Source:** [SentryDigest](https://example.com/feed.xml)" in report
+    assert "**Articles Analyzed:** 30" in report
+    assert "**GRC-Relevant Articles:** 12" in report
+    assert "**Model:** openrouter/example/model" in report
+    assert "**Analysis Mode:** Model-backed" in report
+    assert "## Executive Summary" in report
+    assert "## Source Highlights" in report
+    assert "\n---\n" not in report
+    assert "stale" not in report
+
+
+def test_site_report_composer_requires_each_canonical_section_exactly_once():
+    namespace = runpy.run_path(str(SITE_REPORT_COMPOSER))
+    canonical_body = namespace["canonical_body"]
+
+    for malformed, expected in (
+        (
+            complete_report_body("Careful analysis.", "- Evidence").replace(
+                "## Risk Assessment\nCareful risk analysis.\n\n", ""
+            ),
+            "missing section: Risk Assessment",
+        ),
+        (
+            complete_report_body("Careful analysis.", "- Evidence")
+            + "\n\n## Risk Assessment\nDuplicate risk analysis.",
+            "repeats section: Risk Assessment",
+        ),
+    ):
+        try:
+            canonical_body(malformed)
+        except SystemExit as error:
+            assert expected in str(error)
+        else:
+            raise AssertionError(f"composer accepted malformed section structure: {expected}")
+
+
+def test_site_builder_treats_report_backslashes_as_literal_content():
+    namespace = runpy.run_path(str(SITE_BUILDER))
+    current_index_html = namespace["current_index_html"]
+    template = (
+        '<time class="subtitle" id="generated">Loading</time>'
+        "<!-- REPORT_CONTENT_START --><!-- REPORT_CONTENT_END -->"
+    )
+    markdown = (
+        "# GRC Intelligence Report\n"
+        "**Generated:** 2026-08-13T13:00:00Z\n\n"
+        "## Risk Assessment\n"
+        "Review C:\\Windows access controls."
+    )
+
+    built = current_index_html(template, markdown)
+
+    assert "C:\\Windows" in built
+
+
+def test_site_builder_gives_same_day_reports_unique_archive_keys():
+    namespace = runpy.run_path(str(SITE_BUILDER))
+    archive_slug = namespace["archive_slug"]
+
+    morning = datetime(2026, 8, 13, 13, 0, 0, tzinfo=timezone.utc)
+    rerun = datetime(2026, 8, 13, 15, 45, 12, tzinfo=timezone.utc)
+
+    assert archive_slug(morning) == "2026-08-13T13-00-00Z"
+    assert archive_slug(rerun) == "2026-08-13T15-45-12Z"
+    assert archive_slug(morning) != archive_slug(rerun)
+
+
+def test_site_report_check_validates_every_archive_manifest(tmp_path):
+    namespace = runpy.run_path(str(SITE_REPORT_CHECK))
+    validate_archive_history = namespace["validate_archive_history"]
+    archive_key = "2026-08-13T13-00-00Z"
+    snapshot = tmp_path / archive_key
+    snapshot.mkdir()
+    report = (
+        "# GRC Intelligence Report\n"
+        "**Generated:** 2026-08-13T13:00:00Z\n"
+        "**Date of Issue:** August 2026\n"
+        "**Analysis Period:** August 2026\n"
+        "**Source:** [Feed](https://example.com/feed.xml)\n"
+        "**Articles Analyzed:** 1\n"
+        "**Model:** openrouter/example/model\n"
+        "**Analysis Mode:** Model-backed\n\n"
+        + complete_report_body(
+            "Careful analysis.",
+            "- [Evidence](https://example.com/evidence)",
+        )
+    )
+    manifest = {
+        "generated_at": "2026-08-13T13:00:00Z",
+        "feed_url": "https://example.com/feed.xml",
+        "sources": [{"title": "Evidence", "url": "https://example.com/evidence", "cves": []}],
+    }
+    (snapshot / "report.md").write_text(report)
+    (snapshot / "evidence-manifest.json").write_text(json.dumps(manifest))
+    (snapshot / "index.html").write_text(
+        '<main class="container archive-report"><section class="card report-provenance"></section></main>'
+    )
+    archive_html = f'<a href="{archive_key}/">Report</a>'
+
+    validate_archive_history(tmp_path, archive_html)
+
+    (snapshot / "evidence-manifest.json").write_text("{broken")
+    try:
+        validate_archive_history(tmp_path, archive_html)
+    except SystemExit as error:
+        assert "evidence-manifest.json is invalid JSON" in str(error)
+    else:
+        raise AssertionError("archive validation accepted a corrupted historical manifest")
+
+
+def test_site_report_composer_rejects_provenance_mismatch():
+    namespace = runpy.run_path(str(SITE_REPORT_COMPOSER))
+    compose_report = namespace["compose_report"]
+    data = {
+        "status": "completed",
+        "title": "GRC Intelligence Report - 2026-08-13",
+        "generated_at": "2026-08-13T13:00:00Z",
+        "content": "## Executive Summary\nCareful analysis.",
+        "metadata": {
+            "analysis_mode": "model",
+            "source_name": "SentryDigest",
+            "source_url": "https://example.com/feed.xml",
+            "source_articles": [{"title": "Evidence", "url": "https://example.com/evidence"}],
+            "analysis_period": "August 2026",
+            "article_count": 1,
+            "grc_article_count": 1,
+            "model": "openrouter/example/model",
+        },
+    }
+
+    try:
+        compose_report(data, "https://other.example/feed.xml", "openrouter/example/model")
+    except SystemExit as error:
+        assert "source URL does not match" in str(error)
+    else:
+        raise AssertionError("composer accepted mismatched source provenance")
+
+
+def test_site_report_composer_normalizes_numbered_markdown_headings_and_feed_url():
+    namespace = runpy.run_path(str(SITE_REPORT_COMPOSER))
+    compose_report = namespace["compose_report"]
+    feed_url = "https://example.com/feed(1).xml?edition=(daily)"
+    report = compose_report(
+        {
+            "status": "completed",
+            "title": "GRC Intelligence Report - 2026-08-13",
+            "generated_at": "2026-08-13T13:00:00Z",
+            "content": complete_report_body(
+                "Careful analysis.",
+                "- [Evidence](https://example.com/evidence)",
+                executive_heading="## **1. EXECUTIVE SUMMARY:**",
+                source_heading="**6) source highlights.**",
+            ),
+            "metadata": {
+                "analysis_mode": "model",
+                "source_name": "SentryDigest\\",
+                "source_url": feed_url,
+                "source_articles": [{"title": "Evidence", "url": "https://example.com/evidence"}],
+                "analysis_period": "August 2026",
+                "article_count": 1,
+                "grc_article_count": 1,
+                "model": "openrouter/example/model",
+            },
+        },
+        feed_url,
+        "openrouter/example/model",
+    )
+
+    assert "## Executive Summary" in report
+    assert "## Source Highlights" in report
+    assert "## 1." not in report
+    assert "feed%281%29.xml?edition=%28daily%29" in report
+    assert "**Source:** [SentryDigest\\\\](" in report
+
+
+def test_site_report_composer_rejects_evidence_urls_absent_from_source_articles():
+    namespace = runpy.run_path(str(SITE_REPORT_COMPOSER))
+    compose_report = namespace["compose_report"]
+    data = {
+        "status": "completed",
+        "title": "GRC Intelligence Report - 2026-08-13",
+        "generated_at": "2026-08-13T13:00:00Z",
+        "content": complete_report_body(
+            "[Invented evidence](https://invented.example/advisory)",
+            "- [Invented evidence](https://invented.example/advisory)",
+        ),
+        "metadata": {
+            "analysis_mode": "model",
+            "source_name": "SentryDigest",
+            "source_url": "https://example.com/feed.xml",
+            "source_articles": [{"title": "Real evidence", "url": "https://example.com/real"}],
+            "analysis_period": "August 2026",
+            "article_count": 1,
+            "grc_article_count": 1,
+            "model": "openrouter/example/model",
+        },
+    }
+
+    try:
+        compose_report(data, "https://example.com/feed.xml", "openrouter/example/model")
+    except SystemExit as error:
+        assert "absent from source articles" in str(error)
+    else:
+        raise AssertionError("composer accepted an invented evidence URL")
+
+
+def test_site_report_composer_decodes_escaped_evidence_url_delimiters():
+    namespace = runpy.run_path(str(SITE_REPORT_COMPOSER))
+    compose_report = namespace["compose_report"]
+    http_url = namespace["http_url"]
+    evidence_url = "HTTPS://example.com/O'Reilly/a)b"
+    report = compose_report(
+        {
+            "status": "completed",
+            "title": "GRC Intelligence Report - 2026-08-13",
+            "generated_at": "2026-08-13T13:00:00Z",
+            "content": complete_report_body(
+                "[Evidence](HTTPS://example.com/O'Reilly/a\\)b)",
+                "- [Evidence](HTTPS://example.com/O'Reilly/a\\)b)",
+            ),
+            "metadata": {
+                "analysis_mode": "model",
+                "source_name": "SentryDigest",
+                "source_url": "https://example.com/feed.xml",
+                "source_articles": [{"title": "Evidence", "url": evidence_url}],
+                "analysis_period": "August 2026",
+                "article_count": 1,
+                "grc_article_count": 1,
+                "model": "openrouter/example/model",
+            },
+        },
+        "https://example.com/feed.xml",
+        "openrouter/example/model",
+    )
+
+    assert "[Evidence](HTTPS://example.com/O'Reilly/a\\)b)" in report
+    assert http_url(evidence_url, "evidence URL") == "HTTPS://example.com/O%27Reilly/a%29b"
+
+
+def test_site_report_composer_accepts_serialized_source_link_identity():
+    namespace = runpy.run_path(str(SITE_REPORT_COMPOSER))
+    compose_report = namespace["compose_report"]
+    title = r"Windows C:\[Temp] and C:\(Logs) advisory"
+    escaped_title = (
+        title.replace("\\", "\\\\")
+        .replace("[", "\\[")
+        .replace("]", "\\]")
+        .replace("(", "\\(")
+        .replace(")", "\\)")
+    )
+    source_url = "https://example.com/advisory)1?edition=(daily)"
+    link = f"[{escaped_title}]" "(https://example.com/advisory%291?edition=%28daily%29)"
+
+    report = compose_report(
+        {
+            "status": "completed",
+            "title": "GRC Intelligence Report - 2026-08-13",
+            "generated_at": "2026-08-13T13:00:00Z",
+            "content": complete_report_body(
+                f"Review {link}.",
+                f"- {link}",
+            ),
+            "metadata": {
+                "analysis_mode": "model",
+                "source_name": "SentryDigest",
+                "source_url": "https://example.com/feed.xml",
+                "source_articles": [{"title": title, "url": source_url}],
+                "analysis_period": "August 2026",
+                "article_count": 1,
+                "grc_article_count": 1,
+                "model": "openrouter/example/model",
+            },
+        },
+        "https://example.com/feed.xml",
+        "openrouter/example/model",
+    )
+
+    assert link in report
+
+
+def test_site_report_composer_rejects_invented_title_for_real_evidence_url():
+    namespace = runpy.run_path(str(SITE_REPORT_COMPOSER))
+    compose_report = namespace["compose_report"]
+    data = {
+        "status": "completed",
+        "title": "GRC Intelligence Report - 2026-08-13",
+        "generated_at": "2026-08-13T13:00:00Z",
+        "content": complete_report_body(
+            "[CISA mandates immediate shutdown](https://example.com/neutral)",
+            "- [Neutral advisory](https://example.com/neutral)",
+        ),
+        "metadata": {
+            "analysis_mode": "model",
+            "source_name": "SentryDigest",
+            "source_url": "https://example.com/feed.xml",
+            "source_articles": [
+                {"title": "Neutral advisory", "url": "https://example.com/neutral"}
+            ],
+            "analysis_period": "August 2026",
+            "article_count": 1,
+            "grc_article_count": 1,
+            "model": "openrouter/example/model",
+        },
+    }
+
+    try:
+        compose_report(data, "https://example.com/feed.xml", "openrouter/example/model")
+    except SystemExit as error:
+        assert "title/URL pair absent from source articles" in str(error)
+    else:
+        raise AssertionError("composer accepted an invented title for real evidence")
+
+
+def test_site_report_composer_rejects_cve_absent_from_linked_source():
+    namespace = runpy.run_path(str(SITE_REPORT_COMPOSER))
+    compose_report = namespace["compose_report"]
+    data = {
+        "status": "completed",
+        "title": "GRC Intelligence Report - 2026-08-13",
+        "generated_at": "2026-08-13T13:00:00Z",
+        "content": complete_report_body(
+            "CVE-2026-1111 is described by " "[Different advisory](https://example.com/different).",
+            "- [Different advisory](https://example.com/different)",
+        ),
+        "metadata": {
+            "analysis_mode": "model",
+            "source_name": "SentryDigest",
+            "source_url": "https://example.com/feed.xml",
+            "source_articles": [
+                {
+                    "title": "Different advisory",
+                    "url": "https://example.com/different",
+                    "cves": ["CVE-2026-2222"],
+                }
+            ],
+            "analysis_period": "August 2026",
+            "article_count": 1,
+            "grc_article_count": 1,
+            "model": "openrouter/example/model",
+        },
+    }
+
+    try:
+        compose_report(data, "https://example.com/feed.xml", "openrouter/example/model")
+    except SystemExit as error:
+        assert "CVE-2026-1111" in str(error)
+    else:
+        raise AssertionError("composer accepted a CVE absent from its linked source")
 
 
 def test_site_report_check_rejects_internal_distribution_labels():
@@ -380,6 +841,156 @@ def test_site_report_check_rejects_internal_distribution_labels():
     assert "PRIVATE_VALUE_TERMS" in check_script
     assert "normalize_label_text" in check_script
     assert r"\bCONFIDENTIAL\b" not in check_script
+
+
+def test_site_report_reader_surface_detector_covers_visible_trust_defects():
+    namespace = runpy.run_path(str(SITE_REPORT_CHECK))
+    find_defect = namespace["find_reader_surface_defect"]
+    valid = (
+        "## Executive Summary\n"
+        "[CVE-2026-12345](https://example.com/cve) is documented.\n\n"
+        "## Source Highlights\n"
+        "- [Evidence](https://example.com/cve)"
+    )
+
+    assert find_defect(valid) is None
+    assert (
+        find_defect(
+            valid.replace("https://example.com/cve", "https://example.com/evidence_(daily).html")
+        )
+        is None
+    )
+    assert find_defect(valid.replace("is documented.", "affects ownCloud and openSUSE.")) is None
+    assert (
+        find_defect(
+            valid.replace(
+                "[Evidence](https://example.com/cve)",
+                "[Microsoft [Update] advisory](https://example.com/cve)",
+            )
+        )
+        is None
+    )
+    blocked = (
+        valid.replace("is documented.", "is documented.[¹]"),
+        valid.replace("is documented.", "is documented in [Regulatory Developments]."),
+        valid.replace("is documented.", "causes a criticalCommerce flaw."),
+        valid.replace("is documented.", "exposes customerCredential data."),
+        valid.replace("is documented.", "is documented by Source 1."),
+        valid.replace("\n\n## Source Highlights", "\n\n---\n\n## Source Highlights"),
+        valid.replace("[CVE-2026-12345](https://example.com/cve)", "CVE-2026-12345", 1),
+    )
+    for markdown in blocked:
+        assert find_defect(markdown), markdown
+
+
+def test_site_report_integrity_detector_rejects_model_artifacts():
+    namespace = runpy.run_path(str(SITE_REPORT_CHECK))
+    find_failure = namespace["find_public_report_integrity_failure"]
+
+    assert find_failure("## Executive Summary\nCareful analysis.") is None
+    assert find_failure("Let me review the source evidence.\n## Executive Summary")
+    assert find_failure("## Executive Summary\n[Table]")
+    long_preamble = "\n".join([f"preamble {index}" for index in range(31)])
+    assert find_failure(long_preamble + "\n## Executive Summary")
+
+
+def test_evidence_manifest_normalizes_parenthesized_urls():
+    namespace = runpy.run_path(str(SITE_REPORT_CHECK))
+    validate_manifest = namespace["validate_evidence_manifest"]
+    markdown = (
+        "# Report\n"
+        "**Generated:** 2026-08-13T13:00:00Z\n"
+        "**Source:** [Feed](https://example.com/feed(1).xml)\n\n"
+        "## Executive Summary\n"
+        "[Evidence](HTTPS://example.com/a_(b).html)\n\n"
+        "## Source Highlights\n"
+        "- [Evidence](HTTPS://example.com/a_(b).html)"
+    )
+    metadata = {
+        "generated": "2026-08-13T13:00:00Z",
+        "source": "[Feed](https://example.com/feed(1).xml)",
+    }
+    manifest = {
+        "generated_at": "2026-08-13T13:00:00Z",
+        "feed_url": "https://example.com/feed%281%29.xml",
+        "sources": [{"title": "Evidence", "url": "HTTPS://example.com/a_%28b%29.html"}],
+    }
+
+    validate_manifest(markdown, metadata, json.dumps(manifest))
+
+    escaped_markdown = markdown.replace("a_(b).html", "a_\\)b.html")
+    escaped_manifest = {
+        **manifest,
+        "sources": [{"title": "Evidence", "url": "HTTPS://example.com/a_%29b.html"}],
+    }
+    validate_manifest(escaped_markdown, metadata, json.dumps(escaped_manifest))
+
+
+def test_evidence_manifest_rejects_invented_title_for_real_url():
+    namespace = runpy.run_path(str(SITE_REPORT_CHECK))
+    validate_manifest = namespace["validate_evidence_manifest"]
+    markdown = (
+        "# Report\n"
+        "**Generated:** 2026-08-13T13:00:00Z\n"
+        "**Source:** [Feed](https://example.com/feed.xml)\n\n"
+        "## Executive Summary\n"
+        "[Invented claim](https://example.com/neutral)\n\n"
+        "## Source Highlights\n"
+        "- [Neutral advisory](https://example.com/neutral)"
+    )
+    metadata = {
+        "generated": "2026-08-13T13:00:00Z",
+        "source": "[Feed](https://example.com/feed.xml)",
+    }
+    manifest = {
+        "generated_at": "2026-08-13T13:00:00Z",
+        "feed_url": "https://example.com/feed.xml",
+        "sources": [{"title": "Neutral advisory", "url": "https://example.com/neutral"}],
+    }
+
+    try:
+        validate_manifest(markdown, metadata, json.dumps(manifest))
+    except SystemExit as error:
+        assert "Invented claim" in str(error)
+    else:
+        raise AssertionError("site check accepted an invented evidence title")
+
+
+def test_evidence_manifest_rejects_cve_absent_from_linked_source():
+    namespace = runpy.run_path(str(SITE_REPORT_CHECK))
+    validate_manifest = namespace["validate_evidence_manifest"]
+    markdown = (
+        "# Report\n"
+        "**Generated:** 2026-08-13T13:00:00Z\n"
+        "**Source:** [Feed](https://example.com/feed.xml)\n\n"
+        "## Executive Summary\n"
+        "CVE-2026-1111 is described by "
+        "[Different advisory](https://example.com/different).\n\n"
+        "## Source Highlights\n"
+        "- [Different advisory](https://example.com/different)"
+    )
+    metadata = {
+        "generated": "2026-08-13T13:00:00Z",
+        "source": "[Feed](https://example.com/feed.xml)",
+    }
+    manifest = {
+        "generated_at": "2026-08-13T13:00:00Z",
+        "feed_url": "https://example.com/feed.xml",
+        "sources": [
+            {
+                "title": "Different advisory",
+                "url": "https://example.com/different",
+                "cves": ["CVE-2026-2222"],
+            }
+        ],
+    }
+
+    try:
+        validate_manifest(markdown, metadata, json.dumps(manifest))
+    except SystemExit as error:
+        assert "CVE-2026-1111" in str(error)
+    else:
+        raise AssertionError("site check accepted a CVE absent from its linked source")
 
 
 def test_site_report_forbidden_detector_covers_public_label_variants():
@@ -537,10 +1148,12 @@ def test_workflows_use_current_node_runtime_action_pins():
     assert "actions/checkout@v7" in workflow_text
     assert "aws-actions/configure-aws-credentials@v6" in workflow_text
     assert "actions/setup-python@v6" in workflow_text
+    assert "actions/setup-node@v7" in workflow_text
     assert "actions/cache@v6" in workflow_text
     assert "hashicorp/setup-terraform@v4" in workflow_text
     assert "actions/upload-pages-artifact@v5" in workflow_text
     assert "actions/deploy-pages@v5" in workflow_text
+    assert "actions/upload-artifact@v7" in workflow_text
     assert "astral-sh/setup-uv@v8.2.0" in workflow_text
     assert "actions/checkout@v4" not in workflow_text
     assert "aws-actions/configure-aws-credentials@v4" not in workflow_text

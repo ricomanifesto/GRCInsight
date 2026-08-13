@@ -4,6 +4,7 @@ from collections import Counter
 from datetime import datetime, timezone
 import re
 from typing import Dict, Any, List
+from urllib.parse import urljoin, urlparse
 from loguru import logger
 
 from models.api import (
@@ -169,7 +170,25 @@ def _build_source_evidence(enriched_articles: List[ArticleInput]) -> List[Dict[s
     for index in range(len(evidence)):
         add(index)
 
-    return [evidence[index] for index in selected_indices]
+    selected = [evidence[index] for index in selected_indices]
+    allowed_cves: set[str] = set()
+    for item in selected:
+        for cve in item["cves"]:
+            if len(allowed_cves) >= REPORT_CVE_LIMIT:
+                break
+            allowed_cves.add(cve)
+    bounded_evidence = []
+    for item in selected:
+        identity_cves = _extract_cves(f'{item["title"]}\n{item["url"]}')
+        retained_cves = [cve for cve in item["cves"] if cve in allowed_cves]
+        retained_cves.extend(cve for cve in identity_cves if cve not in retained_cves)
+        bounded_evidence.append(
+            {
+                **item,
+                "cves": retained_cves,
+            }
+        )
+    return bounded_evidence
 
 
 def _build_local_analysis(enriched_articles: List[ArticleInput]):
@@ -403,10 +422,29 @@ async def run_grc_analysis_endpoint(
         # Step 2: Convert entries to ArticleInput format
         logger.info("Step 2: Processing feed entries")
         articles: List[ArticleInput] = []
+        seen_article_urls: set[str] = set()
         from email.utils import parsedate_to_datetime
 
         for entry in feed_data.get("entries", []):
             try:
+                title = re.sub(r"\s+", " ", str(entry.get("title") or "")).strip()
+                raw_url = str(entry.get("link") or "").strip()
+                url = urljoin(feed_url, raw_url) if raw_url else ""
+                parsed_url = urlparse(url)
+                if (
+                    not title
+                    or re.search(r"\s", url)
+                    or parsed_url.scheme not in {"http", "https"}
+                    or not parsed_url.netloc
+                ):
+                    logger.warning("Skipping feed entry that cannot serve as linked evidence")
+                    continue
+                if url in seen_article_urls:
+                    logger.warning(
+                        "Skipping duplicate feed entry URL to preserve canonical evidence"
+                    )
+                    continue
+                seen_article_urls.add(url)
                 published_raw = entry.get("published", "")
                 published_dt = None
                 if published_raw:
@@ -421,8 +459,8 @@ async def run_grc_analysis_endpoint(
                             published_dt = None
 
                 article = ArticleInput(
-                    title=entry.get("title", ""),
-                    url=entry.get("link", ""),
+                    title=title,
+                    url=url,
                     content=entry.get("content", ""),
                     summary=entry.get("description", ""),
                     source=feed_data.get("title", "Unknown Source"),
@@ -434,6 +472,14 @@ async def run_grc_analysis_endpoint(
                 continue
 
         logger.info(f"Processed {len(articles)} articles from feed")
+        if not articles:
+            return WorkflowResponse(
+                status="failed",
+                error=APIError(
+                    code="NO_LINKED_ARTICLES",
+                    message="Feed contains no articles with usable evidence links",
+                ),
+            )
 
         # Step 3: Enrich articles with full content
         logger.info("Step 3: Enriching articles with full content")
@@ -471,7 +517,8 @@ async def run_grc_analysis_endpoint(
                 used_model_analysis = True
 
         grc_article_count = analysis_results.get("summary", {}).get("grc_relevant_count", 0)
-        analysis_results["source_evidence"] = _build_source_evidence(enriched_articles)
+        source_evidence = _build_source_evidence(enriched_articles)
+        analysis_results["source_evidence"] = source_evidence
         logger.info(f"Found {grc_article_count} articles with GRC content")
 
         # Build per-article output
@@ -544,6 +591,18 @@ async def run_grc_analysis_endpoint(
             grc_article_count=grc_article_count,
             analysis_mode="fallback" if used_fallback_report else "model",
             fallback_reason=fallback_reason if used_fallback_report else None,
+            source_name=feed_data.get("title") or "Unknown Feed",
+            source_url=feed_url,
+            analysis_period=generated_at.strftime("%B %Y"),
+            model=config.model,
+            source_articles=[
+                {
+                    "title": source["title"],
+                    "url": source["url"],
+                    "cves": source["cves"],
+                }
+                for source in source_evidence
+            ],
             regulations_mentioned=analysis_data.get("regulations_mentioned", []),
             frameworks_referenced=analysis_data.get("frameworks_referenced", []),
             industries_affected=analysis_data.get("industries_affected", []),

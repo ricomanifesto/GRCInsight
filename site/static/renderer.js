@@ -11,9 +11,13 @@
     return escapeHtml(s).replace(/"/g, '&quot;');
   }
 
+  function decodeMarkdownEscapes(value) {
+    return String(value).replace(/\\([\\\[\]()])/g, '$1');
+  }
+
   function sanitizeMarkdownUrl(url) {
-    const value = String(url).trim();
-    if (!value || /[\s"'<>]/.test(value)) return null;
+    const value = decodeMarkdownEscapes(url).trim();
+    if (!value || /[\s"<>]/.test(value)) return null;
     if (/^(https?:\/\/|\/(?!\/)|\.{0,2}\/|#)/i.test(value)) return value;
     if (!/^[a-z][a-z0-9+.-]*:/i.test(value)) return value;
     return null;
@@ -23,6 +27,118 @@
     const safeUrl = sanitizeMarkdownUrl(url);
     if (!safeUrl) return text;
     return `<a href="${escapeAttribute(safeUrl)}" target="_blank" rel="noopener">${text}</a>`;
+  }
+
+  function renderInlineText(value) {
+    const decoded = decodeMarkdownEscapes(value);
+    let html = escapeHtml(decoded);
+    html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+    html = html.replace(/\*([^*]+)\*/g, '<em>$1</em>');
+    return html;
+  }
+
+  function renderLinkLabel(value) {
+    return escapeHtml(decodeMarkdownEscapes(value));
+  }
+
+  function extractMarkdownLinks(value) {
+    const source = String(value);
+    const links = [];
+    let markdown = '';
+    let cursor = 0;
+    while (cursor < source.length) {
+      const labelStart = source.indexOf('[', cursor);
+      if (labelStart < 0) {
+        markdown += source.slice(cursor);
+        break;
+      }
+      let labelDepth = 1;
+      let labelEscaped = false;
+      let labelEnd = -1;
+      for (let index = labelStart + 1; index < source.length; index += 1) {
+        const character = source[index];
+        if (labelEscaped) {
+          labelEscaped = false;
+          continue;
+        }
+        if (character === '\\') {
+          labelEscaped = true;
+          continue;
+        }
+        if (character === '[') labelDepth += 1;
+        if (character === ']') {
+          labelDepth -= 1;
+          if (labelDepth === 0) {
+            labelEnd = index;
+            break;
+          }
+        }
+      }
+      if (labelEnd < 0) {
+        markdown += source.slice(cursor);
+        break;
+      }
+      if (source[labelEnd + 1] !== '(') {
+        markdown += source.slice(cursor, labelStart + 1);
+        cursor = labelStart + 1;
+        continue;
+      }
+      const destinationStartMarker = labelEnd;
+
+      let depth = 1;
+      let escaped = false;
+      let destinationEnd = -1;
+      for (let index = destinationStartMarker + 2; index < source.length; index += 1) {
+        const character = source[index];
+        if (escaped) {
+          escaped = false;
+          continue;
+        }
+        if (character === '\\') {
+          escaped = true;
+          continue;
+        }
+        if (character === '(') depth += 1;
+        if (character === ')') {
+          depth -= 1;
+          if (depth === 0) {
+            destinationEnd = index;
+            break;
+          }
+        }
+      }
+      if (destinationEnd < 0) {
+        markdown += source.slice(cursor, destinationStartMarker + 2);
+        cursor = destinationStartMarker + 2;
+        continue;
+      }
+
+      const token = `@@GRCINSIGHT_LINK_${links.length}@@`;
+      markdown += source.slice(cursor, labelStart) + token;
+      links.push({
+        token,
+        text: source.slice(labelStart + 1, destinationStartMarker),
+        url: source.slice(destinationStartMarker + 2, destinationEnd),
+      });
+      cursor = destinationEnd + 1;
+    }
+    return {
+      markdown,
+      restore(html) {
+        links.forEach(link => {
+          html = html.replace(
+            link.token,
+            renderMarkdownLink(renderLinkLabel(link.text), link.url),
+          );
+        });
+        return html;
+      },
+    };
+  }
+
+  function renderInlineMarkdown(value) {
+    const extracted = extractMarkdownLinks(value);
+    return extracted.restore(renderInlineText(extracted.markdown));
   }
 
   // Reports are sometimes generated with numbered section headers ("1. Executive
@@ -92,7 +208,11 @@
       return `%%CODEBLOCK_${codeBlocks.length - 1}%%`;
     });
 
-    let html = escapeHtml(md);
+    // Extract links before escaping the surrounding Markdown. Escaping first
+    // turns query separators into &amp;, which would then be escaped a second
+    // time when the URL is written into href.
+    const extractedLinks = extractMarkdownLinks(md);
+    let html = escapeHtml(extractedLinks.markdown);
     html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
     html = html.replace(/\*([^*]+)\*/g, '<em>$1</em>');
     html = html.replace(/^####\s+(.*)$/gm, '<h4>$1</h4>');
@@ -101,11 +221,10 @@
     html = html.replace(/^#\s+(.*)$/gm, '<h1>$1</h1>');
     // Tables run before HR so the separator row is not eaten by the HR rule.
     html = html.replace(/^(?:\|.+\|(?:\n|$)){2,}/gm, m => renderTable(m));
-    html = html.replace(/^-{3,}$/gm, '<hr>');
-    html = html.replace(/^_{3,}$/gm, '<hr>');
-    html = html.replace(/^\*{3,}$/gm, '<hr>');
+    html = html.replace(/^-{3,}[ \t]*$/gm, '<hr>');
+    html = html.replace(/^_{3,}[ \t]*$/gm, '<hr>');
+    html = html.replace(/^\*{3,}[ \t]*$/gm, '<hr>');
     html = html.replace(/^(?:&gt;\s?.*(?:\n|$))+/gm, m => `<blockquote>${m.replace(/^&gt;\s?/gm, '').trim()}</blockquote>`);
-    html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_, text, url) => renderMarkdownLink(text, url));
     // Leading indent is horizontal whitespace only ([ \t]*, not \s*) so the
     // pattern never reaches across the blank line that precedes a list.
     html = html.replace(/^(?:[ \t]*-\s+.*(?:\n|$))+/gm, m => renderNestedList(m));
@@ -135,9 +254,94 @@
     });
     flushParagraph();
     html = assembled.join('\n');
-    // Restore fenced code blocks last so their internal newlines never affect
-    // paragraph assembly.
+    // Restore links and fenced code blocks last so their content never affects
+    // block parsing or receives a second escaping pass.
+    html = extractedLinks.restore(html);
     return html.replace(/%%CODEBLOCK_(\d+)%%/g, (_, i) => `<pre><code>${escapeHtml(codeBlocks[+i])}</code></pre>`);
+  }
+
+  const metadataLabels = {
+    'generated': 'Generated',
+    'date of issue': 'Date of issue',
+    'analysis period': 'Analysis period',
+    'source': 'Source',
+    'total articles analyzed': 'Articles analyzed',
+    'articles analyzed': 'Articles analyzed',
+    'grc-relevant articles': 'GRC-relevant articles',
+    'model': 'Model',
+    'analysis mode': 'Analysis mode',
+  };
+
+  const metadataOrder = [
+    'generated',
+    'date of issue',
+    'analysis period',
+    'source',
+    'articles analyzed',
+    'grc-relevant articles',
+    'model',
+    'analysis mode',
+  ];
+
+  function parseReportDocument(markdown) {
+    const normalized = normalizeReportMarkdown(String(markdown || ''));
+    const lines = normalized.split('\n');
+    let title = '';
+    const metadata = {};
+    let bodyStart = lines.length;
+
+    lines.forEach((line, index) => {
+      if (bodyStart !== lines.length) return;
+      if (!title && /^#\s+/.test(line)) {
+        title = line.replace(/^#\s+/, '').trim();
+        return;
+      }
+      if (/^##\s+/.test(line)) {
+        bodyStart = index;
+        return;
+      }
+
+      const standard = line.match(/^\*\*([^*]+?):\*\*\s*(.+?)\s*$/);
+      const legacy = line.match(/^\*\*([^*]+?):\s*(.+?)\*\*\s*$/);
+      const match = standard || legacy;
+      if (!match) return;
+      const key = match[1].trim().toLowerCase();
+      if (metadataLabels[key]) metadata[key] = match[2].trim();
+    });
+
+    if (metadata['total articles analyzed'] && !metadata['articles analyzed']) {
+      metadata['articles analyzed'] = metadata['total articles analyzed'];
+    }
+
+    return {
+      title,
+      metadata,
+      bodyMarkdown: lines.slice(bodyStart).join('\n').trim(),
+    };
+  }
+
+  function renderReportMetadata(metadata) {
+    const items = metadataOrder
+      .filter(key => metadata[key])
+      .map(key => `<div class="report-meta-item"><dt>${metadataLabels[key]}</dt><dd>${renderInlineMarkdown(metadata[key])}</dd></div>`)
+      .join('');
+    if (!items) return '';
+    return `<section class="card report-provenance"><h2>About this report</h2><dl class="report-meta">${items}</dl></section>`;
+  }
+
+  function renderReportSections(markdown) {
+    const html = renderMarkdown(markdown);
+    return html
+      .split(/(?=<h2>)/)
+      .map(part => part.replace(/^\s*(?:<hr>\s*)+/, '').replace(/(?:\s*<hr>)+\s*$/, '').trim())
+      .filter(Boolean)
+      .map(part => `<section class="card">${part}</section>`)
+      .join('');
+  }
+
+  function renderReportDocument(markdown) {
+    const report = parseReportDocument(markdown);
+    return renderReportMetadata(report.metadata) + renderReportSections(report.bodyMarkdown);
   }
 
   window.GRCInsightRenderer = {
@@ -145,7 +349,10 @@
     escapeAttribute,
     sanitizeMarkdownUrl,
     renderMarkdownLink,
+    renderInlineMarkdown,
     normalizeReportMarkdown,
     renderMarkdown,
+    parseReportDocument,
+    renderReportDocument,
   };
 })();

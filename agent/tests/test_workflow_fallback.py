@@ -94,7 +94,7 @@ def test_run_grc_analysis_endpoint_falls_back_when_model_is_unavailable(monkeypa
 def test_run_grc_analysis_endpoint_marks_model_backed_reports(monkeypatch):
     async def fake_fetch_feed(_feed_url):
         return {
-            "title": "Test Feed",
+            "title": "",
             "entries": [
                 {
                     "title": "NIST publishes new control guidance",
@@ -148,6 +148,99 @@ def test_run_grc_analysis_endpoint_marks_model_backed_reports(monkeypatch):
     assert response.metadata is not None
     assert response.metadata.analysis_mode == "model"
     assert response.metadata.fallback_reason is None
+    assert response.metadata.source_name == "Unknown Feed"
+    assert response.metadata.source_url == "https://example.com/feed.xml"
+    assert response.metadata.analysis_period
+    assert response.metadata.model == "openrouter/openrouter/free"
+    assert response.metadata.source_articles == [
+        {
+            "title": "NIST publishes new control guidance",
+            "url": "https://example.com/nist",
+            "cves": [],
+        }
+    ]
+
+
+def test_run_grc_analysis_endpoint_skips_entries_without_linked_evidence(monkeypatch):
+    analyzed_titles = []
+    generated_from_sources = []
+
+    async def fake_fetch_feed(_feed_url):
+        return {
+            "title": "Test Feed",
+            "entries": [
+                {"title": "Linkless item", "link": "", "content": "Cannot cite this."},
+                {
+                    "title": " Linked\n  item ",
+                    "link": "/linked",
+                    "content": "Can cite CVE-2026-12345 from this source.",
+                },
+                {
+                    "title": "Unsafe URL",
+                    "link": "https://example.com/bad path",
+                    "content": "Cannot serialize this evidence URL.",
+                },
+                {
+                    "title": "Duplicate title must not reach the model",
+                    "link": "linked",
+                    "content": "Duplicate coverage.",
+                },
+            ],
+        }
+
+    async def fake_enrich_articles(articles):
+        return articles
+
+    class FakeGRCModelService:
+        def __init__(self, model_name=None, max_tokens=None, model_deadline=None):
+            pass
+
+        async def analyze_articles_for_grc(self, articles):
+            analyzed_titles.extend(article.title for article in articles)
+            return {
+                "grc_articles": [],
+                "summary": {
+                    "total_articles": len(articles),
+                    "grc_relevant_count": 0,
+                    "confidence_score": 0.9,
+                },
+                "analysis": {},
+            }
+
+        async def generate_grc_report(self, analysis_results, _feed_data):
+            generated_from_sources.extend(analysis_results["source_evidence"])
+            return "1) Executive Summary\n- Model output."
+
+    monkeypatch.setattr(workflow_mod.rss_service, "fetch_feed", fake_fetch_feed)
+    monkeypatch.setattr(workflow_mod.rss_service, "enrich_articles", fake_enrich_articles)
+    monkeypatch.setattr(workflow_mod, "GRCModelService", FakeGRCModelService)
+
+    response = asyncio.run(
+        workflow_mod.run_grc_analysis_endpoint(
+            "https://example.com/feed.xml",
+            GRCAnalysisConfig(),
+        )
+    )
+
+    assert response.status == "completed"
+    assert analyzed_titles == ["Linked item"]
+    assert response.metadata is not None
+    assert response.metadata.article_count == 1
+    assert response.metadata.source_articles == [
+        {
+            "title": "Linked item",
+            "url": "https://example.com/linked",
+            "cves": ["CVE-2026-12345"],
+        }
+    ]
+    assert response.metadata.source_articles == [
+        {
+            "title": source["title"],
+            "url": source["url"],
+            "cves": source["cves"],
+        }
+        for source in generated_from_sources
+    ]
 
 
 def test_run_grc_analysis_endpoint_passes_request_model_config(monkeypatch):

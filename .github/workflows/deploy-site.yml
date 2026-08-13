@@ -29,6 +29,57 @@ jobs:
       - name: Validate site artifact
         run: make check-site
 
+      - name: Set up visual evidence runtime
+        uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+
+      - name: Install Chromium
+        run: npx --yes playwright@1.62.1 install --with-deps chromium
+
+      - name: Start site preview
+        run: |
+          python3 -m http.server 4173 --directory site > /tmp/grcinsight-site-preview.log 2>&1 &
+          echo $! > /tmp/grcinsight-site-preview.pid
+
+      - name: Capture dark and light reader evidence
+        run: |
+          mkdir -p visual-evidence
+          npx --yes playwright@1.62.1 screenshot \
+            --browser chromium \
+            --color-scheme dark \
+            --lang en-US \
+            --timezone UTC \
+            --viewport-size "1440,900" \
+            --wait-for-selector ".report-provenance" \
+            --wait-for-timeout 350 \
+            http://127.0.0.1:4173/ \
+            visual-evidence/report-dark.png
+          npx --yes playwright@1.62.1 screenshot \
+            --browser chromium \
+            --color-scheme light \
+            --lang en-US \
+            --timezone UTC \
+            --viewport-size "1440,900" \
+            --wait-for-selector ".report-provenance" \
+            --wait-for-timeout 350 \
+            http://127.0.0.1:4173/ \
+            visual-evidence/report-light.png
+          echo "### Reader visual evidence" >> "$GITHUB_STEP_SUMMARY"
+          echo "Dark and light top-of-fold captures are attached as the report-reader-${GITHUB_SHA} artifact." >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Stop site preview
+        if: always()
+        run: kill "$(cat /tmp/grcinsight-site-preview.pid)" || true
+
+      - name: Upload reader visual evidence
+        uses: actions/upload-artifact@v7
+        with:
+          name: report-reader-${{ github.sha }}
+          path: visual-evidence
+          if-no-files-found: error
+          retention-days: 30
+
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v5
         with:
