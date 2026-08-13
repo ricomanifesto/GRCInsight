@@ -199,6 +199,63 @@ def markdown_inline_text(value: str) -> str:
     return re.sub(r"\\([\\[\]()])", r"\1", value)
 
 
+def serialized_markdown_label(value: str) -> str:
+    """Serialize a trusted source title as a literal Markdown link label."""
+    return (
+        value.replace("\\", "\\\\")
+        .replace("[", "\\[")
+        .replace("]", "\\]")
+        .replace("(", "\\(")
+        .replace(")", "\\)")
+    )
+
+
+def canonicalize_evidence_links(
+    body: str, sources: list[dict[str, object]]
+) -> str:
+    """Rebuild one-sided model mutations from the trusted source manifest."""
+    sources_by_url = {str(source["url"]): source for source in sources}
+    sources_by_title: dict[str, list[dict[str, object]]] = {}
+    for source in sources:
+        sources_by_title.setdefault(str(source["title"]), []).append(source)
+
+    replacements: dict[str, str] = {}
+    for label, destination in markdown_links(body):
+        decoded_label = markdown_inline_text(label)
+        decoded_destination = markdown_inline_text(destination)
+        decoded_url = (
+            http_url(decoded_destination, "report evidence URL")
+            if has_http_scheme(decoded_destination)
+            else None
+        )
+        title_matches = sources_by_title.get(decoded_label, [])
+        url_match = sources_by_url.get(decoded_url) if decoded_url is not None else None
+        canonical_source = None
+
+        if url_match is not None:
+            if title_matches and not any(
+                str(source["url"]) == str(url_match["url"])
+                for source in title_matches
+            ):
+                continue
+            canonical_source = url_match
+        elif len(title_matches) == 1:
+            canonical_source = title_matches[0]
+
+        if canonical_source is None:
+            continue
+        original = f"[{label}]({destination})"
+        canonical = (
+            f"[{serialized_markdown_label(str(canonical_source['title']))}]"
+            f"({canonical_source['url']})"
+        )
+        replacements[original] = canonical
+
+    for original, canonical in replacements.items():
+        body = body.replace(original, canonical)
+    return body
+
+
 def source_articles(metadata: dict) -> list[dict[str, object]]:
     raw_sources = metadata.get("source_articles")
     if not isinstance(raw_sources, list) or not raw_sources:
@@ -348,6 +405,7 @@ def compose_report(data: dict, expected_feed_url: str, expected_model: str) -> s
 
     body = canonical_body(data.get("content"))
     sources = source_articles(metadata)
+    body = canonicalize_evidence_links(body, sources)
     validate_evidence_links(body, sources)
     return "\n".join(
         (

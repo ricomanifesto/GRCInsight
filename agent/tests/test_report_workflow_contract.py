@@ -717,7 +717,7 @@ def test_site_report_composer_decodes_escaped_evidence_url_delimiters():
         "openrouter/example/model",
     )
 
-    assert "[Evidence](HTTPS://example.com/O'Reilly/a\\)b)" in report
+    assert "[Evidence](HTTPS://example.com/O%27Reilly/a%29b)" in report
     assert http_url(evidence_url, "evidence URL") == "HTTPS://example.com/O%27Reilly/a%29b"
 
 
@@ -762,7 +762,7 @@ def test_site_report_composer_accepts_serialized_source_link_identity():
     assert link in report
 
 
-def test_site_report_composer_rejects_invented_title_for_real_evidence_url():
+def test_site_report_composer_canonicalizes_title_for_real_evidence_url():
     namespace = runpy.run_path(str(SITE_REPORT_COMPOSER))
     compose_report = namespace["compose_report"]
     data = {
@@ -787,12 +787,76 @@ def test_site_report_composer_rejects_invented_title_for_real_evidence_url():
         },
     }
 
+    report = compose_report(data, "https://example.com/feed.xml", "openrouter/example/model")
+
+    assert "CISA mandates immediate shutdown" not in report
+    assert report.count("[Neutral advisory](https://example.com/neutral)") == 2
+
+
+def test_site_report_composer_canonicalizes_url_for_exact_evidence_title():
+    namespace = runpy.run_path(str(SITE_REPORT_COMPOSER))
+    compose_report = namespace["compose_report"]
+    title = "Attackers Exploit SharePoint Authentication Bypass After Public PoC Release"
+    trusted_url = "https://thehackernews.com/2026/08/attackers-exploit-sharepoint.html"
+    mutated_url = "https://thehackernists.com/2026/08/attackers-exploit-sharepoint.html"
+    data = {
+        "status": "completed",
+        "title": "GRC Intelligence Report - 2026-08-13",
+        "generated_at": "2026-08-13T13:00:00Z",
+        "content": complete_report_body(
+            f"[{title}]({mutated_url})",
+            f"- [{title}]({mutated_url})",
+        ),
+        "metadata": {
+            "analysis_mode": "model",
+            "source_name": "SentryDigest",
+            "source_url": "https://example.com/feed.xml",
+            "source_articles": [{"title": title, "url": trusted_url}],
+            "analysis_period": "August 2026",
+            "article_count": 1,
+            "grc_article_count": 1,
+            "model": "openrouter/example/model",
+        },
+    }
+
+    report = compose_report(data, "https://example.com/feed.xml", "openrouter/example/model")
+
+    assert mutated_url not in report
+    assert report.count(f"[{title}]({trusted_url})") == 2
+
+
+def test_site_report_composer_rejects_cross_wired_source_identities():
+    namespace = runpy.run_path(str(SITE_REPORT_COMPOSER))
+    compose_report = namespace["compose_report"]
+    data = {
+        "status": "completed",
+        "title": "GRC Intelligence Report - 2026-08-13",
+        "generated_at": "2026-08-13T13:00:00Z",
+        "content": complete_report_body(
+            "[Source A](https://example.com/b)",
+            "- [Source A](https://example.com/b)",
+        ),
+        "metadata": {
+            "analysis_mode": "model",
+            "source_name": "SentryDigest",
+            "source_url": "https://example.com/feed.xml",
+            "source_articles": [
+                {"title": "Source A", "url": "https://example.com/a"},
+                {"title": "Source B", "url": "https://example.com/b"},
+            ],
+            "analysis_period": "August 2026",
+            "article_count": 2,
+            "grc_article_count": 2,
+            "model": "openrouter/example/model",
+        },
+    }
+
     try:
         compose_report(data, "https://example.com/feed.xml", "openrouter/example/model")
     except SystemExit as error:
         assert "title/URL pair absent from source articles" in str(error)
     else:
-        raise AssertionError("composer accepted an invented title for real evidence")
+        raise AssertionError("composer accepted cross-wired source identities")
 
 
 def test_site_report_composer_rejects_cve_absent_from_linked_source():
