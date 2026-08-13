@@ -35,7 +35,6 @@
       'Key Regulatory Developments',
       'Industry Impact Analysis',
       'Threat Actor Activities',
-      'CVE and Vulnerability Highlights',
       'Risk Assessment',
       'Recommendations for Action',
       'Source Highlights',

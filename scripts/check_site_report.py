@@ -26,11 +26,11 @@ REPORT_SECTION_LABELS = {
     "Key Regulatory Developments",
     "Industry Impact Analysis",
     "Threat Actor Activities",
-    "CVE and Vulnerability Highlights",
     "Risk Assessment",
     "Recommendations for Action",
     "Source Highlights",
 }
+FORBIDDEN_REPORT_SECTION_LABELS = {"cve and vulnerability highlights"}
 NUMBERED_SECTION_PATTERN = re.compile(r"^\d+[\).]\s+(.+)$")
 FORBIDDEN_METADATA_FIELDS = {"distribution approval", "prepared by"}
 PRIVATE_VALUE_FIELDS = {"audience", "classification", "confidentiality", "distribution"}
@@ -411,6 +411,16 @@ def main() -> None:
     section_count = sum(1 for line in lines if is_report_section(line))
     if section_count < 2:
         fail("index.md must contain at least two report sections")
+    forbidden_sections = {
+        normalize_label_text(line)
+        for line in lines
+        if normalize_label_text(line) in FORBIDDEN_REPORT_SECTION_LABELS
+    }
+    if forbidden_sections:
+        fail(
+            "index.md contains unsupported report section: "
+            + ", ".join(sorted(forbidden_sections))
+        )
     if "Temporary placeholder" in markdown or "Temporary Outline" in markdown:
         fail("index.md still contains temporary placeholder content")
     forbidden_label = find_public_report_forbidden_label(markdown)

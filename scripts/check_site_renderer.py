@@ -58,9 +58,9 @@ const normalized = renderer.normalizeReportMarkdown('1. Executive Summary\\n1. R
 assert(normalized.includes('## Executive Summary'), 'numbered known section labels should normalize to h2 headings');
 assert(normalized.includes('1. Review vendor contracts.'), 'numbered prose must not be promoted to a heading');
 assert(renderer.normalizeReportMarkdown('## Executive Summary').includes('## Executive Summary'), 'existing h2 headings should be preserved');
-const entitySections = renderer.normalizeReportMarkdown('4. Threat Actor Activities\\n5. CVE and Vulnerability Highlights');
+const entitySections = renderer.normalizeReportMarkdown('4. Threat Actor Activities\\n5. Risk Assessment');
 assert(entitySections.includes('## Threat Actor Activities'), 'threat actor section should normalize to h2');
-assert(entitySections.includes('## CVE and Vulnerability Highlights'), 'CVE section should normalize to h2');
+assert(entitySections.includes('## Risk Assessment'), 'risk section should normalize to h2');
 
 // Markdown rendering: headings, tables, lists, code.
 assert(renderer.renderMarkdown('## Risk Assessment').includes('<h2>Risk Assessment</h2>'), 'h2 markdown should render as an h2 element');
@@ -105,7 +105,7 @@ const term = (category, label) => category.terms.find(item => item.label === lab
 assert(typeof tags.tokenizeComplianceTerms === 'function', 'tag catalog should expose pure term tokenization');
 assert(byKey.frameworks && byKey.frameworks.pillClass === 'framework', 'framework category should expose framework pills');
 assert(term(byKey.frameworks, 'NIST CSF 2.0').url === 'https://www.nist.gov/cyberframework', 'NIST CSF should link to the official NIST resource');
-assert(!term(byKey.frameworks, 'NIST CSF 2.0').aliases.includes('NIST'), 'ambiguous NIST mentions must not become framework links');
+assert(term(byKey.frameworks, 'NIST CSF 2.0').aliases.includes('NIST'), 'bare NIST mentions should use the official NIST CSF reference');
 assert(term(byKey.frameworks, 'PCI DSS').url === 'https://www.pcisecuritystandards.org/standards/pci-dss/', 'PCI DSS should link to the official PCI SSC resource');
 assert(byKey.regulations && byKey.regulations.pillClass === 'regulation', 'regulation category should expose regulation pills');
 assert(term(byKey.regulations, 'GDPR').url === 'https://eur-lex.europa.eu/eli/reg/2016/679/oj', 'GDPR should link to the official regulation text');
@@ -126,7 +126,8 @@ assert(taggedText('NIST CSF 2.0').url === 'https://www.nist.gov/cyberframework',
 assert(taggedText('GDPR').url === 'https://eur-lex.europa.eu/eli/reg/2016/679/oj', 'GDPR should receive its official link');
 assert(taggedText('ransomware').pillClass === 'risk' && !taggedText('ransomware').url, 'risk terms should be highlighted without a link');
 assert(taggedText('controls').pillClass === 'control' && !taggedText('controls').url, 'control terms should be highlighted without a link');
-assert(tags.tokenizeComplianceTerms('NIST guidance').every(item => !item.pillClass), 'ambiguous NIST text should remain plain');
+const bareNist = tags.tokenizeComplianceTerms('NIST guidance').find(item => item.text === 'NIST');
+assert(bareNist.url === 'https://www.nist.gov/cyberframework', 'bare NIST text should receive the official NIST CSF link');
 
 console.log('node renderer assertions passed');
 """

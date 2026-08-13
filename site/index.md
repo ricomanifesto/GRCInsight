@@ -55,15 +55,6 @@ No article‑supported threat‑actor activity beyond the groups above was ident
 
 ---
 
-## CVE and Vulnerability Highlights  
-
-- **CVE‑2026‑68820** – Windows zero‑day exploited by Lazarus Group; impact includes remote code execution and systemic compromise of defense contractors.  
-- **CVE‑2026‑593…** – Critical flaw in Broadcom VMware vCenter; actively exploited to establish persistent remote access, exposing managed workloads to unauthorized manipulation.  
-
-*No additional CVE identifiers were explicitly referenced in the source articles.*
-
----
-
 ## Risk Assessment  
 
 The convergence of zero‑day exploitation, ransomware service models, and socially engineered infiltration techniques elevates the **overall risk rating** to **high** for sectors reliant on remote‑access and third‑party software ecosystems. Key risk drivers include:  

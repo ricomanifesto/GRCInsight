@@ -12,7 +12,7 @@
         },
         {
           label: 'NIST CSF 2.0',
-          aliases: ['NIST Cybersecurity Framework 2.0', 'NIST CSF 2.0', 'NIST CSF'],
+          aliases: ['NIST Cybersecurity Framework 2.0', 'NIST CSF 2.0', 'NIST CSF', 'NIST'],
           url: 'https://www.nist.gov/cyberframework',
         },
         {

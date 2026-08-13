@@ -107,13 +107,12 @@ def test_report_prompt_requires_current_source_entities_and_readable_summary():
 
     assert "Source Evidence for Entity Sections:" in prompt
     assert "Threat Actor Activities" in prompt
-    assert "CVE and Vulnerability Highlights" in prompt
+    assert "CVE and Vulnerability Highlights" not in prompt
     assert "Executive Summary must be 2-4 short paragraphs" in prompt
     assert "APT1" in prompt
     assert "CVE-2026-12345" in prompt
     assert "structured actor identifiers are hints, not an exhaustive actor list" in prompt
     assert "Do not classify industry, standards, regulatory, or working groups" in prompt
-    assert "List every article-supported CVE identifier up to 10 items" in prompt
     assert "Use Markdown links with the exact source title and URL" in prompt
     assert "Every report-specific regulatory, threat-actor, and CVE claim" in prompt
     assert "Do not emit incomplete, truncated, or ellipsized CVE identifiers" in prompt
@@ -321,9 +320,9 @@ def test_fallback_report_includes_structured_and_named_only_actor_sources():
         analysis,
         "model unavailable",
     )
-    actor_section = report.split("4) Threat Actor Activities", 1)[1].split(
-        "5) CVE and Vulnerability Highlights", 1
-    )[0]
+    actor_section = report.split("4) Threat Actor Activities", 1)[1].split("5) Risk Assessment", 1)[
+        0
+    ]
 
     assert "APT1: Mentioned in [APT1 targets banks](https://example.com/apt1)" in actor_section
     assert "[Volt Typhoon targets agencies](https://example.com/volt-typhoon)" in actor_section
@@ -350,12 +349,13 @@ def test_fallback_report_does_not_infer_named_actor_aliases():
     )
 
     assert "4) Threat Actor Activities" in report
-    assert "5) CVE and Vulnerability Highlights" in report
+    assert "CVE and Vulnerability Highlights" not in report
+    assert "5) Risk Assessment" in report
     assert "does not infer actor names" in report
     assert "Volt Typhoon: Article-supported activity" not in report
 
 
-def test_fallback_report_links_regulatory_and_cve_claims_to_sources():
+def test_fallback_report_links_regulatory_claims_without_a_cve_section():
     articles = [
         ArticleInput(
             title="GDPR Article 32 advisory covers CVE-2026-54321",
@@ -382,19 +382,19 @@ def test_fallback_report_links_regulatory_and_cve_claims_to_sources():
         if line.startswith("- Explicit regulation references detected:")
     )
     assert f"Sources: {source}." in regulatory_line
-    assert (
-        f"- CVE-2026-54321: Review business impact, exposure, and remediation "
-        f"ownership. Source: {source}."
-    ) in report
+    assert "CVE and Vulnerability Highlights" not in report
+    assert "Review business impact, exposure, and remediation ownership" not in report
 
 
-def test_renderer_and_site_check_recognize_entity_sections():
+def test_renderer_and_site_check_enforce_the_current_report_sections():
     check_script = SITE_REPORT_CHECK.read_text()
     renderer = RENDERER_JS.read_text()
 
-    for section in ("Threat Actor Activities", "CVE and Vulnerability Highlights"):
-        assert section in check_script
-        assert section in renderer
+    assert "Threat Actor Activities" in check_script
+    assert "Threat Actor Activities" in renderer
+    assert "FORBIDDEN_REPORT_SECTION_LABELS" in check_script
+    assert "cve and vulnerability highlights" in check_script
+    assert "'CVE and Vulnerability Highlights'," not in renderer
 
 
 def test_report_generation_workflow_does_not_dump_lambda_response_body():

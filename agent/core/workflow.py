@@ -209,25 +209,13 @@ def _build_source_evidence(enriched_articles: List[ArticleInput]) -> List[Dict[s
     return [evidence[index] for index in selected_indices]
 
 
-def _collect_source_entities(
+def _collect_actor_sources(
     source_evidence: List[Dict[str, Any]],
-) -> tuple[List[Dict[str, str]], List[Dict[str, str]]]:
-    """Collect bounded CVEs and source-linked structured actor identifiers."""
-    cve_sources = []
+) -> List[Dict[str, str]]:
+    """Collect source-linked structured actor identifiers."""
     actor_sources = []
-    seen_cves = set()
     seen_actors = set()
     for item in source_evidence:
-        for cve in item.get("cves", []):
-            if cve not in seen_cves and len(cve_sources) < REPORT_CVE_LIMIT:
-                seen_cves.add(cve)
-                cve_sources.append(
-                    {
-                        "cve": cve,
-                        "title": item.get("title", "source article"),
-                        "url": item.get("url", ""),
-                    }
-                )
         for actor_id in item.get("actor_ids", []):
             if actor_id not in seen_actors:
                 seen_actors.add(actor_id)
@@ -238,7 +226,7 @@ def _collect_source_entities(
                         "url": item.get("url", ""),
                     }
                 )
-    return cve_sources, actor_sources
+    return actor_sources
 
 
 def _build_local_analysis(enriched_articles: List[ArticleInput]):
@@ -342,7 +330,7 @@ def _build_fallback_report(
         )
 
     source_evidence = _build_source_evidence(enriched_articles)
-    cve_sources, actor_sources = _collect_source_entities(source_evidence)
+    actor_sources = _collect_actor_sources(source_evidence)
     actor_lines = []
     for item in actor_sources:
         source = f"[{item['title']}]({item['url']})" if item["url"] else item["title"]
@@ -363,16 +351,6 @@ def _build_fallback_report(
         actor_lines = [
             "- No article-supported threat actor activity was identified in this reporting period."
         ]
-
-    cve_lines = []
-    for item in cve_sources:
-        source = f"[{item['title']}]({item['url']})" if item["url"] else item["title"]
-        cve_lines.append(
-            f"- {item['cve']}: Review business impact, exposure, and "
-            f"remediation ownership. Source: {source}."
-        )
-    if not cve_lines:
-        cve_lines = ["- No article-supported CVEs were identified in this reporting period."]
 
     recommendation_lines = [
         "- Maintain incident response, disclosure, and evidence-retention readiness for high-severity cyber events.",
@@ -464,16 +442,13 @@ def _build_fallback_report(
             "4) Threat Actor Activities",
             *actor_lines,
             "",
-            "5) CVE and Vulnerability Highlights",
-            *cve_lines,
-            "",
-            "6) Risk Assessment",
+            "5) Risk Assessment",
             *risk_lines,
             "",
-            "7) Recommendations for Action",
+            "6) Recommendations for Action",
             *recommendation_lines,
             "",
-            "8) Source Highlights",
+            "7) Source Highlights",
             *highlights,
             "",
             "Notes and limitations",
