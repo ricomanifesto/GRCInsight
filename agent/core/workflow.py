@@ -493,7 +493,8 @@ async def run_grc_analysis_endpoint(
                 used_model_analysis = True
 
         grc_article_count = analysis_results.get("summary", {}).get("grc_relevant_count", 0)
-        analysis_results["source_evidence"] = _build_source_evidence(enriched_articles)
+        source_evidence = _build_source_evidence(enriched_articles)
+        analysis_results["source_evidence"] = source_evidence
         logger.info(f"Found {grc_article_count} articles with GRC content")
 
         # Build per-article output
@@ -572,18 +573,11 @@ async def run_grc_analysis_endpoint(
             model=config.model,
             source_articles=[
                 {
-                    "title": article.title,
-                    "url": article.url,
-                    "cves": _extract_cves(
-                        "\n".join(
-                            filter(
-                                None,
-                                [article.title, article.summary, article.content],
-                            )
-                        )
-                    ),
+                    "title": source["title"],
+                    "url": source["url"],
+                    "cves": source["cves"],
                 }
-                for article in enriched_articles
+                for source in source_evidence
             ],
             regulations_mentioned=analysis_data.get("regulations_mentioned", []),
             frameworks_referenced=analysis_data.get("frameworks_referenced", []),

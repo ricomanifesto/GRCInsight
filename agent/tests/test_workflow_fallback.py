@@ -163,6 +163,7 @@ def test_run_grc_analysis_endpoint_marks_model_backed_reports(monkeypatch):
 
 def test_run_grc_analysis_endpoint_skips_entries_without_linked_evidence(monkeypatch):
     analyzed_titles = []
+    generated_from_sources = []
 
     async def fake_fetch_feed(_feed_url):
         return {
@@ -201,7 +202,8 @@ def test_run_grc_analysis_endpoint_skips_entries_without_linked_evidence(monkeyp
                 "analysis": {},
             }
 
-        async def generate_grc_report(self, _analysis_results, _feed_data):
+        async def generate_grc_report(self, analysis_results, _feed_data):
+            generated_from_sources.extend(analysis_results["source_evidence"])
             return "1) Executive Summary\n- Model output."
 
     monkeypatch.setattr(workflow_mod.rss_service, "fetch_feed", fake_fetch_feed)
@@ -225,6 +227,14 @@ def test_run_grc_analysis_endpoint_skips_entries_without_linked_evidence(monkeyp
             "url": "https://example.com/linked",
             "cves": ["CVE-2026-12345"],
         }
+    ]
+    assert response.metadata.source_articles == [
+        {
+            "title": source["title"],
+            "url": source["url"],
+            "cves": source["cves"],
+        }
+        for source in generated_from_sources
     ]
 
 
