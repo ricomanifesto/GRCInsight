@@ -256,6 +256,61 @@ def canonicalize_evidence_links(
     return body
 
 
+def add_missing_cve_source_links(
+    body: str, sources: list[dict[str, object]]
+) -> str:
+    """Attach trusted evidence when the model omits a supported CVE citation."""
+    sources_for_cve: dict[str, list[dict[str, object]]] = {}
+    for source in sources:
+        for cve in source["cves"]:
+            sources_for_cve.setdefault(str(cve), []).append(source)
+
+    output_lines = []
+    for line in body.splitlines():
+        normalized_line = line.replace("‑", "-").replace("–", "-").replace("—", "-")
+        cited_cves = {
+            match.group(0).upper()
+            for match in re.finditer(
+                r"\bCVE-\d{4}-\d{4,}\b", normalized_line, re.IGNORECASE
+            )
+        }
+        linked_urls = {
+            http_url(markdown_inline_text(destination), "report evidence URL")
+            for _label, destination in markdown_links(line)
+            if has_http_scheme(destination)
+        }
+        supported_cves = {
+            str(cve)
+            for source in sources
+            if str(source["url"]) in linked_urls
+            for cve in source["cves"]
+        }
+        missing_cves = sorted(cited_cves - supported_cves)
+        added_sources = []
+        added_urls = set()
+        for cve in missing_cves:
+            candidates = sources_for_cve.get(cve, [])
+            if not candidates:
+                continue
+            source = candidates[0]
+            source_url = str(source["url"])
+            if source_url in linked_urls or source_url in added_urls:
+                continue
+            added_urls.add(source_url)
+            added_sources.append(
+                f"[{serialized_markdown_label(str(source['title']))}]({source_url})"
+            )
+
+        if added_sources:
+            citation = "Sources: " + "; ".join(added_sources)
+            if line.rstrip().endswith("|"):
+                line = line.rstrip()[:-1].rstrip() + f"<br>{citation} |"
+            else:
+                line = line.rstrip() + f" {citation}"
+        output_lines.append(line)
+    return "\n".join(output_lines)
+
+
 def source_articles(metadata: dict) -> list[dict[str, object]]:
     raw_sources = metadata.get("source_articles")
     if not isinstance(raw_sources, list) or not raw_sources:
@@ -406,6 +461,7 @@ def compose_report(data: dict, expected_feed_url: str, expected_model: str) -> s
     body = canonical_body(data.get("content"))
     sources = source_articles(metadata)
     body = canonicalize_evidence_links(body, sources)
+    body = add_missing_cve_source_links(body, sources)
     validate_evidence_links(body, sources)
     return "\n".join(
         (

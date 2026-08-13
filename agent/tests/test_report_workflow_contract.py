@@ -859,6 +859,45 @@ def test_site_report_composer_rejects_cross_wired_source_identities():
         raise AssertionError("composer accepted cross-wired source identities")
 
 
+def test_site_report_composer_adds_links_for_supported_unlinked_cves():
+    namespace = runpy.run_path(str(SITE_REPORT_COMPOSER))
+    compose_report = namespace["compose_report"]
+    source_title = "Critical VMware vCenter RCE flaw exploited for reverse SSH access"
+    source_url = "https://example.com/vmware"
+    data = {
+        "status": "completed",
+        "title": "GRC Intelligence Report - 2026-08-13",
+        "generated_at": "2026-08-13T13:00:00Z",
+        "content": complete_report_body(
+            "VMware vCenter exploitation (CVE-2026-59310) requires containment.",
+            f"- [{source_title}]({source_url})",
+        ),
+        "metadata": {
+            "analysis_mode": "model",
+            "source_name": "SentryDigest",
+            "source_url": "https://example.com/feed.xml",
+            "source_articles": [
+                {
+                    "title": source_title,
+                    "url": source_url,
+                    "cves": ["CVE-2026-59310"],
+                }
+            ],
+            "analysis_period": "August 2026",
+            "article_count": 1,
+            "grc_article_count": 1,
+            "model": "openrouter/example/model",
+        },
+    }
+
+    report = compose_report(data, "https://example.com/feed.xml", "openrouter/example/model")
+
+    assert (
+        "VMware vCenter exploitation (CVE-2026-59310) requires containment. "
+        f"Sources: [{source_title}]({source_url})" in report
+    )
+
+
 def test_site_report_composer_rejects_cve_absent_from_linked_source():
     namespace = runpy.run_path(str(SITE_REPORT_COMPOSER))
     compose_report = namespace["compose_report"]
