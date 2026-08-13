@@ -7,7 +7,7 @@ import argparse
 import json
 from pathlib import Path
 import re
-from urllib.parse import urlparse
+from urllib.parse import quote, urlparse
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 INDEX_MD = REPO_ROOT / "site" / "index.md"
@@ -41,9 +41,11 @@ def http_url(value: object, field: str) -> str:
     parsed = urlparse(url)
     if parsed.scheme not in {"http", "https"} or not parsed.netloc:
         fail(f"{field} must be an http(s) URL")
-    if re.search(r"[\s<>'\"()]", url):
+    if re.search(r"[\s<>'\"]", url):
         fail(f"{field} contains unsafe Markdown URL characters")
-    return url
+    # Parentheses are valid URL characters but delimit a Markdown destination.
+    # Percent-encode them while preserving the remaining RFC 3986 delimiters.
+    return quote(url, safe=":/?#[]@!$&*+,;=%")
 
 
 def integer(value: object, field: str) -> int:
@@ -58,6 +60,24 @@ def integer(value: object, field: str) -> int:
     return number
 
 
+def canonical_section_title(line: str) -> str | None:
+    candidate = line.strip()
+    has_section_marker = False
+    heading = re.match(r"^#{1,6}\s+(.+?)\s*$", candidate)
+    if heading:
+        candidate = heading.group(1).strip()
+        has_section_marker = True
+    numbered = re.match(r"^\d{1,2}[\).]\s+(.+?)\s*$", candidate)
+    if numbered:
+        candidate = numbered.group(1).strip()
+        has_section_marker = True
+    for marker in ("**", "__"):
+        if candidate.startswith(marker) and candidate.endswith(marker):
+            candidate = candidate[len(marker) : -len(marker)].strip()
+            break
+    return candidate if has_section_marker and candidate in SECTION_TITLES else None
+
+
 def canonical_body(content: object) -> str:
     text = str(content or "").replace("\r\n", "\n").strip()
     if not text:
@@ -67,11 +87,7 @@ def canonical_body(content: object) -> str:
     lines = text.splitlines()
     body_start = None
     for index, line in enumerate(lines):
-        if line.startswith("## ") and line[3:].strip() in known:
-            body_start = index
-            break
-        numbered = re.match(r"^\d{1,2}[\).]\s+(.+?)\s*$", line)
-        if numbered and numbered.group(1).strip() in known:
+        if canonical_section_title(line) in known:
             body_start = index
             break
     if body_start is None:
@@ -79,9 +95,9 @@ def canonical_body(content: object) -> str:
 
     body_lines = []
     for line in lines[body_start:]:
-        numbered = re.match(r"^\d{1,2}[\).]\s+(.+?)\s*$", line)
-        if numbered and numbered.group(1).strip() in known:
-            line = f"## {numbered.group(1).strip()}"
+        section_title = canonical_section_title(line)
+        if section_title in known:
+            line = f"## {section_title}"
         if line.strip() in {"---", "___", "***"}:
             continue
         body_lines.append(line.rstrip())

@@ -428,6 +428,40 @@ def test_site_report_composer_rejects_provenance_mismatch():
         raise AssertionError("composer accepted mismatched source provenance")
 
 
+def test_site_report_composer_normalizes_numbered_markdown_headings_and_feed_url():
+    namespace = runpy.run_path(str(SITE_REPORT_COMPOSER))
+    compose_report = namespace["compose_report"]
+    feed_url = "https://example.com/feed(1).xml?edition=(daily)"
+    report = compose_report(
+        {
+            "status": "completed",
+            "title": "GRC Intelligence Report - 2026-08-13",
+            "generated_at": "2026-08-13T13:00:00Z",
+            "content": (
+                "## 1. **Executive Summary**\nCareful analysis.\n\n"
+                "### 6) __Source Highlights__\n"
+                "- [Evidence](https://example.com/evidence)"
+            ),
+            "metadata": {
+                "analysis_mode": "model",
+                "source_name": "SentryDigest",
+                "source_url": feed_url,
+                "analysis_period": "August 2026",
+                "article_count": 1,
+                "grc_article_count": 1,
+                "model": "openrouter/example/model",
+            },
+        },
+        feed_url,
+        "openrouter/example/model",
+    )
+
+    assert "## Executive Summary" in report
+    assert "## Source Highlights" in report
+    assert "## 1." not in report
+    assert "feed%281%29.xml?edition=%28daily%29" in report
+
+
 def test_site_report_check_rejects_internal_distribution_labels():
     check_script = SITE_REPORT_CHECK.read_text()
 
