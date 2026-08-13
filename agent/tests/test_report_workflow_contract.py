@@ -544,11 +544,23 @@ def test_site_report_reader_surface_detector_covers_visible_trust_defects():
         valid.replace("is documented.", "is documented in [Regulatory Developments]."),
         valid.replace("is documented.", "causes a criticalCommerce flaw."),
         valid.replace("is documented.", "exposes customerCredential data."),
+        valid.replace("is documented.", "is documented by Source 1."),
         valid.replace("\n\n## Source Highlights", "\n\n---\n\n## Source Highlights"),
         valid.replace("[CVE-2026-12345](https://example.com/cve)", "CVE-2026-12345", 1),
     )
     for markdown in blocked:
         assert find_defect(markdown), markdown
+
+
+def test_site_report_integrity_detector_rejects_model_artifacts():
+    namespace = runpy.run_path(str(SITE_REPORT_CHECK))
+    find_failure = namespace["find_public_report_integrity_failure"]
+
+    assert find_failure("## Executive Summary\nCareful analysis.") is None
+    assert find_failure("Let me review the source evidence.\n## Executive Summary")
+    assert find_failure("## Executive Summary\n[Table]")
+    long_preamble = "\n".join([f"preamble {index}" for index in range(31)])
+    assert find_failure(long_preamble + "\n## Executive Summary")
 
 
 def test_site_report_forbidden_detector_covers_public_label_variants():

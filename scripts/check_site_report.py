@@ -69,6 +69,17 @@ SUPERSCRIPT_DIGITS = "⁰¹²³⁴⁵⁶⁷⁸⁹"
 # lowercase characters avoids flagging established mixed-case brands such as
 # ownCloud, openSUSE, and macOS. Exact evidence titles are excluded below.
 SUSPICIOUS_CAMEL_CASE = re.compile(r"\b[a-z]{5,}[A-Z][a-z]{2,}\b")
+DANGLING_SOURCE_REFERENCE_PATTERN = re.compile(
+    r"\bSources?\s+\d+(?:\s*(?:,|and|-)\s*\d+)*\b", re.IGNORECASE
+)
+LEAKED_DELIBERATION_PATTERN = re.compile(
+    r"^(?:let me\b|actually\b|hmm\b|i need\b|i should\b|now i need\b|wait\b)",
+    re.IGNORECASE,
+)
+UNRESOLVED_REPORT_PLACEHOLDER_PATTERN = re.compile(
+    r"^\[(?:table|analysis(?:\s+with.*)?|actionable items)\]$", re.IGNORECASE
+)
+MAX_REPORT_PREAMBLE_LINES = 30
 REQUIRED_PUBLIC_METADATA = {
     "analysis mode",
     "analysis period",
@@ -422,6 +433,10 @@ def find_reader_surface_defect(markdown: str) -> str | None:
     if camel_case:
         return f"suspicious camelCase token {camel_case.group(0)}"
 
+    dangling_source = DANGLING_SOURCE_REFERENCE_PATTERN.search(prose)
+    if dangling_source:
+        return f"unresolved source reference {dangling_source.group(0)}"
+
     if re.search(r"(?m)^\s*(?:-{3,}|_{3,}|\*{3,})\s*$", markdown):
         return "standalone section separator"
 
@@ -444,6 +459,22 @@ def find_reader_surface_defect(markdown: str) -> str | None:
         for _, _, _, destination in markdown_links(source_section.group(1))
     ):
         return "Source Highlights section has no linked evidence"
+    return None
+
+
+def find_public_report_integrity_failure(markdown: str) -> str | None:
+    lines = [line.strip() for line in markdown.splitlines() if line.strip()]
+    for line in lines:
+        if LEAKED_DELIBERATION_PATTERN.match(line):
+            return f"leaked model deliberation: {line[:80]}"
+        if UNRESOLVED_REPORT_PLACEHOLDER_PATTERN.match(line):
+            return f"unresolved report placeholder: {line}"
+
+    first_section_index = next(
+        (index for index, line in enumerate(lines) if is_report_section(line)), None
+    )
+    if first_section_index is not None and first_section_index > MAX_REPORT_PREAMBLE_LINES:
+        return "first report section appears after an excessive preamble"
     return None
 
 
@@ -668,6 +699,9 @@ def main() -> None:
     reader_defect = find_reader_surface_defect(markdown)
     if reader_defect:
         fail(f"index.md contains reader-surface defect: {reader_defect}")
+    integrity_failure = find_public_report_integrity_failure(markdown)
+    if integrity_failure:
+        fail(f"index.md contains report-integrity failure: {integrity_failure}")
 
     generated_at = metadata["generated"]
     try:
