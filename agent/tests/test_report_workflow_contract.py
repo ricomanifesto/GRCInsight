@@ -1,3 +1,4 @@
+import asyncio
 from datetime import datetime, timezone
 import json
 from pathlib import Path
@@ -212,6 +213,57 @@ def test_report_prompt_serializes_exact_source_links_for_markdown():
         "(https://example.com/advisory%291?edition=%28daily%29)" in prompt
     )
     assert "including every label escape and URL character" in prompt
+
+
+def test_report_generation_retries_scratch_work_and_returns_complete_report():
+    service = GRCModelService.__new__(GRCModelService)
+    valid_report = complete_report_body(
+        "Careful executive analysis.",
+        "- [Evidence](https://example.com/evidence)",
+    )
+    responses = iter(("Here's a thinking process:\n1. Analyze the request", valid_report))
+    prompts = []
+
+    async def fake_invoke(**kwargs):
+        prompts.append(kwargs)
+        return next(responses)
+
+    service._invoke = fake_invoke
+    result = asyncio.run(
+        service.generate_grc_report(
+            {"summary": {}, "analysis": {}, "source_evidence": []},
+            {"title": "Test Feed"},
+        )
+    )
+
+    assert result == valid_report
+    assert len(prompts) == 2
+    assert prompts[1]["title"] == "GRC intelligence report retry"
+    assert "prior response output did not begin" in prompts[1]["user_prompt"]
+
+
+def test_report_generation_fails_closed_after_two_malformed_drafts():
+    service = GRCModelService.__new__(GRCModelService)
+    responses = iter(
+        (
+            "## Executive Summary\nIncomplete draft.",
+            "## Executive Summary\nStill incomplete.",
+        )
+    )
+
+    async def fake_invoke(**_kwargs):
+        return next(responses)
+
+    service._invoke = fake_invoke
+    result = asyncio.run(
+        service.generate_grc_report(
+            {"summary": {}, "analysis": {}, "source_evidence": []},
+            {"title": "Test Feed"},
+        )
+    )
+
+    assert result.startswith("# GRC Intelligence Report - Error")
+    assert "complete report after retry" in result
 
 
 def test_source_evidence_preserves_distinct_cves_without_actor_priority():

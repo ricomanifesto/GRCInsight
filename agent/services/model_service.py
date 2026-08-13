@@ -16,6 +16,14 @@ CVE_PATTERN = re.compile(r"\bCVE-\d{4}-\d{4,}\b", re.IGNORECASE)
 CVE_OMISSION_MARKER = "[additional CVE omitted]"
 OPENROUTER_ATTEMPT_TIMEOUT_SECONDS = 360.0
 OPENROUTER_TOTAL_TIMEOUT_SECONDS = 780.0
+REPORT_SECTION_TITLES = (
+    "Executive Summary",
+    "Key Regulatory Developments",
+    "Industry Impact Analysis",
+    "Risk Assessment",
+    "Recommendations for Action",
+    "Source Highlights",
+)
 
 
 def _collect_prompt_cves(source_evidence: List[Dict[str, Any]]) -> List[str]:
@@ -58,6 +66,21 @@ def _markdown_link_label(value: Any) -> str:
 def _markdown_link_destination(value: Any) -> str:
     """Serialize an exact source URL for use as a Markdown destination."""
     return quote(str(value), safe=":/?#[]@!$&*+,;=%")
+
+
+def _report_draft_defect(value: Any) -> str | None:
+    """Return why model output is not one complete final report draft."""
+    text = str(value or "").strip()
+    if not text.startswith("## Executive Summary"):
+        return "output did not begin with the Executive Summary heading"
+    lines = [line.strip() for line in text.splitlines()]
+    for title in REPORT_SECTION_TITLES:
+        count = lines.count(f"## {title}")
+        if count == 0:
+            return f"output omitted the {title} section"
+        if count > 1:
+            return f"output repeated the {title} section"
+    return None
 
 
 class GRCModelService:
@@ -184,6 +207,23 @@ class GRCModelService:
                 user_prompt=report_prompt,
                 title="GRC intelligence report",
             )
+
+            defect = _report_draft_defect(report_content)
+            if defect is not None:
+                logger.warning("Retrying malformed report output: %s", defect)
+                retry_prompt = f"""{report_prompt}
+
+This is a clean retry because the prior response {defect}. Do not discuss the instructions or your reasoning. Return one concise final report only, beginning immediately with `## Executive Summary`, followed by each other required `##` section exactly once. Complete the Source Highlights section before stopping."""
+                report_content = await self._invoke(
+                    system_prompt=self._get_report_system_prompt(),
+                    user_prompt=retry_prompt,
+                    title="GRC intelligence report retry",
+                )
+                retry_defect = _report_draft_defect(report_content)
+                if retry_defect is not None:
+                    raise ValueError(
+                        f"Model did not return a complete report after retry: {retry_defect}"
+                    )
 
             logger.info("GRC report generation completed")
             return report_content
