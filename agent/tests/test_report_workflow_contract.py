@@ -16,6 +16,7 @@ REPORT_WORKFLOW = REPO_ROOT / ".github" / "workflows" / "lambda-report-generatio
 CI_WORKFLOW = REPO_ROOT / ".github" / "workflows" / "ci.yml"
 SITE_REPORT_CHECK = REPO_ROOT / "scripts" / "check_site_report.py"
 SITE_REPORT_COMPOSER = REPO_ROOT / "scripts" / "compose_site_report.py"
+SITE_BUILDER = REPO_ROOT / "scripts" / "build_site.py"
 MODEL_SERVICE = REPO_ROOT / "agent" / "services" / "model_service.py"
 RENDERER_JS = REPO_ROOT / "site" / "static" / "renderer.js"
 WORKFLOWS = (CI_WORKFLOW, DEPLOY_WORKFLOW, DEPLOY_SITE_WORKFLOW, REPORT_WORKFLOW)
@@ -314,6 +315,9 @@ def test_report_generation_workflow_builds_prerender_and_archive():
     assert workflow.count("python3 scripts/build_site.py --archive-current") >= 2
     assert "git add site/index.md site/index.html site/archive" in workflow
     assert "[skip ci]" not in workflow
+    assert "actions: write" in workflow
+    assert "gh workflow run deploy-site.yml" in workflow
+    assert "steps.publish.outputs.published == 'true'" in workflow
 
 
 def test_report_generation_workflow_validates_generated_site_before_publish():
@@ -364,6 +368,25 @@ def test_site_report_composer_owns_public_provenance_and_body_shape():
     assert "## Source Highlights" in report
     assert "\n---\n" not in report
     assert "stale" not in report
+
+
+def test_site_builder_treats_report_backslashes_as_literal_content():
+    namespace = runpy.run_path(str(SITE_BUILDER))
+    current_index_html = namespace["current_index_html"]
+    template = (
+        '<time class="subtitle" id="generated">Loading</time>'
+        "<!-- REPORT_CONTENT_START --><!-- REPORT_CONTENT_END -->"
+    )
+    markdown = (
+        "# GRC Intelligence Report\n"
+        "**Generated:** 2026-08-13T13:00:00Z\n\n"
+        "## Risk Assessment\n"
+        "Review C:\\Windows access controls."
+    )
+
+    built = current_index_html(template, markdown)
+
+    assert "C:\\Windows" in built
 
 
 def test_site_report_composer_rejects_provenance_mismatch():

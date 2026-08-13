@@ -70,6 +70,9 @@ assert(tableHtml.includes('<table>') && tableHtml.includes('<th>Field</th>') && 
 assert(renderer.renderMarkdown('- one\\n- two').includes('<ul><li>one</li><li>two</li></ul>'), 'dash lists should render as unordered lists');
 assert(renderer.renderMarkdown('```\\ncode\\n```').includes('<pre><code>code</code></pre>'), 'fenced code should render as a pre block');
 assert(renderer.renderMarkdown('---   ').trim() === '<hr>', 'rules with trailing whitespace should not leak as literal text');
+const queryLinkHtml = renderer.renderMarkdown('[Evidence](https://example.com/feed?a=1&b=2)');
+assert(queryLinkHtml.includes('href="https://example.com/feed?a=1&amp;b=2"'), 'query separators should be escaped exactly once in rendered links');
+assert(!queryLinkHtml.includes('&amp;amp;'), 'rendered links must not double-escape query separators');
 
 // A complete report keeps provenance and section cards in the canonical
 // renderer so build-time HTML and browser rendering are identical.
@@ -83,6 +86,10 @@ assert(reportHtml.includes('<section class="card report-provenance"><h2>About th
 assert(reportHtml.includes('<dt>Source</dt><dd><a href="https://example.com/feed.xml"'), 'source provenance should keep its safe link');
 assert((reportHtml.match(/<section class="card">/g) || []).length === 2, 'each report section should render as a card');
 assert(!reportHtml.includes('<hr>') && !reportHtml.includes('---'), 'section separators should not survive in report cards');
+const querySourceReport = reportDocument.replace('https://example.com/feed.xml', 'https://example.com/feed?a=1&b=2');
+const querySourceHtml = renderer.renderReportDocument(querySourceReport);
+assert(querySourceHtml.includes('href="https://example.com/feed?a=1&amp;b=2"'), 'provenance links should preserve query parameter separators');
+assert(!querySourceHtml.includes('&amp;amp;'), 'provenance links must not double-escape query separators');
 
 // Regression: a paragraph that contains bold text must render as a single
 // wrapped <p>, not as loose inline fragments. Loose fragments became separate

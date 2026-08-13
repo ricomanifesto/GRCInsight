@@ -25,6 +25,7 @@ jobs:
   generate-report:
     runs-on: ubuntu-latest
     permissions:
+      actions: write
       contents: write
 
     steps:
@@ -265,6 +266,7 @@ jobs:
       run: make check-site
 
     - name: Commit and push report
+      id: publish
       if: steps.get-report.conclusion == 'success'
       run: |
         git config --local user.email "action@github.com"
@@ -292,6 +294,7 @@ jobs:
           git commit --amend --no-edit
 
           if git push origin HEAD:"$GITHUB_REF_NAME"; then
+            echo "published=true" >> "$GITHUB_OUTPUT"
             exit 0
           fi
 
@@ -303,3 +306,9 @@ jobs:
 
         echo "Failed to push the generated report after $max_attempts attempts" >&2
         exit 1
+
+    - name: Dispatch Pages deployment
+      if: steps.publish.outputs.published == 'true'
+      env:
+        GH_TOKEN: ${{ github.token }}
+      run: gh workflow run deploy-site.yml --ref "$GITHUB_REF_NAME"

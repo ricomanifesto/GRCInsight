@@ -25,12 +25,37 @@
     return `<a href="${escapeAttribute(safeUrl)}" target="_blank" rel="noopener">${text}</a>`;
   }
 
-  function renderInlineMarkdown(value) {
+  function renderInlineText(value) {
     let html = escapeHtml(value);
-    html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_, text, url) => renderMarkdownLink(text, url));
     html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
     html = html.replace(/\*([^*]+)\*/g, '<em>$1</em>');
     return html;
+  }
+
+  function extractMarkdownLinks(value) {
+    const links = [];
+    const markdown = String(value).replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_, text, url) => {
+      const token = `@@GRCINSIGHT_LINK_${links.length}@@`;
+      links.push({ token, text, url });
+      return token;
+    });
+    return {
+      markdown,
+      restore(html) {
+        links.forEach(link => {
+          html = html.replace(
+            link.token,
+            renderMarkdownLink(renderInlineText(link.text), link.url),
+          );
+        });
+        return html;
+      },
+    };
+  }
+
+  function renderInlineMarkdown(value) {
+    const extracted = extractMarkdownLinks(value);
+    return extracted.restore(renderInlineText(extracted.markdown));
   }
 
   // Reports are sometimes generated with numbered section headers ("1. Executive
@@ -100,7 +125,11 @@
       return `%%CODEBLOCK_${codeBlocks.length - 1}%%`;
     });
 
-    let html = escapeHtml(md);
+    // Extract links before escaping the surrounding Markdown. Escaping first
+    // turns query separators into &amp;, which would then be escaped a second
+    // time when the URL is written into href.
+    const extractedLinks = extractMarkdownLinks(md);
+    let html = escapeHtml(extractedLinks.markdown);
     html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
     html = html.replace(/\*([^*]+)\*/g, '<em>$1</em>');
     html = html.replace(/^####\s+(.*)$/gm, '<h4>$1</h4>');
@@ -113,7 +142,6 @@
     html = html.replace(/^_{3,}[ \t]*$/gm, '<hr>');
     html = html.replace(/^\*{3,}[ \t]*$/gm, '<hr>');
     html = html.replace(/^(?:&gt;\s?.*(?:\n|$))+/gm, m => `<blockquote>${m.replace(/^&gt;\s?/gm, '').trim()}</blockquote>`);
-    html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_, text, url) => renderMarkdownLink(text, url));
     // Leading indent is horizontal whitespace only ([ \t]*, not \s*) so the
     // pattern never reaches across the blank line that precedes a list.
     html = html.replace(/^(?:[ \t]*-\s+.*(?:\n|$))+/gm, m => renderNestedList(m));
@@ -143,8 +171,9 @@
     });
     flushParagraph();
     html = assembled.join('\n');
-    // Restore fenced code blocks last so their internal newlines never affect
-    // paragraph assembly.
+    // Restore links and fenced code blocks last so their content never affects
+    // block parsing or receives a second escaping pass.
+    html = extractedLinks.restore(html);
     return html.replace(/%%CODEBLOCK_(\d+)%%/g, (_, i) => `<pre><code>${escapeHtml(codeBlocks[+i])}</code></pre>`);
   }
 

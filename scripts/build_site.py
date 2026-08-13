@@ -101,7 +101,10 @@ def current_index_html(template: str, markdown: str) -> str:
     )
     if len(region.findall(template)) != 1:
         fail("index.html must contain one report content marker pair")
-    built = region.sub(report_node, template)
+    # A generated report may legitimately contain backslashes (for example,
+    # Windows paths). A callable replacement keeps re.sub from interpreting
+    # them as replacement-string escapes or group references.
+    built = region.sub(lambda _match: report_node, template)
     generated_node = (
         f'<time class="subtitle" id="generated" '
         f'datetime="{escape(generated_raw, quote=True)}">'
