@@ -213,6 +213,26 @@ def test_source_evidence_preserves_distinct_cves_without_actor_priority():
     assert all("has_threat_context" not in item for item in evidence)
 
 
+def test_source_evidence_bounds_persisted_cves_to_prompt_limit():
+    articles = [
+        ArticleInput(
+            title=f"Advisory {index}",
+            url=f"https://example.com/advisory-{index}",
+            content=f"CVE-2026-{20000 + index} affects the product.",
+            summary="",
+            published=PUBLISHED_AT,
+        )
+        for index in range(12)
+    ]
+
+    evidence = workflow_mod._build_source_evidence(articles)
+    persisted_cves = {cve for item in evidence for cve in item["cves"]}
+
+    assert len(evidence) <= workflow_mod.SOURCE_EVIDENCE_LIMIT
+    assert len(persisted_cves) == workflow_mod.REPORT_CVE_LIMIT
+    assert all(set(item["cves"]) <= persisted_cves for item in evidence)
+
+
 def test_fallback_report_excludes_dedicated_threat_actor_section():
     articles = [
         ArticleInput(

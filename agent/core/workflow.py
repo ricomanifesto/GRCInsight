@@ -170,7 +170,20 @@ def _build_source_evidence(enriched_articles: List[ArticleInput]) -> List[Dict[s
     for index in range(len(evidence)):
         add(index)
 
-    return [evidence[index] for index in selected_indices]
+    selected = [evidence[index] for index in selected_indices]
+    allowed_cves: set[str] = set()
+    for item in selected:
+        for cve in item["cves"]:
+            if len(allowed_cves) >= REPORT_CVE_LIMIT:
+                break
+            allowed_cves.add(cve)
+    return [
+        {
+            **item,
+            "cves": [cve for cve in item["cves"] if cve in allowed_cves],
+        }
+        for item in selected
+    ]
 
 
 def _build_local_analysis(enriched_articles: List[ArticleInput]):
