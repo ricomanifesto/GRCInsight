@@ -126,6 +126,7 @@ def test_report_prompt_requires_current_source_entities_and_readable_summary():
     assert "Never use superscript footnotes" in prompt
     assert "Do not invent counts" in prompt
     assert "publication layer adds those values" in prompt
+    assert 'Do not emit a top-level "# " heading' in prompt
 
 
 def test_report_prompt_globally_bounds_cve_evidence():
