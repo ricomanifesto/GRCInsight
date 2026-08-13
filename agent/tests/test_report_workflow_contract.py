@@ -335,12 +335,16 @@ def test_report_generation_workflow_refuses_fallback_reports():
     assert "Refusing to publish a fallback-mode report" in workflow
 
 
-def test_report_generation_workflow_strips_duplicate_report_title():
+def test_report_generation_workflow_owns_the_only_top_level_report_title():
     workflow = REPORT_WORKFLOW.read_text()
+    model_service = MODEL_SERVICE.read_text()
 
     assert 'echo "# ${SAFE_TITLE}" > site/index.md' in workflow
     assert "REPORT_BODY=$(printf '%s\\n' \"$SAFE_CONTENT\" | awk" in workflow
+    assert "/^# / { next }" in workflow
+    assert "dropped_title" not in workflow
     assert 'echo "${REPORT_BODY}" >> site/index.md' in workflow
+    assert 'Do not emit a top-level "# " heading' in model_service
 
 
 def test_report_generation_workflow_strips_duplicate_generated_timestamp():

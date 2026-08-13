@@ -223,8 +223,8 @@ jobs:
             echo "# ${SAFE_TITLE}" > site/index.md
             echo "**Generated:** ${SAFE_GENERATED}" >> site/index.md
             REPORT_BODY=$(printf '%s\n' "$SAFE_CONTENT" | awk '
-              BEGIN { dropped_title = 0; seen_generated = 0 }
-              !dropped_title && /^# / { dropped_title = 1; next }
+              BEGIN { seen_generated = 0 }
+              /^# / { next }
               /^\*\*Generated:\*\*/ {
                 if (seen_generated == 0) { seen_generated = 1; next }
               }
