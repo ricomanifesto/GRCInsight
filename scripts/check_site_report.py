@@ -687,6 +687,77 @@ def validate_evidence_manifest(
     return manifest
 
 
+def validate_required_report_sections(markdown: str, artifact: str) -> None:
+    lines = [line.strip() for line in markdown.splitlines() if line.strip()]
+    section_counts = {
+        label: sum(1 for line in lines if report_section_label(line) == label)
+        for label in REPORT_SECTION_LABELS
+    }
+    missing = [label for label, count in section_counts.items() if count == 0]
+    repeated = [label for label, count in section_counts.items() if count > 1]
+    if missing:
+        fail(f"{artifact} missing required report section: " + sorted(missing)[0])
+    if repeated:
+        fail(f"{artifact} repeats report section: " + sorted(repeated)[0])
+
+
+def validate_archive_history(archive_dir: Path, archive_html: str) -> None:
+    snapshots = sorted(path for path in archive_dir.iterdir() if path.is_dir())
+    if not snapshots:
+        fail("archive contains no timestamped report snapshots")
+    for snapshot in snapshots:
+        if not re.fullmatch(r"\d{4}-\d{2}-\d{2}T\d{2}-\d{2}-\d{2}Z", snapshot.name):
+            fail(f"archive contains invalid snapshot directory: {snapshot.name}")
+        required = {
+            "report": snapshot / "report.md",
+            "manifest": snapshot / "evidence-manifest.json",
+            "page": snapshot / "index.html",
+        }
+        missing_files = [name for name, path in required.items() if not path.is_file()]
+        if missing_files:
+            fail(f"archive {snapshot.name} missing {sorted(missing_files)[0]} file")
+
+        archived_markdown = required["report"].read_text(encoding="utf-8")
+        archived_manifest = required["manifest"].read_text(encoding="utf-8")
+        archived_page = required["page"].read_text(encoding="utf-8")
+        metadata = report_metadata(archived_markdown)
+        missing_metadata = REQUIRED_PUBLIC_METADATA - metadata.keys()
+        if missing_metadata:
+            fail(
+                f"archive {snapshot.name} missing provenance metadata: "
+                + ", ".join(sorted(missing_metadata))
+            )
+        if metadata["analysis mode"].lower() != "model-backed":
+            fail(f"archive {snapshot.name} is not model-backed")
+        try:
+            generated = datetime.fromisoformat(
+                metadata["generated"].replace("Z", "+00:00")
+            )
+            if generated.tzinfo is None:
+                generated = generated.replace(tzinfo=timezone.utc)
+        except ValueError:
+            fail(f"archive {snapshot.name} has an invalid Generated timestamp")
+        expected_name = generated.astimezone(timezone.utc).strftime(
+            "%Y-%m-%dT%H-%M-%SZ"
+        )
+        if snapshot.name != expected_name:
+            fail(f"archive {snapshot.name} does not match its Generated timestamp")
+        validate_required_report_sections(
+            archived_markdown, f"archive {snapshot.name}/report.md"
+        )
+        validate_evidence_manifest(archived_markdown, metadata, archived_manifest)
+        if defect := find_reader_surface_defect(archived_markdown):
+            fail(f"archive {snapshot.name} contains reader-surface defect: {defect}")
+        if integrity := find_public_report_integrity_failure(archived_markdown):
+            fail(f"archive {snapshot.name} contains report-integrity failure: {integrity}")
+        if '<main class="container archive-report">' not in archived_page:
+            fail(f"archive {snapshot.name} page is not pre-rendered")
+        if 'class="card report-provenance"' not in archived_page:
+            fail(f"archive {snapshot.name} page is missing provenance")
+        if f'href="{snapshot.name}/"' not in archive_html:
+            fail(f"archive index does not link snapshot {snapshot.name}")
+
+
 def main() -> None:
     html = read_text(INDEX_HTML)
     markdown = read_text(INDEX_MD)
@@ -733,16 +804,7 @@ def main() -> None:
     )
     if h1_count != 1:
         fail("index.md must contain exactly one top-level report title")
-    section_counts = {
-        label: sum(1 for line in lines if report_section_label(line) == label)
-        for label in REPORT_SECTION_LABELS
-    }
-    missing_sections = [label for label, count in section_counts.items() if count == 0]
-    repeated_sections = [label for label, count in section_counts.items() if count > 1]
-    if missing_sections:
-        fail("index.md missing required report section: " + sorted(missing_sections)[0])
-    if repeated_sections:
-        fail("index.md repeats report section: " + sorted(repeated_sections)[0])
+    validate_required_report_sections(markdown, "index.md")
     forbidden_sections = {
         normalize_label_text(line)
         for line in lines
@@ -792,16 +854,12 @@ def main() -> None:
         fail("index.md Generated metadata must be an ISO timestamp")
     archive_key = generated.strftime("%Y-%m-%dT%H-%M-%SZ")
     archived_markdown = read_text(ARCHIVE_DIR / archive_key / "report.md")
-    archived_page = read_text(ARCHIVE_DIR / archive_key / "index.html")
     archived_manifest = read_text(ARCHIVE_DIR / archive_key / "evidence-manifest.json")
     if archived_markdown.rstrip() != markdown.rstrip():
         fail("current report does not match its timestamped archive snapshot")
     if archived_manifest != evidence_manifest_text:
         fail("current evidence manifest does not match its archived snapshot")
-    if f'href="{archive_key}/"' not in archive_html:
-        fail("archive index does not link the current timestamped report")
-    if 'class="card report-provenance"' not in archived_page:
-        fail("archived report page is not pre-rendered with provenance")
+    validate_archive_history(ARCHIVE_DIR, archive_html)
     if 'href="archive/"' not in html or 'href="index.md"' not in html:
         fail("index.html is missing report archive or Markdown navigation")
     if 'data-prerendered="true"' not in html:

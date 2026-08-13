@@ -511,6 +511,49 @@ def test_site_builder_gives_same_day_reports_unique_archive_keys():
     assert archive_slug(morning) != archive_slug(rerun)
 
 
+def test_site_report_check_validates_every_archive_manifest(tmp_path):
+    namespace = runpy.run_path(str(SITE_REPORT_CHECK))
+    validate_archive_history = namespace["validate_archive_history"]
+    archive_key = "2026-08-13T13-00-00Z"
+    snapshot = tmp_path / archive_key
+    snapshot.mkdir()
+    report = (
+        "# GRC Intelligence Report\n"
+        "**Generated:** 2026-08-13T13:00:00Z\n"
+        "**Date of Issue:** August 2026\n"
+        "**Analysis Period:** August 2026\n"
+        "**Source:** [Feed](https://example.com/feed.xml)\n"
+        "**Articles Analyzed:** 1\n"
+        "**Model:** openrouter/example/model\n"
+        "**Analysis Mode:** Model-backed\n\n"
+        + complete_report_body(
+            "Careful analysis.",
+            "- [Evidence](https://example.com/evidence)",
+        )
+    )
+    manifest = {
+        "generated_at": "2026-08-13T13:00:00Z",
+        "feed_url": "https://example.com/feed.xml",
+        "sources": [{"title": "Evidence", "url": "https://example.com/evidence", "cves": []}],
+    }
+    (snapshot / "report.md").write_text(report)
+    (snapshot / "evidence-manifest.json").write_text(json.dumps(manifest))
+    (snapshot / "index.html").write_text(
+        '<main class="container archive-report"><section class="card report-provenance"></section></main>'
+    )
+    archive_html = f'<a href="{archive_key}/">Report</a>'
+
+    validate_archive_history(tmp_path, archive_html)
+
+    (snapshot / "evidence-manifest.json").write_text("{broken")
+    try:
+        validate_archive_history(tmp_path, archive_html)
+    except SystemExit as error:
+        assert "evidence-manifest.json is invalid JSON" in str(error)
+    else:
+        raise AssertionError("archive validation accepted a corrupted historical manifest")
+
+
 def test_site_report_composer_rejects_provenance_mismatch():
     namespace = runpy.run_path(str(SITE_REPORT_COMPOSER))
     compose_report = namespace["compose_report"]
