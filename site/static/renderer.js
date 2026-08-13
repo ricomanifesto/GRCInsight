@@ -37,6 +37,10 @@
     return html;
   }
 
+  function renderLinkLabel(value) {
+    return escapeHtml(decodeMarkdownEscapes(value));
+  }
+
   function extractMarkdownLinks(value) {
     const source = String(value);
     const links = [];
@@ -124,7 +128,7 @@
         links.forEach(link => {
           html = html.replace(
             link.token,
-            renderMarkdownLink(renderInlineText(link.text), link.url),
+            renderMarkdownLink(renderLinkLabel(link.text), link.url),
           );
         });
         return html;

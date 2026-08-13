@@ -89,6 +89,9 @@ assert(nestedLabelHtml.includes('Microsoft [Update] advisory</a>'), 'nested labe
 const escapedLabelHtml = renderer.renderMarkdown('[Example Feed\\\\\\\\](https://example.com/feed) and [Microsoft \\\\[Update\\\\]](https://example.com/update)');
 assert(escapedLabelHtml.includes('Example Feed\\\\</a>'), 'escaped link-label backslashes should render once');
 assert(escapedLabelHtml.includes('Microsoft [Update]</a>'), 'escaped link-label brackets should render without escape characters');
+const literalLabelHtml = renderer.renderMarkdown('[Critical *BSD* advisory](https://example.com/bsd)');
+assert(literalLabelHtml.includes('Critical *BSD* advisory</a>'), 'exact source-title asterisks should render literally');
+assert(!literalLabelHtml.includes('<em>BSD</em>'), 'source-title identity must not be rewritten as emphasis');
 
 // A complete report keeps provenance and section cards in the canonical
 // renderer so build-time HTML and browser rendering are identical.
