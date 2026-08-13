@@ -130,37 +130,8 @@ def _extract_cves(text: str) -> List[str]:
     return cves
 
 
-def _extract_actor_ids(text: str) -> List[str]:
-    """Extract structured actor identifiers without guessing natural-language aliases."""
-    seen = set()
-    actor_ids = []
-    pattern = r"\b(APT|TA|UNC|FIN|DEV)[ -]?(\d+)\b"
-    for match in re.finditer(pattern, text):
-        actor_id = f"{match.group(1)}{match.group(2)}"
-        if re.fullmatch(r"TA00\d{2}", actor_id):
-            continue
-        if actor_id not in seen:
-            seen.add(actor_id)
-            actor_ids.append(actor_id)
-    return actor_ids
-
-
-def _has_threat_actor_context(text: str) -> bool:
-    """Return whether source text explicitly discusses malicious actor activity."""
-    normalized_text = re.sub(r"[-‐‑‒–—]+", " ", text)
-    return bool(
-        re.search(
-            r"\b(?:threat actors?|threat groups?|nation state actors?|"
-            r"state sponsored (?:actors?|groups?)|cyber ?espionage groups?|"
-            r"ransomware (?:groups?|gangs?)|hacking groups?)\b",
-            normalized_text,
-            re.IGNORECASE,
-        )
-    )
-
-
 def _build_source_evidence(enriched_articles: List[ArticleInput]) -> List[Dict[str, Any]]:
-    """Build bounded current-source evidence without inferring actor names."""
+    """Build bounded current-source evidence for report-specific claims."""
     evidence: List[Dict[str, Any]] = []
     for article in enriched_articles:
         text = "\n".join(filter(None, [article.title, article.summary, article.content]))
@@ -170,8 +141,6 @@ def _build_source_evidence(enriched_articles: List[ArticleInput]) -> List[Dict[s
                 "url": article.url,
                 "snippet": re.sub(r"\s+", " ", text).strip()[:700],
                 "cves": _extract_cves(text),
-                "actor_ids": _extract_actor_ids(text),
-                "has_threat_context": _has_threat_actor_context(text),
             }
         )
 
@@ -197,36 +166,10 @@ def _build_source_evidence(enriched_articles: List[ArticleInput]) -> List[Dict[s
         if len(selected_indices) >= REPORT_CVE_EVIDENCE_LIMIT:
             break
 
-    # Reserve room for explicit threat context, including named actors that
-    # cannot be safely reduced to a deterministic alias by regex.
-    for index, item in enumerate(evidence):
-        if item["actor_ids"] or item["has_threat_context"]:
-            add(index)
-
     for index in range(len(evidence)):
         add(index)
 
     return [evidence[index] for index in selected_indices]
-
-
-def _collect_actor_sources(
-    source_evidence: List[Dict[str, Any]],
-) -> List[Dict[str, str]]:
-    """Collect source-linked structured actor identifiers."""
-    actor_sources = []
-    seen_actors = set()
-    for item in source_evidence:
-        for actor_id in item.get("actor_ids", []):
-            if actor_id not in seen_actors:
-                seen_actors.add(actor_id)
-                actor_sources.append(
-                    {
-                        "actor_id": actor_id,
-                        "title": item.get("title", "source article"),
-                        "url": item.get("url", ""),
-                    }
-                )
-    return actor_sources
 
 
 def _build_local_analysis(enriched_articles: List[ArticleInput]):
@@ -329,29 +272,6 @@ def _build_fallback_report(
             "- Current source articles emphasize operational cyber risk and compliance monitoring."
         )
 
-    source_evidence = _build_source_evidence(enriched_articles)
-    actor_sources = _collect_actor_sources(source_evidence)
-    actor_lines = []
-    for item in actor_sources:
-        source = f"[{item['title']}]({item['url']})" if item["url"] else item["title"]
-        actor_lines.append(
-            f"- {item['actor_id']}: Mentioned in {source}; review the source "
-            "context before relying on the attribution."
-        )
-    for item in source_evidence:
-        if not item.get("has_threat_context") or item.get("actor_ids"):
-            continue
-        source = f"[{item['title']}]({item['url']})" if item["url"] else item["title"]
-        actor_lines.append(
-            f"- Named actor context appears in {source}; this deterministic "
-            "fallback does not infer actor names, so review the source before "
-            "relying on the attribution."
-        )
-    if not actor_lines:
-        actor_lines = [
-            "- No article-supported threat actor activity was identified in this reporting period."
-        ]
-
     recommendation_lines = [
         "- Maintain incident response, disclosure, and evidence-retention readiness for high-severity cyber events.",
         "- Prioritize vulnerability remediation, privileged access hygiene, and external attack-surface review for internet-facing services.",
@@ -439,16 +359,13 @@ def _build_fallback_report(
             *industry_lines,
             "- Organizations in regulated or data-intensive sectors should expect the same cyber events to trigger legal, contractual, and supervisory scrutiny.",
             "",
-            "4) Threat Actor Activities",
-            *actor_lines,
-            "",
-            "5) Risk Assessment",
+            "4) Risk Assessment",
             *risk_lines,
             "",
-            "6) Recommendations for Action",
+            "5) Recommendations for Action",
             *recommendation_lines,
             "",
-            "7) Source Highlights",
+            "6) Source Highlights",
             *highlights,
             "",
             "Notes and limitations",

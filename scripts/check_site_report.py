@@ -25,12 +25,14 @@ REPORT_SECTION_LABELS = {
     "Executive Summary",
     "Key Regulatory Developments",
     "Industry Impact Analysis",
-    "Threat Actor Activities",
     "Risk Assessment",
     "Recommendations for Action",
     "Source Highlights",
 }
-FORBIDDEN_REPORT_SECTION_LABELS = {"cve and vulnerability highlights"}
+FORBIDDEN_REPORT_SECTION_LABELS = {
+    "cve and vulnerability highlights",
+    "threat actor activities",
+}
 NUMBERED_SECTION_PATTERN = re.compile(r"^\d+[\).]\s+(.+)$")
 FORBIDDEN_METADATA_FIELDS = {"distribution approval", "prepared by"}
 PRIVATE_VALUE_FIELDS = {"audience", "classification", "confidentiality", "distribution"}

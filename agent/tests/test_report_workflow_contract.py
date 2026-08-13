@@ -91,30 +91,28 @@ def test_report_prompt_requires_current_source_entities_and_readable_summary():
                     "url": "https://example.com/apt1",
                     "snippet": "Threat actor APT1 exploited CVE-2026-12345 against banks.",
                     "cves": ["CVE-2026-12345"],
-                    "actor_ids": ["APT1"],
                 },
                 {
                     "title": "Cloud Security Alliance publishes guidance",
                     "url": "https://example.com/guidance",
                     "snippet": "The industry group called Cloud Security Alliance published guidance.",
                     "cves": [],
-                    "actor_ids": [],
                 },
             ],
         },
         {"title": "Test Feed"},
     )
 
-    assert "Source Evidence for Entity Sections:" in prompt
-    assert "Threat Actor Activities" in prompt
+    assert "Source Evidence:" in prompt
+    assert "Threat Actor Activities" not in prompt
     assert "CVE and Vulnerability Highlights" not in prompt
     assert "Executive Summary must be 2-4 short paragraphs" in prompt
     assert "APT1" in prompt
     assert "CVE-2026-12345" in prompt
-    assert "structured actor identifiers are hints, not an exhaustive actor list" in prompt
-    assert "Do not classify industry, standards, regulatory, or working groups" in prompt
+    assert "structured actor identifiers are hints, not an exhaustive actor list" not in prompt
+    assert "Do not classify industry, standards, regulatory, or working groups" not in prompt
     assert "Use Markdown links with the exact source title and URL" in prompt
-    assert "Every report-specific regulatory, threat-actor, and CVE claim" in prompt
+    assert "Every report-specific regulatory and CVE claim" in prompt
     assert "Do not emit incomplete, truncated, or ellipsized CVE identifiers" in prompt
     assert "Use exact framework, standard, regulation, or publication names" in prompt
 
@@ -133,7 +131,6 @@ def test_report_prompt_globally_bounds_cve_evidence():
                     "url": f"https://example.com/advisory/{cves[10]}",
                     "snippet": "A vendor published fixes for " + ", ".join(cves) + ".",
                     "cves": cves,
-                    "actor_ids": [],
                 }
             ],
         },
@@ -146,7 +143,7 @@ def test_report_prompt_globally_bounds_cve_evidence():
     assert "[additional CVE omitted]" in prompt
 
 
-def test_source_evidence_preserves_distinct_cves_and_safe_actor_context():
+def test_source_evidence_preserves_distinct_cves_without_actor_priority():
     articles = [
         ArticleInput(
             title=f"Duplicate CVE article {index}",
@@ -193,142 +190,17 @@ def test_source_evidence_preserves_distinct_cves_and_safe_actor_context():
     evidence = workflow_mod._build_source_evidence(articles)
     evidence_urls = {item["url"] for item in evidence}
     cves = {cve for item in evidence for cve in item["cves"]}
-    actor_ids = {actor for item in evidence for actor in item["actor_ids"]}
 
     assert len(evidence) <= workflow_mod.SOURCE_EVIDENCE_LIMIT
     assert "https://example.com/apt1" in evidence_urls
-    assert "https://example.com/named-actor" in evidence_urls
+    assert "https://example.com/named-actor" not in evidence_urls
     assert "https://example.com/long-cve" in evidence_urls
     assert {"CVE-2026-11111", "CVE-2026-22222", "CVE-2026-12345678"} <= cves
-    assert {"APT1", "FIN7"} <= actor_ids
-    assert "FINRA" not in actor_ids
-    assert "Cloud Security Alliance" not in actor_ids
-    named_actor_evidence = next(
-        item for item in evidence if item["url"] == "https://example.com/named-actor"
-    )
-    assert named_actor_evidence["has_threat_context"] is True
-    assert (
-        workflow_mod._has_threat_actor_context(
-            "The industry group called Cloud Security Alliance published guidance."
-        )
-        is False
-    )
+    assert all("actor_ids" not in item for item in evidence)
+    assert all("has_threat_context" not in item for item in evidence)
 
 
-def test_actor_id_extraction_excludes_mitre_attack_tactics():
-    actor_ids = workflow_mod._extract_actor_ids(
-        "MITRE ATT&CK maps tactics TA0001, TA-0002, and TA 0003. "
-        "Ubuntu apt 2.6 received a package update. Threat actor TA 505 remains active."
-    )
-
-    assert actor_ids == ["TA505"]
-
-
-def test_source_evidence_reserves_room_for_actor_context_after_cve_volume():
-    articles = [
-        ArticleInput(
-            title=f"CVE source {index}",
-            url=f"https://example.com/cve-{index}",
-            content=f"CVE-2026-{10000 + index} affects an appliance.",
-            summary="",
-            published=PUBLISHED_AT,
-        )
-        for index in range(14)
-    ]
-    articles.append(
-        ArticleInput(
-            title="Named actor source",
-            url="https://example.com/named-actor-late",
-            content="The threat-actor group Volt Typhoon targeted government agencies.",
-            summary="",
-            published=PUBLISHED_AT,
-        )
-    )
-
-    evidence = workflow_mod._build_source_evidence(articles)
-
-    assert len(evidence) == workflow_mod.SOURCE_EVIDENCE_LIMIT
-    assert any(item["url"] == "https://example.com/named-actor-late" for item in evidence)
-
-
-def test_threat_actor_context_matches_normalized_state_actor_phrases():
-    assert workflow_mod._has_threat_actor_context(
-        "Nation-state actor Volt Typhoon targeted government agencies."
-    )
-    assert workflow_mod._has_threat_actor_context(
-        "A state-sponsored group targeted critical infrastructure."
-    )
-
-
-def test_fallback_report_links_named_actor_context_to_its_reserved_source():
-    articles = [
-        ArticleInput(
-            title=f"CVE source {index}",
-            url=f"https://example.com/cve-{index}",
-            content=f"CVE-2026-{10000 + index} affects an appliance.",
-            summary="",
-            published=PUBLISHED_AT,
-        )
-        for index in range(12)
-    ]
-    articles.append(
-        ArticleInput(
-            title="Late actor source",
-            url="https://example.com/late-actor",
-            content="Nation-state actor Volt Typhoon targeted government agencies.",
-            summary="",
-            published=PUBLISHED_AT,
-        )
-    )
-    local_signals, analysis = workflow_mod._build_local_analysis(articles)
-
-    report = workflow_mod._build_fallback_report(
-        {"title": "Test Feed"},
-        articles,
-        local_signals,
-        analysis,
-        "model unavailable",
-    )
-
-    assert "[Late actor source](https://example.com/late-actor)" in report
-    assert "does not infer actor names" in report
-
-
-def test_fallback_report_includes_structured_and_named_only_actor_sources():
-    articles = [
-        ArticleInput(
-            title="APT1 targets banks",
-            url="https://example.com/apt1",
-            content="Threat actor APT1 targeted bank systems.",
-            summary="",
-            published=PUBLISHED_AT,
-        ),
-        ArticleInput(
-            title="Volt Typhoon targets agencies",
-            url="https://example.com/volt-typhoon",
-            content="Nation-state actor Volt Typhoon targeted government agencies.",
-            summary="",
-            published=PUBLISHED_AT,
-        ),
-    ]
-    local_signals, analysis = workflow_mod._build_local_analysis(articles)
-
-    report = workflow_mod._build_fallback_report(
-        {"title": "Test Feed"},
-        articles,
-        local_signals,
-        analysis,
-        "model unavailable",
-    )
-    actor_section = report.split("4) Threat Actor Activities", 1)[1].split("5) Risk Assessment", 1)[
-        0
-    ]
-
-    assert "APT1: Mentioned in [APT1 targets banks](https://example.com/apt1)" in actor_section
-    assert "[Volt Typhoon targets agencies](https://example.com/volt-typhoon)" in actor_section
-
-
-def test_fallback_report_does_not_infer_named_actor_aliases():
+def test_fallback_report_excludes_dedicated_threat_actor_section():
     articles = [
         ArticleInput(
             title="Volt Typhoon targets agencies",
@@ -348,11 +220,10 @@ def test_fallback_report_does_not_infer_named_actor_aliases():
         "model unavailable",
     )
 
-    assert "4) Threat Actor Activities" in report
+    assert "Threat Actor Activities" not in report
     assert "CVE and Vulnerability Highlights" not in report
-    assert "5) Risk Assessment" in report
-    assert "does not infer actor names" in report
-    assert "Volt Typhoon: Article-supported activity" not in report
+    assert "4) Risk Assessment" in report
+    assert "5) Recommendations for Action" in report
 
 
 def test_fallback_report_links_regulatory_claims_without_a_cve_section():
@@ -390,11 +261,11 @@ def test_renderer_and_site_check_enforce_the_current_report_sections():
     check_script = SITE_REPORT_CHECK.read_text()
     renderer = RENDERER_JS.read_text()
 
-    assert "Threat Actor Activities" in check_script
-    assert "Threat Actor Activities" in renderer
     assert "FORBIDDEN_REPORT_SECTION_LABELS" in check_script
     assert "cve and vulnerability highlights" in check_script
+    assert "threat actor activities" in check_script
     assert "'CVE and Vulnerability Highlights'," not in renderer
+    assert "'Threat Actor Activities'," not in renderer
 
 
 def test_report_generation_workflow_does_not_dump_lambda_response_body():

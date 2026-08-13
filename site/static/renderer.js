@@ -34,7 +34,6 @@
       'Executive Summary',
       'Key Regulatory Developments',
       'Industry Impact Analysis',
-      'Threat Actor Activities',
       'Risk Assessment',
       'Recommendations for Action',
       'Source Highlights',

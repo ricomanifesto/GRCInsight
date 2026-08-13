@@ -43,18 +43,6 @@ Cross‑sector trends reveal overlapping vulnerabilities in remote‑access tech
 
 ---
 
-## Threat Actor Activities  
-
-| Threat Actor | Activity (as reported) | Source Reference |
-|--------------|------------------------|------------------|
-| **Lazarus Group** (North Korean) | Exploited Windows zero‑day (CVE‑2026‑68820) to target defense‑sector companies, gaining SYSTEM access and deploying a custom backdoor. | “Lazarus hackers exploited Windows zero‑day to target defense firms” |
-| **Sandworm** (Russian) | Delivered trojanized WireGuard VPN client to IT professionals as part of targeted social‑engineering campaign. | “Sandworm hackers target IT pros with trojanized WireGuard VPN client” |
-| **Gunra Ransomware Gang** | Leveraged leaked Conti code and unpatched Fortinet flaws to bypass multi‑factor authentication, encrypting critical infrastructure assets. | “Gunra Ransomware Gang Exploits Fortinet Flaws, Bypasses MFA” |
-
-No article‑supported threat‑actor activity beyond the groups above was identified in this reporting period.
-
----
-
 ## Risk Assessment  
 
 The convergence of zero‑day exploitation, ransomware service models, and socially engineered infiltration techniques elevates the **overall risk rating** to **high** for sectors reliant on remote‑access and third‑party software ecosystems. Key risk drivers include:  
