@@ -82,7 +82,9 @@ def canonical_section_title(line: str) -> str | None:
             has_section_marker = True
         if candidate == previous:
             break
-    return candidate if has_section_marker and candidate in SECTION_TITLES else None
+    candidate = re.sub(r"[\s:;.!?–—-]+$", "", candidate).strip()
+    canonical_titles = {title.casefold(): title for title in SECTION_TITLES}
+    return canonical_titles.get(candidate.casefold()) if has_section_marker else None
 
 
 def canonical_body(content: object) -> str:
