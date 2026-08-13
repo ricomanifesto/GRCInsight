@@ -490,10 +490,21 @@ def test_site_report_reader_surface_detector_covers_visible_trust_defects():
         )
         is None
     )
+    assert find_defect(valid.replace("is documented.", "affects ownCloud and openSUSE.")) is None
+    assert (
+        find_defect(
+            valid.replace(
+                "[Evidence](https://example.com/cve)",
+                "[Microsoft [Update] advisory](https://example.com/cve)",
+            )
+        )
+        is None
+    )
     blocked = (
         valid.replace("is documented.", "is documented.[¹]"),
         valid.replace("is documented.", "is documented in [Regulatory Developments]."),
         valid.replace("is documented.", "causes a criticalCommerce flaw."),
+        valid.replace("is documented.", "exposes customerCredential data."),
         valid.replace("\n\n## Source Highlights", "\n\n---\n\n## Source Highlights"),
         valid.replace("[CVE-2026-12345](https://example.com/cve)", "CVE-2026-12345", 1),
     )

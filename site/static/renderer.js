@@ -43,7 +43,28 @@
         markdown += source.slice(cursor);
         break;
       }
-      const labelEnd = source.indexOf(']', labelStart + 1);
+      let labelDepth = 1;
+      let labelEscaped = false;
+      let labelEnd = -1;
+      for (let index = labelStart + 1; index < source.length; index += 1) {
+        const character = source[index];
+        if (labelEscaped) {
+          labelEscaped = false;
+          continue;
+        }
+        if (character === '\\') {
+          labelEscaped = true;
+          continue;
+        }
+        if (character === '[') labelDepth += 1;
+        if (character === ']') {
+          labelDepth -= 1;
+          if (labelDepth === 0) {
+            labelEnd = index;
+            break;
+          }
+        }
+      }
       if (labelEnd < 0) {
         markdown += source.slice(cursor);
         break;

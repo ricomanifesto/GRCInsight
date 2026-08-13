@@ -63,9 +63,11 @@ PRIVATE_VALUE_TERMS = {
 AFFIRMATIVE_LABEL_VALUES = {"true", "yes"}
 MARKDOWN_LABEL_PREFIX = re.compile(r"^\s*(?:>\s*|(?:\d+[\).]|[-*])\s*|#{1,6}\s*)")
 SUPERSCRIPT_DIGITS = "⁰¹²³⁴⁵⁶⁷⁸⁹"
-CAMEL_CASE_ALLOWLIST = {
-    "macOS",
-}
+# Generated identifier leaks have long lowercase prefixes joined to a title-case
+# noun (for example, customerCredential or criticalCommerce). Requiring five
+# lowercase characters avoids flagging established mixed-case brands such as
+# ownCloud, openSUSE, and macOS. Exact evidence titles are excluded below.
+SUSPICIOUS_CAMEL_CASE = re.compile(r"\b[a-z]{5,}[A-Z][a-z]{2,}\b")
 REQUIRED_PUBLIC_METADATA = {
     "analysis mode",
     "analysis period",
@@ -339,7 +341,24 @@ def markdown_links(markdown: str) -> list[tuple[int, int, str, str]]:
         label_start = markdown.find("[", cursor)
         if label_start < 0:
             break
-        label_end = markdown.find("]", label_start + 1)
+        label_depth = 1
+        label_escaped = False
+        label_end = -1
+        for index in range(label_start + 1, len(markdown)):
+            character = markdown[index]
+            if label_escaped:
+                label_escaped = False
+                continue
+            if character == "\\":
+                label_escaped = True
+                continue
+            if character == "[":
+                label_depth += 1
+            elif character == "]":
+                label_depth -= 1
+                if label_depth == 0:
+                    label_end = index
+                    break
         if label_end < 0:
             break
         if label_end + 1 >= len(markdown) or markdown[label_end + 1] != "(":
@@ -383,8 +402,8 @@ def prose_without_destinations(markdown: str) -> str:
     prose = re.sub(r"^```[\s\S]*?^```", "", markdown, flags=re.MULTILINE)
     prose = re.sub(r"`[^`]*`", "", prose)
     links = markdown_links(prose)
-    for start, end, label, _destination in reversed(links):
-        prose = prose[:start] + label + prose[end:]
+    for start, end, _label, _destination in reversed(links):
+        prose = prose[:start] + " " + prose[end:]
     prose = re.sub(r"https?://\S+", "", prose)
     return prose
 
@@ -398,8 +417,8 @@ def find_reader_surface_defect(markdown: str) -> str | None:
     if bare_reference:
         return f"unresolved bracketed reference [{bare_reference.group(1)}]"
 
-    camel_case = re.search(r"\b[a-z]{2,}[A-Z][A-Za-z]*\b", prose)
-    if camel_case and camel_case.group(0) not in CAMEL_CASE_ALLOWLIST:
+    camel_case = SUSPICIOUS_CAMEL_CASE.search(prose)
+    if camel_case:
         return f"suspicious camelCase token {camel_case.group(0)}"
 
     if re.search(r"(?m)^\s*(?:-{3,}|_{3,}|\*{3,})\s*$", markdown):

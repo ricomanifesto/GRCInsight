@@ -78,6 +78,9 @@ assert(parenthesizedLinkHtml.includes('href="https://example.com/a_(b).html"'), 
 assert(!parenthesizedLinkHtml.includes('.html)</p>'), 'balanced link destinations must not leak a trailing fragment into prose');
 const bareThenLinkedHtml = renderer.renderMarkdown('[Unresolved reference] then [Evidence](https://example.com/evidence)');
 assert(bareThenLinkedHtml.includes('[Unresolved reference] then <a href="https://example.com/evidence"'), 'a bare bracketed reference must not consume the next Markdown link');
+const nestedLabelHtml = renderer.renderMarkdown('[Microsoft [Update] advisory](https://example.com/advisory)');
+assert(nestedLabelHtml.includes('<a href="https://example.com/advisory"'), 'balanced brackets should remain part of a link label');
+assert(nestedLabelHtml.includes('Microsoft [Update] advisory</a>'), 'nested label text should render intact');
 
 // A complete report keeps provenance and section cards in the canonical
 // renderer so build-time HTML and browser rendering are identical.
