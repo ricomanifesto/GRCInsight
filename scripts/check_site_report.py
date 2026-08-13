@@ -71,7 +71,8 @@ SUPERSCRIPT_DIGITS = "⁰¹²³⁴⁵⁶⁷⁸⁹"
 # ownCloud, openSUSE, and macOS. Exact evidence titles are excluded below.
 SUSPICIOUS_CAMEL_CASE = re.compile(r"\b[a-z]{5,}[A-Z][a-z]{2,}\b")
 DANGLING_SOURCE_REFERENCE_PATTERN = re.compile(
-    r"\bSources?\s+\d+(?:\s*(?:,|and|-)\s*\d+)*\b", re.IGNORECASE
+    r"\bSources?\s+#?\s*\d+(?:\s*(?:,|and|-)\s*#?\s*\d+)*\b",
+    re.IGNORECASE,
 )
 LEAKED_DELIBERATION_PATTERN = re.compile(
     r"^(?:let me\b|actually\b|hmm\b|i need\b|i should\b|now i need\b|wait\b)",

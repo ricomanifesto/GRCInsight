@@ -285,6 +285,29 @@ def expand_ellipsized_evidence_references(
     )
 
 
+def expand_ordinal_evidence_references(
+    body: str, sources: list[dict[str, object]]
+) -> str:
+    """Replace parenthesized source ordinals with exact trusted links."""
+
+    def replacement(match: re.Match[str]) -> str:
+        source_number = int(match.group(1))
+        if not 1 <= source_number <= len(sources):
+            return match.group(0)
+        source = sources[source_number - 1]
+        return (
+            f"(Source: [{serialized_markdown_label(str(source['title']))}]"
+            f"({source['url']}))"
+        )
+
+    return re.sub(
+        r"\(\s*source\s*#\s*(\d{1,3})\s*\)",
+        replacement,
+        body,
+        flags=re.IGNORECASE,
+    )
+
+
 def add_missing_cve_source_links(
     body: str, sources: list[dict[str, object]]
 ) -> str:
@@ -491,6 +514,7 @@ def compose_report(data: dict, expected_feed_url: str, expected_model: str) -> s
     sources = source_articles(metadata)
     body = canonicalize_evidence_links(body, sources)
     body = expand_ellipsized_evidence_references(body, sources)
+    body = expand_ordinal_evidence_references(body, sources)
     body = add_missing_cve_source_links(body, sources)
     validate_evidence_links(body, sources)
     return "\n".join(

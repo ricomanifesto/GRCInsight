@@ -960,6 +960,46 @@ def test_site_report_composer_leaves_ambiguous_ellipsized_reference_unresolved()
     assert expand_references(reference, sources) == reference
 
 
+def test_site_report_composer_expands_parenthesized_source_ordinal():
+    namespace = runpy.run_path(str(SITE_REPORT_COMPOSER))
+    compose_report = namespace["compose_report"]
+    title = "AI watermark removers flood the web"
+    source_url = "https://example.com/ai-watermarks"
+    data = {
+        "status": "completed",
+        "title": "GRC Intelligence Report - 2026-08-13",
+        "generated_at": "2026-08-13T13:00:00Z",
+        "content": complete_report_body(
+            "Detection controls are affected (source #1).",
+            f"- [{title}]({source_url})",
+        ),
+        "metadata": {
+            "analysis_mode": "model",
+            "source_name": "SentryDigest",
+            "source_url": "https://example.com/feed.xml",
+            "source_articles": [{"title": title, "url": source_url}],
+            "analysis_period": "August 2026",
+            "article_count": 1,
+            "grc_article_count": 1,
+            "model": "openrouter/example/model",
+        },
+    }
+
+    report = compose_report(data, "https://example.com/feed.xml", "openrouter/example/model")
+
+    assert "source #1" not in report
+    assert f"(Source: [{title}]({source_url}))" in report
+
+
+def test_site_report_composer_leaves_unknown_source_ordinal_unresolved():
+    namespace = runpy.run_path(str(SITE_REPORT_COMPOSER))
+    expand_references = namespace["expand_ordinal_evidence_references"]
+    reference = "(source #2)"
+    sources = [{"title": "Only source", "url": "https://example.com/only"}]
+
+    assert expand_references(reference, sources) == reference
+
+
 def test_site_report_composer_adds_links_for_supported_unlinked_cves():
     namespace = runpy.run_path(str(SITE_REPORT_COMPOSER))
     compose_report = namespace["compose_report"]
@@ -1080,6 +1120,7 @@ def test_site_report_reader_surface_detector_covers_visible_trust_defects():
         valid.replace("is documented.", "causes a criticalCommerce flaw."),
         valid.replace("is documented.", "exposes customerCredential data."),
         valid.replace("is documented.", "is documented by Source 1."),
+        valid.replace("is documented.", "is documented by source #10."),
         valid.replace("\n\n## Source Highlights", "\n\n---\n\n## Source Highlights"),
         valid.replace("[CVE-2026-12345](https://example.com/cve)", "CVE-2026-12345", 1),
     )
