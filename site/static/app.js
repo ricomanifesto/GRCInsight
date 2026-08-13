@@ -220,8 +220,9 @@
   function applyCollapsedState() {
     const map = JSON.parse(localStorage.getItem('cardCollapsed') || '{}');
     const isMobile = window.matchMedia('(max-width: 900px)').matches;
-    Array.from(document.querySelectorAll('#report .card')).forEach((card, idx) => {
-      if (card.classList.contains('report-provenance')) return;
+    const collapsibleCards = Array.from(document.querySelectorAll('#report .card'))
+      .filter(card => !card.classList.contains('report-provenance'));
+    collapsibleCards.forEach((card, idx) => {
       const h2 = card.querySelector('h2');
       if (!h2) return;
       const collapsed = Object.prototype.hasOwnProperty.call(map, h2.id)

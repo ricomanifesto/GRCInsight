@@ -608,6 +608,12 @@ def main() -> None:
         fail("copy-link confirmation is missing an aria-live status")
     if "toLocaleDateString('en-US'" not in app_js or "timeZone: 'UTC'" not in app_js:
         fail("app.js does not format report dates in canonical English UTC")
+    if (
+        "const collapsibleCards" not in app_js
+        or ".filter(card => !card.classList.contains('report-provenance'))" not in app_js
+        or "collapsibleCards.forEach((card, idx)" not in app_js
+    ):
+        fail("app.js does not keep the first report section expanded on mobile")
     if "prefers-color-scheme: light" not in app_js:
         fail("app.js does not honor the reader's preferred theme")
     for token in (
