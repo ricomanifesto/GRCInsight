@@ -911,6 +911,55 @@ def test_site_report_composer_rejects_cross_wired_source_identities():
         raise AssertionError("composer accepted cross-wired source identities")
 
 
+def test_site_report_composer_expands_unique_ellipsized_source_reference():
+    namespace = runpy.run_path(str(SITE_REPORT_COMPOSER))
+    compose_report = namespace["compose_report"]
+    title = "Critical VMware vCenter RCE flaw exploited for reverse SSH access"
+    source_url = "https://example.com/vmware"
+    data = {
+        "status": "completed",
+        "title": "GRC Intelligence Report - 2026-08-13",
+        "generated_at": "2026-08-13T13:00:00Z",
+        "content": complete_report_body(
+            "Contain the active campaign (Source: " "[Critical VMware vCenter RCE flaw...]).",
+            f"- [{title}]({source_url})",
+        ),
+        "metadata": {
+            "analysis_mode": "model",
+            "source_name": "SentryDigest",
+            "source_url": "https://example.com/feed.xml",
+            "source_articles": [{"title": title, "url": source_url}],
+            "analysis_period": "August 2026",
+            "article_count": 1,
+            "grc_article_count": 1,
+            "model": "openrouter/example/model",
+        },
+    }
+
+    report = compose_report(data, "https://example.com/feed.xml", "openrouter/example/model")
+
+    assert "[Critical VMware vCenter RCE flaw...]" not in report
+    assert report.count(f"[{title}]({source_url})") == 2
+
+
+def test_site_report_composer_leaves_ambiguous_ellipsized_reference_unresolved():
+    namespace = runpy.run_path(str(SITE_REPORT_COMPOSER))
+    expand_references = namespace["expand_ellipsized_evidence_references"]
+    reference = "[Critical VMware vCenter RCE flaw...]"
+    sources = [
+        {
+            "title": "Critical VMware vCenter RCE flaw affects product A",
+            "url": "https://example.com/a",
+        },
+        {
+            "title": "Critical VMware vCenter RCE flaw affects product B",
+            "url": "https://example.com/b",
+        },
+    ]
+
+    assert expand_references(reference, sources) == reference
+
+
 def test_site_report_composer_adds_links_for_supported_unlinked_cves():
     namespace = runpy.run_path(str(SITE_REPORT_COMPOSER))
     compose_report = namespace["compose_report"]

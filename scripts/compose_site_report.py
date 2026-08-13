@@ -256,6 +256,35 @@ def canonicalize_evidence_links(
     return body
 
 
+def expand_ellipsized_evidence_references(
+    body: str, sources: list[dict[str, object]]
+) -> str:
+    """Link only unambiguous source-title abbreviations from trusted evidence."""
+
+    def replacement(match: re.Match[str]) -> str:
+        prefix = markdown_inline_text(match.group(1)).strip()
+        if len(re.findall(r"[A-Za-z0-9]+", prefix)) < 3:
+            return match.group(0)
+        candidates = [
+            source
+            for source in sources
+            if str(source["title"]).casefold().startswith(prefix.casefold())
+        ]
+        if len(candidates) != 1:
+            return match.group(0)
+        source = candidates[0]
+        return (
+            f"[{serialized_markdown_label(str(source['title']))}]"
+            f"({source['url']})"
+        )
+
+    return re.sub(
+        r"(?<!\\)\[([^\[\]\n]{16,}?)(?:\.{3}|…)\](?!\s*\()",
+        replacement,
+        body,
+    )
+
+
 def add_missing_cve_source_links(
     body: str, sources: list[dict[str, object]]
 ) -> str:
@@ -461,6 +490,7 @@ def compose_report(data: dict, expected_feed_url: str, expected_model: str) -> s
     body = canonical_body(data.get("content"))
     sources = source_articles(metadata)
     body = canonicalize_evidence_links(body, sources)
+    body = expand_ellipsized_evidence_references(body, sources)
     body = add_missing_cve_source_links(body, sources)
     validate_evidence_links(body, sources)
     return "\n".join(
