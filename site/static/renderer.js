@@ -17,7 +17,7 @@
 
   function sanitizeMarkdownUrl(url) {
     const value = decodeMarkdownEscapes(url).trim();
-    if (!value || /[\s"'<>]/.test(value)) return null;
+    if (!value || /[\s"<>]/.test(value)) return null;
     if (/^(https?:\/\/|\/(?!\/)|\.{0,2}\/|#)/i.test(value)) return value;
     if (!/^[a-z][a-z0-9+.-]*:/i.test(value)) return value;
     return null;

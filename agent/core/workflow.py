@@ -177,13 +177,18 @@ def _build_source_evidence(enriched_articles: List[ArticleInput]) -> List[Dict[s
             if len(allowed_cves) >= REPORT_CVE_LIMIT:
                 break
             allowed_cves.add(cve)
-    return [
-        {
-            **item,
-            "cves": [cve for cve in item["cves"] if cve in allowed_cves],
-        }
-        for item in selected
-    ]
+    bounded_evidence = []
+    for item in selected:
+        identity_cves = set(_extract_cves(f'{item["title"]}\n{item["url"]}'))
+        bounded_evidence.append(
+            {
+                **item,
+                "cves": [
+                    cve for cve in item["cves"] if cve in allowed_cves or cve in identity_cves
+                ],
+            }
+        )
+    return bounded_evidence
 
 
 def _build_local_analysis(enriched_articles: List[ArticleInput]):

@@ -253,6 +253,25 @@ def test_source_evidence_bounds_persisted_cves_to_prompt_limit():
     assert all(set(item["cves"]) <= persisted_cves for item in evidence)
 
 
+def test_source_evidence_preserves_cves_in_exact_title_or_url_identity():
+    articles = [
+        ArticleInput(
+            title=(f"Advisory CVE-2026-{30000 + index}" if index == 10 else f"Advisory {index}"),
+            url=f"https://example.com/advisory-{index}",
+            content=f"CVE-2026-{30000 + index} affects the product.",
+            summary="",
+            published=PUBLISHED_AT,
+        )
+        for index in range(11)
+    ]
+
+    evidence = workflow_mod._build_source_evidence(articles)
+    identity_source = next(item for item in evidence if item["url"].endswith("-10"))
+
+    assert "CVE-2026-30010" in identity_source["title"]
+    assert "CVE-2026-30010" in identity_source["cves"]
+
+
 def test_fallback_report_excludes_dedicated_threat_actor_section():
     articles = [
         ArticleInput(

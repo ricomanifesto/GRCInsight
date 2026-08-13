@@ -73,6 +73,8 @@ assert(renderer.renderMarkdown('---   ').trim() === '<hr>', 'rules with trailing
 const queryLinkHtml = renderer.renderMarkdown('[Evidence](https://example.com/feed?a=1&b=2)');
 assert(queryLinkHtml.includes('href="https://example.com/feed?a=1&amp;b=2"'), 'query separators should be escaped exactly once in rendered links');
 assert(!queryLinkHtml.includes('&amp;amp;'), 'rendered links must not double-escape query separators');
+const apostropheLinkHtml = renderer.renderMarkdown("[Evidence](HTTPS://example.com/O'Reilly)");
+assert(apostropheLinkHtml.includes('href="HTTPS://example.com/O\\'Reilly"'), 'RFC-valid apostrophes and case-insensitive HTTP schemes should remain clickable');
 const parenthesizedLinkHtml = renderer.renderMarkdown('[Evidence](https://example.com/a_(b).html)');
 assert(parenthesizedLinkHtml.includes('href="https://example.com/a_(b).html"'), 'balanced parentheses should remain part of a link destination');
 assert(!parenthesizedLinkHtml.includes('.html)</p>'), 'balanced link destinations must not leak a trailing fragment into prose');
