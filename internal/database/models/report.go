@@ -28,6 +28,10 @@ type ReportMetadata struct {
 	GRCArticleCount      int      `json:"grc_article_count"`
 	AnalysisMode         string   `json:"analysis_mode,omitempty"`
 	FallbackReason       string   `json:"fallback_reason,omitempty"`
+	SourceName           string   `json:"source_name,omitempty"`
+	SourceURL            string   `json:"source_url,omitempty"`
+	AnalysisPeriod       string   `json:"analysis_period,omitempty"`
+	Model                string   `json:"model,omitempty"`
 	RegulationsMentioned []string `json:"regulations_mentioned"`
 	FrameworksReferenced []string `json:"frameworks_referenced"`
 	IndustriesAffected   []string `json:"industries_affected"`

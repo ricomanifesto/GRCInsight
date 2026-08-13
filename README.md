@@ -34,7 +34,7 @@ GRCInsight can be triggered by updates from [SentryDigest](https://github.com/ri
 
 - **Go Lambda:** API handling, DynamoDB writes, and Python Lambda invocation.
 - **Python Lambda:** RSS fetch, model-backed analysis, and report composition.
-- **GitHub Actions:** Lambda deployment, scheduled report generation, and GitHub Pages publishing.
+- **GitHub Actions:** Lambda deployment, scheduled report generation, deterministic site composition, visual review evidence, and GitHub Pages publishing.
 
 ## Setup
 
@@ -81,4 +81,10 @@ make check
 - Required secrets: `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `OPENROUTER_API_KEY`.
 - Runtime variable: `LLM_MODEL=openrouter/provider-model`.
 - Model-backed analysis calls OpenRouter directly in local and Lambda environments.
-- `.github/workflows/lambda-report-generation.yml` writes reports to `site/` and deploys GitHub Pages.
+- `.github/workflows/lambda-report-generation.yml` refuses fallback output,
+  composes report-owned provenance into `site/index.md`, preserves a dated
+  archive snapshot, pre-renders the current/archive pages, validates the result,
+  and commits the artifact to `main`.
+- `.github/workflows/deploy-site.yml` is the single Pages deployment owner. It
+  revalidates the committed artifact, captures dark and light top-of-fold review
+  images, uploads that evidence to the workflow run, and deploys `site/`.

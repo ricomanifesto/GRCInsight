@@ -96,6 +96,10 @@ class ReportMetadata(BaseModel):
     grc_article_count: int
     analysis_mode: Optional[Literal["model", "fallback"]] = None
     fallback_reason: Optional[str] = None
+    source_name: str = ""
+    source_url: str = ""
+    analysis_period: str = ""
+    model: str = ""
     regulations_mentioned: List[str] = Field(default_factory=list)
     frameworks_referenced: List[str] = Field(default_factory=list)
     industries_affected: List[str] = Field(default_factory=list)

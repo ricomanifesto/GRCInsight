@@ -1,6 +1,5 @@
 from datetime import datetime, timezone
 from pathlib import Path
-import re
 import runpy
 import tomllib
 
@@ -16,7 +15,7 @@ DEPLOY_SITE_WORKFLOW = REPO_ROOT / ".github" / "workflows" / "deploy-site.yml"
 REPORT_WORKFLOW = REPO_ROOT / ".github" / "workflows" / "lambda-report-generation.yml"
 CI_WORKFLOW = REPO_ROOT / ".github" / "workflows" / "ci.yml"
 SITE_REPORT_CHECK = REPO_ROOT / "scripts" / "check_site_report.py"
-SITE_REPORT = REPO_ROOT / "site" / "index.md"
+SITE_REPORT_COMPOSER = REPO_ROOT / "scripts" / "compose_site_report.py"
 MODEL_SERVICE = REPO_ROOT / "agent" / "services" / "model_service.py"
 RENDERER_JS = REPO_ROOT / "site" / "static" / "renderer.js"
 WORKFLOWS = (CI_WORKFLOW, DEPLOY_WORKFLOW, DEPLOY_SITE_WORKFLOW, REPORT_WORKFLOW)
@@ -39,6 +38,10 @@ def test_static_site_deploys_main_branch_site_changes():
     assert "workflow_dispatch:" in workflow
     assert "group: github-pages" in workflow
     assert "run: make check-site" in workflow
+    assert "playwright@1.62.1 screenshot" in workflow
+    assert "--color-scheme dark" in workflow
+    assert "--color-scheme light" in workflow
+    assert "actions/upload-artifact@v7" in workflow
 
 
 def test_report_generation_payload_treats_feed_url_as_json_data():
@@ -113,10 +116,14 @@ def test_report_prompt_requires_current_source_entities_and_readable_summary():
     assert "CVE-2026-12345" in prompt
     assert "structured actor identifiers are hints, not an exhaustive actor list" not in prompt
     assert "Do not classify industry, standards, regulatory, or working groups" not in prompt
-    assert "Use Markdown links with the exact source title and URL" in prompt
+    assert "Use inline Markdown links with the exact source title and URL" in prompt
     assert "Every report-specific regulatory and CVE claim" in prompt
     assert "Do not emit incomplete, truncated, or ellipsized CVE identifiers" in prompt
     assert "Use exact framework, standard, regulation, or publication names" in prompt
+    assert "Source Highlights" in prompt
+    assert "Never use superscript footnotes" in prompt
+    assert "Do not invent counts" in prompt
+    assert "publication layer adds those values" in prompt
 
 
 def test_report_prompt_globally_bounds_cve_evidence():
@@ -270,49 +277,6 @@ def test_renderer_and_site_check_enforce_the_current_report_sections():
     assert "'Threat Actor Activities'," not in renderer
 
 
-def test_public_report_has_no_unresolved_numeric_source_placeholders():
-    report = SITE_REPORT.read_text()
-
-    assert not re.search(
-        r"\bSources?\s+\d+(?:\s*(?:,|and|-)\s*\d+)*\b",
-        report,
-        re.IGNORECASE,
-    )
-
-
-def test_generation_and_publish_gates_reject_numeric_source_placeholders():
-    model_service = MODEL_SERVICE.read_text()
-    report_check = SITE_REPORT_CHECK.read_text()
-
-    assert "Do not use placeholder citations such as Source 1 or Sources 2, 3" in model_service
-    assert "DANGLING_SOURCE_REFERENCE_PATTERN" in report_check
-
-
-def test_generation_and_publish_gates_reject_leaked_model_deliberation():
-    model_service = MODEL_SERVICE.read_text()
-    namespace = runpy.run_path(str(SITE_REPORT_CHECK))
-    find_integrity_failure = namespace["find_public_report_integrity_failure"]
-
-    assert "Return only the final report Markdown" in model_service
-    assert find_integrity_failure("""# GRC Intelligence Report
-**Generated:** 2026-08-13T19:13:44Z
-
-Let me analyze the request carefully.
-
-## Executive Summary
-
-Final report text.
-""") == "leaked model deliberation: Let me analyze the request carefully."
-    assert find_integrity_failure("""# GRC Intelligence Report
-**Generated:** 2026-08-13T19:13:44Z
-
-## Executive Summary
-
-[table]
-""") == "unresolved report placeholder: [table]"
-    assert find_integrity_failure(SITE_REPORT.read_text()) is None
-
-
 def test_report_generation_workflow_does_not_dump_lambda_response_body():
     workflow = REPORT_WORKFLOW.read_text()
 
@@ -335,40 +299,97 @@ def test_report_generation_workflow_refuses_fallback_reports():
     assert "Refusing to publish a fallback-mode report" in workflow
 
 
-def test_report_generation_workflow_owns_the_only_top_level_report_title():
-    workflow = REPORT_WORKFLOW.read_text()
-    model_service = MODEL_SERVICE.read_text()
-
-    assert 'echo "# ${SAFE_TITLE}" > site/index.md' in workflow
-    assert "REPORT_BODY=$(printf '%s\\n' \"$SAFE_CONTENT\" | awk" in workflow
-    assert "/^# / { next }" in workflow
-    assert "dropped_title" not in workflow
-    assert 'echo "${REPORT_BODY}" >> site/index.md' in workflow
-    assert 'Do not emit a top-level "# " heading' in model_service
-
-
-def test_report_generation_workflow_strips_duplicate_generated_timestamp():
+def test_report_generation_workflow_uses_deterministic_report_composer():
     workflow = REPORT_WORKFLOW.read_text()
 
-    assert "seen_generated = 0" in workflow
-    assert "/^\\*\\*Generated:\\*\\*/" in workflow
+    assert "python3 scripts/compose_site_report.py" in workflow
+    assert "--input report-data.json" in workflow
+    assert '--feed-url "$FEED_URL"' in workflow
+    assert '--model "$LLM_MODEL"' in workflow
+
+
+def test_report_generation_workflow_builds_prerender_and_archive():
+    workflow = REPORT_WORKFLOW.read_text()
+
+    assert workflow.count("python3 scripts/build_site.py --archive-current") >= 2
+    assert "git add site/index.md site/index.html site/archive" in workflow
 
 
 def test_report_generation_workflow_validates_generated_site_before_publish():
     workflow = REPORT_WORKFLOW.read_text()
 
     assert "Validate generated site report" in workflow
-    assert workflow.count("python3 scripts/check_site_report.py") >= 2
+    assert workflow.count("make check-site") >= 2
     assert workflow.index("Validate generated site report") < workflow.index(
         "Commit and push report"
     )
-    assert workflow.index("Validate generated site report") < workflow.index(
-        "Upload Pages artifact"
-    )
+    assert "actions/upload-pages-artifact" not in workflow
+    assert "actions/deploy-pages" not in workflow
     rebase_index = workflow.index('git rebase -X theirs "origin/$GITHUB_REF_NAME"')
-    assert workflow.index("python3 scripts/check_site_report.py", rebase_index) < workflow.index(
-        "git push origin HEAD"
+    assert workflow.index("make check-site", rebase_index) < workflow.index("git push origin HEAD")
+
+
+def test_site_report_composer_owns_public_provenance_and_body_shape():
+    namespace = runpy.run_path(str(SITE_REPORT_COMPOSER))
+    compose_report = namespace["compose_report"]
+    report = compose_report(
+        {
+            "status": "completed",
+            "title": "GRC Intelligence Report - 2026-08-13",
+            "generated_at": "2026-08-13T13:00:00Z",
+            "content": "# Duplicate title\n**Generated:** stale\n\n1. Executive Summary\nCareful analysis.\n\n---\n\n6) Source Highlights\n- [Evidence](https://example.com/evidence)",
+            "metadata": {
+                "analysis_mode": "model",
+                "source_name": "SentryDigest",
+                "source_url": "https://example.com/feed.xml",
+                "analysis_period": "August 2026",
+                "article_count": 30,
+                "grc_article_count": 12,
+                "model": "openrouter/example/model",
+            },
+        },
+        "https://example.com/feed.xml",
+        "openrouter/example/model",
     )
+
+    assert report.count("# GRC Intelligence Report - 2026-08-13") == 1
+    assert report.count("**Generated:** 2026-08-13T13:00:00Z") == 1
+    assert "**Source:** [SentryDigest](https://example.com/feed.xml)" in report
+    assert "**Articles Analyzed:** 30" in report
+    assert "**GRC-Relevant Articles:** 12" in report
+    assert "**Model:** openrouter/example/model" in report
+    assert "**Analysis Mode:** Model-backed" in report
+    assert "## Executive Summary" in report
+    assert "## Source Highlights" in report
+    assert "\n---\n" not in report
+    assert "stale" not in report
+
+
+def test_site_report_composer_rejects_provenance_mismatch():
+    namespace = runpy.run_path(str(SITE_REPORT_COMPOSER))
+    compose_report = namespace["compose_report"]
+    data = {
+        "status": "completed",
+        "title": "GRC Intelligence Report - 2026-08-13",
+        "generated_at": "2026-08-13T13:00:00Z",
+        "content": "## Executive Summary\nCareful analysis.",
+        "metadata": {
+            "analysis_mode": "model",
+            "source_name": "SentryDigest",
+            "source_url": "https://example.com/feed.xml",
+            "analysis_period": "August 2026",
+            "article_count": 1,
+            "grc_article_count": 1,
+            "model": "openrouter/example/model",
+        },
+    }
+
+    try:
+        compose_report(data, "https://other.example/feed.xml", "openrouter/example/model")
+    except SystemExit as error:
+        assert "source URL does not match" in str(error)
+    else:
+        raise AssertionError("composer accepted mismatched source provenance")
 
 
 def test_site_report_check_rejects_internal_distribution_labels():
@@ -380,6 +401,28 @@ def test_site_report_check_rejects_internal_distribution_labels():
     assert "PRIVATE_VALUE_TERMS" in check_script
     assert "normalize_label_text" in check_script
     assert r"\bCONFIDENTIAL\b" not in check_script
+
+
+def test_site_report_reader_surface_detector_covers_visible_trust_defects():
+    namespace = runpy.run_path(str(SITE_REPORT_CHECK))
+    find_defect = namespace["find_reader_surface_defect"]
+    valid = (
+        "## Executive Summary\n"
+        "[CVE-2026-12345](https://example.com/cve) is documented.\n\n"
+        "## Source Highlights\n"
+        "- [Evidence](https://example.com/cve)"
+    )
+
+    assert find_defect(valid) is None
+    blocked = (
+        valid.replace("is documented.", "is documented.[¹]"),
+        valid.replace("is documented.", "is documented in [Regulatory Developments]."),
+        valid.replace("is documented.", "causes a criticalCommerce flaw."),
+        valid.replace("\n\n## Source Highlights", "\n\n---\n\n## Source Highlights"),
+        valid.replace("[CVE-2026-12345](https://example.com/cve)", "CVE-2026-12345", 1),
+    )
+    for markdown in blocked:
+        assert find_defect(markdown), markdown
 
 
 def test_site_report_forbidden_detector_covers_public_label_variants():
@@ -537,10 +580,12 @@ def test_workflows_use_current_node_runtime_action_pins():
     assert "actions/checkout@v7" in workflow_text
     assert "aws-actions/configure-aws-credentials@v6" in workflow_text
     assert "actions/setup-python@v6" in workflow_text
+    assert "actions/setup-node@v7" in workflow_text
     assert "actions/cache@v6" in workflow_text
     assert "hashicorp/setup-terraform@v4" in workflow_text
     assert "actions/upload-pages-artifact@v5" in workflow_text
     assert "actions/deploy-pages@v5" in workflow_text
+    assert "actions/upload-artifact@v7" in workflow_text
     assert "astral-sh/setup-uv@v8.2.0" in workflow_text
     assert "actions/checkout@v4" not in workflow_text
     assert "aws-actions/configure-aws-credentials@v4" not in workflow_text

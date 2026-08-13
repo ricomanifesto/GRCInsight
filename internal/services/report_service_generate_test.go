@@ -82,6 +82,10 @@ func TestGenerateReport_PersistsReportAndArticles(t *testing.T) {
 			GRCArticleCount: 1,
 			AnalysisMode:    "fallback",
 			FallbackReason:  "model quota exceeded",
+			SourceName:      "SentryDigest",
+			SourceURL:       "https://example.com/feed.xml",
+			AnalysisPeriod:  "August 2026",
+			Model:           "openrouter/example/model",
 		},
 		Articles: []apimodels.ArticleRecord{{
 			Title: "A1", URL: "https://ex.com/1", Source: "Feed", Summary: "S",
@@ -114,6 +118,9 @@ func TestGenerateReport_PersistsReportAndArticles(t *testing.T) {
 	}
 	if fr.updated.Metadata.FallbackReason != "model quota exceeded" {
 		t.Fatalf("expected fallback reason to persist, got %q", fr.updated.Metadata.FallbackReason)
+	}
+	if fr.updated.Metadata.SourceName != "SentryDigest" || fr.updated.Metadata.Model != "openrouter/example/model" {
+		t.Fatalf("expected report provenance to persist, got %#v", fr.updated.Metadata)
 	}
 	if fa.calls == 0 {
 		t.Fatalf("expected articles to be persisted")

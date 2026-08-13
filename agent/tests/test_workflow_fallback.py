@@ -148,6 +148,10 @@ def test_run_grc_analysis_endpoint_marks_model_backed_reports(monkeypatch):
     assert response.metadata is not None
     assert response.metadata.analysis_mode == "model"
     assert response.metadata.fallback_reason is None
+    assert response.metadata.source_name == "Test Feed"
+    assert response.metadata.source_url == "https://example.com/feed.xml"
+    assert response.metadata.analysis_period
+    assert response.metadata.model == "openrouter/openrouter/free"
 
 
 def test_run_grc_analysis_endpoint_passes_request_model_config(monkeypatch):
