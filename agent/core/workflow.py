@@ -544,7 +544,7 @@ async def run_grc_analysis_endpoint(
             grc_article_count=grc_article_count,
             analysis_mode="fallback" if used_fallback_report else "model",
             fallback_reason=fallback_reason if used_fallback_report else None,
-            source_name=feed_data.get("title", "Unknown Feed"),
+            source_name=feed_data.get("title") or "Unknown Feed",
             source_url=feed_url,
             analysis_period=generated_at.strftime("%B %Y"),
             model=config.model,
