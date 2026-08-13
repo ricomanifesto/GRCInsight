@@ -6,6 +6,7 @@ import re
 import xml.etree.ElementTree as ET
 from datetime import datetime, timezone
 from pathlib import Path
+from urllib.parse import quote, urlparse
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 SITE_DIR = REPO_ROOT / "site"
@@ -473,7 +474,10 @@ def find_public_report_integrity_failure(markdown: str) -> str | None:
     first_section_index = next(
         (index for index, line in enumerate(lines) if is_report_section(line)), None
     )
-    if first_section_index is not None and first_section_index > MAX_REPORT_PREAMBLE_LINES:
+    if (
+        first_section_index is not None
+        and first_section_index > MAX_REPORT_PREAMBLE_LINES
+    ):
         return "first report section appears after an excessive preamble"
     return None
 
@@ -486,6 +490,13 @@ def read_text(path: Path) -> str:
     if not path.exists():
         fail(f"missing {path.relative_to(REPO_ROOT)}")
     return path.read_text(encoding="utf-8")
+
+
+def canonical_http_url(url: str) -> str:
+    parsed = urlparse(url)
+    if parsed.scheme not in {"http", "https"} or not parsed.netloc:
+        fail(f"invalid evidence URL: {url}")
+    return quote(url, safe=":/?#[]@!$&*+,;=%")
 
 
 def is_report_section(line: str) -> bool:
@@ -563,7 +574,9 @@ def validate_evidence_manifest(
         fail("evidence manifest timestamp does not match report provenance")
 
     source_links = markdown_links(metadata["source"])
-    if len(source_links) != 1 or manifest.get("feed_url") != source_links[0][3]:
+    if len(source_links) != 1 or canonical_http_url(
+        str(manifest.get("feed_url", ""))
+    ) != canonical_http_url(source_links[0][3]):
         fail("evidence manifest feed URL does not match report provenance")
 
     raw_sources = manifest.get("sources")
@@ -580,6 +593,7 @@ def validate_evidence_manifest(
             fail(f"evidence manifest source {index} has no title")
         if not isinstance(url, str) or not url.startswith(("http://", "https://")):
             fail(f"evidence manifest source {index} has no HTTP URL")
+        url = canonical_http_url(url)
         if url in source_urls:
             fail(f"evidence manifest repeats source URL: {url}")
         source_urls.add(url)
@@ -588,7 +602,7 @@ def validate_evidence_manifest(
     body_start = markdown.find("\n## ")
     body = markdown[body_start + 1 :] if body_start >= 0 else ""
     body_links = [
-        (label, destination)
+        (label, canonical_http_url(destination))
         for _, _, label, destination in markdown_links(body)
         if destination.startswith(("http://", "https://"))
     ]
@@ -606,7 +620,7 @@ def validate_evidence_manifest(
     highlighted_pairs = {
         (
             label.replace("\\[", "[").replace("\\]", "]").replace("\\\\", "\\"),
-            destination,
+            canonical_http_url(destination),
         )
         for _, _, label, destination in markdown_links(source_section.group(1))
     }

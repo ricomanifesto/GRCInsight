@@ -81,6 +81,9 @@ assert(bareThenLinkedHtml.includes('[Unresolved reference] then <a href="https:/
 const nestedLabelHtml = renderer.renderMarkdown('[Microsoft [Update] advisory](https://example.com/advisory)');
 assert(nestedLabelHtml.includes('<a href="https://example.com/advisory"'), 'balanced brackets should remain part of a link label');
 assert(nestedLabelHtml.includes('Microsoft [Update] advisory</a>'), 'nested label text should render intact');
+const escapedLabelHtml = renderer.renderMarkdown('[Example Feed\\\\\\\\](https://example.com/feed) and [Microsoft \\\\[Update\\\\]](https://example.com/update)');
+assert(escapedLabelHtml.includes('Example Feed\\\\</a>'), 'escaped link-label backslashes should render once');
+assert(escapedLabelHtml.includes('Microsoft [Update]</a>'), 'escaped link-label brackets should render without escape characters');
 
 // A complete report keeps provenance and section cards in the canonical
 // renderer so build-time HTML and browser rendering are identical.

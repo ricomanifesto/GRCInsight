@@ -1,4 +1,5 @@
 from datetime import datetime, timezone
+import json
 from pathlib import Path
 import runpy
 import tomllib
@@ -561,6 +562,31 @@ def test_site_report_integrity_detector_rejects_model_artifacts():
     assert find_failure("## Executive Summary\n[Table]")
     long_preamble = "\n".join([f"preamble {index}" for index in range(31)])
     assert find_failure(long_preamble + "\n## Executive Summary")
+
+
+def test_evidence_manifest_normalizes_parenthesized_urls():
+    namespace = runpy.run_path(str(SITE_REPORT_CHECK))
+    validate_manifest = namespace["validate_evidence_manifest"]
+    markdown = (
+        "# Report\n"
+        "**Generated:** 2026-08-13T13:00:00Z\n"
+        "**Source:** [Feed](https://example.com/feed(1).xml)\n\n"
+        "## Executive Summary\n"
+        "[Evidence](https://example.com/a_(b).html)\n\n"
+        "## Source Highlights\n"
+        "- [Evidence](https://example.com/a_(b).html)"
+    )
+    metadata = {
+        "generated": "2026-08-13T13:00:00Z",
+        "source": "[Feed](https://example.com/feed(1).xml)",
+    }
+    manifest = {
+        "generated_at": "2026-08-13T13:00:00Z",
+        "feed_url": "https://example.com/feed%281%29.xml",
+        "sources": [{"title": "Evidence", "url": "https://example.com/a_%28b%29.html"}],
+    }
+
+    validate_manifest(markdown, metadata, json.dumps(manifest))
 
 
 def test_site_report_forbidden_detector_covers_public_label_variants():

@@ -26,7 +26,8 @@
   }
 
   function renderInlineText(value) {
-    let html = escapeHtml(value);
+    const decoded = String(value).replace(/\\([\\\[\]()])/g, '$1');
+    let html = escapeHtml(decoded);
     html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
     html = html.replace(/\*([^*]+)\*/g, '<em>$1</em>');
     return html;
