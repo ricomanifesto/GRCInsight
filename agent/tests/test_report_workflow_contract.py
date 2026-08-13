@@ -256,9 +256,17 @@ def test_source_evidence_bounds_persisted_cves_to_prompt_limit():
 def test_source_evidence_preserves_cves_in_exact_title_or_url_identity():
     articles = [
         ArticleInput(
-            title=(f"Advisory CVE-2026-{30000 + index}" if index == 10 else f"Advisory {index}"),
-            url=f"https://example.com/advisory-{index}",
-            content=f"CVE-2026-{30000 + index} affects the product.",
+            title=f"Advisory {index}",
+            url=(
+                "https://example.com/CVE-2026-30010"
+                if index == 10
+                else f"https://example.com/advisory-{index}"
+            ),
+            content=(
+                "The identifier appears only in this source URL."
+                if index == 10
+                else f"CVE-2026-{30000 + index} affects the product."
+            ),
             summary="",
             published=PUBLISHED_AT,
         )
@@ -266,9 +274,10 @@ def test_source_evidence_preserves_cves_in_exact_title_or_url_identity():
     ]
 
     evidence = workflow_mod._build_source_evidence(articles)
-    identity_source = next(item for item in evidence if item["url"].endswith("-10"))
+    identity_source = next(item for item in evidence if "CVE-2026-30010" in item["url"])
 
-    assert "CVE-2026-30010" in identity_source["title"]
+    assert "CVE-2026-30010" not in identity_source["title"]
+    assert "CVE-2026-30010" not in identity_source["snippet"]
     assert "CVE-2026-30010" in identity_source["cves"]
 
 

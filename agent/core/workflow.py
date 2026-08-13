@@ -179,13 +179,13 @@ def _build_source_evidence(enriched_articles: List[ArticleInput]) -> List[Dict[s
             allowed_cves.add(cve)
     bounded_evidence = []
     for item in selected:
-        identity_cves = set(_extract_cves(f'{item["title"]}\n{item["url"]}'))
+        identity_cves = _extract_cves(f'{item["title"]}\n{item["url"]}')
+        retained_cves = [cve for cve in item["cves"] if cve in allowed_cves]
+        retained_cves.extend(cve for cve in identity_cves if cve not in retained_cves)
         bounded_evidence.append(
             {
                 **item,
-                "cves": [
-                    cve for cve in item["cves"] if cve in allowed_cves or cve in identity_cves
-                ],
+                "cves": retained_cves,
             }
         )
     return bounded_evidence
