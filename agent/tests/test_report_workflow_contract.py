@@ -24,6 +24,25 @@ WORKFLOWS = (CI_WORKFLOW, DEPLOY_WORKFLOW, DEPLOY_SITE_WORKFLOW, REPORT_WORKFLOW
 PUBLISHED_AT = datetime(2026, 6, 1, tzinfo=timezone.utc)
 
 
+def complete_report_body(
+    executive_content: str,
+    source_content: str,
+    *,
+    executive_heading: str = "## Executive Summary",
+    source_heading: str = "## Source Highlights",
+) -> str:
+    return "\n\n".join(
+        (
+            f"{executive_heading}\n{executive_content}",
+            "## Key Regulatory Developments\nCareful regulatory analysis.",
+            "## Industry Impact Analysis\nCareful industry analysis.",
+            "## Risk Assessment\nCareful risk analysis.",
+            "## Recommendations for Action\nCareful recommendations.",
+            f"{source_heading}\n{source_content}",
+        )
+    )
+
+
 def test_report_generation_workflow_accepts_repository_dispatch_payloads():
     workflow = REPORT_WORKFLOW.read_text()
 
@@ -368,7 +387,15 @@ def test_site_report_composer_owns_public_provenance_and_body_shape():
             "status": "completed",
             "title": "GRC Intelligence Report - 2026-08-13",
             "generated_at": "2026-08-13T13:00:00Z",
-            "content": "# Duplicate title\n**Generated:** stale\n\n1. Executive Summary\nCareful analysis.\n\n---\n\n6) Source Highlights\n- [Evidence](https://example.com/evidence)",
+            "content": (
+                "# Duplicate title\n**Generated:** stale\n\n"
+                + complete_report_body(
+                    "Careful analysis.\n\n---",
+                    "- [Evidence](https://example.com/evidence)",
+                    executive_heading="1. Executive Summary",
+                    source_heading="6) Source Highlights",
+                )
+            ),
             "metadata": {
                 "analysis_mode": "model",
                 "source_name": "SentryDigest",
@@ -398,6 +425,31 @@ def test_site_report_composer_owns_public_provenance_and_body_shape():
     assert "## Source Highlights" in report
     assert "\n---\n" not in report
     assert "stale" not in report
+
+
+def test_site_report_composer_requires_each_canonical_section_exactly_once():
+    namespace = runpy.run_path(str(SITE_REPORT_COMPOSER))
+    canonical_body = namespace["canonical_body"]
+
+    for malformed, expected in (
+        (
+            complete_report_body("Careful analysis.", "- Evidence").replace(
+                "## Risk Assessment\nCareful risk analysis.\n\n", ""
+            ),
+            "missing section: Risk Assessment",
+        ),
+        (
+            complete_report_body("Careful analysis.", "- Evidence")
+            + "\n\n## Risk Assessment\nDuplicate risk analysis.",
+            "repeats section: Risk Assessment",
+        ),
+    ):
+        try:
+            canonical_body(malformed)
+        except SystemExit as error:
+            assert expected in str(error)
+        else:
+            raise AssertionError(f"composer accepted malformed section structure: {expected}")
 
 
 def test_site_builder_treats_report_backslashes_as_literal_content():
@@ -468,10 +520,11 @@ def test_site_report_composer_normalizes_numbered_markdown_headings_and_feed_url
             "status": "completed",
             "title": "GRC Intelligence Report - 2026-08-13",
             "generated_at": "2026-08-13T13:00:00Z",
-            "content": (
-                "## **1. EXECUTIVE SUMMARY:**\nCareful analysis.\n\n"
-                "**6) source highlights.**\n"
-                "- [Evidence](https://example.com/evidence)"
+            "content": complete_report_body(
+                "Careful analysis.",
+                "- [Evidence](https://example.com/evidence)",
+                executive_heading="## **1. EXECUTIVE SUMMARY:**",
+                source_heading="**6) source highlights.**",
             ),
             "metadata": {
                 "analysis_mode": "model",
@@ -502,11 +555,9 @@ def test_site_report_composer_rejects_evidence_urls_absent_from_source_articles(
         "status": "completed",
         "title": "GRC Intelligence Report - 2026-08-13",
         "generated_at": "2026-08-13T13:00:00Z",
-        "content": (
-            "## Executive Summary\n"
-            "[Invented evidence](https://invented.example/advisory)\n\n"
-            "## Source Highlights\n"
-            "- [Invented evidence](https://invented.example/advisory)"
+        "content": complete_report_body(
+            "[Invented evidence](https://invented.example/advisory)",
+            "- [Invented evidence](https://invented.example/advisory)",
         ),
         "metadata": {
             "analysis_mode": "model",
@@ -538,11 +589,9 @@ def test_site_report_composer_decodes_escaped_evidence_url_delimiters():
             "status": "completed",
             "title": "GRC Intelligence Report - 2026-08-13",
             "generated_at": "2026-08-13T13:00:00Z",
-            "content": (
-                "## Executive Summary\n"
-                "[Evidence](https://example.com/O'Reilly/a\\)b)\n\n"
-                "## Source Highlights\n"
-                "- [Evidence](https://example.com/O'Reilly/a\\)b)"
+            "content": complete_report_body(
+                "[Evidence](https://example.com/O'Reilly/a\\)b)",
+                "- [Evidence](https://example.com/O'Reilly/a\\)b)",
             ),
             "metadata": {
                 "analysis_mode": "model",
@@ -570,11 +619,9 @@ def test_site_report_composer_rejects_invented_title_for_real_evidence_url():
         "status": "completed",
         "title": "GRC Intelligence Report - 2026-08-13",
         "generated_at": "2026-08-13T13:00:00Z",
-        "content": (
-            "## Executive Summary\n"
-            "[CISA mandates immediate shutdown](https://example.com/neutral)\n\n"
-            "## Source Highlights\n"
-            "- [Neutral advisory](https://example.com/neutral)"
+        "content": complete_report_body(
+            "[CISA mandates immediate shutdown](https://example.com/neutral)",
+            "- [Neutral advisory](https://example.com/neutral)",
         ),
         "metadata": {
             "analysis_mode": "model",
@@ -605,12 +652,9 @@ def test_site_report_composer_rejects_cve_absent_from_linked_source():
         "status": "completed",
         "title": "GRC Intelligence Report - 2026-08-13",
         "generated_at": "2026-08-13T13:00:00Z",
-        "content": (
-            "## Executive Summary\n"
-            "CVE-2026-1111 is described by "
-            "[Different advisory](https://example.com/different).\n\n"
-            "## Source Highlights\n"
-            "- [Different advisory](https://example.com/different)"
+        "content": complete_report_body(
+            "CVE-2026-1111 is described by " "[Different advisory](https://example.com/different).",
+            "- [Different advisory](https://example.com/different)",
         ),
         "metadata": {
             "analysis_mode": "model",

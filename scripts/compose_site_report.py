@@ -109,13 +109,21 @@ def canonical_body(content: object) -> str:
         fail("report content has no recognized top-level section")
 
     body_lines = []
+    section_counts = {title: 0 for title in SECTION_TITLES}
     for line in lines[body_start:]:
         section_title = canonical_section_title(line)
         if section_title in known:
+            section_counts[section_title] += 1
             line = f"## {section_title}"
         if line.strip() in {"---", "___", "***"}:
             continue
         body_lines.append(line.rstrip())
+    missing = [title for title, count in section_counts.items() if count == 0]
+    duplicated = [title for title, count in section_counts.items() if count > 1]
+    if missing:
+        fail("report content is missing section: " + missing[0])
+    if duplicated:
+        fail("report content repeats section: " + duplicated[0])
     return "\n".join(body_lines).strip()
 
 

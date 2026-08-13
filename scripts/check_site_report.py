@@ -504,15 +504,21 @@ def markdown_inline_text(value: str) -> str:
     return re.sub(r"\\([\\[\]()])", r"\1", value)
 
 
-def is_report_section(line: str) -> bool:
+def report_section_label(line: str) -> str | None:
     if line.startswith("## "):
-        return True
+        label = line[3:].strip()
+        return label if label in REPORT_SECTION_LABELS else None
 
     match = NUMBERED_SECTION_PATTERN.match(line)
     if not match:
-        return False
+        return None
 
-    return match.group(1).strip() in REPORT_SECTION_LABELS
+    label = match.group(1).strip()
+    return label if label in REPORT_SECTION_LABELS else None
+
+
+def is_report_section(line: str) -> bool:
+    return report_section_label(line) is not None
 
 
 def validate_site_identity(html: str, sitemap_xml: str) -> None:
@@ -723,9 +729,16 @@ def main() -> None:
     )
     if h1_count != 1:
         fail("index.md must contain exactly one top-level report title")
-    section_count = sum(1 for line in lines if is_report_section(line))
-    if section_count < 2:
-        fail("index.md must contain at least two report sections")
+    section_counts = {
+        label: sum(1 for line in lines if report_section_label(line) == label)
+        for label in REPORT_SECTION_LABELS
+    }
+    missing_sections = [label for label, count in section_counts.items() if count == 0]
+    repeated_sections = [label for label, count in section_counts.items() if count > 1]
+    if missing_sections:
+        fail("index.md missing required report section: " + sorted(missing_sections)[0])
+    if repeated_sections:
+        fail("index.md repeats report section: " + sorted(repeated_sections)[0])
     forbidden_sections = {
         normalize_label_text(line)
         for line in lines
