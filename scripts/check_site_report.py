@@ -11,6 +11,7 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 SITE_DIR = REPO_ROOT / "site"
 INDEX_HTML = SITE_DIR / "index.html"
 INDEX_MD = SITE_DIR / "index.md"
+EVIDENCE_MANIFEST = SITE_DIR / "evidence-manifest.json"
 SITEMAP_XML = SITE_DIR / "sitemap.xml"
 APP_JS = SITE_DIR / "static" / "app.js"
 RENDERER_JS = SITE_DIR / "static" / "renderer.js"
@@ -518,6 +519,71 @@ def validate_site_identity(html: str, sitemap_xml: str) -> None:
         fail("sitemap.xml must contain only the canonical GRCInsight project URL")
 
 
+def validate_evidence_manifest(
+    markdown: str, metadata: dict[str, str], manifest_text: str
+) -> dict:
+    try:
+        manifest = json.loads(manifest_text)
+    except json.JSONDecodeError as error:
+        fail(f"evidence-manifest.json is invalid JSON: {error}")
+    if not isinstance(manifest, dict):
+        fail("evidence-manifest.json must be an object")
+    if manifest.get("generated_at") != metadata["generated"]:
+        fail("evidence manifest timestamp does not match report provenance")
+
+    source_links = markdown_links(metadata["source"])
+    if len(source_links) != 1 or manifest.get("feed_url") != source_links[0][3]:
+        fail("evidence manifest feed URL does not match report provenance")
+
+    raw_sources = manifest.get("sources")
+    if not isinstance(raw_sources, list) or not raw_sources:
+        fail("evidence manifest must contain source articles")
+    source_pairs: set[tuple[str, str]] = set()
+    source_urls: set[str] = set()
+    for index, source in enumerate(raw_sources):
+        if not isinstance(source, dict):
+            fail(f"evidence manifest source {index} must be an object")
+        title = source.get("title")
+        url = source.get("url")
+        if not isinstance(title, str) or not title.strip():
+            fail(f"evidence manifest source {index} has no title")
+        if not isinstance(url, str) or not url.startswith(("http://", "https://")):
+            fail(f"evidence manifest source {index} has no HTTP URL")
+        if url in source_urls:
+            fail(f"evidence manifest repeats source URL: {url}")
+        source_urls.add(url)
+        source_pairs.add((title, url))
+
+    body_start = markdown.find("\n## ")
+    body = markdown[body_start + 1 :] if body_start >= 0 else ""
+    body_links = [
+        (label, destination)
+        for _, _, label, destination in markdown_links(body)
+        if destination.startswith(("http://", "https://"))
+    ]
+    if not body_links:
+        fail("report body has no evidence links")
+    unknown = sorted({destination for _, destination in body_links} - source_urls)
+    if unknown:
+        fail("report links evidence absent from source manifest: " + unknown[0])
+
+    source_section = re.search(
+        r"(?ms)^##\s+Source Highlights\s*$([\s\S]*?)(?=^##\s+|\Z)", body
+    )
+    if source_section is None:
+        fail("report has no Source Highlights section")
+    highlighted_pairs = {
+        (
+            label.replace("\\[", "[").replace("\\]", "]").replace("\\\\", "\\"),
+            destination,
+        )
+        for _, _, label, destination in markdown_links(source_section.group(1))
+    }
+    if not highlighted_pairs or not highlighted_pairs.issubset(source_pairs):
+        fail("Source Highlights must use exact source title and URL pairs")
+    return manifest
+
+
 def main() -> None:
     html = read_text(INDEX_HTML)
     markdown = read_text(INDEX_MD)
@@ -527,6 +593,7 @@ def main() -> None:
     tags_js = read_text(TAGS_JS)
     style_css = read_text(STYLE_CSS)
     archive_html = read_text(ARCHIVE_INDEX)
+    evidence_manifest_text = read_text(EVIDENCE_MANIFEST)
 
     validate_site_identity(html, sitemap_xml)
 
@@ -594,6 +661,7 @@ def main() -> None:
         for _, _, _, destination in markdown_links(metadata["source"])
     ):
         fail("index.md Source metadata must be a linked feed")
+    validate_evidence_manifest(markdown, metadata, evidence_manifest_text)
     forbidden_label = find_public_report_forbidden_label(markdown)
     if forbidden_label:
         fail(f"index.md contains public report forbidden label: {forbidden_label}")
@@ -612,8 +680,11 @@ def main() -> None:
     archive_key = generated.strftime("%Y-%m-%dT%H-%M-%SZ")
     archived_markdown = read_text(ARCHIVE_DIR / archive_key / "report.md")
     archived_page = read_text(ARCHIVE_DIR / archive_key / "index.html")
+    archived_manifest = read_text(ARCHIVE_DIR / archive_key / "evidence-manifest.json")
     if archived_markdown.rstrip() != markdown.rstrip():
         fail("current report does not match its timestamped archive snapshot")
+    if archived_manifest != evidence_manifest_text:
+        fail("current evidence manifest does not match its archived snapshot")
     if f'href="{archive_key}/"' not in archive_html:
         fail("archive index does not link the current timestamped report")
     if 'class="card report-provenance"' not in archived_page:
@@ -687,7 +758,8 @@ def main() -> None:
         fail("app.js does not format report dates in canonical English UTC")
     if (
         "const collapsibleCards" not in app_js
-        or ".filter(card => !card.classList.contains('report-provenance'))" not in app_js
+        or ".filter(card => !card.classList.contains('report-provenance'))"
+        not in app_js
         or "collapsibleCards.forEach((card, idx)" not in app_js
     ):
         fail("app.js does not keep the first report section expanded on mobile")

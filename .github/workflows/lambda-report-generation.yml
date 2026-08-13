@@ -271,7 +271,7 @@ jobs:
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
-        git add site/index.md site/index.html site/archive
+        git add site/index.md site/index.html site/evidence-manifest.json site/archive
         if git diff --cached --quiet; then
           echo "No report changes to commit"
           exit 0
@@ -290,7 +290,7 @@ jobs:
             --model "$LLM_MODEL"
           python3 scripts/build_site.py --archive-current
           make check-site
-          git add site/index.md site/index.html site/archive
+          git add site/index.md site/index.html site/evidence-manifest.json site/archive
           git commit --amend --no-edit
 
           if git push origin HEAD:"$GITHUB_REF_NAME"; then

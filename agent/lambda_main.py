@@ -193,6 +193,7 @@ def handler(event, context):
                                 "source_url": md.source_url,
                                 "analysis_period": md.analysis_period,
                                 "model": md.model,
+                                "source_articles": md.source_articles or [],
                                 "regulations_mentioned": md.regulations_mentioned or [],
                                 "frameworks_referenced": md.frameworks_referenced or [],
                                 "industries_affected": md.industries_affected or [],

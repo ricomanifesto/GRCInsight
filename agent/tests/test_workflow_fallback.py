@@ -152,6 +152,9 @@ def test_run_grc_analysis_endpoint_marks_model_backed_reports(monkeypatch):
     assert response.metadata.source_url == "https://example.com/feed.xml"
     assert response.metadata.analysis_period
     assert response.metadata.model == "openrouter/openrouter/free"
+    assert response.metadata.source_articles == [
+        {"title": "NIST publishes new control guidance", "url": "https://example.com/nist"}
+    ]
 
 
 def test_run_grc_analysis_endpoint_passes_request_model_config(monkeypatch):

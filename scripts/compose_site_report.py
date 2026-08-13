@@ -11,6 +11,7 @@ from urllib.parse import quote, urlparse
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 INDEX_MD = REPO_ROOT / "site" / "index.md"
+EVIDENCE_MANIFEST = REPO_ROOT / "site" / "evidence-manifest.json"
 SECTION_TITLES = (
     "Executive Summary",
     "Key Regulatory Developments",
@@ -33,7 +34,12 @@ def single_line(value: object, field: str) -> str:
 
 
 def markdown_link_label(value: object, field: str) -> str:
-    return single_line(value, field).replace("[", "(").replace("]", ")")
+    return (
+        single_line(value, field)
+        .replace("\\", "\\\\")
+        .replace("[", "(")
+        .replace("]", ")")
+    )
 
 
 def http_url(value: object, field: str) -> str:
@@ -113,6 +119,115 @@ def canonical_body(content: object) -> str:
     return "\n".join(body_lines).strip()
 
 
+def markdown_links(markdown: str) -> list[tuple[str, str]]:
+    links: list[tuple[str, str]] = []
+    cursor = 0
+    while cursor < len(markdown):
+        label_start = markdown.find("[", cursor)
+        if label_start < 0:
+            break
+        label_depth = 1
+        escaped = False
+        label_end = -1
+        for index in range(label_start + 1, len(markdown)):
+            character = markdown[index]
+            if escaped:
+                escaped = False
+                continue
+            if character == "\\":
+                escaped = True
+                continue
+            if character == "[":
+                label_depth += 1
+            elif character == "]":
+                label_depth -= 1
+                if label_depth == 0:
+                    label_end = index
+                    break
+        if (
+            label_end < 0
+            or label_end + 1 >= len(markdown)
+            or markdown[label_end + 1] != "("
+        ):
+            cursor = label_start + 1
+            continue
+        depth = 1
+        escaped = False
+        destination_end = -1
+        for index in range(label_end + 2, len(markdown)):
+            character = markdown[index]
+            if escaped:
+                escaped = False
+                continue
+            if character == "\\":
+                escaped = True
+                continue
+            if character == "(":
+                depth += 1
+            elif character == ")":
+                depth -= 1
+                if depth == 0:
+                    destination_end = index
+                    break
+        if destination_end < 0:
+            cursor = label_end + 2
+            continue
+        links.append(
+            (
+                markdown[label_start + 1 : label_end],
+                markdown[label_end + 2 : destination_end],
+            )
+        )
+        cursor = destination_end + 1
+    return links
+
+
+def source_articles(metadata: dict) -> list[dict[str, str]]:
+    raw_sources = metadata.get("source_articles")
+    if not isinstance(raw_sources, list) or not raw_sources:
+        fail("metadata.source_articles must contain the analyzed source evidence")
+    sources: list[dict[str, str]] = []
+    seen_urls: set[str] = set()
+    for index, raw_source in enumerate(raw_sources):
+        if not isinstance(raw_source, dict):
+            fail(f"metadata.source_articles[{index}] must be an object")
+        title = single_line(
+            raw_source.get("title"), f"metadata.source_articles[{index}].title"
+        )
+        url = http_url(raw_source.get("url"), f"metadata.source_articles[{index}].url")
+        if url in seen_urls:
+            continue
+        seen_urls.add(url)
+        sources.append({"title": title, "url": url})
+    return sources
+
+
+def validate_evidence_links(body: str, sources: list[dict[str, str]]) -> None:
+    allowed_urls = {source["url"] for source in sources}
+    evidence_links = [
+        (label, http_url(url, "report evidence URL"))
+        for label, url in markdown_links(body)
+        if url.startswith(("http://", "https://"))
+    ]
+    if not evidence_links:
+        fail("report body contains no linked source evidence")
+    unknown_urls = sorted({url for _, url in evidence_links} - allowed_urls)
+    if unknown_urls:
+        fail(
+            "report contains evidence URL absent from source articles: "
+            + unknown_urls[0]
+        )
+
+
+def evidence_manifest(data: dict, sources: list[dict[str, str]]) -> dict:
+    metadata = data.get("metadata") or {}
+    return {
+        "generated_at": single_line(data.get("generated_at"), "generated_at"),
+        "feed_url": http_url(metadata.get("source_url"), "metadata.source_url"),
+        "sources": sources,
+    }
+
+
 def compose_report(data: dict, expected_feed_url: str, expected_model: str) -> str:
     if data.get("status") != "completed":
         fail("stored report status is not completed")
@@ -163,6 +278,8 @@ def compose_report(data: dict, expected_feed_url: str, expected_model: str) -> s
     )[month - 1]
 
     body = canonical_body(data.get("content"))
+    sources = source_articles(metadata)
+    validate_evidence_links(body, sources)
     return "\n".join(
         (
             f"# {title}",
@@ -195,8 +312,13 @@ def main() -> None:
     if not isinstance(data, dict):
         fail("stored report response must be an object")
 
-    INDEX_MD.write_text(
-        compose_report(data, args.feed_url, args.model), encoding="utf-8"
+    report = compose_report(data, args.feed_url, args.model)
+    sources = source_articles(data.get("metadata") or {})
+    INDEX_MD.write_text(report, encoding="utf-8")
+    EVIDENCE_MANIFEST.write_text(
+        json.dumps(evidence_manifest(data, sources), indent=2, ensure_ascii=False)
+        + "\n",
+        encoding="utf-8",
     )
     print("site report composition completed")
 

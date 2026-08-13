@@ -86,6 +86,9 @@ func TestGenerateReport_PersistsReportAndArticles(t *testing.T) {
 			SourceURL:       "https://example.com/feed.xml",
 			AnalysisPeriod:  "August 2026",
 			Model:           "openrouter/example/model",
+			SourceArticles: []map[string]string{
+				{"title": "A1", "url": "https://ex.com/1"},
+			},
 		},
 		Articles: []apimodels.ArticleRecord{{
 			Title: "A1", URL: "https://ex.com/1", Source: "Feed", Summary: "S",
@@ -121,6 +124,9 @@ func TestGenerateReport_PersistsReportAndArticles(t *testing.T) {
 	}
 	if fr.updated.Metadata.SourceName != "SentryDigest" || fr.updated.Metadata.Model != "openrouter/example/model" {
 		t.Fatalf("expected report provenance to persist, got %#v", fr.updated.Metadata)
+	}
+	if len(fr.updated.Metadata.SourceArticles) != 1 || fr.updated.Metadata.SourceArticles[0]["url"] != "https://ex.com/1" {
+		t.Fatalf("expected source evidence to persist, got %#v", fr.updated.Metadata.SourceArticles)
 	}
 	if fa.calls == 0 {
 		t.Fatalf("expected articles to be persisted")

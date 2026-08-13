@@ -548,6 +548,7 @@ async def run_grc_analysis_endpoint(
             source_url=feed_url,
             analysis_period=generated_at.strftime("%B %Y"),
             model=config.model,
+            source_articles=[{"title": article.title, "url": article.url} for article in articles],
             regulations_mentioned=analysis_data.get("regulations_mentioned", []),
             frameworks_referenced=analysis_data.get("frameworks_referenced", []),
             industries_affected=analysis_data.get("industries_affected", []),

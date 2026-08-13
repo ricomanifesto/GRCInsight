@@ -20,18 +20,19 @@ type Report struct {
 
 // ReportMetadata holds additional information about the report
 type ReportMetadata struct {
-	ArticleCount         int      `dynamodbav:"article_count" json:"article_count"`
-	GRCArticleCount      int      `dynamodbav:"grc_article_count" json:"grc_article_count"`
-	AnalysisMode         string   `dynamodbav:"analysis_mode,omitempty" json:"analysis_mode,omitempty"`
-	FallbackReason       string   `dynamodbav:"fallback_reason,omitempty" json:"fallback_reason,omitempty"`
-	SourceName           string   `dynamodbav:"source_name,omitempty" json:"source_name,omitempty"`
-	SourceURL            string   `dynamodbav:"source_url,omitempty" json:"source_url,omitempty"`
-	AnalysisPeriod       string   `dynamodbav:"analysis_period,omitempty" json:"analysis_period,omitempty"`
-	Model                string   `dynamodbav:"model,omitempty" json:"model,omitempty"`
-	RegulationsMentioned []string `dynamodbav:"regulations_mentioned" json:"regulations_mentioned"`
-	FrameworksReferenced []string `dynamodbav:"frameworks_referenced" json:"frameworks_referenced"`
-	IndustriesAffected   []string `dynamodbav:"industries_affected" json:"industries_affected"`
-	RegulatoryBodies     []string `dynamodbav:"regulatory_bodies" json:"regulatory_bodies"`
+	ArticleCount         int                 `dynamodbav:"article_count" json:"article_count"`
+	GRCArticleCount      int                 `dynamodbav:"grc_article_count" json:"grc_article_count"`
+	AnalysisMode         string              `dynamodbav:"analysis_mode,omitempty" json:"analysis_mode,omitempty"`
+	FallbackReason       string              `dynamodbav:"fallback_reason,omitempty" json:"fallback_reason,omitempty"`
+	SourceName           string              `dynamodbav:"source_name,omitempty" json:"source_name,omitempty"`
+	SourceURL            string              `dynamodbav:"source_url,omitempty" json:"source_url,omitempty"`
+	AnalysisPeriod       string              `dynamodbav:"analysis_period,omitempty" json:"analysis_period,omitempty"`
+	Model                string              `dynamodbav:"model,omitempty" json:"model,omitempty"`
+	SourceArticles       []map[string]string `dynamodbav:"source_articles,omitempty" json:"source_articles,omitempty"`
+	RegulationsMentioned []string            `dynamodbav:"regulations_mentioned" json:"regulations_mentioned"`
+	FrameworksReferenced []string            `dynamodbav:"frameworks_referenced" json:"frameworks_referenced"`
+	IndustriesAffected   []string            `dynamodbav:"industries_affected" json:"industries_affected"`
+	RegulatoryBodies     []string            `dynamodbav:"regulatory_bodies" json:"regulatory_bodies"`
 }
 
 // ReportStatus constants

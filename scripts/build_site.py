@@ -14,6 +14,7 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 SITE_DIR = REPO_ROOT / "site"
 INDEX_MD = SITE_DIR / "index.md"
 INDEX_HTML = SITE_DIR / "index.html"
+EVIDENCE_MANIFEST = SITE_DIR / "evidence-manifest.json"
 ARCHIVE_DIR = SITE_DIR / "archive"
 RENDERER_JS = SITE_DIR / "static" / "renderer.js"
 REPORT_START = "<!-- REPORT_CONTENT_START -->"
@@ -238,10 +239,12 @@ def main() -> None:
     generated = parse_generated(fields.get("generated", ""))
     if args.archive_current:
         report_md = ARCHIVE_DIR / archive_slug(generated) / "report.md"
+        archive_manifest = report_md.parent / "evidence-manifest.json"
         if args.check:
             fail("--archive-current and --check cannot be combined")
         report_md.parent.mkdir(parents=True, exist_ok=True)
         report_md.write_text(markdown.rstrip() + "\n", encoding="utf-8")
+        archive_manifest.write_text(read_text(EVIDENCE_MANIFEST), encoding="utf-8")
 
     template = read_text(INDEX_HTML)
     outputs = expected_outputs(markdown, template)

@@ -313,7 +313,9 @@ def test_report_generation_workflow_builds_prerender_and_archive():
     workflow = REPORT_WORKFLOW.read_text()
 
     assert workflow.count("python3 scripts/build_site.py --archive-current") >= 2
-    assert "git add site/index.md site/index.html site/archive" in workflow
+    assert (
+        "git add site/index.md site/index.html site/evidence-manifest.json site/archive" in workflow
+    )
     assert "[skip ci]" not in workflow
     assert "actions: write" in workflow
     assert "gh workflow run deploy-site.yml" in workflow
@@ -347,6 +349,7 @@ def test_site_report_composer_owns_public_provenance_and_body_shape():
                 "analysis_mode": "model",
                 "source_name": "SentryDigest",
                 "source_url": "https://example.com/feed.xml",
+                "source_articles": [{"title": "Evidence", "url": "https://example.com/evidence"}],
                 "analysis_period": "August 2026",
                 "article_count": 30,
                 "grc_article_count": 12,
@@ -413,6 +416,7 @@ def test_site_report_composer_rejects_provenance_mismatch():
             "analysis_mode": "model",
             "source_name": "SentryDigest",
             "source_url": "https://example.com/feed.xml",
+            "source_articles": [{"title": "Evidence", "url": "https://example.com/evidence"}],
             "analysis_period": "August 2026",
             "article_count": 1,
             "grc_article_count": 1,
@@ -444,8 +448,9 @@ def test_site_report_composer_normalizes_numbered_markdown_headings_and_feed_url
             ),
             "metadata": {
                 "analysis_mode": "model",
-                "source_name": "SentryDigest",
+                "source_name": "SentryDigest\\",
                 "source_url": feed_url,
+                "source_articles": [{"title": "Evidence", "url": "https://example.com/evidence"}],
                 "analysis_period": "August 2026",
                 "article_count": 1,
                 "grc_article_count": 1,
@@ -460,6 +465,40 @@ def test_site_report_composer_normalizes_numbered_markdown_headings_and_feed_url
     assert "## Source Highlights" in report
     assert "## 1." not in report
     assert "feed%281%29.xml?edition=%28daily%29" in report
+    assert "**Source:** [SentryDigest\\\\](" in report
+
+
+def test_site_report_composer_rejects_evidence_urls_absent_from_source_articles():
+    namespace = runpy.run_path(str(SITE_REPORT_COMPOSER))
+    compose_report = namespace["compose_report"]
+    data = {
+        "status": "completed",
+        "title": "GRC Intelligence Report - 2026-08-13",
+        "generated_at": "2026-08-13T13:00:00Z",
+        "content": (
+            "## Executive Summary\n"
+            "[Invented evidence](https://invented.example/advisory)\n\n"
+            "## Source Highlights\n"
+            "- [Invented evidence](https://invented.example/advisory)"
+        ),
+        "metadata": {
+            "analysis_mode": "model",
+            "source_name": "SentryDigest",
+            "source_url": "https://example.com/feed.xml",
+            "source_articles": [{"title": "Real evidence", "url": "https://example.com/real"}],
+            "analysis_period": "August 2026",
+            "article_count": 1,
+            "grc_article_count": 1,
+            "model": "openrouter/example/model",
+        },
+    }
+
+    try:
+        compose_report(data, "https://example.com/feed.xml", "openrouter/example/model")
+    except SystemExit as error:
+        assert "absent from source articles" in str(error)
+    else:
+        raise AssertionError("composer accepted an invented evidence URL")
 
 
 def test_site_report_check_rejects_internal_distribution_labels():
