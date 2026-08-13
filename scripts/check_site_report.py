@@ -445,7 +445,7 @@ def find_reader_surface_defect(markdown: str) -> str | None:
         normalized = line.replace("‑", "-").replace("–", "-").replace("—", "-")
         if re.search(r"\bCVE-\d{4}-\d{4,}\b", normalized, re.IGNORECASE):
             if not any(
-                destination.startswith(("http://", "https://"))
+                has_http_scheme(destination)
                 for _, _, _, destination in markdown_links(normalized)
             ):
                 return "CVE claim without an inline source link"
@@ -456,7 +456,7 @@ def find_reader_surface_defect(markdown: str) -> str | None:
     if source_section is None:
         return "missing Source Highlights section"
     if not any(
-        destination.startswith(("http://", "https://"))
+        has_http_scheme(destination)
         for _, _, _, destination in markdown_links(source_section.group(1))
     ):
         return "Source Highlights section has no linked evidence"
@@ -497,6 +497,10 @@ def canonical_http_url(url: str) -> str:
     if parsed.scheme not in {"http", "https"} or not parsed.netloc:
         fail(f"invalid evidence URL: {url}")
     return quote(url, safe=":/?#[]@!$&*+,;=%")
+
+
+def has_http_scheme(value: str) -> bool:
+    return urlparse(value).scheme.lower() in {"http", "https"}
 
 
 def markdown_inline_text(value: str) -> str:
@@ -603,7 +607,7 @@ def validate_evidence_manifest(
         url = source.get("url")
         if not isinstance(title, str) or not title.strip():
             fail(f"evidence manifest source {index} has no title")
-        if not isinstance(url, str) or not url.startswith(("http://", "https://")):
+        if not isinstance(url, str) or not has_http_scheme(url):
             fail(f"evidence manifest source {index} has no HTTP URL")
         url = canonical_http_url(url)
         raw_cves = source.get("cves", [])
@@ -630,7 +634,7 @@ def validate_evidence_manifest(
             canonical_http_url(markdown_inline_text(destination)),
         )
         for _, _, label, destination in markdown_links(body)
-        if destination.startswith(("http://", "https://"))
+        if has_http_scheme(destination)
     ]
     if not body_links:
         fail("report body has no evidence links")
@@ -655,7 +659,7 @@ def validate_evidence_manifest(
         linked_urls = {
             canonical_http_url(markdown_inline_text(destination))
             for _, _, _, destination in markdown_links(line)
-            if destination.startswith(("http://", "https://"))
+            if has_http_scheme(destination)
         }
         supported_cves = set().union(
             *(source_cves.get(url, set()) for url in linked_urls)
@@ -763,7 +767,7 @@ def main() -> None:
     if not re.fullmatch(r"\d+", metadata["articles analyzed"]):
         fail("index.md Articles Analyzed must be an integer")
     if not any(
-        destination.startswith(("http://", "https://"))
+        has_http_scheme(destination)
         for _, _, _, destination in markdown_links(metadata["source"])
     ):
         fail("index.md Source metadata must be a linked feed")

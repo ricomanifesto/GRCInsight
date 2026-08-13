@@ -54,6 +54,10 @@ def http_url(value: object, field: str) -> str:
     return quote(url, safe=":/?#[]@!$&*+,;=%")
 
 
+def has_http_scheme(value: str) -> bool:
+    return urlparse(value).scheme.lower() in {"http", "https"}
+
+
 def integer(value: object, field: str) -> int:
     if isinstance(value, bool):
         fail(f"{field} must be an integer")
@@ -243,7 +247,7 @@ def validate_evidence_links(body: str, sources: list[dict[str, object]]) -> None
             http_url(markdown_inline_text(url), "report evidence URL"),
         )
         for label, url in markdown_links(body)
-        if url.startswith(("http://", "https://"))
+        if has_http_scheme(url)
     ]
     if not evidence_links:
         fail("report body contains no linked source evidence")
@@ -272,7 +276,7 @@ def validate_evidence_links(body: str, sources: list[dict[str, object]]) -> None
         linked_urls = {
             http_url(markdown_inline_text(url), "report evidence URL")
             for _label, url in markdown_links(line)
-            if url.startswith(("http://", "https://"))
+            if has_http_scheme(url)
         }
         supported_cves = set().union(
             *(cves_by_url.get(url, set()) for url in linked_urls)

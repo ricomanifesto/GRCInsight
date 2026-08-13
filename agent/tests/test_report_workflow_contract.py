@@ -583,15 +583,15 @@ def test_site_report_composer_decodes_escaped_evidence_url_delimiters():
     namespace = runpy.run_path(str(SITE_REPORT_COMPOSER))
     compose_report = namespace["compose_report"]
     http_url = namespace["http_url"]
-    evidence_url = "https://example.com/O'Reilly/a)b"
+    evidence_url = "HTTPS://example.com/O'Reilly/a)b"
     report = compose_report(
         {
             "status": "completed",
             "title": "GRC Intelligence Report - 2026-08-13",
             "generated_at": "2026-08-13T13:00:00Z",
             "content": complete_report_body(
-                "[Evidence](https://example.com/O'Reilly/a\\)b)",
-                "- [Evidence](https://example.com/O'Reilly/a\\)b)",
+                "[Evidence](HTTPS://example.com/O'Reilly/a\\)b)",
+                "- [Evidence](HTTPS://example.com/O'Reilly/a\\)b)",
             ),
             "metadata": {
                 "analysis_mode": "model",
@@ -608,8 +608,8 @@ def test_site_report_composer_decodes_escaped_evidence_url_delimiters():
         "openrouter/example/model",
     )
 
-    assert "[Evidence](https://example.com/O'Reilly/a\\)b)" in report
-    assert http_url(evidence_url, "evidence URL") == "https://example.com/O%27Reilly/a%29b"
+    assert "[Evidence](HTTPS://example.com/O'Reilly/a\\)b)" in report
+    assert http_url(evidence_url, "evidence URL") == "HTTPS://example.com/O%27Reilly/a%29b"
 
 
 def test_site_report_composer_rejects_invented_title_for_real_evidence_url():
@@ -752,9 +752,9 @@ def test_evidence_manifest_normalizes_parenthesized_urls():
         "**Generated:** 2026-08-13T13:00:00Z\n"
         "**Source:** [Feed](https://example.com/feed(1).xml)\n\n"
         "## Executive Summary\n"
-        "[Evidence](https://example.com/a_(b).html)\n\n"
+        "[Evidence](HTTPS://example.com/a_(b).html)\n\n"
         "## Source Highlights\n"
-        "- [Evidence](https://example.com/a_(b).html)"
+        "- [Evidence](HTTPS://example.com/a_(b).html)"
     )
     metadata = {
         "generated": "2026-08-13T13:00:00Z",
@@ -763,7 +763,7 @@ def test_evidence_manifest_normalizes_parenthesized_urls():
     manifest = {
         "generated_at": "2026-08-13T13:00:00Z",
         "feed_url": "https://example.com/feed%281%29.xml",
-        "sources": [{"title": "Evidence", "url": "https://example.com/a_%28b%29.html"}],
+        "sources": [{"title": "Evidence", "url": "HTTPS://example.com/a_%28b%29.html"}],
     }
 
     validate_manifest(markdown, metadata, json.dumps(manifest))
@@ -771,7 +771,7 @@ def test_evidence_manifest_normalizes_parenthesized_urls():
     escaped_markdown = markdown.replace("a_(b).html", "a_\\)b.html")
     escaped_manifest = {
         **manifest,
-        "sources": [{"title": "Evidence", "url": "https://example.com/a_%29b.html"}],
+        "sources": [{"title": "Evidence", "url": "HTTPS://example.com/a_%29b.html"}],
     }
     validate_manifest(escaped_markdown, metadata, json.dumps(escaped_manifest))
 
