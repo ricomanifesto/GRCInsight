@@ -275,7 +275,7 @@ jobs:
           exit 0
         fi
 
-        git commit -m "Update GRC intelligence report [automated] [skip ci]"
+        git commit -m "Update GRC intelligence report [automated]"
 
         attempts=1
         max_attempts=3

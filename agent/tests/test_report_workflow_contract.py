@@ -313,6 +313,7 @@ def test_report_generation_workflow_builds_prerender_and_archive():
 
     assert workflow.count("python3 scripts/build_site.py --archive-current") >= 2
     assert "git add site/index.md site/index.html site/archive" in workflow
+    assert "[skip ci]" not in workflow
 
 
 def test_report_generation_workflow_validates_generated_site_before_publish():
