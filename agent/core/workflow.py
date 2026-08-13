@@ -4,7 +4,7 @@ from collections import Counter
 from datetime import datetime, timezone
 import re
 from typing import Dict, Any, List
-from urllib.parse import urlparse
+from urllib.parse import urljoin, urlparse
 from loguru import logger
 
 from models.api import (
@@ -423,7 +423,8 @@ async def run_grc_analysis_endpoint(
         for entry in feed_data.get("entries", []):
             try:
                 title = re.sub(r"\s+", " ", str(entry.get("title") or "")).strip()
-                url = str(entry.get("link") or "").strip()
+                raw_url = str(entry.get("link") or "").strip()
+                url = urljoin(feed_url, raw_url) if raw_url else ""
                 parsed_url = urlparse(url)
                 if (
                     not title

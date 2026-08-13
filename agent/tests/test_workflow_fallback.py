@@ -172,7 +172,7 @@ def test_run_grc_analysis_endpoint_skips_entries_without_linked_evidence(monkeyp
                 {"title": "Linkless item", "link": "", "content": "Cannot cite this."},
                 {
                     "title": " Linked\n  item ",
-                    "link": "https://example.com/linked",
+                    "link": "/linked",
                     "content": "Can cite CVE-2026-12345 from this source.",
                 },
                 {
@@ -182,7 +182,7 @@ def test_run_grc_analysis_endpoint_skips_entries_without_linked_evidence(monkeyp
                 },
                 {
                     "title": "Duplicate title must not reach the model",
-                    "link": "https://example.com/linked",
+                    "link": "linked",
                     "content": "Duplicate coverage.",
                 },
             ],
