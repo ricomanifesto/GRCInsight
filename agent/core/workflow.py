@@ -211,17 +211,23 @@ def _build_source_evidence(enriched_articles: List[ArticleInput]) -> List[Dict[s
 
 def _collect_source_entities(
     source_evidence: List[Dict[str, Any]],
-) -> tuple[List[str], List[Dict[str, str]]]:
+) -> tuple[List[Dict[str, str]], List[Dict[str, str]]]:
     """Collect bounded CVEs and source-linked structured actor identifiers."""
-    cves = []
+    cve_sources = []
     actor_sources = []
     seen_cves = set()
     seen_actors = set()
     for item in source_evidence:
         for cve in item.get("cves", []):
-            if cve not in seen_cves and len(cves) < REPORT_CVE_LIMIT:
+            if cve not in seen_cves and len(cve_sources) < REPORT_CVE_LIMIT:
                 seen_cves.add(cve)
-                cves.append(cve)
+                cve_sources.append(
+                    {
+                        "cve": cve,
+                        "title": item.get("title", "source article"),
+                        "url": item.get("url", ""),
+                    }
+                )
         for actor_id in item.get("actor_ids", []):
             if actor_id not in seen_actors:
                 seen_actors.add(actor_id)
@@ -232,7 +238,7 @@ def _collect_source_entities(
                         "url": item.get("url", ""),
                     }
                 )
-    return cves, actor_sources
+    return cve_sources, actor_sources
 
 
 def _build_local_analysis(enriched_articles: List[ArticleInput]):
@@ -336,7 +342,7 @@ def _build_fallback_report(
         )
 
     source_evidence = _build_source_evidence(enriched_articles)
-    cves, actor_sources = _collect_source_entities(source_evidence)
+    cve_sources, actor_sources = _collect_source_entities(source_evidence)
     actor_lines = []
     for item in actor_sources:
         source = f"[{item['title']}]({item['url']})" if item["url"] else item["title"]
@@ -358,11 +364,15 @@ def _build_fallback_report(
             "- No article-supported threat actor activity was identified in this reporting period."
         ]
 
-    cve_lines = (
-        [f"- {cve}: Review business impact, exposure, and remediation ownership." for cve in cves]
-        if cves
-        else ["- No article-supported CVEs were identified in this reporting period."]
-    )
+    cve_lines = []
+    for item in cve_sources:
+        source = f"[{item['title']}]({item['url']})" if item["url"] else item["title"]
+        cve_lines.append(
+            f"- {item['cve']}: Review business impact, exposure, and "
+            f"remediation ownership. Source: {source}."
+        )
+    if not cve_lines:
+        cve_lines = ["- No article-supported CVEs were identified in this reporting period."]
 
     recommendation_lines = [
         "- Maintain incident response, disclosure, and evidence-retention readiness for high-severity cyber events.",
@@ -372,18 +382,37 @@ def _build_fallback_report(
     ]
 
     regulatory_lines = []
+
+    def source_links(field: str) -> str:
+        links = []
+        seen = set()
+        for article, signal in relevant_pairs:
+            if not signal.get(field):
+                continue
+            link = f"[{article.title}]({article.url})" if article.url else article.title
+            if link not in seen:
+                seen.add(link)
+                links.append(link)
+        return "; ".join(links[:3])
+
     if regulations or frameworks or bodies:
         if regulations:
+            sources = source_links("regulations")
             regulatory_lines.append(
                 f"- Explicit regulation references detected: {', '.join(regulations[:6])}."
+                + (f" Sources: {sources}." if sources else "")
             )
         if frameworks:
+            sources = source_links("frameworks")
             regulatory_lines.append(
                 f"- Framework references detected: {', '.join(frameworks[:6])}."
+                + (f" Sources: {sources}." if sources else "")
             )
         if bodies:
+            sources = source_links("regulatory_bodies")
             regulatory_lines.append(
                 f"- Regulatory or government bodies mentioned: {', '.join(bodies[:6])}."
+                + (f" Sources: {sources}." if sources else "")
             )
     else:
         regulatory_lines.append(

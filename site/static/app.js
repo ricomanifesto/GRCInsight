@@ -8,7 +8,7 @@
   const mobileToc = document.getElementById('mobileToc');
 
   const renderer = window.GRCInsightRenderer;
-  const tagCategories = window.GRCInsightTags.categories;
+  const tagCatalog = window.GRCInsightTags;
 
   const escapeHtml = renderer.escapeHtml;
   let sidebarObserver = null;
@@ -87,22 +87,18 @@
     node.appendChild(fragment);
   }
 
-  // Highlight known compliance terms inline as pills.
+  // Highlight known compliance terms inline as pills. Curated frameworks,
+  // regulations, and agencies link to authoritative references; general risks
+  // and controls stay non-clickable so the report remains readable.
   function highlightPills(node) {
-    const terms = tagCategories
-      .flatMap(category => category.terms.map(term => ({ term, pillClass: category.pillClass })))
-      .sort((a, b) => b.term.length - a.term.length);
-    if (!terms.length) return;
-    const escapeRegExp = value => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    const pattern = new RegExp(`\\b(${terms.map(item => escapeRegExp(item.term)).join('|')})\\b`, 'gi');
-    const termMap = new Map(terms.map(item => [item.term.toLowerCase(), item.pillClass]));
     const walker = document.createTreeWalker(node, NodeFilter.SHOW_TEXT, {
       acceptNode(textNode) {
         const parent = textNode.parentElement;
-        if (!parent || parent.closest('.pill')) return NodeFilter.FILTER_REJECT;
-        if (!pattern.test(textNode.nodeValue || '')) return NodeFilter.FILTER_REJECT;
-        pattern.lastIndex = 0;
-        return NodeFilter.FILTER_ACCEPT;
+        if (!parent || parent.closest('a, .pill, code, pre, button')) return NodeFilter.FILTER_REJECT;
+        const segments = tagCatalog.tokenizeComplianceTerms(textNode.nodeValue || '');
+        return segments.some(segment => segment.pillClass)
+          ? NodeFilter.FILTER_ACCEPT
+          : NodeFilter.FILTER_REJECT;
       },
     });
     const textNodes = [];
@@ -110,17 +106,28 @@
     textNodes.forEach(textNode => {
       const fragment = document.createDocumentFragment();
       const text = textNode.nodeValue || '';
-      let cursor = 0;
-      text.replace(pattern, (match, _term, offset) => {
-        if (offset > cursor) fragment.appendChild(document.createTextNode(text.slice(cursor, offset)));
-        const pill = document.createElement('span');
-        pill.className = `pill ${termMap.get(match.toLowerCase())}`;
-        pill.textContent = match;
+      tagCatalog.tokenizeComplianceTerms(text).forEach(segment => {
+        if (!segment.pillClass) {
+          fragment.appendChild(document.createTextNode(segment.text));
+          return;
+        }
+
+        const safeUrl = segment.url ? renderer.sanitizeMarkdownUrl(segment.url) : null;
+        const pill = document.createElement(safeUrl ? 'a' : 'span');
+        pill.className = `pill ${segment.pillClass}${safeUrl ? ' reference-link' : ''}`;
+        pill.textContent = segment.text;
+        if (safeUrl) {
+          pill.href = safeUrl;
+          pill.target = '_blank';
+          pill.rel = 'noopener';
+          pill.title = `Open the official ${segment.label} reference`;
+          pill.setAttribute(
+            'aria-label',
+            `${segment.text}: official ${segment.categoryLabel.toLowerCase()} reference`,
+          );
+        }
         fragment.appendChild(pill);
-        cursor = offset + match.length;
-        return match;
       });
-      if (cursor < text.length) fragment.appendChild(document.createTextNode(text.slice(cursor)));
       textNode.replaceWith(fragment);
     });
   }

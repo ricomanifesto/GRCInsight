@@ -183,6 +183,10 @@ a:hover { text-decoration: underline; }
 .pill.risk { background: rgba(245, 158, 11, 0.15); color: #fde68a; }
 .pill.control { background: rgba(20, 184, 166, 0.15); color: #5eead4; }
 .pill.agency { background: rgba(168, 85, 247, 0.15); color: #d8b4fe; }
+.pill.reference-link { cursor: pointer; transition: border-color 140ms ease, filter 140ms ease, transform 140ms ease; }
+.pill.reference-link::after { content: "↗"; margin-left: 5px; font-size: 10px; line-height: 1; }
+.pill.reference-link:hover { border-color: currentColor; filter: brightness(1.12); text-decoration: none; transform: translateY(-1px); }
+.pill.reference-link:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; text-decoration: none; }
 
 /* Reading-progress bar and back-to-top */
 .progress { position: fixed; top: 0; left: 0; z-index: 1000; height: 3px; width: 0; background: linear-gradient(90deg, var(--gold), #38bdf8); }

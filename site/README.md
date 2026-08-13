@@ -11,7 +11,7 @@ page loads `index.md` at runtime and renders it in the browser.
 | `index.html` | Page shell: header, contents sidebar, mobile section bar, report container, footer. |
 | `index.md` | The generated report. Replaced by the report-generation workflow. |
 | `static/renderer.js` | **Canonical rendering contract.** Markdown → HTML and URL sanitization. The only place report Markdown is turned into HTML. |
-| `static/tags.js` | Compliance term catalog used to highlight frameworks, regulations, risks, controls, and agencies as inline pills. |
+| `static/tags.js` | Compliance term catalog and Unicode-aware tokenizer. Frameworks, regulations, and agencies carry curated official URLs; risks and controls remain non-clickable pills. |
 | `static/app.js` | Page controller: loads the report, renders it through `renderer`, wraps each section into a card, and wires the reading aids (contents index, section navigation, theme, collapse, copy link). |
 | `static/style.css` | Presentation: theme tokens (dark/light), layout, cards, Markdown elements, pills, and reading aids. |
 
@@ -20,7 +20,8 @@ page loads `index.md` at runtime and renders it in the browser.
 `renderer.renderMarkdown(markdown) -> htmlString` is pure (no DOM access), so it
 runs identically in the browser and under the Node check. `app.js` consumes it
 and never re-implements Markdown rendering; `tags.js` is the single source for
-pill categories.
+pill categories, aliases, and authoritative reference URLs. The page controller
+does not replace terms inside existing links or code blocks.
 
 ## Checks
 

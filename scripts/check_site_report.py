@@ -427,6 +427,14 @@ def main() -> None:
         fail("app.js does not render through renderer.renderMarkdown")
     if "window.GRCInsightTags" not in app_js:
         fail("app.js does not use the shared compliance tag catalog")
+    if "tokenizeComplianceTerms" not in app_js:
+        fail("app.js does not use the tag catalog tokenizer")
+    if "parent.closest('a, .pill, code, pre, button')" not in app_js:
+        fail("app.js does not preserve existing links and code while adding pills")
+    if "renderer.sanitizeMarkdownUrl(segment.url)" not in app_js:
+        fail("app.js does not sanitize catalog links before rendering")
+    if "pill.target = '_blank'" not in app_js or "pill.rel = 'noopener'" not in app_js:
+        fail("app.js reference pills are missing safe external-link behavior")
     for inline_catalog in ("const frameworks =", "const regulations =", "const risks ="):
         if inline_catalog in app_js:
             fail(f"app.js still defines an inline tag catalog: {inline_catalog}")
@@ -448,6 +456,8 @@ def main() -> None:
 
     if "window.GRCInsightTags" not in tags_js:
         fail("tags.js does not export the compliance tag catalog")
+    if "function tokenizeComplianceTerms" not in tags_js:
+        fail("tags.js does not own compliance-term tokenization")
 
     print("site report check passed")
 

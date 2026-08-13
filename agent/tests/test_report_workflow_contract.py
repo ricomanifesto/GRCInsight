@@ -114,6 +114,10 @@ def test_report_prompt_requires_current_source_entities_and_readable_summary():
     assert "structured actor identifiers are hints, not an exhaustive actor list" in prompt
     assert "Do not classify industry, standards, regulatory, or working groups" in prompt
     assert "List every article-supported CVE identifier up to 10 items" in prompt
+    assert "Use Markdown links with the exact source title and URL" in prompt
+    assert "Every report-specific regulatory, threat-actor, and CVE claim" in prompt
+    assert "Do not emit incomplete, truncated, or ellipsized CVE identifiers" in prompt
+    assert "Use exact framework, standard, regulation, or publication names" in prompt
 
 
 def test_report_prompt_globally_bounds_cve_evidence():
@@ -349,6 +353,39 @@ def test_fallback_report_does_not_infer_named_actor_aliases():
     assert "5) CVE and Vulnerability Highlights" in report
     assert "does not infer actor names" in report
     assert "Volt Typhoon: Article-supported activity" not in report
+
+
+def test_fallback_report_links_regulatory_and_cve_claims_to_sources():
+    articles = [
+        ArticleInput(
+            title="GDPR Article 32 advisory covers CVE-2026-54321",
+            url="https://example.com/gdpr-cve",
+            content="GDPR Article 32 guidance addresses remediation evidence for CVE-2026-54321.",
+            summary="",
+            published=PUBLISHED_AT,
+        )
+    ]
+    local_signals, analysis = workflow_mod._build_local_analysis(articles)
+
+    report = workflow_mod._build_fallback_report(
+        {"title": "Test Feed"},
+        articles,
+        local_signals,
+        analysis,
+        "model unavailable",
+    )
+
+    source = "[GDPR Article 32 advisory covers CVE-2026-54321](https://example.com/gdpr-cve)"
+    regulatory_line = next(
+        line
+        for line in report.splitlines()
+        if line.startswith("- Explicit regulation references detected:")
+    )
+    assert f"Sources: {source}." in regulatory_line
+    assert (
+        f"- CVE-2026-54321: Review business impact, exposure, and remediation "
+        f"ownership. Source: {source}."
+    ) in report
 
 
 def test_renderer_and_site_check_recognize_entity_sections():

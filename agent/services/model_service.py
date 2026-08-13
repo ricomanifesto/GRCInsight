@@ -321,6 +321,12 @@ Threat Actor Activities must include only actors that the current article snippe
 
 CVE and Vulnerability Highlights: List every article-supported CVE identifier up to 10 items with a short business-impact note. Do not cap the CVE section at one item when multiple CVEs appear in the source articles. If no CVE identifiers are present, state that no article-supported CVEs were identified.
 
+Source linking: Every report-specific regulatory, threat-actor, and CVE claim must cite the supporting item from Source Evidence. Use Markdown links with the exact source title and URL provided above; never invent, shorten, or alter a source URL. Add a Source column to regulatory and threat-actor tables, and include a source link in each CVE bullet. Omit a claim when the current evidence does not support it.
+
+Reference naming: Use exact framework, standard, regulation, or publication names supported by the current evidence (for example, NIST CSF 2.0 or NIST SP 800-207 rather than the ambiguous label NIST). Do not infer a framework version that the evidence does not identify.
+
+CVE integrity: Do not emit incomplete, truncated, or ellipsized CVE identifiers. Include only complete identifiers present in Source Evidence; omit partial identifiers instead of displaying or linking them.
+
 IMPORTANT: The Date of Issue in the report header MUST be "{today}" (the current month/year). Do NOT use any other date.
 
 Do not include classification, confidentiality, internal-use, distribution approval, or prepared-by labels. This is a public portfolio report and must not present itself as private or internal-only material.

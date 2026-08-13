@@ -99,13 +99,34 @@ const withCode = renderer.renderMarkdown('Intro line.\\n\\n```\\nrow one\\nrow t
 assert(withCode.includes('<pre><code>row one\\nrow two</code></pre>'), 'multi-line code blocks must render as a single pre/code with their newlines intact');
 assert(withCode.includes('<p>Intro line.</p>') && withCode.includes('<p>After the block.</p>'), 'paragraphs around a code block must each stay wrapped');
 
-// Tag catalog shape.
+// Tag catalog shape and authoritative reference metadata.
 const byKey = Object.fromEntries(tags.categories.map(c => [c.key, c]));
-assert(byKey.frameworks && byKey.frameworks.pillClass === 'framework' && byKey.frameworks.terms.includes('NIST'), 'framework category should expose framework pills');
-assert(byKey.regulations && byKey.regulations.pillClass === 'regulation' && byKey.regulations.terms.includes('GDPR'), 'regulation category should expose regulation pills');
+const term = (category, label) => category.terms.find(item => item.label === label);
+assert(typeof tags.tokenizeComplianceTerms === 'function', 'tag catalog should expose pure term tokenization');
+assert(byKey.frameworks && byKey.frameworks.pillClass === 'framework', 'framework category should expose framework pills');
+assert(term(byKey.frameworks, 'NIST CSF 2.0').url === 'https://www.nist.gov/cyberframework', 'NIST CSF should link to the official NIST resource');
+assert(!term(byKey.frameworks, 'NIST CSF 2.0').aliases.includes('NIST'), 'ambiguous NIST mentions must not become framework links');
+assert(term(byKey.frameworks, 'PCI DSS').url === 'https://www.pcisecuritystandards.org/standards/pci-dss/', 'PCI DSS should link to the official PCI SSC resource');
+assert(byKey.regulations && byKey.regulations.pillClass === 'regulation', 'regulation category should expose regulation pills');
+assert(term(byKey.regulations, 'GDPR').url === 'https://eur-lex.europa.eu/eli/reg/2016/679/oj', 'GDPR should link to the official regulation text');
 assert(byKey.risks && byKey.risks.pillClass === 'risk', 'risk category should expose risk pills');
+assert(term(byKey.risks, 'Ransomware').url === undefined, 'risk pills should remain non-clickable');
 assert(byKey.controls && byKey.controls.pillClass === 'control', 'control category should expose control pills');
-assert(byKey.agencies && byKey.agencies.pillClass === 'agency' && byKey.agencies.terms.includes('SEC'), 'agency category should expose agency pills');
+assert(term(byKey.controls, 'Control').url === undefined, 'control pills should remain non-clickable');
+assert(byKey.agencies && byKey.agencies.pillClass === 'agency', 'agency category should expose agency pills');
+assert(term(byKey.agencies, 'SEC').url === 'https://www.sec.gov/about', 'SEC should link to the official agency resource');
+
+// Tokenization preserves the report's visible typography while normalizing
+// Unicode hyphens/spaces for matching and attaching only curated URLs.
+const tagged = tags.tokenizeComplianceTerms('PCI‑DSS, ISO\u202f27001, NIST CSF 2.0, GDPR, ransomware, and controls.');
+const taggedText = label => tagged.find(item => item.text === label);
+assert(taggedText('PCI‑DSS').url === 'https://www.pcisecuritystandards.org/standards/pci-dss/', 'Unicode PCI DSS spelling should receive its official link');
+assert(taggedText('ISO\u202f27001').url === 'https://www.iso.org/standard/27001', 'narrow-space ISO spelling should receive its official link');
+assert(taggedText('NIST CSF 2.0').url === 'https://www.nist.gov/cyberframework', 'precise NIST CSF spelling should receive its official link');
+assert(taggedText('GDPR').url === 'https://eur-lex.europa.eu/eli/reg/2016/679/oj', 'GDPR should receive its official link');
+assert(taggedText('ransomware').pillClass === 'risk' && !taggedText('ransomware').url, 'risk terms should be highlighted without a link');
+assert(taggedText('controls').pillClass === 'control' && !taggedText('controls').url, 'control terms should be highlighted without a link');
+assert(tags.tokenizeComplianceTerms('NIST guidance').every(item => !item.pillClass), 'ambiguous NIST text should remain plain');
 
 console.log('node renderer assertions passed');
 """
