@@ -6,7 +6,6 @@ import re
 import xml.etree.ElementTree as ET
 from pathlib import Path
 
-
 REPO_ROOT = Path(__file__).resolve().parents[1]
 SITE_DIR = REPO_ROOT / "site"
 INDEX_HTML = SITE_DIR / "index.html"
@@ -15,6 +14,9 @@ SITEMAP_XML = SITE_DIR / "sitemap.xml"
 APP_JS = SITE_DIR / "static" / "app.js"
 RENDERER_JS = SITE_DIR / "static" / "renderer.js"
 TAGS_JS = SITE_DIR / "static" / "tags.js"
+STYLE_CSS = SITE_DIR / "static" / "style.css"
+ARCHIVE_DIR = SITE_DIR / "archive"
+ARCHIVE_INDEX = ARCHIVE_DIR / "index.html"
 PUBLIC_SITE_URL = "https://ricomanifesto.github.io/GRCInsight/"
 PUBLIC_DESCRIPTION = (
     "GRCInsight turns regulatory and security feeds into audit-ready GRC "
@@ -34,19 +36,6 @@ FORBIDDEN_REPORT_SECTION_LABELS = {
     "threat actor activities",
 }
 NUMBERED_SECTION_PATTERN = re.compile(r"^\d+[\).]\s+(.+)$")
-DANGLING_SOURCE_REFERENCE_PATTERN = re.compile(
-    r"\bSources?\s+\d+(?:\s*(?:,|and|-)\s*\d+)*\b",
-    re.IGNORECASE,
-)
-LEAKED_DELIBERATION_PATTERN = re.compile(
-    r"^(?:let me\b|actually\b|hmm\b|i need\b|i should\b|now i need\b|wait\b)",
-    re.IGNORECASE,
-)
-UNRESOLVED_REPORT_PLACEHOLDER_PATTERN = re.compile(
-    r"^\[(?:table|analysis(?:\s+with.*)?|actionable items)\]$",
-    re.IGNORECASE,
-)
-MAX_REPORT_PREAMBLE_LINES = 30
 FORBIDDEN_METADATA_FIELDS = {"distribution approval", "prepared by"}
 PRIVATE_VALUE_FIELDS = {"audience", "classification", "confidentiality", "distribution"}
 REPORT_METADATA_TABLE_FIELDS = {
@@ -71,9 +60,20 @@ PRIVATE_VALUE_TERMS = {
     "restricted",
 }
 AFFIRMATIVE_LABEL_VALUES = {"true", "yes"}
-MARKDOWN_LABEL_PREFIX = re.compile(
-    r"^\s*(?:>\s*|(?:\d+[\).]|[-*])\s*|#{1,6}\s*)"
-)
+MARKDOWN_LABEL_PREFIX = re.compile(r"^\s*(?:>\s*|(?:\d+[\).]|[-*])\s*|#{1,6}\s*)")
+SUPERSCRIPT_DIGITS = "⁰¹²³⁴⁵⁶⁷⁸⁹"
+CAMEL_CASE_ALLOWLIST = {
+    "macOS",
+}
+REQUIRED_PUBLIC_METADATA = {
+    "analysis mode",
+    "analysis period",
+    "articles analyzed",
+    "date of issue",
+    "generated",
+    "model",
+    "source",
+}
 
 
 def normalize_label_text(text: str) -> str:
@@ -118,9 +118,7 @@ def field_matches_any(
 def table_row_has_metadata_header(cells: list[str]) -> bool:
     return any(
         field_matches_any(cell, PRIVATE_VALUE_FIELDS, allow_prefixed_field=True)
-        or field_matches_any(
-            cell, FORBIDDEN_METADATA_FIELDS, allow_prefixed_field=True
-        )
+        or field_matches_any(cell, FORBIDDEN_METADATA_FIELDS, allow_prefixed_field=True)
         for cell in cells
     )
 
@@ -144,7 +142,9 @@ def table_field_and_value(line: str) -> tuple[str, str] | None:
     if "|" not in stripped:
         return None
 
-    cells = [normalize_label_text(cell) for cell in stripped.strip("|").split("|") if cell]
+    cells = [
+        normalize_label_text(cell) for cell in stripped.strip("|").split("|") if cell
+    ]
     if len(cells) < 2:
         return None
 
@@ -194,7 +194,8 @@ def is_private_standalone_banner(line: str) -> bool:
     normalized = normalize_label_text(line)
     return (
         normalized == "confidential"
-        or normalized in {"non-public", "nonpublic", "private", "proprietary", "restricted"}
+        or normalized
+        in {"non-public", "nonpublic", "private", "proprietary", "restricted"}
         or normalized.startswith("confidential:")
         or normalized.startswith("confidential - ")
         or re.match(
@@ -207,7 +208,9 @@ def is_private_standalone_banner(line: str) -> bool:
             normalized,
         )
         is not None
-        or re.match(r"^internal(?:\s*-\s*|\s+)(?:executive\s+)?distribution$", normalized)
+        or re.match(
+            r"^internal(?:\s*-\s*|\s+)(?:executive\s+)?distribution$", normalized
+        )
         is not None
     )
 
@@ -216,27 +219,26 @@ def is_private_prose_footer(line: str) -> bool:
     normalized = normalize_label_text(line)
     return bool(
         re.match(r"^this report contains\b.*\b(confidential|proprietary)\b", normalized)
-        or re.match(r"^unauthorized distribution\b.*\b(prohibited|forbidden)\b", normalized)
+        or re.match(
+            r"^unauthorized distribution\b.*\b(prohibited|forbidden)\b", normalized
+        )
     )
 
 
 def field_value_is_forbidden(field: str, value: str) -> bool:
     field = field.replace("-", " ")
-    if field_matches_any(
-        field, FORBIDDEN_METADATA_FIELDS, allow_prefixed_field=True
-    ):
+    if field_matches_any(field, FORBIDDEN_METADATA_FIELDS, allow_prefixed_field=True):
         return True
 
-    if not field_matches_any(
-        field, PRIVATE_VALUE_FIELDS, allow_prefixed_field=True
-    ):
+    if not field_matches_any(field, PRIVATE_VALUE_FIELDS, allow_prefixed_field=True):
         return False
 
     value_text = value.replace("-", " ")
     value_words = set(re.findall(r"[a-z]+", value_text))
-    if field_matches_any(
-        field, {"confidentiality"}, allow_prefixed_field=True
-    ) and value_words & AFFIRMATIVE_LABEL_VALUES:
+    if (
+        field_matches_any(field, {"confidentiality"}, allow_prefixed_field=True)
+        and value_words & AFFIRMATIVE_LABEL_VALUES
+    ):
         return True
 
     if "non public" in value_text:
@@ -314,6 +316,61 @@ def find_public_report_forbidden_label(markdown: str) -> str | None:
     return None
 
 
+def report_metadata(markdown: str) -> dict[str, str]:
+    metadata: dict[str, str] = {}
+    for line in markdown.splitlines():
+        if line.startswith("## "):
+            break
+        match = re.match(r"^\*\*([^*]+?):\*\*\s*(.+?)\s*$", line)
+        if match is None:
+            match = re.match(r"^\*\*([^*]+?):\s*(.+?)\*\*\s*$", line)
+        if match:
+            metadata[match.group(1).strip().lower()] = match.group(2).strip()
+    if "total articles analyzed" in metadata and "articles analyzed" not in metadata:
+        metadata["articles analyzed"] = metadata["total articles analyzed"]
+    return metadata
+
+
+def prose_without_destinations(markdown: str) -> str:
+    prose = re.sub(r"^```[\s\S]*?^```", "", markdown, flags=re.MULTILINE)
+    prose = re.sub(r"`[^`]*`", "", prose)
+    prose = re.sub(r"\[([^\]]+)\]\([^)]+\)", r"\1", prose)
+    prose = re.sub(r"https?://\S+", "", prose)
+    return prose
+
+
+def find_reader_surface_defect(markdown: str) -> str | None:
+    prose = prose_without_destinations(markdown)
+    if re.search(rf"[{SUPERSCRIPT_DIGITS}]", prose):
+        return "unresolved superscript citation marker"
+
+    bare_reference = re.search(r"(?<!!)\[([^\]]+)\](?!\()", prose)
+    if bare_reference:
+        return f"unresolved bracketed reference [{bare_reference.group(1)}]"
+
+    camel_case = re.search(r"\b[a-z]{2,}[A-Z][A-Za-z]*\b", prose)
+    if camel_case and camel_case.group(0) not in CAMEL_CASE_ALLOWLIST:
+        return f"suspicious camelCase token {camel_case.group(0)}"
+
+    if re.search(r"(?m)^\s*(?:-{3,}|_{3,}|\*{3,})\s*$", markdown):
+        return "standalone section separator"
+
+    for line in markdown.splitlines():
+        normalized = line.replace("‑", "-").replace("–", "-").replace("—", "-")
+        if re.search(r"\bCVE-\d{4}-\d{4,}\b", normalized, re.IGNORECASE):
+            if not re.search(r"\[[^\]]+\]\(https?://", normalized):
+                return "CVE claim without an inline source link"
+
+    source_section = re.search(
+        r"(?ms)^##\s+Source Highlights\s*$([\s\S]*?)(?=^##\s+|\Z)", markdown
+    )
+    if source_section is None:
+        return "missing Source Highlights section"
+    if not re.search(r"\[[^\]]+\]\(https?://[^)]+\)", source_section.group(1)):
+        return "Source Highlights section has no linked evidence"
+    return None
+
+
 def fail(message: str) -> None:
     raise SystemExit(f"site report check failed: {message}")
 
@@ -335,25 +392,6 @@ def is_report_section(line: str) -> bool:
     return match.group(1).strip() in REPORT_SECTION_LABELS
 
 
-def find_public_report_integrity_failure(markdown: str) -> str | None:
-    lines = [line.strip() for line in markdown.splitlines() if line.strip()]
-
-    for line in lines:
-        if LEAKED_DELIBERATION_PATTERN.match(line):
-            return f"leaked model deliberation: {line[:80]}"
-        if UNRESOLVED_REPORT_PLACEHOLDER_PATTERN.match(line):
-            return f"unresolved report placeholder: {line}"
-
-    first_section_index = next(
-        (index for index, line in enumerate(lines) if is_report_section(line)),
-        None,
-    )
-    if first_section_index is not None and first_section_index > MAX_REPORT_PREAMBLE_LINES:
-        return "first report section appears after an excessive preamble"
-
-    return None
-
-
 def validate_site_identity(html: str, sitemap_xml: str) -> None:
     expected_html = (
         f'<meta name="description" content="{PUBLIC_DESCRIPTION}">',
@@ -361,7 +399,7 @@ def validate_site_identity(html: str, sitemap_xml: str) -> None:
         f'<meta property="og:url" content="{PUBLIC_SITE_URL}">',
         '<meta name="twitter:card" content="summary_large_image">',
         'href="https://ricomanifesto.com/">Michael Rico</a>',
-        '<noscript>',
+        "<noscript>",
     )
     for expected in expected_html:
         if expected not in html:
@@ -389,19 +427,18 @@ def validate_site_identity(html: str, sitemap_xml: str) -> None:
         or identity.get("url") != PUBLIC_SITE_URL
         or identity.get("description") != PUBLIC_DESCRIPTION
         or identity.get("author") != expected_author
-        or identity.get("sameAs")
-        != "https://github.com/ricomanifesto/GRCInsight"
+        or identity.get("sameAs") != "https://github.com/ricomanifesto/GRCInsight"
     ):
-        fail("index.html JSON-LD does not match the public GRCInsight identity contract")
+        fail(
+            "index.html JSON-LD does not match the public GRCInsight identity contract"
+        )
 
     try:
         sitemap = ET.fromstring(sitemap_xml)
     except ET.ParseError as error:
         fail(f"sitemap.xml is invalid XML: {error}")
     namespace = {"s": "http://www.sitemaps.org/schemas/sitemap/0.9"}
-    locations = [
-        element.text for element in sitemap.findall("s:url/s:loc", namespace)
-    ]
+    locations = [element.text for element in sitemap.findall("s:url/s:loc", namespace)]
     if locations != [PUBLIC_SITE_URL]:
         fail("sitemap.xml must contain only the canonical GRCInsight project URL")
 
@@ -413,12 +450,19 @@ def main() -> None:
     app_js = read_text(APP_JS)
     renderer_js = read_text(RENDERER_JS)
     tags_js = read_text(TAGS_JS)
+    style_css = read_text(STYLE_CSS)
+    archive_html = read_text(ARCHIVE_INDEX)
 
     validate_site_identity(html, sitemap_xml)
 
     # The page loads exactly one script per concern: the tag catalog, the
     # canonical renderer, and the page controller.
-    for asset in ("static/style.css", "static/tags.js", "static/renderer.js", "static/app.js"):
+    for asset in (
+        "static/style.css",
+        "static/tags.js",
+        "static/renderer.js",
+        "static/app.js",
+    ):
         if asset not in html:
             fail(f"index.html does not reference {asset}")
 
@@ -439,7 +483,9 @@ def main() -> None:
     generated_lines = [line for line in lines[:5] if line.startswith("**Generated:**")]
     if len(generated_lines) != 1:
         fail("index.md must include exactly one Generated line near the top")
-    h1_count = sum(1 for line in lines if line.startswith("# ") and not line.startswith("## "))
+    h1_count = sum(
+        1 for line in lines if line.startswith("# ") and not line.startswith("## ")
+    )
     if h1_count != 1:
         fail("index.md must contain exactly one top-level report title")
     section_count = sum(1 for line in lines if is_report_section(line))
@@ -457,18 +503,47 @@ def main() -> None:
         )
     if "Temporary placeholder" in markdown or "Temporary Outline" in markdown:
         fail("index.md still contains temporary placeholder content")
+    metadata = report_metadata(markdown)
+    missing_metadata = REQUIRED_PUBLIC_METADATA - metadata.keys()
+    if missing_metadata:
+        fail(
+            "index.md missing public provenance metadata: "
+            + ", ".join(sorted(missing_metadata))
+        )
+    if metadata["analysis mode"].lower() != "model-backed":
+        fail("index.md analysis mode must be Model-backed")
+    if not re.fullmatch(r"\d+", metadata["articles analyzed"]):
+        fail("index.md Articles Analyzed must be an integer")
+    if not re.search(r"\[[^\]]+\]\(https?://[^)]+\)", metadata["source"]):
+        fail("index.md Source metadata must be a linked feed")
     forbidden_label = find_public_report_forbidden_label(markdown)
     if forbidden_label:
         fail(f"index.md contains public report forbidden label: {forbidden_label}")
-    integrity_failure = find_public_report_integrity_failure(markdown)
-    if integrity_failure:
-        fail(f"index.md contains non-report model output: {integrity_failure}")
-    dangling_source_reference = DANGLING_SOURCE_REFERENCE_PATTERN.search(markdown)
-    if dangling_source_reference:
-        fail(
-            "index.md contains unresolved numeric source placeholder: "
-            + dangling_source_reference.group(0)
-        )
+    reader_defect = find_reader_surface_defect(markdown)
+    if reader_defect:
+        fail(f"index.md contains reader-surface defect: {reader_defect}")
+
+    generated_at = metadata["generated"]
+    try:
+        generated_date = generated_at.replace("Z", "+00:00")[:10]
+        if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", generated_date):
+            raise ValueError
+    except ValueError:
+        fail("index.md Generated metadata must begin with an ISO date")
+    archived_markdown = read_text(ARCHIVE_DIR / generated_date / "report.md")
+    archived_page = read_text(ARCHIVE_DIR / generated_date / "index.html")
+    if archived_markdown.rstrip() != markdown.rstrip():
+        fail("current report does not match its dated archive snapshot")
+    if f'href="{generated_date}/"' not in archive_html:
+        fail("archive index does not link the current dated report")
+    if 'class="card report-provenance"' not in archived_page:
+        fail("archived report page is not pre-rendered with provenance")
+    if 'href="archive/"' not in html or 'href="index.md"' not in html:
+        fail("index.html is missing report archive or Markdown navigation")
+    if 'data-prerendered="true"' not in html:
+        fail("index.html does not contain pre-rendered report content")
+    if 'class="card report-provenance"' not in html:
+        fail("index.html does not render the report provenance card")
 
     # The page controller routes rendering through the canonical renderer and
     # the shared tag catalog, and never emits an unsanitized Markdown link.
@@ -476,8 +551,8 @@ def main() -> None:
         fail("app.js renders Markdown links without URL sanitization")
     if "window.GRCInsightRenderer" not in app_js:
         fail("app.js does not use the canonical renderer")
-    if "renderer.renderMarkdown" not in app_js and "renderMarkdown(" not in app_js:
-        fail("app.js does not render through renderer.renderMarkdown")
+    if "renderer.renderReportDocument" not in app_js:
+        fail("app.js does not render through renderer.renderReportDocument")
     if "window.GRCInsightTags" not in app_js:
         fail("app.js does not use the shared compliance tag catalog")
     if "tokenizeComplianceTerms" not in app_js:
@@ -488,10 +563,18 @@ def main() -> None:
         fail("app.js does not sanitize catalog links before rendering")
     if "pill.target = '_blank'" not in app_js or "pill.rel = 'noopener'" not in app_js:
         fail("app.js reference pills are missing safe external-link behavior")
-    for inline_catalog in ("const frameworks =", "const regulations =", "const risks ="):
+    for inline_catalog in (
+        "const frameworks =",
+        "const regulations =",
+        "const risks =",
+    ):
         if inline_catalog in app_js:
             fail(f"app.js still defines an inline tag catalog: {inline_catalog}")
-    for removed_global in ("GRCInsightMetadata", "GRCInsightFilters", "GRCInsightArchive"):
+    for removed_global in (
+        "GRCInsightMetadata",
+        "GRCInsightFilters",
+        "GRCInsightArchive",
+    ):
         if removed_global in app_js:
             fail(f"app.js still references removed module global: {removed_global}")
 
@@ -499,18 +582,46 @@ def main() -> None:
     for export in (
         "window.GRCInsightRenderer",
         "function renderMarkdown",
+        "function renderReportDocument",
         "function sanitizeMarkdownUrl",
         "function normalizeReportMarkdown",
     ):
         if export not in renderer_js:
             fail(f"renderer.js missing canonical export: {export}")
-    if "rel=\"noopener\"" not in renderer_js:
+    if 'rel="noopener"' not in renderer_js:
         fail("renderer.js missing safe-link rel=noopener guard")
 
     if "window.GRCInsightTags" not in tags_js:
         fail("tags.js does not export the compliance tag catalog")
     if "function tokenizeComplianceTerms" not in tags_js:
         fail("tags.js does not own compliance-term tokenization")
+    for inert_category in ("key: 'risks'", "key: 'controls'"):
+        if inert_category in tags_js:
+            fail(f"tags.js still presents inert pills: {inert_category}")
+
+    if "ArrowDown" in app_js or "ArrowUp" in app_js:
+        fail("app.js overrides native arrow-key scrolling")
+    if 'aria-live="polite"' not in html or "copyStatus" not in app_js:
+        fail("copy-link confirmation is missing an aria-live status")
+    if "toLocaleDateString('en-US'" not in app_js or "timeZone: 'UTC'" not in app_js:
+        fail("app.js does not format report dates in canonical English UTC")
+    if "prefers-color-scheme: light" not in app_js:
+        fail("app.js does not honor the reader's preferred theme")
+    for token in (
+        "--pill-framework-bg",
+        "--pill-framework-text",
+        "--pill-regulation-bg",
+        "--pill-regulation-text",
+        "--pill-agency-bg",
+        "--pill-agency-text",
+    ):
+        if style_css.count(token) < 3:
+            fail(f"style.css does not define and consume both-theme pill token {token}")
+    heading_actions = re.search(r"(?m)^\.heading-actions\s*\{([^}]+)\}", style_css)
+    if heading_actions is None or re.search(
+        r"opacity:\s*0\s*;", heading_actions.group(1)
+    ):
+        fail("style.css hides heading actions until hover")
 
     print("site report check passed")
 

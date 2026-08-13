@@ -25,6 +25,14 @@
     return `<a href="${escapeAttribute(safeUrl)}" target="_blank" rel="noopener">${text}</a>`;
   }
 
+  function renderInlineMarkdown(value) {
+    let html = escapeHtml(value);
+    html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_, text, url) => renderMarkdownLink(text, url));
+    html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+    html = html.replace(/\*([^*]+)\*/g, '<em>$1</em>');
+    return html;
+  }
+
   // Reports are sometimes generated with numbered section headers ("1. Executive
   // Summary") instead of Markdown h2. Promote the known section labels to h2 so
   // the page treats them as top-level sections; leave numbered prose untouched.
@@ -101,9 +109,9 @@
     html = html.replace(/^#\s+(.*)$/gm, '<h1>$1</h1>');
     // Tables run before HR so the separator row is not eaten by the HR rule.
     html = html.replace(/^(?:\|.+\|(?:\n|$)){2,}/gm, m => renderTable(m));
-    html = html.replace(/^-{3,}$/gm, '<hr>');
-    html = html.replace(/^_{3,}$/gm, '<hr>');
-    html = html.replace(/^\*{3,}$/gm, '<hr>');
+    html = html.replace(/^-{3,}[ \t]*$/gm, '<hr>');
+    html = html.replace(/^_{3,}[ \t]*$/gm, '<hr>');
+    html = html.replace(/^\*{3,}[ \t]*$/gm, '<hr>');
     html = html.replace(/^(?:&gt;\s?.*(?:\n|$))+/gm, m => `<blockquote>${m.replace(/^&gt;\s?/gm, '').trim()}</blockquote>`);
     html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_, text, url) => renderMarkdownLink(text, url));
     // Leading indent is horizontal whitespace only ([ \t]*, not \s*) so the
@@ -140,12 +148,99 @@
     return html.replace(/%%CODEBLOCK_(\d+)%%/g, (_, i) => `<pre><code>${escapeHtml(codeBlocks[+i])}</code></pre>`);
   }
 
+  const metadataLabels = {
+    'generated': 'Generated',
+    'date of issue': 'Date of issue',
+    'analysis period': 'Analysis period',
+    'source': 'Source',
+    'total articles analyzed': 'Articles analyzed',
+    'articles analyzed': 'Articles analyzed',
+    'grc-relevant articles': 'GRC-relevant articles',
+    'model': 'Model',
+    'analysis mode': 'Analysis mode',
+  };
+
+  const metadataOrder = [
+    'generated',
+    'date of issue',
+    'analysis period',
+    'source',
+    'articles analyzed',
+    'grc-relevant articles',
+    'model',
+    'analysis mode',
+  ];
+
+  function parseReportDocument(markdown) {
+    const normalized = normalizeReportMarkdown(String(markdown || ''));
+    const lines = normalized.split('\n');
+    let title = '';
+    const metadata = {};
+    let bodyStart = lines.length;
+
+    lines.forEach((line, index) => {
+      if (bodyStart !== lines.length) return;
+      if (!title && /^#\s+/.test(line)) {
+        title = line.replace(/^#\s+/, '').trim();
+        return;
+      }
+      if (/^##\s+/.test(line)) {
+        bodyStart = index;
+        return;
+      }
+
+      const standard = line.match(/^\*\*([^*]+?):\*\*\s*(.+?)\s*$/);
+      const legacy = line.match(/^\*\*([^*]+?):\s*(.+?)\*\*\s*$/);
+      const match = standard || legacy;
+      if (!match) return;
+      const key = match[1].trim().toLowerCase();
+      if (metadataLabels[key]) metadata[key] = match[2].trim();
+    });
+
+    if (metadata['total articles analyzed'] && !metadata['articles analyzed']) {
+      metadata['articles analyzed'] = metadata['total articles analyzed'];
+    }
+
+    return {
+      title,
+      metadata,
+      bodyMarkdown: lines.slice(bodyStart).join('\n').trim(),
+    };
+  }
+
+  function renderReportMetadata(metadata) {
+    const items = metadataOrder
+      .filter(key => metadata[key])
+      .map(key => `<div class="report-meta-item"><dt>${metadataLabels[key]}</dt><dd>${renderInlineMarkdown(metadata[key])}</dd></div>`)
+      .join('');
+    if (!items) return '';
+    return `<section class="card report-provenance"><h2>About this report</h2><dl class="report-meta">${items}</dl></section>`;
+  }
+
+  function renderReportSections(markdown) {
+    const html = renderMarkdown(markdown);
+    return html
+      .split(/(?=<h2>)/)
+      .map(part => part.replace(/^\s*(?:<hr>\s*)+/, '').replace(/(?:\s*<hr>)+\s*$/, '').trim())
+      .filter(Boolean)
+      .map(part => `<section class="card">${part}</section>`)
+      .join('');
+  }
+
+  function renderReportDocument(markdown) {
+    const report = parseReportDocument(markdown);
+    return renderReportMetadata(report.metadata) + renderReportSections(report.bodyMarkdown);
+  }
+
   window.GRCInsightRenderer = {
     escapeHtml,
     escapeAttribute,
     sanitizeMarkdownUrl,
     renderMarkdownLink,
+    renderInlineMarkdown,
     normalizeReportMarkdown,
     renderMarkdown,
+    parseReportDocument,
+    renderReportDocument,
   };
 })();

@@ -5,7 +5,6 @@ import json
 import subprocess
 from pathlib import Path
 
-
 REPO_ROOT = Path(__file__).resolve().parents[1]
 RENDERER_JS = REPO_ROOT / "site" / "static" / "renderer.js"
 TAGS_JS = REPO_ROOT / "site" / "static" / "tags.js"
@@ -39,6 +38,8 @@ function assert(condition, message) {{
 assert(renderer, 'renderer object is not exported');
 assert(tags, 'tag catalog is not exported');
 assert(typeof renderer.renderMarkdown === 'function', 'renderer should expose renderMarkdown');
+assert(typeof renderer.renderReportDocument === 'function', 'renderer should expose renderReportDocument');
+assert(typeof renderer.parseReportDocument === 'function', 'renderer should expose parseReportDocument');
 assert(typeof renderer.sanitizeMarkdownUrl === 'function', 'renderer should expose sanitizeMarkdownUrl');
 assert(typeof renderer.normalizeReportMarkdown === 'function', 'renderer should expose normalizeReportMarkdown');
 
@@ -68,6 +69,20 @@ const tableHtml = renderer.renderMarkdown('| Field | Detail |\\n|-------|-------
 assert(tableHtml.includes('<table>') && tableHtml.includes('<th>Field</th>') && tableHtml.includes('<td>June 2026</td>'), 'pipe tables should render as HTML tables');
 assert(renderer.renderMarkdown('- one\\n- two').includes('<ul><li>one</li><li>two</li></ul>'), 'dash lists should render as unordered lists');
 assert(renderer.renderMarkdown('```\\ncode\\n```').includes('<pre><code>code</code></pre>'), 'fenced code should render as a pre block');
+assert(renderer.renderMarkdown('---   ').trim() === '<hr>', 'rules with trailing whitespace should not leak as literal text');
+
+// A complete report keeps provenance and section cards in the canonical
+// renderer so build-time HTML and browser rendering are identical.
+const reportDocument = '# GRC Intelligence Report - 2026-08-13\\n**Generated:** 2026-08-13T13:00:00Z\\n**Date of Issue:** August 2026\\n**Source:** [SentryDigest](https://example.com/feed.xml)\\n**Articles Analyzed:** 30\\n**Analysis Mode:** Model-backed\\n\\n---   \\n\\n## Executive Summary\\nCareful analysis.\\n\\n---\\n\\n## Source Highlights\\n- [Evidence](https://example.com/evidence)';
+const parsedReport = renderer.parseReportDocument(reportDocument);
+assert(parsedReport.title === 'GRC Intelligence Report - 2026-08-13', 'report title should be parsed from h1');
+assert(parsedReport.metadata.generated === '2026-08-13T13:00:00Z', 'Generated metadata should be preserved');
+assert(parsedReport.metadata['articles analyzed'] === '30', 'article-count provenance should be preserved');
+const reportHtml = renderer.renderReportDocument(reportDocument);
+assert(reportHtml.includes('<section class="card report-provenance"><h2>About this report</h2>'), 'report provenance should render as a card');
+assert(reportHtml.includes('<dt>Source</dt><dd><a href="https://example.com/feed.xml"'), 'source provenance should keep its safe link');
+assert((reportHtml.match(/<section class="card">/g) || []).length === 2, 'each report section should render as a card');
+assert(!reportHtml.includes('<hr>') && !reportHtml.includes('---'), 'section separators should not survive in report cards');
 
 // Regression: a paragraph that contains bold text must render as a single
 // wrapped <p>, not as loose inline fragments. Loose fragments became separate
@@ -109,12 +124,11 @@ assert(term(byKey.frameworks, 'NIST CSF 2.0').aliases.includes('NIST'), 'bare NI
 assert(term(byKey.frameworks, 'PCI DSS').url === 'https://www.pcisecuritystandards.org/standards/pci-dss/', 'PCI DSS should link to the official PCI SSC resource');
 assert(byKey.regulations && byKey.regulations.pillClass === 'regulation', 'regulation category should expose regulation pills');
 assert(term(byKey.regulations, 'GDPR').url === 'https://eur-lex.europa.eu/eli/reg/2016/679/oj', 'GDPR should link to the official regulation text');
-assert(byKey.risks && byKey.risks.pillClass === 'risk', 'risk category should expose risk pills');
-assert(term(byKey.risks, 'Ransomware').url === undefined, 'risk pills should remain non-clickable');
-assert(byKey.controls && byKey.controls.pillClass === 'control', 'control category should expose control pills');
-assert(term(byKey.controls, 'Control').url === undefined, 'control pills should remain non-clickable');
+assert(!byKey.risks, 'risk terms should remain prose rather than inert pills');
+assert(!byKey.controls, 'control terms should remain prose rather than inert pills');
 assert(byKey.agencies && byKey.agencies.pillClass === 'agency', 'agency category should expose agency pills');
 assert(term(byKey.agencies, 'SEC').url === 'https://www.sec.gov/about', 'SEC should link to the official agency resource');
+assert(tags.categories.every(category => category.terms.every(item => item.url)), 'every pill catalog term must have a destination');
 
 // Tokenization preserves the report's visible typography while normalizing
 // Unicode hyphens/spaces for matching and attaching only curated URLs.
@@ -124,17 +138,15 @@ assert(taggedText('PCI‑DSS').url === 'https://www.pcisecuritystandards.org/sta
 assert(taggedText('ISO\u202f27001').url === 'https://www.iso.org/standard/27001', 'narrow-space ISO spelling should receive its official link');
 assert(taggedText('NIST CSF 2.0').url === 'https://www.nist.gov/cyberframework', 'precise NIST CSF spelling should receive its official link');
 assert(taggedText('GDPR').url === 'https://eur-lex.europa.eu/eli/reg/2016/679/oj', 'GDPR should receive its official link');
-assert(taggedText('ransomware').pillClass === 'risk' && !taggedText('ransomware').url, 'risk terms should be highlighted without a link');
-assert(taggedText('controls').pillClass === 'control' && !taggedText('controls').url, 'control terms should be highlighted without a link');
+assert(!taggedText('ransomware'), 'risk terms should remain plain prose');
+assert(!taggedText('controls'), 'control terms should remain plain prose');
 const bareNist = tags.tokenizeComplianceTerms('NIST guidance').find(item => item.text === 'NIST');
 assert(bareNist.url === 'https://www.nist.gov/cyberframework', 'bare NIST text should receive the official NIST CSF link');
 
 console.log('node renderer assertions passed');
 """
 
-    result = subprocess.run(
-        ["node", "-e", script], capture_output=True, text=True
-    )
+    result = subprocess.run(["node", "-e", script], capture_output=True, text=True)
     if result.returncode != 0:
         detail = (result.stderr or result.stdout).strip()
         fail(detail or "node renderer assertions failed")
