@@ -438,8 +438,8 @@ def test_site_report_composer_normalizes_numbered_markdown_headings_and_feed_url
             "title": "GRC Intelligence Report - 2026-08-13",
             "generated_at": "2026-08-13T13:00:00Z",
             "content": (
-                "## 1. **Executive Summary**\nCareful analysis.\n\n"
-                "### 6) __Source Highlights__\n"
+                "## **1. Executive Summary**\nCareful analysis.\n\n"
+                "**6) Source Highlights**\n"
                 "- [Evidence](https://example.com/evidence)"
             ),
             "metadata": {

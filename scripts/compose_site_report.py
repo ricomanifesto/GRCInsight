@@ -67,13 +67,20 @@ def canonical_section_title(line: str) -> str | None:
     if heading:
         candidate = heading.group(1).strip()
         has_section_marker = True
-    numbered = re.match(r"^\d{1,2}[\).]\s+(.+?)\s*$", candidate)
-    if numbered:
-        candidate = numbered.group(1).strip()
-        has_section_marker = True
-    for marker in ("**", "__"):
-        if candidate.startswith(marker) and candidate.endswith(marker):
-            candidate = candidate[len(marker) : -len(marker)].strip()
+    # Models commonly nest bold and numeric section markers in either order:
+    # `## 1. **Title**`, `## **1. Title**`, or `**1. Title**`.
+    # Peel those wrappers iteratively before comparing the canonical title.
+    for _ in range(4):
+        previous = candidate
+        for marker in ("**", "__"):
+            if candidate.startswith(marker) and candidate.endswith(marker):
+                candidate = candidate[len(marker) : -len(marker)].strip()
+                break
+        numbered = re.match(r"^\d{1,2}[\).]\s+(.+?)\s*$", candidate)
+        if numbered:
+            candidate = numbered.group(1).strip()
+            has_section_marker = True
+        if candidate == previous:
             break
     return candidate if has_section_marker and candidate in SECTION_TITLES else None
 
