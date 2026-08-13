@@ -3,6 +3,7 @@
 from datetime import datetime, timezone
 import re
 from typing import List, Dict, Any
+from urllib.parse import quote
 
 from loguru import logger
 
@@ -52,6 +53,11 @@ def _markdown_link_label(value: Any) -> str:
         .replace("(", "\\(")
         .replace(")", "\\)")
     )
+
+
+def _markdown_link_destination(value: Any) -> str:
+    """Serialize an exact source URL for use as a Markdown destination."""
+    return quote(str(value), safe=":/?#[]@!$&*+,;=%")
 
 
 class GRCModelService:
@@ -281,7 +287,7 @@ Focus only on content with clear governance, risk, or compliance implications.""
             # label so literal backslashes cannot become Markdown escapes.
             title = str(evidence.get("title", "Untitled source"))
             url = str(evidence.get("url", "No URL"))
-            markdown_link = f"[{_markdown_link_label(title)}]({url})"
+            markdown_link = f"[{_markdown_link_label(title)}]({_markdown_link_destination(url)})"
             snippet = _sanitize_evidence_text(
                 evidence.get("snippet", "No snippet available"), allowed_cves
             )

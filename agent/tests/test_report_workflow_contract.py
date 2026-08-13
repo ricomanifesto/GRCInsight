@@ -179,9 +179,10 @@ def test_report_prompt_globally_bounds_cve_evidence():
     assert "[additional CVE omitted]" in prompt
 
 
-def test_report_prompt_serializes_exact_source_titles_for_markdown_links():
+def test_report_prompt_serializes_exact_source_links_for_markdown():
     service = GRCModelService.__new__(GRCModelService)
     title = r"Windows C:\[Temp] and C:\(Logs) advisory"
+    url = "https://example.com/advisory)1?edition=(daily)"
 
     prompt = service._create_report_prompt(
         {
@@ -190,7 +191,7 @@ def test_report_prompt_serializes_exact_source_titles_for_markdown_links():
             "source_evidence": [
                 {
                     "title": title,
-                    "url": "https://example.com/windows",
+                    "url": url,
                     "snippet": "Review the affected Windows paths.",
                     "cves": [],
                 }
@@ -206,7 +207,10 @@ def test_report_prompt_serializes_exact_source_titles_for_markdown_links():
         .replace("(", "\\(")
         .replace(")", "\\)")
     )
-    assert f"Markdown Link: [{escaped_title}](https://example.com/windows)" in prompt
+    assert (
+        f"Markdown Link: [{escaped_title}]"
+        "(https://example.com/advisory%291?edition=%28daily%29)" in prompt
+    )
     assert "including every label escape and URL character" in prompt
 
 
@@ -717,7 +721,7 @@ def test_site_report_composer_decodes_escaped_evidence_url_delimiters():
     assert http_url(evidence_url, "evidence URL") == "HTTPS://example.com/O%27Reilly/a%29b"
 
 
-def test_site_report_composer_decodes_serialized_source_title_identity():
+def test_site_report_composer_accepts_serialized_source_link_identity():
     namespace = runpy.run_path(str(SITE_REPORT_COMPOSER))
     compose_report = namespace["compose_report"]
     title = r"Windows C:\[Temp] and C:\(Logs) advisory"
@@ -728,7 +732,8 @@ def test_site_report_composer_decodes_serialized_source_title_identity():
         .replace("(", "\\(")
         .replace(")", "\\)")
     )
-    link = f"[{escaped_title}](https://example.com/windows)"
+    source_url = "https://example.com/advisory)1?edition=(daily)"
+    link = f"[{escaped_title}]" "(https://example.com/advisory%291?edition=%28daily%29)"
 
     report = compose_report(
         {
@@ -743,7 +748,7 @@ def test_site_report_composer_decodes_serialized_source_title_identity():
                 "analysis_mode": "model",
                 "source_name": "SentryDigest",
                 "source_url": "https://example.com/feed.xml",
-                "source_articles": [{"title": title, "url": "https://example.com/windows"}],
+                "source_articles": [{"title": title, "url": source_url}],
                 "analysis_period": "August 2026",
                 "article_count": 1,
                 "grc_article_count": 1,
