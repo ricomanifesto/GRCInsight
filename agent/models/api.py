@@ -100,7 +100,7 @@ class ReportMetadata(BaseModel):
     source_url: str = ""
     analysis_period: str = ""
     model: str = ""
-    source_articles: List[Dict[str, str]] = Field(default_factory=list)
+    source_articles: List[Dict[str, Any]] = Field(default_factory=list)
     regulations_mentioned: List[str] = Field(default_factory=list)
     frameworks_referenced: List[str] = Field(default_factory=list)
     industries_affected: List[str] = Field(default_factory=list)

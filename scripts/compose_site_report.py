@@ -187,11 +187,11 @@ def markdown_inline_text(value: str) -> str:
     return re.sub(r"\\([\\[\]()])", r"\1", value)
 
 
-def source_articles(metadata: dict) -> list[dict[str, str]]:
+def source_articles(metadata: dict) -> list[dict[str, object]]:
     raw_sources = metadata.get("source_articles")
     if not isinstance(raw_sources, list) or not raw_sources:
         fail("metadata.source_articles must contain the analyzed source evidence")
-    sources: list[dict[str, str]] = []
+    sources: list[dict[str, object]] = []
     seen_urls: set[str] = set()
     for index, raw_source in enumerate(raw_sources):
         if not isinstance(raw_source, dict):
@@ -204,17 +204,31 @@ def source_articles(metadata: dict) -> list[dict[str, str]]:
             raw_source.get("title"), f"metadata.source_articles[{index}].title"
         )
         url = http_url(raw_source.get("url"), f"metadata.source_articles[{index}].url")
+        raw_cves = raw_source.get("cves", [])
+        if not isinstance(raw_cves, list):
+            fail(f"metadata.source_articles[{index}].cves must be a list")
+        cves: list[str] = []
+        for cve_index, raw_cve in enumerate(raw_cves):
+            cve = single_line(
+                raw_cve, f"metadata.source_articles[{index}].cves[{cve_index}]"
+            ).upper()
+            if not re.fullmatch(r"CVE-\d{4}-\d{4,}", cve):
+                fail(f"metadata.source_articles[{index}] contains an invalid CVE")
+            if cve not in cves:
+                cves.append(cve)
         if url in seen_urls:
             continue
         seen_urls.add(url)
-        sources.append({"title": title, "url": url})
+        sources.append({"title": title, "url": url, "cves": cves})
     if not sources:
         fail("metadata.source_articles contains no usable linked evidence")
     return sources
 
 
-def validate_evidence_links(body: str, sources: list[dict[str, str]]) -> None:
-    allowed_pairs = {(source["title"], source["url"]) for source in sources}
+def validate_evidence_links(body: str, sources: list[dict[str, object]]) -> None:
+    allowed_pairs = {
+        (str(source["title"]), str(source["url"])) for source in sources
+    }
     evidence_links = [
         (
             markdown_inline_text(label),
@@ -233,8 +247,36 @@ def validate_evidence_links(body: str, sources: list[dict[str, str]]) -> None:
             f"{label} ({url})"
         )
 
+    cves_by_url = {
+        str(source["url"]): set(source["cves"])
+        for source in sources
+    }
+    for line in body.splitlines():
+        normalized_line = line.replace("‑", "-").replace("–", "-").replace("—", "-")
+        cited_cves = {
+            match.group(0).upper()
+            for match in re.finditer(
+                r"\bCVE-\d{4}-\d{4,}\b", normalized_line, re.IGNORECASE
+            )
+        }
+        if not cited_cves:
+            continue
+        linked_urls = {
+            http_url(markdown_inline_text(url), "report evidence URL")
+            for _label, url in markdown_links(line)
+            if url.startswith(("http://", "https://"))
+        }
+        supported_cves = set().union(
+            *(cves_by_url.get(url, set()) for url in linked_urls)
+        )
+        unsupported = sorted(cited_cves - supported_cves)
+        if unsupported:
+            fail(
+                f"report cites {unsupported[0]} without a linked source containing it"
+            )
 
-def evidence_manifest(data: dict, sources: list[dict[str, str]]) -> dict:
+
+def evidence_manifest(data: dict, sources: list[dict[str, object]]) -> dict:
     metadata = data.get("metadata") or {}
     return {
         "generated_at": single_line(data.get("generated_at"), "generated_at"),

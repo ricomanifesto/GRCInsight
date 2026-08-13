@@ -153,7 +153,11 @@ def test_run_grc_analysis_endpoint_marks_model_backed_reports(monkeypatch):
     assert response.metadata.analysis_period
     assert response.metadata.model == "openrouter/openrouter/free"
     assert response.metadata.source_articles == [
-        {"title": "NIST publishes new control guidance", "url": "https://example.com/nist"}
+        {
+            "title": "NIST publishes new control guidance",
+            "url": "https://example.com/nist",
+            "cves": [],
+        }
     ]
 
 
@@ -168,7 +172,12 @@ def test_run_grc_analysis_endpoint_skips_entries_without_linked_evidence(monkeyp
                 {
                     "title": "Linked item",
                     "link": "https://example.com/linked",
-                    "content": "Can cite this.",
+                    "content": "Can cite CVE-2026-12345 from this source.",
+                },
+                {
+                    "title": "Duplicate title must not reach the model",
+                    "link": "https://example.com/linked",
+                    "content": "Duplicate coverage.",
                 },
             ],
         }
@@ -211,7 +220,11 @@ def test_run_grc_analysis_endpoint_skips_entries_without_linked_evidence(monkeyp
     assert response.metadata is not None
     assert response.metadata.article_count == 1
     assert response.metadata.source_articles == [
-        {"title": "Linked item", "url": "https://example.com/linked"}
+        {
+            "title": "Linked item",
+            "url": "https://example.com/linked",
+            "cves": ["CVE-2026-12345"],
+        }
     ]
 
 

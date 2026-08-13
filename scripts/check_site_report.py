@@ -589,6 +589,7 @@ def validate_evidence_manifest(
         fail("evidence manifest must contain source articles")
     source_pairs: set[tuple[str, str]] = set()
     source_urls: set[str] = set()
+    source_cves: dict[str, set[str]] = {}
     for index, source in enumerate(raw_sources):
         if not isinstance(source, dict):
             fail(f"evidence manifest source {index} must be an object")
@@ -599,9 +600,20 @@ def validate_evidence_manifest(
         if not isinstance(url, str) or not url.startswith(("http://", "https://")):
             fail(f"evidence manifest source {index} has no HTTP URL")
         url = canonical_http_url(url)
+        raw_cves = source.get("cves", [])
+        if not isinstance(raw_cves, list):
+            fail(f"evidence manifest source {index} CVEs must be a list")
+        cves: set[str] = set()
+        for cve in raw_cves:
+            if not isinstance(cve, str) or not re.fullmatch(
+                r"CVE-\d{4}-\d{4,}", cve, re.IGNORECASE
+            ):
+                fail(f"evidence manifest source {index} has an invalid CVE")
+            cves.add(cve.upper())
         if url in source_urls:
             fail(f"evidence manifest repeats source URL: {url}")
         source_urls.add(url)
+        source_cves[url] = cves
         source_pairs.add((title, url))
 
     body_start = markdown.find("\n## ")
@@ -623,6 +635,30 @@ def validate_evidence_manifest(
             "report links evidence absent from source manifest: "
             f"{label} ({url})"
         )
+
+    for line in body.splitlines():
+        normalized_line = line.replace("‑", "-").replace("–", "-").replace("—", "-")
+        cited_cves = {
+            match.group(0).upper()
+            for match in re.finditer(
+                r"\bCVE-\d{4}-\d{4,}\b", normalized_line, re.IGNORECASE
+            )
+        }
+        if not cited_cves:
+            continue
+        linked_urls = {
+            canonical_http_url(markdown_inline_text(destination))
+            for _, _, _, destination in markdown_links(line)
+            if destination.startswith(("http://", "https://"))
+        }
+        supported_cves = set().union(
+            *(source_cves.get(url, set()) for url in linked_urls)
+        )
+        unsupported = sorted(cited_cves - supported_cves)
+        if unsupported:
+            fail(
+                f"report cites {unsupported[0]} without a linked source containing it"
+            )
 
     source_section = re.search(
         r"(?ms)^##\s+Source Highlights\s*$([\s\S]*?)(?=^##\s+|\Z)", body

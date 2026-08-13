@@ -404,6 +404,7 @@ async def run_grc_analysis_endpoint(
         # Step 2: Convert entries to ArticleInput format
         logger.info("Step 2: Processing feed entries")
         articles: List[ArticleInput] = []
+        seen_article_urls: set[str] = set()
         from email.utils import parsedate_to_datetime
 
         for entry in feed_data.get("entries", []):
@@ -414,6 +415,12 @@ async def run_grc_analysis_endpoint(
                 if not title or parsed_url.scheme not in {"http", "https"} or not parsed_url.netloc:
                     logger.warning("Skipping feed entry that cannot serve as linked evidence")
                     continue
+                if url in seen_article_urls:
+                    logger.warning(
+                        "Skipping duplicate feed entry URL to preserve canonical evidence"
+                    )
+                    continue
+                seen_article_urls.add(url)
                 published_raw = entry.get("published", "")
                 published_dt = None
                 if published_raw:
@@ -563,7 +570,21 @@ async def run_grc_analysis_endpoint(
             source_url=feed_url,
             analysis_period=generated_at.strftime("%B %Y"),
             model=config.model,
-            source_articles=[{"title": article.title, "url": article.url} for article in articles],
+            source_articles=[
+                {
+                    "title": article.title,
+                    "url": article.url,
+                    "cves": _extract_cves(
+                        "\n".join(
+                            filter(
+                                None,
+                                [article.title, article.summary, article.content],
+                            )
+                        )
+                    ),
+                }
+                for article in enriched_articles
+            ],
             regulations_mentioned=analysis_data.get("regulations_mentioned", []),
             frameworks_referenced=analysis_data.get("frameworks_referenced", []),
             industries_affected=analysis_data.get("industries_affected", []),

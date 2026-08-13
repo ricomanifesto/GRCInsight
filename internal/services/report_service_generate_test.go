@@ -2,6 +2,7 @@ package services
 
 import (
 	"io"
+	"reflect"
 	"testing"
 	"time"
 
@@ -86,8 +87,12 @@ func TestGenerateReport_PersistsReportAndArticles(t *testing.T) {
 			SourceURL:       "https://example.com/feed.xml",
 			AnalysisPeriod:  "August 2026",
 			Model:           "openrouter/example/model",
-			SourceArticles: []map[string]string{
-				{"title": "A1", "url": "https://ex.com/1"},
+			SourceArticles: []map[string]any{
+				{
+					"title": "A1",
+					"url":   "https://ex.com/1",
+					"cves":  []string{"CVE-2026-12345"},
+				},
 			},
 		},
 		Articles: []apimodels.ArticleRecord{{
@@ -127,6 +132,9 @@ func TestGenerateReport_PersistsReportAndArticles(t *testing.T) {
 	}
 	if len(fr.updated.Metadata.SourceArticles) != 1 || fr.updated.Metadata.SourceArticles[0]["url"] != "https://ex.com/1" {
 		t.Fatalf("expected source evidence to persist, got %#v", fr.updated.Metadata.SourceArticles)
+	}
+	if got := fr.updated.Metadata.SourceArticles[0]["cves"]; !reflect.DeepEqual(got, []string{"CVE-2026-12345"}) {
+		t.Fatalf("expected per-source CVEs to persist, got %#v", got)
 	}
 	if fa.calls == 0 {
 		t.Fatalf("expected articles to be persisted")

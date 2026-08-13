@@ -4,19 +4,29 @@
   "sources": [
     {
       "title": "Attackers Exploit SharePoint Authentication Bypass After Public PoC Release",
-      "url": "https://thehackernews.com/2026/08/attackers-exploit-sharepoint.html"
+      "url": "https://thehackernews.com/2026/08/attackers-exploit-sharepoint.html",
+      "cves": [
+        "CVE-2026-55040"
+      ]
     },
     {
       "title": "Hackers exploit critical Adobe Commerce flaw to hijack customer accounts",
-      "url": "https://www.bleepingcomputer.com/news/security/hackers-exploit-critical-adobe-commerce-flaw-to-hijack-customer-accounts/"
+      "url": "https://www.bleepingcomputer.com/news/security/hackers-exploit-critical-adobe-commerce-flaw-to-hijack-customer-accounts/",
+      "cves": [
+        "CVE-2026-71362"
+      ]
     },
     {
       "title": "Lazarus hackers exploited Windows zero-day to target defense firms",
-      "url": "https://www.bleepingcomputer.com/news/security/lazarus-hackers-exploited-windows-zero-day-to-target-defense-firms/"
+      "url": "https://www.bleepingcomputer.com/news/security/lazarus-hackers-exploited-windows-zero-day-to-target-defense-firms/",
+      "cves": [
+        "CVE-2026-68820"
+      ]
     },
     {
       "title": "City-Forum data-theft attacks target Salesforce, ServiceNow portals",
-      "url": "https://www.bleepingcomputer.com/news/security/city-forum-data-theft-attacks-target-salesforce-servicenow-portals/"
+      "url": "https://www.bleepingcomputer.com/news/security/city-forum-data-theft-attacks-target-salesforce-servicenow-portals/",
+      "cves": []
     }
   ]
 }

@@ -28,8 +28,12 @@ func TestReportMappingsPreserveFields(t *testing.T) {
 			SourceURL:       "https://example.com/feed.xml",
 			AnalysisPeriod:  "August 2026",
 			Model:           "openrouter/example/model",
-			SourceArticles: []map[string]string{
-				{"title": "Evidence", "url": "https://example.com/evidence"},
+			SourceArticles: []map[string]any{
+				{
+					"title": "Evidence",
+					"url":   "https://example.com/evidence",
+					"cves":  []string{"CVE-2026-12345"},
+				},
 			},
 			RegulationsMentioned: []string{"SOX"},
 			FrameworksReferenced: []string{"NIST CSF"},
