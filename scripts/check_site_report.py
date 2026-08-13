@@ -332,10 +332,59 @@ def report_metadata(markdown: str) -> dict[str, str]:
     return metadata
 
 
+def markdown_links(markdown: str) -> list[tuple[int, int, str, str]]:
+    links: list[tuple[int, int, str, str]] = []
+    cursor = 0
+    while cursor < len(markdown):
+        label_start = markdown.find("[", cursor)
+        if label_start < 0:
+            break
+        label_end = markdown.find("]", label_start + 1)
+        if label_end < 0:
+            break
+        if label_end + 1 >= len(markdown) or markdown[label_end + 1] != "(":
+            cursor = label_start + 1
+            continue
+        destination_marker = label_end
+        depth = 1
+        escaped = False
+        destination_end = -1
+        for index in range(destination_marker + 2, len(markdown)):
+            character = markdown[index]
+            if escaped:
+                escaped = False
+                continue
+            if character == "\\":
+                escaped = True
+                continue
+            if character == "(":
+                depth += 1
+            elif character == ")":
+                depth -= 1
+                if depth == 0:
+                    destination_end = index
+                    break
+        if destination_end < 0:
+            cursor = destination_marker + 2
+            continue
+        links.append(
+            (
+                label_start,
+                destination_end + 1,
+                markdown[label_start + 1 : destination_marker],
+                markdown[destination_marker + 2 : destination_end],
+            )
+        )
+        cursor = destination_end + 1
+    return links
+
+
 def prose_without_destinations(markdown: str) -> str:
     prose = re.sub(r"^```[\s\S]*?^```", "", markdown, flags=re.MULTILINE)
     prose = re.sub(r"`[^`]*`", "", prose)
-    prose = re.sub(r"\[([^\]]+)\]\([^)]+\)", r"\1", prose)
+    links = markdown_links(prose)
+    for start, end, label, _destination in reversed(links):
+        prose = prose[:start] + label + prose[end:]
     prose = re.sub(r"https?://\S+", "", prose)
     return prose
 
@@ -359,7 +408,10 @@ def find_reader_surface_defect(markdown: str) -> str | None:
     for line in markdown.splitlines():
         normalized = line.replace("‑", "-").replace("–", "-").replace("—", "-")
         if re.search(r"\bCVE-\d{4}-\d{4,}\b", normalized, re.IGNORECASE):
-            if not re.search(r"\[[^\]]+\]\(https?://", normalized):
+            if not any(
+                destination.startswith(("http://", "https://"))
+                for _, _, _, destination in markdown_links(normalized)
+            ):
                 return "CVE claim without an inline source link"
 
     source_section = re.search(
@@ -367,7 +419,10 @@ def find_reader_surface_defect(markdown: str) -> str | None:
     )
     if source_section is None:
         return "missing Source Highlights section"
-    if not re.search(r"\[[^\]]+\]\(https?://[^)]+\)", source_section.group(1)):
+    if not any(
+        destination.startswith(("http://", "https://"))
+        for _, _, _, destination in markdown_links(source_section.group(1))
+    ):
         return "Source Highlights section has no linked evidence"
     return None
 
@@ -515,7 +570,10 @@ def main() -> None:
         fail("index.md analysis mode must be Model-backed")
     if not re.fullmatch(r"\d+", metadata["articles analyzed"]):
         fail("index.md Articles Analyzed must be an integer")
-    if not re.search(r"\[[^\]]+\]\(https?://[^)]+\)", metadata["source"]):
+    if not any(
+        destination.startswith(("http://", "https://"))
+        for _, _, _, destination in markdown_links(metadata["source"])
+    ):
         fail("index.md Source metadata must be a linked feed")
     forbidden_label = find_public_report_forbidden_label(markdown)
     if forbidden_label:

@@ -33,12 +33,65 @@
   }
 
   function extractMarkdownLinks(value) {
+    const source = String(value);
     const links = [];
-    const markdown = String(value).replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_, text, url) => {
+    let markdown = '';
+    let cursor = 0;
+    while (cursor < source.length) {
+      const labelStart = source.indexOf('[', cursor);
+      if (labelStart < 0) {
+        markdown += source.slice(cursor);
+        break;
+      }
+      const labelEnd = source.indexOf(']', labelStart + 1);
+      if (labelEnd < 0) {
+        markdown += source.slice(cursor);
+        break;
+      }
+      if (source[labelEnd + 1] !== '(') {
+        markdown += source.slice(cursor, labelStart + 1);
+        cursor = labelStart + 1;
+        continue;
+      }
+      const destinationStartMarker = labelEnd;
+
+      let depth = 1;
+      let escaped = false;
+      let destinationEnd = -1;
+      for (let index = destinationStartMarker + 2; index < source.length; index += 1) {
+        const character = source[index];
+        if (escaped) {
+          escaped = false;
+          continue;
+        }
+        if (character === '\\') {
+          escaped = true;
+          continue;
+        }
+        if (character === '(') depth += 1;
+        if (character === ')') {
+          depth -= 1;
+          if (depth === 0) {
+            destinationEnd = index;
+            break;
+          }
+        }
+      }
+      if (destinationEnd < 0) {
+        markdown += source.slice(cursor, destinationStartMarker + 2);
+        cursor = destinationStartMarker + 2;
+        continue;
+      }
+
       const token = `@@GRCINSIGHT_LINK_${links.length}@@`;
-      links.push({ token, text, url });
-      return token;
-    });
+      markdown += source.slice(cursor, labelStart) + token;
+      links.push({
+        token,
+        text: source.slice(labelStart + 1, destinationStartMarker),
+        url: source.slice(destinationStartMarker + 2, destinationEnd),
+      });
+      cursor = destinationEnd + 1;
+    }
     return {
       markdown,
       restore(html) {

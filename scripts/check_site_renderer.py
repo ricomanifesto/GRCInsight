@@ -73,6 +73,11 @@ assert(renderer.renderMarkdown('---   ').trim() === '<hr>', 'rules with trailing
 const queryLinkHtml = renderer.renderMarkdown('[Evidence](https://example.com/feed?a=1&b=2)');
 assert(queryLinkHtml.includes('href="https://example.com/feed?a=1&amp;b=2"'), 'query separators should be escaped exactly once in rendered links');
 assert(!queryLinkHtml.includes('&amp;amp;'), 'rendered links must not double-escape query separators');
+const parenthesizedLinkHtml = renderer.renderMarkdown('[Evidence](https://example.com/a_(b).html)');
+assert(parenthesizedLinkHtml.includes('href="https://example.com/a_(b).html"'), 'balanced parentheses should remain part of a link destination');
+assert(!parenthesizedLinkHtml.includes('.html)</p>'), 'balanced link destinations must not leak a trailing fragment into prose');
+const bareThenLinkedHtml = renderer.renderMarkdown('[Unresolved reference] then [Evidence](https://example.com/evidence)');
+assert(bareThenLinkedHtml.includes('[Unresolved reference] then <a href="https://example.com/evidence"'), 'a bare bracketed reference must not consume the next Markdown link');
 
 // A complete report keeps provenance and section cards in the canonical
 // renderer so build-time HTML and browser rendering are identical.
@@ -90,6 +95,9 @@ const querySourceReport = reportDocument.replace('https://example.com/feed.xml',
 const querySourceHtml = renderer.renderReportDocument(querySourceReport);
 assert(querySourceHtml.includes('href="https://example.com/feed?a=1&amp;b=2"'), 'provenance links should preserve query parameter separators');
 assert(!querySourceHtml.includes('&amp;amp;'), 'provenance links must not double-escape query separators');
+const parenthesizedSourceReport = reportDocument.replace('https://example.com/feed.xml', 'https://example.com/feed(1).xml');
+const parenthesizedSourceHtml = renderer.renderReportDocument(parenthesizedSourceReport);
+assert(parenthesizedSourceHtml.includes('href="https://example.com/feed(1).xml"'), 'provenance links should preserve balanced parentheses');
 
 // Regression: a paragraph that contains bold text must render as a single
 // wrapped <p>, not as loose inline fragments. Loose fragments became separate

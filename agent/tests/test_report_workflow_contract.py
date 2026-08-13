@@ -484,6 +484,12 @@ def test_site_report_reader_surface_detector_covers_visible_trust_defects():
     )
 
     assert find_defect(valid) is None
+    assert (
+        find_defect(
+            valid.replace("https://example.com/cve", "https://example.com/evidence_(daily).html")
+        )
+        is None
+    )
     blocked = (
         valid.replace("is documented.", "is documented.[¹]"),
         valid.replace("is documented.", "is documented in [Regulatory Developments]."),
