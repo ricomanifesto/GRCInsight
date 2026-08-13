@@ -409,10 +409,15 @@ async def run_grc_analysis_endpoint(
 
         for entry in feed_data.get("entries", []):
             try:
-                title = str(entry.get("title") or "").strip()
+                title = re.sub(r"\s+", " ", str(entry.get("title") or "")).strip()
                 url = str(entry.get("link") or "").strip()
                 parsed_url = urlparse(url)
-                if not title or parsed_url.scheme not in {"http", "https"} or not parsed_url.netloc:
+                if (
+                    not title
+                    or re.search(r"\s", url)
+                    or parsed_url.scheme not in {"http", "https"}
+                    or not parsed_url.netloc
+                ):
                     logger.warning("Skipping feed entry that cannot serve as linked evidence")
                     continue
                 if url in seen_article_urls:

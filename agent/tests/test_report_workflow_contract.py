@@ -138,8 +138,8 @@ def test_report_prompt_globally_bounds_cve_evidence():
             "analysis": {},
             "source_evidence": [
                 {
-                    "title": "Patch roundup",
-                    "url": f"https://example.com/advisory/{cves[10]}",
+                    "title": f"Patch roundup for {cves[10]}",
+                    "url": f"https://example.com/advisory/{cves[11]}",
                     "snippet": "A vendor published fixes for " + ", ".join(cves) + ".",
                     "cves": cves,
                 }
@@ -149,8 +149,10 @@ def test_report_prompt_globally_bounds_cve_evidence():
     )
 
     assert cves[9] in prompt
-    assert cves[10] not in prompt
-    assert cves[11] not in prompt
+    assert prompt.count(cves[10]) == 1
+    assert prompt.count(cves[11]) == 1
+    assert f"Patch roundup for {cves[10]}" in prompt
+    assert f"URL: https://example.com/advisory/{cves[11]}" in prompt
     assert "[additional CVE omitted]" in prompt
 
 

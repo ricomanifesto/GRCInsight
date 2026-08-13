@@ -171,9 +171,14 @@ def test_run_grc_analysis_endpoint_skips_entries_without_linked_evidence(monkeyp
             "entries": [
                 {"title": "Linkless item", "link": "", "content": "Cannot cite this."},
                 {
-                    "title": "Linked item",
+                    "title": " Linked\n  item ",
                     "link": "https://example.com/linked",
                     "content": "Can cite CVE-2026-12345 from this source.",
+                },
+                {
+                    "title": "Unsafe URL",
+                    "link": "https://example.com/bad path",
+                    "content": "Cannot serialize this evidence URL.",
                 },
                 {
                     "title": "Duplicate title must not reach the model",

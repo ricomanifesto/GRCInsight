@@ -264,8 +264,10 @@ Focus only on content with clear governance, risk, or compliance implications.""
                 if normalized_cve in allowed_cves and normalized_cve not in listed_cves:
                     listed_cves.add(normalized_cve)
                     cves.append(normalized_cve)
-            title = _sanitize_evidence_text(evidence.get("title", "Untitled source"), allowed_cves)
-            url = _sanitize_evidence_text(evidence.get("url", "No URL"), allowed_cves)
+            # Title and URL form the exact evidence identity enforced by the
+            # publication manifest. Never rewrite them while bounding prose.
+            title = str(evidence.get("title", "Untitled source"))
+            url = str(evidence.get("url", "No URL"))
             snippet = _sanitize_evidence_text(
                 evidence.get("snippet", "No snippet available"), allowed_cves
             )
