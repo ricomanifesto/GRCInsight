@@ -34,6 +34,19 @@ FORBIDDEN_REPORT_SECTION_LABELS = {
     "threat actor activities",
 }
 NUMBERED_SECTION_PATTERN = re.compile(r"^\d+[\).]\s+(.+)$")
+DANGLING_SOURCE_REFERENCE_PATTERN = re.compile(
+    r"\bSources?\s+\d+(?:\s*(?:,|and|-)\s*\d+)*\b",
+    re.IGNORECASE,
+)
+LEAKED_DELIBERATION_PATTERN = re.compile(
+    r"^(?:let me\b|actually\b|hmm\b|i need\b|i should\b|now i need\b|wait\b)",
+    re.IGNORECASE,
+)
+UNRESOLVED_REPORT_PLACEHOLDER_PATTERN = re.compile(
+    r"^\[(?:table|analysis(?:\s+with.*)?|actionable items)\]$",
+    re.IGNORECASE,
+)
+MAX_REPORT_PREAMBLE_LINES = 30
 FORBIDDEN_METADATA_FIELDS = {"distribution approval", "prepared by"}
 PRIVATE_VALUE_FIELDS = {"audience", "classification", "confidentiality", "distribution"}
 REPORT_METADATA_TABLE_FIELDS = {
@@ -322,6 +335,25 @@ def is_report_section(line: str) -> bool:
     return match.group(1).strip() in REPORT_SECTION_LABELS
 
 
+def find_public_report_integrity_failure(markdown: str) -> str | None:
+    lines = [line.strip() for line in markdown.splitlines() if line.strip()]
+
+    for line in lines:
+        if LEAKED_DELIBERATION_PATTERN.match(line):
+            return f"leaked model deliberation: {line[:80]}"
+        if UNRESOLVED_REPORT_PLACEHOLDER_PATTERN.match(line):
+            return f"unresolved report placeholder: {line}"
+
+    first_section_index = next(
+        (index for index, line in enumerate(lines) if is_report_section(line)),
+        None,
+    )
+    if first_section_index is not None and first_section_index > MAX_REPORT_PREAMBLE_LINES:
+        return "first report section appears after an excessive preamble"
+
+    return None
+
+
 def validate_site_identity(html: str, sitemap_xml: str) -> None:
     expected_html = (
         f'<meta name="description" content="{PUBLIC_DESCRIPTION}">',
@@ -428,6 +460,15 @@ def main() -> None:
     forbidden_label = find_public_report_forbidden_label(markdown)
     if forbidden_label:
         fail(f"index.md contains public report forbidden label: {forbidden_label}")
+    integrity_failure = find_public_report_integrity_failure(markdown)
+    if integrity_failure:
+        fail(f"index.md contains non-report model output: {integrity_failure}")
+    dangling_source_reference = DANGLING_SOURCE_REFERENCE_PATTERN.search(markdown)
+    if dangling_source_reference:
+        fail(
+            "index.md contains unresolved numeric source placeholder: "
+            + dangling_source_reference.group(0)
+        )
 
     # The page controller routes rendering through the canonical renderer and
     # the shared tag catalog, and never emits an unsanitized Markdown link.

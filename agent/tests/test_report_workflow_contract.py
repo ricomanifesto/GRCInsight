@@ -1,5 +1,6 @@
 from datetime import datetime, timezone
 from pathlib import Path
+import re
 import runpy
 import tomllib
 
@@ -15,6 +16,7 @@ DEPLOY_SITE_WORKFLOW = REPO_ROOT / ".github" / "workflows" / "deploy-site.yml"
 REPORT_WORKFLOW = REPO_ROOT / ".github" / "workflows" / "lambda-report-generation.yml"
 CI_WORKFLOW = REPO_ROOT / ".github" / "workflows" / "ci.yml"
 SITE_REPORT_CHECK = REPO_ROOT / "scripts" / "check_site_report.py"
+SITE_REPORT = REPO_ROOT / "site" / "index.md"
 MODEL_SERVICE = REPO_ROOT / "agent" / "services" / "model_service.py"
 RENDERER_JS = REPO_ROOT / "site" / "static" / "renderer.js"
 WORKFLOWS = (CI_WORKFLOW, DEPLOY_WORKFLOW, DEPLOY_SITE_WORKFLOW, REPORT_WORKFLOW)
@@ -266,6 +268,49 @@ def test_renderer_and_site_check_enforce_the_current_report_sections():
     assert "threat actor activities" in check_script
     assert "'CVE and Vulnerability Highlights'," not in renderer
     assert "'Threat Actor Activities'," not in renderer
+
+
+def test_public_report_has_no_unresolved_numeric_source_placeholders():
+    report = SITE_REPORT.read_text()
+
+    assert not re.search(
+        r"\bSources?\s+\d+(?:\s*(?:,|and|-)\s*\d+)*\b",
+        report,
+        re.IGNORECASE,
+    )
+
+
+def test_generation_and_publish_gates_reject_numeric_source_placeholders():
+    model_service = MODEL_SERVICE.read_text()
+    report_check = SITE_REPORT_CHECK.read_text()
+
+    assert "Do not use placeholder citations such as Source 1 or Sources 2, 3" in model_service
+    assert "DANGLING_SOURCE_REFERENCE_PATTERN" in report_check
+
+
+def test_generation_and_publish_gates_reject_leaked_model_deliberation():
+    model_service = MODEL_SERVICE.read_text()
+    namespace = runpy.run_path(str(SITE_REPORT_CHECK))
+    find_integrity_failure = namespace["find_public_report_integrity_failure"]
+
+    assert "Return only the final report Markdown" in model_service
+    assert find_integrity_failure("""# GRC Intelligence Report
+**Generated:** 2026-08-13T19:13:44Z
+
+Let me analyze the request carefully.
+
+## Executive Summary
+
+Final report text.
+""") == "leaked model deliberation: Let me analyze the request carefully."
+    assert find_integrity_failure("""# GRC Intelligence Report
+**Generated:** 2026-08-13T19:13:44Z
+
+## Executive Summary
+
+[table]
+""") == "unresolved report placeholder: [table]"
+    assert find_integrity_failure(SITE_REPORT.read_text()) is None
 
 
 def test_report_generation_workflow_does_not_dump_lambda_response_body():
