@@ -575,6 +575,16 @@ def test_report_generation_workflow_refuses_fallback_reports():
     assert "Refusing to publish a fallback-mode report" in workflow
 
 
+def test_report_generation_workflow_classifies_fallback_without_dumping_provider_text():
+    workflow = REPORT_WORKFLOW.read_text()
+
+    assert (
+        "FALLBACK_REASON=$(jq -r '.metadata.fallback_reason // empty' report-data.json)" in workflow
+    )
+    assert 'echo "Fallback category: $FALLBACK_CATEGORY" >&2' in workflow
+    assert 'echo "$FALLBACK_REASON"' not in workflow
+
+
 def test_report_generation_workflow_requires_resolved_model_provenance():
     workflow = REPORT_WORKFLOW.read_text()
 

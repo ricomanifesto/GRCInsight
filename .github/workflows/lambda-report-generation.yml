@@ -194,6 +194,7 @@ jobs:
           STATUS=$(jq -r '.status // empty' report-data.json)
           CONTENT=$(jq -r '.content // empty' report-data.json)
           ANALYSIS_MODE=$(jq -r '.metadata.analysis_mode // empty' report-data.json)
+          FALLBACK_REASON=$(jq -r '.metadata.fallback_reason // empty' report-data.json)
           REQUESTED_MODEL=$(jq -r '.metadata.requested_model // empty' report-data.json)
           RESOLVED_MODEL=$(jq -r '.metadata.resolved_model // empty' report-data.json)
           SOURCE_HOME_URL=$(jq -r '.metadata.source_home_url // empty' report-data.json)
@@ -210,6 +211,15 @@ jobs:
 
           if [ "$STATUS" = "completed" ]; then
             if [ "$ANALYSIS_MODE" != "model" ]; then
+              case "$FALLBACK_REASON" in
+                *"HTTP 401"*|*"API_KEY"*) FALLBACK_CATEGORY="provider authentication" ;;
+                *"HTTP 402"*|*"insufficient_quota"*) FALLBACK_CATEGORY="provider quota" ;;
+                *"HTTP 429"*) FALLBACK_CATEGORY="provider rate limit" ;;
+                *"deadline"*|*"timed out"*|*"timeout"*) FALLBACK_CATEGORY="provider deadline" ;;
+                *"model identity"*) FALLBACK_CATEGORY="provider provenance" ;;
+                *) FALLBACK_CATEGORY="unclassified provider failure" ;;
+              esac
+              echo "Fallback category: $FALLBACK_CATEGORY" >&2
               echo "Refusing to publish a fallback-mode report; keeping the last model-backed report." >&2
               exit 1
             fi
