@@ -60,18 +60,13 @@ def test_release_workflows_verify_the_canonical_reporting_identity_contract():
         "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/"
         "main/contracts/reporting-identity-v1.json"
     )
+    verifier = "python3 scripts/verify_reporting_identity_contract.py"
 
     for workflow_path in WORKFLOWS:
         workflow = workflow_path.read_text()
-        assert canonical_contract in workflow, workflow_path.name
-        assert "Fetch canonical reporting identity contract" in workflow
-        assert "Could not verify canonical reporting identity contract" in workflow
-        assert "Check reporting identity contract drift" in workflow
-        assert "Reporting identity contract drift" in workflow
-        assert "cmp -s contracts/reporting-identity-v1.json" in workflow
-        assert workflow.index("Fetch canonical reporting identity contract") < workflow.index(
-            "Check reporting identity contract drift"
-        )
+        assert workflow.count(verifier) == 1, workflow_path.name
+        assert canonical_contract not in workflow, workflow_path.name
+        assert "cmp -s contracts/reporting-identity-v1.json" not in workflow
 
 
 def test_static_site_deploys_main_branch_site_changes():
@@ -606,7 +601,23 @@ def test_report_generation_workflow_classifies_fallback_without_dumping_provider
         "FALLBACK_REASON=$(jq -r '.metadata.fallback_reason // empty' report-data.json)" in workflow
     )
     assert 'echo "Fallback category: $FALLBACK_CATEGORY" >&2' in workflow
+    assert 'echo "## Report publication retained"' in workflow
+    assert 'echo "- Outcome: Last model-backed report retained"' in workflow
+    assert 'echo "- Refusal category: $FALLBACK_CATEGORY"' in workflow
+    assert '>> "$GITHUB_STEP_SUMMARY"' in workflow
     assert 'echo "$FALLBACK_REASON"' not in workflow
+
+
+def test_report_generation_workflow_summarizes_published_provenance():
+    workflow = REPORT_WORKFLOW.read_text()
+
+    assert 'echo "## GRC report published"' in workflow
+    assert 'echo "- Outcome: Model-backed report published"' in workflow
+    assert "PUBLISHED_GENERATED_AT=$(jq -r '.generated_at'" in workflow
+    assert "PUBLISHED_REQUESTED_MODEL=$(jq -r '.requested_model'" in workflow
+    assert "PUBLISHED_RESOLVED_MODEL=$(jq -r '.resolved_model'" in workflow
+    assert "PUBLISHED_SOURCE_ISSUE=$(jq -r '.digest_issue_url'" in workflow
+    assert 'echo "- Commit: \\`$(git rev-parse HEAD)\\`"' in workflow
 
 
 def test_report_generation_workflow_requires_resolved_model_provenance():

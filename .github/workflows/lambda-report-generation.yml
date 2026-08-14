@@ -34,22 +34,8 @@ jobs:
       with:
         fetch-depth: 0
 
-    - name: Fetch canonical reporting identity contract
-      run: |
-        if ! curl --fail --silent --show-error --location \
-          --retry 3 --retry-all-errors --connect-timeout 10 --max-time 30 \
-          https://raw.githubusercontent.com/ricomanifesto/SentryDigest/main/contracts/reporting-identity-v1.json \
-          --output "$RUNNER_TEMP/reporting-identity-v1.json"; then
-          echo "::error title=Canonical contract unavailable::Could not verify canonical reporting identity contract"
-          exit 1
-        fi
-
-    - name: Check reporting identity contract drift
-      run: |
-        if ! cmp -s contracts/reporting-identity-v1.json "$RUNNER_TEMP/reporting-identity-v1.json"; then
-          echo "::error title=Reporting identity contract drift::Reporting identity contract drift: local bytes differ from SentryDigest v1"
-          exit 1
-        fi
+    - name: Verify canonical reporting identity contract
+      run: python3 scripts/verify_reporting_identity_contract.py
 
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v6.2.1
@@ -229,6 +215,12 @@ jobs:
                 *"model identity"*) FALLBACK_CATEGORY="provider provenance" ;;
                 *) FALLBACK_CATEGORY="unclassified provider failure" ;;
               esac
+              {
+                echo "## Report publication retained"
+                echo
+                echo "- Outcome: Last model-backed report retained"
+                echo "- Refusal category: $FALLBACK_CATEGORY"
+              } >> "$GITHUB_STEP_SUMMARY"
               echo "Fallback category: $FALLBACK_CATEGORY" >&2
               echo "Refusing to publish a fallback-mode report; keeping the last model-backed report." >&2
               exit 1
@@ -348,6 +340,20 @@ jobs:
           git commit --amend --no-edit
 
           if git push origin HEAD:"$GITHUB_REF_NAME"; then
+            PUBLISHED_GENERATED_AT=$(jq -r '.generated_at' site/evidence-manifest.json)
+            PUBLISHED_REQUESTED_MODEL=$(jq -r '.requested_model' site/evidence-manifest.json)
+            PUBLISHED_RESOLVED_MODEL=$(jq -r '.resolved_model' site/evidence-manifest.json)
+            PUBLISHED_SOURCE_ISSUE=$(jq -r '.digest_issue_url' site/evidence-manifest.json)
+            {
+              echo "## GRC report published"
+              echo
+              echo "- Outcome: Model-backed report published"
+              echo "- Generated: \`$PUBLISHED_GENERATED_AT\`"
+              echo "- Requested route: \`$PUBLISHED_REQUESTED_MODEL\`"
+              echo "- Authoring model: \`$PUBLISHED_RESOLVED_MODEL\`"
+              echo "- Source issue: <$PUBLISHED_SOURCE_ISSUE>"
+              echo "- Commit: \`$(git rev-parse HEAD)\`"
+            } >> "$GITHUB_STEP_SUMMARY"
             echo "published=true" >> "$GITHUB_OUTPUT"
             exit 0
           fi

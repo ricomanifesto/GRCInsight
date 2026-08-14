@@ -20,6 +20,9 @@ RENDERER_JS = SITE_DIR / "static" / "renderer.js"
 REPORT_START = "<!-- REPORT_CONTENT_START -->"
 REPORT_END = "<!-- REPORT_CONTENT_END -->"
 PUBLIC_SITE_URL = "https://ricomanifesto.github.io/GRCInsight/"
+DATED_DIGEST_HANDOFF_BOUNDARY = datetime(
+    2026, 8, 14, 4, 49, 12, 35_399, tzinfo=timezone.utc
+)
 
 
 def fail(message: str) -> None:
@@ -167,6 +170,16 @@ def archive_index_html(reports: list[tuple[str, str, str, str]]) -> str:
     )
     if not items:
         items = "<li>No archived reports are available yet.</li>"
+    historical_note = ""
+    if any(
+        parse_generated(generated_at) < DATED_DIGEST_HANDOFF_BOUNDARY
+        for _, _, generated_at, _ in reports
+    ):
+        boundary_iso = DATED_DIGEST_HANDOFF_BOUNDARY.isoformat().replace("+00:00", "Z")
+        historical_note = f"""      <aside class="archive-note" aria-label="Historical context links">
+        <strong>Historical context note:</strong> Reports published before <time datetime="{boundary_iso}">{escape(display_timestamp(DATED_DIGEST_HANDOFF_BOUNDARY))}</time> retain their publication-era rolling SentryDigest links. Those links may no longer land on the original card; the archived reports remain unchanged.
+      </aside>
+"""
     return f"""<!DOCTYPE html>
 <html lang="en">
   <head>
@@ -181,7 +194,7 @@ def archive_index_html(reports: list[tuple[str, str, str, str]]) -> str:
     <header class="app-header"><div class="container"><h1 class="title">Report Archive</h1><p class="subtitle">Dated model-backed reports preserved at publication.</p><nav class="header-links" aria-label="Report resources"><a href="../">Latest report</a></nav></div></header>
     <main class="container archive-shell">
       <p>History begins August 13, 2026. A report is added only after the model-backed publication gate succeeds.</p>
-      <ol class="archive-list">{items}</ol>
+{historical_note}      <ol class="archive-list">{items}</ol>
     </main>
     <footer class="app-footer"><div class="container"><span>GRCInsight report archive</span></div></footer>
   </body>

@@ -28,7 +28,7 @@ Generated reports can include:
 
 ## Relationship to SentryDigest
 
-GRCInsight can be triggered by updates from [SentryDigest](https://github.com/ricomanifesto/SentryDigest), using security-news updates as one input for GRC-focused analysis. Each published source handoff targets the dated SentryDigest issue identified by the feed's UTC build timestamp, so an immutable GRC report never depends on the rolling digest page. Reporting-card fragments are checked against a byte-identical copy of SentryDigest's versioned `contracts/reporting-identity-v1.json` contract.
+GRCInsight can be triggered by updates from [SentryDigest](https://github.com/ricomanifesto/SentryDigest), using security-news updates as one input for GRC-focused analysis. Each published source handoff targets the dated SentryDigest issue identified by the feed's UTC build timestamp, so an immutable GRC report never depends on the rolling digest page. Reporting-card fragments are checked against a byte-identical copy of SentryDigest's versioned `contracts/reporting-identity-v1.json` contract; SentryDigest's [reporting identity runbook](https://github.com/ricomanifesto/SentryDigest/blob/main/contracts/README.md) owns versioning and cross-repository adoption order.
 
 ## Architecture
 

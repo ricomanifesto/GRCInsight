@@ -255,6 +255,8 @@ kbd { padding: 1px 5px; border: 1px solid var(--hairline); border-bottom-width: 
 
 /* Static archive */
 .archive-shell { padding: 24px 0 36px; }
+.archive-note { margin: 18px 0; padding: 12px 14px; border: 1px solid var(--hairline); border-left: 3px solid var(--rail); border-radius: 7px; background: var(--panel); color: var(--muted); line-height: 1.55; }
+.archive-note strong, .archive-note time { color: var(--text); }
 .archive-list { display: grid; gap: 10px; margin: 18px 0 0; padding: 0; }
 .archive-list li { list-style: none; }
 .archive-list a { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 12px; padding: 14px 16px; border: 1px solid var(--hairline); border-radius: 8px; background: linear-gradient(180deg, var(--panel), var(--panel-2)); color: var(--text); box-shadow: var(--card-shadow); }
