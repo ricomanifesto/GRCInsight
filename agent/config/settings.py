@@ -20,7 +20,7 @@ class Settings(BaseSettings):
     log_level: str = "INFO"
 
     # Model configuration
-    llm_model: str = "openrouter/openrouter/free"
+    llm_model: str = "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free"
     llm_max_tokens: int = 16000
     openrouter_api_key: str = ""
 

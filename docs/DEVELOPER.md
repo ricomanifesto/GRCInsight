@@ -82,6 +82,6 @@ The script:
 - GET `/api/v1/reports/{id}/articles`
 
 ## Notes
-- Default model is `openrouter/openrouter/free`, which selects from currently available free models.
+- Default model is `openrouter/nvidia/nemotron-3-ultra-550b-a55b:free`.
 - Articles table benefits from GSIs (`by-report-id`, `by-url`); the Terraform module creates these.
 - For serverless, use `agent/lambda_main.py` packaged behind API Gateway or direct Lambda invokes.

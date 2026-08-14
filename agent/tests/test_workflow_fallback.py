@@ -157,7 +157,7 @@ def test_run_grc_analysis_endpoint_marks_model_backed_reports(monkeypatch):
     assert response.metadata.source_name == "Unknown Feed"
     assert response.metadata.source_url == "https://example.com/feed.xml"
     assert response.metadata.analysis_period
-    assert response.metadata.requested_model == "openrouter/openrouter/free"
+    assert response.metadata.requested_model == "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free"
     assert response.metadata.resolved_model == "google/example-model"
     digest_url = workflow_mod._sentrydigest_item_url(
         "https://digest.example/", "https://example.com/nist"

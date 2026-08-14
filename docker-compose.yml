@@ -30,7 +30,7 @@ services:
       - "8081:8081"
     environment:
       - PYTHONPATH=/app
-      - LLM_MODEL=${LLM_MODEL:-openrouter/openrouter/free}
+      - LLM_MODEL=${LLM_MODEL:-openrouter/nvidia/nemotron-3-ultra-550b-a55b:free}
       - OPENROUTER_API_KEY=${OPENROUTER_API_KEY:?OPENROUTER_API_KEY is required}
       - LOG_LEVEL=INFO
       - HOST=0.0.0.0

@@ -49,7 +49,7 @@ Configure model access:
 
 ```bash
 export OPENROUTER_API_KEY=your-openrouter-api-key
-export LLM_MODEL=openrouter/openrouter/free
+export LLM_MODEL=openrouter/nvidia/nemotron-3-ultra-550b-a55b:free
 ```
 
 Edit Go service configuration in `configs/config.yaml`.

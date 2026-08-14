@@ -24,6 +24,7 @@ MODEL_SERVICE = REPO_ROOT / "agent" / "services" / "model_service.py"
 RENDERER_JS = REPO_ROOT / "site" / "static" / "renderer.js"
 WORKFLOWS = (CI_WORKFLOW, DEPLOY_WORKFLOW, DEPLOY_SITE_WORKFLOW, REPORT_WORKFLOW)
 PUBLISHED_AT = datetime(2026, 6, 1, tzinfo=timezone.utc)
+DEFAULT_LLM_MODEL = "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free"
 
 
 def complete_report_body(
@@ -77,8 +78,11 @@ def test_report_generation_payload_treats_feed_url_as_json_data():
 
 def test_report_generation_payload_uses_provider_model_runtime_config():
     workflow = REPORT_WORKFLOW.read_text()
+    deploy_workflow = DEPLOY_WORKFLOW.read_text()
 
     assert "LLM_MODEL: ${{ vars.LLM_MODEL" in workflow
+    assert f"vars.LLM_MODEL || '{DEFAULT_LLM_MODEL}'" in workflow
+    assert f"vars.LLM_MODEL || '{DEFAULT_LLM_MODEL}'" in deploy_workflow
     assert (
         "Invalid LLM_MODEL; report generation requires openrouter/provider-model format" in workflow
     )
@@ -90,7 +94,7 @@ def test_report_generation_payload_uses_provider_model_runtime_config():
 def test_integration_report_payload_uses_openrouter_provider_model():
     integration_script = (REPO_ROOT / "scripts" / "integration" / "run_e2e.sh").read_text()
 
-    assert '"model": "openrouter/openrouter/free"' in integration_script
+    assert f'"model": "{DEFAULT_LLM_MODEL}"' in integration_script
     assert '"model": "gpt-5"' not in integration_script
 
 
