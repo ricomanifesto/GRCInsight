@@ -5,15 +5,22 @@ from __future__ import annotations
 
 import argparse
 from datetime import datetime
-import hashlib
-import ipaddress
 import json
 from pathlib import Path
 import re
-import unicodedata
-from urllib.parse import quote, unquote_to_bytes, urlparse, urlsplit
+import sys
+from urllib.parse import quote, urlparse
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(REPO_ROOT / "agent"))
+
+from core.reporting_identity import (  # noqa: E402
+    ReportingIdentityError,
+    normalize_reporting_url,
+    sentrydigest_issue_url as build_sentrydigest_issue_url,
+    sentrydigest_item_url as build_sentrydigest_item_url,
+)
+
 INDEX_MD = REPO_ROOT / "site" / "index.md"
 EVIDENCE_MANIFEST = REPO_ROOT / "site" / "evidence-manifest.json"
 SECTION_TITLES = (
@@ -69,123 +76,28 @@ def model_identity(value: object, field: str) -> str:
     return identity
 
 
-def dot_segment(value: str) -> str | None:
-    folded = value.casefold()
-    if folded in {".", "%2e"}:
-        return "."
-    if folded in {"..", ".%2e", "%2e.", "%2e%2e"}:
-        return ".."
-    return None
-
-
-def normalize_reporting_path(value: str) -> str:
-    path = value or "/"
-    output: list[str] = []
-    for index, segment in enumerate(path.split("/")):
-        kind = dot_segment(segment)
-        if kind == ".":
-            continue
-        if kind == "..":
-            if output and not (len(output) == 1 and output[0] == ""):
-                output.pop()
-            continue
-        if index == 0 and path.startswith("/"):
-            output.append("")
-        elif index > 0 or segment:
-            output.append(segment)
-    normalized = "/".join(output) or "/"
-    if path.startswith("/") and not normalized.startswith("/"):
-        normalized = f"/{normalized}"
-    if dot_segment(path.rsplit("/", 1)[-1]) and not normalized.endswith("/"):
-        normalized += "/"
-    return quote(normalized, safe="/!$&'()*+,-.:;=@_~%")
-
-
-def normalize_special_url_slashes(value: str) -> str:
-    boundary = min(
-        (position for marker in ("?", "#") if (position := value.find(marker)) >= 0),
-        default=len(value),
-    )
-    return value[:boundary].replace("\\", "/") + value[boundary:]
-
-
-def idna_hostname(value: str) -> str:
-    labels: list[str] = []
-    for label in unicodedata.normalize("NFC", value).split("."):
-        lowered = label.lower()
-        if not lowered or lowered.isascii():
-            labels.append(lowered)
-        else:
-            labels.append(f"xn--{lowered.encode('punycode').decode('ascii')}")
-    return ".".join(labels)
-
-
 def canonical_public_url(value: object, field: str) -> str:
-    raw_url = normalize_special_url_slashes(str(value or "").strip())
-    if not raw_url:
-        fail(f"missing {field}")
-    parsed = urlsplit(raw_url)
-    if (
-        parsed.scheme.lower() not in {"http", "https"}
-        or not parsed.netloc
-        or parsed.username
-        or parsed.password
-    ):
-        fail(f"{field} must be a credential-free HTTP URL")
-    raw_hostname = parsed.hostname or ""
-    if not raw_hostname or re.search(r"[\x00-\x20\x7f]", raw_hostname):
-        fail(f"{field} must include a hostname")
+    raw_url = single_line(value, field)
     try:
-        address = ipaddress.ip_address(raw_hostname)
-    except ValueError:
-        try:
-            if re.search(r"%(?![0-9a-fA-F]{2})", raw_hostname):
-                raise ValueError("malformed hostname percent escape")
-            decoded_hostname = unquote_to_bytes(raw_hostname).decode("utf-8")
-            if re.search(r"[\x00-\x20\x7f#/:<>?@\[\\\]^|]", decoded_hostname):
-                raise ValueError("forbidden hostname code point")
-            hostname = idna_hostname(decoded_hostname)
-        except (UnicodeError, ValueError):
-            fail(f"{field} must include a valid hostname")
-    else:
-        hostname = (
-            f"[{address.compressed}]" if address.version == 6 else address.compressed
-        )
-    try:
-        port = parsed.port
-    except ValueError:
-        fail(f"{field} contains an invalid port")
-    if port is not None and not (
-        (parsed.scheme.lower() == "http" and port == 80)
-        or (parsed.scheme.lower() == "https" and port == 443)
-    ):
-        hostname = f"{hostname}:{port}"
-    path = normalize_reporting_path(parsed.path)
-    query = quote(parsed.query, safe="!$&()*+,-./:;=?@_~%")
-    before_fragment = raw_url.split("#", 1)[0]
-    query_suffix = f"?{query}" if parsed.query or "?" in before_fragment else ""
-    return f"{parsed.scheme.lower()}://{hostname}{path}{query_suffix}"
+        return normalize_reporting_url(raw_url)
+    except ReportingIdentityError as error:
+        fail(f"{field}: {error}")
 
 
 def sentrydigest_issue_url(feed_home_url: object, issue_date: object) -> str:
-    feed_home = canonical_public_url(feed_home_url, "metadata.source_home_url")
-    if urlparse(feed_home).query:
-        fail("metadata.source_home_url must not include a query")
-    raw_date = single_line(issue_date, "metadata.source_issue_date")
     try:
-        canonical_date = datetime.strptime(raw_date, "%Y-%m-%d").date().isoformat()
-    except ValueError:
-        fail("metadata.source_issue_date must use YYYY-MM-DD")
-    return f"{feed_home.rstrip('/')}/archive/{canonical_date}/"
+        return build_sentrydigest_issue_url(feed_home_url, issue_date)
+    except ReportingIdentityError as error:
+        fail(f"metadata.source_issue_date: {error}")
 
 
 def sentrydigest_item_url(
     feed_home_url: object, issue_date: object, article_url: object
 ) -> str:
-    issue_url = sentrydigest_issue_url(feed_home_url, issue_date)
-    article = canonical_public_url(article_url, "source article URL")
-    fragment = hashlib.sha256(article.encode("utf-8")).hexdigest()[:12]
-    return f"{issue_url}#reporting-{fragment}"
+    try:
+        return build_sentrydigest_item_url(feed_home_url, issue_date, article_url)
+    except ReportingIdentityError as error:
+        fail(f"source article URL: {error}")
 
 
 def integer(value: object, field: str) -> int:

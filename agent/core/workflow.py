@@ -3,12 +3,9 @@
 from collections import Counter
 from datetime import datetime, timezone
 from email.utils import parsedate_to_datetime
-import hashlib
-import ipaddress
 import re
 from typing import Dict, Any, List
-import unicodedata
-from urllib.parse import quote, unquote_to_bytes, urljoin, urlparse, urlsplit
+from urllib.parse import urljoin, urlparse
 from loguru import logger
 
 from models.api import (
@@ -23,6 +20,13 @@ from models.api import (
 from services.rss_service import RSSService
 from services.model_service import GRCModelService
 from core.entities import analyze_article_grc_content
+from core.reporting_identity import (
+    ReportingIdentityError,
+    normalize_reporting_url,
+    sentrydigest_issue_date,
+    sentrydigest_issue_url,
+    sentrydigest_item_url,
+)
 
 # Initialize services
 rss_service = RSSService()
@@ -30,7 +34,6 @@ rss_service = RSSService()
 SOURCE_EVIDENCE_LIMIT = 12
 REPORT_CVE_LIMIT = 10
 REPORT_CVE_EVIDENCE_LIMIT = min(REPORT_CVE_LIMIT, SOURCE_EVIDENCE_LIMIT - 2)
-SENTRYDIGEST_ITEM_PREFIX = "reporting-"
 
 
 def _utc_now() -> datetime:
@@ -136,139 +139,43 @@ def _extract_cves(text: str) -> List[str]:
     return cves
 
 
-def _dot_segment(value: str) -> str | None:
-    folded = value.casefold()
-    if folded in {".", "%2e"}:
-        return "."
-    if folded in {"..", ".%2e", "%2e.", "%2e%2e"}:
-        return ".."
-    return None
-
-
-def _normalize_reporting_path(value: str) -> str:
-    path = value or "/"
-    output: list[str] = []
-    for index, segment in enumerate(path.split("/")):
-        kind = _dot_segment(segment)
-        if kind == ".":
-            continue
-        if kind == "..":
-            if output and not (len(output) == 1 and output[0] == ""):
-                output.pop()
-            continue
-        if index == 0 and path.startswith("/"):
-            output.append("")
-        elif index > 0 or segment:
-            output.append(segment)
-    normalized = "/".join(output) or "/"
-    if path.startswith("/") and not normalized.startswith("/"):
-        normalized = f"/{normalized}"
-    if _dot_segment(path.rsplit("/", 1)[-1]) and not normalized.endswith("/"):
-        normalized += "/"
-    return quote(normalized, safe="/!$&'()*+,-.:;=@_~%")
-
-
-def _normalize_special_url_slashes(value: str) -> str:
-    boundary = min(
-        (position for marker in ("?", "#") if (position := value.find(marker)) >= 0),
-        default=len(value),
-    )
-    return value[:boundary].replace("\\", "/") + value[boundary:]
-
-
-def _idna_hostname(value: str) -> str:
-    labels: list[str] = []
-    for label in unicodedata.normalize("NFC", value).split("."):
-        lowered = label.lower()
-        if not lowered or lowered.isascii():
-            labels.append(lowered)
-        else:
-            labels.append(f"xn--{lowered.encode('punycode').decode('ascii')}")
-    return ".".join(labels)
-
-
 def _canonical_public_url(value: str, field: str) -> str:
     """Normalize the WHATWG-aligned URL identity used by SentryDigest cards."""
-    raw_url = _normalize_special_url_slashes(str(value or "").strip())
-    parsed = urlsplit(raw_url)
-    if (
-        parsed.scheme.lower() not in {"http", "https"}
-        or not parsed.netloc
-        or parsed.username
-        or parsed.password
-    ):
+    if not str(value or "").strip():
         raise ValueError(f"{field} must be a credential-free HTTP URL")
-    raw_hostname = parsed.hostname or ""
-    if not raw_hostname or re.search(r"[\x00-\x20\x7f]", raw_hostname):
-        raise ValueError(f"{field} must include a hostname")
     try:
-        address = ipaddress.ip_address(raw_hostname)
-    except ValueError:
-        try:
-            if re.search(r"%(?![0-9a-fA-F]{2})", raw_hostname):
-                raise ValueError("malformed hostname percent escape")
-            decoded_hostname = unquote_to_bytes(raw_hostname).decode("utf-8")
-            if re.search(r"[\x00-\x20\x7f#/:<>?@\[\\\]^|]", decoded_hostname):
-                raise ValueError("forbidden hostname code point")
-            hostname = _idna_hostname(decoded_hostname)
-        except (UnicodeError, ValueError) as error:
-            raise ValueError(f"{field} must include a valid hostname") from error
-    else:
-        hostname = f"[{address.compressed}]" if address.version == 6 else address.compressed
-    try:
-        port = parsed.port
-    except ValueError as error:
-        raise ValueError(f"{field} contains an invalid port") from error
-    if port is not None and not (
-        (parsed.scheme.lower() == "http" and port == 80)
-        or (parsed.scheme.lower() == "https" and port == 443)
-    ):
-        hostname = f"{hostname}:{port}"
-    path = _normalize_reporting_path(parsed.path)
-    query = quote(parsed.query, safe="!$&()*+,-./:;=?@_~%")
-    before_fragment = raw_url.split("#", 1)[0]
-    query_suffix = f"?{query}" if parsed.query or "?" in before_fragment else ""
-    return f"{parsed.scheme.lower()}://{hostname}{path}{query_suffix}"
+        return normalize_reporting_url(value)
+    except ReportingIdentityError as error:
+        raise ValueError(f"{field}: {error}") from error
 
 
 def _sentrydigest_issue_date(feed_data: Dict[str, Any]) -> str:
     """Return the UTC issue date attested by the fetched RSS channel."""
-    raw_value = str(feed_data.get("last_updated") or "").strip()
-    if not raw_value:
-        raise ValueError("feed lastBuildDate is required for dated SentryDigest handoffs")
     try:
-        parsed = parsedate_to_datetime(raw_value)
-    except (TypeError, ValueError, OverflowError):
-        try:
-            parsed = datetime.fromisoformat(raw_value.replace("Z", "+00:00"))
-        except ValueError as error:
-            raise ValueError("feed lastBuildDate must be a valid timestamp") from error
-    if parsed.tzinfo is None or parsed.utcoffset() is None:
-        raise ValueError("feed lastBuildDate must include a timezone")
-    return parsed.astimezone(timezone.utc).date().isoformat()
+        return sentrydigest_issue_date(feed_data.get("last_updated"))
+    except ReportingIdentityError as error:
+        raise ValueError(str(error)) from error
 
 
 def _sentrydigest_issue_url(feed_home_url: str, issue_date: str) -> str:
     """Build the retained issue URL owned by SentryDigest."""
-    canonical_feed_home = _canonical_public_url(feed_home_url, "feed home URL")
-    if urlparse(canonical_feed_home).query:
-        raise ValueError("feed home URL must not include a query")
     try:
-        canonical_issue_date = datetime.strptime(issue_date, "%Y-%m-%d").date().isoformat()
-    except ValueError as error:
-        raise ValueError("SentryDigest issue date must use YYYY-MM-DD") from error
-    return f"{canonical_feed_home.rstrip('/')}/archive/{canonical_issue_date}/"
+        return sentrydigest_issue_url(feed_home_url, issue_date)
+    except ReportingIdentityError as error:
+        raise ValueError(str(error)) from error
 
 
 def _sentrydigest_item_url(feed_home_url: str, issue_date: str, article_url: str) -> str:
     """Build the dated item permalink defined by SentryDigest identity."""
-    canonical_article_url = _canonical_public_url(article_url, "article URL")
-    issue_url = _sentrydigest_issue_url(feed_home_url, issue_date)
-    fragment = hashlib.sha256(canonical_article_url.encode("utf-8")).hexdigest()[:12]
-    return f"{issue_url}#{SENTRYDIGEST_ITEM_PREFIX}{fragment}"
+    try:
+        return sentrydigest_item_url(feed_home_url, issue_date, article_url)
+    except ReportingIdentityError as error:
+        raise ValueError(str(error)) from error
 
 
-def _build_source_evidence(enriched_articles: List[ArticleInput]) -> List[Dict[str, Any]]:
+def _build_source_evidence(
+    enriched_articles: List[ArticleInput],
+) -> List[Dict[str, Any]]:
     """Build bounded current-source evidence for report-specific claims."""
     evidence: List[Dict[str, Any]] = []
     for article in enriched_articles:
@@ -714,7 +621,10 @@ async def run_grc_analysis_endpoint(
             report_generation = await model_service.generate_grc_report(analysis_results, feed_data)
             report_content = report_generation.content
             resolved_model = report_generation.resolved_model
-            if not resolved_model or resolved_model in {"openrouter/free", "openrouter/auto"}:
+            if not resolved_model or resolved_model in {
+                "openrouter/free",
+                "openrouter/auto",
+            }:
                 fallback_reason = "OpenRouter did not attest a usable upstream model identity"
                 report_content = ""
                 resolved_model = ""
@@ -785,6 +695,8 @@ async def run_grc_analysis_endpoint(
         return WorkflowResponse(
             status="failed",
             error=APIError(
-                code="WORKFLOW_EXECUTION_ERROR", message="Workflow execution failed", details=str(e)
+                code="WORKFLOW_EXECUTION_ERROR",
+                message="Workflow execution failed",
+                details=str(e),
             ),
         )

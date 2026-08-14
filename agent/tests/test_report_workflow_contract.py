@@ -418,6 +418,21 @@ def test_all_grc_reporting_identities_satisfy_versioned_contract():
                 raise AssertionError(f"{normalize.__module__} accepted {example['name']}")
 
 
+def test_all_grc_reporting_entry_points_share_one_identity_owner():
+    entry_points = (
+        REPO_ROOT / "agent" / "core" / "workflow.py",
+        SITE_REPORT_COMPOSER,
+        SITE_REPORT_CHECK,
+    )
+
+    for entry_point in entry_points:
+        source = entry_point.read_text()
+        assert "from core.reporting_identity import" in source
+        assert "def normalize_reporting_path" not in source
+        assert "def idna_hostname" not in source
+        assert "def dot_segment" not in source
+
+
 def test_sentrydigest_issue_date_is_owned_by_timezone_aware_feed_metadata():
     assert (
         workflow_mod._sentrydigest_issue_date({"last_updated": "Thu, 13 Aug 2026 22:42:08 GMT"})
