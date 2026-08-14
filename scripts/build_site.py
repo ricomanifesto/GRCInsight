@@ -18,6 +18,7 @@ sys.path.insert(0, str(REPO_ROOT / "scripts"))
 from publication_state import (  # noqa: E402
     PublicationStateError,
     category_label,
+    validate_publication_history,
     validate_publication_state,
 )
 
@@ -26,6 +27,8 @@ INDEX_MD = SITE_DIR / "index.md"
 INDEX_HTML = SITE_DIR / "index.html"
 EVIDENCE_MANIFEST = SITE_DIR / "evidence-manifest.json"
 PUBLICATION_STATE = SITE_DIR / "publication-state.json"
+PUBLICATION_HISTORY = SITE_DIR / "publication-history.json"
+PUBLICATION_HISTORY_INDEX = SITE_DIR / "publication-history" / "index.html"
 ARCHIVE_DIR = SITE_DIR / "archive"
 RENDERER_JS = SITE_DIR / "static" / "renderer.js"
 REPORT_START = "<!-- REPORT_CONTENT_START -->"
@@ -87,9 +90,23 @@ def display_timestamp(value: datetime) -> str:
     return f"{display_date(value)} at {hour}{value.strftime(':%M:%S %p')} UTC"
 
 
-def publication_notice_html(state: dict[str, object] | None) -> str:
+def schedule_clause(history: dict[str, object]) -> str:
+    schedule = history["schedule"]
+    assert isinstance(schedule, dict)
+    return (
+        f"The next regular attempt runs {schedule['cadence']} at "
+        f"{schedule['time_utc']} UTC."
+    )
+
+
+def publication_notice_html(
+    state: dict[str, object] | None,
+    history: dict[str, object] | None = None,
+) -> str:
     if state is None or state["outcome"] != "retained":
         return ""
+    if history is None:
+        fail("retained publication notice requires publication history")
     attempted = parse_generated(str(state["attempted_at"]))
     label = category_label(state["refusal_category"])
     reason = (
@@ -100,19 +117,26 @@ def publication_notice_html(state: dict[str, object] | None) -> str:
     attempted_raw = str(state["attempted_at"])
     return f"""          <aside class="publication-notice" aria-labelledby="publication-notice-title">
             <h2 id="publication-notice-title">Publication update</h2>
-            <p>A newer report was attempted on <time datetime="{escape(attempted_raw, quote=True)}">{escape(display_timestamp(attempted))}</time>. The current model-backed report was retained because of {escape(reason)}. <a href="publication-state.json">Machine-readable status</a>.</p>
+            <p>A newer report was attempted on <time datetime="{escape(attempted_raw, quote=True)}">{escape(display_timestamp(attempted))}</time>. The current model-backed report was retained because of {escape(reason)}. {escape(schedule_clause(history))} <a href="publication-history/">Recent publication history</a> · <a href="publication-state.json">Machine-readable status</a>.</p>
           </aside>
 """
 
 
-def load_publication_state(manifest_bytes: bytes) -> dict[str, object] | None:
-    if not PUBLICATION_STATE.exists():
-        return None
+def load_publication_artifacts(
+    manifest_bytes: bytes,
+) -> tuple[dict[str, object], dict[str, object]]:
     try:
         state = json.loads(PUBLICATION_STATE.read_text(encoding="utf-8"))
-        return validate_publication_state(state, manifest_bytes)
+        history = json.loads(PUBLICATION_HISTORY.read_text(encoding="utf-8"))
+        validated_state = validate_publication_state(state, manifest_bytes)
+        validated_history = validate_publication_history(
+            history, validated_state, manifest_bytes
+        )
+        return validated_state, validated_history
+    except FileNotFoundError as error:
+        fail(f"missing {Path(error.filename).relative_to(REPO_ROOT)}")
     except (json.JSONDecodeError, PublicationStateError) as error:
-        fail(f"invalid publication state: {error}")
+        fail(f"invalid publication artifacts: {error}")
 
 
 def archive_slug(value: datetime) -> str:
@@ -145,6 +169,7 @@ def current_index_html(
     template: str,
     markdown: str,
     publication_state: dict[str, object] | None = None,
+    publication_history: dict[str, object] | None = None,
 ) -> str:
     fields = report_fields(markdown)
     generated_raw = fields.get("generated", "")
@@ -187,7 +212,7 @@ def current_index_html(
         fail("index.html must contain one publication notice marker pair")
     notice_node = (
         f"{PUBLICATION_NOTICE_START}\n"
-        f"{publication_notice_html(publication_state)}"
+        f"{publication_notice_html(publication_state, publication_history)}"
         f"          {PUBLICATION_NOTICE_END}"
     )
     built = notice_region.sub(lambda _match: notice_node, built)
@@ -299,12 +324,69 @@ def archive_index_html(reports: list[tuple[str, str, str, str]]) -> str:
 """
 
 
+def publication_history_html(history: dict[str, object]) -> str:
+    events = history["events"]
+    assert isinstance(events, list)
+    items: list[str] = []
+    for event in events:
+        assert isinstance(event, dict)
+        event_at_raw = str(event["event_at"])
+        event_at = parse_generated(event_at_raw)
+        report_generated = parse_generated(str(event["report_generated_at"]))
+        report_href = f"../archive/{archive_slug(report_generated)}/"
+        if event["outcome"] == "retained":
+            label = category_label(event["refusal_category"])
+            outcome_text = (
+                "Current model-backed report retained because of "
+                f"a {label} refusal."
+            )
+        else:
+            outcome_text = "Model-backed report published."
+        items.append(
+            f'<li class="publication-history-entry" data-outcome="{escape(str(event["outcome"]), quote=True)}">'
+            f'<div><strong>{escape(outcome_text)}</strong>'
+            f'<time datetime="{escape(event_at_raw, quote=True)}">{escape(display_timestamp(event_at))}</time></div>'
+            f'<a href="{escape(report_href, quote=True)}">Report generated {escape(display_timestamp(report_generated))}</a>'
+            "</li>"
+        )
+    history_started_raw = str(history["history_started_at"])
+    history_started = parse_generated(history_started_raw)
+    return f"""<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Publication History | GRCInsight</title>
+    <meta name="description" content="Recent GRCInsight report publication and retention outcomes.">
+    <link rel="canonical" href="{PUBLIC_SITE_URL}publication-history/">
+    <link rel="stylesheet" href="../static/style.css">
+  </head>
+  <body>
+    <header class="app-header"><div class="container"><h1 class="title">Publication History</h1><p class="subtitle">Recent report publication and retention outcomes.</p><nav class="header-links" aria-label="Report resources"><a href="../">Latest report</a><a href="../archive/">Report archive</a><a href="../publication-history.json">Machine-readable history</a></nav></div></header>
+    <main class="container publication-history-shell">
+      <p>This bounded journal begins <time datetime="{escape(history_started_raw, quote=True)}">{escape(display_timestamp(history_started))}</time> and retains the newest {history['max_entries']} terminal outcomes. Earlier outcomes were not reconstructed. {escape(schedule_clause(history))}</p>
+      <ol class="publication-history-list">{"".join(items)}</ol>
+    </main>
+    <footer class="app-footer"><div class="container"><span>GRCInsight publication history</span></div></footer>
+  </body>
+</html>
+"""
+
+
 def expected_outputs(
     markdown: str,
     template: str,
     publication_state: dict[str, object] | None = None,
+    publication_history: dict[str, object] | None = None,
 ) -> dict[Path, str]:
-    outputs = {INDEX_HTML: current_index_html(template, markdown, publication_state)}
+    if publication_history is None:
+        fail("publication history is required")
+    outputs = {
+        INDEX_HTML: current_index_html(
+            template, markdown, publication_state, publication_history
+        ),
+        PUBLICATION_HISTORY_INDEX: publication_history_html(publication_history),
+    }
     reports: list[tuple[str, str, str, str]] = []
     if ARCHIVE_DIR.exists():
         for report_md in sorted(
@@ -368,8 +450,10 @@ def main() -> None:
 
     template = read_text(INDEX_HTML)
     manifest_bytes = EVIDENCE_MANIFEST.read_bytes()
-    publication_state = load_publication_state(manifest_bytes)
-    outputs = expected_outputs(markdown, template, publication_state)
+    publication_state, publication_history = load_publication_artifacts(manifest_bytes)
+    outputs = expected_outputs(
+        markdown, template, publication_state, publication_history
+    )
     stale = []
     for path, content in outputs.items():
         if path.exists() and path.read_text(encoding="utf-8") == content:

@@ -4,4 +4,8 @@
     <loc>https://ricomanifesto.github.io/GRCInsight/</loc>
     <changefreq>daily</changefreq>
   </url>
+  <url>
+    <loc>https://ricomanifesto.github.io/GRCInsight/publication-history/</loc>
+    <changefreq>daily</changefreq>
+  </url>
 </urlset>

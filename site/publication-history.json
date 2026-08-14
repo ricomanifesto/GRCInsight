@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "max_entries": 30,
+  "history_started_at": "2026-08-14T19:25:23Z",
+  "schedule": {
+    "cadence": "daily",
+    "time_utc": "13:00"
+  },
+  "events": [
+    {
+      "event_at": "2026-08-14T19:25:23Z",
+      "outcome": "retained",
+      "report_generated_at": "2026-08-14T10:12:05.649488Z",
+      "evidence_manifest_sha256": "2f2a7936fcb67c2437d8306857c52f5189ad4950454ac7e8fa4cecccdda558cc",
+      "refusal_category": "provider_provenance"
+    }
+  ]
+}

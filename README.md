@@ -95,8 +95,15 @@ make check
 - `site/publication-state.json` binds the latest publication outcome to the
   current evidence manifest. Successful publication keeps the reader surface
   quiet; a refused model attempt retains the last model-backed report and adds a
-  pre-rendered notice with only the attempt time and an allowlisted provider
-  category. Raw provider errors are never published.
+  pre-rendered notice with only the attempt time, an allowlisted provider
+  category, and the enforced daily 13:00 UTC recovery horizon. Raw provider
+  errors are never published.
+- `site/publication-history.json` is an independently versioned, newest-first
+  journal capped at 30 terminal outcomes. It starts at the first proven public
+  retention event rather than reconstructing earlier history, binds every event
+  to an archived evidence-manifest digest, and drives the readable
+  `/publication-history/` page. Latest state, journal, archive, and rendered
+  surfaces must agree before publication.
 - Archive detail chrome discloses publication-era rolling SentryDigest links on
   reports older than the dated-handoff boundary without changing archived
   Markdown, evidence manifests, or the preserved report body.

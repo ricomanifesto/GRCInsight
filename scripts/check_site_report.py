@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Validate the committed GitHub Pages report artifact."""
 
+import hashlib
 import json
 import re
 import xml.etree.ElementTree as ET
@@ -29,6 +30,7 @@ from build_site import (  # noqa: E402
 from publication_state import (  # noqa: E402
     PublicationStateError,
     category_label,
+    validate_publication_history,
     validate_publication_state,
 )
 
@@ -37,6 +39,8 @@ INDEX_HTML = SITE_DIR / "index.html"
 INDEX_MD = SITE_DIR / "index.md"
 EVIDENCE_MANIFEST = SITE_DIR / "evidence-manifest.json"
 PUBLICATION_STATE = SITE_DIR / "publication-state.json"
+PUBLICATION_HISTORY = SITE_DIR / "publication-history.json"
+PUBLICATION_HISTORY_INDEX = SITE_DIR / "publication-history" / "index.html"
 SITEMAP_XML = SITE_DIR / "sitemap.xml"
 APP_JS = SITE_DIR / "static" / "app.js"
 RENDERER_JS = SITE_DIR / "static" / "renderer.js"
@@ -643,8 +647,8 @@ def validate_site_identity(html: str, sitemap_xml: str) -> None:
         fail(f"sitemap.xml is invalid XML: {error}")
     namespace = {"s": "http://www.sitemaps.org/schemas/sitemap/0.9"}
     locations = [element.text for element in sitemap.findall("s:url/s:loc", namespace)]
-    if locations != [PUBLIC_SITE_URL]:
-        fail("sitemap.xml must contain only the canonical GRCInsight project URL")
+    if locations != [PUBLIC_SITE_URL, f"{PUBLIC_SITE_URL}publication-history/"]:
+        fail("sitemap.xml does not match the canonical GRCInsight public routes")
 
 
 def validate_evidence_manifest(
@@ -937,13 +941,63 @@ def validate_archive_history(archive_dir: Path, archive_html: str) -> None:
 
 
 def validate_publication_surface(
-    html: str, manifest_bytes: bytes, publication_state_text: str
+    html: str,
+    manifest_bytes: bytes,
+    publication_state_text: str,
+    publication_history_text: str,
+    publication_history_html: str,
 ) -> None:
     try:
         state = json.loads(publication_state_text)
-        validate_publication_state(state, manifest_bytes)
+        history = json.loads(publication_history_text)
+        validated_state = validate_publication_state(state, manifest_bytes)
+        validate_publication_history(history, validated_state, manifest_bytes)
     except (json.JSONDecodeError, PublicationStateError) as error:
-        fail(f"publication-state.json is invalid: {error}")
+        fail(f"publication artifacts are invalid: {error}")
+
+    events = history["events"]
+    if publication_history_html.count('class="publication-history-entry"') != len(
+        events
+    ):
+        fail("publication history page does not render every journal event")
+    if 'href="../publication-history.json"' not in publication_history_html:
+        fail("publication history page does not link its machine-readable journal")
+    if "Earlier outcomes were not reconstructed" not in publication_history_html:
+        fail("publication history page does not disclose its honest start")
+    if "The next regular attempt runs daily at 13:00 UTC." not in publication_history_html:
+        fail("publication history page does not name the enforced cadence")
+
+    previous_position = publication_history_html.find(
+        'class="publication-history-list"'
+    )
+    if previous_position < 0:
+        fail("publication history page is missing its event list")
+    for event in events:
+        event_at = str(event["event_at"])
+        position = publication_history_html.find(
+            f'datetime="{event_at}"', previous_position + 1
+        )
+        if position <= previous_position:
+            fail("publication history page is not newest first")
+        previous_position = position
+        generated = datetime.fromisoformat(
+            str(event["report_generated_at"]).replace("Z", "+00:00")
+        ).astimezone(timezone.utc)
+        archive_key = generated.strftime("%Y-%m-%dT%H-%M-%SZ")
+        archived_manifest_path = ARCHIVE_DIR / archive_key / "evidence-manifest.json"
+        if not archived_manifest_path.is_file():
+            fail("publication history event does not resolve to an archived report")
+        archived_manifest = archived_manifest_path.read_bytes()
+        if hashlib.sha256(archived_manifest).hexdigest() != event[
+            "evidence_manifest_sha256"
+        ]:
+            fail("publication history event does not match its archived manifest")
+        try:
+            archived_manifest_data = json.loads(archived_manifest)
+        except json.JSONDecodeError:
+            fail("publication history archived manifest is invalid JSON")
+        if archived_manifest_data.get("generated_at") != event["report_generated_at"]:
+            fail("publication history event names the wrong archived report")
 
     notice_count = html.count('class="publication-notice"')
     if state["outcome"] == "retained":
@@ -951,12 +1005,18 @@ def validate_publication_surface(
             fail("current page must render one retained-publication notice")
         if 'href="publication-state.json"' not in html:
             fail("retained-publication notice does not link its machine-readable state")
+        if 'href="publication-history/"' not in html:
+            fail("retained-publication notice does not link recent outcome history")
+        if "The next regular attempt runs daily at 13:00 UTC." not in html:
+            fail("retained-publication notice does not name the recovery horizon")
         if category_label(state["refusal_category"]) not in html:
             fail("retained-publication notice does not name its safe refusal category")
         if str(state["attempted_at"]) not in html:
             fail("retained-publication notice does not expose its attempt timestamp")
     elif notice_count:
         fail("published report must not render a retained-publication notice")
+    if html.count('href="publication-history/"') < 2:
+        fail("current page does not make publication history discoverable")
 
 
 def main() -> None:
@@ -970,6 +1030,8 @@ def main() -> None:
     archive_html = read_text(ARCHIVE_INDEX)
     evidence_manifest_text = read_text(EVIDENCE_MANIFEST)
     publication_state_text = read_text(PUBLICATION_STATE)
+    publication_history_text = read_text(PUBLICATION_HISTORY)
+    publication_history_html = read_text(PUBLICATION_HISTORY_INDEX)
 
     validate_site_identity(html, sitemap_xml)
 
@@ -1042,7 +1104,11 @@ def main() -> None:
         require_current_schema=True,
     )
     validate_publication_surface(
-        html, EVIDENCE_MANIFEST.read_bytes(), publication_state_text
+        html,
+        EVIDENCE_MANIFEST.read_bytes(),
+        publication_state_text,
+        publication_history_text,
+        publication_history_html,
     )
     forbidden_label = find_public_report_forbidden_label(markdown)
     if forbidden_label:
@@ -1187,6 +1253,8 @@ def main() -> None:
         ".manifest-link",
         ".provenance-explanation",
         ".publication-notice",
+        ".publication-history-shell",
+        ".publication-history-entry",
         ".archive-context",
     ):
         if style_contract not in style_css:

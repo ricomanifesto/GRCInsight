@@ -114,14 +114,54 @@ def test_publication_notice_names_safe_retention_context():
             "outcome": "retained",
             "attempted_at": "2026-08-14T14:07:22Z",
             "refusal_category": "provider_quota",
-        }
+        },
+        {"schedule": {"cadence": "daily", "time_utc": "13:00"}},
     )
 
     assert "Publication update" in html
     assert "August 14, 2026 at 2:07:22 PM UTC" in html
     assert "current model-backed report was retained" in html
     assert "provider quota refusal" in html
+    assert "next regular attempt runs daily at 13:00 UTC" in html
+    assert 'href="publication-history/"' in html
     assert 'href="publication-state.json"' in html
+
+
+def test_publication_history_page_is_bounded_honest_and_newest_first():
+    namespace = builder_namespace()
+    history = {
+        "schema_version": 1,
+        "max_entries": 30,
+        "history_started_at": "2026-08-14T14:07:22Z",
+        "schedule": {"cadence": "daily", "time_utc": "13:00"},
+        "events": [
+            {
+                "event_at": "2026-08-14T16:00:00Z",
+                "outcome": "published",
+                "report_generated_at": "2026-08-14T15:00:00Z",
+                "evidence_manifest_sha256": "a" * 64,
+            },
+            {
+                "event_at": "2026-08-14T14:07:22Z",
+                "outcome": "retained",
+                "report_generated_at": "2026-08-14T10:12:05Z",
+                "evidence_manifest_sha256": "b" * 64,
+                "refusal_category": "provider_quota",
+            },
+        ],
+    }
+
+    html = namespace["publication_history_html"](history)
+
+    assert "Earlier outcomes were not reconstructed" in html
+    assert "newest 30 terminal outcomes" in html
+    assert "next regular attempt runs daily at 13:00 UTC" in html
+    list_start = html.index('class="publication-history-list"')
+    assert html.index("2026-08-14T16:00:00Z", list_start) < html.index(
+        "2026-08-14T14:07:22Z", list_start
+    )
+    assert html.count('class="publication-history-entry"') == 2
+    assert 'href="../publication-history.json"' in html
 
 
 def test_archive_entries_stack_at_the_phone_breakpoint():

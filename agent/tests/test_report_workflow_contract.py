@@ -22,6 +22,7 @@ SITE_REPORT_CHECK = REPO_ROOT / "scripts" / "check_site_report.py"
 SITE_REPORT_COMPOSER = REPO_ROOT / "scripts" / "compose_site_report.py"
 SITE_BUILDER = REPO_ROOT / "scripts" / "build_site.py"
 REPORTING_IDENTITY_CONTRACT = REPO_ROOT / "contracts" / "reporting-identity-v1.json"
+PUBLICATION_HISTORY = REPO_ROOT / "site" / "publication-history.json"
 MODEL_SERVICE = REPO_ROOT / "agent" / "services" / "model_service.py"
 RENDERER_JS = REPO_ROOT / "site" / "static" / "renderer.js"
 WORKFLOWS = (CI_WORKFLOW, DEPLOY_WORKFLOW, DEPLOY_SITE_WORKFLOW, REPORT_WORKFLOW)
@@ -628,10 +629,14 @@ def test_report_generation_workflow_publishes_bound_retained_state():
     assert "scripts/publication_state.py record-retained" in workflow
     assert '--attempted-at "${{ steps.get-report.outputs.attempted_at }}"' in workflow
     assert '--category "${{ steps.get-report.outputs.refusal_category }}"' in workflow
+    assert workflow.count("--history site/publication-history.json") >= 4
     assert "if [ $STATE_STATUS -eq 4 ]; then" in workflow
     assert "python3 scripts/build_site.py" in workflow
     assert "make check-site" in workflow
-    assert "git add site/publication-state.json site/index.html site/archive" in workflow
+    assert (
+        "git add site/publication-state.json site/publication-history.json "
+        "site/publication-history site/index.html site/archive" in workflow
+    )
     assert 'echo "retained=true" >> "$GITHUB_OUTPUT"' in workflow
     assert (
         "steps.publish.outputs.published == 'true' || "
@@ -649,6 +654,17 @@ def test_report_generation_workflow_summarizes_published_provenance():
     assert "PUBLISHED_RESOLVED_MODEL=$(jq -r '.resolved_model'" in workflow
     assert "PUBLISHED_SOURCE_ISSUE=$(jq -r '.digest_issue_url'" in workflow
     assert 'echo "- Commit: \\`$(git rev-parse HEAD)\\`"' in workflow
+
+
+def test_report_generation_workflow_uses_one_bounded_public_cadence_contract():
+    workflow = REPORT_WORKFLOW.read_text()
+    history = json.loads(PUBLICATION_HISTORY.read_text())
+
+    assert "cron: '0 13 * * *'" in workflow
+    assert history["schedule"] == {"cadence": "daily", "time_utc": "13:00"}
+    assert history["max_entries"] == 30
+    assert 'echo "published_at=$PUBLISHED_AT" >> "$GITHUB_OUTPUT"' in workflow
+    assert '--event-at "${{ steps.get-report.outputs.published_at }}"' in workflow
 
 
 def test_report_generation_workflow_requires_resolved_model_provenance():
@@ -693,7 +709,8 @@ def test_report_generation_workflow_builds_prerender_and_archive():
     assert workflow.count("python3 scripts/build_site.py --archive-current") >= 2
     assert (
         "git add site/index.md site/index.html site/evidence-manifest.json "
-        "site/publication-state.json site/archive" in workflow
+        "site/publication-state.json site/publication-history.json "
+        "site/publication-history site/archive" in workflow
     )
     assert workflow.count("scripts/publication_state.py record-published") >= 2
     assert "[skip ci]" not in workflow
@@ -889,6 +906,82 @@ def test_site_report_check_validates_every_archive_manifest(tmp_path):
         assert "evidence-manifest.json is invalid JSON" in str(error)
     else:
         raise AssertionError("archive validation accepted a corrupted historical manifest")
+
+
+def test_site_report_check_binds_publication_history_to_archived_manifest(tmp_path):
+    namespace = runpy.run_path(str(SITE_REPORT_CHECK))
+    namespace["validate_publication_surface"].__globals__["ARCHIVE_DIR"] = tmp_path
+    generated_at = "2026-08-14T10:12:05.649488Z"
+    event_at = "2026-08-14T19:25:23Z"
+    manifest_bytes = (
+        json.dumps({"schema_version": 3, "generated_at": generated_at}) + "\n"
+    ).encode()
+    digest = hashlib.sha256(manifest_bytes).hexdigest()
+    snapshot = tmp_path / "2026-08-14T10-12-05Z"
+    snapshot.mkdir()
+    archived_manifest = snapshot / "evidence-manifest.json"
+    archived_manifest.write_bytes(manifest_bytes)
+    state = {
+        "schema_version": 1,
+        "outcome": "retained",
+        "attempted_at": event_at,
+        "refusal_category": "provider_provenance",
+        "report_generated_at": generated_at,
+        "evidence_manifest_sha256": digest,
+    }
+    history = {
+        "schema_version": 1,
+        "max_entries": 30,
+        "history_started_at": event_at,
+        "schedule": {"cadence": "daily", "time_utc": "13:00"},
+        "events": [
+            {
+                "event_at": event_at,
+                "outcome": "retained",
+                "refusal_category": "provider_provenance",
+                "report_generated_at": generated_at,
+                "evidence_manifest_sha256": digest,
+            }
+        ],
+    }
+    current_html = (
+        '<aside class="publication-notice">provider provenance'
+        f'<time datetime="{event_at}"></time>'
+        "The next regular attempt runs daily at 13:00 UTC."
+        '<a href="publication-history/">History</a>'
+        '<a href="publication-state.json">Status</a></aside>'
+        '<a href="publication-history/">Publication history</a>'
+    )
+    history_html = (
+        '<a href="../publication-history.json">JSON</a>'
+        "Earlier outcomes were not reconstructed"
+        "The next regular attempt runs daily at 13:00 UTC."
+        '<ol class="publication-history-list">'
+        f'<li class="publication-history-entry"><time datetime="{event_at}"></time></li>'
+        "</ol>"
+    )
+
+    namespace["validate_publication_surface"](
+        current_html,
+        manifest_bytes,
+        json.dumps(state),
+        json.dumps(history),
+        history_html,
+    )
+
+    archived_manifest.write_text("{}\n")
+    try:
+        namespace["validate_publication_surface"](
+            current_html,
+            manifest_bytes,
+            json.dumps(state),
+            json.dumps(history),
+            history_html,
+        )
+    except SystemExit as error:
+        assert "does not match its archived manifest" in str(error)
+    else:
+        raise AssertionError("publication history accepted an unrelated archive manifest")
 
 
 def test_site_report_composer_rejects_provenance_mismatch():

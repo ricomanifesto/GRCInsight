@@ -255,6 +255,8 @@ jobs:
               exit 1
             fi
             echo "Report completed. Building site files..."
+            PUBLISHED_AT=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+            echo "published_at=$PUBLISHED_AT" >> "$GITHUB_OUTPUT"
 
             CONTENT_LEN=$(printf %s "$CONTENT" | wc -c | tr -d ' ')
             echo "Content length (bytes): ${CONTENT_LEN:-0}"
@@ -269,7 +271,9 @@ jobs:
               --model "$LLM_MODEL"
             python3 scripts/publication_state.py record-published \
               --manifest site/evidence-manifest.json \
-              --output site/publication-state.json
+              --output site/publication-state.json \
+              --history site/publication-history.json \
+              --event-at "$PUBLISHED_AT"
             python3 scripts/build_site.py --archive-current
 
             echo "Report files created successfully"
@@ -300,6 +304,7 @@ jobs:
         python3 scripts/publication_state.py record-retained \
           --manifest site/evidence-manifest.json \
           --output site/publication-state.json \
+          --history site/publication-history.json \
           --attempted-at "${{ steps.get-report.outputs.attempted_at }}" \
           --category "${{ steps.get-report.outputs.refusal_category }}"
         STATE_STATUS=$?
@@ -314,7 +319,7 @@ jobs:
 
         python3 scripts/build_site.py
         make check-site
-        git add site/publication-state.json site/index.html site/archive
+        git add site/publication-state.json site/publication-history.json site/publication-history site/index.html site/archive
         if git diff --cached --quiet; then
           echo "Retained publication state is already current"
           exit 0
@@ -341,6 +346,7 @@ jobs:
             python3 scripts/publication_state.py record-retained \
               --manifest site/evidence-manifest.json \
               --output site/publication-state.json \
+              --history site/publication-history.json \
               --attempted-at "${{ steps.get-report.outputs.attempted_at }}" \
               --category "${{ steps.get-report.outputs.refusal_category }}"
             STATE_STATUS=$?
@@ -354,7 +360,7 @@ jobs:
             fi
             python3 scripts/build_site.py
             make check-site
-            git add site/publication-state.json site/index.html site/archive
+            git add site/publication-state.json site/publication-history.json site/publication-history site/index.html site/archive
             if git diff --cached --quiet; then
               echo "Retained publication state is already current"
               exit 0
@@ -407,7 +413,7 @@ jobs:
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
-        git add site/index.md site/index.html site/evidence-manifest.json site/publication-state.json site/archive
+        git add site/index.md site/index.html site/evidence-manifest.json site/publication-state.json site/publication-history.json site/publication-history site/archive
         if git diff --cached --quiet; then
           echo "No report changes to commit"
           exit 0
@@ -426,10 +432,12 @@ jobs:
             --model "$LLM_MODEL"
           python3 scripts/publication_state.py record-published \
             --manifest site/evidence-manifest.json \
-            --output site/publication-state.json
+            --output site/publication-state.json \
+            --history site/publication-history.json \
+            --event-at "${{ steps.get-report.outputs.published_at }}"
           python3 scripts/build_site.py --archive-current
           make check-site
-          git add site/index.md site/index.html site/evidence-manifest.json site/publication-state.json site/archive
+          git add site/index.md site/index.html site/evidence-manifest.json site/publication-state.json site/publication-history.json site/publication-history site/archive
           git commit --amend --no-edit
 
           if git push origin HEAD:"$GITHUB_REF_NAME"; then
