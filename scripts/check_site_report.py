@@ -939,23 +939,7 @@ def main() -> None:
     if "Temporary placeholder" in markdown or "Temporary Outline" in markdown:
         fail("index.md still contains temporary placeholder content")
     metadata = report_metadata(markdown)
-    try:
-        current_manifest_data = json.loads(evidence_manifest_text)
-    except json.JSONDecodeError as error:
-        fail(f"evidence-manifest.json is invalid JSON: {error}")
-    current_manifest_schema = (
-        current_manifest_data.get("schema_version", 1)
-        if isinstance(current_manifest_data, dict)
-        else None
-    )
-    # TODO(resolved-model-publication): Require schema 2 metadata unconditionally
-    # after the first resolved-model report is published and verified at Pages.
-    current_required_metadata = (
-        REQUIRED_PUBLIC_METADATA
-        if current_manifest_schema == 2
-        else LEGACY_REQUIRED_PUBLIC_METADATA
-    )
-    missing_metadata = current_required_metadata - metadata.keys()
+    missing_metadata = REQUIRED_PUBLIC_METADATA - metadata.keys()
     if missing_metadata:
         fail(
             "index.md missing public provenance metadata: "
@@ -970,7 +954,12 @@ def main() -> None:
         for _, _, _, destination in markdown_links(metadata["source"])
     ):
         fail("index.md Source metadata must be a linked feed")
-    validate_evidence_manifest(markdown, metadata, evidence_manifest_text)
+    validate_evidence_manifest(
+        markdown,
+        metadata,
+        evidence_manifest_text,
+        require_current_schema=True,
+    )
     forbidden_label = find_public_report_forbidden_label(markdown)
     if forbidden_label:
         fail(f"index.md contains public report forbidden label: {forbidden_label}")
