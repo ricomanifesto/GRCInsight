@@ -732,13 +732,8 @@ def validate_evidence_manifest(
     schema_version = manifest.get("schema_version", 1)
     if schema_version not in {1, 2, 3}:
         fail("evidence-manifest.json has an unsupported schema version")
-    if require_current_schema and schema_version == 1:
-        fail("current evidence manifest must include resolved report provenance")
-    if require_current_schema and schema_version == 2:
-        # TODO(digest-issue-schema3-publication): Reject current schema 2 after
-        # the first schema-3 model-backed report is verified on GitHub Pages.
-        # Do not copy or expand this publication bridge.
-        pass
+    if require_current_schema and schema_version != 3:
+        fail("current evidence manifest must include dated digest issue provenance")
     if manifest.get("generated_at") != metadata["generated"]:
         fail("evidence manifest timestamp does not match report provenance")
 

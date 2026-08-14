@@ -1459,7 +1459,7 @@ def test_evidence_manifest_v3_attests_model_and_dated_digest_item_identity():
         raise AssertionError("manifest accepted a router alias as report authorship")
 
 
-def test_current_schema2_manifest_is_bounded_to_publication_bridge():
+def test_schema2_manifest_is_historical_only():
     namespace = runpy.run_path(str(SITE_REPORT_CHECK))
     validate_manifest = namespace["validate_evidence_manifest"]
     source_url = "https://example.com/advisory"
@@ -1498,8 +1498,14 @@ def test_current_schema2_manifest_is_bounded_to_publication_bridge():
         ],
     }
 
-    validate_manifest(markdown, metadata, json.dumps(manifest), require_current_schema=True)
-    assert "TODO(digest-issue-schema3-publication)" in SITE_REPORT_CHECK.read_text()
+    validate_manifest(markdown, metadata, json.dumps(manifest), require_current_schema=False)
+
+    try:
+        validate_manifest(markdown, metadata, json.dumps(manifest), require_current_schema=True)
+    except SystemExit as error:
+        assert "dated digest issue provenance" in str(error)
+    else:
+        raise AssertionError("current report accepted a schema-2 evidence manifest")
 
 
 def test_evidence_manifest_rejects_invented_title_for_real_url():
