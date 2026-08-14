@@ -595,6 +595,13 @@ def test_report_generation_workflow_requires_feed_owned_issue_provenance():
     assert "Refusing to publish a report with mismatched digest issue provenance" in workflow
 
 
+def test_report_generation_workflow_bounds_the_completion_budget():
+    workflow = REPORT_WORKFLOW.read_text()
+
+    assert "max_tokens: 8000" in workflow
+    assert "max_tokens: 16000" not in workflow
+
+
 def test_report_generation_workflow_uses_deterministic_report_composer():
     workflow = REPORT_WORKFLOW.read_text()
 

@@ -128,7 +128,7 @@ jobs:
 
         # Create payload for Lambda invocation
         BODY=$(jq -n --arg feed_url "$FEED_URL" --arg model "$LLM_MODEL" -c \
-          '{feed_url: $feed_url, config: {model: $model, max_tokens: 16000, focus_areas: ["governance", "compliance", "risk"]}}')
+          '{feed_url: $feed_url, config: {model: $model, max_tokens: 8000, focus_areas: ["governance", "compliance", "risk"]}}')
         PAYLOAD=$(jq -n --arg body "$BODY" -c \
           '{httpMethod: "POST", path: "/api/v1/reports/generate", headers: {"Content-Type": "application/json"}, body: $body}')
 
