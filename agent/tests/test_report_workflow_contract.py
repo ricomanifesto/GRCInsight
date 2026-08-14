@@ -606,14 +606,37 @@ def test_report_generation_workflow_classifies_fallback_without_dumping_provider
     workflow = REPORT_WORKFLOW.read_text()
 
     assert (
-        "FALLBACK_REASON=$(jq -r '.metadata.fallback_reason // empty' report-data.json)" in workflow
+        "FALLBACK_CATEGORY=$(python3 scripts/publication_state.py classify "
+        "--report-data report-data.json)" in workflow
     )
-    assert 'echo "Fallback category: $FALLBACK_CATEGORY" >&2' in workflow
+    assert "FALLBACK_LABEL=${FALLBACK_CATEGORY//_/ }" in workflow
+    assert 'echo "Fallback category: $FALLBACK_LABEL" >&2' in workflow
     assert 'echo "## Report publication retained"' in workflow
     assert 'echo "- Outcome: Last model-backed report retained"' in workflow
-    assert 'echo "- Refusal category: $FALLBACK_CATEGORY"' in workflow
+    assert 'echo "- Attempted: \\`$ATTEMPTED_AT\\`"' in workflow
+    assert 'echo "- Refusal category: $FALLBACK_LABEL"' in workflow
+    assert 'echo "refusal_category=$FALLBACK_CATEGORY"' in workflow
+    assert "FALLBACK_REASON=$(jq" not in workflow
     assert '>> "$GITHUB_STEP_SUMMARY"' in workflow
-    assert 'echo "$FALLBACK_REASON"' not in workflow
+
+
+def test_report_generation_workflow_publishes_bound_retained_state():
+    workflow = REPORT_WORKFLOW.read_text()
+
+    assert "name: Persist retained publication state" in workflow
+    assert "if: always() && steps.get-report.outputs.refused == 'true'" in workflow
+    assert "scripts/publication_state.py record-retained" in workflow
+    assert '--attempted-at "${{ steps.get-report.outputs.attempted_at }}"' in workflow
+    assert '--category "${{ steps.get-report.outputs.refusal_category }}"' in workflow
+    assert "if [ $STATE_STATUS -eq 4 ]; then" in workflow
+    assert "python3 scripts/build_site.py" in workflow
+    assert "make check-site" in workflow
+    assert "git add site/publication-state.json site/index.html site/archive" in workflow
+    assert 'echo "retained=true" >> "$GITHUB_OUTPUT"' in workflow
+    assert (
+        "steps.publish.outputs.published == 'true' || "
+        "steps.retain.outputs.retained == 'true'" in workflow
+    )
 
 
 def test_report_generation_workflow_summarizes_published_provenance():
@@ -669,8 +692,10 @@ def test_report_generation_workflow_builds_prerender_and_archive():
 
     assert workflow.count("python3 scripts/build_site.py --archive-current") >= 2
     assert (
-        "git add site/index.md site/index.html site/evidence-manifest.json site/archive" in workflow
+        "git add site/index.md site/index.html site/evidence-manifest.json "
+        "site/publication-state.json site/archive" in workflow
     )
+    assert workflow.count("scripts/publication_state.py record-published") >= 2
     assert "[skip ci]" not in workflow
     assert "actions: write" in workflow
     assert "gh workflow run deploy-site.yml" in workflow
@@ -688,7 +713,9 @@ def test_report_generation_workflow_validates_generated_site_before_publish():
     assert "actions/upload-pages-artifact" not in workflow
     assert "actions/deploy-pages" not in workflow
     rebase_index = workflow.index('git rebase -X theirs "origin/$GITHUB_REF_NAME"')
-    assert workflow.index("make check-site", rebase_index) < workflow.index("git push origin HEAD")
+    assert workflow.index("make check-site", rebase_index) < workflow.index(
+        "git push origin HEAD", rebase_index
+    )
 
 
 def test_site_report_composer_owns_public_provenance_and_body_shape():
@@ -781,6 +808,7 @@ def test_site_builder_treats_report_backslashes_as_literal_content():
     current_index_html = namespace["current_index_html"]
     template = (
         '<time class="subtitle" id="generated">Loading</time>'
+        "<!-- PUBLICATION_NOTICE_START --><!-- PUBLICATION_NOTICE_END -->"
         "<!-- REPORT_CONTENT_START --><!-- REPORT_CONTENT_END -->"
     )
     markdown = (
@@ -807,10 +835,12 @@ def test_site_builder_gives_same_day_reports_unique_archive_keys():
     assert archive_slug(morning) != archive_slug(rerun)
 
 
-def test_site_builder_preserves_published_archive_pages():
+def test_site_builder_limits_published_archive_updates_to_page_chrome():
     builder = SITE_BUILDER.read_text()
 
-    assert "if not archive_page.exists():" in builder
+    assert "with_archive_detail_chrome" in builder
+    assert "The publication-era report body remains byte-for-byte intact" in builder
+    assert "read_text(archive_page), generated" in builder
     assert "outputs[archive_page] = archive_detail_html(archived_markdown)" in builder
 
 
@@ -842,6 +872,9 @@ def test_site_report_check_validates_every_archive_manifest(tmp_path):
     (snapshot / "report.md").write_text(report)
     (snapshot / "evidence-manifest.json").write_text(json.dumps(manifest))
     (snapshot / "index.html").write_text(
+        '<!-- ARCHIVE_CONTEXT_START --><aside class="archive-note">'
+        'publication-era rolling SentryDigest links <a href="../">Read the archive history</a>'
+        "</aside><!-- ARCHIVE_CONTEXT_END -->"
         '<main class="container archive-report"><section class="card report-provenance">'
         '<a href="evidence-manifest.json">Evidence</a></section></main>'
     )

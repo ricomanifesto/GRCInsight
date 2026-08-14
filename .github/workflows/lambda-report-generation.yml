@@ -197,7 +197,6 @@ jobs:
           STATUS=$(jq -r '.status // empty' report-data.json)
           CONTENT=$(jq -r '.content // empty' report-data.json)
           ANALYSIS_MODE=$(jq -r '.metadata.analysis_mode // empty' report-data.json)
-          FALLBACK_REASON=$(jq -r '.metadata.fallback_reason // empty' report-data.json)
           REQUESTED_MODEL=$(jq -r '.metadata.requested_model // empty' report-data.json)
           RESOLVED_MODEL=$(jq -r '.metadata.resolved_model // empty' report-data.json)
           SOURCE_HOME_URL=$(jq -r '.metadata.source_home_url // empty' report-data.json)
@@ -214,21 +213,22 @@ jobs:
 
           if [ "$STATUS" = "completed" ]; then
             if [ "$ANALYSIS_MODE" != "model" ]; then
-              case "$FALLBACK_REASON" in
-                *"HTTP 401"*|*"API_KEY"*) FALLBACK_CATEGORY="provider authentication" ;;
-                *"HTTP 402"*|*"insufficient_quota"*) FALLBACK_CATEGORY="provider quota" ;;
-                *"HTTP 429"*) FALLBACK_CATEGORY="provider rate limit" ;;
-                *"deadline"*|*"timed out"*|*"timeout"*) FALLBACK_CATEGORY="provider deadline" ;;
-                *"model identity"*) FALLBACK_CATEGORY="provider provenance" ;;
-                *) FALLBACK_CATEGORY="unclassified provider failure" ;;
-              esac
+              FALLBACK_CATEGORY=$(python3 scripts/publication_state.py classify --report-data report-data.json)
+              FALLBACK_LABEL=${FALLBACK_CATEGORY//_/ }
+              ATTEMPTED_AT=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+              {
+                echo "refused=true"
+                echo "refusal_category=$FALLBACK_CATEGORY"
+                echo "attempted_at=$ATTEMPTED_AT"
+              } >> "$GITHUB_OUTPUT"
               {
                 echo "## Report publication retained"
                 echo
                 echo "- Outcome: Last model-backed report retained"
-                echo "- Refusal category: $FALLBACK_CATEGORY"
+                echo "- Attempted: \`$ATTEMPTED_AT\`"
+                echo "- Refusal category: $FALLBACK_LABEL"
               } >> "$GITHUB_STEP_SUMMARY"
-              echo "Fallback category: $FALLBACK_CATEGORY" >&2
+              echo "Fallback category: $FALLBACK_LABEL" >&2
               echo "Refusing to publish a fallback-mode report; keeping the last model-backed report." >&2
               exit 1
             fi
@@ -267,6 +267,9 @@ jobs:
               --input report-data.json \
               --feed-url "$FEED_URL" \
               --model "$LLM_MODEL"
+            python3 scripts/publication_state.py record-published \
+              --manifest site/evidence-manifest.json \
+              --output site/publication-state.json
             python3 scripts/build_site.py --archive-current
 
             echo "Report files created successfully"
@@ -282,6 +285,86 @@ jobs:
           echo "Timed out waiting for report to complete" >&2
           exit 1
         fi
+
+    - name: Persist retained publication state
+      id: retain
+      if: always() && steps.get-report.outputs.refused == 'true'
+      run: |
+        set -e
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git fetch origin "$GITHUB_REF_NAME"
+        git rebase "origin/$GITHUB_REF_NAME"
+
+        set +e
+        python3 scripts/publication_state.py record-retained \
+          --manifest site/evidence-manifest.json \
+          --output site/publication-state.json \
+          --attempted-at "${{ steps.get-report.outputs.attempted_at }}" \
+          --category "${{ steps.get-report.outputs.refusal_category }}"
+        STATE_STATUS=$?
+        set -e
+        if [ $STATE_STATUS -eq 4 ]; then
+          echo "A newer report superseded this refused attempt; no public state was changed."
+          exit 0
+        fi
+        if [ $STATE_STATUS -ne 0 ]; then
+          exit $STATE_STATUS
+        fi
+
+        python3 scripts/build_site.py
+        make check-site
+        git add site/publication-state.json site/index.html site/archive
+        if git diff --cached --quiet; then
+          echo "Retained publication state is already current"
+          exit 0
+        fi
+        git commit -m "Record retained report publication [automated]"
+
+        attempts=1
+        max_attempts=3
+        while [ $attempts -le $max_attempts ]; do
+          if git push origin HEAD:"$GITHUB_REF_NAME"; then
+            {
+              echo "- Public state commit: \`$(git rev-parse HEAD)\`"
+            } >> "$GITHUB_STEP_SUMMARY"
+            echo "retained=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          attempts=$((attempts+1))
+          if [ $attempts -le $max_attempts ]; then
+            echo "Push raced with a newer remote update; rechecking retained state..."
+            git fetch origin "$GITHUB_REF_NAME"
+            git rebase "origin/$GITHUB_REF_NAME"
+            set +e
+            python3 scripts/publication_state.py record-retained \
+              --manifest site/evidence-manifest.json \
+              --output site/publication-state.json \
+              --attempted-at "${{ steps.get-report.outputs.attempted_at }}" \
+              --category "${{ steps.get-report.outputs.refusal_category }}"
+            STATE_STATUS=$?
+            set -e
+            if [ $STATE_STATUS -eq 4 ]; then
+              echo "A newer report superseded this refused attempt; no public state was changed."
+              exit 0
+            fi
+            if [ $STATE_STATUS -ne 0 ]; then
+              exit $STATE_STATUS
+            fi
+            python3 scripts/build_site.py
+            make check-site
+            git add site/publication-state.json site/index.html site/archive
+            if git diff --cached --quiet; then
+              echo "Retained publication state is already current"
+              exit 0
+            fi
+            git commit --amend --no-edit
+          fi
+        done
+
+        echo "Failed to publish retained state after $max_attempts attempts" >&2
+        exit 1
 
     - name: Dump recent Lambda logs (Go & Python)
       if: failure()
@@ -324,7 +407,7 @@ jobs:
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
-        git add site/index.md site/index.html site/evidence-manifest.json site/archive
+        git add site/index.md site/index.html site/evidence-manifest.json site/publication-state.json site/archive
         if git diff --cached --quiet; then
           echo "No report changes to commit"
           exit 0
@@ -341,9 +424,12 @@ jobs:
             --input report-data.json \
             --feed-url "${{ steps.feed-url.outputs.FEED_URL }}" \
             --model "$LLM_MODEL"
+          python3 scripts/publication_state.py record-published \
+            --manifest site/evidence-manifest.json \
+            --output site/publication-state.json
           python3 scripts/build_site.py --archive-current
           make check-site
-          git add site/index.md site/index.html site/evidence-manifest.json site/archive
+          git add site/index.md site/index.html site/evidence-manifest.json site/publication-state.json site/archive
           git commit --amend --no-edit
 
           if git push origin HEAD:"$GITHUB_REF_NAME"; then
@@ -375,7 +461,7 @@ jobs:
         exit 1
 
     - name: Dispatch Pages deployment
-      if: steps.publish.outputs.published == 'true'
+      if: always() && (steps.publish.outputs.published == 'true' || steps.retain.outputs.retained == 'true')
       env:
         GH_TOKEN: ${{ github.token }}
       run: gh workflow run deploy-site.yml --ref "$GITHUB_REF_NAME"

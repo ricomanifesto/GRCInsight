@@ -92,6 +92,14 @@ make check
   composes report-owned provenance into `site/index.md`, preserves a dated
   archive snapshot, pre-renders the current/archive pages, validates the result,
   and commits the artifact to `main`.
+- `site/publication-state.json` binds the latest publication outcome to the
+  current evidence manifest. Successful publication keeps the reader surface
+  quiet; a refused model attempt retains the last model-backed report and adds a
+  pre-rendered notice with only the attempt time and an allowlisted provider
+  category. Raw provider errors are never published.
+- Archive detail chrome discloses publication-era rolling SentryDigest links on
+  reports older than the dated-handoff boundary without changing archived
+  Markdown, evidence manifests, or the preserved report body.
 - `.github/workflows/deploy-site.yml` is the single Pages deployment owner. It
   revalidates the committed artifact, captures dark and light top-of-fold review
   images, uploads that evidence to the workflow run, and deploys `site/`.

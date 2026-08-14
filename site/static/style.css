@@ -146,6 +146,14 @@ body.light .sidebar details[open] > summary { background: rgba(49, 81, 62, 0.10)
 .card.collapsed > :not(h2) { display: none; }
 .report-status { color: var(--muted); }
 .report-provenance { background: linear-gradient(180deg, var(--panel-2), var(--panel)); }
+.publication-notice {
+  margin: 16px 0 0; padding: 13px 15px;
+  border: 1px solid var(--evidence-border); border-left: 3px solid var(--gold); border-radius: 8px;
+  background: var(--evidence-bg); color: var(--muted);
+}
+.publication-notice h2 { margin: 0 0 5px; color: var(--heading); font-size: 14px; letter-spacing: 0.03em; text-transform: uppercase; }
+.publication-notice p { margin: 0; font-size: 13px; line-height: 1.55; }
+.publication-notice time { color: var(--text); }
 .report-meta { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0; margin: 0; border: 1px solid var(--line); border-radius: 7px; overflow: hidden; }
 .report-meta-item { min-width: 0; padding: 10px 12px; border-bottom: 1px solid var(--line); }
 .report-meta-item:nth-child(odd) { border-right: 1px solid var(--line); }
@@ -255,6 +263,8 @@ kbd { padding: 1px 5px; border: 1px solid var(--hairline); border-bottom-width: 
 
 /* Static archive */
 .archive-shell { padding: 24px 0 36px; }
+.archive-context { padding-top: 18px; }
+.archive-context .archive-note { margin: 0; }
 .archive-note { margin: 18px 0; padding: 12px 14px; border: 1px solid var(--hairline); border-left: 3px solid var(--rail); border-radius: 7px; background: var(--panel); color: var(--muted); line-height: 1.55; }
 .archive-note strong, .archive-note time { color: var(--text); }
 .archive-list { display: grid; gap: 10px; margin: 18px 0 0; padding: 0; }

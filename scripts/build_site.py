@@ -6,19 +6,34 @@ from __future__ import annotations
 import argparse
 from datetime import datetime, timezone
 from html import escape
+import json
 from pathlib import Path
 import re
 import subprocess
+import sys
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(REPO_ROOT / "scripts"))
+
+from publication_state import (  # noqa: E402
+    PublicationStateError,
+    category_label,
+    validate_publication_state,
+)
+
 SITE_DIR = REPO_ROOT / "site"
 INDEX_MD = SITE_DIR / "index.md"
 INDEX_HTML = SITE_DIR / "index.html"
 EVIDENCE_MANIFEST = SITE_DIR / "evidence-manifest.json"
+PUBLICATION_STATE = SITE_DIR / "publication-state.json"
 ARCHIVE_DIR = SITE_DIR / "archive"
 RENDERER_JS = SITE_DIR / "static" / "renderer.js"
 REPORT_START = "<!-- REPORT_CONTENT_START -->"
 REPORT_END = "<!-- REPORT_CONTENT_END -->"
+PUBLICATION_NOTICE_START = "<!-- PUBLICATION_NOTICE_START -->"
+PUBLICATION_NOTICE_END = "<!-- PUBLICATION_NOTICE_END -->"
+ARCHIVE_CONTEXT_START = "<!-- ARCHIVE_CONTEXT_START -->"
+ARCHIVE_CONTEXT_END = "<!-- ARCHIVE_CONTEXT_END -->"
 PUBLIC_SITE_URL = "https://ricomanifesto.github.io/GRCInsight/"
 DATED_DIGEST_HANDOFF_BOUNDARY = datetime(
     2026, 8, 14, 4, 49, 12, 35_399, tzinfo=timezone.utc
@@ -72,6 +87,34 @@ def display_timestamp(value: datetime) -> str:
     return f"{display_date(value)} at {hour}{value.strftime(':%M:%S %p')} UTC"
 
 
+def publication_notice_html(state: dict[str, object] | None) -> str:
+    if state is None or state["outcome"] != "retained":
+        return ""
+    attempted = parse_generated(str(state["attempted_at"]))
+    label = category_label(state["refusal_category"])
+    reason = (
+        "an unclassified provider failure"
+        if label == "unclassified provider failure"
+        else f"a {label} refusal"
+    )
+    attempted_raw = str(state["attempted_at"])
+    return f"""          <aside class="publication-notice" aria-labelledby="publication-notice-title">
+            <h2 id="publication-notice-title">Publication update</h2>
+            <p>A newer report was attempted on <time datetime="{escape(attempted_raw, quote=True)}">{escape(display_timestamp(attempted))}</time>. The current model-backed report was retained because of {escape(reason)}. <a href="publication-state.json">Machine-readable status</a>.</p>
+          </aside>
+"""
+
+
+def load_publication_state(manifest_bytes: bytes) -> dict[str, object] | None:
+    if not PUBLICATION_STATE.exists():
+        return None
+    try:
+        state = json.loads(PUBLICATION_STATE.read_text(encoding="utf-8"))
+        return validate_publication_state(state, manifest_bytes)
+    except (json.JSONDecodeError, PublicationStateError) as error:
+        fail(f"invalid publication state: {error}")
+
+
 def archive_slug(value: datetime) -> str:
     return value.strftime("%Y-%m-%dT%H-%M-%SZ")
 
@@ -98,7 +141,11 @@ process.stdout.write(context.window.GRCInsightRenderer.renderReportDocument(mark
     return result.stdout
 
 
-def current_index_html(template: str, markdown: str) -> str:
+def current_index_html(
+    template: str,
+    markdown: str,
+    publication_state: dict[str, object] | None = None,
+) -> str:
     fields = report_fields(markdown)
     generated_raw = fields.get("generated", "")
     generated = parse_generated(generated_raw)
@@ -131,7 +178,60 @@ def current_index_html(template: str, markdown: str) -> str:
     )
     if count != 1:
         fail("index.html is missing the generated time element")
+    notice_region = re.compile(
+        rf"{re.escape(PUBLICATION_NOTICE_START)}.*?"
+        rf"{re.escape(PUBLICATION_NOTICE_END)}",
+        re.DOTALL,
+    )
+    if len(notice_region.findall(built)) != 1:
+        fail("index.html must contain one publication notice marker pair")
+    notice_node = (
+        f"{PUBLICATION_NOTICE_START}\n"
+        f"{publication_notice_html(publication_state)}"
+        f"          {PUBLICATION_NOTICE_END}"
+    )
+    built = notice_region.sub(lambda _match: notice_node, built)
     return built
+
+
+def historical_context_note(archive_href: str | None = None) -> str:
+    boundary_iso = DATED_DIGEST_HANDOFF_BOUNDARY.isoformat().replace("+00:00", "Z")
+    archive_link = (
+        f' <a href="{escape(archive_href, quote=True)}">Read the archive history</a>.'
+        if archive_href is not None
+        else ""
+    )
+    return f"""<aside class="archive-note" aria-label="Historical context links">
+        <strong>Historical context note:</strong> Reports published before <time datetime="{boundary_iso}">{escape(display_timestamp(DATED_DIGEST_HANDOFF_BOUNDARY))}</time> retain their publication-era rolling SentryDigest links. Those links may no longer land on the original card; the archived reports remain unchanged.{archive_link}
+      </aside>"""
+
+
+def with_archive_detail_chrome(html: str, generated: datetime) -> str:
+    region = re.compile(
+        rf"{re.escape(ARCHIVE_CONTEXT_START)}.*?{re.escape(ARCHIVE_CONTEXT_END)}",
+        re.DOTALL,
+    )
+    matches = region.findall(html)
+    if len(matches) > 1 or (
+        (ARCHIVE_CONTEXT_START in html) != (ARCHIVE_CONTEXT_END in html)
+    ):
+        fail("archive detail page has invalid historical-context markers")
+    if generated >= DATED_DIGEST_HANDOFF_BOUNDARY:
+        return region.sub("", html) if matches else html
+
+    context_node = (
+        f"{ARCHIVE_CONTEXT_START}\n"
+        f'    <div class="container archive-context">\n'
+        f"      {historical_context_note('../')}\n"
+        f"    </div>\n"
+        f"    {ARCHIVE_CONTEXT_END}"
+    )
+    if matches:
+        return region.sub(lambda _match: context_node, html)
+    main_node = '<main class="container archive-report">'
+    if html.count(main_node) != 1:
+        fail("archive detail page must contain one report body")
+    return html.replace(main_node, f"{context_node}\n    {main_node}", 1)
 
 
 def archive_detail_html(markdown: str) -> str:
@@ -139,7 +239,7 @@ def archive_detail_html(markdown: str) -> str:
     title = fields.get("title", "GRC Intelligence Report")
     generated_raw = fields.get("generated", "")
     generated = parse_generated(generated_raw)
-    return f"""<!DOCTYPE html>
+    html = f"""<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8">
@@ -161,6 +261,7 @@ def archive_detail_html(markdown: str) -> str:
   </body>
 </html>
 """
+    return with_archive_detail_chrome(html, generated)
 
 
 def archive_index_html(reports: list[tuple[str, str, str, str]]) -> str:
@@ -175,11 +276,7 @@ def archive_index_html(reports: list[tuple[str, str, str, str]]) -> str:
         parse_generated(generated_at) < DATED_DIGEST_HANDOFF_BOUNDARY
         for _, _, generated_at, _ in reports
     ):
-        boundary_iso = DATED_DIGEST_HANDOFF_BOUNDARY.isoformat().replace("+00:00", "Z")
-        historical_note = f"""      <aside class="archive-note" aria-label="Historical context links">
-        <strong>Historical context note:</strong> Reports published before <time datetime="{boundary_iso}">{escape(display_timestamp(DATED_DIGEST_HANDOFF_BOUNDARY))}</time> retain their publication-era rolling SentryDigest links. Those links may no longer land on the original card; the archived reports remain unchanged.
-      </aside>
-"""
+        historical_note = f"      {historical_context_note()}\n"
     return f"""<!DOCTYPE html>
 <html lang="en">
   <head>
@@ -202,8 +299,12 @@ def archive_index_html(reports: list[tuple[str, str, str, str]]) -> str:
 """
 
 
-def expected_outputs(markdown: str, template: str) -> dict[Path, str]:
-    outputs = {INDEX_HTML: current_index_html(template, markdown)}
+def expected_outputs(
+    markdown: str,
+    template: str,
+    publication_state: dict[str, object] | None = None,
+) -> dict[Path, str]:
+    outputs = {INDEX_HTML: current_index_html(template, markdown, publication_state)}
     reports: list[tuple[str, str, str, str]] = []
     if ARCHIVE_DIR.exists():
         for report_md in sorted(
@@ -219,9 +320,13 @@ def expected_outputs(markdown: str, template: str) -> dict[Path, str]:
                     f"{report_md.relative_to(REPO_ROOT)}"
                 )
             archive_page = report_md.parent / "index.html"
-            # Published archive pages keep the renderer and explanatory copy
-            # they shipped with. Only a newly archived report receives a page.
-            if not archive_page.exists():
+            # The publication-era report body remains byte-for-byte intact.
+            # Existing pages receive only boundary-aware page chrome.
+            if archive_page.exists():
+                outputs[archive_page] = with_archive_detail_chrome(
+                    read_text(archive_page), generated
+                )
+            else:
                 outputs[archive_page] = archive_detail_html(archived_markdown)
             reports.append(
                 (
@@ -262,7 +367,9 @@ def main() -> None:
         archive_manifest.write_text(read_text(EVIDENCE_MANIFEST), encoding="utf-8")
 
     template = read_text(INDEX_HTML)
-    outputs = expected_outputs(markdown, template)
+    manifest_bytes = EVIDENCE_MANIFEST.read_bytes()
+    publication_state = load_publication_state(manifest_bytes)
+    outputs = expected_outputs(markdown, template, publication_state)
     stale = []
     for path, content in outputs.items():
         if path.exists() and path.read_text(encoding="utf-8") == content:

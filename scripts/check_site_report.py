@@ -11,6 +11,7 @@ from urllib.parse import quote, urlparse
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "agent"))
+sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
 from core.reporting_identity import (  # noqa: E402
     ReportingIdentityError,
@@ -20,11 +21,22 @@ from core.reporting_identity import (  # noqa: E402
     sentrydigest_issue_url as build_sentrydigest_issue_url,
     sentrydigest_item_url as build_sentrydigest_item_url,
 )
+from build_site import (  # noqa: E402
+    ARCHIVE_CONTEXT_END,
+    ARCHIVE_CONTEXT_START,
+    DATED_DIGEST_HANDOFF_BOUNDARY,
+)
+from publication_state import (  # noqa: E402
+    PublicationStateError,
+    category_label,
+    validate_publication_state,
+)
 
 SITE_DIR = REPO_ROOT / "site"
 INDEX_HTML = SITE_DIR / "index.html"
 INDEX_MD = SITE_DIR / "index.md"
 EVIDENCE_MANIFEST = SITE_DIR / "evidence-manifest.json"
+PUBLICATION_STATE = SITE_DIR / "publication-state.json"
 SITEMAP_XML = SITE_DIR / "sitemap.xml"
 APP_JS = SITE_DIR / "static" / "app.js"
 RENDERER_JS = SITE_DIR / "static" / "renderer.js"
@@ -895,12 +907,56 @@ def validate_archive_history(archive_dir: Path, archive_html: str) -> None:
             )
         if '<main class="container archive-report">' not in archived_page:
             fail(f"archive {snapshot.name} page is not pre-rendered")
+        if generated < DATED_DIGEST_HANDOFF_BOUNDARY:
+            if (
+                archived_page.count(ARCHIVE_CONTEXT_START) != 1
+                or archived_page.count(ARCHIVE_CONTEXT_END) != 1
+                or "publication-era rolling SentryDigest links" not in archived_page
+                or 'href="../">Read the archive history</a>' not in archived_page
+            ):
+                fail(f"archive {snapshot.name} page is missing historical-link chrome")
+            if archived_page.index(ARCHIVE_CONTEXT_START) > archived_page.index(
+                '<main class="container archive-report">'
+            ):
+                fail(
+                    f"archive {snapshot.name} historical-link note is inside its report body"
+                )
+        elif (
+            ARCHIVE_CONTEXT_START in archived_page
+            or ARCHIVE_CONTEXT_END in archived_page
+        ):
+            fail(
+                f"archive {snapshot.name} page has inapplicable historical-link chrome"
+            )
         if 'class="card report-provenance"' not in archived_page:
             fail(f"archive {snapshot.name} page is missing provenance")
         if 'href="evidence-manifest.json"' not in archived_page:
             fail(f"archive {snapshot.name} page does not link its evidence manifest")
         if f'href="{snapshot.name}/"' not in archive_html:
             fail(f"archive index does not link snapshot {snapshot.name}")
+
+
+def validate_publication_surface(
+    html: str, manifest_bytes: bytes, publication_state_text: str
+) -> None:
+    try:
+        state = json.loads(publication_state_text)
+        validate_publication_state(state, manifest_bytes)
+    except (json.JSONDecodeError, PublicationStateError) as error:
+        fail(f"publication-state.json is invalid: {error}")
+
+    notice_count = html.count('class="publication-notice"')
+    if state["outcome"] == "retained":
+        if notice_count != 1:
+            fail("current page must render one retained-publication notice")
+        if 'href="publication-state.json"' not in html:
+            fail("retained-publication notice does not link its machine-readable state")
+        if category_label(state["refusal_category"]) not in html:
+            fail("retained-publication notice does not name its safe refusal category")
+        if str(state["attempted_at"]) not in html:
+            fail("retained-publication notice does not expose its attempt timestamp")
+    elif notice_count:
+        fail("published report must not render a retained-publication notice")
 
 
 def main() -> None:
@@ -913,6 +969,7 @@ def main() -> None:
     style_css = read_text(STYLE_CSS)
     archive_html = read_text(ARCHIVE_INDEX)
     evidence_manifest_text = read_text(EVIDENCE_MANIFEST)
+    publication_state_text = read_text(PUBLICATION_STATE)
 
     validate_site_identity(html, sitemap_xml)
 
@@ -983,6 +1040,9 @@ def main() -> None:
         metadata,
         evidence_manifest_text,
         require_current_schema=True,
+    )
+    validate_publication_surface(
+        html, EVIDENCE_MANIFEST.read_bytes(), publication_state_text
     )
     forbidden_label = find_public_report_forbidden_label(markdown)
     if forbidden_label:
@@ -1126,6 +1186,8 @@ def main() -> None:
         ".digest-handoff",
         ".manifest-link",
         ".provenance-explanation",
+        ".publication-notice",
+        ".archive-context",
     ):
         if style_contract not in style_css:
             fail(f"style.css is missing provenance style: {style_contract}")
