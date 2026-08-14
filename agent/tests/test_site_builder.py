@@ -4,6 +4,7 @@ import runpy
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 SITE_BUILDER = REPO_ROOT / "scripts" / "build_site.py"
+STYLE_CSS = REPO_ROOT / "site" / "static" / "style.css"
 
 
 def builder_namespace() -> dict:
@@ -60,3 +61,12 @@ Historical publication content.
 
     assert "Historical context note" not in html
     assert "publication-era rolling SentryDigest links" not in html
+
+
+def test_archive_entries_stack_at_the_phone_breakpoint():
+    style = STYLE_CSS.read_text()
+    phone_rules = style.split("@media (max-width: 760px) {", 1)[1].split(
+        "/* Print: report only */", 1
+    )[0]
+
+    assert ".archive-list a { grid-template-columns: 1fr; gap: 4px; }" in phone_rules

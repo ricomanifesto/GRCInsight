@@ -273,6 +273,7 @@ kbd { padding: 1px 5px; border: 1px solid var(--hairline); border-bottom-width: 
   .theme-toggle { grid-column: 1; grid-row: 3; justify-self: start; }
 }
 @media (max-width: 760px) {
+  .archive-list a { grid-template-columns: 1fr; gap: 4px; }
   .table-wrap table { min-width: 560px; }
   .report-meta { grid-template-columns: 1fr; }
   .report-meta-item:nth-child(odd) { border-right: 0; }
