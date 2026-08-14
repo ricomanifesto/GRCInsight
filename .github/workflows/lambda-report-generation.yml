@@ -34,6 +34,13 @@ jobs:
       with:
         fetch-depth: 0
 
+    - name: Verify canonical reporting identity contract
+      run: |
+        curl --fail --silent --show-error \
+          https://raw.githubusercontent.com/ricomanifesto/SentryDigest/main/contracts/reporting-identity-v1.json \
+          --output "$RUNNER_TEMP/reporting-identity-v1.json"
+        cmp contracts/reporting-identity-v1.json "$RUNNER_TEMP/reporting-identity-v1.json"
+
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v6.2.1
       with:
@@ -189,6 +196,9 @@ jobs:
           ANALYSIS_MODE=$(jq -r '.metadata.analysis_mode // empty' report-data.json)
           REQUESTED_MODEL=$(jq -r '.metadata.requested_model // empty' report-data.json)
           RESOLVED_MODEL=$(jq -r '.metadata.resolved_model // empty' report-data.json)
+          SOURCE_HOME_URL=$(jq -r '.metadata.source_home_url // empty' report-data.json)
+          SOURCE_ISSUE_DATE=$(jq -r '.metadata.source_issue_date // empty' report-data.json)
+          SOURCE_ISSUE_URL=$(jq -r '.metadata.source_issue_url // empty' report-data.json)
 
           if [ "$STATUS" = "failed" ]; then
             echo "Report status is 'failed'. Aborting early." >&2
@@ -213,6 +223,18 @@ jobs:
                 exit 1
                 ;;
             esac
+            case "$SOURCE_ISSUE_DATE" in
+              ????-??-??) ;;
+              *)
+                echo "Refusing to publish a report without a feed-owned issue date." >&2
+                exit 1
+                ;;
+            esac
+            EXPECTED_SOURCE_ISSUE_URL="${SOURCE_HOME_URL%/}/archive/${SOURCE_ISSUE_DATE}/"
+            if [ "$SOURCE_ISSUE_URL" != "$EXPECTED_SOURCE_ISSUE_URL" ]; then
+              echo "Refusing to publish a report with mismatched digest issue provenance." >&2
+              exit 1
+            fi
             echo "Report completed. Building site files..."
 
             CONTENT_LEN=$(printf %s "$CONTENT" | wc -c | tr -d ' ')

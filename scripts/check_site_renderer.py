@@ -109,7 +109,7 @@ assert(serializedIdentityHtml.includes({json.dumps(identity_title + "</a>")}), '
 
 // A complete report keeps provenance and section cards in the canonical
 // renderer so build-time HTML and browser rendering are identical.
-const reportDocument = '# GRC Intelligence Report - 2026-08-13\\n**Generated:** 2026-08-13T13:00:00Z\\n**Date of Issue:** August 2026\\n**Source:** [SentryDigest](https://example.com/feed.xml)\\n**Articles Analyzed:** 30\\n**Authoring Model:** google/example-model\\n**Requested Route:** openrouter/openrouter/free\\n**Analysis Mode:** Model-backed\\n\\n---   \\n\\n## Executive Summary\\nCareful analysis.\\n\\n---\\n\\n## Source Highlights\\n- [Evidence](https://example.com/evidence) · [View in SentryDigest](https://digest.example/#reporting-123456789abc)';
+const reportDocument = '# GRC Intelligence Report - 2026-08-13\\n**Generated:** 2026-08-13T13:00:00Z\\n**Date of Issue:** August 2026\\n**Source:** [SentryDigest](https://example.com/feed.xml)\\n**Source Issue:** [SentryDigest 2026-08-13](https://digest.example/archive/2026-08-13/)\\n**Articles Analyzed:** 30\\n**Authoring Model:** google/example-model\\n**Requested Route:** openrouter/openrouter/free\\n**Analysis Mode:** Model-backed\\n\\n---   \\n\\n## Executive Summary\\nCareful analysis.\\n\\n---\\n\\n## Source Highlights\\n- [Evidence](https://example.com/evidence) · [View in SentryDigest](https://digest.example/archive/2026-08-13/#reporting-123456789abc)';
 const parsedReport = renderer.parseReportDocument(reportDocument);
 assert(parsedReport.title === 'GRC Intelligence Report - 2026-08-13', 'report title should be parsed from h1');
 assert(parsedReport.metadata.generated === '2026-08-13T13:00:00Z', 'Generated metadata should be preserved');
@@ -117,12 +117,16 @@ assert(parsedReport.metadata['articles analyzed'] === '30', 'article-count prove
 const reportHtml = renderer.renderReportDocument(reportDocument);
 assert(reportHtml.includes('<section class="card report-provenance"><h2>About this report</h2>'), 'report provenance should render as a card');
 assert(reportHtml.includes('<dt>Source</dt><dd><a href="https://example.com/feed.xml"'), 'source provenance should keep its safe link');
+assert(reportHtml.includes('<dt>Source issue</dt><dd><a href="https://digest.example/archive/2026-08-13/"'), 'dated source issue should remain discoverable');
 assert(reportHtml.includes('<dt>Authoring model</dt><dd>google/example-model</dd>'), 'resolved authoring-model provenance should be visible');
 assert(reportHtml.includes('<dt>Requested route</dt><dd>openrouter/openrouter/free</dd>'), 'requested model route should remain distinct');
 assert(reportHtml.includes('<a class="manifest-link" href="evidence-manifest.json"'), 'provenance should expose the machine-readable evidence manifest');
-assert(reportHtml.includes('<a class="digest-handoff" href="https://digest.example/#reporting-123456789abc"'), 'source highlights should expose the SentryDigest item handoff');
+assert(reportHtml.includes('<p class="provenance-explanation">The requested route is the OpenRouter routing alias selected for the run;'), 'reader should understand an alias-routed model distinction');
+assert(reportHtml.includes('<a class="digest-handoff" href="https://digest.example/archive/2026-08-13/#reporting-123456789abc"'), 'source highlights should expose the dated SentryDigest item handoff');
 assert((reportHtml.match(/<section class="card">/g) || []).length === 2, 'each report section should render as a card');
 assert(!reportHtml.includes('<hr>') && !reportHtml.includes('---'), 'section separators should not survive in report cards');
+const pinnedRouteHtml = renderer.renderReportDocument(reportDocument.replace('openrouter/openrouter/free', 'openrouter/nvidia/nemotron-3-ultra-550b-a55b:free'));
+assert(pinnedRouteHtml.includes('The requested route is the OpenRouter model route configured for the run;'), 'reader should understand a specifically configured model route');
 const querySourceReport = reportDocument.replace('https://example.com/feed.xml', 'https://example.com/feed?a=1&b=2');
 const querySourceHtml = renderer.renderReportDocument(querySourceReport);
 assert(querySourceHtml.includes('href="https://example.com/feed?a=1&amp;b=2"'), 'provenance links should preserve query parameter separators');

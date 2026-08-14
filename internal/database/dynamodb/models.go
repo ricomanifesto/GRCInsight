@@ -27,6 +27,8 @@ type ReportMetadata struct {
 	SourceName           string           `dynamodbav:"source_name,omitempty" json:"source_name,omitempty"`
 	SourceURL            string           `dynamodbav:"source_url,omitempty" json:"source_url,omitempty"`
 	SourceHomeURL        string           `dynamodbav:"source_home_url,omitempty" json:"source_home_url,omitempty"`
+	SourceIssueDate      string           `dynamodbav:"source_issue_date,omitempty" json:"source_issue_date,omitempty"`
+	SourceIssueURL       string           `dynamodbav:"source_issue_url,omitempty" json:"source_issue_url,omitempty"`
 	AnalysisPeriod       string           `dynamodbav:"analysis_period,omitempty" json:"analysis_period,omitempty"`
 	RequestedModel       string           `dynamodbav:"requested_model,omitempty" json:"requested_model,omitempty"`
 	ResolvedModel        string           `dynamodbav:"resolved_model,omitempty" json:"resolved_model,omitempty"`

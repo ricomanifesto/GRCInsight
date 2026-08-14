@@ -8,6 +8,18 @@ on:
     branches: [ main, master ]
 
 jobs:
+  reporting-identity:
+    name: Reporting Identity Contract
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: Verify canonical SentryDigest contract
+        run: |
+          curl --fail --silent --show-error \
+            https://raw.githubusercontent.com/ricomanifesto/SentryDigest/main/contracts/reporting-identity-v1.json \
+            --output "$RUNNER_TEMP/reporting-identity-v1.json"
+          cmp contracts/reporting-identity-v1.json "$RUNNER_TEMP/reporting-identity-v1.json"
+
   go:
     name: Go Tests
     runs-on: ubuntu-latest

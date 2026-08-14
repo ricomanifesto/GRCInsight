@@ -284,6 +284,7 @@
     'date of issue': 'Date of issue',
     'analysis period': 'Analysis period',
     'source': 'Source',
+    'source issue': 'Source issue',
     'total articles analyzed': 'Articles analyzed',
     'articles analyzed': 'Articles analyzed',
     'grc-relevant articles': 'GRC-relevant articles',
@@ -298,6 +299,7 @@
     'date of issue',
     'analysis period',
     'source',
+    'source issue',
     'articles analyzed',
     'grc-relevant articles',
     'authoring model',
@@ -349,8 +351,16 @@
       .map(key => `<div class="report-meta-item"><dt>${metadataLabels[key]}</dt><dd>${renderInlineMarkdown(metadata[key])}</dd></div>`)
       .join('');
     const manifestItem = '<div class="report-meta-item report-meta-evidence"><dt>Evidence manifest</dt><dd><a class="manifest-link" href="evidence-manifest.json" target="_blank" rel="noopener">Machine-readable JSON</a></dd></div>';
+    const requestedRoute = String(metadata['requested route'] || '').trim().toLowerCase();
+    const routedByAlias = /(?:^|\/)openrouter\/(?:free|auto)$/.test(requestedRoute);
+    const routeMeaning = routedByAlias
+      ? 'routing alias selected for the run'
+      : 'model route configured for the run';
+    const modelExplanation = requestedRoute && metadata['authoring model']
+      ? `<p class="provenance-explanation">The requested route is the OpenRouter ${routeMeaning}; the authoring model is the upstream model attested with the completed report.</p>`
+      : '';
     if (!metadataItems) return '';
-    return `<section class="card report-provenance"><h2>About this report</h2><dl class="report-meta">${metadataItems}${manifestItem}</dl></section>`;
+    return `<section class="card report-provenance"><h2>About this report</h2><dl class="report-meta">${metadataItems}${manifestItem}</dl>${modelExplanation}</section>`;
   }
 
   function renderReportSections(markdown) {

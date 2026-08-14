@@ -4,11 +4,14 @@
 from __future__ import annotations
 
 import argparse
+from datetime import datetime
 import hashlib
+import ipaddress
 import json
 from pathlib import Path
 import re
-from urllib.parse import quote, urlparse, urlunparse
+import unicodedata
+from urllib.parse import quote, unquote_to_bytes, urlparse, urlsplit
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 INDEX_MD = REPO_ROOT / "site" / "index.md"
@@ -66,43 +69,123 @@ def model_identity(value: object, field: str) -> str:
     return identity
 
 
+def dot_segment(value: str) -> str | None:
+    folded = value.casefold()
+    if folded in {".", "%2e"}:
+        return "."
+    if folded in {"..", ".%2e", "%2e.", "%2e%2e"}:
+        return ".."
+    return None
+
+
+def normalize_reporting_path(value: str) -> str:
+    path = value or "/"
+    output: list[str] = []
+    for index, segment in enumerate(path.split("/")):
+        kind = dot_segment(segment)
+        if kind == ".":
+            continue
+        if kind == "..":
+            if output and not (len(output) == 1 and output[0] == ""):
+                output.pop()
+            continue
+        if index == 0 and path.startswith("/"):
+            output.append("")
+        elif index > 0 or segment:
+            output.append(segment)
+    normalized = "/".join(output) or "/"
+    if path.startswith("/") and not normalized.startswith("/"):
+        normalized = f"/{normalized}"
+    if dot_segment(path.rsplit("/", 1)[-1]) and not normalized.endswith("/"):
+        normalized += "/"
+    return quote(normalized, safe="/!$&'()*+,-.:;=@_~%")
+
+
+def normalize_special_url_slashes(value: str) -> str:
+    boundary = min(
+        (position for marker in ("?", "#") if (position := value.find(marker)) >= 0),
+        default=len(value),
+    )
+    return value[:boundary].replace("\\", "/") + value[boundary:]
+
+
+def idna_hostname(value: str) -> str:
+    labels: list[str] = []
+    for label in unicodedata.normalize("NFC", value).split("."):
+        lowered = label.lower()
+        if not lowered or lowered.isascii():
+            labels.append(lowered)
+        else:
+            labels.append(f"xn--{lowered.encode('punycode').decode('ascii')}")
+    return ".".join(labels)
+
+
 def canonical_public_url(value: object, field: str) -> str:
-    raw_url = single_line(value, field)
-    parsed = urlparse(raw_url)
+    raw_url = normalize_special_url_slashes(str(value or "").strip())
+    if not raw_url:
+        fail(f"missing {field}")
+    parsed = urlsplit(raw_url)
     if (
         parsed.scheme.lower() not in {"http", "https"}
         or not parsed.netloc
-        or parsed.username is not None
-        or parsed.password is not None
-        or re.search(r"\s", raw_url)
+        or parsed.username
+        or parsed.password
     ):
         fail(f"{field} must be a credential-free HTTP URL")
-    hostname = (parsed.hostname or "").encode("idna").decode("ascii").lower()
-    if not hostname:
+    raw_hostname = parsed.hostname or ""
+    if not raw_hostname or re.search(r"[\x00-\x20\x7f]", raw_hostname):
         fail(f"{field} must include a hostname")
-    port = parsed.port
+    try:
+        address = ipaddress.ip_address(raw_hostname)
+    except ValueError:
+        try:
+            if re.search(r"%(?![0-9a-fA-F]{2})", raw_hostname):
+                raise ValueError("malformed hostname percent escape")
+            decoded_hostname = unquote_to_bytes(raw_hostname).decode("utf-8")
+            if re.search(r"[\x00-\x20\x7f#/:<>?@\[\\\]^|]", decoded_hostname):
+                raise ValueError("forbidden hostname code point")
+            hostname = idna_hostname(decoded_hostname)
+        except (UnicodeError, ValueError):
+            fail(f"{field} must include a valid hostname")
+    else:
+        hostname = (
+            f"[{address.compressed}]" if address.version == 6 else address.compressed
+        )
+    try:
+        port = parsed.port
+    except ValueError:
+        fail(f"{field} contains an invalid port")
     if port is not None and not (
         (parsed.scheme.lower() == "http" and port == 80)
         or (parsed.scheme.lower() == "https" and port == 443)
     ):
         hostname = f"{hostname}:{port}"
-    return urlunparse(
-        (
-            parsed.scheme.lower(),
-            hostname,
-            parsed.path or "/",
-            parsed.params,
-            parsed.query,
-            "",
-        )
-    )
+    path = normalize_reporting_path(parsed.path)
+    query = quote(parsed.query, safe="!$&()*+,-./:;=?@_~%")
+    before_fragment = raw_url.split("#", 1)[0]
+    query_suffix = f"?{query}" if parsed.query or "?" in before_fragment else ""
+    return f"{parsed.scheme.lower()}://{hostname}{path}{query_suffix}"
 
 
-def sentrydigest_item_url(feed_home_url: object, article_url: object) -> str:
+def sentrydigest_issue_url(feed_home_url: object, issue_date: object) -> str:
     feed_home = canonical_public_url(feed_home_url, "metadata.source_home_url")
+    if urlparse(feed_home).query:
+        fail("metadata.source_home_url must not include a query")
+    raw_date = single_line(issue_date, "metadata.source_issue_date")
+    try:
+        canonical_date = datetime.strptime(raw_date, "%Y-%m-%d").date().isoformat()
+    except ValueError:
+        fail("metadata.source_issue_date must use YYYY-MM-DD")
+    return f"{feed_home.rstrip('/')}/archive/{canonical_date}/"
+
+
+def sentrydigest_item_url(
+    feed_home_url: object, issue_date: object, article_url: object
+) -> str:
+    issue_url = sentrydigest_issue_url(feed_home_url, issue_date)
     article = canonical_public_url(article_url, "source article URL")
     fragment = hashlib.sha256(article.encode("utf-8")).hexdigest()[:12]
-    return f"{feed_home}#reporting-{fragment}"
+    return f"{issue_url}#reporting-{fragment}"
 
 
 def integer(value: object, field: str) -> int:
@@ -408,6 +491,17 @@ def source_articles(metadata: dict) -> list[dict[str, object]]:
     raw_sources = metadata.get("source_articles")
     if not isinstance(raw_sources, list) or not raw_sources:
         fail("metadata.source_articles must contain the analyzed source evidence")
+    issue_date = single_line(
+        metadata.get("source_issue_date"), "metadata.source_issue_date"
+    )
+    expected_issue_url = sentrydigest_issue_url(
+        metadata.get("source_home_url"), issue_date
+    )
+    actual_issue_url = http_url(
+        metadata.get("source_issue_url"), "metadata.source_issue_url"
+    )
+    if actual_issue_url != expected_issue_url:
+        fail("metadata.source_issue_url does not match the feed-owned issue date")
     sources: list[dict[str, object]] = []
     seen_urls: set[str] = set()
     for index, raw_source in enumerate(raw_sources):
@@ -426,7 +520,7 @@ def source_articles(metadata: dict) -> list[dict[str, object]]:
         )
         url = http_url(raw_url, f"metadata.source_articles[{index}].url")
         expected_digest_url = http_url(
-            sentrydigest_item_url(metadata.get("source_home_url"), raw_url),
+            sentrydigest_item_url(metadata.get("source_home_url"), issue_date, raw_url),
             f"metadata.source_articles[{index}].digest_url",
         )
         raw_digest_url = str(raw_source.get("digest_url") or "").strip()
@@ -558,11 +652,17 @@ def validate_evidence_links(body: str, sources: list[dict[str, object]]) -> None
 def evidence_manifest(data: dict, sources: list[dict[str, object]]) -> dict:
     metadata = data.get("metadata") or {}
     return {
-        "schema_version": 2,
+        "schema_version": 3,
         "generated_at": single_line(data.get("generated_at"), "generated_at"),
         "feed_url": http_url(metadata.get("source_url"), "metadata.source_url"),
         "feed_home_url": http_url(
             metadata.get("source_home_url"), "metadata.source_home_url"
+        ),
+        "digest_issue_date": single_line(
+            metadata.get("source_issue_date"), "metadata.source_issue_date"
+        ),
+        "digest_issue_url": http_url(
+            metadata.get("source_issue_url"), "metadata.source_issue_url"
         ),
         "requested_model": model_identity(
             metadata.get("requested_model"), "metadata.requested_model"
@@ -588,6 +688,12 @@ def compose_report(data: dict, expected_feed_url: str, expected_model: str) -> s
         metadata.get("source_name"), "metadata.source_name"
     )
     source_url = http_url(metadata.get("source_url"), "metadata.source_url")
+    source_issue_date = single_line(
+        metadata.get("source_issue_date"), "metadata.source_issue_date"
+    )
+    source_issue_url = http_url(
+        metadata.get("source_issue_url"), "metadata.source_issue_url"
+    )
     analysis_period = single_line(
         metadata.get("analysis_period"), "metadata.analysis_period"
     )
@@ -645,6 +751,7 @@ def compose_report(data: dict, expected_feed_url: str, expected_model: str) -> s
             f"**Date of Issue:** {month_name} {year}",
             f"**Analysis Period:** {analysis_period}",
             f"**Source:** [{source_name}]({source_url})",
+            f"**Source Issue:** [SentryDigest {source_issue_date}]({source_issue_url})",
             f"**Articles Analyzed:** {article_count}",
             f"**GRC-Relevant Articles:** {grc_article_count}",
             f"**Authoring Model:** {resolved_model}",

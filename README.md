@@ -28,7 +28,7 @@ Generated reports can include:
 
 ## Relationship to SentryDigest
 
-GRCInsight can be triggered by updates from [SentryDigest](https://github.com/ricomanifesto/SentryDigest), using security-news updates as one input for GRC-focused analysis.
+GRCInsight can be triggered by updates from [SentryDigest](https://github.com/ricomanifesto/SentryDigest), using security-news updates as one input for GRC-focused analysis. Each published source handoff targets the dated SentryDigest issue identified by the feed's UTC build timestamp, so an immutable GRC report never depends on the rolling digest page. Reporting-card fragments are checked against a byte-identical copy of SentryDigest's versioned `contracts/reporting-identity-v1.json` contract.
 
 ## Architecture
 
@@ -86,8 +86,8 @@ make check
   fails closed when that resolved model identity is absent or remains a router
   alias.
 - Every published report exposes `evidence-manifest.json`, including the feed,
-  resolved model, exact source title/URL pairs, CVE coverage, and stable links
-  to the corresponding SentryDigest items.
+  resolved model, feed-owned digest issue, exact source title/URL pairs, CVE
+  coverage, and stable links to the corresponding dated SentryDigest items.
 - `.github/workflows/lambda-report-generation.yml` refuses fallback output,
   composes report-owned provenance into `site/index.md`, preserves a dated
   archive snapshot, pre-renders the current/archive pages, validates the result,

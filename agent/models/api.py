@@ -100,6 +100,8 @@ class ReportMetadata(BaseModel):
     source_name: str = ""
     source_url: str = ""
     source_home_url: str = ""
+    source_issue_date: str = ""
+    source_issue_url: str = ""
     analysis_period: str = ""
     requested_model: str = ""
     resolved_model: str = ""

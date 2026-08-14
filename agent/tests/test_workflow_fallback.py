@@ -37,6 +37,7 @@ def test_run_grc_analysis_endpoint_falls_back_when_model_is_unavailable(monkeypa
         return {
             "title": "Test Feed",
             "link": "https://digest.example/",
+            "last_updated": "Thu, 20 Mar 2026 01:00:00 GMT",
             "entries": [
                 {
                     "title": "CISA orders vendors to strengthen compliance controls",
@@ -98,6 +99,7 @@ def test_run_grc_analysis_endpoint_marks_model_backed_reports(monkeypatch):
         return {
             "title": "",
             "link": "https://digest.example/",
+            "last_updated": "Thu, 20 Mar 2026 01:00:00 GMT",
             "entries": [
                 {
                     "title": "NIST publishes new control guidance",
@@ -156,11 +158,13 @@ def test_run_grc_analysis_endpoint_marks_model_backed_reports(monkeypatch):
     assert response.metadata.fallback_reason is None
     assert response.metadata.source_name == "Unknown Feed"
     assert response.metadata.source_url == "https://example.com/feed.xml"
+    assert response.metadata.source_issue_date == "2026-03-20"
+    assert response.metadata.source_issue_url == ("https://digest.example/archive/2026-03-20/")
     assert response.metadata.analysis_period
     assert response.metadata.requested_model == "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free"
     assert response.metadata.resolved_model == "google/example-model"
     digest_url = workflow_mod._sentrydigest_item_url(
-        "https://digest.example/", "https://example.com/nist"
+        "https://digest.example/", "2026-03-20", "https://example.com/nist"
     )
     assert response.metadata.source_articles == [
         {
@@ -177,6 +181,7 @@ def test_run_grc_analysis_endpoint_rejects_router_alias_as_authorship(monkeypatc
         return {
             "title": "Test Feed",
             "link": "https://digest.example/",
+            "last_updated": "Thu, 20 Mar 2026 01:00:00 GMT",
             "entries": [
                 {
                     "title": "NIST publishes new control guidance",
@@ -237,6 +242,7 @@ def test_run_grc_analysis_endpoint_skips_entries_without_linked_evidence(monkeyp
         return {
             "title": "Test Feed",
             "link": "https://digest.example/",
+            "last_updated": "Thu, 20 Mar 2026 01:00:00 GMT",
             "entries": [
                 {"title": "Linkless item", "link": "", "content": "Cannot cite this."},
                 {
@@ -303,7 +309,9 @@ def test_run_grc_analysis_endpoint_skips_entries_without_linked_evidence(monkeyp
             "title": "Linked item",
             "url": "https://example.com/linked",
             "digest_url": workflow_mod._sentrydigest_item_url(
-                "https://digest.example/", "https://example.com/linked"
+                "https://digest.example/",
+                "2026-03-20",
+                "https://example.com/linked",
             ),
             "cves": ["CVE-2026-12345"],
         }
@@ -326,6 +334,7 @@ def test_run_grc_analysis_endpoint_passes_request_model_config(monkeypatch):
         return {
             "title": "Test Feed",
             "link": "https://digest.example/",
+            "last_updated": "Thu, 20 Mar 2026 01:00:00 GMT",
             "entries": [
                 {
                     "title": "SEC updates cyber disclosure expectations",

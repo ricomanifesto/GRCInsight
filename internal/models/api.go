@@ -112,6 +112,8 @@ type Metadata struct {
 	SourceName           string           `json:"source_name,omitempty"`
 	SourceURL            string           `json:"source_url,omitempty"`
 	SourceHomeURL        string           `json:"source_home_url,omitempty"`
+	SourceIssueDate      string           `json:"source_issue_date,omitempty"`
+	SourceIssueURL       string           `json:"source_issue_url,omitempty"`
 	AnalysisPeriod       string           `json:"analysis_period,omitempty"`
 	RequestedModel       string           `json:"requested_model,omitempty"`
 	ResolvedModel        string           `json:"resolved_model,omitempty"`

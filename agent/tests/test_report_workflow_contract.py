@@ -1,5 +1,6 @@
 import asyncio
 from datetime import datetime, timezone
+import hashlib
 import json
 from pathlib import Path
 import runpy
@@ -20,6 +21,7 @@ CI_WORKFLOW = REPO_ROOT / ".github" / "workflows" / "ci.yml"
 SITE_REPORT_CHECK = REPO_ROOT / "scripts" / "check_site_report.py"
 SITE_REPORT_COMPOSER = REPO_ROOT / "scripts" / "compose_site_report.py"
 SITE_BUILDER = REPO_ROOT / "scripts" / "build_site.py"
+REPORTING_IDENTITY_CONTRACT = REPO_ROOT / "contracts" / "reporting-identity-v1.json"
 MODEL_SERVICE = REPO_ROOT / "agent" / "services" / "model_service.py"
 RENDERER_JS = REPO_ROOT / "site" / "static" / "renderer.js"
 WORKFLOWS = (CI_WORKFLOW, DEPLOY_WORKFLOW, DEPLOY_SITE_WORKFLOW, REPORT_WORKFLOW)
@@ -51,6 +53,16 @@ def test_report_generation_workflow_accepts_repository_dispatch_payloads():
 
     assert "repository_dispatch:" in workflow
     assert "github.event.client_payload.feed_url" in workflow
+
+
+def test_release_workflows_verify_the_canonical_reporting_identity_contract():
+    canonical_contract = (
+        "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/"
+        "main/contracts/reporting-identity-v1.json"
+    )
+
+    for workflow_path in WORKFLOWS:
+        assert canonical_contract in workflow_path.read_text(), workflow_path.name
 
 
 def test_static_site_deploys_main_branch_site_changes():
@@ -354,8 +366,75 @@ def test_sentrydigest_item_identity_matches_the_public_reporting_contract():
     )
 
     assert workflow_mod._sentrydigest_item_url(
-        "https://ricomanifesto.github.io/SentryDigest/", article_url
-    ) == ("https://ricomanifesto.github.io/SentryDigest/" "#reporting-dace2be75c67")
+        "https://ricomanifesto.github.io/SentryDigest/",
+        "2026-08-13",
+        article_url,
+    ) == (
+        "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-13/" "#reporting-dace2be75c67"
+    )
+
+
+def test_all_grc_reporting_identities_satisfy_versioned_contract():
+    contract = json.loads(REPORTING_IDENTITY_CONTRACT.read_text())
+    composer = runpy.run_path(str(SITE_REPORT_COMPOSER))
+    checker = runpy.run_path(str(SITE_REPORT_CHECK))
+    normalizers = (
+        workflow_mod._canonical_public_url,
+        composer["canonical_public_url"],
+        checker["canonical_public_url"],
+    )
+    item_urls = (
+        workflow_mod._sentrydigest_item_url,
+        composer["sentrydigest_item_url"],
+        checker["sentrydigest_item_url"],
+    )
+
+    assert contract["schema_version"] == 1
+    assert contract["contract"] == "sentry-reporting-identity"
+    assert contract["contract_version"] == 1
+    assert hashlib.sha256(REPORTING_IDENTITY_CONTRACT.read_bytes()).hexdigest() == (
+        "16c52db11b981aba115f4a1a127458def99b809c3e768028bebb66b880e33671"
+    )
+    for example in contract["accepted"]:
+        for normalize in normalizers:
+            assert normalize(example["input"], example["name"]) == example["normalized"]
+        for item_url in item_urls:
+            assert item_url(
+                "https://ricomanifesto.github.io/SentryDigest/",
+                "2026-08-13",
+                example["input"],
+            ) == (
+                "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-13/"
+                f"#{example['reporting_fragment']}"
+            )
+
+    for example in contract["rejected"]:
+        for normalize in normalizers:
+            try:
+                normalize(example["input"], example["name"])
+            except (SystemExit, ValueError):
+                pass
+            else:
+                raise AssertionError(f"{normalize.__module__} accepted {example['name']}")
+
+
+def test_sentrydigest_issue_date_is_owned_by_timezone_aware_feed_metadata():
+    assert (
+        workflow_mod._sentrydigest_issue_date({"last_updated": "Thu, 13 Aug 2026 22:42:08 GMT"})
+        == "2026-08-13"
+    )
+    assert (
+        workflow_mod._sentrydigest_issue_date({"last_updated": "2026-08-14T00:30:00+02:00"})
+        == "2026-08-13"
+    )
+
+    for invalid in ("", "2026-08-13T22:42:08"):
+        try:
+            workflow_mod._sentrydigest_issue_date({"last_updated": invalid})
+        except ValueError:
+            pass
+        else:
+            raise AssertionError("feed issue date accepted missing timezone evidence")
 
 
 def test_source_evidence_bounds_persisted_cves_to_prompt_limit():
@@ -505,6 +584,17 @@ def test_report_generation_workflow_requires_resolved_model_provenance():
     assert "Refusing to publish a report without an upstream resolved model" in workflow
 
 
+def test_report_generation_workflow_requires_feed_owned_issue_provenance():
+    workflow = REPORT_WORKFLOW.read_text()
+
+    assert ".metadata.source_issue_date // empty" in workflow
+    assert ".metadata.source_issue_url // empty" in workflow
+    assert (
+        'EXPECTED_SOURCE_ISSUE_URL="${SOURCE_HOME_URL%/}/archive/${SOURCE_ISSUE_DATE}/"' in workflow
+    )
+    assert "Refusing to publish a report with mismatched digest issue provenance" in workflow
+
+
 def test_report_generation_workflow_uses_deterministic_report_composer():
     workflow = REPORT_WORKFLOW.read_text()
 
@@ -563,6 +653,8 @@ def test_site_report_composer_owns_public_provenance_and_body_shape():
                 "source_name": "SentryDigest",
                 "source_url": "https://example.com/feed.xml",
                 "source_home_url": "https://digest.example/",
+                "source_issue_date": "2026-08-13",
+                "source_issue_url": "https://digest.example/archive/2026-08-13/",
                 "source_articles": [
                     {"title": "Linkless item", "url": ""},
                     {"title": "Evidence", "url": "https://example.com/evidence"},
@@ -586,7 +678,13 @@ def test_site_report_composer_owns_public_provenance_and_body_shape():
     assert "**Authoring Model:** google/example-model" in report
     assert "**Requested Route:** openrouter/example/model" in report
     assert "**Analysis Mode:** Model-backed" in report
-    assert "[View in SentryDigest](https://digest.example/#reporting-" in report
+    assert (
+        "[View in SentryDigest]" "(https://digest.example/archive/2026-08-13/#reporting-" in report
+    )
+    assert (
+        "**Source Issue:** [SentryDigest 2026-08-13]"
+        "(https://digest.example/archive/2026-08-13/)" in report
+    )
     assert "## Executive Summary" in report
     assert "## Source Highlights" in report
     assert "\n---\n" not in report
@@ -649,6 +747,13 @@ def test_site_builder_gives_same_day_reports_unique_archive_keys():
     assert archive_slug(morning) != archive_slug(rerun)
 
 
+def test_site_builder_preserves_published_archive_pages():
+    builder = SITE_BUILDER.read_text()
+
+    assert "if not archive_page.exists():" in builder
+    assert "outputs[archive_page] = archive_detail_html(archived_markdown)" in builder
+
+
 def test_site_report_check_validates_every_archive_manifest(tmp_path):
     namespace = runpy.run_path(str(SITE_REPORT_CHECK))
     validate_archive_history = namespace["validate_archive_history"]
@@ -706,6 +811,8 @@ def test_site_report_composer_rejects_provenance_mismatch():
             "source_name": "SentryDigest",
             "source_url": "https://example.com/feed.xml",
             "source_home_url": "https://digest.example/",
+            "source_issue_date": "2026-08-13",
+            "source_issue_url": "https://digest.example/archive/2026-08-13/",
             "source_articles": [{"title": "Evidence", "url": "https://example.com/evidence"}],
             "analysis_period": "August 2026",
             "article_count": 1,
@@ -743,6 +850,8 @@ def test_site_report_composer_normalizes_numbered_markdown_headings_and_feed_url
                 "source_name": "SentryDigest\\",
                 "source_url": feed_url,
                 "source_home_url": "https://digest.example/",
+                "source_issue_date": "2026-08-13",
+                "source_issue_url": "https://digest.example/archive/2026-08-13/",
                 "source_articles": [{"title": "Evidence", "url": "https://example.com/evidence"}],
                 "analysis_period": "August 2026",
                 "article_count": 1,
@@ -778,6 +887,8 @@ def test_site_report_composer_rejects_evidence_urls_absent_from_source_articles(
             "source_name": "SentryDigest",
             "source_url": "https://example.com/feed.xml",
             "source_home_url": "https://digest.example/",
+            "source_issue_date": "2026-08-13",
+            "source_issue_url": "https://digest.example/archive/2026-08-13/",
             "source_articles": [{"title": "Real evidence", "url": "https://example.com/real"}],
             "analysis_period": "August 2026",
             "article_count": 1,
@@ -814,6 +925,8 @@ def test_site_report_composer_decodes_escaped_evidence_url_delimiters():
                 "source_name": "SentryDigest",
                 "source_url": "https://example.com/feed.xml",
                 "source_home_url": "https://digest.example/",
+                "source_issue_date": "2026-08-13",
+                "source_issue_url": "https://digest.example/archive/2026-08-13/",
                 "source_articles": [{"title": "Evidence", "url": evidence_url}],
                 "analysis_period": "August 2026",
                 "article_count": 1,
@@ -858,6 +971,8 @@ def test_site_report_composer_accepts_serialized_source_link_identity():
                 "source_name": "SentryDigest",
                 "source_url": "https://example.com/feed.xml",
                 "source_home_url": "https://digest.example/",
+                "source_issue_date": "2026-08-13",
+                "source_issue_url": "https://digest.example/archive/2026-08-13/",
                 "source_articles": [{"title": title, "url": source_url}],
                 "analysis_period": "August 2026",
                 "article_count": 1,
@@ -889,6 +1004,8 @@ def test_site_report_composer_canonicalizes_title_for_real_evidence_url():
             "source_name": "SentryDigest",
             "source_url": "https://example.com/feed.xml",
             "source_home_url": "https://digest.example/",
+            "source_issue_date": "2026-08-13",
+            "source_issue_url": "https://digest.example/archive/2026-08-13/",
             "source_articles": [
                 {"title": "Neutral advisory", "url": "https://example.com/neutral"}
             ],
@@ -925,6 +1042,8 @@ def test_site_report_composer_canonicalizes_url_for_exact_evidence_title():
             "source_name": "SentryDigest",
             "source_url": "https://example.com/feed.xml",
             "source_home_url": "https://digest.example/",
+            "source_issue_date": "2026-08-13",
+            "source_issue_url": "https://digest.example/archive/2026-08-13/",
             "source_articles": [{"title": title, "url": trusted_url}],
             "analysis_period": "August 2026",
             "article_count": 1,
@@ -956,6 +1075,8 @@ def test_site_report_composer_rejects_cross_wired_source_identities():
             "source_name": "SentryDigest",
             "source_url": "https://example.com/feed.xml",
             "source_home_url": "https://digest.example/",
+            "source_issue_date": "2026-08-13",
+            "source_issue_url": "https://digest.example/archive/2026-08-13/",
             "source_articles": [
                 {"title": "Source A", "url": "https://example.com/a"},
                 {"title": "Source B", "url": "https://example.com/b"},
@@ -994,6 +1115,8 @@ def test_site_report_composer_expands_unique_ellipsized_source_reference():
             "source_name": "SentryDigest",
             "source_url": "https://example.com/feed.xml",
             "source_home_url": "https://digest.example/",
+            "source_issue_date": "2026-08-13",
+            "source_issue_url": "https://digest.example/archive/2026-08-13/",
             "source_articles": [{"title": title, "url": source_url}],
             "analysis_period": "August 2026",
             "article_count": 1,
@@ -1045,6 +1168,8 @@ def test_site_report_composer_expands_parenthesized_source_ordinal():
             "source_name": "SentryDigest",
             "source_url": "https://example.com/feed.xml",
             "source_home_url": "https://digest.example/",
+            "source_issue_date": "2026-08-13",
+            "source_issue_url": "https://digest.example/archive/2026-08-13/",
             "source_articles": [{"title": title, "url": source_url}],
             "analysis_period": "August 2026",
             "article_count": 1,
@@ -1087,6 +1212,8 @@ def test_site_report_composer_adds_links_for_supported_unlinked_cves():
             "source_name": "SentryDigest",
             "source_url": "https://example.com/feed.xml",
             "source_home_url": "https://digest.example/",
+            "source_issue_date": "2026-08-13",
+            "source_issue_url": "https://digest.example/archive/2026-08-13/",
             "source_articles": [
                 {
                     "title": source_title,
@@ -1126,6 +1253,8 @@ def test_site_report_composer_rejects_cve_absent_from_linked_source():
             "source_name": "SentryDigest",
             "source_url": "https://example.com/feed.xml",
             "source_home_url": "https://digest.example/",
+            "source_issue_date": "2026-08-13",
+            "source_issue_url": "https://digest.example/archive/2026-08-13/",
             "source_articles": [
                 {
                     "title": "Different advisory",
@@ -1244,11 +1373,80 @@ def test_evidence_manifest_normalizes_parenthesized_urls():
     validate_manifest(escaped_markdown, metadata, json.dumps(escaped_manifest))
 
 
-def test_evidence_manifest_v2_attests_model_and_digest_item_identity():
+def test_evidence_manifest_v3_attests_model_and_dated_digest_item_identity():
     namespace = runpy.run_path(str(SITE_REPORT_CHECK))
     validate_manifest = namespace["validate_evidence_manifest"]
     source_url = "https://example.com/advisory"
-    digest_url = namespace["sentrydigest_item_url"]("https://digest.example/", source_url)
+    digest_url = namespace["sentrydigest_item_url"](
+        "https://digest.example/", "2026-08-13", source_url
+    )
+    markdown = (
+        "# Report\n"
+        "**Generated:** 2026-08-13T13:00:00Z\n"
+        "**Source:** [Feed](https://example.com/feed.xml)\n"
+        "**Source Issue:** [SentryDigest 2026-08-13]"
+        "(https://digest.example/archive/2026-08-13/)\n"
+        "**Authoring Model:** google/example-model\n"
+        "**Requested Route:** openrouter/openrouter/free\n\n"
+        "## Executive Summary\n"
+        f"[Evidence]({source_url}) supports the finding.\n\n"
+        "## Source Highlights\n"
+        f"- [Evidence]({source_url}) · [View in SentryDigest]({digest_url})"
+    )
+    metadata = {
+        "generated": "2026-08-13T13:00:00Z",
+        "source": "[Feed](https://example.com/feed.xml)",
+        "source issue": (
+            "[SentryDigest 2026-08-13]" "(https://digest.example/archive/2026-08-13/)"
+        ),
+        "authoring model": "google/example-model",
+        "requested route": "openrouter/openrouter/free",
+    }
+    manifest = {
+        "schema_version": 3,
+        "generated_at": "2026-08-13T13:00:00Z",
+        "feed_url": "https://example.com/feed.xml",
+        "feed_home_url": "https://digest.example/",
+        "digest_issue_date": "2026-08-13",
+        "digest_issue_url": "https://digest.example/archive/2026-08-13/",
+        "requested_model": "openrouter/openrouter/free",
+        "resolved_model": "google/example-model",
+        "sources": [
+            {
+                "title": "Evidence",
+                "url": source_url,
+                "digest_url": digest_url,
+                "cves": [],
+            }
+        ],
+    }
+
+    validate_manifest(
+        markdown,
+        metadata,
+        json.dumps(manifest),
+        require_current_schema=True,
+    )
+
+    aliased_manifest = {**manifest, "resolved_model": "openrouter/free"}
+    try:
+        validate_manifest(
+            markdown.replace("google/example-model", "openrouter/free"),
+            {**metadata, "authoring model": "openrouter/free"},
+            json.dumps(aliased_manifest),
+            require_current_schema=True,
+        )
+    except SystemExit as error:
+        assert "routing alias" in str(error)
+    else:
+        raise AssertionError("manifest accepted a router alias as report authorship")
+
+
+def test_current_schema2_manifest_is_bounded_to_publication_bridge():
+    namespace = runpy.run_path(str(SITE_REPORT_CHECK))
+    validate_manifest = namespace["validate_evidence_manifest"]
+    source_url = "https://example.com/advisory"
+    digest_url = namespace["legacy_sentrydigest_item_url"]("https://digest.example/", source_url)
     markdown = (
         "# Report\n"
         "**Generated:** 2026-08-13T13:00:00Z\n"
@@ -1283,25 +1481,8 @@ def test_evidence_manifest_v2_attests_model_and_digest_item_identity():
         ],
     }
 
-    validate_manifest(
-        markdown,
-        metadata,
-        json.dumps(manifest),
-        require_current_schema=True,
-    )
-
-    aliased_manifest = {**manifest, "resolved_model": "openrouter/free"}
-    try:
-        validate_manifest(
-            markdown.replace("google/example-model", "openrouter/free"),
-            {**metadata, "authoring model": "openrouter/free"},
-            json.dumps(aliased_manifest),
-            require_current_schema=True,
-        )
-    except SystemExit as error:
-        assert "routing alias" in str(error)
-    else:
-        raise AssertionError("manifest accepted a router alias as report authorship")
+    validate_manifest(markdown, metadata, json.dumps(manifest), require_current_schema=True)
+    assert "TODO(digest-issue-schema3-publication)" in SITE_REPORT_CHECK.read_text()
 
 
 def test_evidence_manifest_rejects_invented_title_for_real_url():

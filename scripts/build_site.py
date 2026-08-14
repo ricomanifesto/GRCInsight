@@ -205,9 +205,11 @@ def expected_outputs(markdown: str, template: str) -> dict[Path, str]:
                     "archive timestamp does not match Generated metadata: "
                     f"{report_md.relative_to(REPO_ROOT)}"
                 )
-            outputs[report_md.parent / "index.html"] = archive_detail_html(
-                archived_markdown
-            )
+            archive_page = report_md.parent / "index.html"
+            # Published archive pages keep the renderer and explanatory copy
+            # they shipped with. Only a newly archived report receives a page.
+            if not archive_page.exists():
+                outputs[archive_page] = archive_detail_html(archived_markdown)
             reports.append(
                 (
                     report_key,

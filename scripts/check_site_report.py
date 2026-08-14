@@ -3,11 +3,13 @@
 
 import json
 import hashlib
+import ipaddress
 import re
 import xml.etree.ElementTree as ET
+import unicodedata
 from datetime import datetime, timezone
 from pathlib import Path
-from urllib.parse import quote, urlparse, urlunparse
+from urllib.parse import quote, unquote_to_bytes, urlparse, urlsplit
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 SITE_DIR = REPO_ROOT / "site"
@@ -505,43 +507,129 @@ def canonical_http_url(url: str) -> str:
     return quote(url, safe=":/?#[]@!$&*+,;=%")
 
 
+def dot_segment(value: str) -> str | None:
+    folded = value.casefold()
+    if folded in {".", "%2e"}:
+        return "."
+    if folded in {"..", ".%2e", "%2e.", "%2e%2e"}:
+        return ".."
+    return None
+
+
+def normalize_reporting_path(value: str) -> str:
+    path = value or "/"
+    output: list[str] = []
+    for index, segment in enumerate(path.split("/")):
+        kind = dot_segment(segment)
+        if kind == ".":
+            continue
+        if kind == "..":
+            if output and not (len(output) == 1 and output[0] == ""):
+                output.pop()
+            continue
+        if index == 0 and path.startswith("/"):
+            output.append("")
+        elif index > 0 or segment:
+            output.append(segment)
+    normalized = "/".join(output) or "/"
+    if path.startswith("/") and not normalized.startswith("/"):
+        normalized = f"/{normalized}"
+    if dot_segment(path.rsplit("/", 1)[-1]) and not normalized.endswith("/"):
+        normalized += "/"
+    return quote(normalized, safe="/!$&'()*+,-.:;=@_~%")
+
+
+def normalize_special_url_slashes(value: str) -> str:
+    boundary = min(
+        (position for marker in ("?", "#") if (position := value.find(marker)) >= 0),
+        default=len(value),
+    )
+    return value[:boundary].replace("\\", "/") + value[boundary:]
+
+
+def idna_hostname(value: str) -> str:
+    labels: list[str] = []
+    for label in unicodedata.normalize("NFC", value).split("."):
+        lowered = label.lower()
+        if not lowered or lowered.isascii():
+            labels.append(lowered)
+        else:
+            labels.append(f"xn--{lowered.encode('punycode').decode('ascii')}")
+    return ".".join(labels)
+
+
 def canonical_public_url(value: str, field: str) -> str:
-    raw_url = str(value or "").strip()
-    parsed = urlparse(raw_url)
+    raw_url = normalize_special_url_slashes(str(value or "").strip())
+    parsed = urlsplit(raw_url)
     if (
         parsed.scheme.lower() not in {"http", "https"}
         or not parsed.netloc
-        or parsed.username is not None
-        or parsed.password is not None
-        or re.search(r"\s", raw_url)
+        or parsed.username
+        or parsed.password
     ):
         fail(f"{field} must be a credential-free HTTP URL")
-    hostname = (parsed.hostname or "").encode("idna").decode("ascii").lower()
-    if not hostname:
+    raw_hostname = parsed.hostname or ""
+    if not raw_hostname or re.search(r"[\x00-\x20\x7f]", raw_hostname):
         fail(f"{field} must include a hostname")
-    port = parsed.port
+    try:
+        address = ipaddress.ip_address(raw_hostname)
+    except ValueError:
+        try:
+            if re.search(r"%(?![0-9a-fA-F]{2})", raw_hostname):
+                raise ValueError("malformed hostname percent escape")
+            decoded_hostname = unquote_to_bytes(raw_hostname).decode("utf-8")
+            if re.search(r"[\x00-\x20\x7f#/:<>?@\[\\\]^|]", decoded_hostname):
+                raise ValueError("forbidden hostname code point")
+            hostname = idna_hostname(decoded_hostname)
+        except (UnicodeError, ValueError):
+            fail(f"{field} must include a valid hostname")
+    else:
+        hostname = (
+            f"[{address.compressed}]" if address.version == 6 else address.compressed
+        )
+    try:
+        port = parsed.port
+    except ValueError:
+        fail(f"{field} contains an invalid port")
     if port is not None and not (
         (parsed.scheme.lower() == "http" and port == 80)
         or (parsed.scheme.lower() == "https" and port == 443)
     ):
         hostname = f"{hostname}:{port}"
-    return urlunparse(
-        (
-            parsed.scheme.lower(),
-            hostname,
-            parsed.path or "/",
-            parsed.params,
-            parsed.query,
-            "",
-        )
+    path = normalize_reporting_path(parsed.path)
+    query = quote(parsed.query, safe="!$&()*+,-./:;=?@_~%")
+    before_fragment = raw_url.split("#", 1)[0]
+    query_suffix = f"?{query}" if parsed.query or "?" in before_fragment else ""
+    return f"{parsed.scheme.lower()}://{hostname}{path}{query_suffix}"
+
+
+def sentrydigest_issue_url(feed_home_url: str, issue_date: str) -> str:
+    feed_home = canonical_public_url(feed_home_url, "evidence manifest feed home URL")
+    if urlparse(feed_home).query:
+        fail("evidence manifest feed home URL must not include a query")
+    try:
+        canonical_date = datetime.strptime(issue_date, "%Y-%m-%d").date().isoformat()
+    except ValueError:
+        fail("evidence manifest digest issue date must use YYYY-MM-DD")
+    return f"{feed_home.rstrip('/')}/archive/{canonical_date}/"
+
+
+def reporting_fragment(article_url: str) -> str:
+    article = canonical_public_url(article_url, "evidence manifest source URL")
+    fragment = hashlib.sha256(article.encode("utf-8")).hexdigest()[:12]
+    return f"reporting-{fragment}"
+
+
+def sentrydigest_item_url(feed_home_url: str, issue_date: str, article_url: str) -> str:
+    return (
+        f"{sentrydigest_issue_url(feed_home_url, issue_date)}"
+        f"#{reporting_fragment(article_url)}"
     )
 
 
-def sentrydigest_item_url(feed_home_url: str, article_url: str) -> str:
+def legacy_sentrydigest_item_url(feed_home_url: str, article_url: str) -> str:
     feed_home = canonical_public_url(feed_home_url, "evidence manifest feed home URL")
-    article = canonical_public_url(article_url, "evidence manifest source URL")
-    fragment = hashlib.sha256(article.encode("utf-8")).hexdigest()[:12]
-    return f"{feed_home}#reporting-{fragment}"
+    return f"{feed_home}#{reporting_fragment(article_url)}"
 
 
 def usable_model_identity(value: object, field: str) -> str:
@@ -642,10 +730,15 @@ def validate_evidence_manifest(
     if not isinstance(manifest, dict):
         fail("evidence-manifest.json must be an object")
     schema_version = manifest.get("schema_version", 1)
-    if schema_version not in {1, 2}:
+    if schema_version not in {1, 2, 3}:
         fail("evidence-manifest.json has an unsupported schema version")
-    if require_current_schema and schema_version != 2:
-        fail("current evidence manifest must use schema version 2")
+    if require_current_schema and schema_version == 1:
+        fail("current evidence manifest must include resolved report provenance")
+    if require_current_schema and schema_version == 2:
+        # TODO(digest-issue-schema3-publication): Reject current schema 2 after
+        # the first schema-3 model-backed report is verified on GitHub Pages.
+        # Do not copy or expand this publication bridge.
+        pass
     if manifest.get("generated_at") != metadata["generated"]:
         fail("evidence manifest timestamp does not match report provenance")
 
@@ -656,7 +749,9 @@ def validate_evidence_manifest(
         fail("evidence manifest feed URL does not match report provenance")
 
     feed_home_url = ""
-    if schema_version == 2:
+    digest_issue_date = ""
+    digest_issue_url = ""
+    if schema_version >= 2:
         feed_home_url = canonical_public_url(
             str(manifest.get("feed_home_url", "")),
             "evidence manifest feed home URL",
@@ -673,6 +768,19 @@ def validate_evidence_manifest(
             fail("evidence manifest resolved model does not match report provenance")
         if resolved_model in {"openrouter/free", "openrouter/auto"}:
             fail("evidence manifest resolved model is still a routing alias")
+    if schema_version == 3:
+        digest_issue_date = str(manifest.get("digest_issue_date") or "").strip()
+        digest_issue_url = canonical_http_url(
+            str(manifest.get("digest_issue_url") or "")
+        )
+        expected_issue_url = sentrydigest_issue_url(feed_home_url, digest_issue_date)
+        if digest_issue_url != expected_issue_url:
+            fail("evidence manifest digest issue URL does not match its issue date")
+        source_issue_links = markdown_links(metadata.get("source issue", ""))
+        if len(source_issue_links) != 1 or canonical_http_url(
+            markdown_inline_text(source_issue_links[0][3])
+        ) != canonical_http_url(digest_issue_url):
+            fail("report source issue does not match the evidence manifest")
 
     raw_sources = manifest.get("sources")
     if not isinstance(raw_sources, list) or not raw_sources:
@@ -690,12 +798,14 @@ def validate_evidence_manifest(
         if not isinstance(url, str) or not has_http_scheme(url):
             fail(f"evidence manifest source {index} has no HTTP URL")
         url = canonical_http_url(url)
-        if schema_version == 2:
+        if schema_version >= 2:
             digest_url = source.get("digest_url")
             if not isinstance(digest_url, str) or not has_http_scheme(digest_url):
                 fail(f"evidence manifest source {index} has no SentryDigest item URL")
             expected_digest_url = canonical_http_url(
-                sentrydigest_item_url(feed_home_url, url)
+                sentrydigest_item_url(feed_home_url, digest_issue_date, url)
+                if schema_version == 3
+                else legacy_sentrydigest_item_url(feed_home_url, url)
             )
             if canonical_http_url(digest_url) != expected_digest_url:
                 fail(
@@ -773,7 +883,7 @@ def validate_evidence_manifest(
     }
     if not highlighted_pairs or not highlighted_pairs.issubset(source_pairs):
         fail("Source Highlights must use exact source title and URL pairs")
-    if schema_version == 2:
+    if schema_version >= 2:
         expected_digest_urls = {
             canonical_http_url(str(source["digest_url"]))
             for source in raw_sources
@@ -835,7 +945,7 @@ def validate_archive_history(archive_dir: Path, archive_html: str) -> None:
         )
         required_metadata = (
             REQUIRED_PUBLIC_METADATA
-            if manifest_schema == 2
+            if manifest_schema in {2, 3}
             else LEGACY_REQUIRED_PUBLIC_METADATA
         )
         missing_metadata = required_metadata - metadata.keys()
@@ -994,6 +1104,10 @@ def main() -> None:
         fail("index.html does not render the report provenance card")
     if 'href="evidence-manifest.json"' not in html:
         fail("index.html does not link the machine-readable evidence manifest")
+    if 'class="provenance-explanation"' not in html:
+        fail(
+            "index.html does not explain requested-route and authoring-model provenance"
+        )
 
     # The page controller routes rendering through the canonical renderer and
     # the shared tag catalog, and never emits an unsanitized Markdown link.
@@ -1046,6 +1160,9 @@ def main() -> None:
         "View in SentryDigest",
         "Authoring model",
         "Requested route",
+        "Source issue",
+        "The requested route is the OpenRouter",
+        "the authoring model is the upstream model attested",
     ):
         if renderer_contract not in renderer_js:
             fail(f"renderer.js missing provenance contract: {renderer_contract}")
@@ -1094,6 +1211,7 @@ def main() -> None:
         ".evidence-label",
         ".digest-handoff",
         ".manifest-link",
+        ".provenance-explanation",
     ):
         if style_contract not in style_css:
             fail(f"style.css is missing provenance style: {style_contract}")

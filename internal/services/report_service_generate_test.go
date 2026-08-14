@@ -86,6 +86,8 @@ func TestGenerateReport_PersistsReportAndArticles(t *testing.T) {
 			SourceName:      "SentryDigest",
 			SourceURL:       "https://example.com/feed.xml",
 			SourceHomeURL:   "https://digest.example/",
+			SourceIssueDate: "2026-08-13",
+			SourceIssueURL:  "https://digest.example/archive/2026-08-13/",
 			AnalysisPeriod:  "August 2026",
 			RequestedModel:  "openrouter/example/model",
 			ResolvedModel:   "google/example-model",
@@ -131,6 +133,9 @@ func TestGenerateReport_PersistsReportAndArticles(t *testing.T) {
 	}
 	if fr.updated.Metadata.SourceName != "SentryDigest" || fr.updated.Metadata.ResolvedModel != "google/example-model" {
 		t.Fatalf("expected report provenance to persist, got %#v", fr.updated.Metadata)
+	}
+	if fr.updated.Metadata.SourceIssueDate != "2026-08-13" || fr.updated.Metadata.SourceIssueURL != "https://digest.example/archive/2026-08-13/" {
+		t.Fatalf("expected digest issue provenance to persist, got %#v", fr.updated.Metadata)
 	}
 	if len(fr.updated.Metadata.SourceArticles) != 1 || fr.updated.Metadata.SourceArticles[0]["url"] != "https://ex.com/1" {
 		t.Fatalf("expected source evidence to persist, got %#v", fr.updated.Metadata.SourceArticles)

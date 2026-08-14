@@ -192,6 +192,8 @@ def handler(event, context):
                                 "source_name": md.source_name,
                                 "source_url": md.source_url,
                                 "source_home_url": md.source_home_url,
+                                "source_issue_date": md.source_issue_date,
+                                "source_issue_url": md.source_issue_url,
                                 "analysis_period": md.analysis_period,
                                 "requested_model": md.requested_model,
                                 "resolved_model": md.resolved_model,

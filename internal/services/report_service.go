@@ -99,6 +99,8 @@ func (s *ReportService) GenerateReport(req *apiModels.GenerateReportRequest) (*m
 					SourceName:           workflowResp.Metadata.SourceName,
 					SourceURL:            workflowResp.Metadata.SourceURL,
 					SourceHomeURL:        workflowResp.Metadata.SourceHomeURL,
+					SourceIssueDate:      workflowResp.Metadata.SourceIssueDate,
+					SourceIssueURL:       workflowResp.Metadata.SourceIssueURL,
 					AnalysisPeriod:       workflowResp.Metadata.AnalysisPeriod,
 					RequestedModel:       workflowResp.Metadata.RequestedModel,
 					ResolvedModel:        workflowResp.Metadata.ResolvedModel,
