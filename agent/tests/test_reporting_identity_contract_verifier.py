@@ -1,3 +1,4 @@
+import hashlib
 import importlib.util
 from pathlib import Path
 import subprocess
@@ -5,7 +6,8 @@ import sys
 from urllib.error import URLError
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
-VERIFIER = REPO_ROOT / "scripts" / "verify_reporting_identity_contract.py"
+VERIFIER = REPO_ROOT / "contracts" / "reporting-identity-verifier-v1.py"
+VERIFIER_SHA256 = "1d2d2288de826cd45fc72ad3e95e86474fbb72ec4b104a305db17f3b3b32081b"
 
 
 def run_verifier(*arguments: str) -> subprocess.CompletedProcess[str]:
@@ -17,6 +19,10 @@ def run_verifier(*arguments: str) -> subprocess.CompletedProcess[str]:
     )
 
 
+def test_verifier_is_the_immutable_owner_copy():
+    assert hashlib.sha256(VERIFIER.read_bytes()).hexdigest() == VERIFIER_SHA256
+
+
 def test_verifier_accepts_byte_identical_contract(tmp_path: Path):
     local_contract = tmp_path / "local.json"
     canonical_contract = tmp_path / "canonical.json"
@@ -26,20 +32,24 @@ def test_verifier_accepts_byte_identical_contract(tmp_path: Path):
 
     result = run_verifier(
         "compare",
-        "--local-contract",
+        "--artifact",
+        "contract",
+        "--local-artifact",
         str(local_contract),
-        "--canonical-contract",
+        "--canonical-artifact",
         str(canonical_contract),
     )
 
     assert result.returncode == 0
-    assert "contract verified" in result.stdout
+    assert "Contract verified" in result.stdout
     assert result.stderr == ""
 
 
 def test_verifier_classifies_canonical_source_unavailability(tmp_path: Path):
     result = run_verifier(
         "fetch",
+        "--artifact",
+        "contract",
         "--canonical-url",
         (tmp_path / "missing.json").as_uri(),
         "--canonical-output",
@@ -49,8 +59,8 @@ def test_verifier_classifies_canonical_source_unavailability(tmp_path: Path):
     )
 
     assert result.returncode == 2
-    assert "Canonical reporting identity unavailable" in result.stderr
-    assert "contract drift" not in result.stderr
+    assert "Canonical reporting identity contract unavailable" in result.stderr
+    assert "drift" not in result.stderr
 
 
 def test_verifier_classifies_byte_drift(tmp_path: Path):
@@ -61,14 +71,16 @@ def test_verifier_classifies_byte_drift(tmp_path: Path):
 
     result = run_verifier(
         "compare",
-        "--local-contract",
+        "--artifact",
+        "contract",
+        "--local-artifact",
         str(local_contract),
-        "--canonical-contract",
+        "--canonical-artifact",
         str(canonical_contract),
     )
 
     assert result.returncode == 3
-    assert "Reporting identity contract drift" in result.stderr
+    assert "Reporting Identity Contract drift" in result.stderr
     assert "Local SHA-256" in result.stderr
     assert "canonical SHA-256" in result.stderr
 
@@ -79,14 +91,16 @@ def test_verifier_treats_missing_local_copy_as_drift(tmp_path: Path):
 
     result = run_verifier(
         "compare",
-        "--local-contract",
+        "--artifact",
+        "contract",
+        "--local-artifact",
         str(tmp_path / "missing.json"),
-        "--canonical-contract",
+        "--canonical-artifact",
         str(canonical_contract),
     )
 
     assert result.returncode == 3
-    assert "repository-local contract is missing or unreadable" in result.stderr
+    assert "repository-local reporting identity contract" in result.stderr
 
 
 def test_canonical_fetch_retries_bounded_transient_failures(monkeypatch):
@@ -108,7 +122,7 @@ def test_canonical_fetch_retries_bounded_transient_failures(monkeypatch):
             return False
 
         def read(self, limit):
-            assert limit == module.MAX_CONTRACT_BYTES + 1
+            assert limit == module.MAX_ARTIFACT_BYTES + 1
             return payload
 
     def transient_urlopen(_request, timeout):
@@ -120,7 +134,7 @@ def test_canonical_fetch_retries_bounded_transient_failures(monkeypatch):
     monkeypatch.setattr(module, "urlopen", transient_urlopen)
     monkeypatch.setattr(module.time, "sleep", sleeps.append)
 
-    result = module.fetch_canonical_contract(
+    result = module.fetch_canonical_artifact(
         "https://example.invalid/contract.json", timeout_seconds=3.0, attempts=4
     )
 
@@ -139,6 +153,8 @@ def test_fetch_and_compare_are_separate_fail_closed_stages(tmp_path: Path):
 
     fetch_result = run_verifier(
         "fetch",
+        "--artifact",
+        "contract",
         "--canonical-url",
         canonical_contract.as_uri(),
         "--canonical-output",
@@ -146,9 +162,11 @@ def test_fetch_and_compare_are_separate_fail_closed_stages(tmp_path: Path):
     )
     compare_result = run_verifier(
         "compare",
-        "--local-contract",
+        "--artifact",
+        "contract",
+        "--local-artifact",
         str(local_contract),
-        "--canonical-contract",
+        "--canonical-artifact",
         str(fetched_contract),
     )
 
@@ -156,4 +174,4 @@ def test_fetch_and_compare_are_separate_fail_closed_stages(tmp_path: Path):
     assert fetched_contract.read_bytes() == contract
     assert "contract fetched" in fetch_result.stdout
     assert compare_result.returncode == 0
-    assert "contract verified" in compare_result.stdout
+    assert "Contract verified" in compare_result.stdout

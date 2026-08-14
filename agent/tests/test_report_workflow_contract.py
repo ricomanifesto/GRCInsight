@@ -56,26 +56,29 @@ def test_report_generation_workflow_accepts_repository_dispatch_payloads():
     assert "github.event.client_payload.feed_url" in workflow
 
 
-def test_release_workflows_verify_the_canonical_reporting_identity_contract():
-    canonical_contract = (
-        "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/"
-        "main/contracts/reporting-identity-v1.json"
-    )
-    fetch_step = "Fetch canonical reporting identity contract"
-    drift_step = "Check reporting identity contract drift"
-    fetch_command = "python3 scripts/verify_reporting_identity_contract.py fetch"
-    compare_command = "python3 scripts/verify_reporting_identity_contract.py compare"
+def test_release_workflows_use_the_owner_reporting_identity_verifier():
+    verifier = "python3 contracts/reporting-identity-verifier-v1.py"
 
     for workflow_path in WORKFLOWS:
         workflow = workflow_path.read_text()
-        assert workflow.count(fetch_step) == 1, workflow_path.name
-        assert workflow.count(drift_step) == 1, workflow_path.name
-        assert workflow.count(fetch_command) == 1, workflow_path.name
-        assert workflow.count(compare_command) == 1, workflow_path.name
-        assert workflow.index(fetch_step) < workflow.index(drift_step), workflow_path.name
+        assert workflow.count("Fetch canonical reporting identity verifier") == 1
+        assert workflow.count("Check reporting identity verifier drift") == 1
+        assert workflow.count("Fetch canonical reporting identity contract") == 1
+        assert workflow.count("Check reporting identity contract drift") == 1
+        assert workflow.count(f"{verifier} fetch") == 2, workflow_path.name
+        assert workflow.count(f"{verifier} compare") == 2, workflow_path.name
+        assert workflow.index("Fetch canonical reporting identity verifier") < workflow.index(
+            "Check reporting identity verifier drift"
+        )
+        assert workflow.index("Fetch canonical reporting identity contract") < workflow.index(
+            "Check reporting identity contract drift"
+        )
+        assert "--artifact verifier" in workflow
+        assert "--artifact contract" in workflow
+        assert "$RUNNER_TEMP/reporting-identity-verifier-v1.py" in workflow
         assert "$RUNNER_TEMP/reporting-identity-v1.json" in workflow
-        assert canonical_contract not in workflow, workflow_path.name
         assert "cmp -s contracts/reporting-identity-v1.json" not in workflow
+        assert "scripts/verify_reporting_identity_contract.py" not in workflow
 
 
 def test_static_site_deploys_main_branch_site_changes():

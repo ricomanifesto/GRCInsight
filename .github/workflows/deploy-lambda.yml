@@ -23,15 +23,31 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v7
 
+      - name: Fetch canonical reporting identity verifier
+        run: >-
+          python3 contracts/reporting-identity-verifier-v1.py fetch
+          --artifact verifier
+          --canonical-output "$RUNNER_TEMP/reporting-identity-verifier-v1.py"
+
+      - name: Check reporting identity verifier drift
+        run: >-
+          python3 contracts/reporting-identity-verifier-v1.py compare
+          --artifact verifier
+          --local-artifact contracts/reporting-identity-verifier-v1.py
+          --canonical-artifact "$RUNNER_TEMP/reporting-identity-verifier-v1.py"
+
       - name: Fetch canonical reporting identity contract
         run: >-
-          python3 scripts/verify_reporting_identity_contract.py fetch
+          python3 contracts/reporting-identity-verifier-v1.py fetch
+          --artifact contract
           --canonical-output "$RUNNER_TEMP/reporting-identity-v1.json"
 
       - name: Check reporting identity contract drift
         run: >-
-          python3 scripts/verify_reporting_identity_contract.py compare
-          --canonical-contract "$RUNNER_TEMP/reporting-identity-v1.json"
+          python3 contracts/reporting-identity-verifier-v1.py compare
+          --artifact contract
+          --local-artifact contracts/reporting-identity-v1.json
+          --canonical-artifact "$RUNNER_TEMP/reporting-identity-v1.json"
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v6.2.1
