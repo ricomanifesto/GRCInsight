@@ -62,7 +62,16 @@ def test_release_workflows_verify_the_canonical_reporting_identity_contract():
     )
 
     for workflow_path in WORKFLOWS:
-        assert canonical_contract in workflow_path.read_text(), workflow_path.name
+        workflow = workflow_path.read_text()
+        assert canonical_contract in workflow, workflow_path.name
+        assert "Fetch canonical reporting identity contract" in workflow
+        assert "Could not verify canonical reporting identity contract" in workflow
+        assert "Check reporting identity contract drift" in workflow
+        assert "Reporting identity contract drift" in workflow
+        assert "cmp -s contracts/reporting-identity-v1.json" in workflow
+        assert workflow.index("Fetch canonical reporting identity contract") < workflow.index(
+            "Check reporting identity contract drift"
+        )
 
 
 def test_static_site_deploys_main_branch_site_changes():
@@ -1521,6 +1530,22 @@ def test_schema2_manifest_is_historical_only():
         assert "dated digest issue provenance" in str(error)
     else:
         raise AssertionError("current report accepted a schema-2 evidence manifest")
+
+
+def test_schema3_publication_bridge_is_removed_after_dated_report():
+    checker = SITE_REPORT_CHECK.read_text()
+    current_manifest = json.loads((REPO_ROOT / "site" / "evidence-manifest.json").read_text())
+    archived_manifests = [
+        json.loads(path.read_text())
+        for path in (REPO_ROOT / "site" / "archive").glob("*/evidence-manifest.json")
+    ]
+
+    retired_breadcrumb = "TODO(" + "digest-issue-schema3-publication)"
+    assert retired_breadcrumb not in checker
+    assert "if require_current_schema and schema_version != 3:" in checker
+    assert current_manifest["schema_version"] == 3
+    assert any(manifest.get("schema_version") == 3 for manifest in archived_manifests)
+    assert any(manifest.get("schema_version") == 2 for manifest in archived_manifests)
 
 
 def test_evidence_manifest_rejects_invented_title_for_real_url():
