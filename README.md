@@ -81,6 +81,13 @@ make check
 - Required secrets: `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `OPENROUTER_API_KEY`.
 - Runtime variable: `LLM_MODEL=openrouter/provider-model`.
 - Model-backed analysis calls OpenRouter directly in local and Lambda environments.
+- Report provenance distinguishes the configured OpenRouter route from the
+  upstream model returned with the successful report completion. Publication
+  fails closed when that resolved model identity is absent or remains a router
+  alias.
+- Every published report exposes `evidence-manifest.json`, including the feed,
+  resolved model, exact source title/URL pairs, CVE coverage, and stable links
+  to the corresponding SentryDigest items.
 - `.github/workflows/lambda-report-generation.yml` refuses fallback output,
   composes report-owned provenance into `site/index.md`, preserves a dated
   archive snapshot, pre-renders the current/archive pages, validates the result,

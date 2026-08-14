@@ -22,6 +22,7 @@ class ArticleInput(BaseModel):
     content: str
     summary: str = ""
     source: str = ""
+    digest_url: str = ""
     published: datetime
 
 
@@ -98,8 +99,10 @@ class ReportMetadata(BaseModel):
     fallback_reason: Optional[str] = None
     source_name: str = ""
     source_url: str = ""
+    source_home_url: str = ""
     analysis_period: str = ""
-    model: str = ""
+    requested_model: str = ""
+    resolved_model: str = ""
     source_articles: List[Dict[str, Any]] = Field(default_factory=list)
     regulations_mentioned: List[str] = Field(default_factory=list)
     frameworks_referenced: List[str] = Field(default_factory=list)

@@ -109,7 +109,7 @@ assert(serializedIdentityHtml.includes({json.dumps(identity_title + "</a>")}), '
 
 // A complete report keeps provenance and section cards in the canonical
 // renderer so build-time HTML and browser rendering are identical.
-const reportDocument = '# GRC Intelligence Report - 2026-08-13\\n**Generated:** 2026-08-13T13:00:00Z\\n**Date of Issue:** August 2026\\n**Source:** [SentryDigest](https://example.com/feed.xml)\\n**Articles Analyzed:** 30\\n**Analysis Mode:** Model-backed\\n\\n---   \\n\\n## Executive Summary\\nCareful analysis.\\n\\n---\\n\\n## Source Highlights\\n- [Evidence](https://example.com/evidence)';
+const reportDocument = '# GRC Intelligence Report - 2026-08-13\\n**Generated:** 2026-08-13T13:00:00Z\\n**Date of Issue:** August 2026\\n**Source:** [SentryDigest](https://example.com/feed.xml)\\n**Articles Analyzed:** 30\\n**Authoring Model:** google/example-model\\n**Requested Route:** openrouter/openrouter/free\\n**Analysis Mode:** Model-backed\\n\\n---   \\n\\n## Executive Summary\\nCareful analysis.\\n\\n---\\n\\n## Source Highlights\\n- [Evidence](https://example.com/evidence) · [View in SentryDigest](https://digest.example/#reporting-123456789abc)';
 const parsedReport = renderer.parseReportDocument(reportDocument);
 assert(parsedReport.title === 'GRC Intelligence Report - 2026-08-13', 'report title should be parsed from h1');
 assert(parsedReport.metadata.generated === '2026-08-13T13:00:00Z', 'Generated metadata should be preserved');
@@ -117,6 +117,10 @@ assert(parsedReport.metadata['articles analyzed'] === '30', 'article-count prove
 const reportHtml = renderer.renderReportDocument(reportDocument);
 assert(reportHtml.includes('<section class="card report-provenance"><h2>About this report</h2>'), 'report provenance should render as a card');
 assert(reportHtml.includes('<dt>Source</dt><dd><a href="https://example.com/feed.xml"'), 'source provenance should keep its safe link');
+assert(reportHtml.includes('<dt>Authoring model</dt><dd>google/example-model</dd>'), 'resolved authoring-model provenance should be visible');
+assert(reportHtml.includes('<dt>Requested route</dt><dd>openrouter/openrouter/free</dd>'), 'requested model route should remain distinct');
+assert(reportHtml.includes('<a class="manifest-link" href="evidence-manifest.json"'), 'provenance should expose the machine-readable evidence manifest');
+assert(reportHtml.includes('<a class="digest-handoff" href="https://digest.example/#reporting-123456789abc"'), 'source highlights should expose the SentryDigest item handoff');
 assert((reportHtml.match(/<section class="card">/g) || []).length === 2, 'each report section should render as a card');
 assert(!reportHtml.includes('<hr>') && !reportHtml.includes('---'), 'section separators should not survive in report cards');
 const querySourceReport = reportDocument.replace('https://example.com/feed.xml', 'https://example.com/feed?a=1&b=2');
@@ -126,6 +130,19 @@ assert(!querySourceHtml.includes('&amp;amp;'), 'provenance links must not double
 const parenthesizedSourceReport = reportDocument.replace('https://example.com/feed.xml', 'https://example.com/feed(1).xml');
 const parenthesizedSourceHtml = renderer.renderReportDocument(parenthesizedSourceReport);
 assert(parenthesizedSourceHtml.includes('href="https://example.com/feed(1).xml"'), 'provenance links should preserve balanced parentheses');
+
+// Deterministically repaired citations remain on the validated Markdown line
+// while the renderer integrates them into a visible evidence affordance.
+const evidenceParagraph = renderer.renderMarkdown('Contain CVE-2026-12345 now. **Evidence:** [Advisory](https://example.com/advisory)');
+assert(evidenceParagraph.includes('<aside class="evidence-note" aria-label="Evidence">'), 'repaired prose evidence should render as an evidence note');
+assert(evidenceParagraph.includes('<span class="evidence-label">Evidence</span>'), 'evidence notes should have a textual label');
+const evidenceList = renderer.renderMarkdown('- Contain CVE-2026-12345. **Evidence:** [Advisory](https://example.com/advisory)');
+assert(evidenceList.includes('<li>Contain CVE-2026-12345.<aside class="evidence-note"'), 'repaired list evidence should remain attached to its claim');
+const laterEvidenceList = renderer.renderMarkdown('- unaffected item\\n- Contain CVE-2026-12345. **Evidence:** [Advisory](https://example.com/advisory)');
+assert(laterEvidenceList.includes('<li>unaffected item</li><li>Contain CVE-2026-12345.<aside'), 'evidence styling must not consume an earlier list item');
+const evidenceTable = renderer.renderMarkdown('| Risk | Action |\\n|---|---|\\n| CVE-2026-12345 | Patch **Evidence:** [Advisory](https://example.com/advisory) |');
+assert(evidenceTable.includes('<div class="evidence-inline"><span class="evidence-label">Evidence</span>'), 'repaired table evidence should render inside its cell');
+assert(evidenceTable.includes('<td>CVE-2026-12345</td><td>Patch<div class="evidence-inline">'), 'evidence styling must not consume an earlier table cell');
 
 // Regression: a paragraph that contains bold text must render as a single
 // wrapped <p>, not as loose inline fragments. Loose fragments became separate

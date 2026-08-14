@@ -187,6 +187,8 @@ jobs:
           STATUS=$(jq -r '.status // empty' report-data.json)
           CONTENT=$(jq -r '.content // empty' report-data.json)
           ANALYSIS_MODE=$(jq -r '.metadata.analysis_mode // empty' report-data.json)
+          REQUESTED_MODEL=$(jq -r '.metadata.requested_model // empty' report-data.json)
+          RESOLVED_MODEL=$(jq -r '.metadata.resolved_model // empty' report-data.json)
 
           if [ "$STATUS" = "failed" ]; then
             echo "Report status is 'failed'. Aborting early." >&2
@@ -201,6 +203,16 @@ jobs:
               echo "Refusing to publish a fallback-mode report; keeping the last model-backed report." >&2
               exit 1
             fi
+            if [ "$REQUESTED_MODEL" != "$LLM_MODEL" ]; then
+              echo "Refusing to publish a report with mismatched requested-model provenance." >&2
+              exit 1
+            fi
+            case "$RESOLVED_MODEL" in
+              ""|openrouter/free|openrouter/auto)
+                echo "Refusing to publish a report without an upstream resolved model." >&2
+                exit 1
+                ;;
+            esac
             echo "Report completed. Building site files..."
 
             CONTENT_LEN=$(printf %s "$CONTENT" | wc -c | tr -d ' ')

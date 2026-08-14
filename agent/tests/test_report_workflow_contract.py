@@ -8,6 +8,7 @@ import tomllib
 from core import workflow as workflow_mod
 from models.api import ArticleInput
 from services.model_service import GRCModelService
+from services.openrouter_client import OpenRouterGeneration
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 AGENT_PYPROJECT = REPO_ROOT / "agent" / "pyproject.toml"
@@ -221,7 +222,18 @@ def test_report_generation_retries_scratch_work_and_returns_complete_report():
         "Careful executive analysis.",
         "- [Evidence](https://example.com/evidence)",
     )
-    responses = iter(("Here's a thinking process:\n1. Analyze the request", valid_report))
+    responses = iter(
+        (
+            OpenRouterGeneration(
+                text="Here's a thinking process:\n1. Analyze the request",
+                resolved_model="google/rejected-draft",
+            ),
+            OpenRouterGeneration(
+                text=valid_report,
+                resolved_model="google/final-report-model",
+            ),
+        )
+    )
     prompts = []
 
     async def fake_invoke(**kwargs):
@@ -236,7 +248,8 @@ def test_report_generation_retries_scratch_work_and_returns_complete_report():
         )
     )
 
-    assert result == valid_report
+    assert result.content == valid_report
+    assert result.resolved_model == "google/final-report-model"
     assert len(prompts) == 2
     assert prompts[1]["title"] == "GRC intelligence report retry"
     assert "prior response output did not begin" in prompts[1]["user_prompt"]
@@ -246,8 +259,14 @@ def test_report_generation_fails_closed_after_two_malformed_drafts():
     service = GRCModelService.__new__(GRCModelService)
     responses = iter(
         (
-            "## Executive Summary\nIncomplete draft.",
-            "## Executive Summary\nStill incomplete.",
+            OpenRouterGeneration(
+                text="## Executive Summary\nIncomplete draft.",
+                resolved_model="google/first-model",
+            ),
+            OpenRouterGeneration(
+                text="## Executive Summary\nStill incomplete.",
+                resolved_model="google/retry-model",
+            ),
         )
     )
 
@@ -262,8 +281,9 @@ def test_report_generation_fails_closed_after_two_malformed_drafts():
         )
     )
 
-    assert result.startswith("# GRC Intelligence Report - Error")
-    assert "complete report after retry" in result
+    assert result.content.startswith("# GRC Intelligence Report - Error")
+    assert "complete report after retry" in result.content
+    assert result.resolved_model == ""
 
 
 def test_source_evidence_preserves_distinct_cves_without_actor_priority():
@@ -321,6 +341,17 @@ def test_source_evidence_preserves_distinct_cves_without_actor_priority():
     assert {"CVE-2026-11111", "CVE-2026-22222", "CVE-2026-12345678"} <= cves
     assert all("actor_ids" not in item for item in evidence)
     assert all("has_threat_context" not in item for item in evidence)
+
+
+def test_sentrydigest_item_identity_matches_the_public_reporting_contract():
+    article_url = (
+        "https://www.bleepingcomputer.com/news/security/"
+        "akira-hackers-disable-edr-with-safe-mode-steal-data-but-fail-to-encrypt/"
+    )
+
+    assert workflow_mod._sentrydigest_item_url(
+        "https://ricomanifesto.github.io/SentryDigest/", article_url
+    ) == ("https://ricomanifesto.github.io/SentryDigest/" "#reporting-dace2be75c67")
 
 
 def test_source_evidence_bounds_persisted_cves_to_prompt_limit():
@@ -461,6 +492,15 @@ def test_report_generation_workflow_refuses_fallback_reports():
     assert "Refusing to publish a fallback-mode report" in workflow
 
 
+def test_report_generation_workflow_requires_resolved_model_provenance():
+    workflow = REPORT_WORKFLOW.read_text()
+
+    assert ".metadata.requested_model // empty" in workflow
+    assert ".metadata.resolved_model // empty" in workflow
+    assert 'if [ "$REQUESTED_MODEL" != "$LLM_MODEL" ]; then' in workflow
+    assert "Refusing to publish a report without an upstream resolved model" in workflow
+
+
 def test_report_generation_workflow_uses_deterministic_report_composer():
     workflow = REPORT_WORKFLOW.read_text()
 
@@ -518,6 +558,7 @@ def test_site_report_composer_owns_public_provenance_and_body_shape():
                 "analysis_mode": "model",
                 "source_name": "SentryDigest",
                 "source_url": "https://example.com/feed.xml",
+                "source_home_url": "https://digest.example/",
                 "source_articles": [
                     {"title": "Linkless item", "url": ""},
                     {"title": "Evidence", "url": "https://example.com/evidence"},
@@ -525,7 +566,8 @@ def test_site_report_composer_owns_public_provenance_and_body_shape():
                 "analysis_period": "August 2026",
                 "article_count": 30,
                 "grc_article_count": 12,
-                "model": "openrouter/example/model",
+                "requested_model": "openrouter/example/model",
+                "resolved_model": "google/example-model",
             },
         },
         "https://example.com/feed.xml",
@@ -537,8 +579,10 @@ def test_site_report_composer_owns_public_provenance_and_body_shape():
     assert "**Source:** [SentryDigest](https://example.com/feed.xml)" in report
     assert "**Articles Analyzed:** 30" in report
     assert "**GRC-Relevant Articles:** 12" in report
-    assert "**Model:** openrouter/example/model" in report
+    assert "**Authoring Model:** google/example-model" in report
+    assert "**Requested Route:** openrouter/example/model" in report
     assert "**Analysis Mode:** Model-backed" in report
+    assert "[View in SentryDigest](https://digest.example/#reporting-" in report
     assert "## Executive Summary" in report
     assert "## Source Highlights" in report
     assert "\n---\n" not in report
@@ -629,7 +673,8 @@ def test_site_report_check_validates_every_archive_manifest(tmp_path):
     (snapshot / "report.md").write_text(report)
     (snapshot / "evidence-manifest.json").write_text(json.dumps(manifest))
     (snapshot / "index.html").write_text(
-        '<main class="container archive-report"><section class="card report-provenance"></section></main>'
+        '<main class="container archive-report"><section class="card report-provenance">'
+        '<a href="evidence-manifest.json">Evidence</a></section></main>'
     )
     archive_html = f'<a href="{archive_key}/">Report</a>'
 
@@ -656,11 +701,13 @@ def test_site_report_composer_rejects_provenance_mismatch():
             "analysis_mode": "model",
             "source_name": "SentryDigest",
             "source_url": "https://example.com/feed.xml",
+            "source_home_url": "https://digest.example/",
             "source_articles": [{"title": "Evidence", "url": "https://example.com/evidence"}],
             "analysis_period": "August 2026",
             "article_count": 1,
             "grc_article_count": 1,
-            "model": "openrouter/example/model",
+            "requested_model": "openrouter/example/model",
+            "resolved_model": "google/example-model",
         },
     }
 
@@ -691,11 +738,13 @@ def test_site_report_composer_normalizes_numbered_markdown_headings_and_feed_url
                 "analysis_mode": "model",
                 "source_name": "SentryDigest\\",
                 "source_url": feed_url,
+                "source_home_url": "https://digest.example/",
                 "source_articles": [{"title": "Evidence", "url": "https://example.com/evidence"}],
                 "analysis_period": "August 2026",
                 "article_count": 1,
                 "grc_article_count": 1,
-                "model": "openrouter/example/model",
+                "requested_model": "openrouter/example/model",
+                "resolved_model": "google/example-model",
             },
         },
         feed_url,
@@ -724,11 +773,13 @@ def test_site_report_composer_rejects_evidence_urls_absent_from_source_articles(
             "analysis_mode": "model",
             "source_name": "SentryDigest",
             "source_url": "https://example.com/feed.xml",
+            "source_home_url": "https://digest.example/",
             "source_articles": [{"title": "Real evidence", "url": "https://example.com/real"}],
             "analysis_period": "August 2026",
             "article_count": 1,
             "grc_article_count": 1,
-            "model": "openrouter/example/model",
+            "requested_model": "openrouter/example/model",
+            "resolved_model": "google/example-model",
         },
     }
 
@@ -758,11 +809,13 @@ def test_site_report_composer_decodes_escaped_evidence_url_delimiters():
                 "analysis_mode": "model",
                 "source_name": "SentryDigest",
                 "source_url": "https://example.com/feed.xml",
+                "source_home_url": "https://digest.example/",
                 "source_articles": [{"title": "Evidence", "url": evidence_url}],
                 "analysis_period": "August 2026",
                 "article_count": 1,
                 "grc_article_count": 1,
-                "model": "openrouter/example/model",
+                "requested_model": "openrouter/example/model",
+                "resolved_model": "google/example-model",
             },
         },
         "https://example.com/feed.xml",
@@ -800,11 +853,13 @@ def test_site_report_composer_accepts_serialized_source_link_identity():
                 "analysis_mode": "model",
                 "source_name": "SentryDigest",
                 "source_url": "https://example.com/feed.xml",
+                "source_home_url": "https://digest.example/",
                 "source_articles": [{"title": title, "url": source_url}],
                 "analysis_period": "August 2026",
                 "article_count": 1,
                 "grc_article_count": 1,
-                "model": "openrouter/example/model",
+                "requested_model": "openrouter/example/model",
+                "resolved_model": "google/example-model",
             },
         },
         "https://example.com/feed.xml",
@@ -829,13 +884,15 @@ def test_site_report_composer_canonicalizes_title_for_real_evidence_url():
             "analysis_mode": "model",
             "source_name": "SentryDigest",
             "source_url": "https://example.com/feed.xml",
+            "source_home_url": "https://digest.example/",
             "source_articles": [
                 {"title": "Neutral advisory", "url": "https://example.com/neutral"}
             ],
             "analysis_period": "August 2026",
             "article_count": 1,
             "grc_article_count": 1,
-            "model": "openrouter/example/model",
+            "requested_model": "openrouter/example/model",
+            "resolved_model": "google/example-model",
         },
     }
 
@@ -863,11 +920,13 @@ def test_site_report_composer_canonicalizes_url_for_exact_evidence_title():
             "analysis_mode": "model",
             "source_name": "SentryDigest",
             "source_url": "https://example.com/feed.xml",
+            "source_home_url": "https://digest.example/",
             "source_articles": [{"title": title, "url": trusted_url}],
             "analysis_period": "August 2026",
             "article_count": 1,
             "grc_article_count": 1,
-            "model": "openrouter/example/model",
+            "requested_model": "openrouter/example/model",
+            "resolved_model": "google/example-model",
         },
     }
 
@@ -892,6 +951,7 @@ def test_site_report_composer_rejects_cross_wired_source_identities():
             "analysis_mode": "model",
             "source_name": "SentryDigest",
             "source_url": "https://example.com/feed.xml",
+            "source_home_url": "https://digest.example/",
             "source_articles": [
                 {"title": "Source A", "url": "https://example.com/a"},
                 {"title": "Source B", "url": "https://example.com/b"},
@@ -899,7 +959,8 @@ def test_site_report_composer_rejects_cross_wired_source_identities():
             "analysis_period": "August 2026",
             "article_count": 2,
             "grc_article_count": 2,
-            "model": "openrouter/example/model",
+            "requested_model": "openrouter/example/model",
+            "resolved_model": "google/example-model",
         },
     }
 
@@ -928,11 +989,13 @@ def test_site_report_composer_expands_unique_ellipsized_source_reference():
             "analysis_mode": "model",
             "source_name": "SentryDigest",
             "source_url": "https://example.com/feed.xml",
+            "source_home_url": "https://digest.example/",
             "source_articles": [{"title": title, "url": source_url}],
             "analysis_period": "August 2026",
             "article_count": 1,
             "grc_article_count": 1,
-            "model": "openrouter/example/model",
+            "requested_model": "openrouter/example/model",
+            "resolved_model": "google/example-model",
         },
     }
 
@@ -977,11 +1040,13 @@ def test_site_report_composer_expands_parenthesized_source_ordinal():
             "analysis_mode": "model",
             "source_name": "SentryDigest",
             "source_url": "https://example.com/feed.xml",
+            "source_home_url": "https://digest.example/",
             "source_articles": [{"title": title, "url": source_url}],
             "analysis_period": "August 2026",
             "article_count": 1,
             "grc_article_count": 1,
-            "model": "openrouter/example/model",
+            "requested_model": "openrouter/example/model",
+            "resolved_model": "google/example-model",
         },
     }
 
@@ -1017,6 +1082,7 @@ def test_site_report_composer_adds_links_for_supported_unlinked_cves():
             "analysis_mode": "model",
             "source_name": "SentryDigest",
             "source_url": "https://example.com/feed.xml",
+            "source_home_url": "https://digest.example/",
             "source_articles": [
                 {
                     "title": source_title,
@@ -1027,7 +1093,8 @@ def test_site_report_composer_adds_links_for_supported_unlinked_cves():
             "analysis_period": "August 2026",
             "article_count": 1,
             "grc_article_count": 1,
-            "model": "openrouter/example/model",
+            "requested_model": "openrouter/example/model",
+            "resolved_model": "google/example-model",
         },
     }
 
@@ -1035,7 +1102,7 @@ def test_site_report_composer_adds_links_for_supported_unlinked_cves():
 
     assert (
         "VMware vCenter exploitation (CVE-2026-59310) requires containment. "
-        f"Sources: [{source_title}]({source_url})" in report
+        f"**Evidence:** [{source_title}]({source_url})" in report
     )
 
 
@@ -1054,6 +1121,7 @@ def test_site_report_composer_rejects_cve_absent_from_linked_source():
             "analysis_mode": "model",
             "source_name": "SentryDigest",
             "source_url": "https://example.com/feed.xml",
+            "source_home_url": "https://digest.example/",
             "source_articles": [
                 {
                     "title": "Different advisory",
@@ -1064,7 +1132,8 @@ def test_site_report_composer_rejects_cve_absent_from_linked_source():
             "analysis_period": "August 2026",
             "article_count": 1,
             "grc_article_count": 1,
-            "model": "openrouter/example/model",
+            "requested_model": "openrouter/example/model",
+            "resolved_model": "google/example-model",
         },
     }
 
@@ -1169,6 +1238,66 @@ def test_evidence_manifest_normalizes_parenthesized_urls():
         "sources": [{"title": "Evidence", "url": "HTTPS://example.com/a_%29b.html"}],
     }
     validate_manifest(escaped_markdown, metadata, json.dumps(escaped_manifest))
+
+
+def test_evidence_manifest_v2_attests_model_and_digest_item_identity():
+    namespace = runpy.run_path(str(SITE_REPORT_CHECK))
+    validate_manifest = namespace["validate_evidence_manifest"]
+    source_url = "https://example.com/advisory"
+    digest_url = namespace["sentrydigest_item_url"]("https://digest.example/", source_url)
+    markdown = (
+        "# Report\n"
+        "**Generated:** 2026-08-13T13:00:00Z\n"
+        "**Source:** [Feed](https://example.com/feed.xml)\n"
+        "**Authoring Model:** google/example-model\n"
+        "**Requested Route:** openrouter/openrouter/free\n\n"
+        "## Executive Summary\n"
+        f"[Evidence]({source_url}) supports the finding.\n\n"
+        "## Source Highlights\n"
+        f"- [Evidence]({source_url}) · [View in SentryDigest]({digest_url})"
+    )
+    metadata = {
+        "generated": "2026-08-13T13:00:00Z",
+        "source": "[Feed](https://example.com/feed.xml)",
+        "authoring model": "google/example-model",
+        "requested route": "openrouter/openrouter/free",
+    }
+    manifest = {
+        "schema_version": 2,
+        "generated_at": "2026-08-13T13:00:00Z",
+        "feed_url": "https://example.com/feed.xml",
+        "feed_home_url": "https://digest.example/",
+        "requested_model": "openrouter/openrouter/free",
+        "resolved_model": "google/example-model",
+        "sources": [
+            {
+                "title": "Evidence",
+                "url": source_url,
+                "digest_url": digest_url,
+                "cves": [],
+            }
+        ],
+    }
+
+    validate_manifest(
+        markdown,
+        metadata,
+        json.dumps(manifest),
+        require_current_schema=True,
+    )
+
+    aliased_manifest = {**manifest, "resolved_model": "openrouter/free"}
+    try:
+        validate_manifest(
+            markdown.replace("google/example-model", "openrouter/free"),
+            {**metadata, "authoring model": "openrouter/free"},
+            json.dumps(aliased_manifest),
+            require_current_schema=True,
+        )
+    except SystemExit as error:
+        assert "routing alias" in str(error)
+    else:
+        raise AssertionError("manifest accepted a router alias as report authorship")
 
 
 def test_evidence_manifest_rejects_invented_title_for_real_url():

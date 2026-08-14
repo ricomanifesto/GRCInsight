@@ -26,7 +26,8 @@
   function renderMarkdownLink(text, url) {
     const safeUrl = sanitizeMarkdownUrl(url);
     if (!safeUrl) return text;
-    return `<a href="${escapeAttribute(safeUrl)}" target="_blank" rel="noopener">${text}</a>`;
+    const className = text === 'View in SentryDigest' ? ' class="digest-handoff"' : '';
+    return `<a${className} href="${escapeAttribute(safeUrl)}" target="_blank" rel="noopener">${text}</a>`;
   }
 
   function renderInlineText(value) {
@@ -139,6 +140,23 @@
   function renderInlineMarkdown(value) {
     const extracted = extractMarkdownLinks(value);
     return extracted.restore(renderInlineText(extracted.markdown));
+  }
+
+  function renderEvidenceAffordances(html) {
+    const evidence = '<span class="evidence-label">Evidence</span>';
+    html = html.replace(
+      /<p>((?:(?!<\/p>)[\s\S])*?)\s*<strong>Evidence:<\/strong>\s*([\s\S]*?)<\/p>/g,
+      (_match, claim, links) => `<p>${claim.trim()}</p><aside class="evidence-note" aria-label="Evidence">${evidence}${links.trim()}</aside>`,
+    );
+    html = html.replace(
+      /<li>((?:(?!<\/li>)[\s\S])*?)\s*<strong>Evidence:<\/strong>\s*([\s\S]*?)<\/li>/g,
+      (_match, claim, links) => `<li>${claim.trim()}<aside class="evidence-note" aria-label="Evidence">${evidence}${links.trim()}</aside></li>`,
+    );
+    html = html.replace(
+      /<td>((?:(?!<\/td>)[\s\S])*?)\s*<strong>Evidence:<\/strong>\s*([\s\S]*?)<\/td>/g,
+      (_match, claim, links) => `<td>${claim.trim()}<div class="evidence-inline">${evidence}${links.trim()}</div></td>`,
+    );
+    return html;
   }
 
   // Reports are sometimes generated with numbered section headers ("1. Executive
@@ -257,6 +275,7 @@
     // Restore links and fenced code blocks last so their content never affects
     // block parsing or receives a second escaping pass.
     html = extractedLinks.restore(html);
+    html = renderEvidenceAffordances(html);
     return html.replace(/%%CODEBLOCK_(\d+)%%/g, (_, i) => `<pre><code>${escapeHtml(codeBlocks[+i])}</code></pre>`);
   }
 
@@ -268,6 +287,8 @@
     'total articles analyzed': 'Articles analyzed',
     'articles analyzed': 'Articles analyzed',
     'grc-relevant articles': 'GRC-relevant articles',
+    'authoring model': 'Authoring model',
+    'requested route': 'Requested route',
     'model': 'Model',
     'analysis mode': 'Analysis mode',
   };
@@ -279,6 +300,8 @@
     'source',
     'articles analyzed',
     'grc-relevant articles',
+    'authoring model',
+    'requested route',
     'model',
     'analysis mode',
   ];
@@ -321,12 +344,13 @@
   }
 
   function renderReportMetadata(metadata) {
-    const items = metadataOrder
+    const metadataItems = metadataOrder
       .filter(key => metadata[key])
       .map(key => `<div class="report-meta-item"><dt>${metadataLabels[key]}</dt><dd>${renderInlineMarkdown(metadata[key])}</dd></div>`)
       .join('');
-    if (!items) return '';
-    return `<section class="card report-provenance"><h2>About this report</h2><dl class="report-meta">${items}</dl></section>`;
+    const manifestItem = '<div class="report-meta-item report-meta-evidence"><dt>Evidence manifest</dt><dd><a class="manifest-link" href="evidence-manifest.json" target="_blank" rel="noopener">Machine-readable JSON</a></dd></div>';
+    if (!metadataItems) return '';
+    return `<section class="card report-provenance"><h2>About this report</h2><dl class="report-meta">${metadataItems}${manifestItem}</dl></section>`;
   }
 
   function renderReportSections(markdown) {

@@ -26,8 +26,10 @@ func TestReportMappingsPreserveFields(t *testing.T) {
 			AnalysisMode:    "model",
 			SourceName:      "SentryDigest",
 			SourceURL:       "https://example.com/feed.xml",
+			SourceHomeURL:   "https://digest.example/",
 			AnalysisPeriod:  "August 2026",
-			Model:           "openrouter/example/model",
+			RequestedModel:  "openrouter/example/model",
+			ResolvedModel:   "google/example-model",
 			SourceArticles: []map[string]any{
 				{
 					"title": "Evidence",

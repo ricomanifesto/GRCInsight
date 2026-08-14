@@ -191,8 +191,10 @@ def handler(event, context):
                                 "fallback_reason": md.fallback_reason,
                                 "source_name": md.source_name,
                                 "source_url": md.source_url,
+                                "source_home_url": md.source_home_url,
                                 "analysis_period": md.analysis_period,
-                                "model": md.model,
+                                "requested_model": md.requested_model,
+                                "resolved_model": md.resolved_model,
                                 "source_articles": md.source_articles or [],
                                 "regulations_mentioned": md.regulations_mentioned or [],
                                 "frameworks_referenced": md.frameworks_referenced or [],
@@ -276,6 +278,7 @@ def handler(event, context):
                                             "content": a.get("content", "")[:50000],
                                             "summary": a.get("summary", ""),
                                             "source": a.get("source", ""),
+                                            "digest_url": a.get("digest_url", ""),
                                             "published": (
                                                 a.get("published")
                                                 if isinstance(a.get("published"), str)

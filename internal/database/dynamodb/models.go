@@ -26,8 +26,10 @@ type ReportMetadata struct {
 	FallbackReason       string           `dynamodbav:"fallback_reason,omitempty" json:"fallback_reason,omitempty"`
 	SourceName           string           `dynamodbav:"source_name,omitempty" json:"source_name,omitempty"`
 	SourceURL            string           `dynamodbav:"source_url,omitempty" json:"source_url,omitempty"`
+	SourceHomeURL        string           `dynamodbav:"source_home_url,omitempty" json:"source_home_url,omitempty"`
 	AnalysisPeriod       string           `dynamodbav:"analysis_period,omitempty" json:"analysis_period,omitempty"`
-	Model                string           `dynamodbav:"model,omitempty" json:"model,omitempty"`
+	RequestedModel       string           `dynamodbav:"requested_model,omitempty" json:"requested_model,omitempty"`
+	ResolvedModel        string           `dynamodbav:"resolved_model,omitempty" json:"resolved_model,omitempty"`
 	SourceArticles       []map[string]any `dynamodbav:"source_articles,omitempty" json:"source_articles,omitempty"`
 	RegulationsMentioned []string         `dynamodbav:"regulations_mentioned" json:"regulations_mentioned"`
 	FrameworksReferenced []string         `dynamodbav:"frameworks_referenced" json:"frameworks_referenced"`
@@ -53,6 +55,7 @@ type Article struct {
 	Content   string `dynamodbav:"content" json:"content"`
 	Summary   string `dynamodbav:"summary" json:"summary"`
 	Source    string `dynamodbav:"source" json:"source"`
+	DigestURL string `dynamodbav:"digest_url,omitempty" json:"digest_url,omitempty"`
 	Published string `dynamodbav:"published" json:"published"`
 	CreatedAt string `dynamodbav:"created_at" json:"created_at"`
 	UpdatedAt string `dynamodbav:"updated_at" json:"updated_at"`

@@ -15,7 +15,10 @@ class SlowOpenRouterTransport(httpx.AsyncBaseTransport):
         await asyncio.sleep(0.05)
         return httpx.Response(
             200,
-            json={"choices": [{"message": {"content": "Too late"}}]},
+            json={
+                "model": "google/gemini-test",
+                "choices": [{"message": {"content": "Too late"}}],
+            },
             request=request,
         )
 
@@ -57,7 +60,10 @@ def test_openrouter_client_posts_chat_completion_with_nested_model_id():
         ]
         return httpx.Response(
             200,
-            json={"choices": [{"message": {"content": "Generated report"}}]},
+            json={
+                "model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+                "choices": [{"message": {"content": "Generated report"}}],
+            },
         )
 
     client = OpenRouterClient(
@@ -76,7 +82,8 @@ def test_openrouter_client_posts_chat_completion_with_nested_model_id():
         )
     )
 
-    assert result == "Generated report"
+    assert result.text == "Generated report"
+    assert result.resolved_model == "nvidia/nemotron-3-ultra-550b-a55b:free"
     assert [request.url.path for request in requests] == ["/api/v1/chat/completions"]
 
 
@@ -89,7 +96,10 @@ def test_openrouter_client_retries_invalid_json_once():
             return httpx.Response(200, text='{"choices": [\nprovider disconnected')
         return httpx.Response(
             200,
-            json={"choices": [{"message": {"content": "Generated report"}}]},
+            json={
+                "model": "google/gemini-test",
+                "choices": [{"message": {"content": "Generated report"}}],
+            },
         )
 
     client = OpenRouterClient(
@@ -108,7 +118,8 @@ def test_openrouter_client_retries_invalid_json_once():
         )
     )
 
-    assert result == "Generated report"
+    assert result.text == "Generated report"
+    assert result.resolved_model == "google/gemini-test"
     assert len(requests) == 2
     assert json.loads(requests[0].content.decode())["model"] == "openrouter/free"
 
@@ -157,7 +168,10 @@ def test_openrouter_client_retries_transient_provider_error_once():
             )
         return httpx.Response(
             200,
-            json={"choices": [{"message": {"content": "Generated report"}}]},
+            json={
+                "model": "google/gemini-test",
+                "choices": [{"message": {"content": "Generated report"}}],
+            },
         )
 
     client = OpenRouterClient(
@@ -176,8 +190,38 @@ def test_openrouter_client_retries_transient_provider_error_once():
         )
     )
 
-    assert result == "Generated report"
+    assert result.text == "Generated report"
+    assert result.resolved_model == "google/gemini-test"
     assert len(requests) == 2
+
+
+def test_openrouter_client_rejects_text_without_resolved_model_identity():
+    def handler(_request):
+        return httpx.Response(
+            200,
+            json={"choices": [{"message": {"content": "Generated report"}}]},
+        )
+
+    client = OpenRouterClient(
+        api_key="test-key",
+        max_tokens=4096,
+        base_url="https://openrouter.test/api/v1",
+        transport=httpx.MockTransport(handler),
+    )
+
+    try:
+        asyncio.run(
+            client.generate(
+                system_prompt="system",
+                user_prompt="user",
+                model=parse_openrouter_model("openrouter/openrouter/free"),
+                title="test",
+            )
+        )
+    except Exception as exc:
+        assert "resolved model identity" in str(exc)
+    else:
+        raise AssertionError("unattested OpenRouter output must be rejected")
 
 
 def test_openrouter_client_enforces_wall_clock_deadline_per_attempt():

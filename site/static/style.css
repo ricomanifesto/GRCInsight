@@ -11,6 +11,8 @@
   --line: rgba(236, 231, 220, 0.10);
   --hairline: rgba(236, 231, 220, 0.14);
   --surface: rgba(236, 231, 220, 0.045);
+  --evidence-bg: rgba(214, 160, 77, 0.08);
+  --evidence-border: rgba(214, 160, 77, 0.32);
   --card-shadow: 0 12px 26px rgba(0, 0, 0, 0.20);
   --pill-framework-bg: rgba(88, 145, 222, 0.16);
   --pill-framework-text: #b9d3ff;
@@ -33,6 +35,8 @@ body.light {
   --line: rgba(27, 35, 43, 0.12);
   --hairline: rgba(27, 35, 43, 0.14);
   --surface: rgba(27, 35, 43, 0.035);
+  --evidence-bg: rgba(168, 101, 29, 0.07);
+  --evidence-border: rgba(168, 101, 29, 0.26);
   --card-shadow: 0 10px 22px rgba(27, 35, 43, 0.08);
   --pill-framework-bg: rgba(29, 78, 216, 0.10);
   --pill-framework-text: #1e4f91;
@@ -145,7 +149,8 @@ body.light .sidebar details[open] > summary { background: rgba(49, 81, 62, 0.10)
 .report-meta { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0; margin: 0; border: 1px solid var(--line); border-radius: 7px; overflow: hidden; }
 .report-meta-item { min-width: 0; padding: 10px 12px; border-bottom: 1px solid var(--line); }
 .report-meta-item:nth-child(odd) { border-right: 1px solid var(--line); }
-.report-meta-item:nth-last-child(-n + 2) { border-bottom: 0; }
+.report-meta-item:last-child, .report-meta-item:nth-last-child(2):nth-child(odd) { border-bottom: 0; }
+.report-meta-item:last-child:nth-child(odd) { grid-column: 1 / -1; border-right: 0; }
 .report-meta dt { margin-bottom: 3px; color: var(--muted); font-size: 11px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; }
 .report-meta dd { margin: 0; overflow-wrap: anywhere; font-size: 14px; line-height: 1.45; }
 
@@ -199,6 +204,19 @@ body.light code { background: rgba(0, 0, 0, 0.05); }
 pre { padding: 14px 16px; border: 1px solid var(--hairline); border-radius: 8px; background: rgba(236, 231, 220, 0.05); overflow-x: auto; font-size: 13px; line-height: 1.5; }
 body.light pre { background: rgba(0, 0, 0, 0.03); }
 pre code { background: none; padding: 0; }
+
+/* Deterministically repaired evidence is presented as part of the report. */
+.evidence-note, .evidence-inline {
+  display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap;
+  color: var(--muted); background: var(--evidence-bg);
+  border: 1px solid var(--evidence-border); border-radius: 6px;
+  font-size: 12px; line-height: 1.45;
+}
+.evidence-note { margin: -2px 0 10px; padding: 8px 10px; }
+.evidence-inline { margin-top: 7px; padding: 6px 8px; }
+.evidence-label { color: var(--heading); font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; }
+.digest-handoff, .manifest-link { font-size: 0.88em; font-weight: 650; white-space: nowrap; }
+.digest-handoff::after, .manifest-link::after { content: " ↗"; font-size: 0.82em; }
 
 /* Links */
 a { color: var(--gold); text-decoration: none; }
@@ -255,7 +273,8 @@ kbd { padding: 1px 5px; border: 1px solid var(--hairline); border-bottom-width: 
   .table-wrap table { min-width: 560px; }
   .report-meta { grid-template-columns: 1fr; }
   .report-meta-item:nth-child(odd) { border-right: 0; }
-  .report-meta-item:nth-last-child(-n + 2) { border-bottom: 1px solid var(--line); }
+  .report-meta-item:nth-last-child(2):nth-child(odd) { border-bottom: 1px solid var(--line); }
+  .report-meta-item:last-child:nth-child(odd) { grid-column: auto; }
   .report-meta-item:last-child { border-bottom: 0; }
 }
 
@@ -265,4 +284,5 @@ kbd { padding: 1px 5px; border: 1px solid var(--hairline); border-bottom-width: 
   .app-header, .topbar, .sidebar, .app-footer, .back-to-top, .theme-toggle, .progress, .heading-actions, .anchor-link { display: none !important; }
   .card { background: #fff; border: none; box-shadow: none; }
   .card.collapsed > :not(h2) { display: revert; }
+  .evidence-note, .evidence-inline { color: #333; background: #f7f4ed; border-color: #bbb; }
 }

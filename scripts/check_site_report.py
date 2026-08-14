@@ -2,11 +2,12 @@
 """Validate the committed GitHub Pages report artifact."""
 
 import json
+import hashlib
 import re
 import xml.etree.ElementTree as ET
 from datetime import datetime, timezone
 from pathlib import Path
-from urllib.parse import quote, urlparse
+from urllib.parse import quote, urlparse, urlunparse
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 SITE_DIR = REPO_ROOT / "site"
@@ -86,11 +87,15 @@ REQUIRED_PUBLIC_METADATA = {
     "analysis mode",
     "analysis period",
     "articles analyzed",
+    "authoring model",
     "date of issue",
     "generated",
-    "model",
+    "requested route",
     "source",
 }
+LEGACY_REQUIRED_PUBLIC_METADATA = (
+    REQUIRED_PUBLIC_METADATA - {"authoring model", "requested route"}
+) | {"model"}
 
 
 def normalize_label_text(text: str) -> str:
@@ -500,6 +505,52 @@ def canonical_http_url(url: str) -> str:
     return quote(url, safe=":/?#[]@!$&*+,;=%")
 
 
+def canonical_public_url(value: str, field: str) -> str:
+    raw_url = str(value or "").strip()
+    parsed = urlparse(raw_url)
+    if (
+        parsed.scheme.lower() not in {"http", "https"}
+        or not parsed.netloc
+        or parsed.username is not None
+        or parsed.password is not None
+        or re.search(r"\s", raw_url)
+    ):
+        fail(f"{field} must be a credential-free HTTP URL")
+    hostname = (parsed.hostname or "").encode("idna").decode("ascii").lower()
+    if not hostname:
+        fail(f"{field} must include a hostname")
+    port = parsed.port
+    if port is not None and not (
+        (parsed.scheme.lower() == "http" and port == 80)
+        or (parsed.scheme.lower() == "https" and port == 443)
+    ):
+        hostname = f"{hostname}:{port}"
+    return urlunparse(
+        (
+            parsed.scheme.lower(),
+            hostname,
+            parsed.path or "/",
+            parsed.params,
+            parsed.query,
+            "",
+        )
+    )
+
+
+def sentrydigest_item_url(feed_home_url: str, article_url: str) -> str:
+    feed_home = canonical_public_url(feed_home_url, "evidence manifest feed home URL")
+    article = canonical_public_url(article_url, "evidence manifest source URL")
+    fragment = hashlib.sha256(article.encode("utf-8")).hexdigest()[:12]
+    return f"{feed_home}#reporting-{fragment}"
+
+
+def usable_model_identity(value: object, field: str) -> str:
+    identity = str(value or "").strip()
+    if not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9._:/+-]{1,255}", identity):
+        fail(f"{field} is not a usable provider model identity")
+    return identity
+
+
 def has_http_scheme(value: str) -> bool:
     return urlparse(value).scheme.lower() in {"http", "https"}
 
@@ -578,7 +629,11 @@ def validate_site_identity(html: str, sitemap_xml: str) -> None:
 
 
 def validate_evidence_manifest(
-    markdown: str, metadata: dict[str, str], manifest_text: str
+    markdown: str,
+    metadata: dict[str, str],
+    manifest_text: str,
+    *,
+    require_current_schema: bool = False,
 ) -> dict:
     try:
         manifest = json.loads(manifest_text)
@@ -586,6 +641,11 @@ def validate_evidence_manifest(
         fail(f"evidence-manifest.json is invalid JSON: {error}")
     if not isinstance(manifest, dict):
         fail("evidence-manifest.json must be an object")
+    schema_version = manifest.get("schema_version", 1)
+    if schema_version not in {1, 2}:
+        fail("evidence-manifest.json has an unsupported schema version")
+    if require_current_schema and schema_version != 2:
+        fail("current evidence manifest must use schema version 2")
     if manifest.get("generated_at") != metadata["generated"]:
         fail("evidence manifest timestamp does not match report provenance")
 
@@ -594,6 +654,25 @@ def validate_evidence_manifest(
         str(manifest.get("feed_url", ""))
     ) != canonical_http_url(markdown_inline_text(source_links[0][3])):
         fail("evidence manifest feed URL does not match report provenance")
+
+    feed_home_url = ""
+    if schema_version == 2:
+        feed_home_url = canonical_public_url(
+            str(manifest.get("feed_home_url", "")),
+            "evidence manifest feed home URL",
+        )
+        requested_model = usable_model_identity(
+            manifest.get("requested_model"), "evidence manifest requested model"
+        )
+        resolved_model = usable_model_identity(
+            manifest.get("resolved_model"), "evidence manifest resolved model"
+        )
+        if requested_model != metadata.get("requested route"):
+            fail("evidence manifest requested model does not match report provenance")
+        if resolved_model != metadata.get("authoring model"):
+            fail("evidence manifest resolved model does not match report provenance")
+        if resolved_model in {"openrouter/free", "openrouter/auto"}:
+            fail("evidence manifest resolved model is still a routing alias")
 
     raw_sources = manifest.get("sources")
     if not isinstance(raw_sources, list) or not raw_sources:
@@ -611,6 +690,18 @@ def validate_evidence_manifest(
         if not isinstance(url, str) or not has_http_scheme(url):
             fail(f"evidence manifest source {index} has no HTTP URL")
         url = canonical_http_url(url)
+        if schema_version == 2:
+            digest_url = source.get("digest_url")
+            if not isinstance(digest_url, str) or not has_http_scheme(digest_url):
+                fail(f"evidence manifest source {index} has no SentryDigest item URL")
+            expected_digest_url = canonical_http_url(
+                sentrydigest_item_url(feed_home_url, url)
+            )
+            if canonical_http_url(digest_url) != expected_digest_url:
+                fail(
+                    f"evidence manifest source {index} has an invalid "
+                    "SentryDigest item URL"
+                )
         raw_cves = source.get("cves", [])
         if not isinstance(raw_cves, list):
             fail(f"evidence manifest source {index} CVEs must be a list")
@@ -636,16 +727,14 @@ def validate_evidence_manifest(
         )
         for _, _, label, destination in markdown_links(body)
         if has_http_scheme(destination)
+        and markdown_inline_text(label) != "View in SentryDigest"
     ]
     if not body_links:
         fail("report body has no evidence links")
     unknown_pairs = sorted(set(body_links) - source_pairs)
     if unknown_pairs:
         label, url = unknown_pairs[0]
-        fail(
-            "report links evidence absent from source manifest: "
-            f"{label} ({url})"
-        )
+        fail("report links evidence absent from source manifest: " f"{label} ({url})")
 
     for line in body.splitlines():
         normalized_line = line.replace("‑", "-").replace("–", "-").replace("—", "-")
@@ -667,9 +756,7 @@ def validate_evidence_manifest(
         )
         unsupported = sorted(cited_cves - supported_cves)
         if unsupported:
-            fail(
-                f"report cites {unsupported[0]} without a linked source containing it"
-            )
+            fail(f"report cites {unsupported[0]} without a linked source containing it")
 
     source_section = re.search(
         r"(?ms)^##\s+Source Highlights\s*$([\s\S]*?)(?=^##\s+|\Z)", body
@@ -682,9 +769,24 @@ def validate_evidence_manifest(
             canonical_http_url(markdown_inline_text(destination)),
         )
         for _, _, label, destination in markdown_links(source_section.group(1))
+        if markdown_inline_text(label) != "View in SentryDigest"
     }
     if not highlighted_pairs or not highlighted_pairs.issubset(source_pairs):
         fail("Source Highlights must use exact source title and URL pairs")
+    if schema_version == 2:
+        expected_digest_urls = {
+            canonical_http_url(str(source["digest_url"]))
+            for source in raw_sources
+            if (str(source["title"]), canonical_http_url(str(source["url"])))
+            in highlighted_pairs
+        }
+        digest_urls = {
+            canonical_http_url(markdown_inline_text(destination))
+            for _, _, label, destination in markdown_links(source_section.group(1))
+            if markdown_inline_text(label) == "View in SentryDigest"
+        }
+        if not digest_urls or digest_urls != expected_digest_urls:
+            fail("Source Highlights must link each highlighted SentryDigest item")
     return manifest
 
 
@@ -722,7 +824,21 @@ def validate_archive_history(archive_dir: Path, archive_html: str) -> None:
         archived_manifest = required["manifest"].read_text(encoding="utf-8")
         archived_page = required["page"].read_text(encoding="utf-8")
         metadata = report_metadata(archived_markdown)
-        missing_metadata = REQUIRED_PUBLIC_METADATA - metadata.keys()
+        try:
+            archived_manifest_data = json.loads(archived_manifest)
+        except json.JSONDecodeError as error:
+            fail(f"evidence-manifest.json is invalid JSON: {error}")
+        manifest_schema = (
+            archived_manifest_data.get("schema_version", 1)
+            if isinstance(archived_manifest_data, dict)
+            else None
+        )
+        required_metadata = (
+            REQUIRED_PUBLIC_METADATA
+            if manifest_schema == 2
+            else LEGACY_REQUIRED_PUBLIC_METADATA
+        )
+        missing_metadata = required_metadata - metadata.keys()
         if missing_metadata:
             fail(
                 f"archive {snapshot.name} missing provenance metadata: "
@@ -750,11 +866,15 @@ def validate_archive_history(archive_dir: Path, archive_html: str) -> None:
         if defect := find_reader_surface_defect(archived_markdown):
             fail(f"archive {snapshot.name} contains reader-surface defect: {defect}")
         if integrity := find_public_report_integrity_failure(archived_markdown):
-            fail(f"archive {snapshot.name} contains report-integrity failure: {integrity}")
+            fail(
+                f"archive {snapshot.name} contains report-integrity failure: {integrity}"
+            )
         if '<main class="container archive-report">' not in archived_page:
             fail(f"archive {snapshot.name} page is not pre-rendered")
         if 'class="card report-provenance"' not in archived_page:
             fail(f"archive {snapshot.name} page is missing provenance")
+        if 'href="evidence-manifest.json"' not in archived_page:
+            fail(f"archive {snapshot.name} page does not link its evidence manifest")
         if f'href="{snapshot.name}/"' not in archive_html:
             fail(f"archive index does not link snapshot {snapshot.name}")
 
@@ -819,7 +939,23 @@ def main() -> None:
     if "Temporary placeholder" in markdown or "Temporary Outline" in markdown:
         fail("index.md still contains temporary placeholder content")
     metadata = report_metadata(markdown)
-    missing_metadata = REQUIRED_PUBLIC_METADATA - metadata.keys()
+    try:
+        current_manifest_data = json.loads(evidence_manifest_text)
+    except json.JSONDecodeError as error:
+        fail(f"evidence-manifest.json is invalid JSON: {error}")
+    current_manifest_schema = (
+        current_manifest_data.get("schema_version", 1)
+        if isinstance(current_manifest_data, dict)
+        else None
+    )
+    # TODO(resolved-model-publication): Require schema 2 metadata unconditionally
+    # after the first resolved-model report is published and verified at Pages.
+    current_required_metadata = (
+        REQUIRED_PUBLIC_METADATA
+        if current_manifest_schema == 2
+        else LEGACY_REQUIRED_PUBLIC_METADATA
+    )
+    missing_metadata = current_required_metadata - metadata.keys()
     if missing_metadata:
         fail(
             "index.md missing public provenance metadata: "
@@ -867,6 +1003,8 @@ def main() -> None:
         fail("index.html does not contain pre-rendered report content")
     if 'class="card report-provenance"' not in html:
         fail("index.html does not render the report provenance card")
+    if 'href="evidence-manifest.json"' not in html:
+        fail("index.html does not link the machine-readable evidence manifest")
 
     # The page controller routes rendering through the canonical renderer and
     # the shared tag catalog, and never emits an unsanitized Markdown link.
@@ -913,6 +1051,15 @@ def main() -> None:
             fail(f"renderer.js missing canonical export: {export}")
     if 'rel="noopener"' not in renderer_js:
         fail("renderer.js missing safe-link rel=noopener guard")
+    for renderer_contract in (
+        "renderEvidenceAffordances",
+        "evidence-manifest.json",
+        "View in SentryDigest",
+        "Authoring model",
+        "Requested route",
+    ):
+        if renderer_contract not in renderer_js:
+            fail(f"renderer.js missing provenance contract: {renderer_contract}")
 
     if "window.GRCInsightTags" not in tags_js:
         fail("tags.js does not export the compliance tag catalog")
@@ -952,6 +1099,15 @@ def main() -> None:
         r"opacity:\s*0\s*;", heading_actions.group(1)
     ):
         fail("style.css hides heading actions until hover")
+    for style_contract in (
+        ".evidence-note",
+        ".evidence-inline",
+        ".evidence-label",
+        ".digest-handoff",
+        ".manifest-link",
+    ):
+        if style_contract not in style_css:
+            fail(f"style.css is missing provenance style: {style_contract}")
 
     print("site report check passed")
 

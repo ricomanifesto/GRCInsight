@@ -6,6 +6,7 @@ import asyncio
 from collections.abc import Callable
 from dataclasses import dataclass
 import json
+import re
 import time
 from typing import Any
 
@@ -20,6 +21,14 @@ class OpenRouterModel:
 
     model_id: str
     provider_id: str = "openrouter"
+
+
+@dataclass(frozen=True)
+class OpenRouterGeneration:
+    """Provider-attested text and the upstream model that generated it."""
+
+    text: str
+    resolved_model: str
 
 
 def parse_openrouter_model(model_name: str) -> OpenRouterModel:
@@ -78,8 +87,8 @@ class OpenRouterClient:
         user_prompt: str,
         model: OpenRouterModel,
         title: str,
-    ) -> str:
-        """Generate text through OpenRouter."""
+    ) -> OpenRouterGeneration:
+        """Generate text and retain OpenRouter's resolved upstream model."""
         async with httpx.AsyncClient(
             base_url=self.base_url,
             timeout=self.timeout,
@@ -106,7 +115,7 @@ class OpenRouterClient:
                             },
                         )
                     self._raise_for_status(response)
-                    return self._extract_text(self._decode_payload(response))
+                    return self._extract_generation(self._decode_payload(response))
                 except TimeoutError as exc:
                     error = OpenRouterError(
                         "OpenRouter request deadline exceeded",
@@ -159,10 +168,23 @@ class OpenRouterClient:
             raise OpenRouterError("OpenRouter returned invalid JSON", retryable=True)
         return payload
 
-    def _extract_text(self, payload: dict[str, Any]) -> str:
+    def _extract_generation(self, payload: dict[str, Any]) -> OpenRouterGeneration:
         error = payload.get("error")
         if isinstance(error, dict):
             raise self._provider_error(error)
+
+        resolved_model = payload.get("model")
+        if not isinstance(resolved_model, str):
+            raise OpenRouterError(
+                "OpenRouter response did not include resolved model identity",
+                retryable=True,
+            )
+        resolved_model = resolved_model.strip()
+        if not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9._:/+-]{1,255}", resolved_model):
+            raise OpenRouterError(
+                "OpenRouter response included invalid resolved model identity",
+                retryable=True,
+            )
 
         choices = payload.get("choices")
         if not isinstance(choices, list):
@@ -185,7 +207,10 @@ class OpenRouterClient:
                     text_parts.append(content)
 
         if text_parts:
-            return "\n".join(text_parts)
+            return OpenRouterGeneration(
+                text="\n".join(text_parts),
+                resolved_model=resolved_model,
+            )
 
         raise OpenRouterError(
             "OpenRouter response did not include text output",

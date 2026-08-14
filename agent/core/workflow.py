@@ -2,9 +2,10 @@
 
 from collections import Counter
 from datetime import datetime, timezone
+import hashlib
 import re
 from typing import Dict, Any, List
-from urllib.parse import urljoin, urlparse
+from urllib.parse import urljoin, urlparse, urlunparse
 from loguru import logger
 
 from models.api import (
@@ -26,6 +27,7 @@ rss_service = RSSService()
 SOURCE_EVIDENCE_LIMIT = 12
 REPORT_CVE_LIMIT = 10
 REPORT_CVE_EVIDENCE_LIMIT = min(REPORT_CVE_LIMIT, SOURCE_EVIDENCE_LIMIT - 2)
+SENTRYDIGEST_ITEM_PREFIX = "reporting-"
 
 
 def _utc_now() -> datetime:
@@ -131,6 +133,47 @@ def _extract_cves(text: str) -> List[str]:
     return cves
 
 
+def _canonical_public_url(value: str, field: str) -> str:
+    """Normalize the public URL identity used by SentryDigest card anchors."""
+    raw_url = str(value or "").strip()
+    parsed = urlparse(raw_url)
+    if (
+        parsed.scheme.lower() not in {"http", "https"}
+        or not parsed.netloc
+        or parsed.username is not None
+        or parsed.password is not None
+        or re.search(r"\s", raw_url)
+    ):
+        raise ValueError(f"{field} must be a credential-free HTTP URL")
+    hostname = (parsed.hostname or "").encode("idna").decode("ascii").lower()
+    if not hostname:
+        raise ValueError(f"{field} must include a hostname")
+    port = parsed.port
+    if port is not None and not (
+        (parsed.scheme.lower() == "http" and port == 80)
+        or (parsed.scheme.lower() == "https" and port == 443)
+    ):
+        hostname = f"{hostname}:{port}"
+    return urlunparse(
+        (
+            parsed.scheme.lower(),
+            hostname,
+            parsed.path or "/",
+            parsed.params,
+            parsed.query,
+            "",
+        )
+    )
+
+
+def _sentrydigest_item_url(feed_home_url: str, article_url: str) -> str:
+    """Build the stable item permalink defined by SentryDigest reporting identity."""
+    canonical_article_url = _canonical_public_url(article_url, "article URL")
+    canonical_feed_home = _canonical_public_url(feed_home_url, "feed home URL")
+    fragment = hashlib.sha256(canonical_article_url.encode("utf-8")).hexdigest()[:12]
+    return f"{canonical_feed_home}#{SENTRYDIGEST_ITEM_PREFIX}{fragment}"
+
+
 def _build_source_evidence(enriched_articles: List[ArticleInput]) -> List[Dict[str, Any]]:
     """Build bounded current-source evidence for report-specific claims."""
     evidence: List[Dict[str, Any]] = []
@@ -140,6 +183,7 @@ def _build_source_evidence(enriched_articles: List[ArticleInput]) -> List[Dict[s
             {
                 "title": article.title,
                 "url": article.url,
+                "digest_url": article.digest_url,
                 "snippet": re.sub(r"\s+", " ", text).strip()[:700],
                 "cves": _extract_cves(text),
             }
@@ -421,6 +465,17 @@ async def run_grc_analysis_endpoint(
 
         # Step 2: Convert entries to ArticleInput format
         logger.info("Step 2: Processing feed entries")
+        try:
+            feed_home_url = _canonical_public_url(str(feed_data.get("link") or ""), "feed home URL")
+        except ValueError as error:
+            return WorkflowResponse(
+                status="failed",
+                error=APIError(
+                    code="FEED_IDENTITY_INVALID",
+                    message="Feed does not expose a usable public home URL",
+                    details=str(error),
+                ),
+            )
         articles: List[ArticleInput] = []
         seen_article_urls: set[str] = set()
         from email.utils import parsedate_to_datetime
@@ -464,6 +519,7 @@ async def run_grc_analysis_endpoint(
                     content=entry.get("content", ""),
                     summary=entry.get("description", ""),
                     source=feed_data.get("title", "Unknown Source"),
+                    digest_url=_sentrydigest_item_url(feed_home_url, url),
                     published=published_dt or datetime.now(),
                 )
                 articles.append(article)
@@ -544,6 +600,7 @@ async def run_grc_analysis_endpoint(
                     content=art.content,
                     summary=art.summary,
                     source=art.source,
+                    digest_url=art.digest_url,
                     published=art.published,
                     has_grc_content=has_grc,
                     regulations=local.get("regulations", []),
@@ -556,13 +613,23 @@ async def run_grc_analysis_endpoint(
         # Step 6: Generate comprehensive report
         logger.info("Step 6: Generating comprehensive GRC report")
         report_content = ""
+        resolved_model = ""
         used_fallback_report = False
 
         if used_model_analysis and model_service is not None:
-            report_content = await model_service.generate_grc_report(analysis_results, feed_data)
-            if not report_content or report_content.startswith("# GRC Intelligence Report - Error"):
-                fallback_reason = report_content or "empty report content from model"
+            report_generation = await model_service.generate_grc_report(analysis_results, feed_data)
+            report_content = report_generation.content
+            resolved_model = report_generation.resolved_model
+            if not resolved_model or resolved_model in {"openrouter/free", "openrouter/auto"}:
+                fallback_reason = "OpenRouter did not attest a usable upstream model identity"
                 report_content = ""
+                resolved_model = ""
+            if not report_content or report_content.startswith("# GRC Intelligence Report - Error"):
+                fallback_reason = (
+                    fallback_reason or report_content or "empty report content from model"
+                )
+                report_content = ""
+                resolved_model = ""
 
         if not report_content:
             report_content = _build_fallback_report(
@@ -593,12 +660,15 @@ async def run_grc_analysis_endpoint(
             fallback_reason=fallback_reason if used_fallback_report else None,
             source_name=feed_data.get("title") or "Unknown Feed",
             source_url=feed_url,
+            source_home_url=feed_home_url,
             analysis_period=generated_at.strftime("%B %Y"),
-            model=config.model,
+            requested_model=config.model,
+            resolved_model=resolved_model,
             source_articles=[
                 {
                     "title": source["title"],
                     "url": source["url"],
+                    "digest_url": source["digest_url"],
                     "cves": source["cves"],
                 }
                 for source in source_evidence

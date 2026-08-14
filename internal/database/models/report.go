@@ -30,8 +30,10 @@ type ReportMetadata struct {
 	FallbackReason       string           `json:"fallback_reason,omitempty"`
 	SourceName           string           `json:"source_name,omitempty"`
 	SourceURL            string           `json:"source_url,omitempty"`
+	SourceHomeURL        string           `json:"source_home_url,omitempty"`
 	AnalysisPeriod       string           `json:"analysis_period,omitempty"`
-	Model                string           `json:"model,omitempty"`
+	RequestedModel       string           `json:"requested_model,omitempty"`
+	ResolvedModel        string           `json:"resolved_model,omitempty"`
 	SourceArticles       []map[string]any `json:"source_articles,omitempty"`
 	RegulationsMentioned []string         `json:"regulations_mentioned"`
 	FrameworksReferenced []string         `json:"frameworks_referenced"`
@@ -47,6 +49,7 @@ type Article struct {
 	Content   string    `json:"content"`
 	Summary   string    `json:"summary"`
 	Source    string    `json:"source"`
+	DigestURL string    `json:"digest_url,omitempty"`
 	Published time.Time `json:"published"`
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`

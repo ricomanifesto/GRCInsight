@@ -1,5 +1,6 @@
 """OpenRouter model service for GRC analysis."""
 
+from dataclasses import dataclass
 from datetime import datetime, timezone
 import re
 from typing import List, Dict, Any
@@ -9,7 +10,11 @@ from loguru import logger
 
 from config.settings import settings
 from models.api import ArticleInput
-from services.openrouter_client import OpenRouterClient, parse_openrouter_model
+from services.openrouter_client import (
+    OpenRouterClient,
+    OpenRouterGeneration,
+    parse_openrouter_model,
+)
 
 REPORT_CVE_LIMIT = 10
 CVE_PATTERN = re.compile(r"\bCVE-\d{4}-\d{4,}\b", re.IGNORECASE)
@@ -24,6 +29,14 @@ REPORT_SECTION_TITLES = (
     "Recommendations for Action",
     "Source Highlights",
 )
+
+
+@dataclass(frozen=True)
+class GRCReportGeneration:
+    """Final report text and the model attested by its successful completion."""
+
+    content: str
+    resolved_model: str
 
 
 def _collect_prompt_cves(source_evidence: List[Dict[str, Any]]) -> List[str]:
@@ -129,7 +142,9 @@ class GRCModelService:
             return "\n".join(texts)
         return str(content)
 
-    async def _invoke(self, *, system_prompt: str, user_prompt: str, title: str) -> str:
+    async def _invoke(
+        self, *, system_prompt: str, user_prompt: str, title: str
+    ) -> OpenRouterGeneration:
         """Invoke the configured model through the selected model client."""
         return await self.client.generate(
             system_prompt=system_prompt,
@@ -161,13 +176,13 @@ class GRCModelService:
 
             analysis_prompt = self._create_analysis_prompt(articles)
 
-            response_content = await self._invoke(
+            response = await self._invoke(
                 system_prompt=self._get_system_prompt(),
                 user_prompt=analysis_prompt,
                 title="GRC article analysis",
             )
 
-            analysis_result = self._process_analysis_response(response_content, articles)
+            analysis_result = self._process_analysis_response(response.text, articles)
 
             logger.info(
                 f"Analysis complete: {analysis_result['summary']['grc_relevant_count']} GRC-relevant articles found"
@@ -195,18 +210,19 @@ class GRCModelService:
 
     async def generate_grc_report(
         self, analysis_data: Dict[str, Any], feed_info: Dict[str, Any]
-    ) -> str:
+    ) -> GRCReportGeneration:
         """Generate a comprehensive GRC intelligence report."""
         try:
             logger.info("Generating GRC intelligence report")
 
             report_prompt = self._create_report_prompt(analysis_data, feed_info)
 
-            report_content = await self._invoke(
+            generation = await self._invoke(
                 system_prompt=self._get_report_system_prompt(),
                 user_prompt=report_prompt,
                 title="GRC intelligence report",
             )
+            report_content = generation.text
 
             defect = _report_draft_defect(report_content)
             if defect is not None:
@@ -214,11 +230,12 @@ class GRCModelService:
                 retry_prompt = f"""{report_prompt}
 
 This is a clean retry because the prior response {defect}. Do not discuss the instructions or your reasoning. Return one concise final report only, beginning immediately with `## Executive Summary`, followed by each other required `##` section exactly once. Complete the Source Highlights section before stopping."""
-                report_content = await self._invoke(
+                generation = await self._invoke(
                     system_prompt=self._get_report_system_prompt(),
                     user_prompt=retry_prompt,
                     title="GRC intelligence report retry",
                 )
+                report_content = generation.text
                 retry_defect = _report_draft_defect(report_content)
                 if retry_defect is not None:
                     raise ValueError(
@@ -226,11 +243,19 @@ This is a clean retry because the prior response {defect}. Do not discuss the in
                     )
 
             logger.info("GRC report generation completed")
-            return report_content
+            return GRCReportGeneration(
+                content=report_content,
+                resolved_model=generation.resolved_model,
+            )
 
         except Exception as e:
             logger.error(f"Error generating report: {e}")
-            return f"# GRC Intelligence Report - Error\n\nUnable to generate report: {str(e)}"
+            return GRCReportGeneration(
+                content=(
+                    "# GRC Intelligence Report - Error\n\n" f"Unable to generate report: {str(e)}"
+                ),
+                resolved_model="",
+            )
 
     def _get_system_prompt(self) -> str:
         """Get the system prompt for GRC analysis."""

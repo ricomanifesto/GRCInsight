@@ -4,10 +4,11 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 from pathlib import Path
 import re
-from urllib.parse import quote, urlparse
+from urllib.parse import quote, urlparse, urlunparse
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 INDEX_MD = REPO_ROOT / "site" / "index.md"
@@ -56,6 +57,52 @@ def http_url(value: object, field: str) -> str:
 
 def has_http_scheme(value: str) -> bool:
     return urlparse(value).scheme.lower() in {"http", "https"}
+
+
+def model_identity(value: object, field: str) -> str:
+    identity = single_line(value, field)
+    if not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9._:/+-]{1,255}", identity):
+        fail(f"{field} is not a usable provider model identity")
+    return identity
+
+
+def canonical_public_url(value: object, field: str) -> str:
+    raw_url = single_line(value, field)
+    parsed = urlparse(raw_url)
+    if (
+        parsed.scheme.lower() not in {"http", "https"}
+        or not parsed.netloc
+        or parsed.username is not None
+        or parsed.password is not None
+        or re.search(r"\s", raw_url)
+    ):
+        fail(f"{field} must be a credential-free HTTP URL")
+    hostname = (parsed.hostname or "").encode("idna").decode("ascii").lower()
+    if not hostname:
+        fail(f"{field} must include a hostname")
+    port = parsed.port
+    if port is not None and not (
+        (parsed.scheme.lower() == "http" and port == 80)
+        or (parsed.scheme.lower() == "https" and port == 443)
+    ):
+        hostname = f"{hostname}:{port}"
+    return urlunparse(
+        (
+            parsed.scheme.lower(),
+            hostname,
+            parsed.path or "/",
+            parsed.params,
+            parsed.query,
+            "",
+        )
+    )
+
+
+def sentrydigest_item_url(feed_home_url: object, article_url: object) -> str:
+    feed_home = canonical_public_url(feed_home_url, "metadata.source_home_url")
+    article = canonical_public_url(article_url, "source article URL")
+    fragment = hashlib.sha256(article.encode("utf-8")).hexdigest()[:12]
+    return f"{feed_home}#reporting-{fragment}"
 
 
 def integer(value: object, field: str) -> int:
@@ -210,9 +257,7 @@ def serialized_markdown_label(value: str) -> str:
     )
 
 
-def canonicalize_evidence_links(
-    body: str, sources: list[dict[str, object]]
-) -> str:
+def canonicalize_evidence_links(body: str, sources: list[dict[str, object]]) -> str:
     """Rebuild one-sided model mutations from the trusted source manifest."""
     sources_by_url = {str(source["url"]): source for source in sources}
     sources_by_title: dict[str, list[dict[str, object]]] = {}
@@ -234,8 +279,7 @@ def canonicalize_evidence_links(
 
         if url_match is not None:
             if title_matches and not any(
-                str(source["url"]) == str(url_match["url"])
-                for source in title_matches
+                str(source["url"]) == str(url_match["url"]) for source in title_matches
             ):
                 continue
             canonical_source = url_match
@@ -274,8 +318,7 @@ def expand_ellipsized_evidence_references(
             return match.group(0)
         source = candidates[0]
         return (
-            f"[{serialized_markdown_label(str(source['title']))}]"
-            f"({source['url']})"
+            f"[{serialized_markdown_label(str(source['title']))}]" f"({source['url']})"
         )
 
     return re.sub(
@@ -308,9 +351,7 @@ def expand_ordinal_evidence_references(
     )
 
 
-def add_missing_cve_source_links(
-    body: str, sources: list[dict[str, object]]
-) -> str:
+def add_missing_cve_source_links(body: str, sources: list[dict[str, object]]) -> str:
     """Attach trusted evidence when the model omits a supported CVE citation."""
     sources_for_cve: dict[str, list[dict[str, object]]] = {}
     for source in sources:
@@ -354,9 +395,9 @@ def add_missing_cve_source_links(
             )
 
         if added_sources:
-            citation = "Sources: " + "; ".join(added_sources)
+            citation = "**Evidence:** " + "; ".join(added_sources)
             if line.rstrip().endswith("|"):
-                line = line.rstrip()[:-1].rstrip() + f"<br>{citation} |"
+                line = line.rstrip()[:-1].rstrip() + f" {citation} |"
             else:
                 line = line.rstrip() + f" {citation}"
         output_lines.append(line)
@@ -372,14 +413,36 @@ def source_articles(metadata: dict) -> list[dict[str, object]]:
     for index, raw_source in enumerate(raw_sources):
         if not isinstance(raw_source, dict):
             fail(f"metadata.source_articles[{index}] must be an object")
-        if not str(raw_source.get("title") or "").strip() or not str(
-            raw_source.get("url") or ""
-        ).strip():
+        if (
+            not str(raw_source.get("title") or "").strip()
+            or not str(raw_source.get("url") or "").strip()
+        ):
             continue
         title = single_line(
             raw_source.get("title"), f"metadata.source_articles[{index}].title"
         )
-        url = http_url(raw_source.get("url"), f"metadata.source_articles[{index}].url")
+        raw_url = single_line(
+            raw_source.get("url"), f"metadata.source_articles[{index}].url"
+        )
+        url = http_url(raw_url, f"metadata.source_articles[{index}].url")
+        expected_digest_url = http_url(
+            sentrydigest_item_url(metadata.get("source_home_url"), raw_url),
+            f"metadata.source_articles[{index}].digest_url",
+        )
+        raw_digest_url = str(raw_source.get("digest_url") or "").strip()
+        digest_url = (
+            http_url(
+                raw_digest_url,
+                f"metadata.source_articles[{index}].digest_url",
+            )
+            if raw_digest_url
+            else expected_digest_url
+        )
+        if digest_url != expected_digest_url:
+            fail(
+                f"metadata.source_articles[{index}].digest_url does not match "
+                "SentryDigest reporting identity"
+            )
         raw_cves = raw_source.get("cves", [])
         if not isinstance(raw_cves, list):
             fail(f"metadata.source_articles[{index}].cves must be a list")
@@ -395,27 +458,47 @@ def source_articles(metadata: dict) -> list[dict[str, object]]:
         if url in seen_urls:
             continue
         seen_urls.add(url)
-        sources.append({"title": title, "url": url, "cves": cves})
+        sources.append(
+            {"title": title, "url": url, "digest_url": digest_url, "cves": cves}
+        )
     if not sources:
         fail("metadata.source_articles contains no usable linked evidence")
     return sources
 
 
+def add_sentrydigest_handoffs(body: str, sources: list[dict[str, object]]) -> str:
+    """Add feed-card handoffs to exact source links in Source Highlights."""
+    match = re.search(
+        r"(?ms)(^##\s+Source Highlights\s*$)([\s\S]*?)(?=^##\s+|\Z)", body
+    )
+    if match is None:
+        fail("report has no Source Highlights section")
+    source_section = match.group(2)
+    for source in sources:
+        source_link = (
+            f"[{serialized_markdown_label(str(source['title']))}]" f"({source['url']})"
+        )
+        digest_link = f"[View in SentryDigest]({source['digest_url']})"
+        source_section = source_section.replace(
+            source_link, f"{source_link} · {digest_link}"
+        )
+    return body[: match.start(2)] + source_section + body[match.end(2) :]
+
+
 def validate_evidence_links(body: str, sources: list[dict[str, object]]) -> None:
-    allowed_pairs = {
-        (str(source["title"]), str(source["url"])) for source in sources
-    }
-    evidence_links = [
+    allowed_pairs = {(str(source["title"]), str(source["url"])) for source in sources}
+    source_links = [
         (
             markdown_inline_text(label),
             http_url(markdown_inline_text(url), "report evidence URL"),
         )
         for label, url in markdown_links(body)
         if has_http_scheme(url)
+        and markdown_inline_text(label) != "View in SentryDigest"
     ]
-    if not evidence_links:
+    if not source_links:
         fail("report body contains no linked source evidence")
-    unknown_pairs = sorted(set(evidence_links) - allowed_pairs)
+    unknown_pairs = sorted(set(source_links) - allowed_pairs)
     if unknown_pairs:
         label, url = unknown_pairs[0]
         fail(
@@ -423,10 +506,32 @@ def validate_evidence_links(body: str, sources: list[dict[str, object]]) -> None
             f"{label} ({url})"
         )
 
-    cves_by_url = {
-        str(source["url"]): set(source["cves"])
-        for source in sources
+    source_section = re.search(
+        r"(?ms)^##\s+Source Highlights\s*$([\s\S]*?)(?=^##\s+|\Z)", body
+    )
+    if source_section is None:
+        fail("report has no Source Highlights section")
+    expected_digest_urls = {str(source["digest_url"]) for source in sources}
+    digest_links = {
+        http_url(markdown_inline_text(url), "SentryDigest item URL")
+        for label, url in markdown_links(source_section.group(1))
+        if markdown_inline_text(label) == "View in SentryDigest"
     }
+    highlighted_source_urls = {
+        http_url(markdown_inline_text(url), "report evidence URL")
+        for label, url in markdown_links(source_section.group(1))
+        if markdown_inline_text(label) != "View in SentryDigest"
+        and has_http_scheme(url)
+    }
+    required_digest_urls = {
+        str(source["digest_url"])
+        for source in sources
+        if str(source["url"]) in highlighted_source_urls
+    }
+    if digest_links != required_digest_urls or not digest_links <= expected_digest_urls:
+        fail("Source Highlights does not provide exact SentryDigest item handoffs")
+
+    cves_by_url = {str(source["url"]): set(source["cves"]) for source in sources}
     for line in body.splitlines():
         normalized_line = line.replace("‑", "-").replace("–", "-").replace("—", "-")
         cited_cves = {
@@ -447,16 +552,24 @@ def validate_evidence_links(body: str, sources: list[dict[str, object]]) -> None
         )
         unsupported = sorted(cited_cves - supported_cves)
         if unsupported:
-            fail(
-                f"report cites {unsupported[0]} without a linked source containing it"
-            )
+            fail(f"report cites {unsupported[0]} without a linked source containing it")
 
 
 def evidence_manifest(data: dict, sources: list[dict[str, object]]) -> dict:
     metadata = data.get("metadata") or {}
     return {
+        "schema_version": 2,
         "generated_at": single_line(data.get("generated_at"), "generated_at"),
         "feed_url": http_url(metadata.get("source_url"), "metadata.source_url"),
+        "feed_home_url": http_url(
+            metadata.get("source_home_url"), "metadata.source_home_url"
+        ),
+        "requested_model": model_identity(
+            metadata.get("requested_model"), "metadata.requested_model"
+        ),
+        "resolved_model": model_identity(
+            metadata.get("resolved_model"), "metadata.resolved_model"
+        ),
         "sources": sources,
     }
 
@@ -482,12 +595,19 @@ def compose_report(data: dict, expected_feed_url: str, expected_model: str) -> s
     grc_article_count = integer(
         metadata.get("grc_article_count"), "metadata.grc_article_count"
     )
-    model = single_line(metadata.get("model"), "metadata.model")
+    requested_model = model_identity(
+        metadata.get("requested_model"), "metadata.requested_model"
+    )
+    resolved_model = model_identity(
+        metadata.get("resolved_model"), "metadata.resolved_model"
+    )
 
     if source_url != http_url(expected_feed_url, "expected feed URL"):
         fail("stored source URL does not match the requested feed URL")
-    if model != single_line(expected_model, "expected model"):
-        fail("stored model does not match the requested model")
+    if requested_model != model_identity(expected_model, "expected model"):
+        fail("stored requested model does not match the requested model")
+    if resolved_model in {"openrouter/free", "openrouter/auto"}:
+        fail("stored resolved model is still an OpenRouter routing alias")
 
     date_match = re.match(r"^(\d{4})-(\d{2})-(\d{2})", generated_at)
     if date_match is None:
@@ -516,6 +636,7 @@ def compose_report(data: dict, expected_feed_url: str, expected_model: str) -> s
     body = expand_ellipsized_evidence_references(body, sources)
     body = expand_ordinal_evidence_references(body, sources)
     body = add_missing_cve_source_links(body, sources)
+    body = add_sentrydigest_handoffs(body, sources)
     validate_evidence_links(body, sources)
     return "\n".join(
         (
@@ -526,7 +647,8 @@ def compose_report(data: dict, expected_feed_url: str, expected_model: str) -> s
             f"**Source:** [{source_name}]({source_url})",
             f"**Articles Analyzed:** {article_count}",
             f"**GRC-Relevant Articles:** {grc_article_count}",
-            f"**Model:** {model}",
+            f"**Authoring Model:** {resolved_model}",
+            f"**Requested Route:** {requested_model}",
             "**Analysis Mode:** Model-backed",
             "",
             body,

@@ -2,6 +2,7 @@ import asyncio
 
 from core import workflow as workflow_mod
 from models.api import GRCAnalysisConfig
+from services.model_service import GRCReportGeneration
 from services.rss_service import RSSService
 
 
@@ -35,6 +36,7 @@ def test_run_grc_analysis_endpoint_falls_back_when_model_is_unavailable(monkeypa
     async def fake_fetch_feed(_feed_url):
         return {
             "title": "Test Feed",
+            "link": "https://digest.example/",
             "entries": [
                 {
                     "title": "CISA orders vendors to strengthen compliance controls",
@@ -95,6 +97,7 @@ def test_run_grc_analysis_endpoint_marks_model_backed_reports(monkeypatch):
     async def fake_fetch_feed(_feed_url):
         return {
             "title": "",
+            "link": "https://digest.example/",
             "entries": [
                 {
                     "title": "NIST publishes new control guidance",
@@ -131,7 +134,10 @@ def test_run_grc_analysis_endpoint_marks_model_backed_reports(monkeypatch):
             }
 
         async def generate_grc_report(self, _analysis_results, _feed_data):
-            return "# Model-backed GRC Intelligence Report\n\n1) Executive Summary\n- Model output."
+            return GRCReportGeneration(
+                content="# Model-backed GRC Intelligence Report\n\n1) Executive Summary\n- Model output.",
+                resolved_model="google/example-model",
+            )
 
     monkeypatch.setattr(workflow_mod.rss_service, "fetch_feed", fake_fetch_feed)
     monkeypatch.setattr(workflow_mod.rss_service, "enrich_articles", fake_enrich_articles)
@@ -151,14 +157,76 @@ def test_run_grc_analysis_endpoint_marks_model_backed_reports(monkeypatch):
     assert response.metadata.source_name == "Unknown Feed"
     assert response.metadata.source_url == "https://example.com/feed.xml"
     assert response.metadata.analysis_period
-    assert response.metadata.model == "openrouter/openrouter/free"
+    assert response.metadata.requested_model == "openrouter/openrouter/free"
+    assert response.metadata.resolved_model == "google/example-model"
+    digest_url = workflow_mod._sentrydigest_item_url(
+        "https://digest.example/", "https://example.com/nist"
+    )
     assert response.metadata.source_articles == [
         {
             "title": "NIST publishes new control guidance",
             "url": "https://example.com/nist",
+            "digest_url": digest_url,
             "cves": [],
         }
     ]
+
+
+def test_run_grc_analysis_endpoint_rejects_router_alias_as_authorship(monkeypatch):
+    async def fake_fetch_feed(_feed_url):
+        return {
+            "title": "Test Feed",
+            "link": "https://digest.example/",
+            "entries": [
+                {
+                    "title": "NIST publishes new control guidance",
+                    "link": "https://example.com/nist",
+                    "description": "Framework control update",
+                    "content": "NIST control guidance for regulated teams.",
+                }
+            ],
+        }
+
+    async def fake_enrich_articles(articles):
+        return articles
+
+    class FakeGRCModelService:
+        def __init__(self, model_name=None, max_tokens=None, model_deadline=None):
+            pass
+
+        async def analyze_articles_for_grc(self, articles):
+            return {
+                "grc_articles": [{"title": articles[0].title, "url": articles[0].url}],
+                "summary": {
+                    "total_articles": len(articles),
+                    "grc_relevant_count": 1,
+                    "confidence_score": 0.9,
+                },
+                "analysis": {},
+            }
+
+        async def generate_grc_report(self, _analysis_results, _feed_data):
+            return GRCReportGeneration(
+                content="## Executive Summary\nModel output.",
+                resolved_model="openrouter/free",
+            )
+
+    monkeypatch.setattr(workflow_mod.rss_service, "fetch_feed", fake_fetch_feed)
+    monkeypatch.setattr(workflow_mod.rss_service, "enrich_articles", fake_enrich_articles)
+    monkeypatch.setattr(workflow_mod, "GRCModelService", FakeGRCModelService)
+
+    response = asyncio.run(
+        workflow_mod.run_grc_analysis_endpoint(
+            "https://example.com/feed.xml",
+            GRCAnalysisConfig(),
+        )
+    )
+
+    assert response.status == "completed"
+    assert response.metadata is not None
+    assert response.metadata.analysis_mode == "fallback"
+    assert response.metadata.resolved_model == ""
+    assert "upstream model identity" in (response.metadata.fallback_reason or "")
 
 
 def test_run_grc_analysis_endpoint_skips_entries_without_linked_evidence(monkeypatch):
@@ -168,6 +236,7 @@ def test_run_grc_analysis_endpoint_skips_entries_without_linked_evidence(monkeyp
     async def fake_fetch_feed(_feed_url):
         return {
             "title": "Test Feed",
+            "link": "https://digest.example/",
             "entries": [
                 {"title": "Linkless item", "link": "", "content": "Cannot cite this."},
                 {
@@ -209,7 +278,10 @@ def test_run_grc_analysis_endpoint_skips_entries_without_linked_evidence(monkeyp
 
         async def generate_grc_report(self, analysis_results, _feed_data):
             generated_from_sources.extend(analysis_results["source_evidence"])
-            return "1) Executive Summary\n- Model output."
+            return GRCReportGeneration(
+                content="1) Executive Summary\n- Model output.",
+                resolved_model="google/example-model",
+            )
 
     monkeypatch.setattr(workflow_mod.rss_service, "fetch_feed", fake_fetch_feed)
     monkeypatch.setattr(workflow_mod.rss_service, "enrich_articles", fake_enrich_articles)
@@ -230,6 +302,9 @@ def test_run_grc_analysis_endpoint_skips_entries_without_linked_evidence(monkeyp
         {
             "title": "Linked item",
             "url": "https://example.com/linked",
+            "digest_url": workflow_mod._sentrydigest_item_url(
+                "https://digest.example/", "https://example.com/linked"
+            ),
             "cves": ["CVE-2026-12345"],
         }
     ]
@@ -237,6 +312,7 @@ def test_run_grc_analysis_endpoint_skips_entries_without_linked_evidence(monkeyp
         {
             "title": source["title"],
             "url": source["url"],
+            "digest_url": source["digest_url"],
             "cves": source["cves"],
         }
         for source in generated_from_sources
@@ -249,6 +325,7 @@ def test_run_grc_analysis_endpoint_passes_request_model_config(monkeypatch):
     async def fake_fetch_feed(_feed_url):
         return {
             "title": "Test Feed",
+            "link": "https://digest.example/",
             "entries": [
                 {
                     "title": "SEC updates cyber disclosure expectations",
@@ -285,7 +362,10 @@ def test_run_grc_analysis_endpoint_passes_request_model_config(monkeypatch):
             }
 
         async def generate_grc_report(self, _analysis_results, _feed_data):
-            return "# Model-backed GRC Intelligence Report\n\n1) Executive Summary\n- Model output."
+            return GRCReportGeneration(
+                content="# Model-backed GRC Intelligence Report\n\n1) Executive Summary\n- Model output.",
+                resolved_model="nvidia/nemotron-3-ultra-550b-a55b:free",
+            )
 
     monkeypatch.setattr(workflow_mod.rss_service, "fetch_feed", fake_fetch_feed)
     monkeypatch.setattr(workflow_mod.rss_service, "enrich_articles", fake_enrich_articles)
