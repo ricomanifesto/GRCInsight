@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Fail closed when the local reporting identity contract is unavailable or drifts."""
+"""Fetch and compare the canonical reporting identity contract in distinct stages."""
 
 from __future__ import annotations
 
@@ -53,12 +53,34 @@ def fetch_canonical_contract(
     return content
 
 
-def verify_contract(
-    local_contract: Path,
+def report_unavailable() -> int:
+    print(
+        "::error title=Canonical reporting identity unavailable::"
+        "The canonical contract could not be retrieved; release remains blocked.",
+        file=sys.stderr,
+    )
+    return UNAVAILABLE_EXIT_CODE
+
+
+def fetch_contract(
     canonical_url: str,
+    canonical_output: Path,
     timeout_seconds: float,
     attempts: int = DEFAULT_ATTEMPTS,
 ) -> int:
+    try:
+        canonical_bytes = fetch_canonical_contract(
+            canonical_url, timeout_seconds, attempts=attempts
+        )
+        canonical_output.write_bytes(canonical_bytes)
+    except (CanonicalContractUnavailable, OSError):
+        return report_unavailable()
+
+    print(f"Reporting identity contract fetched: SHA-256 {sha256(canonical_bytes)}")
+    return 0
+
+
+def compare_contract(local_contract: Path, canonical_contract: Path) -> int:
     try:
         local_bytes = local_contract.read_bytes()
     except OSError:
@@ -70,16 +92,9 @@ def verify_contract(
         return DRIFT_EXIT_CODE
 
     try:
-        canonical_bytes = fetch_canonical_contract(
-            canonical_url, timeout_seconds, attempts=attempts
-        )
-    except CanonicalContractUnavailable:
-        print(
-            "::error title=Canonical reporting identity unavailable::"
-            "The canonical contract could not be retrieved; release remains blocked.",
-            file=sys.stderr,
-        )
-        return UNAVAILABLE_EXIT_CODE
+        canonical_bytes = canonical_contract.read_bytes()
+    except OSError:
+        return report_unavailable()
 
     local_hash = sha256(local_bytes)
     canonical_hash = sha256(canonical_bytes)
@@ -98,14 +113,29 @@ def verify_contract(
 
 def main() -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--local-contract", type=Path, default=LOCAL_CONTRACT)
-    parser.add_argument("--canonical-url", default=CANONICAL_CONTRACT_URL)
-    parser.add_argument("--timeout-seconds", type=float, default=15.0)
-    parser.add_argument("--attempts", type=int, choices=range(1, 6), default=DEFAULT_ATTEMPTS)
-    args = parser.parse_args()
-    return verify_contract(
-        args.local_contract, args.canonical_url, args.timeout_seconds, args.attempts
+    commands = parser.add_subparsers(dest="command", required=True)
+
+    fetch_parser = commands.add_parser("fetch")
+    fetch_parser.add_argument("--canonical-url", default=CANONICAL_CONTRACT_URL)
+    fetch_parser.add_argument("--canonical-output", type=Path, required=True)
+    fetch_parser.add_argument("--timeout-seconds", type=float, default=15.0)
+    fetch_parser.add_argument(
+        "--attempts", type=int, choices=range(1, 6), default=DEFAULT_ATTEMPTS
     )
+
+    compare_parser = commands.add_parser("compare")
+    compare_parser.add_argument("--local-contract", type=Path, default=LOCAL_CONTRACT)
+    compare_parser.add_argument("--canonical-contract", type=Path, required=True)
+
+    args = parser.parse_args()
+    if args.command == "fetch":
+        return fetch_contract(
+            args.canonical_url,
+            args.canonical_output,
+            args.timeout_seconds,
+            args.attempts,
+        )
+    return compare_contract(args.local_contract, args.canonical_contract)
 
 
 if __name__ == "__main__":

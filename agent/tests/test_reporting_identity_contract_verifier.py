@@ -8,20 +8,9 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 VERIFIER = REPO_ROOT / "scripts" / "verify_reporting_identity_contract.py"
 
 
-def run_verifier(
-    local_contract: Path, canonical_contract: Path
-) -> subprocess.CompletedProcess[str]:
+def run_verifier(*arguments: str) -> subprocess.CompletedProcess[str]:
     return subprocess.run(
-        [
-            sys.executable,
-            str(VERIFIER),
-            "--local-contract",
-            str(local_contract),
-            "--canonical-url",
-            canonical_contract.as_uri(),
-            "--attempts",
-            "1",
-        ],
+        [sys.executable, str(VERIFIER), *arguments],
         check=False,
         capture_output=True,
         text=True,
@@ -35,7 +24,13 @@ def test_verifier_accepts_byte_identical_contract(tmp_path: Path):
     local_contract.write_bytes(contract)
     canonical_contract.write_bytes(contract)
 
-    result = run_verifier(local_contract, canonical_contract)
+    result = run_verifier(
+        "compare",
+        "--local-contract",
+        str(local_contract),
+        "--canonical-contract",
+        str(canonical_contract),
+    )
 
     assert result.returncode == 0
     assert "contract verified" in result.stdout
@@ -43,10 +38,15 @@ def test_verifier_accepts_byte_identical_contract(tmp_path: Path):
 
 
 def test_verifier_classifies_canonical_source_unavailability(tmp_path: Path):
-    local_contract = tmp_path / "local.json"
-    local_contract.write_text("{}\n")
-
-    result = run_verifier(local_contract, tmp_path / "missing.json")
+    result = run_verifier(
+        "fetch",
+        "--canonical-url",
+        (tmp_path / "missing.json").as_uri(),
+        "--canonical-output",
+        str(tmp_path / "fetched.json"),
+        "--attempts",
+        "1",
+    )
 
     assert result.returncode == 2
     assert "Canonical reporting identity unavailable" in result.stderr
@@ -59,7 +59,13 @@ def test_verifier_classifies_byte_drift(tmp_path: Path):
     local_contract.write_text('{"contract_version":1}\n')
     canonical_contract.write_text('{"contract_version":2}\n')
 
-    result = run_verifier(local_contract, canonical_contract)
+    result = run_verifier(
+        "compare",
+        "--local-contract",
+        str(local_contract),
+        "--canonical-contract",
+        str(canonical_contract),
+    )
 
     assert result.returncode == 3
     assert "Reporting identity contract drift" in result.stderr
@@ -71,7 +77,13 @@ def test_verifier_treats_missing_local_copy_as_drift(tmp_path: Path):
     canonical_contract = tmp_path / "canonical.json"
     canonical_contract.write_text("{}\n")
 
-    result = run_verifier(tmp_path / "missing.json", canonical_contract)
+    result = run_verifier(
+        "compare",
+        "--local-contract",
+        str(tmp_path / "missing.json"),
+        "--canonical-contract",
+        str(canonical_contract),
+    )
 
     assert result.returncode == 3
     assert "repository-local contract is missing or unreadable" in result.stderr
@@ -115,3 +127,33 @@ def test_canonical_fetch_retries_bounded_transient_failures(monkeypatch):
     assert result == payload
     assert calls == [3.0, 3.0, 3.0, 3.0]
     assert sleeps == [1, 2, 4]
+
+
+def test_fetch_and_compare_are_separate_fail_closed_stages(tmp_path: Path):
+    canonical_contract = tmp_path / "canonical.json"
+    fetched_contract = tmp_path / "fetched.json"
+    local_contract = tmp_path / "local.json"
+    contract = b'{"contract_version":1}\n'
+    canonical_contract.write_bytes(contract)
+    local_contract.write_bytes(contract)
+
+    fetch_result = run_verifier(
+        "fetch",
+        "--canonical-url",
+        canonical_contract.as_uri(),
+        "--canonical-output",
+        str(fetched_contract),
+    )
+    compare_result = run_verifier(
+        "compare",
+        "--local-contract",
+        str(local_contract),
+        "--canonical-contract",
+        str(fetched_contract),
+    )
+
+    assert fetch_result.returncode == 0
+    assert fetched_contract.read_bytes() == contract
+    assert "contract fetched" in fetch_result.stdout
+    assert compare_result.returncode == 0
+    assert "contract verified" in compare_result.stdout

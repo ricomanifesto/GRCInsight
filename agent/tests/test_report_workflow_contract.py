@@ -60,11 +60,19 @@ def test_release_workflows_verify_the_canonical_reporting_identity_contract():
         "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/"
         "main/contracts/reporting-identity-v1.json"
     )
-    verifier = "python3 scripts/verify_reporting_identity_contract.py"
+    fetch_step = "Fetch canonical reporting identity contract"
+    drift_step = "Check reporting identity contract drift"
+    fetch_command = "python3 scripts/verify_reporting_identity_contract.py fetch"
+    compare_command = "python3 scripts/verify_reporting_identity_contract.py compare"
 
     for workflow_path in WORKFLOWS:
         workflow = workflow_path.read_text()
-        assert workflow.count(verifier) == 1, workflow_path.name
+        assert workflow.count(fetch_step) == 1, workflow_path.name
+        assert workflow.count(drift_step) == 1, workflow_path.name
+        assert workflow.count(fetch_command) == 1, workflow_path.name
+        assert workflow.count(compare_command) == 1, workflow_path.name
+        assert workflow.index(fetch_step) < workflow.index(drift_step), workflow_path.name
+        assert "$RUNNER_TEMP/reporting-identity-v1.json" in workflow
         assert canonical_contract not in workflow, workflow_path.name
         assert "cmp -s contracts/reporting-identity-v1.json" not in workflow
 
