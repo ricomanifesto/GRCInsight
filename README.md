@@ -26,7 +26,7 @@ The site keeps dated reports and a [publication history](https://ricomanifesto.g
 1. The Go service accepts report requests, stores report state in DynamoDB, and invokes the Python service.
 2. The Python service fetches RSS articles, filters for GRC relevance, and asks the configured OpenRouter model to compose a report.
 3. The report workflow retrieves the result and checks its model identity, source issue, citations, and analysis mode.
-4. Only a model-backed report with complete source and model records is published. If the model route fails or cannot prove which model answered, the public site keeps the last verified report and records a short refusal category.
+4. Only a model-backed report with complete source and model records is published. A completed fallback-mode report keeps the last verified report and records a short refusal category. Other generation or provenance failures also keep the last verified report, but exit before adding a history event.
 5. A static builder creates the current page, dated archive, evidence manifest, and publication-history page before GitHub Pages deploys them.
 
 The stable article links shared with SentryDigest and SentryInsight follow SentryDigest's [reporting identity contract](https://github.com/ricomanifesto/SentryDigest/blob/main/contracts/README.md).
