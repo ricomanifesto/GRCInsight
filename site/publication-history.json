@@ -8,6 +8,12 @@
   },
   "events": [
     {
+      "event_at": "2026-08-15T09:33:31Z",
+      "outcome": "published",
+      "report_generated_at": "2026-08-15T09:33:27.17366Z",
+      "evidence_manifest_sha256": "f774e1cf1a52969d47e5c3d4eb16a85b1010fb0d4ccc0756c4e1063990d65e40"
+    },
+    {
       "event_at": "2026-08-15T06:51:03Z",
       "outcome": "published",
       "report_generated_at": "2026-08-15T06:50:53.112495Z",
