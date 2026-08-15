@@ -56,7 +56,9 @@ Start the Go API from the repository root:
 go run ./cmd/server
 ```
 
-The Go service listens on port 8080 and calls the Python service at `http://localhost:8081` by default. Edit `configs/config.yaml` or use environment variables to change those settings. Report storage endpoints require AWS credentials and the configured DynamoDB tables.
+Before starting it, configure AWS credentials. Make the `grcinsight-reports` DynamoDB table available in the configured region, or point `DATABASE_ENDPOINT` at a compatible local DynamoDB instance with that table. Startup calls `DescribeTable` and exits if the reports table is unavailable.
+
+The Go service listens on port 8080 and calls the Python service at `http://localhost:8081` by default. Edit `configs/config.yaml` or use environment variables to change those settings.
 
 ## Checks
 

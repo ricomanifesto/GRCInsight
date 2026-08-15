@@ -24,7 +24,7 @@ Generated report files should be changed through the publication scripts, not ed
 
 `scripts/compose_site_report.py` accepts a completed stored report and creates `index.md` plus `evidence-manifest.json`. It refuses fallback reports, mismatched source or model records, and citations that were not in the analyzed article set.
 
-`scripts/build_site.py --archive-current` snapshots the current Markdown and evidence manifest, then rebuilds the current page, archive, sitemap, publication history, and related navigation.
+`scripts/build_site.py --archive-current` snapshots the current Markdown and evidence manifest, then rebuilds the current page, archive, publication history, and related navigation. `scripts/check_site_report.py` validates the separately maintained sitemap.
 
 `static/renderer.js` is used by both the build and the browser. The controller in `static/app.js` does not contain a second Markdown implementation.
 
