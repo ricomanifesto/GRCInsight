@@ -101,6 +101,46 @@ def test_archive_detail_chrome_preserves_report_body_bytes_and_is_idempotent():
     assert first.count(namespace["ARCHIVE_CONTEXT_END"]) == 1
 
 
+def test_archive_detail_chrome_adds_icons_without_changing_report_body():
+    namespace = builder_namespace()
+    generated = namespace["DATED_DIGEST_HANDOFF_BOUNDARY"]
+    report_body = (
+        '<main class="container archive-report">'
+        '<section data-era="original">Publication-era body.</section>'
+        "</main>"
+    )
+    html = f"<html><head><title>Archive</title></head><body>{report_body}</body></html>"
+
+    first = namespace["with_archive_detail_chrome"](html, generated)
+    second = namespace["with_archive_detail_chrome"](first, generated)
+
+    assert first == second
+    assert report_body in first
+    assert first.count('href="../../static/favicon.ico"') == 1
+    assert first.count('href="../../static/icon.svg"') == 1
+    assert first.count('href="../../static/apple-touch-icon.png"') == 1
+
+
+def test_secondary_pages_link_site_icons_explicitly():
+    namespace = builder_namespace()
+    boundary = namespace["DATED_DIGEST_HANDOFF_BOUNDARY"]
+    history = {
+        "schema_version": 1,
+        "max_entries": 30,
+        "history_started_at": "2026-08-14T14:07:22Z",
+        "schedule": {"cadence": "daily", "time_utc": "13:00"},
+        "events": [],
+    }
+
+    archive_html = namespace["archive_index_html"]([report_tuple(namespace, boundary)])
+    history_html = namespace["publication_history_html"](history)
+
+    for html in (archive_html, history_html):
+        assert 'href="../static/favicon.ico"' in html
+        assert 'href="../static/icon.svg"' in html
+        assert 'href="../static/apple-touch-icon.png"' in html
+
+
 def test_publication_notice_is_silent_when_report_published():
     namespace = builder_namespace()
 

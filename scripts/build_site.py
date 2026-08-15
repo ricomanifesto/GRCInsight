@@ -231,7 +231,32 @@ def historical_context_note(archive_href: str | None = None) -> str:
       </aside>"""
 
 
+def with_site_icons(html: str, static_prefix: str) -> str:
+    favicon_href = f'{static_prefix}/favicon.ico'
+    if html.count("</head>") != 1:
+        return html
+
+    icon_hrefs = (
+        favicon_href,
+        f"{static_prefix}/icon.svg",
+        f"{static_prefix}/apple-touch-icon.png",
+    )
+    for href in icon_hrefs:
+        html = re.sub(
+            rf'[ \t]*<link\b[^>]*\bhref="{re.escape(href)}"[^>]*>[ \t]*\n?',
+            "",
+            html,
+        )
+    icon_links = (
+        f'    <link rel="icon" href="{favicon_href}" sizes="48x48">\n'
+        f'    <link rel="icon" type="image/svg+xml" href="{static_prefix}/icon.svg">\n'
+        f'    <link rel="apple-touch-icon" href="{static_prefix}/apple-touch-icon.png">\n'
+    )
+    return re.sub(r"[ \t]*</head>", f"{icon_links}  </head>", html, count=1)
+
+
 def with_archive_detail_chrome(html: str, generated: datetime) -> str:
+    html = with_site_icons(html, "../../static")
     region = re.compile(
         rf"{re.escape(ARCHIVE_CONTEXT_START)}.*?{re.escape(ARCHIVE_CONTEXT_END)}",
         re.DOTALL,
@@ -310,6 +335,9 @@ def archive_index_html(reports: list[tuple[str, str, str, str]]) -> str:
     <title>Report Archive | GRCInsight</title>
     <meta name="description" content="Dated, model-backed GRCInsight intelligence reports.">
     <link rel="canonical" href="{PUBLIC_SITE_URL}archive/">
+    <link rel="icon" href="../static/favicon.ico" sizes="48x48">
+    <link rel="icon" type="image/svg+xml" href="../static/icon.svg">
+    <link rel="apple-touch-icon" href="../static/apple-touch-icon.png">
     <link rel="stylesheet" href="../static/style.css">
   </head>
   <body>
@@ -359,6 +387,9 @@ def publication_history_html(history: dict[str, object]) -> str:
     <title>Publication History | GRCInsight</title>
     <meta name="description" content="Recent GRCInsight report publication and retention outcomes.">
     <link rel="canonical" href="{PUBLIC_SITE_URL}publication-history/">
+    <link rel="icon" href="../static/favicon.ico" sizes="48x48">
+    <link rel="icon" type="image/svg+xml" href="../static/icon.svg">
+    <link rel="apple-touch-icon" href="../static/apple-touch-icon.png">
     <link rel="stylesheet" href="../static/style.css">
   </head>
   <body>
