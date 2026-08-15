@@ -1,18 +1,50 @@
-# Terraform – grcinsight-articles DynamoDB Table
+# GRCInsight Articles Table
 
-This module creates the DynamoDB table used to persist analyzed articles with the required GSIs:
+This Terraform module manages the DynamoDB table that stores analyzed source articles.
 
-- Table: `grcinsight-articles`
-- PK: `article_id` (S)
-- GSIs:
-  - `by-report-id` (HASH: `report_id`)
-  - `by-url` (HASH: `url`)
+The table uses on-demand billing and has three keys:
+
+- `article_id`: primary key.
+- `report_id`: `by-report-id` index for the articles in one report.
+- `url`: `by-url` index for finding an article by source URL.
 
 ## Inputs
 
-- `aws_region` (string, default `us-east-1`)
-- `articles_table_name` (string, default `grcinsight-articles`)
-- `tags` (map(string), default `{}`)
+| Variable | Default | Purpose |
+|---|---|---|
+| `aws_region` | `us-east-1` | AWS region |
+| `articles_table_name` | `grcinsight-articles` | Table name |
+| `tags` | `{}` | Resource tags |
+
+## Apply to the Existing Table
+
+The checked-in `imports.tf` tells Terraform to adopt an existing table named by `articles_table_name`.
+
+```bash
+cd configs/terraform/articles-table
+terraform init
+terraform fmt -check
+terraform validate
+terraform plan \
+  -var 'aws_region=us-east-1' \
+  -var 'articles_table_name=grcinsight-articles'
+terraform apply \
+  -var 'aws_region=us-east-1' \
+  -var 'articles_table_name=grcinsight-articles'
+```
+
+Review the plan before applying it. If the named table does not already exist, remove the import block only when you intend Terraform to create a new table.
+
+## Service Configuration
+
+After applying, set:
+
+```bash
+ARTICLES_TABLE_NAME=grcinsight-articles
+DDB_TABLE_NAME=grcinsight-reports
+```
+
+`ARTICLES_TABLE_NAME` selects this article table. `DDB_TABLE_NAME` selects the separate reports table.
 
 ## Outputs
 
@@ -20,33 +52,3 @@ This module creates the DynamoDB table used to persist analyzed articles with th
 - `articles_table_arn`
 - `articles_gsi_by_report_id`
 - `articles_gsi_by_url`
-
-## Usage
-
-Initialize, review the import plan, and apply:
-
-```sh
-cd configs/terraform/articles-table
-terraform init
-terraform plan \
-  -var "aws_region=us-east-1" \
-  -var "articles_table_name=grcinsight-articles"
-terraform apply \
-  -var "aws_region=us-east-1" \
-  -var "articles_table_name=grcinsight-articles"
-```
-
-The import block adopts the existing table identified by
-`articles_table_name` before Terraform plans changes. Keep it for the
-default deployment. Remove the import block only when intentionally creating a
-new table that does not already exist.
-
-After apply, set the service environment variables:
-
-- `ARTICLES_TABLE_NAME=grcinsight-articles`
-- `DDB_TABLE_NAME=grcinsight-reports` (existing reports table)
-
-## Notes
-
-- The Go and Python services already support these names via env vars.
-- Queries will prefer GSIs; ensure they are present to avoid fallback scans.

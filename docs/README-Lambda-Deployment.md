@@ -1,73 +1,90 @@
 # AWS Lambda Deployment
 
-Go Lambda orchestrates API and DynamoDB. Python Lambda analyzes feeds and writes back results. GitHub Actions builds, deploys, and schedules runs.
+GRCInsight runs two container-based Lambda functions:
+
+- `grcinsight-go-function` handles the API and DynamoDB access.
+- `grcinsight-python-function` fetches feeds and performs model-backed analysis.
+
+The Go function invokes the Python function for report generation.
 
 ## Prerequisites
 
-- AWS account with ECR and Lambda access
-- AWS CLI and Docker installed
-- OpenRouter API key for Python Lambda model-backed analysis
+- AWS CLI and Docker.
+- An AWS account with ECR, Lambda, IAM, DynamoDB, and CloudWatch access.
+- Existing `grcinsight-reports` and `grcinsight-articles` DynamoDB tables.
+- An OpenRouter API key.
+- amd64 container support.
 
-## CI Deploy (recommended)
+## GitHub Actions Deployment
 
-- Add repo secrets: `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `OPENROUTER_API_KEY`
-- Configure repo variable: `LLM_MODEL=openrouter/provider-model`
-- Run `.github/workflows/deploy-lambda.yml` (manual or push to `main`)
-- Workflow builds both images with `DOCKER_BUILDKIT=0`, pushes to ECR, updates Lambdas, and smoke‑tests `/health`
+`.github/workflows/deploy-lambda.yml` runs on pushes to `main` and by manual trigger. Configure:
 
-## Manual Deploy
+- Repository secrets: `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `OPENROUTER_API_KEY`.
+- Repository variable: `LLM_MODEL`, using `openrouter/provider-model` format. If unset, the workflow uses `openrouter/nvidia/nemotron-3-ultra-550b-a55b:free`.
+
+The workflow:
+
+1. Verifies the shared reporting-identity files.
+2. Creates the two ECR repositories if needed.
+3. Builds and pushes amd64 images tagged with the commit SHA and `latest`.
+4. Updates the existing Lambda functions and their environment variables.
+5. Waits for both functions to become active.
+6. Invokes the Go `/health` route and requires a healthy response.
+
+The workflow updates Lambda functions; it does not create missing functions or their execution role.
+
+## Manual Deployment
+
+The manual script can create missing ECR repositories, the shared Lambda role, and the two functions before updating them:
 
 ```bash
-export LLM_MODEL=openrouter/nvidia/nemotron-3-ultra-550b-a55b:free
-export OPENROUTER_API_KEY=...
 export AWS_REGION=us-east-1
+export OPENROUTER_API_KEY=...
+export LLM_MODEL=openrouter/nvidia/nemotron-3-ultra-550b-a55b:free
 export DOCKER_BUILDKIT=0
 ./scripts/deploy-lambda.sh
 ```
 
-The script creates ECR repos if missing, builds/pushes images, creates or updates roles and functions, and sets env vars.
+The script changes AWS resources and pushes container images. Review it and confirm the active AWS account before running it.
 
-## Architecture Constraints
+## Container Constraints
 
-- Images target amd64. Go build sets `GOARCH=amd64`. Python base image is digest‑pinned to amd64.
-- BuildKit is disabled to emit Docker schema v2 manifests accepted by Lambda.
+- Both images target `linux/amd64`.
+- The Go build sets `GOARCH=amd64`.
+- The Python Lambda base image is pinned by digest.
+- Docker BuildKit is disabled so Lambda receives Docker schema v2 image manifests.
 
-## Test
+## Smoke Checks
 
-```bash
-# Health
-aws lambda invoke --function-name grcinsight-go-function \
-  --payload '{"httpMethod":"GET","path":"/health"}' health.json && cat health.json
-
-# Generate
-aws lambda invoke --function-name grcinsight-go-function \
-  --payload '{"httpMethod":"POST","path":"/api/v1/reports/generate","body":"{\"feed_url\":\"https://example.com/feed.xml\"}"}' out.json && cat out.json
-```
-
-## Monitoring
+Health route:
 
 ```bash
-aws logs describe-log-groups --log-group-name-prefix /aws/lambda/grcinsight-go-function
-aws cloudwatch get-metric-statistics --namespace AWS/Lambda --metric-name Duration \
-  --dimensions Name=FunctionName,Value=grcinsight-go-function \
-  --start-time $(date -u -d '1 hour ago' +%Y-%m-%dT%H:%M:%S) \
-  --end-time $(date -u +%Y-%m-%dT%H:%M:%S) --period 300 --statistics Average,Maximum
+aws lambda invoke \
+  --function-name grcinsight-go-function \
+  --payload '{"httpMethod":"GET","path":"/health"}' \
+  --cli-binary-format raw-in-base64-out \
+  health.json
+jq . health.json
 ```
 
-## Cleanup
+Start a report:
 
 ```bash
-aws lambda delete-function --function-name grcinsight-go-function
-aws lambda delete-function --function-name grcinsight-python-function
-aws ecr delete-repository --repository-name grcinsight-go --force
-aws ecr delete-repository --repository-name grcinsight-python --force
-aws iam detach-role-policy --role-name grcinsight-lambda-role \
-  --policy-arn arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
-aws iam delete-role --role-name grcinsight-lambda-role
+aws lambda invoke \
+  --function-name grcinsight-go-function \
+  --payload '{"httpMethod":"POST","path":"/api/v1/reports/generate","body":"{\"feed_url\":\"https://example.com/feed.xml\"}"}' \
+  --cli-binary-format raw-in-base64-out \
+  report.json
+jq . report.json
 ```
 
-## Local vs Lambda
+The report request is asynchronous in the production configuration. Use the returned report ID with `GET /api/v1/reports/{id}` to read its status.
 
-- Local: `cmd/server/main.go`, `agent/main.py`
-- Lambda: `cmd/lambda/main.go`, `agent/lambda_main.py`
-- Local and Lambda model calls use OpenRouter directly with `OPENROUTER_API_KEY`.
+## Logs
+
+```bash
+aws logs describe-log-groups \
+  --log-group-name-prefix /aws/lambda/grcinsight-
+```
+
+Use CloudWatch Logs to inspect a failed health check or report request. Do not publish raw provider errors; the public site exposes only allowlisted refusal categories.

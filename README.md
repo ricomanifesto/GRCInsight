@@ -7,106 +7,83 @@
   </picture>
 </div>
 
-GRCInsight turns regulatory and security feeds into audit-ready GRC intelligence, with framework mapping, agency signals, industry relevance, and concise action-oriented reports.
+GRCInsight reads security and regulatory news and publishes a report for governance, risk, and compliance review.
 
-**[Latest Report](https://ricomanifesto.github.io/GRCInsight/)**
+**[Read the latest GRC report](https://ricomanifesto.github.io/GRCInsight/)**
 
-## What It Does
+## What the Report Shows
 
-GRCInsight monitors security and regulatory feeds, filters for governance, risk, and compliance relevance, and publishes generated reports for review. It is designed to translate raw feed activity into signals a reviewer can map to obligations, frameworks, industries, agencies, and next actions.
+- The source event and why it may matter.
+- Relevant regulations, frameworks, agencies, and industries.
+- Evidence links back to the original article and the dated [SentryDigest](https://github.com/ricomanifesto/SentryDigest) issue.
+- Suggested review or follow-up actions.
+- The model and source records used to create the report.
 
-## Report Coverage
+The site keeps dated reports and a [publication history](https://ricomanifesto.github.io/GRCInsight/publication-history/) of recorded publication and retention outcomes. Runs that fail before either outcome is recorded do not appear in that history.
 
-Generated reports can include:
+## How It Works
 
-- regulatory and agency signals
-- framework and control relevance
-- affected industries
-- concise summaries
-- action-oriented findings
-- published Pages output
+1. The Go service accepts report requests, stores report state in DynamoDB, and invokes the Python service.
+2. The Python service fetches RSS articles, filters for GRC relevance, and asks the configured OpenRouter model to compose a report.
+3. The report workflow retrieves the result and checks its model identity, source issue, citations, and analysis mode.
+4. Only a model-backed report with complete source and model records is published. A completed fallback-mode report keeps the last verified report and records a short refusal category. Other generation or provenance failures also keep the last verified report, but exit before adding a history event.
+5. A static builder creates the current page, dated archive, evidence manifest, and publication-history page before GitHub Pages deploys them.
 
-## Relationship to SentryDigest
+The stable article links shared with SentryDigest and SentryInsight follow SentryDigest's [reporting identity contract](https://github.com/ricomanifesto/SentryDigest/blob/main/contracts/README.md).
 
-GRCInsight can be triggered by updates from [SentryDigest](https://github.com/ricomanifesto/SentryDigest), using security-news updates as one input for GRC-focused analysis. Each published source handoff targets the dated SentryDigest issue identified by the feed's UTC build timestamp, so an immutable GRC report never depends on the rolling digest page. Reporting-card fragments are checked by a byte-identical copy of SentryDigest's versioned `contracts/reporting-identity-verifier-v1.py`; the verifier rejects drift in both itself and `contracts/reporting-identity-v1.json`. SentryDigest's [reporting identity runbook](https://github.com/ricomanifesto/SentryDigest/blob/main/contracts/README.md) owns versioning, cross-repository adoption order, and the family gate inventory.
+## Run It Locally
 
-## Architecture
+You need Go 1.24, Python 3.11, and [`uv`](https://docs.astral.sh/uv/). Copy `.env.example` to `.env` and replace the placeholder values before calling model or AWS services.
 
-- **Go Lambda:** API handling, DynamoDB writes, and Python Lambda invocation.
-- **Python Lambda:** RSS fetch, model-backed analysis, and report composition.
-- **GitHub Actions:** Lambda deployment, scheduled report generation, deterministic site composition, visual review evidence, and GitHub Pages publishing.
-
-## Setup
-
-Install Python agent dependencies:
+For model-backed analysis, set:
 
 ```bash
-cd agent
-uv sync
-```
-
-Configure model access:
-
-```bash
-export OPENROUTER_API_KEY=your-openrouter-api-key
+export OPENROUTER_API_KEY=...
 export LLM_MODEL=openrouter/nvidia/nemotron-3-ultra-550b-a55b:free
 ```
 
-Edit Go service configuration in `configs/config.yaml`.
-
-## Use Locally
-
-Run the Python agent:
+Start the Python service:
 
 ```bash
 cd agent
+uv sync --locked
 uv run uvicorn main:app --host 0.0.0.0 --port 8081 --reload
 ```
 
-Run the Go API:
+Start the Go API from the repository root:
 
 ```bash
 go run ./cmd/server
 ```
 
-## Local Checks
+Before starting it, configure AWS credentials. Make the `grcinsight-reports` DynamoDB table available in the configured region, or point `DATABASE_ENDPOINT` at a compatible local DynamoDB instance with that table. Startup calls `DescribeTable` and exits if the reports table is unavailable.
+
+The Go service listens on port 8080 and calls the Python service at `http://localhost:8081` by default. Edit `configs/config.yaml` or use environment variables to change those settings.
+
+## Checks
 
 ```bash
 make check
 ```
 
-## Production
+This checks Go formatting and tests; Python tests, linting, formatting, and types; and the committed site. The site checks prove that generated HTML matches its Markdown and JSON inputs, citations belong to the analyzed source set, archive and publication state agree, and the shared renderer handles links and report sections safely.
 
-- Deploy by pushing to `main` or running `.github/workflows/deploy-lambda.yml`.
-- Required secrets: `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `OPENROUTER_API_KEY`.
-- Runtime variable: `LLM_MODEL=openrouter/provider-model`.
-- Model-backed analysis calls OpenRouter directly in local and Lambda environments.
-- Report provenance distinguishes the configured OpenRouter route from the
-  upstream model returned with the successful report completion. Publication
-  fails closed when that resolved model identity is absent or remains a router
-  alias.
-- Every published report exposes `evidence-manifest.json`, including the feed,
-  resolved model, feed-owned digest issue, exact source title/URL pairs, CVE
-  coverage, and stable links to the corresponding dated SentryDigest items.
-- `.github/workflows/lambda-report-generation.yml` refuses fallback output,
-  composes report-owned provenance into `site/index.md`, preserves a dated
-  archive snapshot, pre-renders the current/archive pages, validates the result,
-  and commits the artifact to `main`.
-- `site/publication-state.json` binds the latest publication outcome to the
-  current evidence manifest. Successful publication keeps the reader surface
-  quiet; a refused model attempt retains the last model-backed report and adds a
-  pre-rendered notice with only the attempt time, an allowlisted provider
-  category, and the enforced daily 13:00 UTC recovery horizon. Raw provider
-  errors are never published.
-- `site/publication-history.json` is an independently versioned, newest-first
-  journal capped at 30 terminal outcomes. It starts at the first proven public
-  retention event rather than reconstructing earlier history, binds every event
-  to an archived evidence-manifest digest, and drives the readable
-  `/publication-history/` page. Latest state, journal, archive, and rendered
-  surfaces must agree before publication.
-- Archive detail chrome discloses publication-era rolling SentryDigest links on
-  reports older than the dated-handoff boundary without changing archived
-  Markdown, evidence manifests, or the preserved report body.
-- `.github/workflows/deploy-site.yml` is the single Pages deployment owner. It
-  revalidates the committed artifact, captures dark and light top-of-fold review
-  images, uploads that evidence to the workflow run, and deploys `site/`.
+Focused commands are also available:
+
+```bash
+make test-go
+make test-agent
+make check-site
+```
+
+## Deployment and Publishing
+
+- [Lambda deployment guide](docs/README-Lambda-Deployment.md)
+- [Static-site contract](site/README.md)
+- [DynamoDB articles-table module](configs/terraform/articles-table/README.md)
+
+`.github/workflows/deploy-lambda.yml` runs on every push to `main` or by manual trigger. It deploys the Go and Python Lambda images and checks the Go health endpoint.
+
+`.github/workflows/lambda-report-generation.yml` runs after a SentryDigest dispatch, daily at 13:00 UTC, or by manual trigger. The default route is `openrouter/nvidia/nemotron-3-ultra-550b-a55b:free`; set the repository variable `LLM_MODEL` to override it. AWS credentials and `OPENROUTER_API_KEY` are required repository secrets.
+
+`.github/workflows/deploy-site.yml` is the only Pages deployment workflow. It validates the committed `site/` directory, captures light and dark screenshots, and deploys that same artifact.

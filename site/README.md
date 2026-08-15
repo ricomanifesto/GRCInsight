@@ -1,52 +1,43 @@
-# Site
+# GRCInsight Static Site
 
-Static GitHub Pages front end for the generated GRC report (`index.md`). The
-publication workflow pre-renders the current report and its archive before
-deployment; browser JavaScript progressively adds navigation, official-reference
-pills, collapse controls, copy feedback, and theme behavior.
+`site/` is the exact GitHub Pages artifact. The current report and every archive page are rendered before deployment, so the evidence remains readable when JavaScript is unavailable. Browser JavaScript adds navigation, theme controls, collapse buttons, copy feedback, and keyboard shortcuts.
+
+Generated report files should be changed through the publication scripts, not edited by hand.
 
 ## Files
 
-| File | Owns |
-|------|------|
-| `index.html` | Page shell plus the pre-rendered current report. Rebuilt whenever `index.md` changes. |
-| `index.md` | The generated report. Replaced by the report-generation workflow. |
-| `evidence-manifest.json` | Report-owned source article title/URL pairs. The composer rejects evidence URLs absent from this analyzed source set. |
-| `archive/` | Workflow-maintained dated Markdown snapshots and pre-rendered archive pages. History begins August 13, 2026. |
-| `static/renderer.js` | **Canonical rendering contract.** Markdown → complete report-card HTML and URL sanitization. Used in Node and the browser. |
-| `static/tags.js` | Unicode-aware catalog for framework, regulation, and agency pills. Every pill has a curated official URL. |
-| `static/app.js` | Progressive page controller: refreshes from `index.md` and wires contents, theme, collapse, copy confirmation, and documented shortcuts. |
-| `static/style.css` | Presentation: theme tokens (dark/light), layout, cards, Markdown elements, pills, and reading aids. |
+| Path | Purpose |
+|---|---|
+| `index.md` | Current generated report. |
+| `index.html` | Pre-rendered current report and page shell. |
+| `evidence-manifest.json` | Source titles and URLs, CVE coverage, model identity, and the dated SentryDigest issue for the current report. |
+| `archive/` | Dated Markdown, evidence manifests, and pre-rendered report pages. |
+| `publication-state.json` | Latest publish or retention outcome. |
+| `publication-history.json` | Newest-first journal of up to 30 terminal outcomes. |
+| `publication-history/` | Human-readable version of that journal. |
+| `static/renderer.js` | Shared Markdown-to-report-card renderer and URL sanitizer. |
+| `static/tags.js` | Framework, regulation, and agency labels with curated official URLs. |
+| `static/app.js` | Optional browser enhancements. |
+| `static/style.css` | Layout, themes, report cards, and reading controls. |
 
-## Rendering contract
+## Publication Path
 
-`renderer.renderReportDocument(markdown) -> htmlString` is pure (no DOM access),
-so the build and browser paths produce identical provenance and section cards.
-`app.js` never re-implements Markdown rendering; `tags.js` is the single source
-for linked pill categories, aliases, and authoritative URLs. The controller does
-not replace terms inside existing links or code blocks.
+`scripts/compose_site_report.py` accepts a completed stored report and creates `index.md` plus `evidence-manifest.json`. It refuses fallback reports, mismatched source or model records, and citations that were not in the analyzed article set.
 
-`scripts/compose_site_report.py` accepts a completed stored report response and
-creates deterministic public Markdown and an evidence manifest from report-owned
-metadata. It fails on fallback mode, source/model mismatch, or any cited URL that
-was not present in the analyzed source articles. `scripts/build_site.py
---archive-current` then snapshots the Markdown and evidence manifest and rebuilds
-current/archive HTML.
+`scripts/build_site.py --archive-current` snapshots the current Markdown and evidence manifest, then rebuilds the current page, archive, publication history, and related navigation. `scripts/check_site_report.py` validates the separately maintained sitemap.
+
+`static/renderer.js` is used by both the build and the browser. The controller in `static/app.js` does not contain a second Markdown implementation.
 
 ## Checks
 
 ```bash
-make check-site   # runs both checks below (Python 3.11)
+make check-site
 ```
 
-- `scripts/build_site.py --check` proves committed current/archive HTML matches
-  the Markdown inputs.
-- `scripts/check_site_report.py` validates provenance, archive consistency,
-  model-backed mode, source links, citations, cross-references, prose hygiene,
-  separators, pre-rendering, public identity, and interaction contracts.
-- `scripts/check_site_renderer.py` runs `renderer.js` and `tags.js` under Node
-  and asserts URL sanitization, complete report rendering, section normalization,
-  linked-only pills, and Markdown regressions.
+This runs three checks:
 
-The Pages deployment captures dark and light top-of-fold screenshots and uploads
-them as a workflow artifact before publishing the same validated `site/` tree.
+- `scripts/build_site.py --check` fails when committed HTML differs from its Markdown and JSON inputs.
+- `scripts/check_site_report.py` checks model and source provenance, citations, archives, publication state, pre-rendering, prose rules, public identity, and interactions.
+- `scripts/check_site_renderer.py` runs the shared renderer under Node and checks URL sanitization, report sections, tags, and Markdown edge cases.
+
+The Pages workflow runs the same gate, captures light and dark screenshots, uploads them for review, and deploys the validated `site/` directory.
