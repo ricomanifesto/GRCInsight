@@ -168,6 +168,12 @@ const orderedThenPara = renderer.renderMarkdown('1. step one\\n2. step two\\n\\n
 assert(orderedThenPara.includes('<ol><li>step one</li><li>step two</li></ol>'), 'the ordered list before a paragraph must render as an <ol>');
 assert(orderedThenPara.includes('<p>Closing paragraph with a, comma.</p>'), 'a paragraph after an ordered list must stay wrapped in its own <p>');
 
+// Report generators often separate numbered recommendations with blank lines.
+// Those items still belong to one semantic list and must not restart at 1.
+const spacedOrderedList = renderer.renderMarkdown('1. first action\\n\\n2. second action\\n\\n3. third action');
+assert((spacedOrderedList.match(/<ol>/g) || []).length === 1, 'blank-line-separated ordered items should render as one list');
+assert(spacedOrderedList.includes('<ol><li>first action</li><li>second action</li><li>third action</li></ol>'), 'a spaced ordered list should preserve every item in sequence');
+
 // A multi-line fenced code block survives paragraph assembly intact.
 const withCode = renderer.renderMarkdown('Intro line.\\n\\n```\\nrow one\\nrow two\\n```\\n\\nAfter the block.');
 assert(withCode.includes('<pre><code>row one\\nrow two</code></pre>'), 'multi-line code blocks must render as a single pre/code with their newlines intact');

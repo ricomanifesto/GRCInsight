@@ -214,6 +214,42 @@
     return html;
   }
 
+  function renderOrderedLists(markdown) {
+    const lines = markdown.split('\n');
+    const output = [];
+    let index = 0;
+
+    while (index < lines.length) {
+      const firstItem = lines[index].match(/^\d+\.\s+(.*)$/);
+      if (!firstItem) {
+        output.push(lines[index]);
+        index += 1;
+        continue;
+      }
+
+      const items = [];
+      while (index < lines.length) {
+        const item = lines[index].match(/^\d+\.\s+(.*)$/);
+        if (!item) break;
+
+        items.push(item[1]);
+        index += 1;
+
+        // A blank line makes a Markdown list "loose"; it does not end the
+        // list when the next non-blank line is another numbered item.
+        let nextItem = index;
+        while (nextItem < lines.length && !lines[nextItem].trim()) nextItem += 1;
+        if (nextItem < lines.length && /^\d+\.\s+/.test(lines[nextItem])) {
+          index = nextItem;
+        }
+      }
+
+      output.push('<ol>' + items.map(item => `<li>${item}</li>`).join('') + '</ol>');
+    }
+
+    return output.join('\n');
+  }
+
   // Pure Markdown -> HTML for the report body. No DOM access, so the same
   // function renders in the browser and under the Node renderer check.
   function renderMarkdown(md) {
@@ -246,10 +282,7 @@
     // Leading indent is horizontal whitespace only ([ \t]*, not \s*) so the
     // pattern never reaches across the blank line that precedes a list.
     html = html.replace(/^(?:[ \t]*-\s+.*(?:\n|$))+/gm, m => renderNestedList(m));
-    html = html.replace(/^(?:\d+\.\s+.*(?:\n|$))+/gm, m => {
-      const items = m.trim().split(/\n/).filter(l => /^\d+\.\s+/.test(l));
-      return '<ol>' + items.map(l => `<li>${l.replace(/^\d+\.\s+/, '')}</li>`).join('') + '</ol>';
-    });
+    html = renderOrderedLists(html);
     // Assemble paragraphs line by line rather than by blank-line splitting.
     // Each block construct above consumes the newline that ended its last line,
     // which can collapse the blank line separating it from an adjacent
