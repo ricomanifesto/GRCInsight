@@ -19,7 +19,7 @@ GRCInsight reads security and regulatory news and publishes a report for governa
 - Suggested review or follow-up actions.
 - The model and source records used to create the report.
 
-The site keeps dated reports and a [publication history](https://ricomanifesto.github.io/GRCInsight/publication-history/) so a reader can see whether each run published a new report or retained the last verified one.
+The site keeps dated reports and a [publication history](https://ricomanifesto.github.io/GRCInsight/publication-history/) of recorded publication and retention outcomes. Runs that fail before either outcome is recorded do not appear in that history.
 
 ## How It Works
 
