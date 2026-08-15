@@ -5,6 +5,8 @@ import runpy
 REPO_ROOT = Path(__file__).resolve().parents[2]
 SITE_BUILDER = REPO_ROOT / "scripts" / "build_site.py"
 STYLE_CSS = REPO_ROOT / "site" / "static" / "style.css"
+APP_JS = REPO_ROOT / "site" / "static" / "app.js"
+INDEX_HTML = REPO_ROOT / "site" / "index.html"
 
 
 def builder_namespace() -> dict:
@@ -171,3 +173,55 @@ def test_archive_entries_stack_at_the_phone_breakpoint():
     )[0]
 
     assert ".archive-list a { grid-template-columns: 1fr; gap: 4px; }" in phone_rules
+
+
+def test_reader_shell_uses_an_editorial_briefing_visual_language():
+    style = STYLE_CSS.read_text()
+    html = INDEX_HTML.read_text()
+
+    assert 'class="brand-kicker">GRCInsight</span>' in html
+    assert "font-family: Georgia" in style
+    assert "linear-gradient(" not in style
+    assert "box-shadow:" not in style
+    assert "font-size: 11px" not in style
+    assert "font-size: 12px" not in style
+
+    card_rule = style.split(".card {", 1)[1].split("}", 1)[0]
+    assert "border: 1px" not in card_rule
+    assert "border-radius" not in card_rule
+
+
+def test_reader_shell_removes_dashboard_gadgets_and_keeps_one_mobile_index():
+    app = APP_JS.read_text()
+    html = INDEX_HTML.read_text()
+
+    for retired_markup in (
+        'id="progress"',
+        'id="topbarLinks"',
+        'class="reference-legend"',
+        'class="shortcuts"',
+        'id="copyStatus"',
+        'id="backToTop"',
+        "static/tags.js",
+    ):
+        assert retired_markup not in html
+
+    assert html.count('id="mobileToc"') == 1
+    assert "window.GRCInsightTags" not in app
+    assert "highlightPills" not in app
+    assert "buildTopbar" not in app
+    assert "collapse-toggle" not in app
+    assert "copy-link" not in app
+    assert "cardCollapsed" not in app
+
+
+def test_reader_shell_is_light_and_fully_expanded_without_javascript():
+    style = STYLE_CSS.read_text()
+    app = APP_JS.read_text()
+
+    root_tokens = style.split(":root {", 1)[1].split("}", 1)[0]
+    assert "--paper: #f7f3ea" in root_tokens
+    assert "body.dark" in style
+    assert "body.light" not in style
+    assert ".card.collapsed" not in style
+    assert "prefers-color-scheme" not in app

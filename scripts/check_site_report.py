@@ -44,7 +44,6 @@ PUBLICATION_HISTORY_INDEX = SITE_DIR / "publication-history" / "index.html"
 SITEMAP_XML = SITE_DIR / "sitemap.xml"
 APP_JS = SITE_DIR / "static" / "app.js"
 RENDERER_JS = SITE_DIR / "static" / "renderer.js"
-TAGS_JS = SITE_DIR / "static" / "tags.js"
 STYLE_CSS = SITE_DIR / "static" / "style.css"
 ARCHIVE_DIR = SITE_DIR / "archive"
 ARCHIVE_INDEX = ARCHIVE_DIR / "index.html"
@@ -1025,7 +1024,6 @@ def main() -> None:
     sitemap_xml = read_text(SITEMAP_XML)
     app_js = read_text(APP_JS)
     renderer_js = read_text(RENDERER_JS)
-    tags_js = read_text(TAGS_JS)
     style_css = read_text(STYLE_CSS)
     archive_html = read_text(ARCHIVE_INDEX)
     evidence_manifest_text = read_text(EVIDENCE_MANIFEST)
@@ -1035,11 +1033,9 @@ def main() -> None:
 
     validate_site_identity(html, sitemap_xml)
 
-    # The page loads exactly one script per concern: the tag catalog, the
-    # canonical renderer, and the page controller.
+    # The page loads the shared style, canonical renderer, and small controller.
     for asset in (
         "static/style.css",
-        "static/tags.js",
         "static/renderer.js",
         "static/app.js",
     ):
@@ -1050,7 +1046,7 @@ def main() -> None:
     for removed in ("static/metadata.js", "static/filters.js", "static/archive.js"):
         if removed in html:
             fail(f"index.html still references removed module {removed}")
-    for removed_module in ("metadata.js", "filters.js", "archive.js"):
+    for removed_module in ("metadata.js", "filters.js", "archive.js", "tags.js"):
         if (SITE_DIR / "static" / removed_module).exists():
             fail(f"removed module still present: static/{removed_module}")
 
@@ -1149,24 +1145,13 @@ def main() -> None:
             "index.html does not explain requested-route and authoring-model provenance"
         )
 
-    # The page controller routes rendering through the canonical renderer and
-    # the shared tag catalog, and never emits an unsanitized Markdown link.
+    # The page controller routes rendering through the canonical renderer.
     if 'href="$2"' in app_js:
         fail("app.js renders Markdown links without URL sanitization")
     if "window.GRCInsightRenderer" not in app_js:
         fail("app.js does not use the canonical renderer")
     if "renderer.renderReportDocument" not in app_js:
         fail("app.js does not render through renderer.renderReportDocument")
-    if "window.GRCInsightTags" not in app_js:
-        fail("app.js does not use the shared compliance tag catalog")
-    if "tokenizeComplianceTerms" not in app_js:
-        fail("app.js does not use the tag catalog tokenizer")
-    if "parent.closest('a, .pill, code, pre, button')" not in app_js:
-        fail("app.js does not preserve existing links and code while adding pills")
-    if "renderer.sanitizeMarkdownUrl(segment.url)" not in app_js:
-        fail("app.js does not sanitize catalog links before rendering")
-    if "pill.target = '_blank'" not in app_js or "pill.rel = 'noopener'" not in app_js:
-        fail("app.js reference pills are missing safe external-link behavior")
     for inline_catalog in (
         "const frameworks =",
         "const regulations =",
@@ -1207,44 +1192,48 @@ def main() -> None:
         if renderer_contract not in renderer_js:
             fail(f"renderer.js missing provenance contract: {renderer_contract}")
 
-    if "window.GRCInsightTags" not in tags_js:
-        fail("tags.js does not export the compliance tag catalog")
-    if "function tokenizeComplianceTerms" not in tags_js:
-        fail("tags.js does not own compliance-term tokenization")
-    for inert_category in ("key: 'risks'", "key: 'controls'"):
-        if inert_category in tags_js:
-            fail(f"tags.js still presents inert pills: {inert_category}")
-
-    if "ArrowDown" in app_js or "ArrowUp" in app_js:
-        fail("app.js overrides native arrow-key scrolling")
-    if 'aria-live="polite"' not in html or "copyStatus" not in app_js:
-        fail("copy-link confirmation is missing an aria-live status")
     if "toLocaleDateString('en-US'" not in app_js or "timeZone: 'UTC'" not in app_js:
         fail("app.js does not format report dates in canonical English UTC")
-    if (
-        "const collapsibleCards" not in app_js
-        or ".filter(card => !card.classList.contains('report-provenance'))"
-        not in app_js
-        or "collapsibleCards.forEach((card, idx)" not in app_js
+    if 'class="brand-kicker">GRCInsight</span>' not in html:
+        fail("index.html is missing the GRCInsight editorial masthead")
+    if html.count('id="mobileToc"') != 1:
+        fail("index.html must expose exactly one mobile section index")
+    for retired_markup in (
+        'id="progress"',
+        'id="topbarLinks"',
+        'class="reference-legend"',
+        'class="shortcuts"',
+        'id="copyStatus"',
+        'id="backToTop"',
+        'static/tags.js',
     ):
-        fail("app.js does not keep the first report section expanded on mobile")
-    if "prefers-color-scheme: light" not in app_js:
-        fail("app.js does not honor the reader's preferred theme")
-    for token in (
-        "--pill-framework-bg",
-        "--pill-framework-text",
-        "--pill-regulation-bg",
-        "--pill-regulation-text",
-        "--pill-agency-bg",
-        "--pill-agency-text",
+        if retired_markup in html:
+            fail(f"index.html still exposes retired dashboard markup: {retired_markup}")
+    for retired_behavior in (
+        "window.GRCInsightTags",
+        "highlightPills",
+        "buildTopbar",
+        "collapse-toggle",
+        "copy-link",
+        "cardCollapsed",
+        "prefers-color-scheme",
     ):
-        if style_css.count(token) < 3:
-            fail(f"style.css does not define and consume both-theme pill token {token}")
-    heading_actions = re.search(r"(?m)^\.heading-actions\s*\{([^}]+)\}", style_css)
-    if heading_actions is None or re.search(
-        r"opacity:\s*0\s*;", heading_actions.group(1)
+        if retired_behavior in app_js:
+            fail(f"app.js still exposes retired dashboard behavior: {retired_behavior}")
+    for generic_finish in (
+        "linear-gradient(",
+        "box-shadow:",
+        "font-size: 11px",
+        "font-size: 12px",
+        ".card.collapsed",
+        "body.light",
     ):
-        fail("style.css hides heading actions until hover")
+        if generic_finish in style_css:
+            fail(f"style.css still contains retired dashboard styling: {generic_finish}")
+    if "--paper: #f7f3ea" not in style_css or "body.dark" not in style_css:
+        fail("style.css does not provide a light editorial default with dark opt-in")
+    if 'font-family: Georgia, "Times New Roman", serif' not in style_css:
+        fail("style.css is missing the editorial heading type family")
     for style_contract in (
         ".evidence-note",
         ".evidence-inline",

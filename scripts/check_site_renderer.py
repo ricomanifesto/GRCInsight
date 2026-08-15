@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Exercise the canonical site renderer and tag catalog without a browser."""
+"""Exercise the canonical site renderer without a browser."""
 
 import json
 import subprocess
@@ -7,7 +7,6 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 RENDERER_JS = REPO_ROOT / "site" / "static" / "renderer.js"
-TAGS_JS = REPO_ROOT / "site" / "static" / "tags.js"
 
 
 def fail(message: str) -> None:
@@ -17,8 +16,6 @@ def fail(message: str) -> None:
 def main() -> None:
     if not RENDERER_JS.exists():
         fail("missing site/static/renderer.js")
-    if not TAGS_JS.exists():
-        fail("missing site/static/tags.js")
 
     identity_title = r"Windows C:\[Temp] and C:\(Logs) advisory"
     serialized_identity_title = (
@@ -36,19 +33,15 @@ def main() -> None:
 const fs = require('fs');
 const vm = require('vm');
 const rendererSource = fs.readFileSync({json.dumps(str(RENDERER_JS))}, 'utf8');
-const tagsSource = fs.readFileSync({json.dumps(str(TAGS_JS))}, 'utf8');
 const context = {{ window: {{}} }};
 vm.createContext(context);
 vm.runInContext(rendererSource, context, {{ filename: 'renderer.js' }});
-vm.runInContext(tagsSource, context, {{ filename: 'tags.js' }});
 const renderer = context.window.GRCInsightRenderer;
-const tags = context.window.GRCInsightTags;
 function assert(condition, message) {{
   if (!condition) throw new Error(message);
 }}
 
 assert(renderer, 'renderer object is not exported');
-assert(tags, 'tag catalog is not exported');
 assert(typeof renderer.renderMarkdown === 'function', 'renderer should expose renderMarkdown');
 assert(typeof renderer.renderReportDocument === 'function', 'renderer should expose renderReportDocument');
 assert(typeof renderer.parseReportDocument === 'function', 'renderer should expose parseReportDocument');
@@ -116,6 +109,8 @@ assert(parsedReport.metadata.generated === '2026-08-13T13:00:00Z', 'Generated me
 assert(parsedReport.metadata['articles analyzed'] === '30', 'article-count provenance should be preserved');
 const reportHtml = renderer.renderReportDocument(reportDocument);
 assert(reportHtml.includes('<section class="card report-provenance"><h2>About this report</h2>'), 'report provenance should render as a card');
+assert(reportHtml.includes('<time datetime="2026-08-13T13:00:00Z">August 13, 2026 at 1:00 PM UTC</time>'), 'generated provenance should use a precise human-readable timestamp');
+assert(reportHtml.indexOf('<h2>Executive Summary</h2>') < reportHtml.indexOf('<h2>About this report</h2>'), 'the report should lead with reader value and keep provenance as supporting evidence');
 assert(reportHtml.includes('<dt>Source</dt><dd><a href="https://example.com/feed.xml"'), 'source provenance should keep its safe link');
 assert(reportHtml.includes('<dt>Source issue</dt><dd><a href="https://digest.example/archive/2026-08-13/"'), 'dated source issue should remain discoverable');
 assert(reportHtml.includes('<dt>Authoring model</dt><dd>google/example-model</dd>'), 'resolved authoring-model provenance should be visible');
@@ -177,35 +172,6 @@ assert(orderedThenPara.includes('<p>Closing paragraph with a, comma.</p>'), 'a p
 const withCode = renderer.renderMarkdown('Intro line.\\n\\n```\\nrow one\\nrow two\\n```\\n\\nAfter the block.');
 assert(withCode.includes('<pre><code>row one\\nrow two</code></pre>'), 'multi-line code blocks must render as a single pre/code with their newlines intact');
 assert(withCode.includes('<p>Intro line.</p>') && withCode.includes('<p>After the block.</p>'), 'paragraphs around a code block must each stay wrapped');
-
-// Tag catalog shape and authoritative reference metadata.
-const byKey = Object.fromEntries(tags.categories.map(c => [c.key, c]));
-const term = (category, label) => category.terms.find(item => item.label === label);
-assert(typeof tags.tokenizeComplianceTerms === 'function', 'tag catalog should expose pure term tokenization');
-assert(byKey.frameworks && byKey.frameworks.pillClass === 'framework', 'framework category should expose framework pills');
-assert(term(byKey.frameworks, 'NIST CSF 2.0').url === 'https://www.nist.gov/cyberframework', 'NIST CSF should link to the official NIST resource');
-assert(term(byKey.frameworks, 'NIST CSF 2.0').aliases.includes('NIST'), 'bare NIST mentions should use the official NIST CSF reference');
-assert(term(byKey.frameworks, 'PCI DSS').url === 'https://www.pcisecuritystandards.org/standards/pci-dss/', 'PCI DSS should link to the official PCI SSC resource');
-assert(byKey.regulations && byKey.regulations.pillClass === 'regulation', 'regulation category should expose regulation pills');
-assert(term(byKey.regulations, 'GDPR').url === 'https://eur-lex.europa.eu/eli/reg/2016/679/oj', 'GDPR should link to the official regulation text');
-assert(!byKey.risks, 'risk terms should remain prose rather than inert pills');
-assert(!byKey.controls, 'control terms should remain prose rather than inert pills');
-assert(byKey.agencies && byKey.agencies.pillClass === 'agency', 'agency category should expose agency pills');
-assert(term(byKey.agencies, 'SEC').url === 'https://www.sec.gov/about', 'SEC should link to the official agency resource');
-assert(tags.categories.every(category => category.terms.every(item => item.url)), 'every pill catalog term must have a destination');
-
-// Tokenization preserves the report's visible typography while normalizing
-// Unicode hyphens/spaces for matching and attaching only curated URLs.
-const tagged = tags.tokenizeComplianceTerms('PCI‑DSS, ISO\u202f27001, NIST CSF 2.0, GDPR, ransomware, and controls.');
-const taggedText = label => tagged.find(item => item.text === label);
-assert(taggedText('PCI‑DSS').url === 'https://www.pcisecuritystandards.org/standards/pci-dss/', 'Unicode PCI DSS spelling should receive its official link');
-assert(taggedText('ISO\u202f27001').url === 'https://www.iso.org/standard/27001', 'narrow-space ISO spelling should receive its official link');
-assert(taggedText('NIST CSF 2.0').url === 'https://www.nist.gov/cyberframework', 'precise NIST CSF spelling should receive its official link');
-assert(taggedText('GDPR').url === 'https://eur-lex.europa.eu/eli/reg/2016/679/oj', 'GDPR should receive its official link');
-assert(!taggedText('ransomware'), 'risk terms should remain plain prose');
-assert(!taggedText('controls'), 'control terms should remain plain prose');
-const bareNist = tags.tokenizeComplianceTerms('NIST guidance').find(item => item.text === 'NIST');
-assert(bareNist.url === 'https://www.nist.gov/cyberframework', 'bare NIST text should receive the official NIST CSF link');
 
 console.log('node renderer assertions passed');
 """

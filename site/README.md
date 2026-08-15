@@ -1,6 +1,6 @@
 # GRCInsight Static Site
 
-`site/` is the exact GitHub Pages artifact. The current report and every archive page are rendered before deployment, so the evidence remains readable when JavaScript is unavailable. Browser JavaScript adds navigation, theme controls, collapse buttons, copy feedback, and keyboard shortcuts.
+`site/` is the exact GitHub Pages artifact. The current report and every archive page are rendered before deployment, so the evidence remains readable when JavaScript is unavailable. Browser JavaScript adds the contents index, human-readable date refresh, and an optional dark theme.
 
 Generated report files should be changed through the publication scripts, not edited by hand.
 
@@ -16,9 +16,8 @@ Generated report files should be changed through the publication scripts, not ed
 | `publication-history.json` | Newest-first journal of up to 30 terminal outcomes. |
 | `publication-history/` | Human-readable version of that journal. |
 | `static/renderer.js` | Shared Markdown-to-report-card renderer and URL sanitizer. |
-| `static/tags.js` | Framework, regulation, and agency labels with curated official URLs. |
-| `static/app.js` | Optional browser enhancements. |
-| `static/style.css` | Layout, themes, report cards, and reading controls. |
+| `static/app.js` | Optional navigation, date, and theme enhancements. |
+| `static/style.css` | Editorial report layout, responsive tables, and print styles. |
 
 ## Publication Path
 
@@ -38,6 +37,6 @@ This runs three checks:
 
 - `scripts/build_site.py --check` fails when committed HTML differs from its Markdown and JSON inputs.
 - `scripts/check_site_report.py` checks model and source provenance, citations, archives, publication state, pre-rendering, prose rules, public identity, and interactions.
-- `scripts/check_site_renderer.py` runs the shared renderer under Node and checks URL sanitization, report sections, tags, and Markdown edge cases.
+- `scripts/check_site_renderer.py` runs the shared renderer under Node and checks URL sanitization, report sections, provenance, and Markdown edge cases.
 
 The Pages workflow runs the same gate, captures light and dark screenshots, uploads them for review, and deploys the validated `site/` directory.

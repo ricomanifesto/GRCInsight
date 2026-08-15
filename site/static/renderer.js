@@ -345,10 +345,31 @@
     };
   }
 
+  function renderGeneratedTimestamp(value) {
+    const parsed = new Date(value);
+    if (Number.isNaN(parsed.getTime())) return renderInlineMarkdown(value);
+
+    const months = [
+      'January', 'February', 'March', 'April', 'May', 'June',
+      'July', 'August', 'September', 'October', 'November', 'December',
+    ];
+    const hours = parsed.getUTCHours();
+    const minutes = String(parsed.getUTCMinutes()).padStart(2, '0');
+    const meridiem = hours >= 12 ? 'PM' : 'AM';
+    const displayHour = hours % 12 || 12;
+    const display = `${months[parsed.getUTCMonth()]} ${parsed.getUTCDate()}, ${parsed.getUTCFullYear()} at ${displayHour}:${minutes} ${meridiem} UTC`;
+    return `<time datetime="${escapeAttribute(value)}">${display}</time>`;
+  }
+
   function renderReportMetadata(metadata) {
     const metadataItems = metadataOrder
       .filter(key => metadata[key])
-      .map(key => `<div class="report-meta-item"><dt>${metadataLabels[key]}</dt><dd>${renderInlineMarkdown(metadata[key])}</dd></div>`)
+      .map(key => {
+        const value = key === 'generated'
+          ? renderGeneratedTimestamp(metadata[key])
+          : renderInlineMarkdown(metadata[key]);
+        return `<div class="report-meta-item"><dt>${metadataLabels[key]}</dt><dd>${value}</dd></div>`;
+      })
       .join('');
     const manifestItem = '<div class="report-meta-item report-meta-evidence"><dt>Evidence manifest</dt><dd><a class="manifest-link" href="evidence-manifest.json" target="_blank" rel="noopener">Machine-readable JSON</a></dd></div>';
     const requestedRoute = String(metadata['requested route'] || '').trim().toLowerCase();
@@ -375,7 +396,7 @@
 
   function renderReportDocument(markdown) {
     const report = parseReportDocument(markdown);
-    return renderReportMetadata(report.metadata) + renderReportSections(report.bodyMarkdown);
+    return renderReportSections(report.bodyMarkdown) + renderReportMetadata(report.metadata);
   }
 
   window.GRCInsightRenderer = {
