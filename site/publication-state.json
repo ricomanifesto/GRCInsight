@@ -1,6 +1,8 @@
 {
   "schema_version": 1,
-  "outcome": "published",
+  "outcome": "retained",
+  "attempted_at": "2026-08-30T17:11:03Z",
+  "refusal_category": "provider_deadline",
   "report_generated_at": "2026-08-29T17:01:50.586073Z",
   "evidence_manifest_sha256": "62b3b174b65fc96f97f096322ad99bce0908464b646d7c92808aafa9be3ec19f"
 }
