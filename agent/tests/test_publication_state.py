@@ -203,7 +203,7 @@ def test_history_rejects_unknown_category_and_event_before_report():
         namespace["validate_publication_history_shape"](history)
 
     published = namespace["build_published_state"](manifest)
-    with pytest.raises(namespace["StalePublicationEvent"]):
+    with pytest.raises(namespace["PublicationStateError"]):
         namespace["state_event"](published, "2026-08-14T10:00:00Z")
     with pytest.raises(namespace["PublicationStateError"]):
         namespace["state_event"](published, "2026-08-14T16:00:00+00:00")
@@ -281,5 +281,45 @@ def test_record_cli_exit_four_preserves_state_and_history_on_supersession(tmp_pa
 
     assert result.returncode == 4
     assert "superseded" in result.stderr
+    assert state_path.read_bytes() == state_before
+    assert history_path.read_bytes() == history_before
+
+
+def test_record_cli_rejects_publication_event_before_report(tmp_path):
+    namespace = publication_namespace()
+    manifest = manifest_bytes()
+    manifest_path = tmp_path / "evidence-manifest.json"
+    manifest_path.write_bytes(manifest)
+    state_path = tmp_path / "publication-state.json"
+    published = namespace["build_published_state"](manifest)
+    state_path.write_text(json.dumps(published), encoding="utf-8")
+    history_path = tmp_path / "publication-history.json"
+    history = history_for(namespace, published, "2026-08-14T16:00:00Z")
+    history_path.write_text(json.dumps(history), encoding="utf-8")
+    state_before = state_path.read_bytes()
+    history_before = history_path.read_bytes()
+
+    result = subprocess.run(
+        [
+            sys.executable,
+            str(PUBLICATION_STATE),
+            "record-published",
+            "--manifest",
+            str(manifest_path),
+            "--output",
+            str(state_path),
+            "--history",
+            str(history_path),
+            "--event-at",
+            "2026-08-14T10:00:00Z",
+        ],
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+
+    assert result.returncode == 2
+    assert "predates its report" in result.stderr
+    assert "superseded" not in result.stderr
     assert state_path.read_bytes() == state_before
     assert history_path.read_bytes() == history_before
