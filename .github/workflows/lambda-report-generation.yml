@@ -246,7 +246,7 @@ jobs:
               } >> "$GITHUB_STEP_SUMMARY"
               echo "Fallback category: $FALLBACK_LABEL" >&2
               echo "Refusing to publish a fallback-mode report; keeping the last model-backed report." >&2
-              exit 1
+              break
             fi
             if [ "$REQUESTED_MODEL" != "$LLM_MODEL" ]; then
               echo "Refusing to publish a report with mismatched requested-model provenance." >&2
@@ -285,12 +285,29 @@ jobs:
               --input report-data.json \
               --feed-url "$FEED_URL" \
               --model "$LLM_MODEL"
+            set +e
             python3 scripts/publication_state.py record-published \
               --manifest site/evidence-manifest.json \
               --output site/publication-state.json \
               --history site/publication-history.json \
               --event-at "$PUBLISHED_AT"
+            STATE_STATUS=$?
+            set -e
+            if [ $STATE_STATUS -eq 4 ]; then
+              echo "superseded=true" >> "$GITHUB_OUTPUT"
+              {
+                echo "## Report publication skipped"
+                echo
+                echo "- Outcome: A newer terminal publication event already exists"
+              } >> "$GITHUB_STEP_SUMMARY"
+              echo "A newer publication event superseded this report; no public state was changed."
+              exit 0
+            fi
+            if [ $STATE_STATUS -ne 0 ]; then
+              exit $STATE_STATUS
+            fi
             python3 scripts/build_site.py --archive-current
+            echo "publishable=true" >> "$GITHUB_OUTPUT"
 
             echo "Report files created successfully"
             break
@@ -420,12 +437,12 @@ jobs:
         done
 
     - name: Validate generated site report
-      if: steps.get-report.conclusion == 'success'
+      if: steps.get-report.outputs.publishable == 'true'
       run: make check-site
 
     - name: Commit and push report
       id: publish
-      if: steps.get-report.conclusion == 'success'
+      if: steps.get-report.outputs.publishable == 'true'
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
@@ -446,11 +463,21 @@ jobs:
             --input report-data.json \
             --feed-url "${{ steps.feed-url.outputs.FEED_URL }}" \
             --model "$LLM_MODEL"
+          set +e
           python3 scripts/publication_state.py record-published \
             --manifest site/evidence-manifest.json \
             --output site/publication-state.json \
             --history site/publication-history.json \
             --event-at "${{ steps.get-report.outputs.published_at }}"
+          STATE_STATUS=$?
+          set -e
+          if [ $STATE_STATUS -eq 4 ]; then
+            echo "A newer publication event superseded this report; no public state was changed."
+            exit 0
+          fi
+          if [ $STATE_STATUS -ne 0 ]; then
+            exit $STATE_STATUS
+          fi
           python3 scripts/build_site.py --archive-current
           make check-site
           git add site/index.md site/index.html site/evidence-manifest.json site/publication-state.json site/publication-history.json site/publication-history site/archive
