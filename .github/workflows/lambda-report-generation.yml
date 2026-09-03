@@ -228,7 +228,7 @@ jobs:
           fi
 
           if [ "$STATUS" = "completed" ]; then
-            if [ "$ANALYSIS_MODE" != "model" ]; then
+            if [ "$ANALYSIS_MODE" = "fallback" ]; then
               FALLBACK_CATEGORY=$(python3 scripts/publication_state.py classify --report-data report-data.json)
               FALLBACK_LABEL=${FALLBACK_CATEGORY//_/ }
               ATTEMPTED_AT=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
@@ -247,6 +247,10 @@ jobs:
               echo "Fallback category: $FALLBACK_LABEL" >&2
               echo "Refusing to publish a fallback-mode report; keeping the last model-backed report." >&2
               break
+            fi
+            if [ "$ANALYSIS_MODE" != "model" ]; then
+              echo "Refusing to publish a report with missing or unrecognized analysis-mode provenance." >&2
+              exit 1
             fi
             if [ "$REQUESTED_MODEL" != "$LLM_MODEL" ]; then
               echo "Refusing to publish a report with mismatched requested-model provenance." >&2
