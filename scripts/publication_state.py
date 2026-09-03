@@ -193,7 +193,7 @@ def state_event(state: dict[str, object], event_at: str) -> dict[str, object]:
         state["report_generated_at"], "report_generated_at"
     )
     if event_time < generated:
-        raise StalePublicationEvent("publication event predates its report")
+        raise PublicationStateError("publication event predates its report")
     event: dict[str, object] = {
         "event_at": event_at,
         "outcome": state["outcome"],

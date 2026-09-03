@@ -602,8 +602,26 @@ def test_report_generation_workflow_refuses_fallback_reports():
     workflow = REPORT_WORKFLOW.read_text()
 
     assert "ANALYSIS_MODE=$(jq -r '.metadata.analysis_mode // empty' report-data.json)" in workflow
-    assert 'if [ "$ANALYSIS_MODE" != "model" ]; then' in workflow
+    assert 'if [ "$ANALYSIS_MODE" = "fallback" ]; then' in workflow
     assert "Refusing to publish a fallback-mode report" in workflow
+    fallback_block = workflow.split('if [ "$ANALYSIS_MODE" = "fallback" ]; then', maxsplit=1)[
+        1
+    ].split("            fi", maxsplit=1)[0]
+    assert "break" in fallback_block
+    assert "exit 1" not in fallback_block
+
+
+def test_report_generation_workflow_rejects_unknown_analysis_modes():
+    workflow = REPORT_WORKFLOW.read_text()
+
+    fallback_guard = workflow.index('if [ "$ANALYSIS_MODE" = "fallback" ]; then')
+    model_guard = workflow.index('if [ "$ANALYSIS_MODE" != "model" ]; then')
+    provenance_failure = workflow.index(
+        "Refusing to publish a report with missing or unrecognized analysis-mode provenance"
+    )
+    model_provenance = workflow.index('if [ "$REQUESTED_MODEL" != "$LLM_MODEL" ]; then')
+
+    assert fallback_guard < model_guard < provenance_failure < model_provenance
 
 
 def test_report_generation_workflow_classifies_fallback_without_dumping_provider_text():
@@ -726,12 +744,16 @@ def test_report_generation_workflow_validates_generated_site_before_publish():
     workflow = REPORT_WORKFLOW.read_text()
 
     assert "Validate generated site report" in workflow
+    assert workflow.count("if: steps.get-report.outputs.publishable == 'true'") == 2
+    assert 'echo "publishable=true" >> "$GITHUB_OUTPUT"' in workflow
     assert workflow.count("make check-site") >= 2
     assert workflow.index("Validate generated site report") < workflow.index(
         "Commit and push report"
     )
     assert "actions/upload-pages-artifact" not in workflow
     assert "actions/deploy-pages" not in workflow
+    assert workflow.count("if [ $STATE_STATUS -eq 4 ]; then") >= 3
+    assert 'echo "superseded=true" >> "$GITHUB_OUTPUT"' in workflow
     rebase_index = workflow.index('git rebase -X theirs "origin/$GITHUB_REF_NAME"')
     assert workflow.index("make check-site", rebase_index) < workflow.index(
         "git push origin HEAD", rebase_index
