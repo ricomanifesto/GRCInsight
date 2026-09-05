@@ -83,7 +83,7 @@ jobs:
             --region "$AWS_REGION" \
             health.json >/dev/null || true
           # Parse body which may be JSON string - more robust parsing
-          BODY=$(cat health.json | jq -r '.body // empty')
+          BODY=$(jq -r '.body // empty' health.json)
           if [ -n "$BODY" ] && [ "$BODY" != "null" ]; then
             STATUS=$(echo "$BODY" | jq -r '.status // empty' 2>/dev/null || echo "unknown")
           else
@@ -166,7 +166,7 @@ jobs:
 
           # Extract report ID from response
           REPORT_ID=$(jq -r '.body | (try fromjson catch .) | .report_id // empty' lambda-response.json)
-          if [ ! -z "$REPORT_ID" ]; then
+          if [ -n "$REPORT_ID" ]; then
             echo "REPORT_ID=$REPORT_ID" >> "$GITHUB_OUTPUT"
             echo "Report generated with ID: $REPORT_ID"
           else
@@ -205,7 +205,7 @@ jobs:
             report-response.json >/dev/null
 
           # Parse body; handle both raw object or JSON string body
-          cat report-response.json | jq -r '.body | (try fromjson catch .)' > report-data.json
+          jq -r '.body | (try fromjson catch .)' report-response.json > report-data.json
 
           STATUS=$(jq -r '.status // empty' report-data.json)
           CONTENT=$(jq -r '.content // empty' report-data.json)
