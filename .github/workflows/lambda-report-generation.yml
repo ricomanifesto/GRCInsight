@@ -154,15 +154,12 @@ jobs:
         echo "Invoking Lambda function: $GO_FUNCTION_NAME"
 
         # Invoke Go Lambda function
-        aws lambda invoke \
-          --function-name $GO_FUNCTION_NAME \
+        if aws lambda invoke \
+          --function-name "$GO_FUNCTION_NAME" \
           --payload "$PAYLOAD" \
           --cli-binary-format raw-in-base64-out \
-          --region $AWS_REGION \
-          lambda-response.json
-
-        # Check if invocation was successful
-        if [ $? -eq 0 ]; then
+          --region "$AWS_REGION" \
+          lambda-response.json; then
           STATUS_CODE=$(jq -r '.statusCode // empty' lambda-response.json)
           echo "Lambda invocation successful"
           echo "Lambda status code: ${STATUS_CODE:-unknown}"
@@ -170,7 +167,7 @@ jobs:
           # Extract report ID from response
           REPORT_ID=$(jq -r '.body | (try fromjson catch .) | .report_id // empty' lambda-response.json)
           if [ ! -z "$REPORT_ID" ]; then
-            echo "REPORT_ID=$REPORT_ID" >> $GITHUB_OUTPUT
+            echo "REPORT_ID=$REPORT_ID" >> "$GITHUB_OUTPUT"
             echo "Report generated with ID: $REPORT_ID"
           else
             echo "Failed to extract report ID from response"
@@ -195,7 +192,7 @@ jobs:
         SLEEP_SECONDS=${SLEEP_SECONDS:-10}
 
         attempt=1
-        while [ $attempt -le $MAX_ATTEMPTS ]; do
+        while [ "$attempt" -le "$MAX_ATTEMPTS" ]; do
           echo "Attempt $attempt/$MAX_ATTEMPTS to fetch report..."
 
           GET_PAYLOAD='{"httpMethod":"GET","path":"/api/v1/reports/'$REPORT_ID'","headers":{}}'
@@ -308,7 +305,7 @@ jobs:
               exit 0
             fi
             if [ $STATE_STATUS -ne 0 ]; then
-              exit $STATE_STATUS
+              exit "$STATE_STATUS"
             fi
             python3 scripts/build_site.py --archive-current
             echo "publishable=true" >> "$GITHUB_OUTPUT"
@@ -317,12 +314,12 @@ jobs:
             break
           else
             echo "Status: ${STATUS:-unknown}. Waiting ${SLEEP_SECONDS}s..."
-            sleep $SLEEP_SECONDS
+            sleep "$SLEEP_SECONDS"
             attempt=$((attempt+1))
           fi
         done
 
-        if [ $attempt -gt $MAX_ATTEMPTS ]; then
+        if [ "$attempt" -gt "$MAX_ATTEMPTS" ]; then
           echo "Timed out waiting for report to complete" >&2
           exit 1
         fi
