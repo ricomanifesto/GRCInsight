@@ -8,6 +8,12 @@
   },
   "events": [
     {
+      "event_at": "2026-09-06T10:42:47Z",
+      "outcome": "published",
+      "report_generated_at": "2026-09-06T10:42:42.433682Z",
+      "evidence_manifest_sha256": "561e5914498ff045326a678b500167b39c40bcc8b2da73471671c2de6acf1fc0"
+    },
+    {
       "event_at": "2026-09-05T20:13:54Z",
       "outcome": "published",
       "report_generated_at": "2026-09-05T20:13:52.212122Z",
@@ -182,12 +188,6 @@
       "outcome": "published",
       "report_generated_at": "2026-08-21T01:42:12.592966Z",
       "evidence_manifest_sha256": "954f4530d330004ef6aa92e32eb12a3085efeadf0f75b358e6d25905c944b06b"
-    },
-    {
-      "event_at": "2026-08-20T21:34:13Z",
-      "outcome": "published",
-      "report_generated_at": "2026-08-20T21:34:03.588979Z",
-      "evidence_manifest_sha256": "0079fac5287db8f19ef67e627bda874c00821d736dfa0f8422cb176698ab7c9d"
     }
   ]
 }
