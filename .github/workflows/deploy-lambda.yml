@@ -84,16 +84,26 @@ jobs:
       - name: Attempt login to AWS Public ECR (optional)
         continue-on-error: true
         run: |
-          set +e
-          aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws
-          if [ $? -ne 0 ]; then
+          if ! aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws; then
             echo "Skipping ECR Public login (missing ecr-public:GetAuthorizationToken). Proceeding anonymously."
           fi
 
       - name: Pre-pull base images with retries
         run: |
           set -e
-          retry() { n=0; max=5; delay=10; while true; do "$@" && break || { n=$((n+1)); if [ $n -ge $max ]; then echo "Command failed after $n attempts: $*" >&2; exit 1; fi; echo "Retry $n/$max in ${delay}s: $*"; sleep $delay; delay=$((delay*2)); }; done; }
+          retry() {
+            local n=0 max=5 delay=10
+            until "$@"; do
+              n=$((n+1))
+              if [ "$n" -ge "$max" ]; then
+                echo "Command failed after $n attempts: $*" >&2
+                return 1
+              fi
+              echo "Retry $n/$max in ${delay}s: $*"
+              sleep "$delay"
+              delay=$((delay*2))
+            done
+          }
           retry docker pull golang:1.22-alpine
           retry docker pull public.ecr.aws/lambda/go:1
           # Match Python base image digest used in agent/Dockerfile.lambda
@@ -103,8 +113,8 @@ jobs:
         id: aws-account
         run: |
           ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
-          echo "AWS_ACCOUNT_ID=$ACCOUNT_ID" >> $GITHUB_ENV
-          echo "registry=${ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com" >> $GITHUB_OUTPUT
+          echo "AWS_ACCOUNT_ID=$ACCOUNT_ID" >> "$GITHUB_ENV"
+          echo "registry=${ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com" >> "$GITHUB_OUTPUT"
 
       - name: Ensure ECR repositories exist
         run: |
@@ -140,7 +150,7 @@ jobs:
 
       - name: Login to Amazon ECR
         run: |
-          aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin ${{ steps.aws-account.outputs.registry }}
+          aws ecr get-login-password --region "$AWS_REGION" | docker login --username AWS --password-stdin ${{ steps.aws-account.outputs.registry }}
 
       - name: Build and push Go Lambda image (amd64, BuildKit off)
         env:
@@ -153,7 +163,7 @@ jobs:
           docker build --platform linux/amd64 -f Dockerfile.lambda -t "$GO_IMAGE_SHA" -t "$GO_IMAGE_LATEST" .
           docker push "$GO_IMAGE_SHA"
           docker push "$GO_IMAGE_LATEST"
-          echo "GO_IMAGE_SHA=$GO_IMAGE_SHA" >> $GITHUB_ENV
+          echo "GO_IMAGE_SHA=$GO_IMAGE_SHA" >> "$GITHUB_ENV"
 
       - name: Build and push Python Lambda image (amd64, BuildKit off)
         working-directory: agent
@@ -167,7 +177,7 @@ jobs:
           docker build --platform linux/amd64 -f Dockerfile.lambda -t "$PY_IMAGE_SHA" -t "$PY_IMAGE_LATEST" .
           docker push "$PY_IMAGE_SHA"
           docker push "$PY_IMAGE_LATEST"
-          echo "PYTHON_IMAGE_SHA=$PY_IMAGE_SHA" >> $GITHUB_ENV
+          echo "PYTHON_IMAGE_SHA=$PY_IMAGE_SHA" >> "$GITHUB_ENV"
 
       - name: Update Go Lambda to new image
         run: |
@@ -218,7 +228,7 @@ jobs:
           for fn in "$GO_FUNCTION_NAME" "$PYTHON_FUNCTION_NAME"; do
             echo "Waiting for $fn to be Active..."
             ready=false
-            for i in {1..30}; do
+            for _ in {1..30}; do
               STATUS=$(aws lambda get-function --function-name "$fn" --query 'Configuration.[State,LastUpdateStatus]' --output text)
               echo "$fn -> $STATUS"
               read -r STATE UPDATE_STATUS <<< "$STATUS"
