@@ -210,6 +210,16 @@
       "removed_narrative_units": 0,
       "corrected_report_sha256": "2ac2fd5df15712f380a74e82ff3b2a039fa5469afc69fe3bddb8752420212359",
       "corrected_evidence_manifest_sha256": "f31512f757a2825d3ebdece467e6ef02e9540e44b0c2de54badbb0ca29e1de5f"
+    },
+    {
+      "report_generated_at": "2026-09-09T04:08:40.980795Z",
+      "corrected_at": "2026-09-09T11:10:08Z",
+      "original_report_sha256": "342ef4493b26ea126c9423944e2200ff401c20da5f3d6db7538a2658ff267b50",
+      "original_evidence_manifest_sha256": "a8be2e91d3242410968ed4aa5f48e54caa53602c7ad5c90d60b705e4f5dd7de8",
+      "removed_source_count": 2,
+      "removed_narrative_units": 1,
+      "corrected_report_sha256": "f42944290c5ace2dc757f4dd8853ead6c068d89df914ac5a6dad53e11ed7dbc9",
+      "corrected_evidence_manifest_sha256": "3a44b28ede8fc465c6f152d73208762c92eadaaedbc28242b566371feed71ba7"
     }
   ]
 }
