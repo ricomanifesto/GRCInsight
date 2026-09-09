@@ -1,4 +1,11 @@
-"""Extract article-owned visible text without ingesting shared page widgets."""
+"""Extract optional article text only from supported static HTML.
+
+This is not a browser or a CSS visibility evaluator. Rendering instructions,
+unsupported markup and ambiguous ownership make the entire fetched document
+unavailable, including its titles. Callers must retain vetted feed content in
+that case. Plain text and balanced, unstyled semantic/inline HTML are supported;
+the positive tag/attribute sets below define that deliberately limited contract.
+"""
 
 from __future__ import annotations
 
@@ -21,33 +28,8 @@ VOID_TAGS = {
     "track",
     "wbr",
 }
-NON_CONTENT_TAGS = {
-    "head",
-    "script",
-    "style",
-    "noscript",
-    "template",
-    "nav",
-    "aside",
-    "iframe",
-    "svg",
-    "form",
-    "button",
-    "dialog",
-}
+NON_CONTENT_TAGS = {"head", "template", "nav", "aside"}
 SHARED_ROLES = {"navigation", "complementary", "banner", "contentinfo", "search"}
-SHARED_CLASSES = {
-    "ad",
-    "ads",
-    "ad-slot",
-    "ad-container",
-    "advertisement",
-    "sidebar",
-    "site-header",
-    "site-footer",
-    "related-articles",
-    "related-content",
-}
 BLOCK_TAGS = {
     "article",
     "main",
@@ -72,6 +54,67 @@ BLOCK_TAGS = {
     "header",
     "footer",
 }
+STATIC_TAGS = (
+    BLOCK_TAGS
+    | NON_CONTENT_TAGS
+    | {
+        "html",
+        "body",
+        "title",
+        "meta",
+        "a",
+        "abbr",
+        "b",
+        "cite",
+        "code",
+        "del",
+        "em",
+        "i",
+        "ins",
+        "kbd",
+        "mark",
+        "q",
+        "s",
+        "samp",
+        "small",
+        "span",
+        "strong",
+        "sub",
+        "sup",
+        "time",
+        "u",
+        "var",
+        "pre",
+        "blockquote",
+        "dl",
+        "dt",
+        "dd",
+        "figure",
+        "figcaption",
+        "address",
+        "wbr",
+    }
+)
+STATIC_ATTRIBUTES = {
+    "role",
+    "itemprop",
+    "lang",
+    "dir",
+    "title",
+    "href",
+    "name",
+    "property",
+    "content",
+    "charset",
+    "datetime",
+    "cite",
+    "colspan",
+    "rowspan",
+    "scope",
+    "start",
+    "reversed",
+    "value",
+}
 
 
 @dataclass(eq=False)
@@ -92,20 +135,23 @@ class _ArticleParser(HTMLParser):
         self.nodes = [self.root]
         self.title_parts: list[str] = []
         self.meta_titles: list[str] = []
+        self.supported = True
 
     def handle_starttag(self, tag, attrs):
         attributes = {key: value or "" for key, value in attrs}
+        # Decline unknown rendering state globally, even in shared chrome. Do
+        # not grow a CSS classifier or use partial text from such a document.
+        if (
+            tag not in STATIC_TAGS
+            or not attributes.keys() <= STATIC_ATTRIBUTES
+            or len(attrs) != len(attributes)
+        ):
+            self.supported = False
         parent = self.stack[-1]
-        classes = set(
-            (attributes.get("class", "") + " " + attributes.get("id", "")).lower().split()
-        )
         excluded = (
             parent.excluded
             or tag in NON_CONTENT_TAGS
             or attributes.get("role", "").lower() in SHARED_ROLES
-            or bool(classes & SHARED_CLASSES)
-            or "hidden" in attributes
-            or attributes.get("aria-hidden", "").lower() == "true"
             or (tag == "footer" and not parent.in_article)
         )
         node = _Element(
@@ -127,13 +173,17 @@ class _ArticleParser(HTMLParser):
     def handle_startendtag(self, tag, attrs):
         self.handle_starttag(tag, attrs)
         if tag not in VOID_TAGS:
+            self.supported = False
             self.handle_endtag(tag)
 
     def handle_endtag(self, tag):
         for index in range(len(self.stack) - 1, 0, -1):
             if self.stack[index].tag == tag:
+                if index != len(self.stack) - 1:
+                    self.supported = False
                 del self.stack[index:]
-                break
+                return
+        self.supported = False
 
     def handle_data(self, data):
         current = self.stack[-1]
@@ -188,13 +238,22 @@ def _choose_owner(candidates: list[_Element], nodes: list[_Element], title: str)
 
 
 def extract_article_text(html: str, *, title: str) -> str:
-    """Prefer an owned container; otherwise use only chrome-filtered visible text."""
+    """Return owned static text, or empty text to preserve the vetted feed record.
+
+    Styling (including classes/IDs), visibility hints, scripts and unknown markup
+    are intentionally unsupported. Even an apparently visible CSS child override
+    does not establish eligibility. No fetched projection survives uncertainty.
+    """
     parser = _ArticleParser()
     parser.feed(html)
     parser.close()
+    if not parser.supported or len(parser.stack) != 1:
+        return ""
     nodes = [node for node in parser.nodes if not node.excluded]
     mains = [node for node in nodes if node.tag == "main" or node.attrs.get("role") == "main"]
     main = _choose_owner(mains, nodes, title)
+    if mains and main is None:
+        return ""
     articles = [
         node
         for node in nodes
@@ -231,9 +290,14 @@ def extract_article_text(html: str, *, title: str) -> str:
     else:
         owner = next((node for node in nodes if node.tag == "body"), parser.root)
 
-    # Empty or ambiguous explicit containers never fall back to the raw page.
-    content = _visible_text(owner) if owner is not None else ""
+    # Empty or ambiguous explicit containers never fall back to the raw page
+    # or to independently projected titles from the uncertain document.
+    if owner is None:
+        return ""
+    content = _visible_text(owner)
+    if not content.strip():
+        return ""
     titles = ["".join(parser.title_parts), *parser.meta_titles]
-    if main_heading is not None and (owner is None or not _within(main_heading, owner)):
+    if main_heading is not None and not _within(main_heading, owner):
         titles.append(_visible_text(main_heading))
     return "\n\n".join(part.strip() for part in [*titles, content] if part.strip())

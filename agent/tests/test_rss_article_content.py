@@ -43,8 +43,11 @@ def test_shared_page_promotions_do_not_exclude_article(monkeypatch, container, c
     result = enrich(monkeypatch, f"<html><body>{opening}{BODY}{closing}{chrome}</body></html>")
     assert len(result) == 1
     assert result[0].content is not None
+    if chrome in (CHROME[2], CHROME[4], CHROME[7], CHROME[8]):
+        assert result == [article(content="")]
+        return
     assert "NIST compliance controls" in result[0].content
-    assert "Shared promotion" not in result[0].content
+    assert "Shared promotion" not in (result[0].content or "")
     assert "<" not in result[0].content
 
 
@@ -88,7 +91,7 @@ def test_embedded_shared_widgets_are_not_article_text(monkeypatch, chrome):
         f"<article>{BODY}<footer>[Virtual Event] Registration</footer></article>",
         f"<head><title>[Virtual Event] Promotion</title></head><article>{BODY}</article>",
         f'<head><meta property="og:title" content="[Virtual Event] Promotion"></head><main>{BODY}</main>',
-        f'<div class="event-content">{BODY}<p>[Virtual Event] Promotion</p></div>',
+        f"<div>{BODY}<p>[Virtual Event] Promotion</p></div>",
     ],
 )
 def test_article_titles_and_owned_footer_cannot_bypass_exclusion(monkeypatch, html):
@@ -138,23 +141,23 @@ def test_conflicting_main_and_card_headings_do_not_select_the_card(monkeypatch):
     assert "Unrelated card" not in (result[0].content or "")
 
 
-def test_owned_main_heading_is_checked_when_body_ownership_is_ambiguous(monkeypatch):
-    assert (
-        enrich(
-            monkeypatch,
-            "<main><h1>[Virtual Event] Promotion</h1>"
-            "<article><h2>Unrelated card</h2></article></main>",
-        )
-        == []
-    )
+def test_ambiguous_ownership_declines_the_entire_fetched_projection(monkeypatch):
+    assert enrich(
+        monkeypatch,
+        "<main><h1>[Virtual Event] Promotion</h1>"
+        "<article><h2>Unrelated card</h2></article></main>",
+    ) == [article(content="")]
 
 
-def test_shared_promotion_does_not_remove_source_from_workflow_fallback(monkeypatch):
+@pytest.mark.parametrize(
+    "chrome", [CHROME[0], '<div style="display:none">[Virtual Event] Shared promotion</div>']
+)
+def test_shared_promotion_does_not_remove_source_from_workflow_fallback(monkeypatch, chrome):
     async def fetch(_url):
         return feed_entries([article(content="")])
 
     class Client(StaticFeedAsyncClient):
-        response_text = f"<article>{BODY}</article>{CHROME[0]}"
+        response_text = f"<article>{BODY}{chrome}</article>"
 
     class UnavailableModel:
         def __init__(self, **_kwargs):
@@ -172,3 +175,99 @@ def test_shared_promotion_does_not_remove_source_from_workflow_fallback(monkeypa
     assert result.metadata.article_count == 1
     assert [source["url"] for source in result.metadata.source_articles] == [article().url]
     assert "Shared promotion" not in result.report.content
+
+
+@pytest.mark.parametrize("container", CONTAINERS)
+@pytest.mark.parametrize(
+    "markup",
+    [
+        "<div hidden>[Virtual Event] Hidden ad</div>",
+        '<div hidden="false"><span>[Virtual Event] Hidden ad</span></div>',
+        '<div hidden="until-found">[Virtual Event] Hidden ad</div>',
+    ],
+)
+def test_hidden_state_declines_optional_html_enrichment(monkeypatch, container, markup):
+    opening, closing = container
+    result = enrich(monkeypatch, f"{opening}{BODY}{markup}{closing}")
+    assert result == [article(content="")]
+
+
+UNCERTAIN_RENDERING = (
+    '<div style="display:none">[Virtual Event] Promotion</div>',
+    '<div STYLE="DISPLAY : NONE !important">[Virtual Event] Promotion</div>',
+    '<div style="visibility:hidden">[Virtual Event] Promotion</div>',
+    '<div style="visibility:collapse">[Virtual Event] Promotion</div>',
+    '<div style="visibility:hidden"><span style="visibility:visible">[Virtual Event] Promotion</span></div>',
+    '<div style="display:none"><span style="display:block">[Virtual Event] Promotion</span></div>',
+    '<div hidden style="display:block">[Virtual Event] Promotion</div>',
+    '<div style="color:red">[<strong>Virtual</strong> Event] Promotion</div>',
+    '<div style="opacity:0">[Virtual Event] Promotion</div>',
+    '<div style="display:var(--state)">[Virtual Event] Promotion</div>',
+    '<div class="modal">[Virtual Event] Promotion</div>',
+    '<div id="modal">[Virtual Event] Promotion</div>',
+    '<div aria-hidden="true">[Virtual Event] Promotion</div>',
+    "<div popover>[Virtual Event] Promotion</div>",
+    "<details><summary>More</summary>[Virtual Event] Promotion</details>",
+    "<custom-modal>[Virtual Event] Promotion</custom-modal>",
+    '<div onclick="openModal()">[Virtual Event] Promotion</div>',
+    "<style>span { visibility:hidden }</style><span>[Virtual Event] Promotion</span>",
+    '<link rel="stylesheet" href="layout.css"><span>[Virtual Event] Promotion</span>',
+    "<script>toggleModal()</script><span>[Virtual Event] Promotion</span>",
+)
+
+
+@pytest.mark.parametrize("container", CONTAINERS)
+@pytest.mark.parametrize("markup", UNCERTAIN_RENDERING)
+def test_uncertain_rendering_preserves_exact_feed_record(monkeypatch, container, markup):
+    opening, closing = container
+    result = enrich(monkeypatch, f"{opening}{BODY}{markup}{closing}")
+    assert result == [article(content="")]
+
+
+@pytest.mark.parametrize(
+    "markup",
+    [
+        "<style>article { display:none }</style>",
+        '<link rel="stylesheet" href="layout.css">',
+        '<script src="layout.js"></script>',
+    ],
+)
+def test_rendering_uncertainty_applies_to_document_not_just_selected_owner(monkeypatch, markup):
+    html = (
+        f"<head><title>[Virtual Event] Page title</title>{markup}</head><article>{BODY}</article>"
+    )
+    assert enrich(monkeypatch, html) == [article(content="")]
+
+
+@pytest.mark.parametrize(
+    "html",
+    [
+        "<article><p>[Virtual Event] Unclosed paragraph</article>",
+        "<article>[Virtual Event] Unclosed article",
+        "<article>[Virtual Event] Mismatched tags</main>",
+        '<article role="main" role="complementary">[Virtual Event] Duplicate attrs</article>',
+        "<main>[Virtual Event] First main</main><main>Second main</main>",
+        "<article>[Virtual Event] First card</article><article>Second card</article>",
+    ],
+)
+def test_unsupported_structure_is_unavailable_enrichment(monkeypatch, html):
+    assert enrich(monkeypatch, html) == [article(content="")]
+
+
+@pytest.mark.parametrize("container", CONTAINERS)
+@pytest.mark.parametrize(
+    "marker",
+    [
+        "[<strong>Virtual</strong> <em>Event</em>]",
+        "<span>[Vir</span><span>tual Event]</span>",
+        "[Virtual <a href='https://example.com/event'>Event</a>]",
+    ],
+)
+def test_supported_inline_formatting_cannot_strip_article_marker(monkeypatch, container, marker):
+    opening, closing = container
+    assert enrich(monkeypatch, f"{opening}{BODY}<p>{marker}</p>{closing}") == []
+
+
+@pytest.mark.parametrize("text", ["NIST guidance about virtual events.", "Ordinary security news."])
+def test_plain_text_remains_available_enrichment(monkeypatch, text):
+    assert enrich(monkeypatch, text) == [article(content=text)]

@@ -113,6 +113,8 @@ class RSSService:
                         try:
                             response = await client.get(article.url, timeout=10.0)
                             if response.status_code == 200:
+                                # Unsupported fetched HTML is unavailable enrichment,
+                                # not evidence to reclassify this vetted feed record.
                                 content = extract_article_text(response.text, title=article.title)
                                 if contains_virtual_event(content):
                                     continue
