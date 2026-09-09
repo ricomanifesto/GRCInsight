@@ -9,6 +9,7 @@ from loguru import logger
 from models.api import ArticleInput
 from config.settings import settings
 from core.content_policy import contains_virtual_event
+from services.article_content import extract_article_text
 
 
 def _exclude_tagged_feed_records(xml: str) -> str:
@@ -105,8 +106,6 @@ class RSSService:
                 try:
                     logger.debug(f"Enriching article: {article.title}")
 
-                    # For now, just return the article as-is
-                    # In the future, you could fetch full content from the URL
                     enriched_article = article
 
                     # If the article has minimal content, try to fetch more
@@ -114,13 +113,11 @@ class RSSService:
                         try:
                             response = await client.get(article.url, timeout=10.0)
                             if response.status_code == 200:
-                                if contains_virtual_event(response.text):
+                                content = extract_article_text(response.text, title=article.title)
+                                if contains_virtual_event(content):
                                     continue
-                                # Simple content extraction - in production you'd want
-                                # more sophisticated content extraction
-                                enriched_article.content = response.text[
-                                    :5000
-                                ]  # Limit content size
+                                if content:
+                                    enriched_article.content = content[:5000]
                         except Exception as e:
                             logger.warning(f"Failed to fetch content for {article.url}: {e}")
 
