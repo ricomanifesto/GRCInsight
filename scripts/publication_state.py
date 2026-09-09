@@ -383,6 +383,19 @@ def load_editorial_corrections(site_dir: Path) -> dict[str, dict[str, Any]]:
                 "editorial correction must change the evidence manifest"
             )
         snapshot = site_dir / "archive" / generated.strftime("%Y-%m-%dT%H-%M-%SZ")
+        original_path = (
+            site_dir.parent / "audit" / "original-reports" / snapshot.name / "report.md"
+        )
+        try:
+            original_report = original_path.read_bytes()
+        except OSError as error:
+            raise PublicationStateError(
+                "editorial correction original report is missing"
+            ) from error
+        if hashlib.sha256(original_report).hexdigest() != entry["original_report_sha256"]:
+            raise PublicationStateError(
+                "editorial correction does not match original report digest"
+            )
         try:
             report = (snapshot / "report.md").read_bytes()
             manifest = (snapshot / "evidence-manifest.json").read_bytes()
