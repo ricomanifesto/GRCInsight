@@ -12,6 +12,8 @@
 
 ## Executive Summary
 
+**Editorial correction (2026-09-09):** Promotional source records and associated content were removed. Generation time, model identity, and analyzed-article counts refer to the original run; the model was not rerun. The evidence manifest now lists the retained public sources.
+
 Active exploitation of critical vulnerabilities across enterprise infrastructure dominates the current threat landscape. Multiple high-severity flaws in virtualization platforms, application delivery controllers, and database systems are being weaponized within days of disclosure, compressing remediation windows for security teams.
 
 The education sector faces targeted credential-theft campaigns leveraging authentication bypass chains in print management software. Simultaneously, e-commerce platforms confront an unpatched zero-day enabling unauthenticated remote code execution, with attacks observed in the wild before vendor fixes are available.
@@ -69,7 +71,6 @@ The current evidence set does not disclose new regulatory pronouncements, rulema
 
 7. **Upgrade email security for Unicode evasion** — Configure filters to normalize and strip invisible Unicode characters; augment with DMARC enforcement and user reporting channels.
 
-8. **Track cloud and AI security guidance** — Review materials from the virtual events on securing cloud assets in the age of AI and building a secure AI strategy for the enterprise to align architecture reviews with emerging best practices.
 
 ## Source Highlights
 
@@ -83,5 +84,3 @@ The current evidence set does not disclose new regulatory pronouncements, rulema
 - [Attackers Hijack MikroTik Routers Through Internet-Exposed SSH Without Authentication](https://thehackernews.com/2026/09/attackers-hijack-mikrotik-routers.html) · [View in SentryDigest](https://ricomanifesto.github.io/SentryDigest/archive/2026-09-06/#reporting-bec3d4c719cb)
 - [Four REVSTEALER-Linked Modules Disable Windows Update and Defender to Run a Crypto Miner](https://thehackernews.com/2026/09/four-revstealer-linked-modules-disable.html) · [View in SentryDigest](https://ricomanifesto.github.io/SentryDigest/archive/2026-09-06/#reporting-1a8ef3d227d4)
 - [Unpatched Magento and Adobe Commerce Zero-Day Exploited to Backdoor Online Stores](https://thehackernews.com/2026/09/unpatched-magento-and-adobe-commerce.html) · [View in SentryDigest](https://ricomanifesto.github.io/SentryDigest/archive/2026-09-06/#reporting-9eeec10be375)
-- [\[Virtual Event\] What Every Enterprise Should Know About Securing Cloud Assets in the Age of AI](https://www.darkreading.com/events/virtual-event-what-every-enterprise-know-securing-cloud-2026) · [View in SentryDigest](https://ricomanifesto.github.io/SentryDigest/archive/2026-09-06/#reporting-a5c502fdcf06)
-- [\[Virtual Event\] Building a Secure AI Strategy for the Enterprise](https://www.darkreading.com/events/virtual-event-building-secure-ai-strategy-enterprise-2026) · [View in SentryDigest](https://ricomanifesto.github.io/SentryDigest/archive/2026-09-06/#reporting-dca03da12610)

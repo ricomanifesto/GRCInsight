@@ -1,0 +1,215 @@
+{
+  "schema_version": 1,
+  "corrections": [
+    {
+      "report_generated_at": "2026-09-03T23:12:52.405373Z",
+      "corrected_at": "2026-09-09T01:20:22Z",
+      "original_report_sha256": "ac8f2f267f3e09d20f7f119d7a6688bc0cf89cb59d3cf11e650e8403880463fe",
+      "original_evidence_manifest_sha256": "16691f58019db285e4616e9bdf10e577089ad25a519f2e7772f7fee7101cdca5",
+      "removed_source_count": 2,
+      "removed_narrative_units": 0,
+      "corrected_report_sha256": "e85659c067f9a456a2328986114e28fd27b303ec5409e305a37efbafd9c026fb",
+      "corrected_evidence_manifest_sha256": "6c1e83deb5253ce7f6da9e35afa7c38613d0158dfe72fdfdba70cfa45f59aee7"
+    },
+    {
+      "report_generated_at": "2026-09-04T03:57:45.611618Z",
+      "corrected_at": "2026-09-09T01:20:22Z",
+      "original_report_sha256": "454478754dd4959731c137aa6496852e43224995e29b3bdd93156ecb03aa095e",
+      "original_evidence_manifest_sha256": "19d1eee763c138655ff7bd541ca8f51ae15a2da11a4e3156e1a4ca896418ab12",
+      "removed_source_count": 2,
+      "removed_narrative_units": 1,
+      "corrected_report_sha256": "6021e2aecb3eedde9a6363f820d2ac06a4c1099b8a7162a6b744e74a3df2d64c",
+      "corrected_evidence_manifest_sha256": "fafe1813340d9ad39761e7785891756ca3099cddcee954759bc009c23747ab77"
+    },
+    {
+      "report_generated_at": "2026-09-04T16:11:35.263061Z",
+      "corrected_at": "2026-09-09T01:20:22Z",
+      "original_report_sha256": "53ce8a06f33946e3db7499a5755727b998bacdda964aa217b2752f73a2ff95e0",
+      "original_evidence_manifest_sha256": "99c2c70d66740ee5800f0a76568bb60faa516d7c0de960d1151e2fb3293e1245",
+      "removed_source_count": 2,
+      "removed_narrative_units": 0,
+      "corrected_report_sha256": "367bf0b0cfd6c22c1f4e0f7995313bb279d419b175b1be760e3e102a74301fa1",
+      "corrected_evidence_manifest_sha256": "4f3b3df8e49d9b3efe69470a149a7b91bc3e43b0076f2d3c908009712646d246"
+    },
+    {
+      "report_generated_at": "2026-09-04T16:44:26.385672Z",
+      "corrected_at": "2026-09-09T01:20:22Z",
+      "original_report_sha256": "617ceb7a78f84b90de440154aec201eac41d79d09283510c0c8782ca9287d150",
+      "original_evidence_manifest_sha256": "e06a0e809b69cc6b641f4d7b365c2298d7ceb60d09fed5178f1129e73d03cb30",
+      "removed_source_count": 2,
+      "removed_narrative_units": 0,
+      "corrected_report_sha256": "e78243082ce17be536b17ac126f39c8f1083a877988ed3ab88dca031155b08b2",
+      "corrected_evidence_manifest_sha256": "6f9d142cb0703aa7e011653f48cda52390026365c8f1c3849b9e2f920c93d779"
+    },
+    {
+      "report_generated_at": "2026-09-04T22:59:47.165849Z",
+      "corrected_at": "2026-09-09T01:20:22Z",
+      "original_report_sha256": "c6086776b3970d6c6b21fea7266a9df5d244aa256c5f18da91a2def14661fd19",
+      "original_evidence_manifest_sha256": "a6a0ecc56dc88c08d9a02489d067cc2b7b58cec754aa5005d0cac8a41d6ccc71",
+      "removed_source_count": 2,
+      "removed_narrative_units": 0,
+      "corrected_report_sha256": "c118e833b7a63d2ae2a6dda006bb6c5d655d2226dcf3a5a40e04a2122e745cd5",
+      "corrected_evidence_manifest_sha256": "fed0b14b6507246f957ca097a5854922c31b253b6326e83ac064d8d8a676791b"
+    },
+    {
+      "report_generated_at": "2026-09-05T14:59:38.294451Z",
+      "corrected_at": "2026-09-09T01:20:22Z",
+      "original_report_sha256": "81ce98aa2f45ae3e847d42da61a76f264eacaf03afc5cd6aa4d929aadf5f6e73",
+      "original_evidence_manifest_sha256": "7b78a64d9c279bd0c1a0693161d433267d183f7a480697304603a1e42833ddd4",
+      "removed_source_count": 2,
+      "removed_narrative_units": 0,
+      "corrected_report_sha256": "8b5bef6dced89acb92f9a50941d121ec001d4aeb1c3baacd6cecd9fabdcf4e5a",
+      "corrected_evidence_manifest_sha256": "bcc47b7c26ad49b63216332dca84ede0ac110db36c2fae75fae9fd6799302217"
+    },
+    {
+      "report_generated_at": "2026-09-05T17:18:12.401852Z",
+      "corrected_at": "2026-09-09T01:20:22Z",
+      "original_report_sha256": "6a74e9609ccbdcb24facfc0f8d7e3ce933f7cc002cf03231e4894e86ec651416",
+      "original_evidence_manifest_sha256": "da63db415dc65c89e1be2727796f7afa3e79e7d7e4f655c54ce106396459d330",
+      "removed_source_count": 2,
+      "removed_narrative_units": 0,
+      "corrected_report_sha256": "b5463d1b5200899c1b2a5acf41f21448dca5752b5e8bfc04252c16ee48dbf7c2",
+      "corrected_evidence_manifest_sha256": "f95382e784b68b8aeeab674c1ab9a8d8e6c51250c5cfd47903855d5d2c09467c"
+    },
+    {
+      "report_generated_at": "2026-09-05T20:13:52.212122Z",
+      "corrected_at": "2026-09-09T01:20:22Z",
+      "original_report_sha256": "88de3fd19dde2fdf868fa50099f818d8b56810f81043b8589d3fa1637593ecbe",
+      "original_evidence_manifest_sha256": "758c770585fd99fe46a6e22a317db632bd582efe7300117448c04fd73f766852",
+      "removed_source_count": 2,
+      "removed_narrative_units": 0,
+      "corrected_report_sha256": "b0163c58332346d8842833103ba10b9c25d2a93e74479fc65afff056dd8bd61a",
+      "corrected_evidence_manifest_sha256": "f6fe2635edfa7c862522454a1c29b1c09c9bbdcd4e981ef877d1fa3c34db6f1e"
+    },
+    {
+      "report_generated_at": "2026-09-06T10:42:42.433682Z",
+      "corrected_at": "2026-09-09T01:20:22Z",
+      "original_report_sha256": "0241c771556ee9fabf68aac42937bb7c2e4f35dd23a49882cfc1f2ba47bc15e3",
+      "original_evidence_manifest_sha256": "561e5914498ff045326a678b500167b39c40bcc8b2da73471671c2de6acf1fc0",
+      "removed_source_count": 2,
+      "removed_narrative_units": 0,
+      "corrected_report_sha256": "cc9741aa430f4d1f884345cdad4c4761fa6a82f1571154acae38ae40394eafa1",
+      "corrected_evidence_manifest_sha256": "e926b8971110797ac3e69150734e6831718e5464973b79d3faf2fea24307fbf3"
+    },
+    {
+      "report_generated_at": "2026-09-06T15:23:41.180929Z",
+      "corrected_at": "2026-09-09T01:20:22Z",
+      "original_report_sha256": "b510ef6a8a8cfcf106098e27c4cf2a44e0fc002528e5e5d501cf1cece78bdddd",
+      "original_evidence_manifest_sha256": "255104793379aa71859f95b0b4329554d1b7fecd08581d6d69afa72f6b4e432c",
+      "removed_source_count": 2,
+      "removed_narrative_units": 0,
+      "corrected_report_sha256": "c9d24e7e15d075a4f927274e1265d2a753e6dd530f1ab7c120969fd43ad94de3",
+      "corrected_evidence_manifest_sha256": "991b2dc2ba852c19b257169cb0d6f687ce09597cbbef6a93d4f82f75185ff932"
+    },
+    {
+      "report_generated_at": "2026-09-06T15:56:56.908987Z",
+      "corrected_at": "2026-09-09T01:20:22Z",
+      "original_report_sha256": "a6916ee15e0822011e3f2bbd15079d43d1a40cef3f1051ad10b246e75c197ca1",
+      "original_evidence_manifest_sha256": "818c96e21ff395b3b79c5beda47d57c936630d4eec1b1067b6fd954f54550088",
+      "removed_source_count": 2,
+      "removed_narrative_units": 0,
+      "corrected_report_sha256": "a55563d4a292110fb5560c5120e44c889e332d4987629d8d361b317342212b96",
+      "corrected_evidence_manifest_sha256": "ce82bf1cb367dd9f340c221141b0939c63ff4df53ce84d3ae17152b79161f5a3"
+    },
+    {
+      "report_generated_at": "2026-09-06T20:18:58.752121Z",
+      "corrected_at": "2026-09-09T01:20:22Z",
+      "original_report_sha256": "bb32aa3d508c3c3ad618154304d32091c3aa63c7c45d40fb5f278332aba4a45a",
+      "original_evidence_manifest_sha256": "098d12fb4bc3a55ba322a2638dee26fbcaf61cbc9d807f53372d0cb59b1d8708",
+      "removed_source_count": 2,
+      "removed_narrative_units": 0,
+      "corrected_report_sha256": "ec21328cc20dcc761363ed09dcd36d5903e29277f4462877336be4e72e70a978",
+      "corrected_evidence_manifest_sha256": "3203fe8b992df391ab7d9d7ab7b3898ab214bedc9f8c1bff00c7921f04ee3950"
+    },
+    {
+      "report_generated_at": "2026-09-06T22:53:06.120822Z",
+      "corrected_at": "2026-09-09T01:20:22Z",
+      "original_report_sha256": "11f3e37ad6e15eb9861a2b73a7f1723615a6998dc7711deb48f62e8be6476a0e",
+      "original_evidence_manifest_sha256": "9e2312e88f56727e748fa5f9ab0bce17c21559859b88026091203ecca70e0ff4",
+      "removed_source_count": 2,
+      "removed_narrative_units": 1,
+      "corrected_report_sha256": "9b51304b798064e5b8924d48c6e9b075e0f04a143730d715d69ac6580dacf597",
+      "corrected_evidence_manifest_sha256": "8bec0a2f31683211f99a09244edac8159991ba29bcf8e8cdc9bf6cbe82363dc5"
+    },
+    {
+      "report_generated_at": "2026-09-07T03:56:48.085056Z",
+      "corrected_at": "2026-09-09T01:20:22Z",
+      "original_report_sha256": "10e454f3560502c86a1a418d531a63f5567d29e56a686969b41aa3894c0d6a54",
+      "original_evidence_manifest_sha256": "77cb0278282ff73753f32f110156cde58c1d6a4a06cb0a544621fdec2366f611",
+      "removed_source_count": 2,
+      "removed_narrative_units": 0,
+      "corrected_report_sha256": "f301b96c40570eeee2c64b40c483ca095d4ccd27af710e4f15bba627331d68e3",
+      "corrected_evidence_manifest_sha256": "ca1ed88533d09c34213136ee2950e6f7b135f56e1d29dfb4d1ca691e70c8e4a2"
+    },
+    {
+      "report_generated_at": "2026-09-07T12:14:32.283702Z",
+      "corrected_at": "2026-09-09T01:20:22Z",
+      "original_report_sha256": "cd66098858b64e924577ce52c65236924f6c27473b66673fcb7626350cab56dc",
+      "original_evidence_manifest_sha256": "479e2a8c36f393f2de31f1f291a5e27a011eace421b062a94e04d321f293e2e8",
+      "removed_source_count": 2,
+      "removed_narrative_units": 3,
+      "corrected_report_sha256": "8728795bfbadbbdd33240d7178277be8dfd3aa5f845786c55fa757fcfbe1ae51",
+      "corrected_evidence_manifest_sha256": "05fb9c5ec4abb977515ec95175c795dec49805ead8cec802b06bd241a834007c"
+    },
+    {
+      "report_generated_at": "2026-09-07T18:05:39.3058Z",
+      "corrected_at": "2026-09-09T01:20:22Z",
+      "original_report_sha256": "6028755396e1387b326ff094f7d3031d2d39cb95ce2e0c2a593060e977ced0c0",
+      "original_evidence_manifest_sha256": "ee53c751950c8965823900a743aff1c04392b21bfff165cb138226fda3f578d7",
+      "removed_source_count": 2,
+      "removed_narrative_units": 0,
+      "corrected_report_sha256": "09392fb58255883d280f1147eb002bbeed3e684c036e3660ac4f8f60bcbf0793",
+      "corrected_evidence_manifest_sha256": "bd6faf4c702ff27278e11b365af16c02c50bddca13cda4f492d4f7e5af8b71a0"
+    },
+    {
+      "report_generated_at": "2026-09-07T23:23:46.690329Z",
+      "corrected_at": "2026-09-09T01:20:22Z",
+      "original_report_sha256": "e0cd3da162a7782b8a37cfa5982584bffc4422046c116f878adbc0a364c4f60f",
+      "original_evidence_manifest_sha256": "d48277a0c33073f28798bbe22ff0cb90d34e0a952ce4c27048e36b40419cf249",
+      "removed_source_count": 2,
+      "removed_narrative_units": 0,
+      "corrected_report_sha256": "c679ccc2c318327a29b5f7a985c179d3fd46b96b0a22763a3ca561b93d467d17",
+      "corrected_evidence_manifest_sha256": "3f67b44632993111729e8409ab01defeceb3b7f36bdf2e7ed73f34e1678b6898"
+    },
+    {
+      "report_generated_at": "2026-09-08T04:00:42.355966Z",
+      "corrected_at": "2026-09-09T01:20:22Z",
+      "original_report_sha256": "257ba7208b22e11f9316f2818bcc68e6d51723842060460deb42ee85d39ba283",
+      "original_evidence_manifest_sha256": "c1e1a23b8751b9af68f40cfcea4ecd963158787896c86b14d5cd424dbaf62e58",
+      "removed_source_count": 2,
+      "removed_narrative_units": 0,
+      "corrected_report_sha256": "033f7933c96aa3d1f442c6c7d309d8c4c36ed40e7e250c54679a56cbf2345451",
+      "corrected_evidence_manifest_sha256": "52374a269322d682ca6a6c89093c8051008eb0f6f675c43879543df48deb467a"
+    },
+    {
+      "report_generated_at": "2026-09-08T11:01:13.773941Z",
+      "corrected_at": "2026-09-09T01:20:22Z",
+      "original_report_sha256": "dcc9fac254c336edbe2d0cd9c84ad04e87ef764d49f4cc7d45e4f8e6d673bf83",
+      "original_evidence_manifest_sha256": "2fc9593f4042c446588045d710abb78d51e18df55e17bc4dc25d998415a973e0",
+      "removed_source_count": 2,
+      "removed_narrative_units": 0,
+      "corrected_report_sha256": "89ae9dfaf3ac9e2159dbaea08097a5423d126bbeccdf0fb98fe94236163a751e",
+      "corrected_evidence_manifest_sha256": "deea9ebd7b8f59df4b3b19494e34ec427d3fd3c5306cccaf033c3c244d74ff4d"
+    },
+    {
+      "report_generated_at": "2026-09-08T16:59:37.342962Z",
+      "corrected_at": "2026-09-09T01:20:22Z",
+      "original_report_sha256": "2b8c16ca89be7a63e75d05e2adc9219606fab16aeb815ea35d1d29b27118daf3",
+      "original_evidence_manifest_sha256": "a88174fcfb08da7b8e6009e9decfa8b7d90838679c98c8b4eb30bbd14bc89b2a",
+      "removed_source_count": 2,
+      "removed_narrative_units": 0,
+      "corrected_report_sha256": "9cc05e33df78151d41fe0447bb20fecbab93c28a91d64f9fc34786a3ce426bd5",
+      "corrected_evidence_manifest_sha256": "5ae674fbb392f52c54332c9ad0e06f33c58c3b11b4f9538237f0aeb514948b78"
+    },
+    {
+      "report_generated_at": "2026-09-08T21:01:17.6193Z",
+      "corrected_at": "2026-09-09T01:20:22Z",
+      "original_report_sha256": "f5074c847cbb215e609ce9032376a4bb5fae5007bc3adcbb4e3f77a29800a4e9",
+      "original_evidence_manifest_sha256": "7529d7d47a1a0a06a909c95394b192bcbd5c8b3b0fda862e04f9a4320cde33cf",
+      "removed_source_count": 2,
+      "removed_narrative_units": 0,
+      "corrected_report_sha256": "2ac2fd5df15712f380a74e82ff3b2a039fa5469afc69fe3bddb8752420212359",
+      "corrected_evidence_manifest_sha256": "f31512f757a2825d3ebdece467e6ef02e9540e44b0c2de54badbb0ca29e1de5f"
+    }
+  ]
+}

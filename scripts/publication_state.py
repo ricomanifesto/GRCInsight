@@ -287,17 +287,166 @@ def state_matches_event(state: dict[str, object], event: dict[str, object]) -> b
 
 
 def validate_publication_history(
-    history: object, state: object, manifest_bytes: bytes
+    history: object,
+    state: object,
+    manifest_bytes: bytes,
+    *,
+    corrections: dict[str, dict[str, Any]] | None = None,
 ) -> dict[str, object]:
     validated_state = validate_publication_state(state, manifest_bytes)
     validated_history = validate_publication_history_shape(history)
     events = validated_history["events"]
     assert isinstance(events, list)
-    if not state_matches_event(validated_state, events[0]):
+    comparison_state = validated_state
+    if corrections and publication_manifest_matches(
+        events[0]["evidence_manifest_sha256"],
+        validated_state["evidence_manifest_sha256"],
+        str(validated_state["report_generated_at"]),
+        corrections,
+    ):
+        comparison_state = {
+            **validated_state,
+            "evidence_manifest_sha256": events[0]["evidence_manifest_sha256"],
+        }
+    if not state_matches_event(comparison_state, events[0]):
         raise PublicationStateError(
             "publication history latest event does not match publication state"
         )
     return validated_history
+
+
+def editorial_correction_note(correction: dict[str, Any]) -> str:
+    date = str(correction["corrected_at"])[:10]
+    return (
+        f"**Editorial correction ({date}):** Promotional source records and associated "
+        "content were removed. Generation time, model identity, and analyzed-article "
+        "counts refer to the original run; the model was not rerun. The evidence "
+        "manifest now lists the retained public sources."
+    )
+
+
+def load_editorial_corrections(site_dir: Path) -> dict[str, dict[str, Any]]:
+    """Validate explicit original-to-corrected bindings, never a hash exemption."""
+    path = site_dir / "editorial-corrections.json"
+    if not path.exists():
+        require_editorial_correction_records(site_dir, {})
+        return {}
+    ledger = read_json(path, "editorial corrections")
+    if (
+        not isinstance(ledger, dict)
+        or set(ledger) != {"schema_version", "corrections"}
+        or ledger["schema_version"] != 1
+        or not isinstance(ledger["corrections"], list)
+        or not ledger["corrections"]
+    ):
+        raise PublicationStateError("editorial corrections shape is invalid")
+    fields = {
+        "report_generated_at",
+        "corrected_at",
+        "original_report_sha256",
+        "original_evidence_manifest_sha256",
+        "corrected_report_sha256",
+        "corrected_evidence_manifest_sha256",
+        "removed_source_count",
+        "removed_narrative_units",
+    }
+    corrections = {}
+    for entry in ledger["corrections"]:
+        if not isinstance(entry, dict) or set(entry) != fields:
+            raise PublicationStateError("editorial correction fields are invalid")
+        generated_at = entry["report_generated_at"]
+        generated = parse_journal_timestamp(generated_at, "report_generated_at")
+        corrected = parse_journal_timestamp(entry["corrected_at"], "corrected_at")
+        if corrected <= generated or generated_at in corrections:
+            raise PublicationStateError(
+                "editorial correction time or identity is invalid"
+            )
+        for field in fields:
+            if field.endswith("_sha256") and (
+                not isinstance(entry[field], str)
+                or not SHA256_PATTERN.fullmatch(entry[field])
+            ):
+                raise PublicationStateError("editorial correction digest is invalid")
+        for field, minimum in (
+            ("removed_source_count", 1),
+            ("removed_narrative_units", 0),
+        ):
+            if type(entry[field]) is not int or entry[field] < minimum:
+                raise PublicationStateError(
+                    "editorial correction removal count is invalid"
+                )
+        if (
+            entry["original_evidence_manifest_sha256"]
+            == entry["corrected_evidence_manifest_sha256"]
+        ):
+            raise PublicationStateError(
+                "editorial correction must change the evidence manifest"
+            )
+        snapshot = site_dir / "archive" / generated.strftime("%Y-%m-%dT%H-%M-%SZ")
+        try:
+            report = (snapshot / "report.md").read_bytes()
+            manifest = (snapshot / "evidence-manifest.json").read_bytes()
+        except OSError as error:
+            raise PublicationStateError(
+                "editorial correction snapshot is missing"
+            ) from error
+        for data, field in (
+            (report, "corrected_report_sha256"),
+            (manifest, "corrected_evidence_manifest_sha256"),
+        ):
+            if hashlib.sha256(data).hexdigest() != entry[field]:
+                raise PublicationStateError(
+                    "editorial correction does not match artifact digest"
+                )
+        if manifest_identity(manifest)[0] != generated_at:
+            raise PublicationStateError("editorial correction names the wrong report")
+        expected_metadata = {
+            "corrected_at": entry["corrected_at"],
+            "original_evidence_manifest_sha256": entry[
+                "original_evidence_manifest_sha256"
+            ],
+            "record": "/GRCInsight/editorial-corrections.json",
+        }
+        if json.loads(manifest).get("editorial_correction") != expected_metadata:
+            raise PublicationStateError(
+                "evidence manifest does not identify its editorial correction"
+            )
+        if report.decode("utf-8").count(editorial_correction_note(entry)) != 1:
+            raise PublicationStateError(
+                "corrected report must disclose its editorial correction"
+            )
+        corrections[generated_at] = entry
+    require_editorial_correction_records(site_dir, corrections)
+    return corrections
+
+
+def require_editorial_correction_records(
+    site_dir: Path, corrections: dict[str, dict[str, Any]]
+) -> None:
+    for path in (site_dir / "archive").glob("*/evidence-manifest.json"):
+        manifest = read_json(path, "archived evidence manifest")
+        if (
+            isinstance(manifest, dict)
+            and "editorial_correction" in manifest
+            and manifest.get("generated_at") not in corrections
+        ):
+            raise PublicationStateError("missing editorial correction record")
+
+
+def publication_manifest_matches(
+    published_digest: object,
+    current_digest: object,
+    generated_at: str,
+    corrections: dict[str, dict[str, Any]],
+) -> bool:
+    if published_digest == current_digest:
+        return True
+    correction = corrections.get(generated_at)
+    return bool(
+        correction
+        and correction["original_evidence_manifest_sha256"] == published_digest
+        and correction["corrected_evidence_manifest_sha256"] == current_digest
+    )
 
 
 def append_publication_event(

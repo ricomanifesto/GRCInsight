@@ -12,6 +12,8 @@
 
 ## Executive Summary
 
+**Editorial correction (2026-09-09):** Promotional source records and associated content were removed. Generation time, model identity, and analyzed-article counts refer to the original run; the model was not rerun. The evidence manifest now lists the retained public sources.
+
 Organizations face an accelerating velocity of critical vulnerability exploitation across core infrastructure layers, with seven actively exploited or weaponized flaws disclosed in the first week of September 2026 alone. The convergence of authentication bypasses, remote code execution chains, and long-dormant logical flaws signals a threat landscape where perimeter defenses and legacy patching cadences are insufficient.
 
 Critical infrastructure components — virtualization platforms, application delivery controllers, database engines, and content management ecosystems — are under simultaneous attack. Citrix NetScaler (CVE-2026-19490) [Critical Citrix NetScaler auth bypass now leveraged in attacks](https://www.bleepingcomputer.com/news/security/hackers-target-critical-citrix-netscaler-auth-bypass-in-attacks/), VMware Workstation and Fusion (CVE-2026-59346) [Critical VMware Workstation and Fusion Flaw Lets VM Admins Execute Host Code](https://thehackernews.com/2026/09/critical-vmware-workstation-and-fusion.html), and Google Chrome V8 (CVE-2026-85046) [Google Releases Chrome Update to Patch Actively Exploited V8 Zero-Day](https://thehackernews.com/2026/09/google-releases-chrome-update-to-patch.html) each have confirmed in-the-wild exploitation, demanding immediate emergency patching workflows.

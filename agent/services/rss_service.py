@@ -2,11 +2,32 @@
 
 import httpx
 import feedparser
+import xml.etree.ElementTree as ET
 from typing import Dict, Any, List
 from loguru import logger
 
 from models.api import ArticleInput
 from config.settings import settings
+from core.content_policy import contains_virtual_event
+
+
+def _exclude_tagged_feed_records(xml: str) -> str:
+    """Exclude records before feedparser can normalize away HTML5 entity markers."""
+    try:
+        root = ET.fromstring(xml)
+    except ET.ParseError:
+        if contains_virtual_event(xml):
+            raise ValueError("Cannot establish source eligibility in malformed feed XML")
+        return xml
+    removed = False
+    for parent in root.iter():
+        for child in list(parent):
+            if child.tag.rsplit("}", 1)[-1] in {"item", "entry"} and contains_virtual_event(
+                ET.tostring(child, encoding="unicode")
+            ):
+                parent.remove(child)
+                removed = True
+    return ET.tostring(root, encoding="unicode") if removed else xml
 
 
 class RSSService:
@@ -32,7 +53,7 @@ class RSSService:
                 raise ValueError("RSS feed response was empty")
 
             # Parse the feed
-            feed = feedparser.parse(response_text)
+            feed = feedparser.parse(_exclude_tagged_feed_records(response_text))
             if feed.bozo and not feed.entries:
                 raise ValueError(f"RSS feed parsing failed: {feed.bozo_exception}")
             metadata_keys = set(feed.feed.keys())
@@ -54,7 +75,8 @@ class RSSService:
                     "source": entry.get("source", {}).get("title", "Unknown Source"),
                     "content": self._extract_content(entry),
                 }
-                entries.append(entry_data)
+                if not contains_virtual_event(entry_data):
+                    entries.append(entry_data)
 
             return {
                 "title": feed.feed.get("title", "Unknown Feed"),
@@ -78,6 +100,8 @@ class RSSService:
             timeout=self.timeout,
         ) as client:
             for article in articles:
+                if contains_virtual_event(article.model_dump()):
+                    continue
                 try:
                     logger.debug(f"Enriching article: {article.title}")
 
@@ -90,6 +114,8 @@ class RSSService:
                         try:
                             response = await client.get(article.url, timeout=10.0)
                             if response.status_code == 200:
+                                if contains_virtual_event(response.text):
+                                    continue
                                 # Simple content extraction - in production you'd want
                                 # more sophisticated content extraction
                                 enriched_article.content = response.text[

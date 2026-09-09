@@ -14,6 +14,10 @@ from urllib.parse import quote, urlparse
 REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "agent"))
 
+from core.content_policy import (  # noqa: E402
+    VIRTUAL_EVENT_EXCLUSION,
+    contains_virtual_event,
+)
 from core.reporting_identity import (  # noqa: E402
     ReportingIdentityError,
     normalize_reporting_url,
@@ -400,6 +404,8 @@ def add_missing_cve_source_links(body: str, sources: list[dict[str, object]]) ->
 
 
 def source_articles(metadata: dict) -> list[dict[str, object]]:
+    if contains_virtual_event(metadata.get("source_articles")):
+        fail(VIRTUAL_EVENT_EXCLUSION)
     raw_sources = metadata.get("source_articles")
     if not isinstance(raw_sources, list) or not raw_sources:
         fail("metadata.source_articles must contain the analyzed source evidence")
@@ -587,6 +593,8 @@ def evidence_manifest(data: dict, sources: list[dict[str, object]]) -> dict:
 
 
 def compose_report(data: dict, expected_feed_url: str, expected_model: str) -> str:
+    if contains_virtual_event(data):
+        fail(VIRTUAL_EVENT_EXCLUSION)
     if data.get("status") != "completed":
         fail("stored report status is not completed")
 
