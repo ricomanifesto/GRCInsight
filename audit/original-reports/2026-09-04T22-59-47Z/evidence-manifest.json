@@ -1,0 +1,94 @@
+{
+  "schema_version": 3,
+  "generated_at": "2026-09-04T22:59:47.165849Z",
+  "feed_url": "https://ricomanifesto.github.io/SentryDigest/feed.xml",
+  "feed_home_url": "https://ricomanifesto.github.io/SentryDigest/",
+  "digest_issue_date": "2026-09-04",
+  "digest_issue_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-04/",
+  "requested_model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
+  "resolved_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+  "sources": [
+    {
+      "title": "Critical Citrix NetScaler auth bypass now leveraged in attacks",
+      "url": "https://www.bleepingcomputer.com/news/security/hackers-target-critical-citrix-netscaler-auth-bypass-in-attacks/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-04/#reporting-7483ae5401bd",
+      "cves": [
+        "CVE-2026-19490"
+      ]
+    },
+    {
+      "title": "PostgreSQL Fixes 12-Year-Old Logical Decoding Flaw Enabling Replication-Role Code Execution",
+      "url": "https://thehackernews.com/2026/09/postgresql-fixes-12-year-old-logical.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-04/#reporting-d7ed15b40cfe",
+      "cves": [
+        "CVE-2026-6471"
+      ]
+    },
+    {
+      "title": "Over 440,000 Exploit Attempts Target Super Forms and Elementor Pro RCE Flaws",
+      "url": "https://thehackernews.com/2026/09/over-440000-exploit-attempts-target.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-04/#reporting-7eb26d7003dc",
+      "cves": [
+        "CVE-2026-14894"
+      ]
+    },
+    {
+      "title": "Google Releases Chrome Update to Patch Actively Exploited V8 Zero-Day",
+      "url": "https://thehackernews.com/2026/09/google-releases-chrome-update-to-patch.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-04/#reporting-49749711ba07",
+      "cves": [
+        "CVE-2026-85046"
+      ]
+    },
+    {
+      "title": "Critical Cisco Nexus 9000 Flaw Lets Unauthenticated Remote Attackers Run Code as Root",
+      "url": "https://thehackernews.com/2026/09/critical-cisco-nexus-9000-flaw-lets.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-04/#reporting-10869e1cb2f9",
+      "cves": [
+        "CVE-2026-20212"
+      ]
+    },
+    {
+      "title": "[Virtual Event] What Every Enterprise Should Know About Securing Cloud Assets in the Age of AI",
+      "url": "https://www.darkreading.com/events/virtual-event-what-every-enterprise-know-securing-cloud-2026",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-04/#reporting-a5c502fdcf06",
+      "cves": []
+    },
+    {
+      "title": "[Virtual Event] Building a Secure AI Strategy for the Enterprise",
+      "url": "https://www.darkreading.com/events/virtual-event-building-secure-ai-strategy-enterprise-2026",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-04/#reporting-dca03da12610",
+      "cves": []
+    },
+    {
+      "title": "IDScan sued over alleged data breach affecting 153 million drivers",
+      "url": "https://www.bleepingcomputer.com/news/security/idscan-sued-over-alleged-data-breach-affecting-153-million-drivers/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-04/#reporting-5c7b6ad938ba",
+      "cves": []
+    },
+    {
+      "title": "Companies Have 6 Months to Prepare for Automated Attacks",
+      "url": "https://www.darkreading.com/cybersecurity-operations/companies-six-months-prepare-automated-attacks",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-04/#reporting-6b5b7c851b25",
+      "cves": []
+    },
+    {
+      "title": "Phishing Campaign Sends Millions of Emails Using Invisible Unicode to Evade Filters",
+      "url": "https://thehackernews.com/2026/09/phishing-campaign-sends-millions-of.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-04/#reporting-ffe72a79b189",
+      "cves": []
+    },
+    {
+      "title": "New Ted Backdoor Hides Inside Victims' Own HAProxy Builds to Intercept Web Traffic",
+      "url": "https://thehackernews.com/2026/09/new-ted-backdoor-hides-inside-victims.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-04/#reporting-b1ea25ffc370",
+      "cves": []
+    },
+    {
+      "title": "Microsoft says some users can’t open the Teams desktop client",
+      "url": "https://www.bleepingcomputer.com/news/microsoft/microsoft-says-some-users-cant-open-the-teams-desktop-client/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-04/#reporting-fface7014a8e",
+      "cves": []
+    }
+  ]
+}

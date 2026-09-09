@@ -12,6 +12,9 @@ import re
 import sys
 from typing import Any
 
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "agent"))
+from core.content_policy import contains_virtual_event  # noqa: E402
+
 SCHEMA_VERSION = 1
 HISTORY_SCHEMA_VERSION = 1
 HISTORY_MAX_ENTRIES = 30
@@ -325,6 +328,204 @@ def editorial_correction_note(correction: dict[str, Any]) -> str:
     )
 
 
+# These three reviewed whole units have no marker. Permission is bound to both
+# the immutable report and the exact unit, never to a phrase or a source URL.
+UNTAGGED_CORRECTION_UNITS = {
+    (
+        "2026-09-06T22-53-06Z",
+        "11f3e37ad6e15eb9861a2b73a7f1723615a6998dc7711deb48f62e8be6476a0e",
+    ): {
+        "40a0afb85f63de617d6ce6c2e98043ff9a3c95c43c83e99f7f406afa07a7171e",
+    },
+    (
+        "2026-09-09T11-06-50Z",
+        "744b68fdad83e5eb3a3f984c4896a73359a7bf35e579a554129edfecb2d41eb8",
+    ): {
+        "d255408ac79d33a00d6ecb627b29478de2c265f6153bc136781820c0a2006146",
+        "8272975f914f6961822c012582f51906545c9a5fa348fe0c6ea096eb767bcf0a",
+    },
+}
+REPORT_LIST_ITEM = re.compile(r"^( *)(?:[-+*]|\d+[.)])\s+")
+REPORT_HEADING = re.compile(r"^#{1,6}\s+")
+REPORT_TABLE_RULE = re.compile(r"^\s*\|[\s:|\-]+\|\s*$")
+
+
+def exclusion_only_report(
+    original: bytes, snapshot_name: str, correction: dict[str, Any]
+) -> tuple[bytes, int, list[str]]:
+    """Replay whole-unit deletions without normalizing any retained Markdown."""
+    try:
+        text = original.decode("utf-8")
+    except UnicodeDecodeError as error:
+        raise PublicationStateError("original report must be UTF-8") from error
+    heading = "## Executive Summary\n\n"
+    lines = text.splitlines(keepends=True)
+    if text.count(heading) != 1 or lines.count("## Source Highlights\n") != 1:
+        raise PublicationStateError("original report correction sections are invalid")
+    body_start = lines.index("## Executive Summary\n") + 1
+    sources_start = lines.index("## Source Highlights\n")
+    if sources_start <= body_start or "**Editorial correction (" in text:
+        raise PublicationStateError("original report is not an uncorrected report")
+    approved = UNTAGGED_CORRECTION_UNITS.get(
+        (snapshot_name, hashlib.sha256(original).hexdigest()), set()
+    )
+    used_approvals: set[str] = set()
+    retained = []
+    narrative_count = 0
+    removed_highlights: list[str] = []
+    index = 0
+    while index < len(lines):
+        line = lines[index]
+        if index < body_start or not line.strip() or REPORT_HEADING.match(line):
+            retained.append(line)
+            index += 1
+            continue
+        # Corrections support ordinary prose, list items and table rows. Refuse
+        # ambiguous code/HTML blocks instead of silently removing part of one.
+        item = REPORT_LIST_ITEM.match(line)
+        if line.lstrip().startswith(("```", "~~~", "<", ">")) or (
+            not item and line.startswith(("    ", "\t"))
+        ):
+            raise PublicationStateError("unsupported original report correction block")
+        table_row = line.lstrip().startswith("|")
+        end = index + 1
+        if not table_row:
+            while end < len(lines):
+                following = lines[end]
+                if (
+                    not following.strip()
+                    or REPORT_HEADING.match(following)
+                    or REPORT_LIST_ITEM.match(following)
+                    or following.lstrip().startswith("|")
+                    or following.lstrip().startswith(("```", "~~~", "<", ">"))
+                ):
+                    break
+                end += 1
+        unit = "".join(lines[index:end])
+        digest = hashlib.sha256(unit.encode("utf-8")).hexdigest()
+        excluded = contains_virtual_event(unit) or digest in approved
+        if excluded:
+            if table_row:
+                preceding = index - 1
+                while preceding >= 0 and lines[preceding].lstrip().startswith("|"):
+                    preceding -= 1
+                if not line.strip().endswith("|") or not any(
+                    REPORT_TABLE_RULE.fullmatch(value)
+                    for value in lines[preceding + 1 : index]
+                ):
+                    raise PublicationStateError("unsupported original report table row")
+            if table_row and (
+                REPORT_TABLE_RULE.fullmatch(line)
+                or (end < len(lines) and REPORT_TABLE_RULE.fullmatch(lines[end]))
+            ):
+                raise PublicationStateError("cannot remove a report table heading")
+            if item:
+                following = next((value for value in lines[end:] if value.strip()), "")
+                indentation = len(following) - len(following.lstrip(" "))
+                if following and indentation > len(item.group(1)):
+                    raise PublicationStateError(
+                        "cannot partially remove a nested report item"
+                    )
+            if digest in approved:
+                used_approvals.add(digest)
+            if index < sources_start:
+                narrative_count += 1
+            else:
+                if not item or end != index + 1:
+                    raise PublicationStateError(
+                        "source highlight must be a whole list entry"
+                    )
+                removed_highlights.append(unit)
+        else:
+            retained.append(unit)
+        index = end
+    if used_approvals != approved:
+        raise PublicationStateError("approved original correction units are missing")
+    expected = "".join(retained)
+    if contains_virtual_event(expected):
+        raise PublicationStateError("promotion remains outside a removable report unit")
+    expected = expected.replace(
+        heading, heading + editorial_correction_note(correction) + "\n\n", 1
+    )
+    return expected.encode("utf-8"), narrative_count, removed_highlights
+
+
+def validate_exclusion_only_correction(
+    original_report: bytes,
+    original_manifest: bytes,
+    report: bytes,
+    manifest: bytes,
+    snapshot_name: str,
+    correction: dict[str, Any],
+) -> None:
+    try:
+        original = json.loads(original_manifest)
+    except (ValueError, UnicodeDecodeError) as error:
+        raise PublicationStateError(
+            "original evidence manifest must be valid JSON"
+        ) from error
+    if (
+        not isinstance(original, dict)
+        or "editorial_correction" in original
+        or not isinstance(original.get("sources"), list)
+        or not original["sources"]
+        or any(not isinstance(source, dict) for source in original["sources"])
+    ):
+        raise PublicationStateError("original evidence sources are invalid")
+    if manifest_identity(original_manifest)[0] != correction["report_generated_at"]:
+        raise PublicationStateError("original evidence manifest names the wrong report")
+    retained_sources = [
+        source for source in original["sources"] if not contains_virtual_event(source)
+    ]
+    removed_sources = len(original["sources"]) - len(retained_sources)
+    if removed_sources != correction["removed_source_count"]:
+        raise PublicationStateError(
+            "editorial correction source removal count does not match"
+        )
+    expected_manifest = {
+        **original,
+        "sources": retained_sources,
+        "editorial_correction": {
+            "corrected_at": correction["corrected_at"],
+            "original_evidence_manifest_sha256": correction[
+                "original_evidence_manifest_sha256"
+            ],
+            "record": "/GRCInsight/editorial-corrections.json",
+        },
+    }
+    expected_manifest_bytes = (
+        json.dumps(expected_manifest, indent=2, ensure_ascii=False) + "\n"
+    ).encode("utf-8")
+    if manifest != expected_manifest_bytes:
+        raise PublicationStateError(
+            "evidence correction is not the source-exclusion projection"
+        )
+    expected_report, narrative_count, removed_highlights = exclusion_only_report(
+        original_report, snapshot_name, correction
+    )
+    if narrative_count != correction["removed_narrative_units"]:
+        raise PublicationStateError(
+            "editorial correction narrative removal count does not match"
+        )
+    excluded_urls = {
+        source["url"]
+        for source in original["sources"]
+        if contains_virtual_event(source) and isinstance(source.get("url"), str)
+    }
+    highlighted_urls: set[str] = set()
+    for highlight in removed_highlights:
+        matched_urls = {url for url in excluded_urls if f"]({url})" in highlight}
+        if len(matched_urls) != 1 or matched_urls & highlighted_urls:
+            raise PublicationStateError(
+                "removed highlight does not identify one excluded source"
+            )
+        highlighted_urls.update(matched_urls)
+    if report != expected_report:
+        raise PublicationStateError(
+            "report correction is not the exclusion-only transformation"
+        )
+
+
 def load_editorial_corrections(site_dir: Path) -> dict[str, dict[str, Any]]:
     """Validate explicit original-to-corrected bindings, never a hash exemption."""
     path = site_dir / "editorial-corrections.json"
@@ -392,9 +593,27 @@ def load_editorial_corrections(site_dir: Path) -> dict[str, dict[str, Any]]:
             raise PublicationStateError(
                 "editorial correction original report is missing"
             ) from error
-        if hashlib.sha256(original_report).hexdigest() != entry["original_report_sha256"]:
+        if (
+            hashlib.sha256(original_report).hexdigest()
+            != entry["original_report_sha256"]
+        ):
             raise PublicationStateError(
                 "editorial correction does not match original report digest"
+            )
+        try:
+            original_manifest = original_path.with_name(
+                "evidence-manifest.json"
+            ).read_bytes()
+        except OSError as error:
+            raise PublicationStateError(
+                "editorial correction original manifest is missing"
+            ) from error
+        if (
+            hashlib.sha256(original_manifest).hexdigest()
+            != entry["original_evidence_manifest_sha256"]
+        ):
+            raise PublicationStateError(
+                "editorial correction does not match original manifest digest"
             )
         try:
             report = (snapshot / "report.md").read_bytes()
@@ -428,6 +647,9 @@ def load_editorial_corrections(site_dir: Path) -> dict[str, dict[str, Any]]:
             raise PublicationStateError(
                 "corrected report must disclose its editorial correction"
             )
+        validate_exclusion_only_correction(
+            original_report, original_manifest, report, manifest, snapshot.name, entry
+        )
         corrections[generated_at] = entry
     require_editorial_correction_records(site_dir, corrections)
     return corrections
