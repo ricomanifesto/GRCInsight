@@ -264,6 +264,41 @@ def test_direct_api_excludes_records_from_model_and_local_results(monkeypatch):
     assert [item["article_url"] for item in data["results"]] == [clean.url]
 
 
+@pytest.mark.parametrize("all_excluded", [False, True])
+def test_direct_api_with_no_eligible_articles_skips_model_initialization(monkeypatch, all_excluded):
+    initialized = []
+
+    class UnavailableModel:
+        def __init__(self, **_kwargs):
+            initialized.append(True)
+            raise ValueError("Model unavailable")
+
+    monkeypatch.setattr(analysis_route, "GRCModelService", UnavailableModel)
+    articles = (
+        [
+            article(title=r"\[Virtual Event\] Promotion").model_dump(mode="json"),
+            article(summary="&#91;Virtual Event&#93; Promotion").model_dump(mode="json"),
+        ]
+        if all_excluded
+        else []
+    )
+    response = request("POST", "/api/v1/analyze", json={"articles": articles})
+    assert response.status_code == 200
+    assert response.json() == {
+        "status": "success",
+        "results": [],
+        "summary": {
+            "total_articles": 0,
+            "grc_articles": 0,
+            "top_regulations": [],
+            "top_frameworks": [],
+            "affected_industries": [],
+        },
+        "error": None,
+    }
+    assert initialized == []
+
+
 @pytest.mark.parametrize("marker", MARKERS)
 def test_final_model_report_rejects_visible_markers(monkeypatch, marker):
     service = GRCModelService.__new__(GRCModelService)

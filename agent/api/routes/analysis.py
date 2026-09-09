@@ -31,6 +31,19 @@ async def analyze_ar(request: AnalysisRequest, http_request: Request):
     ]
     logger.info(f"Starting analysis of {len(articles)} articles")
 
+    if not articles:
+        return AnalysisResponse(
+            status="success",
+            results=[],
+            summary=AnalysisSummary(
+                total_articles=0,
+                grc_articles=0,
+                top_regulations=[],
+                top_frameworks=[],
+                affected_industries=[],
+            ),
+        )
+
     try:
         try:
             model_deadline = earliest_deadline(
