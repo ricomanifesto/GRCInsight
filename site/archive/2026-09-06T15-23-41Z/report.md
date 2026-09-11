@@ -12,6 +12,8 @@
 
 ## Executive Summary
 
+**Editorial correction (2026-09-09):** Promotional source records and associated content were removed. Generation time, model identity, and analyzed-article counts refer to the original run; the model was not rerun. The evidence manifest now lists the retained public sources.
+
 A cluster of actively exploited vulnerabilities across virtualization, printing, application delivery, database, content management, and browser platforms surfaced in early September 2026, signaling an elevated threat tempo for infrastructure that underpins daily business operations. Several flaws carry CVSS scores above 9.0 and are already weaponized in the wild, compressing the window for safe remediation.
 
 The education sector faces immediate credential-theft campaigns leveraging a PaperCut authentication-bypass and remote-code-execution chain, while e-commerce operators confront an unpatched Magento and Adobe Commerce zero-day that enables unauthenticated server-side code execution. Both verticals should treat these incidents as active breaches until forensic verification confirms otherwise.

@@ -17,18 +17,6 @@
       ]
     },
     {
-      "title": "[Virtual Event] What Every Enterprise Should Know About Securing Cloud Assets in the Age of AI",
-      "url": "https://www.darkreading.com/events/virtual-event-what-every-enterprise-know-securing-cloud-2026",
-      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-08/#reporting-a5c502fdcf06",
-      "cves": []
-    },
-    {
-      "title": "[Virtual Event] Building a Secure AI Strategy for the Enterprise",
-      "url": "https://www.darkreading.com/events/virtual-event-building-secure-ai-strategy-enterprise-2026",
-      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-08/#reporting-dca03da12610",
-      "cves": []
-    },
-    {
       "title": "Microsoft Plugs Nearly 1,000 Security Holes",
       "url": "https://krebsonsecurity.com/2026/09/microsoft-plugs-nearly-1000-security-holes/",
       "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-08/#reporting-6e80b0fb56bf",
@@ -82,5 +70,10 @@
       "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-08/#reporting-983d80461afe",
       "cves": []
     }
-  ]
+  ],
+  "editorial_correction": {
+    "corrected_at": "2026-09-09T11:10:08Z",
+    "original_evidence_manifest_sha256": "a8be2e91d3242410968ed4aa5f48e54caa53602c7ad5c90d60b705e4f5dd7de8",
+    "record": "/GRCInsight/editorial-corrections.json"
+  }
 }

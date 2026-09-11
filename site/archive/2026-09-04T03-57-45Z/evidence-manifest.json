@@ -41,18 +41,6 @@
       ]
     },
     {
-      "title": "[Virtual Event] What Every Enterprise Should Know About Securing Cloud Assets in the Age of AI",
-      "url": "https://www.darkreading.com/events/virtual-event-what-every-enterprise-know-securing-cloud-2026",
-      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-03/#reporting-a5c502fdcf06",
-      "cves": []
-    },
-    {
-      "title": "[Virtual Event] Building a Secure AI Strategy for the Enterprise",
-      "url": "https://www.darkreading.com/events/virtual-event-building-secure-ai-strategy-enterprise-2026",
-      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-03/#reporting-dca03da12610",
-      "cves": []
-    },
-    {
       "title": "French hospital fined €500,000 after breach exposes data of 727,000",
       "url": "https://www.bleepingcomputer.com/news/security/french-hospital-fined-500-000-after-breach-exposes-data-of-727-000/",
       "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-03/#reporting-0310538b67d5",
@@ -88,5 +76,10 @@
       "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-03/#reporting-eae08603ec40",
       "cves": []
     }
-  ]
+  ],
+  "editorial_correction": {
+    "corrected_at": "2026-09-09T01:20:22Z",
+    "original_evidence_manifest_sha256": "19d1eee763c138655ff7bd541ca8f51ae15a2da11a4e3156e1a4ca896418ab12",
+    "record": "/GRCInsight/editorial-corrections.json"
+  }
 }
