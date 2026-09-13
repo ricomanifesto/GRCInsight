@@ -101,7 +101,16 @@ def test_analyze_route_uses_the_tighter_caller_deadline(monkeypatch):
             "POST",
             "/api/v1/analyze",
             headers={"X-GRC-Caller-Deadline-Unix-Ms": "400000"},
-            json={"articles": []},
+            json={
+                "articles": [
+                    {
+                        "title": "Security guidance",
+                        "url": "https://example.com/security",
+                        "content": "NIST incident response guidance",
+                        "published": "2026-09-09T00:00:00Z",
+                    }
+                ]
+            },
         )
     finally:
         reset_model_deadline(token)
