@@ -41,18 +41,6 @@
       ]
     },
     {
-      "title": "[Virtual Event] What Every Enterprise Should Know About Securing Cloud Assets in the Age of AI",
-      "url": "https://www.darkreading.com/events/virtual-event-what-every-enterprise-know-securing-cloud-2026",
-      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-03/#reporting-a5c502fdcf06",
-      "cves": []
-    },
-    {
-      "title": "[Virtual Event] Building a Secure AI Strategy for the Enterprise",
-      "url": "https://www.darkreading.com/events/virtual-event-building-secure-ai-strategy-enterprise-2026",
-      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-03/#reporting-dca03da12610",
-      "cves": []
-    },
-    {
       "title": "Large Enterprises Targeted in Fake Merger & Acquisition Scams",
       "url": "https://www.darkreading.com/cyberattacks-data-breaches/large-enterprises-fake-merger-acquisition-scams",
       "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-03/#reporting-b38f4c9e8193",
@@ -88,5 +76,10 @@
       "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-03/#reporting-9d9736b815d5",
       "cves": []
     }
-  ]
+  ],
+  "editorial_correction": {
+    "corrected_at": "2026-09-09T01:20:22Z",
+    "original_evidence_manifest_sha256": "16691f58019db285e4616e9bdf10e577089ad25a519f2e7772f7fee7101cdca5",
+    "record": "/GRCInsight/editorial-corrections.json"
+  }
 }

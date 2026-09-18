@@ -16,6 +16,7 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
 from publication_state import (  # noqa: E402
+    load_editorial_corrections,
     PublicationStateError,
     category_label,
     validate_publication_history,
@@ -130,7 +131,10 @@ def load_publication_artifacts(
         history = json.loads(PUBLICATION_HISTORY.read_text(encoding="utf-8"))
         validated_state = validate_publication_state(state, manifest_bytes)
         validated_history = validate_publication_history(
-            history, validated_state, manifest_bytes
+            history,
+            validated_state,
+            manifest_bytes,
+            corrections=load_editorial_corrections(SITE_DIR),
         )
         return validated_state, validated_history
     except FileNotFoundError as error:
@@ -419,6 +423,7 @@ def expected_outputs(
         PUBLICATION_HISTORY_INDEX: publication_history_html(publication_history),
     }
     reports: list[tuple[str, str, str, str]] = []
+    corrections = load_editorial_corrections(SITE_DIR)
     if ARCHIVE_DIR.exists():
         for report_md in sorted(
             ARCHIVE_DIR.glob("????-??-??T??-??-??Z/report.md"), reverse=True
@@ -433,9 +438,11 @@ def expected_outputs(
                     f"{report_md.relative_to(REPO_ROOT)}"
                 )
             archive_page = report_md.parent / "index.html"
-            # The publication-era report body remains byte-for-byte intact.
-            # Existing pages receive only boundary-aware page chrome.
-            if archive_page.exists():
+            # The publication-era report body remains byte-for-byte intact
+            # unless a hash-bound editorial correction explicitly replaces it.
+            if fields.get("generated") in corrections:
+                outputs[archive_page] = archive_detail_html(archived_markdown)
+            elif archive_page.exists():
                 outputs[archive_page] = with_archive_detail_chrome(
                     read_text(archive_page), generated
                 )
