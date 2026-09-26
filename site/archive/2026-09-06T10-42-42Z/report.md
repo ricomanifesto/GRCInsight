@@ -12,6 +12,8 @@
 
 ## Executive Summary
 
+**Editorial correction (2026-09-09):** Promotional source records and associated content were removed. Generation time, model identity, and analyzed-article counts refer to the original run; the model was not rerun. The evidence manifest now lists the retained public sources.
+
 Organizations face an accelerating vulnerability exploitation cycle in September 2026, with multiple critical flaws under active attack across virtualization, printing infrastructure, application delivery controllers, databases, content management systems, and browser engines. The velocity of exploitation — evidenced by over 440,000 exploit attempts against WordPress plugins alone and active targeting of Citrix NetScaler and Chrome zero-days — demands immediate patch prioritization and compensating controls.
 
 Supply chain and third-party risk has materialized in concurrent incidents: JetBrains Cadence was breached via an unpatched TeamCity instance exposing AWS credentials, while Trezor disclosed 67,000 U.S. customer records compromised through its shipping provider ShipMonk. These events demonstrate that vendor risk management must extend beyond primary suppliers to logistics and CI/CD pipeline dependencies.

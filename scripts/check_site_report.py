@@ -14,6 +14,10 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "agent"))
 sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
+from core.content_policy import (  # noqa: E402
+    VIRTUAL_EVENT_EXCLUSION,
+    contains_virtual_event,
+)
 from core.reporting_identity import (  # noqa: E402
     ReportingIdentityError,
     legacy_sentrydigest_item_url as build_legacy_sentrydigest_item_url,
@@ -28,6 +32,8 @@ from build_site import (  # noqa: E402
     DATED_DIGEST_HANDOFF_BOUNDARY,
 )
 from publication_state import (  # noqa: E402
+    load_editorial_corrections,
+    publication_manifest_matches,
     PublicationStateError,
     category_label,
     validate_publication_history,
@@ -496,6 +502,8 @@ def find_reader_surface_defect(markdown: str) -> str | None:
 
 
 def find_public_report_integrity_failure(markdown: str) -> str | None:
+    if contains_virtual_event(markdown):
+        return VIRTUAL_EVENT_EXCLUSION
     lines = [line.strip() for line in markdown.splitlines() if line.strip()]
     for line in lines:
         if LEAKED_DELIBERATION_PATTERN.match(line):
@@ -663,6 +671,8 @@ def validate_evidence_manifest(
         fail(f"evidence-manifest.json is invalid JSON: {error}")
     if not isinstance(manifest, dict):
         fail("evidence-manifest.json must be an object")
+    if contains_virtual_event(manifest):
+        fail("evidence manifest contains " + VIRTUAL_EVENT_EXCLUSION)
     schema_version = manifest.get("schema_version", 1)
     if schema_version not in {1, 2, 3}:
         fail("evidence-manifest.json has an unsupported schema version")
@@ -950,7 +960,10 @@ def validate_publication_surface(
         state = json.loads(publication_state_text)
         history = json.loads(publication_history_text)
         validated_state = validate_publication_state(state, manifest_bytes)
-        validate_publication_history(history, validated_state, manifest_bytes)
+        corrections = load_editorial_corrections(SITE_DIR)
+        validate_publication_history(
+            history, validated_state, manifest_bytes, corrections=corrections
+        )
     except (json.JSONDecodeError, PublicationStateError) as error:
         fail(f"publication artifacts are invalid: {error}")
 
@@ -987,9 +1000,12 @@ def validate_publication_surface(
         if not archived_manifest_path.is_file():
             fail("publication history event does not resolve to an archived report")
         archived_manifest = archived_manifest_path.read_bytes()
-        if hashlib.sha256(archived_manifest).hexdigest() != event[
-            "evidence_manifest_sha256"
-        ]:
+        if not publication_manifest_matches(
+            event["evidence_manifest_sha256"],
+            hashlib.sha256(archived_manifest).hexdigest(),
+            event["report_generated_at"],
+            corrections,
+        ):
             fail("publication history event does not match its archived manifest")
         try:
             archived_manifest_data = json.loads(archived_manifest)

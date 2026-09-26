@@ -58,18 +58,6 @@
       ]
     },
     {
-      "title": "[Virtual Event] What Every Enterprise Should Know About Securing Cloud Assets in the Age of AI",
-      "url": "https://www.darkreading.com/events/virtual-event-what-every-enterprise-know-securing-cloud-2026",
-      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-06/#reporting-a5c502fdcf06",
-      "cves": []
-    },
-    {
-      "title": "[Virtual Event] Building a Secure AI Strategy for the Enterprise",
-      "url": "https://www.darkreading.com/events/virtual-event-building-secure-ai-strategy-enterprise-2026",
-      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-06/#reporting-dca03da12610",
-      "cves": []
-    },
-    {
       "title": "Attackers conceal phishing lures using invisible Unicode characters",
       "url": "https://www.bleepingcomputer.com/news/security/attackers-conceal-phishing-lures-using-invisible-unicode-characters/",
       "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-06/#reporting-bc441f97e571",
@@ -93,5 +81,10 @@
       "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-06/#reporting-9eeec10be375",
       "cves": []
     }
-  ]
+  ],
+  "editorial_correction": {
+    "corrected_at": "2026-09-09T01:20:22Z",
+    "original_evidence_manifest_sha256": "9e2312e88f56727e748fa5f9ab0bce17c21559859b88026091203ecca70e0ff4",
+    "record": "/GRCInsight/editorial-corrections.json"
+  }
 }

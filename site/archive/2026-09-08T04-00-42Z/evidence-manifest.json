@@ -26,18 +26,6 @@
       ]
     },
     {
-      "title": "[Virtual Event] What Every Enterprise Should Know About Securing Cloud Assets in the Age of AI",
-      "url": "https://www.darkreading.com/events/virtual-event-what-every-enterprise-know-securing-cloud-2026",
-      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-07/#reporting-a5c502fdcf06",
-      "cves": []
-    },
-    {
-      "title": "[Virtual Event] Building a Secure AI Strategy for the Enterprise",
-      "url": "https://www.darkreading.com/events/virtual-event-building-secure-ai-strategy-enterprise-2026",
-      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-07/#reporting-dca03da12610",
-      "cves": []
-    },
-    {
       "title": "PEEP Turns Chrome and Edge Into Post-Compromise Backdoors for Host Command Execution",
       "url": "https://thehackernews.com/2026/09/peep-turns-chrome-and-edge-into-post.html",
       "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-07/#reporting-6c94379fcb16",
@@ -85,5 +73,10 @@
       "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-07/#reporting-c09a5ec87b1f",
       "cves": []
     }
-  ]
+  ],
+  "editorial_correction": {
+    "corrected_at": "2026-09-09T01:20:22Z",
+    "original_evidence_manifest_sha256": "c1e1a23b8751b9af68f40cfcea4ecd963158787896c86b14d5cd424dbaf62e58",
+    "record": "/GRCInsight/editorial-corrections.json"
+  }
 }

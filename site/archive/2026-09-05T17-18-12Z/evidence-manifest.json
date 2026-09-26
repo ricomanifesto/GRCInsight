@@ -50,18 +50,6 @@
       ]
     },
     {
-      "title": "[Virtual Event] What Every Enterprise Should Know About Securing Cloud Assets in the Age of AI",
-      "url": "https://www.darkreading.com/events/virtual-event-what-every-enterprise-know-securing-cloud-2026",
-      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-05/#reporting-a5c502fdcf06",
-      "cves": []
-    },
-    {
-      "title": "[Virtual Event] Building a Secure AI Strategy for the Enterprise",
-      "url": "https://www.darkreading.com/events/virtual-event-building-secure-ai-strategy-enterprise-2026",
-      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-05/#reporting-dca03da12610",
-      "cves": []
-    },
-    {
       "title": "Over 5,400 hacked sites serve ClickFix payloads stored on the blockchain",
       "url": "https://www.bleepingcomputer.com/news/security/over-5-400-hacked-sites-serve-clickfix-payloads-stored-on-the-blockchain/",
       "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-05/#reporting-1305dd241c30",
@@ -91,5 +79,10 @@
       "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-05/#reporting-6b5b7c851b25",
       "cves": []
     }
-  ]
+  ],
+  "editorial_correction": {
+    "corrected_at": "2026-09-09T01:20:22Z",
+    "original_evidence_manifest_sha256": "da63db415dc65c89e1be2727796f7afa3e79e7d7e4f655c54ce106396459d330",
+    "record": "/GRCInsight/editorial-corrections.json"
+  }
 }
