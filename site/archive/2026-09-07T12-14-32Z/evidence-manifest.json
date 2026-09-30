@@ -58,18 +58,6 @@
       ]
     },
     {
-      "title": "[Virtual Event] What Every Enterprise Should Know About Securing Cloud Assets in the Age of AI",
-      "url": "https://www.darkreading.com/events/virtual-event-what-every-enterprise-know-securing-cloud-2026",
-      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-07/#reporting-a5c502fdcf06",
-      "cves": []
-    },
-    {
-      "title": "[Virtual Event] Building a Secure AI Strategy for the Enterprise",
-      "url": "https://www.darkreading.com/events/virtual-event-building-secure-ai-strategy-enterprise-2026",
-      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-07/#reporting-dca03da12610",
-      "cves": []
-    },
-    {
       "title": "ChatGPT Astra is now rolling out to $20 Plus subscription",
       "url": "https://www.bleepingcomputer.com/news/artificial-intelligence/chatgpt-astra-is-now-rolling-out-to-20-plus-subscription/",
       "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-07/#reporting-a1bdcc187807",
@@ -93,5 +81,10 @@
       "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-07/#reporting-1a8ef3d227d4",
       "cves": []
     }
-  ]
+  ],
+  "editorial_correction": {
+    "corrected_at": "2026-09-09T01:20:22Z",
+    "original_evidence_manifest_sha256": "479e2a8c36f393f2de31f1f291a5e27a011eace421b062a94e04d321f293e2e8",
+    "record": "/GRCInsight/editorial-corrections.json"
+  }
 }

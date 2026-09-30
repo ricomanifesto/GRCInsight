@@ -17,18 +17,6 @@
       ]
     },
     {
-      "title": "[Virtual Event] What Every Enterprise Should Know About Securing Cloud Assets in the Age of AI",
-      "url": "https://www.darkreading.com/events/virtual-event-what-every-enterprise-know-securing-cloud-2026",
-      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-09/#reporting-a5c502fdcf06",
-      "cves": []
-    },
-    {
-      "title": "[Virtual Event] Building a Secure AI Strategy for the Enterprise",
-      "url": "https://www.darkreading.com/events/virtual-event-building-secure-ai-strategy-enterprise-2026",
-      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-09/#reporting-dca03da12610",
-      "cves": []
-    },
-    {
       "title": "Microsoft adds age-awareness APIs that can tell if users are children, teens, or adults",
       "url": "https://www.bleepingcomputer.com/news/microsoft/microsoft-adds-age-awareness-apis-that-can-tell-if-users-are-children-teens-or-adults/",
       "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-09/#reporting-d9942c7c320c",
@@ -82,5 +70,10 @@
       "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-09/#reporting-a9d06ef94cc0",
       "cves": []
     }
-  ]
+  ],
+  "editorial_correction": {
+    "corrected_at": "2026-09-09T11:15:02Z",
+    "original_evidence_manifest_sha256": "dd5ddeea00ea796a78112c004d208eb18fb2dca25390b28179733cde2dd9646d",
+    "record": "/GRCInsight/editorial-corrections.json"
+  }
 }

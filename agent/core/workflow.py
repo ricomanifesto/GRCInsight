@@ -20,6 +20,7 @@ from models.api import (
 from services.rss_service import RSSService
 from services.model_service import GRCModelService
 from core.entities import analyze_article_grc_content
+from core.content_policy import VIRTUAL_EVENT_EXCLUSION, contains_virtual_event
 from core.reporting_identity import (
     ReportingIdentityError,
     normalize_reporting_url,
@@ -179,6 +180,8 @@ def _build_source_evidence(
     """Build bounded current-source evidence for report-specific claims."""
     evidence: List[Dict[str, Any]] = []
     for article in enriched_articles:
+        if contains_virtual_event(article.model_dump()):
+            continue
         text = "\n".join(filter(None, [article.title, article.summary, article.content]))
         evidence.append(
             {
@@ -452,7 +455,7 @@ async def run_grc_analysis_endpoint(
     try:
         # Step 1: Fetch RSS feed
         logger.info("Step 1: Fetching RSS feed")
-        feed_data = await rss_service.fetch_feed(feed_url)
+        feed_data: Dict[str, Any] = await rss_service.fetch_feed(feed_url)
 
         if "error" in feed_data:
             return WorkflowResponse(
@@ -466,6 +469,13 @@ async def run_grc_analysis_endpoint(
 
         # Step 2: Convert entries to ArticleInput format
         logger.info("Step 2: Processing feed entries")
+        feed_data = {
+            **feed_data,
+            "entries": [
+                entry for entry in feed_data.get("entries", []) if not contains_virtual_event(entry)
+            ],
+        }
+        feed_data["entry_count"] = len(feed_data["entries"])
         try:
             feed_home_url = _canonical_public_url(str(feed_data.get("link") or ""), "feed home URL")
             source_issue_date = _sentrydigest_issue_date(feed_data)
@@ -541,6 +551,26 @@ async def run_grc_analysis_endpoint(
         # Step 3: Enrich articles with full content
         logger.info("Step 3: Enriching articles with full content")
         enriched_articles = await rss_service.enrich_articles(articles)
+        enriched_articles = [
+            article
+            for article in enriched_articles
+            if not contains_virtual_event(article.model_dump())
+        ]
+        if not enriched_articles:
+            return WorkflowResponse(
+                status="failed",
+                error=APIError(
+                    code="NO_LINKED_ARTICLES",
+                    message="Feed contains no eligible articles after enrichment",
+                ),
+            )
+        eligible_urls = {article.url for article in enriched_articles}
+        feed_data["entries"] = [
+            entry
+            for entry in feed_data["entries"]
+            if urljoin(feed_url, str(entry.get("link") or "")) in eligible_urls
+        ]
+        feed_data["entry_count"] = len(enriched_articles)
 
         # Build local analysis upfront, used as fallback if model output is unavailable.
         local_signals, local_analysis = _build_local_analysis(enriched_articles)
@@ -566,8 +596,12 @@ async def run_grc_analysis_endpoint(
         logger.info("Step 5: Analyzing articles for GRC content")
         if model_service is not None:
             model_analysis = await model_service.analyze_articles_for_grc(enriched_articles)
-            if "error" in model_analysis:
-                fallback_reason = model_analysis["error"]
+            if "error" in model_analysis or contains_virtual_event(model_analysis):
+                fallback_reason = (
+                    VIRTUAL_EVENT_EXCLUSION
+                    if contains_virtual_event(model_analysis)
+                    else model_analysis["error"]
+                )
                 logger.warning(f"GRC analysis failed, using local fallback: {fallback_reason}")
             else:
                 analysis_results = model_analysis
@@ -621,10 +655,18 @@ async def run_grc_analysis_endpoint(
             report_generation = await model_service.generate_grc_report(analysis_results, feed_data)
             report_content = report_generation.content
             resolved_model = report_generation.resolved_model
-            if not resolved_model or resolved_model in {
-                "openrouter/free",
-                "openrouter/auto",
-            }:
+            if contains_virtual_event(report_content):
+                fallback_reason = VIRTUAL_EVENT_EXCLUSION
+                report_content = ""
+                resolved_model = ""
+            if report_content and (
+                not resolved_model
+                or resolved_model
+                in {
+                    "openrouter/free",
+                    "openrouter/auto",
+                }
+            ):
                 fallback_reason = "OpenRouter did not attest a usable upstream model identity"
                 report_content = ""
                 resolved_model = ""
@@ -658,7 +700,7 @@ async def run_grc_analysis_endpoint(
 
         analysis_data = analysis_results.get("analysis", {})
         metadata = ReportMetadata(
-            article_count=len(articles),
+            article_count=len(enriched_articles),
             grc_article_count=grc_article_count,
             analysis_mode="fallback" if used_fallback_report else "model",
             fallback_reason=fallback_reason if used_fallback_report else None,
