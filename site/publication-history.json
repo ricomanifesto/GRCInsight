@@ -8,6 +8,13 @@
   },
   "events": [
     {
+      "event_at": "2026-10-03T22:04:28Z",
+      "outcome": "retained",
+      "report_generated_at": "2026-10-03T18:54:57.216619Z",
+      "evidence_manifest_sha256": "8cbbf1f3b59c0b48e59b0e042141112b52e36da2b1aa023cbc6e4481627290e5",
+      "refusal_category": "unclassified_provider_failure"
+    },
+    {
       "event_at": "2026-10-03T18:55:00Z",
       "outcome": "published",
       "report_generated_at": "2026-10-03T18:54:57.216619Z",
@@ -182,12 +189,6 @@
       "report_generated_at": "2026-09-30T12:37:36.658826Z",
       "evidence_manifest_sha256": "ec626d0842752051df40631076cdc4e3f95d20e850f2e132d63cbe64cb75932f",
       "refusal_category": "provider_provenance"
-    },
-    {
-      "event_at": "2026-09-30T12:37:46Z",
-      "outcome": "published",
-      "report_generated_at": "2026-09-30T12:37:36.658826Z",
-      "evidence_manifest_sha256": "ec626d0842752051df40631076cdc4e3f95d20e850f2e132d63cbe64cb75932f"
     }
   ]
 }
