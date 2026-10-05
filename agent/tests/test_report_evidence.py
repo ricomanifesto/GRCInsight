@@ -95,6 +95,27 @@ def test_no_sourced_change_preserves_inference_and_unknown_dates():
 
 
 @pytest.mark.parametrize(
+    "claim",
+    [
+        "The final reporting rule takes effect on 2027-01-01.",
+        "2027-01-01 is the effective date of the final reporting rule.",
+        "The compliance deadline is 2027-01-01.",
+    ],
+)
+def test_regulatory_timing_claims_are_rejected_outside_sourced_table(claim):
+    report = "## Executive Summary\n" + claim + "\n\n" + body(row(date="Unknown"))
+    with pytest.raises(ValueError, match="only in the sourced table"):
+        validate(report, [SOURCE])
+
+
+def test_unrelated_dated_prose_is_allowed_outside_sourced_table():
+    report = "## Executive Summary\nThe regulator published the rule on 2027-01-01.\n\n" + body(
+        row(date="Unknown")
+    )
+    assert validate(report, [SOURCE])[0].document_effective_date is None
+
+
+@pytest.mark.parametrize(
     "change",
     [
         {"url": "https://news.example/security"},

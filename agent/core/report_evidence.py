@@ -70,6 +70,35 @@ def _markdown_link_destination(value: str) -> str:
     return quote(value, safe=":/?#[]@!$&*+,;=%")
 
 
+def _reject_effective_dates_outside_regulatory_table(
+    markdown: str, regulatory_section: re.Match[str]
+) -> None:
+    """Keep model-authored regulatory timing inside the evidence table.
+
+    A date in prose cannot be checked against the row that supplied it (and, in
+    particular, can be inferred from a snippet when publisher metadata says
+    ``Unknown``).  Remove the complete section body before looking for the
+    common ways an ISO date is asserted as an effective or deadline date.
+    """
+    outside = markdown[: regulatory_section.start(1)] + markdown[regulatory_section.end(1) :]
+    timing = (
+        r"(?:takes?|took|comes?|came|enters?|entered)\s+(?:into\s+)?(?:effect|force)"
+        r"|(?:becomes?|became)\s+effective"
+        r"|effective\s+(?:date|on|as\s+of|from)"
+        r"|(?:compliance\s+)?deadline"
+    )
+    iso_date = r"\b\d{4}-\d{2}-\d{2}\b"
+    sentence_text = r"[^\n.!?]*"
+    if re.search(
+        rf"(?:{iso_date}{sentence_text}(?:{timing})|(?:{timing}){sentence_text}{iso_date})",
+        outside,
+        re.I,
+    ):
+        raise ValueError(
+            "regulatory effective dates and deadlines must appear only in the sourced table"
+        )
+
+
 def validate_regulatory_evidence(
     markdown: str, sources: list[dict[str, Any]]
 ) -> list[RegulatoryChange]:
@@ -83,6 +112,7 @@ def validate_regulatory_evidence(
         raise ValueError("legacy regulatory heading cannot classify a new report")
     match = re.search(rf"(?ms)^## {REGULATORY_SECTION}\s*\n(.*?)(?=^## |\Z)", markdown)
     assert match is not None
+    _reject_effective_dates_outside_regulatory_table(markdown, match)
     text = match.group(1).strip()
     if text == NO_REGULATORY_CHANGES:
         return []
