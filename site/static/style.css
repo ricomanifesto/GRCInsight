@@ -127,6 +127,11 @@ body {
 .publication-notice h2 { margin: 0 0 4px; color: var(--ink); font-family: Georgia, "Times New Roman", serif; font-size: 21px; font-weight: 500; }
 .publication-notice p { margin: 0; font-size: 15px; }
 .publication-notice time { color: var(--ink); }
+.publication-notice details { margin-top: 8px; font-size: 14px; }
+.publication-notice summary { cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+.publication-notice details p { margin-top: 8px; }
+.report-citation { white-space: nowrap; font-variant-numeric: tabular-nums; font-weight: 600; padding: 0.15em 0.1em; }
+.source-number { color: var(--muted); font-variant-numeric: tabular-nums; }
 
 .report-meta { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px 30px; margin: 24px 0 0; }
 .report-meta-item { min-width: 0; }

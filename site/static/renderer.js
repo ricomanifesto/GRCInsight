@@ -118,6 +118,7 @@
       markdown += source.slice(cursor, labelStart) + token;
       links.push({
         token,
+        position: labelStart,
         text: source.slice(labelStart + 1, destinationStartMarker),
         url: source.slice(destinationStartMarker + 2, destinationEnd),
       });
@@ -125,11 +126,12 @@
     }
     return {
       markdown,
-      restore(html) {
+      links,
+      restore(html, renderLink = link => renderMarkdownLink(renderLinkLabel(link.text), link.url)) {
         links.forEach(link => {
           html = html.replace(
             link.token,
-            renderMarkdownLink(renderLinkLabel(link.text), link.url),
+            renderLink(link),
           );
         });
         return html;
@@ -167,6 +169,8 @@
     const expectedSectionTitles = new Set([
       'Executive Summary',
       'Key Regulatory Developments',
+      'Sourced Regulatory Changes',
+      'Inferred Control and Governance Implications',
       'Industry Impact Analysis',
       'Risk Assessment',
       'Recommendations for Action',
@@ -252,7 +256,7 @@
 
   // Pure Markdown -> HTML for the report body. No DOM access, so the same
   // function renders in the browser and under the Node renderer check.
-  function renderMarkdown(md) {
+  function renderMarkdown(md, compactCitations = false) {
     md = normalizeReportMarkdown(md);
 
     // Pull fenced code blocks out before escaping, restore them afterwards.
@@ -266,6 +270,7 @@
     // turns query separators into &amp;, which would then be escaped a second
     // time when the URL is written into href.
     const extractedLinks = extractMarkdownLinks(md);
+    const renderLink = compactCitations ? citationRenderer(md, extractedLinks.links) : undefined;
     let html = escapeHtml(extractedLinks.markdown);
     html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
     html = html.replace(/\*([^*]+)\*/g, '<em>$1</em>');
@@ -307,7 +312,7 @@
     html = assembled.join('\n');
     // Restore links and fenced code blocks last so their content never affects
     // block parsing or receives a second escaping pass.
-    html = extractedLinks.restore(html);
+    html = extractedLinks.restore(html, renderLink);
     html = renderEvidenceAffordances(html);
     return html.replace(/%%CODEBLOCK_(\d+)%%/g, (_, i) => `<pre><code>${escapeHtml(codeBlocks[+i])}</code></pre>`);
   }
@@ -417,8 +422,51 @@
     return `<section class="card report-provenance"><h2>About this report</h2><dl class="report-meta">${metadataItems}${manifestItem}</dl>${modelExplanation}</section>`;
   }
 
+  function citationRenderer(markdown, links) {
+    const sourceSection = /^## Source Highlights\s*$/m.exec(markdown);
+    const sourceStart = sourceSection ? sourceSection.index : markdown.length;
+    const followingSection = markdown.slice(sourceStart + (sourceSection?.[0].length || 0)).search(/^## /m);
+    const sourceEnd = followingSection < 0 ? markdown.length : sourceStart + sourceSection[0].length + followingSection;
+    const registry = new Map();
+    const eligible = link => /^https?:\/\//i.test(link.url) && sanitizeMarkdownUrl(link.url) && decodeMarkdownEscapes(link.text) !== 'View in SentryDigest';
+    const isHighlight = link => link.position >= sourceStart && link.position < sourceEnd;
+    [...links.filter(isHighlight), ...links.filter(link => !isHighlight(link))].forEach(link => {
+      const url = sanitizeMarkdownUrl(link.url);
+      if (eligible(link) && !registry.has(url)) registry.set(url, { number: registry.size + 1 });
+    });
+    const highlighted = new Set();
+    return link => {
+      const url = sanitizeMarkdownUrl(link.url);
+      const citation = eligible(link) && registry.get(url);
+      if (!citation) return renderMarkdownLink(renderLinkLabel(link.text), link.url);
+      const number = citation.number;
+      if (isHighlight(link)) {
+        const marker = highlighted.has(url) ? '' : `<span class="source-number" id="source-${number}">[${number}]</span> `;
+        highlighted.add(url);
+        return marker + renderMarkdownLink(renderLinkLabel(link.text), link.url);
+      }
+      const title = decodeMarkdownEscapes(link.text);
+      return `<a class="report-citation" href="${escapeAttribute(url)}" aria-label="${escapeAttribute(`Source ${number}: ${title}`)}" title="${escapeAttribute(title)}" target="_blank" rel="noopener">[${number}]</a>`;
+    };
+  }
+
   function renderReportSections(markdown) {
-    const html = renderMarkdown(markdown);
+    // Historical source bytes remain unchanged. Make their classification limit
+    // visible without claiming a modern evidence check ran at publication.
+    markdown = normalizeReportMarkdown(markdown).replace(
+      /^## Key Regulatory Developments\s*\n([\s\S]*?)(?=^## |(?![\s\S]))/gm,
+      (_match, content) => {
+        const rows = content.split('\n').filter(line => /^\|/.test(line.trim()));
+        const dataRows = rows.slice(2);
+        const allImplied = dataRows.length > 0 && dataRows.every(line => /\b(?:implied|inferred)\b/i.test(line.split('|')[1] || ''));
+        const heading = allImplied ? 'Inferred Control and Governance Implications' : 'Regulatory and Control Context';
+        const note = allImplied
+          ? 'These are inferred mappings, not verified regulatory changes.'
+          : 'This retained report predates separate validation of regulatory changes and inferred control mappings. Verify legal claims against the original regulatory publication.';
+        return `## ${heading}\n\n${note}\n\n${content}`;
+      },
+    );
+    const html = renderMarkdown(markdown, true);
     return html
       .split(/(?=<h2>)/)
       .map(part => part.replace(/^\s*(?:<hr>\s*)+/, '').replace(/(?:\s*<hr>)+\s*$/, '').trim())

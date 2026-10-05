@@ -108,6 +108,8 @@ def publication_notice_html(
     if history is None:
         fail("retained publication notice requires publication history")
     attempted = parse_generated(str(state["attempted_at"]))
+    generated_raw = str(state["report_generated_at"])
+    generated = parse_generated(generated_raw)
     label = category_label(state["refusal_category"])
     reason = (
         "an unclassified provider failure"
@@ -117,7 +119,10 @@ def publication_notice_html(
     attempted_raw = str(state["attempted_at"])
     return f"""          <aside class="publication-notice" aria-labelledby="publication-notice-title">
             <h2 id="publication-notice-title">Publication update</h2>
-            <p>A newer report was attempted on <time datetime="{escape(attempted_raw, quote=True)}">{escape(display_timestamp(attempted))}</time>. The current model-backed report was retained because of {escape(reason)}. {escape(schedule_clause(history))} <a href="publication-history/">Recent publication history</a> · <a href="publication-state.json">Machine-readable status</a>.</p>
+            <p>Showing the report generated on <time datetime="{escape(generated_raw, quote=True)}">{escape(display_date(generated))} at {generated.strftime('%H:%M:%S')} UTC</time>. The <time datetime="{escape(attempted_raw, quote=True)}">{escape(display_date(attempted))} at {attempted.strftime('%H:%M:%S')} UTC</time> refresh failed.</p>
+            <details><summary>Refresh details and publication history</summary>
+              <p>The previous report remains available because of {escape(reason)}. {escape(schedule_clause(history))} <a href="publication-history/">Recent publication history</a> · <a href="publication-state.json">Machine-readable status</a>.</p>
+            </details>
           </aside>
 """
 
@@ -432,15 +437,10 @@ def expected_outputs(
                     "archive timestamp does not match Generated metadata: "
                     f"{report_md.relative_to(REPO_ROOT)}"
                 )
+            # Markdown and manifests retain publication-era evidence; HTML is a
+            # deterministic reader projection shared with the current report.
             archive_page = report_md.parent / "index.html"
-            # The publication-era report body remains byte-for-byte intact.
-            # Existing pages receive only boundary-aware page chrome.
-            if archive_page.exists():
-                outputs[archive_page] = with_archive_detail_chrome(
-                    read_text(archive_page), generated
-                )
-            else:
-                outputs[archive_page] = archive_detail_html(archived_markdown)
+            outputs[archive_page] = archive_detail_html(archived_markdown)
             reports.append(
                 (
                     report_key,

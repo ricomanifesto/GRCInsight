@@ -40,7 +40,8 @@ def complete_report_body(
     return "\n\n".join(
         (
             f"{executive_heading}\n{executive_content}",
-            "## Key Regulatory Developments\nCareful regulatory analysis.",
+            "## Sourced Regulatory Changes\nNo sourced regulatory changes identified in the supplied evidence.",
+            "## Inferred Control and Governance Implications\nInference: review controls.",
             "## Industry Impact Analysis\nCareful industry analysis.",
             "## Risk Assessment\nCareful risk analysis.",
             "## Recommendations for Action\nCareful recommendations.",
@@ -538,8 +539,10 @@ def test_fallback_report_excludes_dedicated_threat_actor_section():
 
     assert "Threat Actor Activities" not in report
     assert "CVE and Vulnerability Highlights" not in report
-    assert "4) Risk Assessment" in report
-    assert "5) Recommendations for Action" in report
+    assert "5) Risk Assessment" in report
+    assert "2) Sourced Regulatory Changes" in report
+    assert "3) Inferred Control and Governance Implications" in report
+    assert "6) Recommendations for Action" in report
 
 
 def test_fallback_report_links_regulatory_claims_without_a_cve_section():
@@ -877,12 +880,11 @@ def test_site_builder_gives_same_day_reports_unique_archive_keys():
     assert archive_slug(morning) != archive_slug(rerun)
 
 
-def test_site_builder_limits_published_archive_updates_to_page_chrome():
+def test_site_builder_rebuilds_archive_reading_view_from_preserved_markdown():
     builder = SITE_BUILDER.read_text()
 
     assert "with_archive_detail_chrome" in builder
-    assert "The publication-era report body remains byte-for-byte intact" in builder
-    assert "read_text(archive_page), generated" in builder
+    assert "Markdown and manifests retain publication-era evidence" in builder
     assert "outputs[archive_page] = archive_detail_html(archived_markdown)" in builder
 
 

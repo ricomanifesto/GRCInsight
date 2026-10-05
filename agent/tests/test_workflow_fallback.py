@@ -172,6 +172,7 @@ def test_run_grc_analysis_endpoint_marks_model_backed_reports(monkeypatch):
             "url": "https://example.com/nist",
             "digest_url": digest_url,
             "cves": [],
+            "snippet": "NIST publishes new control guidance Framework control update NIST control guidance for regulated teams.",
         }
     ]
 
@@ -314,6 +315,7 @@ def test_run_grc_analysis_endpoint_skips_entries_without_linked_evidence(monkeyp
                 "https://example.com/linked",
             ),
             "cves": ["CVE-2026-12345"],
+            "snippet": "Linked item Can cite CVE-2026-12345 from this source.",
         }
     ]
     assert response.metadata.source_articles == [
@@ -322,6 +324,7 @@ def test_run_grc_analysis_endpoint_skips_entries_without_linked_evidence(monkeyp
             "url": source["url"],
             "digest_url": source["digest_url"],
             "cves": source["cves"],
+            "snippet": source["snippet"],
         }
         for source in generated_from_sources
     ]

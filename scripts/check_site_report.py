@@ -14,6 +14,11 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "agent"))
 sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
+from core.report_evidence import (  # noqa: E402
+    REPORT_SECTION_TITLES,
+    REPORT_CONTRACT_VERSION,
+    validate_regulatory_evidence,
+)
 from core.reporting_identity import (  # noqa: E402
     ReportingIdentityError,
     legacy_sentrydigest_item_url as build_legacy_sentrydigest_item_url,
@@ -56,6 +61,8 @@ PUBLIC_DESCRIPTION = (
 REPORT_SECTION_LABELS = {
     "Executive Summary",
     "Key Regulatory Developments",
+    "Sourced Regulatory Changes",
+    "Inferred Control and Governance Implications",
     "Industry Impact Analysis",
     "Risk Assessment",
     "Recommendations for Action",
@@ -826,6 +833,14 @@ def validate_evidence_manifest(
         }
         if not digest_urls or digest_urls != expected_digest_urls:
             fail("Source Highlights must link each highlighted SentryDigest item")
+    contract_version = manifest.get("report_contract_version", 1)
+    if contract_version not in {1, REPORT_CONTRACT_VERSION}:
+        fail("unsupported report evidence contract version")
+    if contract_version == REPORT_CONTRACT_VERSION or "## Sourced Regulatory Changes" in body:
+        try:
+            validate_regulatory_evidence(body, raw_sources)
+        except ValueError as error:
+            fail(str(error))
     return manifest
 
 
@@ -833,7 +848,10 @@ def validate_required_report_sections(markdown: str, artifact: str) -> None:
     lines = [line.strip() for line in markdown.splitlines() if line.strip()]
     section_counts = {
         label: sum(1 for line in lines if report_section_label(line) == label)
-        for label in REPORT_SECTION_LABELS
+        for label in (
+            REPORT_SECTION_TITLES if "## Sourced Regulatory Changes" in markdown
+            else REPORT_SECTION_LABELS - {"Sourced Regulatory Changes", "Inferred Control and Governance Implications"}
+        )
     }
     missing = [label for label, count in section_counts.items() if count == 0]
     repeated = [label for label, count in section_counts.items() if count > 1]

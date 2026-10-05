@@ -155,14 +155,17 @@ def test_publication_notice_names_safe_retention_context():
         {
             "outcome": "retained",
             "attempted_at": "2026-08-14T14:07:22Z",
+            "report_generated_at": "2026-08-14T13:00:00Z",
             "refusal_category": "provider_quota",
         },
         {"schedule": {"cadence": "daily", "time_utc": "13:00"}},
     )
 
     assert "Publication update" in html
-    assert "August 14, 2026 at 2:07:22 PM UTC" in html
-    assert "current model-backed report was retained" in html
+    assert "August 14, 2026 at 14:07:22 UTC" in html
+    assert "August 14, 2026 at 13:00:00 UTC" in html
+    assert "Showing the report generated on" in html
+    assert "refresh failed" in html
     assert "provider quota refusal" in html
     assert "next regular attempt runs daily at 13:00 UTC" in html
     assert 'href="publication-history/"' in html

@@ -14,6 +14,11 @@ from urllib.parse import quote, urlparse
 REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "agent"))
 
+from core.report_evidence import (  # noqa: E402
+    REPORT_SECTION_TITLES as SECTION_TITLES,
+    REPORT_CONTRACT_VERSION,
+    validate_regulatory_evidence,
+)
 from core.reporting_identity import (  # noqa: E402
     ReportingIdentityError,
     normalize_reporting_url,
@@ -23,14 +28,6 @@ from core.reporting_identity import (  # noqa: E402
 
 INDEX_MD = REPO_ROOT / "site" / "index.md"
 EVIDENCE_MANIFEST = REPO_ROOT / "site" / "evidence-manifest.json"
-SECTION_TITLES = (
-    "Executive Summary",
-    "Key Regulatory Developments",
-    "Industry Impact Analysis",
-    "Risk Assessment",
-    "Recommendations for Action",
-    "Source Highlights",
-)
 
 
 def fail(message: str) -> None:
@@ -465,7 +462,10 @@ def source_articles(metadata: dict) -> list[dict[str, object]]:
             continue
         seen_urls.add(url)
         sources.append(
-            {"title": title, "url": url, "digest_url": digest_url, "cves": cves}
+            {
+                "title": title, "url": url, "digest_url": digest_url, "cves": cves,
+                "snippet": str(raw_source.get("snippet") or ""),
+            }
         )
     if not sources:
         fail("metadata.source_articles contains no usable linked evidence")
@@ -565,6 +565,7 @@ def evidence_manifest(data: dict, sources: list[dict[str, object]]) -> dict:
     metadata = data.get("metadata") or {}
     return {
         "schema_version": 3,
+        "report_contract_version": REPORT_CONTRACT_VERSION,
         "generated_at": single_line(data.get("generated_at"), "generated_at"),
         "feed_url": http_url(metadata.get("source_url"), "metadata.source_url"),
         "feed_home_url": http_url(
@@ -656,6 +657,10 @@ def compose_report(data: dict, expected_feed_url: str, expected_model: str) -> s
     body = add_missing_cve_source_links(body, sources)
     body = add_sentrydigest_handoffs(body, sources)
     validate_evidence_links(body, sources)
+    try:
+        validate_regulatory_evidence(body, sources)
+    except ValueError as error:
+        fail(str(error))
     return "\n".join(
         (
             f"# {title}",

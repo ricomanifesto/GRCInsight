@@ -29,6 +29,10 @@ The site keeps dated reports and a [publication history](https://ricomanifesto.g
 4. Only a model-backed report with complete source and model records is published. A completed fallback-mode report keeps the last verified report and records a short refusal category. Other generation or provenance failures also keep the last verified report, but exit before adding a history event.
 5. A static builder creates the current page, dated archive, evidence manifest, and publication-history page before GitHub Pages deploys them.
 
+New reports separate **Sourced Regulatory Changes** from **Inferred Control and Governance Implications**. Regulatory rows require a supported primary publisher, a matching source excerpt, and evidenced jurisdiction/effective-date text or `Unknown`. The bounded publisher policy and row contract live in `agent/core/report_evidence.py`; source mentions and security news alone cannot establish a regulatory change. Source excerpts are retained in the evidence manifest for publication validation.
+
+The reading view uses compact numbered citations with full accessible titles. Source Highlights keeps the complete source links and dated Digest context. Archived Markdown and evidence manifests retain their original bytes; archived HTML is rebuilt with the current reader. Older reports disclose that their regulatory context predates the separate evidence check. Failed-refresh notices derive both displayed timestamps from publication state and keep diagnostics under expandable details.
+
 The stable article links shared with SentryDigest and SentryInsight follow SentryDigest's [reporting identity contract](https://github.com/ricomanifesto/SentryDigest/blob/main/contracts/README.md).
 
 ## Run It Locally
