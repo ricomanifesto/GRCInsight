@@ -624,12 +624,14 @@ async def run_grc_analysis_endpoint(
         logger.info("Step 6: Generating comprehensive GRC report")
         report_content = ""
         resolved_model = ""
+        report_plan = None
         used_fallback_report = False
 
         if used_model_analysis and model_service is not None:
             report_generation = await model_service.generate_grc_report(analysis_results, feed_data)
             report_content = report_generation.content
             resolved_model = report_generation.resolved_model
+            report_plan = report_generation.report_plan
             if not resolved_model or resolved_model in {
                 "openrouter/free",
                 "openrouter/auto",
@@ -679,6 +681,7 @@ async def run_grc_analysis_endpoint(
             analysis_period=generated_at.strftime("%B %Y"),
             requested_model=config.model,
             resolved_model=resolved_model,
+            report_plan=None if used_fallback_report else report_plan,
             source_articles=[
                 {
                     "title": source["title"],

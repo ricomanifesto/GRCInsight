@@ -1,6 +1,7 @@
 package services
 
 import (
+	"encoding/json"
 	"io"
 	"reflect"
 	"testing"
@@ -106,6 +107,9 @@ func TestGenerateReport_PersistsReportAndArticles(t *testing.T) {
 		}},
 	}}
 
+	if err := json.Unmarshal([]byte(`{"report_plan":{"regulatory_changes":[],"control_implications":[{"control_id":"governance","priority":"medium","source_ids":[1]}],"industry_impacts":[]}}`), pc.resp.Metadata); err != nil {
+		t.Fatal(err)
+	}
 	svc := &ReportService{
 		reportRepo:   fr,
 		articleRepo:  fa,
@@ -142,6 +146,17 @@ func TestGenerateReport_PersistsReportAndArticles(t *testing.T) {
 	}
 	if got := fr.updated.Metadata.SourceArticles[0]["cves"]; !reflect.DeepEqual(got, []string{"CVE-2026-12345"}) {
 		t.Fatalf("expected per-source CVEs to persist, got %#v", got)
+	}
+	encoded, err := json.Marshal(fr.updated.Metadata)
+	if err != nil {
+		t.Fatal(err)
+	}
+	var metadata map[string]any
+	if err := json.Unmarshal(encoded, &metadata); err != nil {
+		t.Fatal(err)
+	}
+	if metadata["report_plan"] == nil {
+		t.Fatal("report plan lost from Python response")
 	}
 	if fa.calls == 0 {
 		t.Fatalf("expected articles to be persisted")

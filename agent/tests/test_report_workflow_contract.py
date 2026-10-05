@@ -167,20 +167,14 @@ def test_report_prompt_requires_current_source_entities_and_readable_summary():
     assert "Source Evidence:" in prompt
     assert "Threat Actor Activities" not in prompt
     assert "CVE and Vulnerability Highlights" not in prompt
-    assert "Executive Summary must be 2-4 short paragraphs" in prompt
     assert "APT1" in prompt
     assert "CVE-2026-12345" in prompt
-    assert "structured actor identifiers are hints, not an exhaustive actor list" not in prompt
-    assert "Do not classify industry, standards, regulatory, or working groups" not in prompt
-    assert "Copy the exact Markdown Link supplied above" in prompt
-    assert "Every report-specific regulatory and CVE claim" in prompt
-    assert "Do not emit incomplete, truncated, or ellipsized CVE identifiers" in prompt
-    assert "Use exact framework, standard, regulation, or publication names" in prompt
-    assert "Source Highlights" in prompt
-    assert "Never use superscript footnotes" in prompt
-    assert "Do not invent counts" in prompt
-    assert "publication layer adds those values" in prompt
-    assert 'Do not emit a top-level "# " heading' in prompt
+    assert "Return only a JSON object" in prompt
+    assert "control_implications" in prompt
+    assert "industry_impacts" in prompt
+    assert "No narrative text or date fields" in prompt
+    assert "source_id" in prompt
+    assert "application renders" in prompt
 
 
 def test_report_prompt_globally_bounds_cve_evidence():
@@ -246,15 +240,22 @@ def test_report_prompt_serializes_exact_source_links_for_markdown():
         f"Markdown Link: [{escaped_title}]"
         "(https://example.com/advisory%291?edition=%28daily%29)" in prompt
     )
-    assert "including every label escape and URL character" in prompt
+    assert "source_id" in prompt
 
 
 def test_report_generation_retries_scratch_work_and_returns_complete_report():
     service = GRCModelService.__new__(GRCModelService)
-    valid_report = complete_report_body(
-        "Careful executive analysis.",
-        "- [Evidence](https://example.com/evidence)",
-    )
+    from core.report_plan import render_report_plan
+
+    plan = {"regulatory_changes": [], "control_implications": [], "industry_impacts": []}
+    sources = [
+        {
+            "title": "Evidence",
+            "url": "https://example.com/evidence",
+            "snippet": "Security advisory evidence.",
+        }
+    ]
+    valid_report = render_report_plan(plan, sources)
     responses = iter(
         (
             OpenRouterGeneration(
@@ -262,7 +263,7 @@ def test_report_generation_retries_scratch_work_and_returns_complete_report():
                 resolved_model="google/rejected-draft",
             ),
             OpenRouterGeneration(
-                text=valid_report,
+                text=json.dumps(plan),
                 resolved_model="google/final-report-model",
             ),
         )
@@ -276,16 +277,17 @@ def test_report_generation_retries_scratch_work_and_returns_complete_report():
     service._invoke = fake_invoke
     result = asyncio.run(
         service.generate_grc_report(
-            {"summary": {}, "analysis": {}, "source_evidence": []},
+            {"summary": {}, "analysis": {}, "source_evidence": sources},
             {"title": "Test Feed"},
         )
     )
 
     assert result.content == valid_report
+    assert result.report_plan == plan
     assert result.resolved_model == "google/final-report-model"
     assert len(prompts) == 2
     assert prompts[1]["title"] == "GRC intelligence report retry"
-    assert "prior response output did not begin" in prompts[1]["user_prompt"]
+    assert "prior response was not a valid report plan" in prompts[1]["user_prompt"]
 
 
 def test_report_generation_fails_closed_after_two_malformed_drafts():
@@ -315,7 +317,7 @@ def test_report_generation_fails_closed_after_two_malformed_drafts():
     )
 
     assert result.content.startswith("# GRC Intelligence Report - Error")
-    assert "complete report after retry" in result.content
+    assert "valid report plan after retry" in result.content
     assert result.resolved_model == ""
 
 
@@ -764,6 +766,11 @@ def test_report_generation_workflow_validates_generated_site_before_publish():
 
 
 def test_site_report_composer_owns_public_provenance_and_body_shape():
+    from core.report_plan import render_report_plan
+
+    plan = {"regulatory_changes": [], "control_implications": [], "industry_impacts": []}
+    sources = [{"title": "Evidence", "url": "https://example.com/evidence"}]
+    canonical = render_report_plan(plan, sources)
     namespace = runpy.run_path(str(SITE_REPORT_COMPOSER))
     compose_report = namespace["compose_report"]
     report = compose_report(
@@ -771,17 +778,14 @@ def test_site_report_composer_owns_public_provenance_and_body_shape():
             "status": "completed",
             "title": "GRC Intelligence Report - 2026-08-13",
             "generated_at": "2026-08-13T13:00:00Z",
-            "content": (
-                "# Duplicate title\n**Generated:** stale\n\n"
-                + complete_report_body(
-                    "Careful analysis.\n\n---",
-                    "- [Evidence](https://example.com/evidence)",
-                    executive_heading="1. Executive Summary",
-                    source_heading="6) Source Highlights",
-                )
-            ),
+            "content": "# Duplicate title\n**Generated:** stale\n\n"
+            + canonical.replace("## Executive Summary", "1. Executive Summary").replace(
+                "## Source Highlights", "6) Source Highlights"
+            )
+            + "\n\n---",
             "metadata": {
                 "analysis_mode": "model",
+                "report_plan": plan,
                 "source_name": "SentryDigest",
                 "source_url": "https://example.com/feed.xml",
                 "source_home_url": "https://digest.example/",
@@ -908,6 +912,7 @@ def test_site_report_check_validates_every_archive_manifest(tmp_path):
             "- [Evidence](https://example.com/evidence)",
         )
     )
+    report = report.replace("## Sourced Regulatory Changes", "## Key Regulatory Developments")
     manifest = {
         "generated_at": "2026-08-13T13:00:00Z",
         "feed_url": "https://example.com/feed.xml",
@@ -1044,6 +1049,11 @@ def test_site_report_composer_rejects_provenance_mismatch():
 
 
 def test_site_report_composer_normalizes_numbered_markdown_headings_and_feed_url():
+    from core.report_plan import render_report_plan
+
+    plan = {"regulatory_changes": [], "control_implications": [], "industry_impacts": []}
+    sources = [{"title": "Evidence", "url": "https://example.com/evidence"}]
+    canonical = render_report_plan(plan, sources)
     namespace = runpy.run_path(str(SITE_REPORT_COMPOSER))
     compose_report = namespace["compose_report"]
     feed_url = "https://example.com/feed(1).xml?edition=(daily)"
@@ -1052,14 +1062,12 @@ def test_site_report_composer_normalizes_numbered_markdown_headings_and_feed_url
             "status": "completed",
             "title": "GRC Intelligence Report - 2026-08-13",
             "generated_at": "2026-08-13T13:00:00Z",
-            "content": complete_report_body(
-                "Careful analysis.",
-                "- [Evidence](https://example.com/evidence)",
-                executive_heading="## **1. EXECUTIVE SUMMARY:**",
-                source_heading="**6) source highlights.**",
-            ),
+            "content": canonical.replace(
+                "## Executive Summary", "## **1. EXECUTIVE SUMMARY:**"
+            ).replace("## Source Highlights", "**6) source highlights.**"),
             "metadata": {
                 "analysis_mode": "model",
+                "report_plan": plan,
                 "source_name": "SentryDigest\\",
                 "source_url": feed_url,
                 "source_home_url": "https://digest.example/",
@@ -1121,153 +1129,48 @@ def test_site_report_composer_rejects_evidence_urls_absent_from_source_articles(
 
 def test_site_report_composer_decodes_escaped_evidence_url_delimiters():
     namespace = runpy.run_path(str(SITE_REPORT_COMPOSER))
-    compose_report = namespace["compose_report"]
-    http_url = namespace["http_url"]
     evidence_url = "HTTPS://example.com/O'Reilly/a)b"
-    report = compose_report(
-        {
-            "status": "completed",
-            "title": "GRC Intelligence Report - 2026-08-13",
-            "generated_at": "2026-08-13T13:00:00Z",
-            "content": complete_report_body(
-                "[Evidence](HTTPS://example.com/O'Reilly/a\\)b)",
-                "- [Evidence](HTTPS://example.com/O'Reilly/a\\)b)",
-            ),
-            "metadata": {
-                "analysis_mode": "model",
-                "source_name": "SentryDigest",
-                "source_url": "https://example.com/feed.xml",
-                "source_home_url": "https://digest.example/",
-                "source_issue_date": "2026-08-13",
-                "source_issue_url": "https://digest.example/archive/2026-08-13/",
-                "source_articles": [{"title": "Evidence", "url": evidence_url}],
-                "analysis_period": "August 2026",
-                "article_count": 1,
-                "grc_article_count": 1,
-                "requested_model": "openrouter/example/model",
-                "resolved_model": "google/example-model",
-            },
-        },
-        "https://example.com/feed.xml",
-        "openrouter/example/model",
-    )
-
+    sources = [{"title": "Evidence", "url": namespace["http_url"](evidence_url, "evidence URL")}]
+    body = "[Evidence](HTTPS://example.com/O'Reilly/a\\)b)"
+    report = namespace["canonicalize_evidence_links"](body, sources)
     assert "[Evidence](HTTPS://example.com/O%27Reilly/a%29b)" in report
-    assert http_url(evidence_url, "evidence URL") == "HTTPS://example.com/O%27Reilly/a%29b"
+    assert (
+        namespace["http_url"](evidence_url, "evidence URL")
+        == "HTTPS://example.com/O%27Reilly/a%29b"
+    )
 
 
 def test_site_report_composer_accepts_serialized_source_link_identity():
+    from core.report_plan import render_report_plan
+
     namespace = runpy.run_path(str(SITE_REPORT_COMPOSER))
-    compose_report = namespace["compose_report"]
     title = r"Windows C:\[Temp] and C:\(Logs) advisory"
-    escaped_title = (
-        title.replace("\\", "\\\\")
-        .replace("[", "\\[")
-        .replace("]", "\\]")
-        .replace("(", "\\(")
-        .replace(")", "\\)")
-    )
     source_url = "https://example.com/advisory)1?edition=(daily)"
-    link = f"[{escaped_title}]" "(https://example.com/advisory%291?edition=%28daily%29)"
-
-    report = compose_report(
-        {
-            "status": "completed",
-            "title": "GRC Intelligence Report - 2026-08-13",
-            "generated_at": "2026-08-13T13:00:00Z",
-            "content": complete_report_body(
-                f"Review {link}.",
-                f"- {link}",
-            ),
-            "metadata": {
-                "analysis_mode": "model",
-                "source_name": "SentryDigest",
-                "source_url": "https://example.com/feed.xml",
-                "source_home_url": "https://digest.example/",
-                "source_issue_date": "2026-08-13",
-                "source_issue_url": "https://digest.example/archive/2026-08-13/",
-                "source_articles": [{"title": title, "url": source_url}],
-                "analysis_period": "August 2026",
-                "article_count": 1,
-                "grc_article_count": 1,
-                "requested_model": "openrouter/example/model",
-                "resolved_model": "google/example-model",
-            },
-        },
-        "https://example.com/feed.xml",
-        "openrouter/example/model",
-    )
-
-    assert link in report
+    sources = [{"title": title, "url": source_url}]
+    plan = {"regulatory_changes": [], "control_implications": [], "industry_impacts": []}
+    body = render_report_plan(plan, sources)
+    normalized_sources = [{"title": title, "url": namespace["http_url"](source_url, "source URL")}]
+    canonical = namespace["canonicalize_evidence_links"](body, normalized_sources)
+    assert canonical == body
+    assert "https://example.com/advisory%291?edition=%28daily%29" in canonical
 
 
 def test_site_report_composer_canonicalizes_title_for_real_evidence_url():
     namespace = runpy.run_path(str(SITE_REPORT_COMPOSER))
-    compose_report = namespace["compose_report"]
-    data = {
-        "status": "completed",
-        "title": "GRC Intelligence Report - 2026-08-13",
-        "generated_at": "2026-08-13T13:00:00Z",
-        "content": complete_report_body(
-            "[CISA mandates immediate shutdown](https://example.com/neutral)",
-            "- [Neutral advisory](https://example.com/neutral)",
-        ),
-        "metadata": {
-            "analysis_mode": "model",
-            "source_name": "SentryDigest",
-            "source_url": "https://example.com/feed.xml",
-            "source_home_url": "https://digest.example/",
-            "source_issue_date": "2026-08-13",
-            "source_issue_url": "https://digest.example/archive/2026-08-13/",
-            "source_articles": [
-                {"title": "Neutral advisory", "url": "https://example.com/neutral"}
-            ],
-            "analysis_period": "August 2026",
-            "article_count": 1,
-            "grc_article_count": 1,
-            "requested_model": "openrouter/example/model",
-            "resolved_model": "google/example-model",
-        },
-    }
-
-    report = compose_report(data, "https://example.com/feed.xml", "openrouter/example/model")
-
+    body = "[CISA mandates immediate shutdown](https://example.com/neutral)\n[Neutral advisory](https://example.com/neutral)"
+    sources = [{"title": "Neutral advisory", "url": "https://example.com/neutral"}]
+    report = namespace["canonicalize_evidence_links"](body, sources)
     assert "CISA mandates immediate shutdown" not in report
     assert report.count("[Neutral advisory](https://example.com/neutral)") == 2
 
 
 def test_site_report_composer_canonicalizes_url_for_exact_evidence_title():
     namespace = runpy.run_path(str(SITE_REPORT_COMPOSER))
-    compose_report = namespace["compose_report"]
     title = "Attackers Exploit SharePoint Authentication Bypass After Public PoC Release"
     trusted_url = "https://thehackernews.com/2026/08/attackers-exploit-sharepoint.html"
     mutated_url = "https://thehackernists.com/2026/08/attackers-exploit-sharepoint.html"
-    data = {
-        "status": "completed",
-        "title": "GRC Intelligence Report - 2026-08-13",
-        "generated_at": "2026-08-13T13:00:00Z",
-        "content": complete_report_body(
-            f"[{title}]({mutated_url})",
-            f"- [{title}]({mutated_url})",
-        ),
-        "metadata": {
-            "analysis_mode": "model",
-            "source_name": "SentryDigest",
-            "source_url": "https://example.com/feed.xml",
-            "source_home_url": "https://digest.example/",
-            "source_issue_date": "2026-08-13",
-            "source_issue_url": "https://digest.example/archive/2026-08-13/",
-            "source_articles": [{"title": title, "url": trusted_url}],
-            "analysis_period": "August 2026",
-            "article_count": 1,
-            "grc_article_count": 1,
-            "requested_model": "openrouter/example/model",
-            "resolved_model": "google/example-model",
-        },
-    }
-
-    report = compose_report(data, "https://example.com/feed.xml", "openrouter/example/model")
-
+    body = f"[{title}]({mutated_url})\n[{title}]({mutated_url})"
+    report = namespace["canonicalize_evidence_links"](body, [{"title": title, "url": trusted_url}])
     assert mutated_url not in report
     assert report.count(f"[{title}]({trusted_url})") == 2
 
@@ -1312,35 +1215,15 @@ def test_site_report_composer_rejects_cross_wired_source_identities():
 
 def test_site_report_composer_expands_unique_ellipsized_source_reference():
     namespace = runpy.run_path(str(SITE_REPORT_COMPOSER))
-    compose_report = namespace["compose_report"]
     title = "Critical VMware vCenter RCE flaw exploited for reverse SSH access"
     source_url = "https://example.com/vmware"
-    data = {
-        "status": "completed",
-        "title": "GRC Intelligence Report - 2026-08-13",
-        "generated_at": "2026-08-13T13:00:00Z",
-        "content": complete_report_body(
-            "Contain the active campaign (Source: " "[Critical VMware vCenter RCE flaw...]).",
-            f"- [{title}]({source_url})",
-        ),
-        "metadata": {
-            "analysis_mode": "model",
-            "source_name": "SentryDigest",
-            "source_url": "https://example.com/feed.xml",
-            "source_home_url": "https://digest.example/",
-            "source_issue_date": "2026-08-13",
-            "source_issue_url": "https://digest.example/archive/2026-08-13/",
-            "source_articles": [{"title": title, "url": source_url}],
-            "analysis_period": "August 2026",
-            "article_count": 1,
-            "grc_article_count": 1,
-            "requested_model": "openrouter/example/model",
-            "resolved_model": "google/example-model",
-        },
-    }
-
-    report = compose_report(data, "https://example.com/feed.xml", "openrouter/example/model")
-
+    body = (
+        "Contain the active campaign (Source: [Critical VMware vCenter RCE flaw...]).\n"
+        + f"[{title}]({source_url})"
+    )
+    report = namespace["expand_ellipsized_evidence_references"](
+        body, [{"title": title, "url": source_url}]
+    )
     assert "[Critical VMware vCenter RCE flaw...]" not in report
     assert report.count(f"[{title}]({source_url})") == 2
 
@@ -1365,36 +1248,13 @@ def test_site_report_composer_leaves_ambiguous_ellipsized_reference_unresolved()
 
 def test_site_report_composer_expands_parenthesized_source_ordinal():
     namespace = runpy.run_path(str(SITE_REPORT_COMPOSER))
-    compose_report = namespace["compose_report"]
     title = "AI watermark removers flood the web"
     source_url = "https://example.com/ai-watermarks"
-    data = {
-        "status": "completed",
-        "title": "GRC Intelligence Report - 2026-08-13",
-        "generated_at": "2026-08-13T13:00:00Z",
-        "content": complete_report_body(
-            "Detection controls are affected (source #1).",
-            f"- [{title}]({source_url})",
-        ),
-        "metadata": {
-            "analysis_mode": "model",
-            "source_name": "SentryDigest",
-            "source_url": "https://example.com/feed.xml",
-            "source_home_url": "https://digest.example/",
-            "source_issue_date": "2026-08-13",
-            "source_issue_url": "https://digest.example/archive/2026-08-13/",
-            "source_articles": [{"title": title, "url": source_url}],
-            "analysis_period": "August 2026",
-            "article_count": 1,
-            "grc_article_count": 1,
-            "requested_model": "openrouter/example/model",
-            "resolved_model": "google/example-model",
-        },
-    }
-
-    report = compose_report(data, "https://example.com/feed.xml", "openrouter/example/model")
-
-    assert "source #1" not in report
+    body = "Detection controls are affected (source\u202f#1)."
+    report = namespace["expand_ordinal_evidence_references"](
+        body, [{"title": title, "url": source_url}]
+    )
+    assert "source\u202f#1" not in report
     assert f"(Source: [{title}]({source_url}))" in report
 
 
@@ -1409,45 +1269,12 @@ def test_site_report_composer_leaves_unknown_source_ordinal_unresolved():
 
 def test_site_report_composer_adds_links_for_supported_unlinked_cves():
     namespace = runpy.run_path(str(SITE_REPORT_COMPOSER))
-    compose_report = namespace["compose_report"]
-    source_title = "Critical VMware vCenter RCE flaw exploited for reverse SSH access"
+    title = "Critical VMware vCenter RCE flaw exploited for reverse SSH access"
     source_url = "https://example.com/vmware"
-    data = {
-        "status": "completed",
-        "title": "GRC Intelligence Report - 2026-08-13",
-        "generated_at": "2026-08-13T13:00:00Z",
-        "content": complete_report_body(
-            "VMware vCenter exploitation (CVE-2026-59310) requires containment.",
-            f"- [{source_title}]({source_url})",
-        ),
-        "metadata": {
-            "analysis_mode": "model",
-            "source_name": "SentryDigest",
-            "source_url": "https://example.com/feed.xml",
-            "source_home_url": "https://digest.example/",
-            "source_issue_date": "2026-08-13",
-            "source_issue_url": "https://digest.example/archive/2026-08-13/",
-            "source_articles": [
-                {
-                    "title": source_title,
-                    "url": source_url,
-                    "cves": ["CVE-2026-59310"],
-                }
-            ],
-            "analysis_period": "August 2026",
-            "article_count": 1,
-            "grc_article_count": 1,
-            "requested_model": "openrouter/example/model",
-            "resolved_model": "google/example-model",
-        },
-    }
-
-    report = compose_report(data, "https://example.com/feed.xml", "openrouter/example/model")
-
-    assert (
-        "VMware vCenter exploitation (CVE-2026-59310) requires containment. "
-        f"**Evidence:** [{source_title}]({source_url})" in report
-    )
+    body = "VMware vCenter exploitation (CVE-2026-59310) requires containment."
+    sources = [{"title": title, "url": source_url, "cves": ["CVE-2026-59310"]}]
+    report = namespace["add_missing_cve_source_links"](body, sources)
+    assert body + f" **Evidence:** [{title}]({source_url})" in report
 
 
 def test_site_report_composer_rejects_cve_absent_from_linked_source():

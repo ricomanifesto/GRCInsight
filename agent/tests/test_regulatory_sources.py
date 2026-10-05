@@ -203,9 +203,24 @@ def test_date_provenance_survives_workflow_prompt_composer_and_manifest(monkeypa
     async def analysis(articles):
         return {"summary": {"grc_relevant_count": 1, "total_articles": 1}, "analysis": {}}
 
+    plan = {
+        "regulatory_changes": [
+            {
+                "source_id": 1,
+                "change": "final reporting rule",
+                "jurisdiction": "United States",
+                "evidence_excerpt": SOURCE["snippet"],
+            }
+        ],
+        "control_implications": [
+            {"control_id": "governance", "priority": "medium", "source_ids": [1]}
+        ],
+        "industry_impacts": [],
+    }
+
     async def invoke(**kwargs):
         prompts.append(kwargs["user_prompt"])
-        return OpenRouterGeneration(text=report(), resolved_model="example/model")
+        return OpenRouterGeneration(text=json.dumps(plan), resolved_model="example/model")
 
     service.analyze_articles_for_grc = analysis
     service._invoke = invoke
@@ -224,6 +239,7 @@ def test_date_provenance_survives_workflow_prompt_composer_and_manifest(monkeypa
     assert API_URL in prompts[0]
     record = response.metadata.source_articles[0]["effective_date_evidence"]
     assert record["document"] == DOCUMENT
+    assert response.metadata.report_plan == plan
     data = response.model_dump(mode="json")
     stored_body = data.pop("report")
     data.update({key: stored_body[key] for key in ("title", "content", "generated_at")})
@@ -235,6 +251,8 @@ def test_date_provenance_survives_workflow_prompt_composer_and_manifest(monkeypa
     )
     manifest = composer["evidence_manifest"](data, composer["source_articles"](data["metadata"]))
     assert manifest["sources"][0]["effective_date_evidence"] == record
+    assert manifest["report_plan"] == plan
+    assert manifest["report_contract_version"] == 3
     checker["validate_evidence_manifest"](
         markdown, builder["report_fields"](markdown), json.dumps(manifest)
     )

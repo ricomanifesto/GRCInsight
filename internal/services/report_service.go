@@ -105,6 +105,7 @@ func (s *ReportService) GenerateReport(req *apiModels.GenerateReportRequest) (*m
 					RequestedModel:       workflowResp.Metadata.RequestedModel,
 					ResolvedModel:        workflowResp.Metadata.ResolvedModel,
 					SourceArticles:       workflowResp.Metadata.SourceArticles,
+					ReportPlan:           workflowResp.Metadata.ReportPlan,
 					RegulationsMentioned: ensureNonNilSlice(workflowResp.Metadata.RegulationsMentioned),
 					FrameworksReferenced: ensureNonNilSlice(workflowResp.Metadata.FrameworksReferenced),
 					IndustriesAffected:   ensureNonNilSlice(workflowResp.Metadata.IndustriesAffected),

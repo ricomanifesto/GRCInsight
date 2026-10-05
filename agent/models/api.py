@@ -106,6 +106,7 @@ class ReportMetadata(BaseModel):
     requested_model: str = ""
     resolved_model: str = ""
     source_articles: List[Dict[str, Any]] = Field(default_factory=list)
+    report_plan: Optional[Dict[str, Any]] = None
     regulations_mentioned: List[str] = Field(default_factory=list)
     frameworks_referenced: List[str] = Field(default_factory=list)
     industries_affected: List[str] = Field(default_factory=list)

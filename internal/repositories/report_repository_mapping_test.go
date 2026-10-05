@@ -1,11 +1,14 @@
 package repositories
 
 import (
+	"encoding/json"
 	"reflect"
 	"testing"
 	"time"
 
 	"grcinsight/internal/database/dynamodb"
+
+	"github.com/aws/aws-sdk-go-v2/feature/dynamodb/attributevalue"
 	"grcinsight/internal/database/models"
 )
 
@@ -46,6 +49,9 @@ func TestReportMappingsPreserveFields(t *testing.T) {
 		},
 	}
 
+	if err := json.Unmarshal([]byte(`{"report_plan":{"regulatory_changes":[],"control_implications":[{"control_id":"governance","priority":"medium","source_ids":[1]}],"industry_impacts":[]}}`), &domainReport.Metadata); err != nil {
+		t.Fatal(err)
+	}
 	dynamoReport := reportToDynamo(domainReport)
 	if dynamoReport.ReportID != "" || dynamoReport.CreatedAt != "" || dynamoReport.UpdatedAt != "" {
 		t.Fatal("create mapping populated persistence-managed fields")
@@ -57,7 +63,29 @@ func TestReportMappingsPreserveFields(t *testing.T) {
 	dynamoReport.CreatedAt = dynamodb.ToISO8601(domainReport.CreatedAt)
 	dynamoReport.UpdatedAt = dynamodb.ToISO8601(domainReport.UpdatedAt)
 
+	attributes, err := attributevalue.MarshalMap(dynamoReport.Metadata.ReportPlan)
+	if err != nil {
+		t.Fatal(err)
+	}
+	var storedPlan map[string]any
+	if err := attributevalue.UnmarshalMap(attributes, &storedPlan); err != nil {
+		t.Fatal(err)
+	}
+	if !reflect.DeepEqual(storedPlan, domainReport.Metadata.ReportPlan) {
+		t.Fatal("report plan changed during DynamoDB serialization")
+	}
 	roundTripped := reportFromDynamo(dynamoReport)
+	encoded, err := json.Marshal(roundTripped.Metadata)
+	if err != nil {
+		t.Fatal(err)
+	}
+	var metadata map[string]any
+	if err := json.Unmarshal(encoded, &metadata); err != nil {
+		t.Fatal(err)
+	}
+	if metadata["report_plan"] == nil {
+		t.Fatal("report plan lost across storage mappings")
+	}
 	if !reflect.DeepEqual(roundTripped, domainReport) {
 		t.Fatalf("round-tripped report mismatch:\n got: %#v\nwant: %#v", roundTripped, domainReport)
 	}

@@ -11,7 +11,7 @@ from urllib.parse import quote, urlsplit
 
 from core.regulatory_dates import document_effective_date
 
-REPORT_CONTRACT_VERSION = 2
+REPORT_CONTRACT_VERSION = 3
 REGULATORY_SECTION = "Sourced Regulatory Changes"
 INFERENCE_SECTION = "Inferred Control and Governance Implications"
 NO_REGULATORY_CHANGES = "No sourced regulatory changes identified in the supplied evidence."
@@ -70,46 +70,6 @@ def _markdown_link_destination(value: str) -> str:
     return quote(value, safe=":/?#[]@!$&*+,;=%")
 
 
-def _reject_effective_dates_outside_regulatory_table(
-    markdown: str, regulatory_section: re.Match[str], sources: list[dict[str, Any]]
-) -> None:
-    """Reject operative timing language outside the evidence table.
-
-    This conservative lexical guard does not infer a date or its relationship
-    to a clause. It applies even to relative, negated or unknown timing. Exact
-    supplied source titles remain citations, not model-authored assertions.
-    This is not a semantic proof covering every possible natural-language claim.
-    """
-    outside = markdown[: regulatory_section.start(1)] + markdown[regulatory_section.end(1) :]
-    titles = {
-        serialized: str(source.get("title") or "")
-        for source in sources
-        for serialized in (
-            str(source["url"]),
-            _markdown_link_destination(str(source["url"])),
-        )
-    }
-
-    def visible_label(link: re.Match[str]) -> str:
-        label = re.sub(r"\\(.)", r"\1", link[1])
-        return "" if label == titles.get(link[2]) else label
-
-    outside = re.sub(r"\[((?:\\.|[^\]])+)\]\((https?://[^\s]+)\)", visible_label, outside)
-    outside = _plain(re.sub(r"[*_`~]", "", outside))
-    timing = (
-        r"(?:takes?|taking|took|comes?|coming|came|enters?|entering|entered|goes|going|went)"
-        r"\s+(?:into\s+)?(?:effect|force)"
-        r"|(?:becomes?|becoming|became|be|is|are|was|were)\s+effective"
-        r"|effective\s+(?:date|on|as\s+of|from|immediately)"
-        r"|(?:applies?|applicable|enforceable|mandatory)\s+from"
-        r"|deadlines?"
-    )
-    if re.search(rf"\b(?:{timing})\b", outside, re.I):
-        raise ValueError(
-            "regulatory effective dates and deadlines must appear only in the sourced table"
-        )
-
-
 def validate_regulatory_evidence(
     markdown: str, sources: list[dict[str, Any]]
 ) -> list[RegulatoryChange]:
@@ -123,7 +83,6 @@ def validate_regulatory_evidence(
         raise ValueError("legacy regulatory heading cannot classify a new report")
     match = re.search(rf"(?ms)^## {REGULATORY_SECTION}\s*\n(.*?)(?=^## |\Z)", markdown)
     assert match is not None
-    _reject_effective_dates_outside_regulatory_table(markdown, match, sources)
     text = match.group(1).strip()
     if text == NO_REGULATORY_CHANGES:
         return []

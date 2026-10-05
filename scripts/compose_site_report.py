@@ -19,6 +19,7 @@ from core.report_evidence import (  # noqa: E402
     REPORT_CONTRACT_VERSION,
     validate_regulatory_evidence,
 )
+from core.report_plan import validate_rendered_report  # noqa: E402
 from core.reporting_identity import (  # noqa: E402
     ReportingIdentityError,
     normalize_reporting_url,
@@ -567,6 +568,7 @@ def evidence_manifest(data: dict, sources: list[dict[str, object]]) -> dict:
     return {
         "schema_version": 3,
         "report_contract_version": REPORT_CONTRACT_VERSION,
+        "report_plan": metadata.get("report_plan"),
         "generated_at": single_line(data.get("generated_at"), "generated_at"),
         "feed_url": http_url(metadata.get("source_url"), "metadata.source_url"),
         "feed_home_url": http_url(
@@ -660,6 +662,7 @@ def compose_report(data: dict, expected_feed_url: str, expected_model: str) -> s
     validate_evidence_links(body, sources)
     try:
         validate_regulatory_evidence(body, sources)
+        validate_rendered_report(body, metadata.get("report_plan"), sources, include_digest=True)
     except ValueError as error:
         fail(str(error))
     return "\n".join(

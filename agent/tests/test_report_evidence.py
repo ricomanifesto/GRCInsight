@@ -103,9 +103,12 @@ def test_no_sourced_change_preserves_inference_and_unknown_dates():
     ],
 )
 def test_regulatory_timing_claims_are_rejected_outside_sourced_table(claim):
-    report = "## Executive Summary\n" + claim + "\n\n" + body(row(date="Unknown"))
-    with pytest.raises(ValueError, match="only in the sourced table"):
-        validate(report, [SOURCE])
+    from core.report_plan import render_report_plan, validate_rendered_report
+
+    plan = selection_plan()
+    report = render_report_plan(plan, [SOURCE]) + "\n" + claim
+    with pytest.raises(ValueError, match="retained report plan"):
+        validate_rendered_report(report, plan, [SOURCE])
 
 
 def test_unrelated_dated_prose_is_allowed_outside_sourced_table():
@@ -130,18 +133,28 @@ def test_unrelated_dated_prose_is_allowed_outside_sourced_table():
     ],
 )
 def test_timing_guard_does_not_depend_on_a_date_format(claim, empty_table):
-    report = body(None if empty_table else row(date="Unknown")) + "\n" + claim
-    with pytest.raises(ValueError, match="only in the sourced table"):
-        validate(report, [SOURCE])
+    from core.report_plan import render_report_plan, validate_rendered_report
+
+    plan = selection_plan()
+    if empty_table:
+        plan["regulatory_changes"] = []
+    report = render_report_plan(plan, [SOURCE]) + "\n" + claim
+    with pytest.raises(ValueError, match="retained report plan"):
+        validate_rendered_report(report, plan, [SOURCE])
 
 
 def test_timing_guard_preserves_exact_source_titles_and_unrelated_analysis():
+    from core.report_plan import render_report_plan, validate_rendered_report
+
     title = "Final rule takes effect on 2027-01-01"
-    report = full_report(body(row(date="Unknown"))).replace("[Final reporting rule]", f"[{title}]")
-    report += "\nEffective controls reduce risk. The rule was published on January 1, 2027."
-    assert validate(report, [{**SOURCE, "title": title}])
-    with pytest.raises(ValueError, match="only in the sourced table"):
-        validate(report.replace(title, "Invented deadline: tomorrow"), [SOURCE])
+    sources = [{**SOURCE, "title": title}]
+    plan = selection_plan()
+    report = render_report_plan(plan, sources)
+    validate_rendered_report(report, plan, sources)
+    with pytest.raises(ValueError, match="retained report plan"):
+        validate_rendered_report(
+            report.replace(title, "Invented deadline: tomorrow"), plan, sources
+        )
 
 
 @pytest.mark.parametrize(
@@ -295,7 +308,24 @@ def test_regulatory_change_description_and_date_role_must_match_evidence():
         validate(body(row(quote=excerpt)), [{**SOURCE, "snippet": excerpt}])
 
 
-def stored_report(content):
+def selection_plan():
+    return {
+        "regulatory_changes": [
+            {
+                "source_id": 1,
+                "change": "Final reporting rule",
+                "jurisdiction": "United States",
+                "evidence_excerpt": SOURCE["snippet"],
+            }
+        ],
+        "control_implications": [
+            {"control_id": "governance", "priority": "medium", "source_ids": [1]}
+        ],
+        "industry_impacts": [],
+    }
+
+
+def stored_report(content, plan=None):
     return {
         "status": "completed",
         "title": "GRC Intelligence Report",
@@ -314,6 +344,7 @@ def stored_report(content):
             "requested_model": "openrouter/example/model",
             "resolved_model": "example/model",
             "source_articles": [SOURCE],
+            "report_plan": plan,
         },
     }
 
@@ -335,13 +366,16 @@ def test_regulatory_contract_survives_composition_manifest_and_publication_valid
     composer = runpy.run_path(str(ROOT / "scripts/compose_site_report.py"))
     checker = runpy.run_path(str(ROOT / "scripts/check_site_report.py"))
     builder = runpy.run_path(str(ROOT / "scripts/build_site.py"))
-    data = stored_report(full_report(body(row(date="Unknown"))))
+    from core.report_plan import render_report_plan
+
+    plan = selection_plan()
+    data = stored_report(render_report_plan(plan, [SOURCE]), plan)
     markdown = composer["compose_report"](
         data, "https://digest.example/feed.xml", "openrouter/example/model"
     )
     sources = composer["source_articles"](data["metadata"])
     manifest = composer["evidence_manifest"](data, sources)
-    assert manifest["report_contract_version"] == 2
+    assert manifest["report_contract_version"] == 3
     assert manifest["sources"][0]["snippet"] == SOURCE["snippet"]
     validate_manifest = checker["validate_evidence_manifest"]
     validate_manifest(
@@ -383,8 +417,11 @@ def test_prose_timing_guard_is_shared_by_model_composer_and_publication_checker(
     from services.model_service import GRCModelService
     from services.openrouter_client import OpenRouterGeneration
 
-    good = full_report(body(row(date="Unknown")))
-    bad = good.replace("Review the cited rule.", "The rule takes effect on January 1, 2027.")
+    from core.report_plan import render_report_plan
+
+    plan = selection_plan()
+    good = render_report_plan(plan, [SOURCE])
+    bad = good + "\nThe rule takes effect on January 1, 2027."
     service = GRCModelService.__new__(GRCModelService)
 
     async def invoke(**kwargs):
@@ -394,20 +431,35 @@ def test_prose_timing_guard_is_shared_by_model_composer_and_publication_checker(
     result = asyncio.run(service.generate_grc_report({"source_evidence": [SOURCE]}, {}))
     assert result.resolved_model == ""
     composer = runpy.run_path(str(ROOT / "scripts/compose_site_report.py"))
-    with pytest.raises(SystemExit, match="only in the sourced table"):
+    with pytest.raises(SystemExit, match="retained report plan"):
         composer["compose_report"](
-            stored_report(bad), "https://digest.example/feed.xml", "openrouter/example/model"
+            stored_report(bad, plan), "https://digest.example/feed.xml", "openrouter/example/model"
         )
-    data = stored_report(good)
+    data = stored_report(good, plan)
     markdown = composer["compose_report"](
         data, "https://digest.example/feed.xml", "openrouter/example/model"
     )
     manifest = composer["evidence_manifest"](data, composer["source_articles"](data["metadata"]))
     checker = runpy.run_path(str(ROOT / "scripts/check_site_report.py"))
     builder = runpy.run_path(str(ROOT / "scripts/build_site.py"))
-    with pytest.raises(SystemExit, match="only in the sourced table"):
+    with pytest.raises(SystemExit, match="retained report plan"):
         checker["validate_evidence_manifest"](
-            markdown.replace("Review the cited rule.", "The compliance deadline is tomorrow."),
+            markdown + "\nThe compliance deadline is tomorrow.",
             builder["report_fields"](markdown),
             json.dumps(manifest),
+        )
+    data["metadata"].pop("report_plan")
+    with pytest.raises(SystemExit, match="report plan"):
+        composer["compose_report"](
+            data, "https://digest.example/feed.xml", "openrouter/example/model"
+        )
+    manifest.pop("report_plan")
+    with pytest.raises(SystemExit, match="report plan"):
+        checker["validate_evidence_manifest"](
+            markdown, builder["report_fields"](markdown), json.dumps(manifest)
+        )
+    manifest["report_contract_version"] = 1
+    with pytest.raises(SystemExit, match="current report contract"):
+        checker["validate_evidence_manifest"](
+            markdown, builder["report_fields"](markdown), json.dumps(manifest)
         )

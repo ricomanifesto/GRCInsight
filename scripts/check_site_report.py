@@ -19,6 +19,7 @@ from core.report_evidence import (  # noqa: E402
     REPORT_CONTRACT_VERSION,
     validate_regulatory_evidence,
 )
+from core.report_plan import validate_rendered_report  # noqa: E402
 from core.reporting_identity import (  # noqa: E402
     ReportingIdentityError,
     legacy_sentrydigest_item_url as build_legacy_sentrydigest_item_url,
@@ -836,9 +837,12 @@ def validate_evidence_manifest(
     contract_version = manifest.get("report_contract_version", 1)
     if contract_version not in {1, REPORT_CONTRACT_VERSION}:
         fail("unsupported report evidence contract version")
-    if contract_version == REPORT_CONTRACT_VERSION or "## Sourced Regulatory Changes" in body:
+    if "## Sourced Regulatory Changes" in body and contract_version != REPORT_CONTRACT_VERSION:
+        fail("structured reports require the current report contract and retained plan")
+    if contract_version == REPORT_CONTRACT_VERSION:
         try:
             validate_regulatory_evidence(body, raw_sources)
+            validate_rendered_report(body, manifest.get("report_plan"), raw_sources, include_digest=True)
         except ValueError as error:
             fail(str(error))
     return manifest
