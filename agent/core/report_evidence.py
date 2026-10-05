@@ -65,6 +65,19 @@ def _plain(value: str) -> str:
     return re.sub(r"\s+", " ", value).strip()
 
 
+def _contains_complete_phrase(text: str, phrase: str) -> bool:
+    """Match exact source casing and token boundaries, including short codes."""
+    normalized_text = _plain(text)
+    normalized_phrase = _plain(phrase)
+    return bool(
+        normalized_phrase
+        and re.search(
+            rf"(?<!\w){re.escape(normalized_phrase)}(?!\w)",
+            normalized_text,
+        )
+    )
+
+
 def _markdown_link_destination(value: str) -> str:
     """Match the URL serialization used when evidence is placed in the prompt."""
     return quote(value, safe=":/?#[]@!$&*+,;=%")
@@ -144,10 +157,7 @@ def validate_regulatory_evidence(
         if not any(effective_date == (date or "Unknown") for date in dates):
             raise ValueError("document effective date must match publisher metadata or be Unknown")
         attested_date = None if effective_date == "Unknown" else effective_date
-        if (
-            jurisdiction != "Unknown"
-            and _plain(jurisdiction).casefold() not in _plain(excerpt).casefold()
-        ):
+        if jurisdiction != "Unknown" and not _contains_complete_phrase(excerpt, jurisdiction):
             raise ValueError("regulatory jurisdiction must be evidenced or Unknown")
         changes.append(
             RegulatoryChange(

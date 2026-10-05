@@ -95,6 +95,27 @@ def test_no_sourced_change_preserves_inference_and_unknown_dates():
 
 
 @pytest.mark.parametrize(
+    "excerpt",
+    [
+        "The final reporting rule requires business entities to file reports.",
+        "Covered entities must comply with the final reporting rule.",
+        "The final reporting rule protects customer trust.",
+    ],
+)
+def test_short_jurisdiction_must_be_a_complete_evidenced_token(excerpt):
+    source = {**SOURCE, "snippet": excerpt}
+    with pytest.raises(ValueError, match="jurisdiction"):
+        validate(body(row(jurisdiction="US", date="Unknown", quote=excerpt)), [source])
+
+
+def test_short_jurisdiction_matches_a_complete_evidenced_token():
+    excerpt = "The US final reporting rule applies to covered entities."
+    source = {**SOURCE, "snippet": excerpt}
+    changes = validate(body(row(jurisdiction="US", date="Unknown", quote=excerpt)), [source])
+    assert changes[0].jurisdiction == "US"
+
+
+@pytest.mark.parametrize(
     "claim",
     [
         "The final reporting rule takes effect on 2027-01-01.",
@@ -462,4 +483,48 @@ def test_prose_timing_guard_is_shared_by_model_composer_and_publication_checker(
     with pytest.raises(SystemExit, match="current report contract"):
         checker["validate_evidence_manifest"](
             markdown, builder["report_fields"](markdown), json.dumps(manifest)
+        )
+
+
+@pytest.mark.parametrize(
+    ("jurisdiction", "excerpt"),
+    [
+        ("US", "The final reporting rule requires business entities to file reports."),
+        ("US", "The final reporting rule asks entities to contact us."),
+        ("IN", "The final reporting rule is in force for listed entities."),
+    ],
+)
+def test_jurisdiction_substrings_and_lowercase_pronouns_fail_publication(jurisdiction, excerpt):
+    from copy import deepcopy
+    from core.report_plan import parse_report_plan, render_report_plan
+
+    sources = [{**SOURCE, "snippet": excerpt}]
+    plan = selection_plan()
+    plan["regulatory_changes"][0].update(jurisdiction="Unknown", evidence_excerpt=excerpt)
+    valid = render_report_plan(plan, sources)
+    invalid_plan = deepcopy(plan)
+    invalid_plan["regulatory_changes"][0]["jurisdiction"] = jurisdiction
+    with pytest.raises(ValueError, match="jurisdiction"):
+        parse_report_plan(json.dumps(invalid_plan), sources)
+
+    composer = runpy.run_path(str(ROOT / "scripts/compose_site_report.py"))
+    checker = runpy.run_path(str(ROOT / "scripts/check_site_report.py"))
+    builder = runpy.run_path(str(ROOT / "scripts/build_site.py"))
+    data = stored_report(valid, plan)
+    data["metadata"]["source_articles"] = sources
+    markdown = composer["compose_report"](
+        data, "https://digest.example/feed.xml", "openrouter/example/model"
+    )
+    manifest = composer["evidence_manifest"](data, composer["source_articles"](data["metadata"]))
+    manifest["report_plan"] = invalid_plan
+    bad_markdown = markdown.replace("| Unknown | Unknown |", f"| {jurisdiction} | Unknown |")
+    with pytest.raises(SystemExit, match="jurisdiction"):
+        checker["validate_evidence_manifest"](
+            bad_markdown, builder["report_fields"](markdown), json.dumps(manifest)
+        )
+    data["metadata"]["report_plan"] = invalid_plan
+    data["content"] = valid.replace("| Unknown | Unknown |", f"| {jurisdiction} | Unknown |")
+    with pytest.raises(SystemExit, match="jurisdiction"):
+        composer["compose_report"](
+            data, "https://digest.example/feed.xml", "openrouter/example/model"
         )
