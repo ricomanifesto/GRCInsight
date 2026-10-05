@@ -9,6 +9,7 @@ from urllib.parse import quote
 from loguru import logger
 
 from config.settings import settings
+from core.content_policy import VIRTUAL_EVENT_EXCLUSION, contains_virtual_event
 from models.api import ArticleInput
 from services.openrouter_client import (
     OpenRouterClient,
@@ -84,6 +85,8 @@ def _markdown_link_destination(value: Any) -> str:
 def _report_draft_defect(value: Any) -> str | None:
     """Return why model output is not one complete final report draft."""
     text = str(value or "").strip()
+    if contains_virtual_event(text):
+        return VIRTUAL_EVENT_EXCLUSION
     if not text.startswith("## Executive Summary"):
         return "output did not begin with the Executive Summary heading"
     lines = [line.strip() for line in text.splitlines()]
@@ -155,6 +158,9 @@ class GRCModelService:
 
     async def analyze_articles_for_grc(self, articles: List[ArticleInput]) -> Dict[str, Any]:
         """Analyze articles for GRC-relevant content."""
+        articles = [
+            article for article in articles if not contains_virtual_event(article.model_dump())
+        ]
         try:
             logger.info(f"Analyzing {len(articles)} articles for GRC content")
 
@@ -181,6 +187,8 @@ class GRCModelService:
                 user_prompt=analysis_prompt,
                 title="GRC article analysis",
             )
+            if contains_virtual_event(response.text):
+                raise ValueError(VIRTUAL_EVENT_EXCLUSION)
 
             analysis_result = self._process_analysis_response(response.text, articles)
 
@@ -214,8 +222,14 @@ class GRCModelService:
         """Generate a comprehensive GRC intelligence report."""
         try:
             logger.info("Generating GRC intelligence report")
+            # Gate and prompt must share exactly the metadata entering the report.
+            report_feed_metadata = {"title": str(feed_info.get("title", "Unknown Feed"))}
+            if contains_virtual_event(analysis_data) or contains_virtual_event(
+                report_feed_metadata
+            ):
+                raise ValueError(VIRTUAL_EVENT_EXCLUSION)
 
-            report_prompt = self._create_report_prompt(analysis_data, feed_info)
+            report_prompt = self._create_report_prompt(analysis_data, report_feed_metadata)
 
             generation = await self._invoke(
                 system_prompt=self._get_report_system_prompt(),
@@ -322,7 +336,7 @@ Please provide analysis in this format:
 Focus only on content with clear governance, risk, or compliance implications."""
 
     def _create_report_prompt(
-        self, analysis_data: Dict[str, Any], feed_info: Dict[str, Any]
+        self, analysis_data: Dict[str, Any], report_feed_metadata: Dict[str, str]
     ) -> str:
         """Create prompt for report generation."""
         now = datetime.now(timezone.utc)
@@ -375,7 +389,7 @@ Focus only on content with clear governance, risk, or compliance implications.""
 
 Report Date: {today_full}
 Date of Issue: {today}
-Source: {feed_info.get('title', 'Unknown Feed')}
+Source: {report_feed_metadata['title']}
 Analysis Period: Current Quarter ({today})
 Total Articles Analyzed: {total_count}
 GRC-Relevant Articles: {grc_count}

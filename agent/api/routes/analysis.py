@@ -12,6 +12,7 @@ from models.api import (
 )
 from services.model_service import GRCModelService
 from core.entities import analyze_article_grc_content
+from core.content_policy import contains_virtual_event
 from core.runtime import (
     CALLER_DEADLINE_HEADER,
     deadline_from_unix_ms,
@@ -25,7 +26,23 @@ router = APIRouter()
 @router.post("/analyze", response_model=AnalysisResponse)
 async def analyze_ar(request: AnalysisRequest, http_request: Request):
     """Analyze articles for GRC content using the configured model service."""
-    logger.info(f"Starting analysis of {len(request.articles)} articles")
+    articles = [
+        article for article in request.articles if not contains_virtual_event(article.model_dump())
+    ]
+    logger.info(f"Starting analysis of {len(articles)} articles")
+
+    if not articles:
+        return AnalysisResponse(
+            status="success",
+            results=[],
+            summary=AnalysisSummary(
+                total_articles=0,
+                grc_articles=0,
+                top_regulations=[],
+                top_frameworks=[],
+                affected_industries=[],
+            ),
+        )
 
     try:
         try:
@@ -40,7 +57,7 @@ async def analyze_ar(request: AnalysisRequest, http_request: Request):
                 status="failed",
                 results=[],
                 summary=AnalysisSummary(
-                    total_articles=len(request.articles),
+                    total_articles=len(articles),
                     grc_articles=0,
                     top_regulations=[],
                     top_frameworks=[],
@@ -54,7 +71,7 @@ async def analyze_ar(request: AnalysisRequest, http_request: Request):
             )
 
         # Run analysis
-        analysis = await model_service.analyze_articles_for_grc(request.articles)
+        analysis = await model_service.analyze_articles_for_grc(articles)
 
         if "error" in analysis:
             logger.error(f"GRC analysis error: {analysis['error']}")
@@ -62,7 +79,7 @@ async def analyze_ar(request: AnalysisRequest, http_request: Request):
                 status="failed",
                 results=[],
                 summary=AnalysisSummary(
-                    total_articles=len(request.articles),
+                    total_articles=len(articles),
                     grc_articles=0,
                     top_regulations=[],
                     top_frameworks=[],
@@ -82,7 +99,7 @@ async def analyze_ar(request: AnalysisRequest, http_request: Request):
 
         # Map per-article results (augment with local entity extraction)
         results = []
-        for art in request.articles:
+        for art in articles:
             has_grc = (art.url in identified_urls) or (art.title in identified_titles)
             # Local entity extraction to populate details regardless of LLM output
             try:
@@ -116,7 +133,7 @@ async def analyze_ar(request: AnalysisRequest, http_request: Request):
         summary_data = analysis.get("summary", {})
         analysis_data = analysis.get("analysis", {})
         summary = AnalysisSummary(
-            total_articles=summary_data.get("total_articles", len(request.articles)),
+            total_articles=summary_data.get("total_articles", len(articles)),
             grc_articles=summary_data.get("grc_relevant_count", 0),
             top_regulations=analysis_data.get("regulations_mentioned", []) or [],
             top_frameworks=analysis_data.get("frameworks_referenced", []) or [],
@@ -132,7 +149,7 @@ async def analyze_ar(request: AnalysisRequest, http_request: Request):
             status="failed",
             results=[],
             summary=AnalysisSummary(
-                total_articles=len(request.articles),
+                total_articles=len(articles),
                 grc_articles=0,
                 top_regulations=[],
                 top_frameworks=[],

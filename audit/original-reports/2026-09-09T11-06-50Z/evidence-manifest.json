@@ -1,0 +1,86 @@
+{
+  "schema_version": 3,
+  "generated_at": "2026-09-09T11:06:50.918447Z",
+  "feed_url": "https://ricomanifesto.github.io/SentryDigest/feed.xml",
+  "feed_home_url": "https://ricomanifesto.github.io/SentryDigest/",
+  "digest_issue_date": "2026-09-09",
+  "digest_issue_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-09/",
+  "requested_model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
+  "resolved_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+  "sources": [
+    {
+      "title": "Adobe fixes critical Magento zero-day exploited to backdoor servers",
+      "url": "https://www.bleepingcomputer.com/news/security/adobe-fixes-critical-magento-zero-day-exploited-to-backdoor-servers/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-09/#reporting-7cfb420aff10",
+      "cves": [
+        "CVE-2026-75650"
+      ]
+    },
+    {
+      "title": "[Virtual Event] What Every Enterprise Should Know About Securing Cloud Assets in the Age of AI",
+      "url": "https://www.darkreading.com/events/virtual-event-what-every-enterprise-know-securing-cloud-2026",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-09/#reporting-a5c502fdcf06",
+      "cves": []
+    },
+    {
+      "title": "[Virtual Event] Building a Secure AI Strategy for the Enterprise",
+      "url": "https://www.darkreading.com/events/virtual-event-building-secure-ai-strategy-enterprise-2026",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-09/#reporting-dca03da12610",
+      "cves": []
+    },
+    {
+      "title": "Microsoft adds age-awareness APIs that can tell if users are children, teens, or adults",
+      "url": "https://www.bleepingcomputer.com/news/microsoft/microsoft-adds-age-awareness-apis-that-can-tell-if-users-are-children-teens-or-adults/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-09/#reporting-d9942c7c320c",
+      "cves": []
+    },
+    {
+      "title": "Microsoft Plugs Nearly 1,000 Security Holes",
+      "url": "https://krebsonsecurity.com/2026/09/microsoft-plugs-nearly-1000-security-holes/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-09/#reporting-6e80b0fb56bf",
+      "cves": []
+    },
+    {
+      "title": "Patch Tuesday Sets Another Record With 974 CVEs",
+      "url": "https://www.darkreading.com/vulnerabilities-threats/patch-tuesday-another-record-974-cves",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-09/#reporting-12654741403d",
+      "cves": []
+    },
+    {
+      "title": "Attackers Use Multi-Hop Google Redirects for Phishing Campaign",
+      "url": "https://www.darkreading.com/cyberattacks-data-breaches/attackers-multi-hop-google-redirects-phishing-campaign",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-09/#reporting-dacffe4f40c9",
+      "cves": []
+    },
+    {
+      "title": "OpenAI Agents Took Over Wiki Site Before Hugging Face Attack",
+      "url": "https://www.darkreading.com/cyberattacks-data-breaches/openai-agents-wiki-site-hugging-face-attack",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-09/#reporting-e1327ff1da81",
+      "cves": []
+    },
+    {
+      "title": "DoppelCart fraud network uses 119,000 fake shops to steal credit cards",
+      "url": "https://www.bleepingcomputer.com/news/security/doppelcart-fraud-network-uses-119-000-fake-shops-to-steal-credit-cards/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-09/#reporting-44a5bf98b92e",
+      "cves": []
+    },
+    {
+      "title": "The EU CRA's Real Question: What Shipped, and When Did You Know?",
+      "url": "https://www.bleepingcomputer.com/news/security/the-eu-cras-real-question-what-shipped-and-when-did-you-know/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-09/#reporting-c5c4aee36770",
+      "cves": []
+    },
+    {
+      "title": "Hackers breach F5 BIG-IP APM devices to deploy Linux rootkit",
+      "url": "https://www.bleepingcomputer.com/news/security/hackers-breach-f5-big-ip-apm-devices-to-deploy-linux-rootkit/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-09/#reporting-11f562db786d",
+      "cves": []
+    },
+    {
+      "title": "Microsoft releases Windows 10 KB5122878 extended security update",
+      "url": "https://www.bleepingcomputer.com/news/microsoft/microsoft-releases-windows-10-kb5122878-extended-security-update/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-09/#reporting-a9d06ef94cc0",
+      "cves": []
+    }
+  ]
+}

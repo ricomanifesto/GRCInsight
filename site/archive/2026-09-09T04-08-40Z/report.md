@@ -12,6 +12,8 @@
 
 ## Executive Summary
 
+**Editorial correction (2026-09-09):** Promotional source records and associated content were removed. Generation time, model identity, and analyzed-article counts refer to the original run; the model was not rerun. The evidence manifest now lists the retained public sources.
+
 September 2026 marks a critical inflection point for vulnerability management as the EU Cyber Resilience Act's mandatory 24-hour exploited-vulnerability reporting requirement takes effect on September 11, coinciding with Microsoft's largest-ever Patch Tuesday release of 966 flaws including two actively exploited zero-days [The EU CRA's Real Question: What Shipped, and When Did You Know?](https://www.bleepingcomputer.com/news/security/the-eu-cras-real-question-what-shipped-and-when-did-you-know/) [Microsoft September 2026 Patch Tuesday fixes 966 flaws, 2 zero-days](https://www.bleepingcomputer.com/news/microsoft/microsoft-september-2026-patch-tuesday-fixes-966-flaws-2-zero-days/). Organizations must now demonstrate precise software bill-of-materials knowledge and accelerated disclosure workflows to remain compliant.
 
 Active exploitation campaigns are targeting widely deployed enterprise infrastructure. Adobe has issued an emergency fix for CVE-2026-75650 (StyleSmuggler), a maximum-severity zero-day in Magento and Adobe Commerce that enables server backdoor access [Adobe fixes critical Magento zero-day exploited to backdoor servers](https://www.bleepingcomputer.com/news/security/adobe-fixes-critical-magento-zero-day-exploited-to-backdoor-servers/). Simultaneously, threat actors are breaching F5 BIG-IP APM devices to deploy fileless Linux rootkits that inject web shells directly into memory [Hackers breach F5 BIG-IP APM devices to deploy Linux rootkit](https://www.bleepingcomputer.com/news/security/hackers-breach-f5-big-ip-apm-devices-to-deploy-linux-rootkit/).
@@ -65,7 +67,6 @@ Microsoft's record-breaking 974-fix release highlights a growing operational cri
 4. **Build AI Governance and Incident Disclosure Procedures**
    - Define AI agent accountability thresholds and mandatory disclosure triggers for supply chain incidents [OpenAI Agents Took Over Wiki Site Before Hugging Face Attack](https://www.darkreading.com/cyberattacks-data-breaches/openai-agents-wiki-site-hugging-face-attack)
    - Require third-party AI vendors to provide incident notification SLAs aligned with EU CRA 24-hour window
-   - Participate in industry forums on securing cloud assets in the AI age and building secure AI strategies [\[Virtual Event\] What Every Enterprise Should Know About Securing Cloud Assets in the Age of AI](https://www.darkreading.com/events/virtual-event-what-every-enterprise-know-securing-cloud-2026) [\[Virtual Event\] Building a Secure AI Strategy for the Enterprise](https://www.darkreading.com/events/virtual-event-building-secure-ai-strategy-enterprise-2026)
 
 5. **Invest in Patch Automation and Testing Capacity**
    - Evaluate automated patch validation platforms to address the human-intensive testing bottleneck highlighted by Microsoft's record release [Microsoft Plugs Nearly 1,000 Security Holes](https://krebsonsecurity.com/2026/09/microsoft-plugs-nearly-1000-security-holes/)
@@ -75,8 +76,6 @@ Microsoft's record-breaking 974-fix release highlights a growing operational cri
 ## Source Highlights
 
 - [Adobe fixes critical Magento zero-day exploited to backdoor servers](https://www.bleepingcomputer.com/news/security/adobe-fixes-critical-magento-zero-day-exploited-to-backdoor-servers/) · [View in SentryDigest](https://ricomanifesto.github.io/SentryDigest/archive/2026-09-08/#reporting-7cfb420aff10)
-- [\[Virtual Event\] What Every Enterprise Should Know About Securing Cloud Assets in the Age of AI](https://www.darkreading.com/events/virtual-event-what-every-enterprise-know-securing-cloud-2026) · [View in SentryDigest](https://ricomanifesto.github.io/SentryDigest/archive/2026-09-08/#reporting-a5c502fdcf06)
-- [\[Virtual Event\] Building a Secure AI Strategy for the Enterprise](https://www.darkreading.com/events/virtual-event-building-secure-ai-strategy-enterprise-2026) · [View in SentryDigest](https://ricomanifesto.github.io/SentryDigest/archive/2026-09-08/#reporting-dca03da12610)
 - [Microsoft Plugs Nearly 1,000 Security Holes](https://krebsonsecurity.com/2026/09/microsoft-plugs-nearly-1000-security-holes/) · [View in SentryDigest](https://ricomanifesto.github.io/SentryDigest/archive/2026-09-08/#reporting-6e80b0fb56bf)
 - [Patch Tuesday Sets Another Record With 974 CVEs](https://www.darkreading.com/vulnerabilities-threats/patch-tuesday-another-record-974-cves) · [View in SentryDigest](https://ricomanifesto.github.io/SentryDigest/archive/2026-09-08/#reporting-12654741403d)
 - [Attackers Use Multi-Hop Google Redirects for Phishing Campaign](https://www.darkreading.com/cyberattacks-data-breaches/attackers-multi-hop-google-redirects-phishing-campaign) · [View in SentryDigest](https://ricomanifesto.github.io/SentryDigest/archive/2026-09-08/#reporting-dacffe4f40c9)

@@ -1,0 +1,97 @@
+{
+  "schema_version": 3,
+  "generated_at": "2026-09-07T12:14:32.283702Z",
+  "feed_url": "https://ricomanifesto.github.io/SentryDigest/feed.xml",
+  "feed_home_url": "https://ricomanifesto.github.io/SentryDigest/",
+  "digest_issue_date": "2026-09-07",
+  "digest_issue_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-07/",
+  "requested_model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
+  "resolved_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+  "sources": [
+    {
+      "title": "Critical VMware Workstation and Fusion Flaw Lets VM Admins Execute Host Code",
+      "url": "https://thehackernews.com/2026/09/critical-vmware-workstation-and-fusion.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-07/#reporting-e74c4bc78631",
+      "cves": [
+        "CVE-2026-59346"
+      ]
+    },
+    {
+      "title": "Attackers Exploit PaperCut Flaws to Steal Credentials From Schools and Universities",
+      "url": "https://thehackernews.com/2026/09/attackers-exploit-papercut-flaws-to.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-07/#reporting-c08f05268e88",
+      "cves": [
+        "CVE-2026-81578",
+        "CVE-2026-82078"
+      ]
+    },
+    {
+      "title": "Critical Citrix NetScaler auth bypass now leveraged in attacks",
+      "url": "https://www.bleepingcomputer.com/news/security/hackers-target-critical-citrix-netscaler-auth-bypass-in-attacks/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-07/#reporting-7483ae5401bd",
+      "cves": [
+        "CVE-2026-19490"
+      ]
+    },
+    {
+      "title": "PostgreSQL Fixes 12-Year-Old Logical Decoding Flaw Enabling Replication-Role Code Execution",
+      "url": "https://thehackernews.com/2026/09/postgresql-fixes-12-year-old-logical.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-07/#reporting-d7ed15b40cfe",
+      "cves": [
+        "CVE-2026-6471"
+      ]
+    },
+    {
+      "title": "Over 440,000 Exploit Attempts Target Super Forms and Elementor Pro RCE Flaws",
+      "url": "https://thehackernews.com/2026/09/over-440000-exploit-attempts-target.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-07/#reporting-7eb26d7003dc",
+      "cves": [
+        "CVE-2026-14894"
+      ]
+    },
+    {
+      "title": "Google Releases Chrome Update to Patch Actively Exploited V8 Zero-Day",
+      "url": "https://thehackernews.com/2026/09/google-releases-chrome-update-to-patch.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-07/#reporting-49749711ba07",
+      "cves": [
+        "CVE-2026-85046"
+      ]
+    },
+    {
+      "title": "[Virtual Event] What Every Enterprise Should Know About Securing Cloud Assets in the Age of AI",
+      "url": "https://www.darkreading.com/events/virtual-event-what-every-enterprise-know-securing-cloud-2026",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-07/#reporting-a5c502fdcf06",
+      "cves": []
+    },
+    {
+      "title": "[Virtual Event] Building a Secure AI Strategy for the Enterprise",
+      "url": "https://www.darkreading.com/events/virtual-event-building-secure-ai-strategy-enterprise-2026",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-07/#reporting-dca03da12610",
+      "cves": []
+    },
+    {
+      "title": "ChatGPT Astra is now rolling out to $20 Plus subscription",
+      "url": "https://www.bleepingcomputer.com/news/artificial-intelligence/chatgpt-astra-is-now-rolling-out-to-20-plus-subscription/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-07/#reporting-a1bdcc187807",
+      "cves": []
+    },
+    {
+      "title": "Attackers conceal phishing lures using invisible Unicode characters",
+      "url": "https://www.bleepingcomputer.com/news/security/attackers-conceal-phishing-lures-using-invisible-unicode-characters/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-07/#reporting-bc441f97e571",
+      "cves": []
+    },
+    {
+      "title": "Attackers Hijack MikroTik Routers Through Internet-Exposed SSH Without Authentication",
+      "url": "https://thehackernews.com/2026/09/attackers-hijack-mikrotik-routers.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-07/#reporting-bec3d4c719cb",
+      "cves": []
+    },
+    {
+      "title": "Four REVSTEALER-Linked Modules Disable Windows Update and Defender to Run a Crypto Miner",
+      "url": "https://thehackernews.com/2026/09/four-revstealer-linked-modules-disable.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-07/#reporting-1a8ef3d227d4",
+      "cves": []
+    }
+  ]
+}

@@ -1,0 +1,92 @@
+{
+  "schema_version": 3,
+  "generated_at": "2026-09-04T16:11:35.263061Z",
+  "feed_url": "https://ricomanifesto.github.io/SentryDigest/feed.xml",
+  "feed_home_url": "https://ricomanifesto.github.io/SentryDigest/",
+  "digest_issue_date": "2026-09-04",
+  "digest_issue_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-04/",
+  "requested_model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
+  "resolved_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+  "sources": [
+    {
+      "title": "Over 440,000 Exploit Attempts Target Super Forms and Elementor Pro RCE Flaws",
+      "url": "https://thehackernews.com/2026/09/over-440000-exploit-attempts-target.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-04/#reporting-7eb26d7003dc",
+      "cves": [
+        "CVE-2026-14894"
+      ]
+    },
+    {
+      "title": "Google Releases Chrome Update to Patch Actively Exploited V8 Zero-Day",
+      "url": "https://thehackernews.com/2026/09/google-releases-chrome-update-to-patch.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-04/#reporting-49749711ba07",
+      "cves": [
+        "CVE-2026-85046"
+      ]
+    },
+    {
+      "title": "Critical Cisco Nexus 9000 Flaw Lets Unauthenticated Remote Attackers Run Code as Root",
+      "url": "https://thehackernews.com/2026/09/critical-cisco-nexus-9000-flaw-lets.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-04/#reporting-10869e1cb2f9",
+      "cves": [
+        "CVE-2026-20212"
+      ]
+    },
+    {
+      "title": "Critical Elementor Pro flaw exploited to take over WordPress sites",
+      "url": "https://www.bleepingcomputer.com/news/security/critical-elementor-pro-flaw-exploited-to-take-over-wordpress-sites/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-04/#reporting-12bd6356b4bc",
+      "cves": [
+        "CVE-2026-32475"
+      ]
+    },
+    {
+      "title": "[Virtual Event] What Every Enterprise Should Know About Securing Cloud Assets in the Age of AI",
+      "url": "https://www.darkreading.com/events/virtual-event-what-every-enterprise-know-securing-cloud-2026",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-04/#reporting-a5c502fdcf06",
+      "cves": []
+    },
+    {
+      "title": "[Virtual Event] Building a Secure AI Strategy for the Enterprise",
+      "url": "https://www.darkreading.com/events/virtual-event-building-secure-ai-strategy-enterprise-2026",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-04/#reporting-dca03da12610",
+      "cves": []
+    },
+    {
+      "title": "Plex Urges Immediate Updates After Patching Multiple Undisclosed Security Flaws",
+      "url": "https://thehackernews.com/2026/09/plex-urges-immediate-updates-after.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-04/#reporting-08f9037c31db",
+      "cves": []
+    },
+    {
+      "title": "GPT-6 Astra Scores 100% on ExploitBench as OpenAI Blocks PoC Exploit Requests",
+      "url": "https://thehackernews.com/2026/09/gpt-6-astra-scores-100-on-exploitbench.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-04/#reporting-09bf1e9a868f",
+      "cves": []
+    },
+    {
+      "title": "French hospital fined €500,000 after breach exposes data of 727,000",
+      "url": "https://www.bleepingcomputer.com/news/security/french-hospital-fined-500-000-after-breach-exposes-data-of-727-000/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-04/#reporting-0310538b67d5",
+      "cves": []
+    },
+    {
+      "title": "Large Enterprises Targeted in Fake Merger & Acquisition Scams",
+      "url": "https://www.darkreading.com/cyberattacks-data-breaches/large-enterprises-fake-merger-acquisition-scams",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-04/#reporting-b38f4c9e8193",
+      "cves": []
+    },
+    {
+      "title": "Coder's registry infrastructure compromised to push malicious modules",
+      "url": "https://www.bleepingcomputer.com/news/security/coders-registry-infrastructure-compromised-to-push-malicious-modules/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-04/#reporting-25f09ace8141",
+      "cves": []
+    },
+    {
+      "title": "What We Missed: Did ShinyHunters 'Breach' ReliaQuest?",
+      "url": "https://www.darkreading.com/cybersecurity-operations/what-we-missed-did-shinyhunters-breach-reliaquest",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-04/#reporting-657cfe30a45c",
+      "cves": []
+    }
+  ]
+}

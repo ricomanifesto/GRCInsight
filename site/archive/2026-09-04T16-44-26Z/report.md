@@ -12,6 +12,8 @@
 
 ## Executive Summary
 
+**Editorial correction (2026-09-09):** Promotional source records and associated content were removed. Generation time, model identity, and analyzed-article counts refer to the original run; the model was not rerun. The evidence manifest now lists the retained public sources.
+
 Active exploitation of critical infrastructure vulnerabilities has accelerated across networking, web application, and endpoint layers, requiring immediate patching prioritization and compensating controls. Citrix NetScaler authentication bypass [Critical Citrix NetScaler auth bypass now leveraged in attacks](https://www.bleepingcomputer.com/news/security/hackers-target-critical-citrix-netscaler-auth-bypass-in-attacks/) and Cisco Nexus 9000 unauthenticated remote code execution [Critical Cisco Nexus 9000 Flaw Lets Unauthenticated Remote Attackers Run Code as Root](https://thehackernews.com/2026/09/critical-cisco-nexus-9000-flaw-lets.html) represent direct threats to network perimeters with no workarounds available for affected IOS XR versions.
 
 WordPress ecosystem exploitation has reached industrial scale, with over 440,000 exploit attempts targeting Super Forms and Elementor Pro remote code execution flaws [Over 440,000 Exploit Attempts Target Super Forms and Elementor Pro RCE Flaws](https://thehackernews.com/2026/09/over-440000-exploit-attempts-target.html) and active webshell deployment via Elementor Pro [Critical Elementor Pro flaw exploited to take over WordPress sites](https://www.bleepingcomputer.com/news/security/critical-elementor-pro-flaw-exploited-to-take-over-wordpress-sites/). Organizations using these plugins face immediate compromise risk and should enforce web application firewall rules while patches are deployed.

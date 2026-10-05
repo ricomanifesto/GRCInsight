@@ -12,13 +12,14 @@
 
 ## Executive Summary
 
+**Editorial correction (2026-09-09):** Promotional source records and associated content were removed. Generation time, model identity, and analyzed-article counts refer to the original run; the model was not rerun. The evidence manifest now lists the retained public sources.
+
 The EU Cyber Resilience Act enters its active enforcement phase on September 11, 2026, imposing a 24-hour reporting obligation for actively exploited vulnerabilities on software vendors. This regulatory milestone coincides with a record-breaking Patch Tuesday that delivered 974 CVEs, of which two are confirmed under active exploitation and 58 more are assessed as likely to be exploited. Organizations must now demonstrate the ability to identify, assess, and report exploited flaws within a single business day.
 
 Microsoft's September patch cycle represents the largest monthly vulnerability disclosure in the company's history, with nearly 1,000 security holes addressed across Windows and associated software. The volume alone creates a testing and deployment burden that exceeds the capacity of many patch management programs, while the presence of actively exploited flaws demands emergency prioritization that conflicts with standard change-control windows.
 
 Threat actors are simultaneously advancing on multiple fronts: a critical Magento zero-day (CVE-2026-75650) dubbed StyleSmuggler is being weaponized to backdoor e-commerce servers; F5 BIG-IP APM devices are being compromised to deploy fileless Linux rootkits; and the DoppelCart fraud network operates 119,000 fake storefronts harvesting payment credentials. These campaigns illustrate how supply-chain, infrastructure, and consumer-facing attack surfaces are being exploited in parallel. **Evidence:** [Adobe fixes critical Magento zero-day exploited to backdoor servers](https://www.bleepingcomputer.com/news/security/adobe-fixes-critical-magento-zero-day-exploited-to-backdoor-servers/)
 
-AI-related risk is emerging as a governance priority. OpenAI agents were implicated in the takeover of a wiki site preceding the Hugging Face attack, while industry events highlight enterprise urgency around securing cloud assets and building safe AI strategies. Microsoft's new age-awareness APIs in Windows 11 signal a platform-level response to child-protection regulations, adding a compliance dimension to application development roadmaps.
 
 ## Key Regulatory Developments
 
@@ -35,7 +36,6 @@ AI-related risk is emerging as a governance priority. OpenAI agents were implica
 | Network Infrastructure | F5 BIG-IP APM devices breached to deploy fileless Linux rootkit intercepting PHP and injecting memory-resident web shells | [Hackers breach F5 BIG-IP APM devices to deploy Linux rootkit](https://www.bleepingcomputer.com/news/security/hackers-breach-f5-big-ip-apm-devices-to-deploy-linux-rootkit/) |
 | Software Vendors (all) | CRA 24-hour reporting clock starts September 11; requires knowing "what shipped and when vulnerabilities were discovered" | [The EU CRA's Real Question: What Shipped, and When Did You Know?](https://www.bleepingcomputer.com/news/security/the-eu-cras-real-question-what-shipped-and-when-did-you-know/) |
 | Application Developers | Windows 11 age-awareness APIs enable child/teen/adult classification without exposing DOB; supports age-gating compliance | [Microsoft adds age-awareness APIs that can tell if users are children, teens, or adults](https://www.bleepingcomputer.com/news/microsoft/microsoft-adds-age-awareness-apis-that-can-tell-if-users-are-children-teens-or-adults/) |
-| AI / ML Operations | OpenAI agents implicated in wiki takeover preceding Hugging Face attack; enterprise demand for AI security strategy guidance | [OpenAI Agents Took Over Wiki Site Before Hugging Face Attack](https://www.darkreading.com/cyberattacks-data-breaches/openai-agents-wiki-site-hugging-face-attack) ; [\[Virtual Event\] Building a Secure AI Strategy for the Enterprise](https://www.darkreading.com/events/virtual-event-building-secure-ai-strategy-enterprise-2026) |
 
 ## Risk Assessment
 
@@ -61,15 +61,12 @@ AI-related risk is emerging as a governance priority. OpenAI agents were implica
 
 5. **Integrate age-awareness API into application compliance roadmap** — Assess Windows 11 age-classification APIs for child-protection obligations (GDPR, CCPA, state laws); update consent flows and data-minimization practices accordingly.
 
-6. **Establish AI governance guardrails** — Define acceptable-use policies for autonomous agents; require audit logging of agent actions; evaluate supply-chain risk from third-party AI components; participate in industry AI security forums.
 
 7. **Harden phishing defenses against trusted-service abuse** — Deploy URL filtering that inspects redirect chains; block ScreenConnect and unauthorized remote-access tools; conduct simulated phishing using multi-hop redirect techniques.
 
 ## Source Highlights
 
 - [Adobe fixes critical Magento zero-day exploited to backdoor servers](https://www.bleepingcomputer.com/news/security/adobe-fixes-critical-magento-zero-day-exploited-to-backdoor-servers/) · [View in SentryDigest](https://ricomanifesto.github.io/SentryDigest/archive/2026-09-09/#reporting-7cfb420aff10)
-- [\[Virtual Event\] What Every Enterprise Should Know About Securing Cloud Assets in the Age of AI](https://www.darkreading.com/events/virtual-event-what-every-enterprise-know-securing-cloud-2026) · [View in SentryDigest](https://ricomanifesto.github.io/SentryDigest/archive/2026-09-09/#reporting-a5c502fdcf06)
-- [\[Virtual Event\] Building a Secure AI Strategy for the Enterprise](https://www.darkreading.com/events/virtual-event-building-secure-ai-strategy-enterprise-2026) · [View in SentryDigest](https://ricomanifesto.github.io/SentryDigest/archive/2026-09-09/#reporting-dca03da12610)
 - [Microsoft adds age-awareness APIs that can tell if users are children, teens, or adults](https://www.bleepingcomputer.com/news/microsoft/microsoft-adds-age-awareness-apis-that-can-tell-if-users-are-children-teens-or-adults/) · [View in SentryDigest](https://ricomanifesto.github.io/SentryDigest/archive/2026-09-09/#reporting-d9942c7c320c)
 - [Microsoft Plugs Nearly 1,000 Security Holes](https://krebsonsecurity.com/2026/09/microsoft-plugs-nearly-1000-security-holes/) · [View in SentryDigest](https://ricomanifesto.github.io/SentryDigest/archive/2026-09-09/#reporting-6e80b0fb56bf)
 - [Patch Tuesday Sets Another Record With 974 CVEs](https://www.darkreading.com/vulnerabilities-threats/patch-tuesday-another-record-974-cves) · [View in SentryDigest](https://ricomanifesto.github.io/SentryDigest/archive/2026-09-09/#reporting-12654741403d)
