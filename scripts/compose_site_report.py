@@ -465,6 +465,7 @@ def source_articles(metadata: dict) -> list[dict[str, object]]:
             {
                 "title": title, "url": url, "digest_url": digest_url, "cves": cves,
                 "snippet": str(raw_source.get("snippet") or ""),
+                "effective_date_evidence": raw_source.get("effective_date_evidence"),
             }
         )
     if not sources:

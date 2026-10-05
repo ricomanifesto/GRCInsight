@@ -9,6 +9,8 @@ import re
 from typing import Any
 from urllib.parse import quote, urlsplit
 
+from core.regulatory_dates import document_effective_date
+
 REPORT_CONTRACT_VERSION = 2
 REGULATORY_SECTION = "Sourced Regulatory Changes"
 INFERENCE_SECTION = "Inferred Control and Governance Implications"
@@ -43,7 +45,7 @@ REGULATORY_PUBLISHERS = (
 class RegulatoryChange:
     change: str
     jurisdiction: str | None
-    effective_date: str | None
+    document_effective_date: str | None
     source_url: str
     evidence_excerpt: str
 
@@ -72,6 +74,8 @@ def validate_regulatory_evidence(
     markdown: str, sources: list[dict[str, Any]]
 ) -> list[RegulatoryChange]:
     """Reject unsourced legal-change rows; unknown facts remain explicit nulls."""
+    for source in sources:
+        document_effective_date(source)
     for title in (REGULATORY_SECTION, INFERENCE_SECTION):
         if len(re.findall(rf"(?m)^## {re.escape(title)}\s*$", markdown)) != 1:
             raise ValueError(f"report requires one {title} section")
@@ -83,7 +87,7 @@ def validate_regulatory_evidence(
     if text == NO_REGULATORY_CHANGES:
         return []
     lines = [line.strip() for line in text.splitlines() if line.strip()]
-    header = ["Change", "Jurisdiction", "Effective date", "Source", "Evidence excerpt"]
+    header = ["Change", "Jurisdiction", "Document effective date", "Source", "Evidence excerpt"]
     if (
         len(lines) < 3
         or [cell.strip() for cell in lines[0].strip("|").split("|")] != header
@@ -118,26 +122,19 @@ def validate_regulatory_evidence(
             raise ValueError("regulatory evidence excerpt is absent from the supplied source text")
         if _plain(change).casefold() not in _plain(excerpt).casefold():
             raise ValueError("regulatory change must quote an evidenced clause")
-        if effective_date != "Unknown":
-            operative_phrase = (
-                r"(?:takes? effect|effective(?: date)?|enters? into force|applies? from)"
-            )
-            date = re.escape(effective_date)
-            if not re.search(
-                rf"(?:{operative_phrase}\s*(?:is|on|from|:)?\s*{date}"
-                rf"|{date}[^;.!?\n]{{0,200}}{operative_phrase}\s*(?:[.;!?]|$))",
-                excerpt,
-                re.I,
-            ):
-                raise ValueError("regulatory effective date must be identified as such in evidence")
-        for field, value in (("jurisdiction", jurisdiction), ("effective date", effective_date)):
-            if value != "Unknown" and _plain(value).casefold() not in _plain(excerpt).casefold():
-                raise ValueError(f"regulatory {field} must be evidenced or Unknown")
+        attested_date = document_effective_date(source)
+        if effective_date != (attested_date or "Unknown"):
+            raise ValueError("document effective date must match publisher metadata or be Unknown")
+        if (
+            jurisdiction != "Unknown"
+            and _plain(jurisdiction).casefold() not in _plain(excerpt).casefold()
+        ):
+            raise ValueError("regulatory jurisdiction must be evidenced or Unknown")
         changes.append(
             RegulatoryChange(
                 change,
                 None if jurisdiction == "Unknown" else jurisdiction,
-                None if effective_date == "Unknown" else effective_date,
+                attested_date,
                 url,
                 excerpt,
             )

@@ -9,6 +9,7 @@ from urllib.parse import quote
 from loguru import logger
 
 from config.settings import settings
+from core.regulatory_dates import document_effective_date
 from core.report_evidence import (
     REPORT_SECTION_TITLES,
     REGULATORY_PUBLISHERS,
@@ -360,6 +361,8 @@ Focus only on content with clear governance, risk, or compliance implications.""
                         f"{index}. Markdown Link: {markdown_link}",
                         f"   CVEs: {', '.join(cves) if cves else 'None detected'}",
                         f"   Snippet: {snippet}",
+                        f"   Document effective date: {document_effective_date(evidence) or 'Unknown'}",
+                        f"   Date metadata: {(evidence.get('effective_date_evidence') or {}).get('api_url', 'Not available')}",
                     ]
                 )
             )
@@ -396,8 +399,8 @@ Please create a professional executive summary report with:
 7. Source Highlights
 
 Regulatory evidence: Sourced Regulatory Changes must contain only a table with these exact columns:
-| Change | Jurisdiction | Effective date | Source | Evidence excerpt |
-Use a direct primary regulatory publication from these supported publishers: {', '.join(REGULATORY_PUBLISHERS)}. Source must be its exact supplied Markdown Link. Evidence excerpt must be a verbatim contiguous excerpt (at least 20 characters) from its supplied snippet documenting the change. Change must be a short verbatim clause from that excerpt. Copy jurisdiction and effective date as written in the excerpt, or use Unknown when not evidenced. A publication date is not an effective date. Do not turn incidents, platform policy changes, standards references, or security reporting into legal changes. If none qualifies, use exactly: No sourced regulatory changes identified in the supplied evidence.
+| Change | Jurisdiction | Document effective date | Source | Evidence excerpt |
+Use a direct primary regulatory publication from these supported publishers: {', '.join(REGULATORY_PUBLISHERS)}. Source must be its exact supplied Markdown Link. Evidence excerpt must be a verbatim contiguous excerpt (at least 20 characters) from its supplied snippet documenting the change. Change must be a short verbatim clause from that excerpt. Copy jurisdiction as written in the excerpt, or use Unknown when not evidenced. Copy the supplied Document effective date exactly, including Unknown. It is the publisher metadata's document-level date, not a deadline for an individual provision or an independent finding of legal applicability. Never extract or infer a date from the snippet, publication timestamp, model knowledge, or analysis. Keep regulatory timing in this table; do not restate dates or infer deadlines elsewhere in the report. Do not turn incidents, platform policy changes, standards references, or security reporting into legal changes. If none qualifies, use exactly: No sourced regulatory changes identified in the supplied evidence.
 
 Inferred Control and Governance Implications preserves useful analytical mappings. Label them as inferences, cite supporting security news, and distinguish existing controls from new legal obligations. Do not claim a new legal duty, regulatory deadline, or regulator action based on an inferred mapping.
 

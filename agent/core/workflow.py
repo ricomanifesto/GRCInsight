@@ -19,6 +19,7 @@ from models.api import (
 )
 from services.rss_service import RSSService
 from services.model_service import GRCModelService
+from services.regulatory_sources import enrich_regulatory_sources
 from core.entities import analyze_article_grc_content
 from core.reporting_identity import (
     ReportingIdentityError,
@@ -580,7 +581,9 @@ async def run_grc_analysis_endpoint(
                 used_model_analysis = True
 
         grc_article_count = analysis_results.get("summary", {}).get("grc_relevant_count", 0)
-        source_evidence = _build_source_evidence(enriched_articles)
+        source_evidence = await enrich_regulatory_sources(
+            _build_source_evidence(enriched_articles), model_deadline=model_deadline
+        )
         analysis_results["source_evidence"] = source_evidence
         logger.info(f"Found {grc_article_count} articles with GRC content")
 
@@ -683,6 +686,7 @@ async def run_grc_analysis_endpoint(
                     "digest_url": source["digest_url"],
                     "cves": source["cves"],
                     "snippet": source["snippet"],
+                    "effective_date_evidence": source["effective_date_evidence"],
                 }
                 for source in source_evidence
             ],

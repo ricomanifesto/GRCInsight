@@ -24,7 +24,7 @@ def body(row=None):
     changes = "No sourced regulatory changes identified in the supplied evidence."
     if row:
         changes = (
-            "| Change | Jurisdiction | Effective date | Source | Evidence excerpt |\n"
+            "| Change | Jurisdiction | Document effective date | Source | Evidence excerpt |\n"
             "|---|---|---|---|---|\n" + row
         )
     return (
@@ -42,16 +42,20 @@ def row(
 
 
 def test_regulatory_change_requires_grounded_primary_evidence():
-    changes = validate(body(row()), [SOURCE])
+    changes = validate(body(row(date="Unknown")), [SOURCE])
     assert changes[0].jurisdiction == "United States"
-    assert changes[0].effective_date == "2027-01-01"
+    assert changes[0].document_effective_date is None
     assert changes[0].source_url == SOURCE["url"]
 
 
-def test_regulatory_change_accepts_effective_date_before_operative_phrase():
+def test_regulatory_change_retains_date_first_excerpt_without_inferring_a_date():
     excerpt = "On 2027-01-01, the United States final reporting rule takes effect."
-    changes = validate(body(row(quote=excerpt)), [{**SOURCE, "snippet": excerpt}])
-    assert changes[0].effective_date == "2027-01-01"
+    source = {**SOURCE, "snippet": excerpt}
+    with pytest.raises(ValueError, match="effective date"):
+        validate(body(row(quote=excerpt)), [source])
+    changes = validate(body(row(date="Unknown", quote=excerpt)), [source])
+    assert changes[0].document_effective_date is None
+    assert changes[0].evidence_excerpt == excerpt
 
 
 def test_regulatory_change_rejects_publication_date_before_relative_effective_date():
@@ -63,10 +67,23 @@ def test_regulatory_change_rejects_publication_date_before_relative_effective_da
         validate(body(row(quote=excerpt)), [{**SOURCE, "snippet": excerpt}])
 
 
+@pytest.mark.parametrize(
+    "excerpt",
+    [
+        "On 2027-01-01, the United States agency announced the final reporting rule, and on 2028-01-01 it takes effect.",
+        "The United States final reporting rule does not take effect on 2027-01-01.",
+        "On 2027-01-01, the United States final reporting rule does not take effect.",
+    ],
+)
+def test_date_claim_cannot_be_inferred_from_mixed_or_negated_prose(excerpt):
+    with pytest.raises(ValueError, match="effective date"):
+        validate(body(row(quote=excerpt)), [{**SOURCE, "snippet": excerpt}])
+
+
 def test_regulatory_change_matches_prompt_encoded_source_url():
     source = {**SOURCE, "url": "https://www.sec.gov/rules/final/example_(test)"}
     encoded_url = "https://www.sec.gov/rules/final/example_%28test%29"
-    changes = validate(body(row(url=encoded_url)), [source])
+    changes = validate(body(row(date="Unknown", url=encoded_url)), [source])
     assert changes[0].source_url == encoded_url
 
 
@@ -74,7 +91,7 @@ def test_no_sourced_change_preserves_inference_and_unknown_dates():
     assert validate(body(), [SOURCE]) == []
     changes = validate(body(row("Unknown", "Unknown")), [SOURCE])
     assert changes[0].jurisdiction is None
-    assert changes[0].effective_date is None
+    assert changes[0].document_effective_date is None
 
 
 @pytest.mark.parametrize(
@@ -268,7 +285,7 @@ def test_regulatory_contract_survives_composition_manifest_and_publication_valid
     composer = runpy.run_path(str(ROOT / "scripts/compose_site_report.py"))
     checker = runpy.run_path(str(ROOT / "scripts/check_site_report.py"))
     builder = runpy.run_path(str(ROOT / "scripts/build_site.py"))
-    data = stored_report(full_report(body(row())))
+    data = stored_report(full_report(body(row(date="Unknown"))))
     markdown = composer["compose_report"](
         data, "https://digest.example/feed.xml", "openrouter/example/model"
     )
@@ -283,10 +300,10 @@ def test_regulatory_contract_survives_composition_manifest_and_publication_valid
         json.dumps(manifest),
         require_current_schema=True,
     )
-    corrupted = markdown.replace("2027-01-01 |", "2028-01-01 |")
+    corrupted = markdown.replace("Unknown |", "2028-01-01 |")
     with pytest.raises(SystemExit, match="effective date"):
         validate_manifest(corrupted, builder["report_fields"](markdown), json.dumps(manifest))
-    data["content"] = data["content"].replace("2027-01-01 |", "2028-01-01 |")
+    data["content"] = data["content"].replace("Unknown |", "2028-01-01 |")
     with pytest.raises(SystemExit, match="effective date"):
         composer["compose_report"](
             data, "https://digest.example/feed.xml", "openrouter/example/model"
