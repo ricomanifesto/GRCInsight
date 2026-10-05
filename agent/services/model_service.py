@@ -72,6 +72,7 @@ def _markdown_link_label(value: Any) -> str:
         .replace("]", "\\]")
         .replace("(", "\\(")
         .replace(")", "\\)")
+        .replace("|", "\\|")
     )
 
 

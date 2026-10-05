@@ -152,7 +152,7 @@ def parse_report_plan(text: str, sources: list[dict[str, Any]]) -> dict[str, Any
 
 def _link(source: dict[str, Any]) -> str:
     label = str(source["title"])
-    for character in ("\\", "[", "]", "(", ")"):
+    for character in ("\\", "[", "]", "(", ")", "|"):
         label = label.replace(character, "\\" + character)
     destination = quote(str(source["url"]), safe=":/?#[]@!$&*+,;=%")
     return f"[{label}]({destination})"

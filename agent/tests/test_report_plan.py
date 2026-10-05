@@ -2,6 +2,9 @@
 
 from copy import deepcopy
 import json
+from pathlib import Path
+import re
+import runpy
 
 import pytest
 
@@ -119,6 +122,55 @@ def test_report_plan_preserves_source_title_quotations_without_treating_them_as_
     body = render_report_plan(PLAN, sources)
     validate_rendered_report(body, PLAN, sources)
     assert "[Rule effective January 1, 2027]" in body
+
+
+@pytest.mark.parametrize("title", ["SEC.gov | Final Rule", r"SEC.gov C:\[Docs] \| Final Rule"])
+def test_report_plan_escapes_source_title_pipes_in_regulatory_table(title):
+    from core.report_plan import render_report_plan, validate_rendered_report
+    from test_report_evidence import stored_report
+
+    source = {
+        **SOURCES[0],
+        "title": title,
+        "url": "https://www.sec.gov/rules/final/example",
+        "snippet": "The United States final reporting rule changes reporting requirements.",
+    }
+    plan = {
+        **deepcopy(PLAN),
+        "regulatory_changes": [
+            {
+                "source_id": 1,
+                "change": "final reporting rule",
+                "jurisdiction": "United States",
+                "evidence_excerpt": source["snippet"],
+            }
+        ],
+    }
+
+    body = render_report_plan(plan, [source])
+
+    assert r"\| Final Rule]" in body
+    validate_rendered_report(body, plan, [source])
+    root = Path(__file__).resolve().parents[2]
+    composer = runpy.run_path(str(root / "scripts/compose_site_report.py"))
+    checker = runpy.run_path(str(root / "scripts/check_site_report.py"))
+    builder = runpy.run_path(str(root / "scripts/build_site.py"))
+    data = stored_report(body, plan)
+    data["metadata"]["source_articles"] = [
+        {key: value for key, value in source.items() if key != "digest_url"}
+    ]
+    markdown = composer["compose_report"](
+        data, "https://digest.example/feed.xml", "openrouter/example/model"
+    )
+    manifest = composer["evidence_manifest"](data, composer["source_articles"](data["metadata"]))
+    checker["validate_evidence_manifest"](
+        markdown, builder["report_fields"](markdown), json.dumps(manifest)
+    )
+    rendered = builder["render_report"](markdown)
+    table = re.search(r"<tbody>(.*?)</tbody>", rendered, re.S)
+    assert table is not None and table[1].count("<td>") == 5
+    assert f'aria-label="Source 1: {title}"' in rendered
+    assert f">{title}</a>" in rendered
 
 
 def test_report_metadata_retains_the_selection_plan():

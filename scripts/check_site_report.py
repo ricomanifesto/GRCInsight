@@ -587,7 +587,7 @@ def has_http_scheme(value: str) -> bool:
 
 def markdown_inline_text(value: str) -> str:
     """Decode the escapes used to serialize a Markdown link label."""
-    return re.sub(r"\\([\\[\]()])", r"\1", value)
+    return re.sub(r"\\([\\[\]()|])", r"\1", value)
 
 
 def report_section_label(line: str) -> str | None:

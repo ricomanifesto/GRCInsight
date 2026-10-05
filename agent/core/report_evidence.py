@@ -70,6 +70,24 @@ def _markdown_link_destination(value: str) -> str:
     return quote(value, safe=":/?#[]@!$&*+,;=%")
 
 
+def _table_cells(line: str) -> list[str]:
+    """Split a Markdown table row without treating escaped pipes as delimiters."""
+    if not line.startswith("|") or not line.endswith("|"):
+        return []
+    cells = []
+    cell = []
+    escaped = False
+    for character in line[1:-1]:
+        if character == "|" and not escaped:
+            cells.append("".join(cell).strip())
+            cell = []
+        else:
+            cell.append(character)
+        escaped = character == "\\" and not escaped
+    cells.append("".join(cell).strip())
+    return cells
+
+
 def validate_regulatory_evidence(
     markdown: str, sources: list[dict[str, Any]]
 ) -> list[RegulatoryChange]:
@@ -90,7 +108,7 @@ def validate_regulatory_evidence(
     header = ["Change", "Jurisdiction", "Document effective date", "Source", "Evidence excerpt"]
     if (
         len(lines) < 3
-        or [cell.strip() for cell in lines[0].strip("|").split("|")] != header
+        or _table_cells(lines[0]) != header
         or not re.fullmatch(r"\|[\s:|\-]+\|", lines[1])
     ):
         raise ValueError(
@@ -106,7 +124,7 @@ def validate_regulatory_evidence(
     }
     changes = []
     for line in lines[2:]:
-        cells = [cell.strip() for cell in line.strip("|").split("|")]
+        cells = _table_cells(line)
         if len(cells) != 5 or not all(cells):
             raise ValueError("regulatory row must supply all five evidence fields")
         change, jurisdiction, effective_date, link, excerpt = cells
