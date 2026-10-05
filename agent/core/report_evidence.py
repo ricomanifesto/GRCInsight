@@ -114,14 +114,9 @@ def validate_regulatory_evidence(
         raise ValueError(
             "sourced regulatory changes require the evidence table or explicit absence"
         )
-    by_url = {
-        serialized: source
-        for source in sources
-        for serialized in (
-            str(source["url"]),
-            _markdown_link_destination(str(source["url"])),
-        )
-    }
+    by_url: dict[str, list[dict[str, Any]]] = {}
+    for source in sources:
+        by_url.setdefault(_markdown_link_destination(str(source["url"])), []).append(source)
     changes = []
     for line in lines[2:]:
         cells = _table_cells(line)
@@ -130,19 +125,25 @@ def validate_regulatory_evidence(
         change, jurisdiction, effective_date, link, excerpt = cells
         if re.search(r"\b(implied|inferred|inference)\b", change, re.I):
             raise ValueError("inferred control mappings belong in the implications section")
-        linked = re.fullmatch(r"\[(?:\\.|[^\]])+\]\((https://[^\s]+)\)", link)
-        url = linked.group(1) if linked else ""
-        source = by_url.get(url)
-        if source is None or not is_regulatory_publisher(url):
+        linked = re.fullmatch(r"\[((?:\\.|[^\]])+)\]\((https://[^\s]+)\)", link)
+        label = re.sub(r"\\([\\[\]()|])", r"\1", linked.group(1)) if linked else ""
+        url = linked.group(2) if linked else ""
+        candidates = [source for source in by_url.get(url, []) if source["title"] == label]
+        if not candidates or not is_regulatory_publisher(url):
             raise ValueError("regulatory change requires a supplied primary regulatory source")
-        evidence = _plain(str(source.get("snippet") or ""))
-        if len(excerpt) < 20 or _plain(excerpt) not in evidence:
+        candidates = [
+            source
+            for source in candidates
+            if len(excerpt) >= 20 and _plain(excerpt) in _plain(str(source.get("snippet") or ""))
+        ]
+        if not candidates:
             raise ValueError("regulatory evidence excerpt is absent from the supplied source text")
         if _plain(change).casefold() not in _plain(excerpt).casefold():
             raise ValueError("regulatory change must quote an evidenced clause")
-        attested_date = document_effective_date(source)
-        if effective_date != (attested_date or "Unknown"):
+        dates = {document_effective_date(source) for source in candidates}
+        if not any(effective_date == (date or "Unknown") for date in dates):
             raise ValueError("document effective date must match publisher metadata or be Unknown")
+        attested_date = None if effective_date == "Unknown" else effective_date
         if (
             jurisdiction != "Unknown"
             and _plain(jurisdiction).casefold() not in _plain(excerpt).casefold()

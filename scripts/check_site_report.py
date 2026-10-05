@@ -734,13 +734,14 @@ def validate_evidence_manifest(
             fail(f"evidence manifest source {index} has no title")
         if not isinstance(url, str) or not has_http_scheme(url):
             fail(f"evidence manifest source {index} has no HTTP URL")
+        reporting_url = url
         url = canonical_http_url(url)
         if schema_version >= 2:
             digest_url = source.get("digest_url")
             if not isinstance(digest_url, str) or not has_http_scheme(digest_url):
                 fail(f"evidence manifest source {index} has no SentryDigest item URL")
             expected_digest_url = canonical_http_url(
-                sentrydigest_item_url(feed_home_url, digest_issue_date, url)
+                sentrydigest_item_url(feed_home_url, digest_issue_date, reporting_url)
                 if schema_version == 3
                 else legacy_sentrydigest_item_url(feed_home_url, url)
             )
@@ -759,10 +760,10 @@ def validate_evidence_manifest(
             ):
                 fail(f"evidence manifest source {index} has an invalid CVE")
             cves.add(cve.upper())
-        if url in source_urls:
+        if url in source_urls and manifest.get("report_contract_version", 1) != REPORT_CONTRACT_VERSION:
             fail(f"evidence manifest repeats source URL: {url}")
         source_urls.add(url)
-        source_cves[url] = cves
+        source_cves.setdefault(url, set()).update(cves)
         source_pairs.add((title, url))
 
     body_start = markdown.find("\n## ")

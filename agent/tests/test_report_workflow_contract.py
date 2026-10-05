@@ -792,7 +792,6 @@ def test_site_report_composer_owns_public_provenance_and_body_shape():
                 "source_issue_date": "2026-08-13",
                 "source_issue_url": "https://digest.example/archive/2026-08-13/",
                 "source_articles": [
-                    {"title": "Linkless item", "url": ""},
                     {"title": "Evidence", "url": "https://example.com/evidence"},
                 ],
                 "analysis_period": "August 2026",

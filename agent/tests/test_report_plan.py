@@ -178,3 +178,117 @@ def test_report_metadata_retains_the_selection_plan():
 
     metadata = ReportMetadata(article_count=1, grc_article_count=1, report_plan=PLAN)
     assert metadata.model_dump()["report_plan"] == PLAN
+
+
+def test_composer_preserves_source_ids_for_duplicate_urls():
+    from core.report_plan import render_report_plan
+    from test_report_evidence import stored_report
+
+    root = Path(__file__).resolve().parents[2]
+    composer = runpy.run_path(str(root / "scripts/compose_site_report.py"))
+    shared_url = "https://example.com/shared-advisory"
+    sources = [
+        {
+            **{key: value for key, value in SOURCES[0].items() if key != "digest_url"},
+            "title": "First feed entry",
+            "url": shared_url,
+        },
+        {
+            **{key: value for key, value in SOURCES[0].items() if key != "digest_url"},
+            "title": "Second feed entry",
+            "url": shared_url,
+        },
+    ]
+    plan = {
+        "regulatory_changes": [],
+        "control_implications": [
+            {"control_id": "governance", "priority": "medium", "source_ids": [2]}
+        ],
+        "industry_impacts": [],
+    }
+    data = stored_report(render_report_plan(plan, sources), plan)
+    data["metadata"]["source_articles"] = sources
+
+    normalized_sources = composer["source_articles"](data["metadata"])
+    assert [source["title"] for source in normalized_sources] == [
+        "First feed entry",
+        "Second feed entry",
+    ]
+    report = composer["compose_report"](
+        data, "https://digest.example/feed.xml", "openrouter/example/model"
+    )
+    assert "Governance and accountability" in report
+    assert "[Second feed entry](https://example.com/shared-advisory)" in report
+
+
+def publish_plan(plan, sources):
+    from core.report_plan import render_report_plan
+    from test_report_evidence import stored_report
+
+    root = Path(__file__).resolve().parents[2]
+    composer = runpy.run_path(str(root / "scripts/compose_site_report.py"))
+    checker = runpy.run_path(str(root / "scripts/check_site_report.py"))
+    builder = runpy.run_path(str(root / "scripts/build_site.py"))
+    data = stored_report(render_report_plan(plan, sources), plan)
+    data["metadata"]["source_articles"] = sources
+    report = composer["compose_report"](
+        data, "https://digest.example/feed.xml", "openrouter/example/model"
+    )
+    manifest = composer["evidence_manifest"](data, composer["source_articles"](data["metadata"]))
+    checker["validate_evidence_manifest"](
+        report, builder["report_fields"](report), json.dumps(manifest), require_current_schema=True
+    )
+    return report, manifest
+
+
+@pytest.mark.parametrize("same_title", [False, True])
+def test_indexed_duplicate_sources_survive_full_publication(same_title):
+    sources = [{k: v for k, v in SOURCES[0].items() if k != "digest_url"}]
+    sources.append({**sources[0], "title": sources[0]["title"] if same_title else "Second entry"})
+    sources.append({**sources[0], "title": "Later source", "url": "https://example.com/later"})
+    plan = deepcopy(PLAN)
+    plan["control_implications"][0]["source_ids"] = [2, 3]
+    report, manifest = publish_plan(plan, sources)
+    assert [s["title"] for s in manifest["sources"]] == [s["title"] for s in sources]
+    assert report.count("[View in SentryDigest]") == 3
+    assert "[Later source](https://example.com/later)" in report
+
+
+def test_markdown_url_serialization_preserves_distinct_digest_identities():
+    sources = [
+        {**{k: v for k, v in SOURCES[0].items() if k != "digest_url"}, "url": url}
+        for url in ("https://example.com/a_(b)", "https://example.com/a_%28b%29")
+    ]
+    plan = deepcopy(PLAN)
+    plan["control_implications"][0]["source_ids"] = [1, 2]
+    report, manifest = publish_plan(plan, sources)
+    assert [s["url"] for s in manifest["sources"]] == [s["url"] for s in sources]
+    assert len({s["digest_url"] for s in manifest["sources"]}) == 2
+    assert report.count("[View in SentryDigest]") == 2
+
+
+def test_regulatory_rows_resolve_duplicate_url_evidence_by_exact_selected_source():
+    from test_report_evidence import SOURCE, selection_plan
+
+    sources = [
+        SOURCE,
+        {
+            **SOURCE,
+            "title": "Another retained excerpt",
+            "snippet": "A separate notice discusses public consultation.",
+        },
+    ]
+    report, _ = publish_plan(selection_plan(), sources)
+    assert SOURCE["snippet"] in report
+
+
+@pytest.mark.parametrize("field", ["title", "url"])
+def test_composition_rejects_missing_source_identity_without_shifting_indices(field):
+    from test_report_evidence import stored_report
+
+    root = Path(__file__).resolve().parents[2]
+    composer = runpy.run_path(str(root / "scripts/compose_site_report.py"))
+    data = stored_report("", PLAN)
+    data["metadata"]["source_articles"] = [{**SOURCES[0], field: ""}, SOURCES[0]]
+    with pytest.raises(SystemExit, match="must retain its title and URL"):
+        composer["source_articles"](data["metadata"])

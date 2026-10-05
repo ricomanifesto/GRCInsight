@@ -19,7 +19,7 @@ from core.report_evidence import (  # noqa: E402
     REPORT_CONTRACT_VERSION,
     validate_regulatory_evidence,
 )
-from core.report_plan import validate_rendered_report  # noqa: E402
+from core.report_plan import render_report_plan, validate_rendered_report  # noqa: E402
 from core.reporting_identity import (  # noqa: E402
     ReportingIdentityError,
     normalize_reporting_url,
@@ -414,7 +414,6 @@ def source_articles(metadata: dict) -> list[dict[str, object]]:
     if actual_issue_url != expected_issue_url:
         fail("metadata.source_issue_url does not match the feed-owned issue date")
     sources: list[dict[str, object]] = []
-    seen_urls: set[str] = set()
     for index, raw_source in enumerate(raw_sources):
         if not isinstance(raw_source, dict):
             fail(f"metadata.source_articles[{index}] must be an object")
@@ -422,14 +421,14 @@ def source_articles(metadata: dict) -> list[dict[str, object]]:
             not str(raw_source.get("title") or "").strip()
             or not str(raw_source.get("url") or "").strip()
         ):
-            continue
+            fail(f"metadata.source_articles[{index}] must retain its title and URL")
         title = single_line(
             raw_source.get("title"), f"metadata.source_articles[{index}].title"
         )
         raw_url = single_line(
             raw_source.get("url"), f"metadata.source_articles[{index}].url"
         )
-        url = http_url(raw_url, f"metadata.source_articles[{index}].url")
+        http_url(raw_url, f"metadata.source_articles[{index}].url")
         expected_digest_url = http_url(
             sentrydigest_item_url(metadata.get("source_home_url"), issue_date, raw_url),
             f"metadata.source_articles[{index}].digest_url",
@@ -460,12 +459,9 @@ def source_articles(metadata: dict) -> list[dict[str, object]]:
                 fail(f"metadata.source_articles[{index}] contains an invalid CVE")
             if cve not in cves:
                 cves.append(cve)
-        if url in seen_urls:
-            continue
-        seen_urls.add(url)
         sources.append(
             {
-                "title": title, "url": url, "digest_url": digest_url, "cves": cves,
+                "title": title, "url": raw_url, "digest_url": digest_url, "cves": cves,
                 "snippet": str(raw_source.get("snippet") or ""),
                 "effective_date_evidence": raw_source.get("effective_date_evidence"),
             }
@@ -494,7 +490,9 @@ def add_sentrydigest_handoffs(body: str, sources: list[dict[str, object]]) -> st
     return body[: match.start(2)] + source_section + body[match.end(2) :]
 
 
-def validate_evidence_links(body: str, sources: list[dict[str, object]]) -> None:
+def validate_evidence_links(
+    body: str, sources: list[dict[str, object]], *, include_digest: bool = True
+) -> None:
     allowed_pairs = {(str(source["title"]), str(source["url"])) for source in sources}
     source_links = [
         (
@@ -537,10 +535,12 @@ def validate_evidence_links(body: str, sources: list[dict[str, object]]) -> None
         for source in sources
         if str(source["url"]) in highlighted_source_urls
     }
-    if digest_links != required_digest_urls or not digest_links <= expected_digest_urls:
+    if include_digest and (digest_links != required_digest_urls or not digest_links <= expected_digest_urls):
         fail("Source Highlights does not provide exact SentryDigest item handoffs")
 
-    cves_by_url = {str(source["url"]): set(source["cves"]) for source in sources}
+    cves_by_url: dict[str, set[object]] = {}
+    for source in sources:
+        cves_by_url.setdefault(str(source["url"]), set()).update(source["cves"])
     for line in body.splitlines():
         normalized_line = line.replace("‑", "-").replace("–", "-").replace("—", "-")
         cited_cves = {
@@ -655,15 +655,17 @@ def compose_report(data: dict, expected_feed_url: str, expected_model: str) -> s
 
     body = canonical_body(data.get("content"))
     sources = source_articles(metadata)
-    body = canonicalize_evidence_links(body, sources)
-    body = expand_ellipsized_evidence_references(body, sources)
-    body = expand_ordinal_evidence_references(body, sources)
-    body = add_missing_cve_source_links(body, sources)
-    body = add_sentrydigest_handoffs(body, sources)
-    validate_evidence_links(body, sources)
+    serialized_sources = [
+        {**source, "url": http_url(source["url"], "source URL")} for source in sources
+    ]
+    validate_evidence_links(body, serialized_sources, include_digest=False)
     try:
+        # Validate the stored body before adding handoffs. Source positions and raw
+        # URL identities are immutable; escaping belongs only at the link boundary.
         validate_regulatory_evidence(body, sources)
-        validate_rendered_report(body, metadata.get("report_plan"), sources, include_digest=True)
+        validate_rendered_report(body, metadata.get("report_plan"), sources)
+        body = render_report_plan(metadata.get("report_plan"), sources, include_digest=True)
+        validate_evidence_links(body, serialized_sources)
     except ValueError as error:
         fail(str(error))
     return "\n".join(
