@@ -4,7 +4,7 @@ from config.settings import Settings
 import lambda_main
 from core.runtime import get_model_deadline
 from lambda_main import _lambda_model_deadline
-from models.api import GRCAnalysisConfig, WorkflowResponse
+from models.api import GRCAnalysisConfig, Report, ReportMetadata, WorkflowResponse
 from services import model_service
 from services.model_service import GRCModelService
 from services.openrouter_client import OpenRouterClient, parse_openrouter_model
@@ -117,6 +117,81 @@ def test_direct_lambda_passes_the_caller_aware_deadline(monkeypatch):
 
     assert response["statusCode"] == 200
     assert captured_deadlines == [370.0]
+
+
+def test_async_lambda_writeback_persists_the_report_plan(monkeypatch):
+    import json
+    import runpy
+    from boto3.dynamodb.types import TypeSerializer
+    from core.report_plan import render_report_plan
+    from test_report_evidence import SOURCE, selection_plan, stored_report
+
+    report_plan = selection_plan()
+    source_articles = [SOURCE]
+    stored = stored_report(render_report_plan(report_plan, source_articles), report_plan)
+
+    async def fake_workflow(_feed_url, _config, model_deadline=None):
+        return WorkflowResponse(
+            status="completed",
+            report=Report(
+                title=stored["title"],
+                content=stored["content"],
+                generated_at=stored["generated_at"],
+            ),
+            metadata=ReportMetadata(**stored["metadata"]),
+        )
+
+    class FakeTable:
+        def __init__(self):
+            self.update = None
+
+        def update_item(self, **kwargs):
+            self.update = kwargs
+
+    table = FakeTable()
+
+    class FakeDynamoDB:
+        def Table(self, _name):
+            return table
+
+    monkeypatch.setattr("core.workflow.run_grc_analysis_endpoint", fake_workflow)
+    monkeypatch.setattr(lambda_main.boto3, "resource", lambda _service: FakeDynamoDB())
+
+    response = lambda_main.handler(
+        {"feed_url": "https://example.com/feed.xml", "report_id": "report-1"},
+        object(),
+    )
+
+    assert response["statusCode"] == 200
+    assert table.update is not None
+    persisted_metadata = table.update["ExpressionAttributeValues"][":metadata"]
+    assert persisted_metadata["report_plan"] == report_plan
+    assert persisted_metadata["source_articles"] == source_articles
+    assert persisted_metadata == ReportMetadata(**stored["metadata"]).model_dump()
+    assert table.update["Key"] == {"report_id": "report-1"}
+    assert table.update["ConditionExpression"] == "attribute_exists(report_id)"
+    values = table.update["ExpressionAttributeValues"]
+    serialized = TypeSerializer().serialize(values)
+    assert serialized["M"][":metadata"]["M"]["report_plan"]["M"]
+
+    # The publication path receives exactly the fields saved by async writeback.
+    persisted = {key.removeprefix(":"): value for key, value in values.items()}
+    composer = runpy.run_path(str(REPO_ROOT / "scripts/compose_site_report.py"))
+    checker = runpy.run_path(str(REPO_ROOT / "scripts/check_site_report.py"))
+    builder = runpy.run_path(str(REPO_ROOT / "scripts/build_site.py"))
+    markdown = composer["compose_report"](
+        persisted, "https://digest.example/feed.xml", "openrouter/example/model"
+    )
+    manifest = composer["evidence_manifest"](
+        persisted, composer["source_articles"](persisted_metadata)
+    )
+    checker["validate_evidence_manifest"](
+        markdown,
+        builder["report_fields"](markdown),
+        json.dumps(manifest),
+        require_current_schema=True,
+    )
+    assert manifest["report_plan"] == report_plan
 
 
 def test_api_gateway_lambda_sets_and_resets_the_runtime_deadline(monkeypatch):
