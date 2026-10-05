@@ -48,6 +48,12 @@ def test_regulatory_change_requires_grounded_primary_evidence():
     assert changes[0].source_url == SOURCE["url"]
 
 
+def test_regulatory_change_accepts_effective_date_before_operative_phrase():
+    excerpt = "On 2027-01-01, the United States final reporting rule takes effect."
+    changes = validate(body(row(quote=excerpt)), [{**SOURCE, "snippet": excerpt}])
+    assert changes[0].effective_date == "2027-01-01"
+
+
 def test_no_sourced_change_preserves_inference_and_unknown_dates():
     assert validate(body(), [SOURCE]) == []
     changes = validate(body(row("Unknown", "Unknown")), [SOURCE])
@@ -103,6 +109,23 @@ A claim [Long title](https://example.com/a). Another [Long title](https://exampl
     assert ">Long title</a>" in highlights
     assert "https://example.com/archive/2026-10-05/#one" in highlights
     assert rendered == builder["render_report"](markdown)
+
+
+def test_reader_only_compacts_sources_listed_in_highlights():
+    builder = runpy.run_path(str(ROOT / "scripts/build_site.py"))
+    markdown = """# Report
+## Executive Summary
+A highlighted [Known source](https://example.com/known) and an unlisted [Other source](https://example.com/other).
+## Source Highlights
+- [Known source](https://example.com/known)
+"""
+    rendered = builder["render_report"](markdown)
+    before, highlights = rendered.split("<h2>Source Highlights</h2>")
+    assert 'class="report-citation"' in before
+    assert ">[1]</a>" in before
+    assert ">Other source</a>" in before
+    assert "Source 2:" not in rendered
+    assert 'id="source-1"' in highlights
 
 
 def test_retained_report_projects_implied_mappings_honestly():

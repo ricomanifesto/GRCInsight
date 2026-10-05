@@ -430,7 +430,7 @@
     const registry = new Map();
     const eligible = link => /^https?:\/\//i.test(link.url) && sanitizeMarkdownUrl(link.url) && decodeMarkdownEscapes(link.text) !== 'View in SentryDigest';
     const isHighlight = link => link.position >= sourceStart && link.position < sourceEnd;
-    [...links.filter(isHighlight), ...links.filter(link => !isHighlight(link))].forEach(link => {
+    links.filter(isHighlight).forEach(link => {
       const url = sanitizeMarkdownUrl(link.url);
       if (eligible(link) && !registry.has(url)) registry.set(url, { number: registry.size + 1 });
     });

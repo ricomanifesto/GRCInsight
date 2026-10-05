@@ -106,13 +106,20 @@ def validate_regulatory_evidence(
             raise ValueError("regulatory evidence excerpt is absent from the supplied source text")
         if _plain(change).casefold() not in _plain(excerpt).casefold():
             raise ValueError("regulatory change must quote an evidenced clause")
-        if effective_date != "Unknown" and not re.search(
-            r"(?:takes? effect|effective(?: date)?|enters? into force|applies? from)"
-            r"\s*(?:is|on|from|:)?\s*" + re.escape(effective_date),
-            excerpt,
-            re.I,
-        ):
-            raise ValueError("regulatory effective date must be identified as such in evidence")
+        if effective_date != "Unknown":
+            operative_phrase = (
+                r"(?:takes? effect|effective(?: date)?|enters? into force|applies? from)"
+            )
+            date = re.escape(effective_date)
+            if not re.search(
+                rf"(?:{operative_phrase}\s*(?:is|on|from|:)?\s*{date}"
+                rf"|{date}(?:(?!\d{{4}}-\d{{2}}-\d{{2}})[^.!?\n]){{0,200}}"
+                rf"{operative_phrase}(?!(?:\s*(?:is|on|from|:)\s*)?"
+                rf"\d{{4}}-\d{{2}}-\d{{2}}))",
+                excerpt,
+                re.I,
+            ):
+                raise ValueError("regulatory effective date must be identified as such in evidence")
         for field, value in (("jurisdiction", jurisdiction), ("effective date", effective_date)):
             if value != "Unknown" and _plain(value).casefold() not in _plain(excerpt).casefold():
                 raise ValueError(f"regulatory {field} must be evidenced or Unknown")
