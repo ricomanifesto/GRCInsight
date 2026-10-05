@@ -115,6 +115,35 @@ def test_unrelated_dated_prose_is_allowed_outside_sourced_table():
     assert validate(report, [SOURCE])[0].document_effective_date is None
 
 
+@pytest.mark.parametrize("empty_table", [False, True])
+@pytest.mark.parametrize(
+    "claim",
+    [
+        "The rule takes effect on January 1, 2027.",
+        "The rule takes effect in thirty days.",
+        "The rule takes\neffect on 2027-01-01.",
+        "The rule **takes** *effect* on 2027-01-01.",
+        "The compliance deadline is tomorrow.",
+        "The rule is effective immediately.",
+        "The rule applies from January 2027.",
+        "The rule enters into force next year.",
+    ],
+)
+def test_timing_guard_does_not_depend_on_a_date_format(claim, empty_table):
+    report = body(None if empty_table else row(date="Unknown")) + "\n" + claim
+    with pytest.raises(ValueError, match="only in the sourced table"):
+        validate(report, [SOURCE])
+
+
+def test_timing_guard_preserves_exact_source_titles_and_unrelated_analysis():
+    title = "Final rule takes effect on 2027-01-01"
+    report = full_report(body(row(date="Unknown"))).replace("[Final reporting rule]", f"[{title}]")
+    report += "\nEffective controls reduce risk. The rule was published on January 1, 2027."
+    assert validate(report, [{**SOURCE, "title": title}])
+    with pytest.raises(ValueError, match="only in the sourced table"):
+        validate(report.replace(title, "Invented deadline: tomorrow"), [SOURCE])
+
+
 @pytest.mark.parametrize(
     "change",
     [
@@ -347,3 +376,38 @@ def test_model_rejects_complete_but_unevidenced_legal_change():
     result = asyncio.run(service.generate_grc_report({"source_evidence": [SOURCE]}, {}))
     assert result.resolved_model == ""
     assert "Unable to generate report" in result.content
+
+
+def test_prose_timing_guard_is_shared_by_model_composer_and_publication_checker():
+    import asyncio
+    from services.model_service import GRCModelService
+    from services.openrouter_client import OpenRouterGeneration
+
+    good = full_report(body(row(date="Unknown")))
+    bad = good.replace("Review the cited rule.", "The rule takes effect on January 1, 2027.")
+    service = GRCModelService.__new__(GRCModelService)
+
+    async def invoke(**kwargs):
+        return OpenRouterGeneration(text=bad, resolved_model="example/model")
+
+    service._invoke = invoke
+    result = asyncio.run(service.generate_grc_report({"source_evidence": [SOURCE]}, {}))
+    assert result.resolved_model == ""
+    composer = runpy.run_path(str(ROOT / "scripts/compose_site_report.py"))
+    with pytest.raises(SystemExit, match="only in the sourced table"):
+        composer["compose_report"](
+            stored_report(bad), "https://digest.example/feed.xml", "openrouter/example/model"
+        )
+    data = stored_report(good)
+    markdown = composer["compose_report"](
+        data, "https://digest.example/feed.xml", "openrouter/example/model"
+    )
+    manifest = composer["evidence_manifest"](data, composer["source_articles"](data["metadata"]))
+    checker = runpy.run_path(str(ROOT / "scripts/check_site_report.py"))
+    builder = runpy.run_path(str(ROOT / "scripts/build_site.py"))
+    with pytest.raises(SystemExit, match="only in the sourced table"):
+        checker["validate_evidence_manifest"](
+            markdown.replace("Review the cited rule.", "The compliance deadline is tomorrow."),
+            builder["report_fields"](markdown),
+            json.dumps(manifest),
+        )
