@@ -54,6 +54,22 @@ def test_regulatory_change_accepts_effective_date_before_operative_phrase():
     assert changes[0].effective_date == "2027-01-01"
 
 
+def test_regulatory_change_rejects_publication_date_before_relative_effective_date():
+    excerpt = (
+        "On 2027-01-01, the United States final reporting rule was published; "
+        "it takes effect 30 days later."
+    )
+    with pytest.raises(ValueError, match="effective date"):
+        validate(body(row(quote=excerpt)), [{**SOURCE, "snippet": excerpt}])
+
+
+def test_regulatory_change_matches_prompt_encoded_source_url():
+    source = {**SOURCE, "url": "https://www.sec.gov/rules/final/example_(test)"}
+    encoded_url = "https://www.sec.gov/rules/final/example_%28test%29"
+    changes = validate(body(row(url=encoded_url)), [source])
+    assert changes[0].source_url == encoded_url
+
+
 def test_no_sourced_change_preserves_inference_and_unknown_dates():
     assert validate(body(), [SOURCE]) == []
     changes = validate(body(row("Unknown", "Unknown")), [SOURCE])

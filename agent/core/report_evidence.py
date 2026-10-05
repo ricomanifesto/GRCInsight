@@ -7,7 +7,7 @@ excerpts. It does not establish the legal meaning of a rule or its applicability
 from dataclasses import dataclass
 import re
 from typing import Any
-from urllib.parse import urlsplit
+from urllib.parse import quote, urlsplit
 
 REPORT_CONTRACT_VERSION = 2
 REGULATORY_SECTION = "Sourced Regulatory Changes"
@@ -63,6 +63,11 @@ def _plain(value: str) -> str:
     return re.sub(r"\s+", " ", value).strip()
 
 
+def _markdown_link_destination(value: str) -> str:
+    """Match the URL serialization used when evidence is placed in the prompt."""
+    return quote(value, safe=":/?#[]@!$&*+,;=%")
+
+
 def validate_regulatory_evidence(
     markdown: str, sources: list[dict[str, Any]]
 ) -> list[RegulatoryChange]:
@@ -87,7 +92,14 @@ def validate_regulatory_evidence(
         raise ValueError(
             "sourced regulatory changes require the evidence table or explicit absence"
         )
-    by_url = {str(source["url"]): source for source in sources}
+    by_url = {
+        serialized: source
+        for source in sources
+        for serialized in (
+            str(source["url"]),
+            _markdown_link_destination(str(source["url"])),
+        )
+    }
     changes = []
     for line in lines[2:]:
         cells = [cell.strip() for cell in line.strip("|").split("|")]
@@ -113,9 +125,7 @@ def validate_regulatory_evidence(
             date = re.escape(effective_date)
             if not re.search(
                 rf"(?:{operative_phrase}\s*(?:is|on|from|:)?\s*{date}"
-                rf"|{date}(?:(?!\d{{4}}-\d{{2}}-\d{{2}})[^.!?\n]){{0,200}}"
-                rf"{operative_phrase}(?!(?:\s*(?:is|on|from|:)\s*)?"
-                rf"\d{{4}}-\d{{2}}-\d{{2}}))",
+                rf"|{date}[^;.!?\n]{{0,200}}{operative_phrase}\s*(?:[.;!?]|$))",
                 excerpt,
                 re.I,
             ):
