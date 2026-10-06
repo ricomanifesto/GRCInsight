@@ -262,7 +262,7 @@ def _executive_narrative(plan: dict[str, Any], sources: list[dict[str, Any]], ci
     for index in brief["source_ids"]:
         row = findings.get(index) if brief["decision_frame"] != "regulatory" else None
         focus = row["focus"] if row else regulatory[index]["change"]
-        leads.append(f"{_quoted_text(focus)} {citations([index])}")
+        leads.append(f"“{_quoted_text(focus)}” {citations([index])}")
         step = (
             CONTROL_DECISIONS[row["control_id"]][0]
             if row
@@ -270,9 +270,9 @@ def _executive_narrative(plan: dict[str, Any], sources: list[dict[str, Any]], ci
         )
         if len(brief["source_ids"]) > 1:
             prefix = ("First", "Next", "Then")[len(steps)]
-            steps.append(f"{prefix}, {step} for {_quoted_text(focus)}.")
+            steps.append(f"{prefix}, {step}.")
         else:
-            steps.append(f"For {_quoted_text(focus)}, {step}.")
+            steps.append(f"The next step is to {step}.")
     agenda = " ".join(steps)
     lead_text = (
         leads[0]
@@ -441,6 +441,12 @@ def _validate_plan(
             seen.add(selection)
             if findings:
                 _validate_finding(row, sources)
+                if contract_version >= 5 and (
+                    len(row["focus"]) > 80 or len(row["focus"].split()) > 8
+                ):
+                    raise ReportQualityError(
+                        "finding focus must be a short review label: at most eight words and 80 characters"
+                    )
             if collection == "control_implications":
                 _choice(row["priority"], PRIORITIES)
     if contract_version >= 4:

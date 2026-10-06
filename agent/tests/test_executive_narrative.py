@@ -352,3 +352,35 @@ def test_quality_failure_survives_workflow_and_selects_retention(monkeypatch):
         str(Path(__file__).resolve().parents[2] / "scripts/publication_state.py")
     )["classify_fallback_reason"]
     assert classify(result.metadata.fallback_reason) == "report_quality"
+
+
+@pytest.mark.parametrize(
+    "focus",
+    [
+        "Weak authorization in Microsoft Exchange Server allows an authenticated attacker to elevate privileges",
+        "Superlongproductnameforenterpriseassets and anotherextendedcomponentidentifierforsecurityreview",
+    ],
+)
+def test_sentence_length_review_labels_are_refused_only_for_new_reports(focus):
+    excerpt = f"The source describes {focus} and says applicability still needs confirmation."
+    source = {
+        **SOURCE,
+        "snippet": excerpt,
+        "article_evidence": [
+            {"origin": "summary", "raw_text": excerpt, "text": excerpt, "extraction_version": 1}
+        ],
+    }
+    plan = narrative_plan()
+    plan["control_implications"][0].update(focus=focus, evidence_excerpt=excerpt)
+    with pytest.raises(ValueError, match="short review label"):
+        parse_report_plan(json.dumps(plan), [source])
+    del plan["executive_brief"]
+    legacy = render_report_plan(plan, [source], contract_version=4)
+    validate_rendered_report(legacy, plan, [source], contract_version=4)
+
+
+def test_agenda_steps_do_not_repeat_the_selected_source_label():
+    summary = summary_of(render_report_plan(narrative_plan(), [SOURCE]))
+    assert summary.count("Java support") == 1
+    assert "“Java support”" in summary
+    assert "The next step is to establish affected-asset and configuration scope." in summary
