@@ -430,19 +430,21 @@
     const registry = new Map();
     const eligible = link => /^https?:\/\//i.test(link.url) && sanitizeMarkdownUrl(link.url) && decodeMarkdownEscapes(link.text) !== 'View in SentryDigest';
     const isHighlight = link => link.position >= sourceStart && link.position < sourceEnd;
+    const sourceIdentity = link => JSON.stringify([sanitizeMarkdownUrl(link.url), decodeMarkdownEscapes(link.text)]);
     links.filter(isHighlight).forEach(link => {
-      const url = sanitizeMarkdownUrl(link.url);
-      if (eligible(link) && !registry.has(url)) registry.set(url, { number: registry.size + 1 });
+      const identity = sourceIdentity(link);
+      if (eligible(link) && !registry.has(identity)) registry.set(identity, { number: registry.size + 1 });
     });
     const highlighted = new Set();
     return link => {
       const url = sanitizeMarkdownUrl(link.url);
-      const citation = eligible(link) && registry.get(url);
+      const identity = sourceIdentity(link);
+      const citation = eligible(link) && registry.get(identity);
       if (!citation) return renderMarkdownLink(renderLinkLabel(link.text), link.url);
       const number = citation.number;
       if (isHighlight(link)) {
-        const marker = highlighted.has(url) ? '' : `<span class="source-number" id="source-${number}">[${number}]</span> `;
-        highlighted.add(url);
+        const marker = highlighted.has(identity) ? '' : `<span class="source-number" id="source-${number}">[${number}]</span> `;
+        highlighted.add(identity);
         return marker + renderMarkdownLink(renderLinkLabel(link.text), link.url);
       }
       const title = decodeMarkdownEscapes(link.text);

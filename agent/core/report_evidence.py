@@ -151,7 +151,7 @@ def validate_regulatory_evidence(
         ]
         if not candidates:
             raise ValueError("regulatory evidence excerpt is absent from the supplied source text")
-        if _plain(change).casefold() not in _plain(excerpt).casefold():
+        if not _contains_complete_phrase(excerpt, change):
             raise ValueError("regulatory change must quote an evidenced clause")
         dates = {document_effective_date(source) for source in candidates}
         if not any(effective_date == (date or "Unknown") for date in dates):

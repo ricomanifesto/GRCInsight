@@ -38,7 +38,7 @@ def body(row=None):
 def row(
     jurisdiction="United States", date="2027-01-01", quote=SOURCE["snippet"], url=SOURCE["url"]
 ):
-    return f"| Final reporting rule | {jurisdiction} | {date} | [Final reporting rule]({url}) | {quote} |"
+    return f"| final reporting rule | {jurisdiction} | {date} | [Final reporting rule]({url}) | {quote} |"
 
 
 def test_regulatory_change_requires_grounded_primary_evidence():
@@ -113,6 +113,19 @@ def test_short_jurisdiction_matches_a_complete_evidenced_token():
     source = {**SOURCE, "snippet": excerpt}
     changes = validate(body(row(jurisdiction="US", date="Unknown", quote=excerpt)), [source])
     assert changes[0].jurisdiction == "US"
+
+
+@pytest.mark.parametrize("change", ["US", "Final reporting rule"])
+def test_regulatory_change_must_be_an_exact_complete_evidenced_phrase(change):
+    excerpt = "The United States final reporting rule requires business entities to file reports."
+    source = {**SOURCE, "snippet": excerpt}
+    with pytest.raises(ValueError, match="quote an evidenced clause"):
+        validate(
+            body(row(date="Unknown", quote=excerpt)).replace(
+                "| final reporting rule |", f"| {change} |"
+            ),
+            [source],
+        )
 
 
 @pytest.mark.parametrize(
@@ -197,7 +210,7 @@ def test_regulatory_validation_rejects_unattested_claims(change):
 
 def test_inferred_mapping_cannot_be_a_sourced_change():
     with pytest.raises(ValueError):
-        validate(body(row().replace("Final reporting rule |", "GDPR (implied) |")), [SOURCE])
+        validate(body(row().replace("final reporting rule |", "GDPR (implied) |")), [SOURCE])
     with pytest.raises(ValueError):
         validate("## Sourced Regulatory Changes\nGDPR requires consent.\n", [SOURCE])
 
@@ -243,6 +256,25 @@ A highlighted [Known source](https://example.com/known) and an unlisted [Other s
     assert ">Other source</a>" in before
     assert "Source 2:" not in rendered
     assert 'id="source-1"' in highlights
+
+
+def test_reader_keeps_duplicate_url_citations_tied_to_source_titles():
+    builder = runpy.run_path(str(ROOT / "scripts/build_site.py"))
+    markdown = """# Report
+## Executive Summary
+[First source](https://example.com/shared) and [Second source](https://example.com/shared).
+## Source Highlights
+- [First source](https://example.com/shared)
+- [Second source](https://example.com/shared)
+"""
+    rendered = builder["render_report"](markdown)
+    before, highlights = rendered.split("<h2>Source Highlights</h2>")
+    assert ">[1]</a>" in before
+    assert ">[2]</a>" in before
+    assert 'aria-label="Source 1: First source"' in before
+    assert 'aria-label="Source 2: Second source"' in before
+    assert highlights.count('id="source-1"') == 1
+    assert highlights.count('id="source-2"') == 1
 
 
 def test_retained_report_projects_implied_mappings_honestly():
@@ -323,7 +355,7 @@ Claim [A "quoted" <title>](https://example.com/a?x=1&y=2).
 
 def test_regulatory_change_description_and_date_role_must_match_evidence():
     with pytest.raises(ValueError):
-        validate(body(row().replace("Final reporting rule |", "A new worldwide ban |")), [SOURCE])
+        validate(body(row().replace("final reporting rule |", "A new worldwide ban |")), [SOURCE])
     excerpt = "The United States final reporting rule was published on 2027-01-01 and takes effect on 2027-02-01."
     with pytest.raises(ValueError):
         validate(body(row(quote=excerpt)), [{**SOURCE, "snippet": excerpt}])
@@ -334,7 +366,7 @@ def selection_plan():
         "regulatory_changes": [
             {
                 "source_id": 1,
-                "change": "Final reporting rule",
+                "change": "final reporting rule",
                 "jurisdiction": "United States",
                 "evidence_excerpt": SOURCE["snippet"],
             }
@@ -487,14 +519,20 @@ def test_prose_timing_guard_is_shared_by_model_composer_and_publication_checker(
 
 
 @pytest.mark.parametrize(
-    ("jurisdiction", "excerpt"),
+    ("field", "value", "excerpt"),
     [
-        ("US", "The final reporting rule requires business entities to file reports."),
-        ("US", "The final reporting rule asks entities to contact us."),
-        ("IN", "The final reporting rule is in force for listed entities."),
+        (
+            "jurisdiction",
+            "US",
+            "The final reporting rule requires business entities to file reports.",
+        ),
+        ("jurisdiction", "US", "The final reporting rule asks entities to contact us."),
+        ("jurisdiction", "IN", "The final reporting rule is in force for listed entities."),
+        ("change", "US", "The final reporting rule requires business entities to file reports."),
+        ("change", "Final reporting rule", "The final reporting rule applies to listed entities."),
     ],
 )
-def test_jurisdiction_substrings_and_lowercase_pronouns_fail_publication(jurisdiction, excerpt):
+def test_regulatory_values_require_complete_source_phrases_at_every_boundary(field, value, excerpt):
     from copy import deepcopy
     from core.report_plan import parse_report_plan, render_report_plan
 
@@ -503,8 +541,11 @@ def test_jurisdiction_substrings_and_lowercase_pronouns_fail_publication(jurisdi
     plan["regulatory_changes"][0].update(jurisdiction="Unknown", evidence_excerpt=excerpt)
     valid = render_report_plan(plan, sources)
     invalid_plan = deepcopy(plan)
-    invalid_plan["regulatory_changes"][0]["jurisdiction"] = jurisdiction
-    with pytest.raises(ValueError, match="jurisdiction"):
+    invalid_plan["regulatory_changes"][0][field] = value
+    error = "jurisdiction" if field == "jurisdiction" else "evidenced clause"
+    old_cell = "| Unknown | Unknown |" if field == "jurisdiction" else "| final reporting rule |"
+    new_cell = f"| {value} | Unknown |" if field == "jurisdiction" else f"| {value} |"
+    with pytest.raises(ValueError, match=error):
         parse_report_plan(json.dumps(invalid_plan), sources)
 
     composer = runpy.run_path(str(ROOT / "scripts/compose_site_report.py"))
@@ -517,14 +558,14 @@ def test_jurisdiction_substrings_and_lowercase_pronouns_fail_publication(jurisdi
     )
     manifest = composer["evidence_manifest"](data, composer["source_articles"](data["metadata"]))
     manifest["report_plan"] = invalid_plan
-    bad_markdown = markdown.replace("| Unknown | Unknown |", f"| {jurisdiction} | Unknown |")
-    with pytest.raises(SystemExit, match="jurisdiction"):
+    bad_markdown = markdown.replace(old_cell, new_cell)
+    with pytest.raises(SystemExit, match=error):
         checker["validate_evidence_manifest"](
             bad_markdown, builder["report_fields"](markdown), json.dumps(manifest)
         )
     data["metadata"]["report_plan"] = invalid_plan
-    data["content"] = valid.replace("| Unknown | Unknown |", f"| {jurisdiction} | Unknown |")
-    with pytest.raises(SystemExit, match="jurisdiction"):
+    data["content"] = valid.replace(old_cell, new_cell)
+    with pytest.raises(SystemExit, match=error):
         composer["compose_report"](
             data, "https://digest.example/feed.xml", "openrouter/example/model"
         )
