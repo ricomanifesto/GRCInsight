@@ -1,8 +1,6 @@
 {
   "schema_version": 1,
-  "outcome": "retained",
-  "attempted_at": "2026-10-06T15:17:59Z",
-  "refusal_category": "unclassified_provider_failure",
-  "report_generated_at": "2026-10-06T13:07:05.346437Z",
-  "evidence_manifest_sha256": "2a3e29eeeb44841c79a3f4b907b948271a7195bc058091b50b36f2315c04f8c1"
+  "outcome": "published",
+  "report_generated_at": "2026-10-06T18:08:08.76277Z",
+  "evidence_manifest_sha256": "38dbdfe814a624aa2370da2e43c3934cc32d39ad682ed893d5713f99530be7ff"
 }
