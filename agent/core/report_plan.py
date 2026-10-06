@@ -132,17 +132,11 @@ def _quoted_text(value: str) -> str:
 
 def _title_only_text(value: str) -> str:
     """Ignore cosmetic differences only when rejecting recycled source titles."""
-    text = " ".join(value.split()).casefold()
-    start, end = 0, len(text)
-    while start < end and (
-        text[start].isspace() or unicodedata.category(text[start]).startswith("P")
-    ):
-        start += 1
-    while end > start and (
-        text[end - 1].isspace() or unicodedata.category(text[end - 1]).startswith("P")
-    ):
-        end -= 1
-    return text[start:end]
+    return "".join(
+        character
+        for character in value.casefold()
+        if not character.isspace() and not unicodedata.category(character).startswith("P")
+    )
 
 
 def _validate_finding(row: dict[str, Any], sources: list[dict[str, Any]]) -> None:

@@ -104,9 +104,21 @@ def test_finding_must_be_bound_to_one_source_and_its_exact_evidence(field, value
     ]
     + [
         (
+            "Critical vulnerability: enterprise gateway permits remote code execution",
+            "Critical vulnerability enterprise gateway permits remote code execution.",
+        ),
+        (
+            "Critical vulnerability in enterprise gateway permits remote code execution",
+            "Critical vulnerability in enterprise gateway: permits remote code execution.",
+        ),
+        (
+            "Critical vulnerability in enterprise gateway permits remote code execution",
+            "Critical vulnerability in enterprise gateway—permits remote code execution.",
+        ),
+        (
             "‘Critical vulnerability in enterprise gateway permits remote code execution!’",
             "Critical vulnerability in enterprise gateway permits remote code execution.",
-        )
+        ),
     ],
 )
 def test_title_only_evidence_cannot_be_promoted_to_a_finding(title, excerpt):
