@@ -20,6 +20,7 @@ from models.api import (
 from services.rss_service import RSSService
 from services.model_service import GRCModelService
 from services.regulatory_sources import enrich_regulatory_sources
+from core.article_evidence import capture_article_evidence
 from core.entities import analyze_article_grc_content
 from core.reporting_identity import (
     ReportingIdentityError,
@@ -187,6 +188,9 @@ def _build_source_evidence(
                 "url": article.url,
                 "digest_url": article.digest_url,
                 "snippet": re.sub(r"\s+", " ", text).strip()[:700],
+                "article_evidence": capture_article_evidence(
+                    summary=article.summary, content=article.content
+                ),
                 "cves": _extract_cves(text),
             }
         )
@@ -689,6 +693,7 @@ async def run_grc_analysis_endpoint(
                     "digest_url": source["digest_url"],
                     "cves": source["cves"],
                     "snippet": source["snippet"],
+                    "article_evidence": source["article_evidence"],
                     "effective_date_evidence": source["effective_date_evidence"],
                 }
                 for source in source_evidence

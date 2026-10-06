@@ -11,6 +11,14 @@ SOURCE = {
     "title": "Final reporting rule",
     "url": "https://www.sec.gov/rules/final/example",
     "snippet": "The United States final reporting rule takes effect on 2027-01-01.",
+    "article_evidence": [
+        {
+            "origin": "summary",
+            "text": "The United States final reporting rule takes effect on 2027-01-01.",
+            "extraction_version": 1,
+            "raw_text": "The United States final reporting rule takes effect on 2027-01-01.",
+        }
+    ],
 }
 
 
@@ -36,7 +44,10 @@ def body(row=None):
 
 
 def row(
-    jurisdiction="United States", date="2027-01-01", quote=SOURCE["snippet"], url=SOURCE["url"]
+    jurisdiction="United States",
+    date="2027-01-01",
+    quote=SOURCE["snippet"],
+    url=SOURCE["url"],
 ):
     return f"| final reporting rule | {jurisdiction} | {date} | [Final reporting rule]({url}) | {quote} |"
 
@@ -50,7 +61,13 @@ def test_regulatory_change_requires_grounded_primary_evidence():
 
 def test_regulatory_change_retains_date_first_excerpt_without_inferring_a_date():
     excerpt = "On 2027-01-01, the United States final reporting rule takes effect."
-    source = {**SOURCE, "snippet": excerpt}
+    source = {
+        **SOURCE,
+        "snippet": excerpt,
+        "article_evidence": [
+            {"origin": "summary", "text": excerpt, "extraction_version": 1, "raw_text": excerpt}
+        ],
+    }
     with pytest.raises(ValueError, match="effective date"):
         validate(body(row(quote=excerpt)), [source])
     changes = validate(body(row(date="Unknown", quote=excerpt)), [source])
@@ -64,7 +81,23 @@ def test_regulatory_change_rejects_publication_date_before_relative_effective_da
         "it takes effect 30 days later."
     )
     with pytest.raises(ValueError, match="effective date"):
-        validate(body(row(quote=excerpt)), [{**SOURCE, "snippet": excerpt}])
+        validate(
+            body(row(quote=excerpt)),
+            [
+                {
+                    **SOURCE,
+                    "snippet": excerpt,
+                    "article_evidence": [
+                        {
+                            "origin": "summary",
+                            "text": excerpt,
+                            "extraction_version": 1,
+                            "raw_text": excerpt,
+                        }
+                    ],
+                }
+            ],
+        )
 
 
 @pytest.mark.parametrize(
@@ -77,7 +110,23 @@ def test_regulatory_change_rejects_publication_date_before_relative_effective_da
 )
 def test_date_claim_cannot_be_inferred_from_mixed_or_negated_prose(excerpt):
     with pytest.raises(ValueError, match="effective date"):
-        validate(body(row(quote=excerpt)), [{**SOURCE, "snippet": excerpt}])
+        validate(
+            body(row(quote=excerpt)),
+            [
+                {
+                    **SOURCE,
+                    "snippet": excerpt,
+                    "article_evidence": [
+                        {
+                            "origin": "summary",
+                            "text": excerpt,
+                            "extraction_version": 1,
+                            "raw_text": excerpt,
+                        }
+                    ],
+                }
+            ],
+        )
 
 
 def test_regulatory_change_matches_prompt_encoded_source_url():
@@ -103,14 +152,26 @@ def test_no_sourced_change_preserves_inference_and_unknown_dates():
     ],
 )
 def test_short_jurisdiction_must_be_a_complete_evidenced_token(excerpt):
-    source = {**SOURCE, "snippet": excerpt}
+    source = {
+        **SOURCE,
+        "snippet": excerpt,
+        "article_evidence": [
+            {"origin": "summary", "text": excerpt, "extraction_version": 1, "raw_text": excerpt}
+        ],
+    }
     with pytest.raises(ValueError, match="jurisdiction"):
         validate(body(row(jurisdiction="US", date="Unknown", quote=excerpt)), [source])
 
 
 def test_short_jurisdiction_matches_a_complete_evidenced_token():
     excerpt = "The US final reporting rule applies to covered entities."
-    source = {**SOURCE, "snippet": excerpt}
+    source = {
+        **SOURCE,
+        "snippet": excerpt,
+        "article_evidence": [
+            {"origin": "summary", "text": excerpt, "extraction_version": 1, "raw_text": excerpt}
+        ],
+    }
     changes = validate(body(row(jurisdiction="US", date="Unknown", quote=excerpt)), [source])
     assert changes[0].jurisdiction == "US"
 
@@ -118,7 +179,13 @@ def test_short_jurisdiction_matches_a_complete_evidenced_token():
 @pytest.mark.parametrize("change", ["US", "Final reporting rule"])
 def test_regulatory_change_must_be_an_exact_complete_evidenced_phrase(change):
     excerpt = "The United States final reporting rule requires business entities to file reports."
-    source = {**SOURCE, "snippet": excerpt}
+    source = {
+        **SOURCE,
+        "snippet": excerpt,
+        "article_evidence": [
+            {"origin": "summary", "text": excerpt, "extraction_version": 1, "raw_text": excerpt}
+        ],
+    }
     with pytest.raises(ValueError, match="quote an evidenced clause"):
         validate(
             body(row(date="Unknown", quote=excerpt)).replace(
@@ -324,7 +391,10 @@ def test_archive_rebuild_uses_reader_projection_without_rewriting_evidence(tmp_p
     (snapshot / "evidence-manifest.json").write_bytes(manifest)
     monkeypatch.setitem(builder["expected_outputs"].__globals__, "ARCHIVE_DIR", tmp_path)
     outputs = builder["expected_outputs"](
-        (site / "index.md").read_text(), (site / "index.html").read_text(), state, history
+        (site / "index.md").read_text(),
+        (site / "index.html").read_text(),
+        state,
+        history,
     )
     assert "report-citation" in outputs[snapshot / "index.html"]
     assert "Inferred Control and Governance Implications" in outputs[snapshot / "index.html"]
@@ -355,10 +425,29 @@ Claim [A "quoted" <title>](https://example.com/a?x=1&y=2).
 
 def test_regulatory_change_description_and_date_role_must_match_evidence():
     with pytest.raises(ValueError):
-        validate(body(row().replace("final reporting rule |", "A new worldwide ban |")), [SOURCE])
+        validate(
+            body(row().replace("final reporting rule |", "A new worldwide ban |")),
+            [SOURCE],
+        )
     excerpt = "The United States final reporting rule was published on 2027-01-01 and takes effect on 2027-02-01."
     with pytest.raises(ValueError):
-        validate(body(row(quote=excerpt)), [{**SOURCE, "snippet": excerpt}])
+        validate(
+            body(row(quote=excerpt)),
+            [
+                {
+                    **SOURCE,
+                    "snippet": excerpt,
+                    "article_evidence": [
+                        {
+                            "origin": "summary",
+                            "text": excerpt,
+                            "extraction_version": 1,
+                            "raw_text": excerpt,
+                        }
+                    ],
+                }
+            ],
+        )
 
 
 def selection_plan():
@@ -372,7 +461,14 @@ def selection_plan():
             }
         ],
         "control_implications": [
-            {"control_id": "governance", "priority": "medium", "source_ids": [1]}
+            {
+                "control_id": "governance",
+                "priority": "medium",
+                "source_ids": [1],
+                "focus": "final reporting rule",
+                "evidence_excerpt": SOURCE["snippet"],
+                "evidence_origin": "summary",
+            }
         ],
         "industry_impacts": [],
     }
@@ -428,7 +524,7 @@ def test_regulatory_contract_survives_composition_manifest_and_publication_valid
     )
     sources = composer["source_articles"](data["metadata"])
     manifest = composer["evidence_manifest"](data, sources)
-    assert manifest["report_contract_version"] == 3
+    assert manifest["report_contract_version"] == 4
     assert manifest["sources"][0]["snippet"] == SOURCE["snippet"]
     validate_manifest = checker["validate_evidence_manifest"]
     validate_manifest(
@@ -456,7 +552,8 @@ def test_model_rejects_complete_but_unevidenced_legal_change():
 
     async def invoke(**kwargs):
         return OpenRouterGeneration(
-            text=full_report(body(row(date="2028-01-01"))), resolved_model="example/model"
+            text=full_report(body(row(date="2028-01-01"))),
+            resolved_model="example/model",
         )
 
     service._invoke = invoke
@@ -486,7 +583,9 @@ def test_prose_timing_guard_is_shared_by_model_composer_and_publication_checker(
     composer = runpy.run_path(str(ROOT / "scripts/compose_site_report.py"))
     with pytest.raises(SystemExit, match="retained report plan"):
         composer["compose_report"](
-            stored_report(bad, plan), "https://digest.example/feed.xml", "openrouter/example/model"
+            stored_report(bad, plan),
+            "https://digest.example/feed.xml",
+            "openrouter/example/model",
         )
     data = stored_report(good, plan)
     markdown = composer["compose_report"](
@@ -527,18 +626,39 @@ def test_prose_timing_guard_is_shared_by_model_composer_and_publication_checker(
             "The final reporting rule requires business entities to file reports.",
         ),
         ("jurisdiction", "US", "The final reporting rule asks entities to contact us."),
-        ("jurisdiction", "IN", "The final reporting rule is in force for listed entities."),
-        ("change", "US", "The final reporting rule requires business entities to file reports."),
-        ("change", "Final reporting rule", "The final reporting rule applies to listed entities."),
+        (
+            "jurisdiction",
+            "IN",
+            "The final reporting rule is in force for listed entities.",
+        ),
+        (
+            "change",
+            "US",
+            "The final reporting rule requires business entities to file reports.",
+        ),
+        (
+            "change",
+            "Final reporting rule",
+            "The final reporting rule applies to listed entities.",
+        ),
     ],
 )
 def test_regulatory_values_require_complete_source_phrases_at_every_boundary(field, value, excerpt):
     from copy import deepcopy
     from core.report_plan import parse_report_plan, render_report_plan
 
-    sources = [{**SOURCE, "snippet": excerpt}]
+    sources = [
+        {
+            **SOURCE,
+            "snippet": excerpt,
+            "article_evidence": [
+                {"origin": "summary", "text": excerpt, "extraction_version": 1, "raw_text": excerpt}
+            ],
+        }
+    ]
     plan = selection_plan()
     plan["regulatory_changes"][0].update(jurisdiction="Unknown", evidence_excerpt=excerpt)
+    plan["control_implications"][0]["evidence_excerpt"] = excerpt
     valid = render_report_plan(plan, sources)
     invalid_plan = deepcopy(plan)
     invalid_plan["regulatory_changes"][0][field] = value

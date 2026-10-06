@@ -152,12 +152,28 @@ def test_report_prompt_requires_current_source_entities_and_readable_summary():
                     "url": "https://example.com/apt1",
                     "snippet": "Threat actor APT1 exploited CVE-2026-12345 against banks.",
                     "cves": ["CVE-2026-12345"],
+                    "article_evidence": [
+                        {
+                            "origin": "summary",
+                            "text": "Threat actor APT1 exploited CVE-2026-12345 against banks.",
+                            "extraction_version": 1,
+                            "raw_text": "Threat actor APT1 exploited CVE-2026-12345 against banks.",
+                        }
+                    ],
                 },
                 {
                     "title": "Cloud Security Alliance publishes guidance",
                     "url": "https://example.com/guidance",
                     "snippet": "The industry group called Cloud Security Alliance published guidance.",
                     "cves": [],
+                    "article_evidence": [
+                        {
+                            "origin": "summary",
+                            "text": "The industry group called Cloud Security Alliance published guidance.",
+                            "extraction_version": 1,
+                            "raw_text": "The industry group called Cloud Security Alliance published guidance.",
+                        }
+                    ],
                 },
             ],
         },
@@ -191,6 +207,14 @@ def test_report_prompt_globally_bounds_cve_evidence():
                     "url": f"https://example.com/advisory/{cves[11]}",
                     "snippet": "A vendor published fixes for " + ", ".join(cves) + ".",
                     "cves": cves,
+                    "article_evidence": [
+                        {
+                            "origin": "summary",
+                            "text": "A vendor published fixes for " + ", ".join(cves) + ".",
+                            "extraction_version": 1,
+                            "raw_text": "A vendor published fixes for " + ", ".join(cves) + ".",
+                        }
+                    ],
                 }
             ],
         },
@@ -223,6 +247,14 @@ def test_report_prompt_serializes_exact_source_links_for_markdown():
                     "url": url,
                     "snippet": "Review the affected Windows paths.",
                     "cves": [],
+                    "article_evidence": [
+                        {
+                            "origin": "summary",
+                            "text": "Review the affected Windows paths.",
+                            "extraction_version": 1,
+                            "raw_text": "Review the affected Windows paths.",
+                        }
+                    ],
                 }
             ],
         },
@@ -247,12 +279,33 @@ def test_report_generation_retries_scratch_work_and_returns_complete_report():
     service = GRCModelService.__new__(GRCModelService)
     from core.report_plan import render_report_plan
 
-    plan = {"regulatory_changes": [], "control_implications": [], "industry_impacts": []}
+    plan = {
+        "regulatory_changes": [],
+        "control_implications": [
+            {
+                "control_id": "vulnerability_management",
+                "priority": "medium",
+                "source_ids": [1],
+                "focus": "security advisory",
+                "evidence_excerpt": "A security advisory describes exposure in deployed gateways.",
+                "evidence_origin": "summary",
+            }
+        ],
+        "industry_impacts": [],
+    }
     sources = [
         {
             "title": "Evidence",
             "url": "https://example.com/evidence",
-            "snippet": "Security advisory evidence.",
+            "snippet": "A security advisory describes exposure in deployed gateways.",
+            "article_evidence": [
+                {
+                    "origin": "summary",
+                    "text": "A security advisory describes exposure in deployed gateways.",
+                    "extraction_version": 1,
+                    "raw_text": "A security advisory describes exposure in deployed gateways.",
+                }
+            ],
         }
     ]
     valid_report = render_report_plan(plan, sources)
@@ -768,8 +821,35 @@ def test_report_generation_workflow_validates_generated_site_before_publish():
 def test_site_report_composer_owns_public_provenance_and_body_shape():
     from core.report_plan import render_report_plan
 
-    plan = {"regulatory_changes": [], "control_implications": [], "industry_impacts": []}
-    sources = [{"title": "Evidence", "url": "https://example.com/evidence"}]
+    plan = {
+        "regulatory_changes": [],
+        "control_implications": [
+            {
+                "control_id": "vulnerability_management",
+                "priority": "medium",
+                "source_ids": [1],
+                "focus": "security advisory",
+                "evidence_excerpt": "A security advisory describes exposure in deployed gateways.",
+                "evidence_origin": "summary",
+            }
+        ],
+        "industry_impacts": [],
+    }
+    sources = [
+        {
+            "title": "Evidence",
+            "url": "https://example.com/evidence",
+            "snippet": "A security advisory describes exposure in deployed gateways.",
+            "article_evidence": [
+                {
+                    "origin": "summary",
+                    "text": "A security advisory describes exposure in deployed gateways.",
+                    "extraction_version": 1,
+                    "raw_text": "A security advisory describes exposure in deployed gateways.",
+                }
+            ],
+        }
+    ]
     canonical = render_report_plan(plan, sources)
     namespace = runpy.run_path(str(SITE_REPORT_COMPOSER))
     compose_report = namespace["compose_report"]
@@ -792,7 +872,19 @@ def test_site_report_composer_owns_public_provenance_and_body_shape():
                 "source_issue_date": "2026-08-13",
                 "source_issue_url": "https://digest.example/archive/2026-08-13/",
                 "source_articles": [
-                    {"title": "Evidence", "url": "https://example.com/evidence"},
+                    {
+                        "title": "Evidence",
+                        "url": "https://example.com/evidence",
+                        "snippet": "A security advisory describes exposure in deployed gateways.",
+                        "article_evidence": [
+                            {
+                                "origin": "summary",
+                                "text": "A security advisory describes exposure in deployed gateways.",
+                                "extraction_version": 1,
+                                "raw_text": "A security advisory describes exposure in deployed gateways.",
+                            }
+                        ],
+                    },
                 ],
                 "analysis_period": "August 2026",
                 "article_count": 30,
@@ -1030,7 +1122,21 @@ def test_site_report_composer_rejects_provenance_mismatch():
             "source_home_url": "https://digest.example/",
             "source_issue_date": "2026-08-13",
             "source_issue_url": "https://digest.example/archive/2026-08-13/",
-            "source_articles": [{"title": "Evidence", "url": "https://example.com/evidence"}],
+            "source_articles": [
+                {
+                    "title": "Evidence",
+                    "url": "https://example.com/evidence",
+                    "snippet": "A security advisory describes exposure in deployed gateways.",
+                    "article_evidence": [
+                        {
+                            "origin": "summary",
+                            "text": "A security advisory describes exposure in deployed gateways.",
+                            "extraction_version": 1,
+                            "raw_text": "A security advisory describes exposure in deployed gateways.",
+                        }
+                    ],
+                }
+            ],
             "analysis_period": "August 2026",
             "article_count": 1,
             "grc_article_count": 1,
@@ -1050,8 +1156,35 @@ def test_site_report_composer_rejects_provenance_mismatch():
 def test_site_report_composer_normalizes_numbered_markdown_headings_and_feed_url():
     from core.report_plan import render_report_plan
 
-    plan = {"regulatory_changes": [], "control_implications": [], "industry_impacts": []}
-    sources = [{"title": "Evidence", "url": "https://example.com/evidence"}]
+    plan = {
+        "regulatory_changes": [],
+        "control_implications": [
+            {
+                "control_id": "vulnerability_management",
+                "priority": "medium",
+                "source_ids": [1],
+                "focus": "security advisory",
+                "evidence_excerpt": "A security advisory describes exposure in deployed gateways.",
+                "evidence_origin": "summary",
+            }
+        ],
+        "industry_impacts": [],
+    }
+    sources = [
+        {
+            "title": "Evidence",
+            "url": "https://example.com/evidence",
+            "snippet": "A security advisory describes exposure in deployed gateways.",
+            "article_evidence": [
+                {
+                    "origin": "summary",
+                    "text": "A security advisory describes exposure in deployed gateways.",
+                    "extraction_version": 1,
+                    "raw_text": "A security advisory describes exposure in deployed gateways.",
+                }
+            ],
+        }
+    ]
     canonical = render_report_plan(plan, sources)
     namespace = runpy.run_path(str(SITE_REPORT_COMPOSER))
     compose_report = namespace["compose_report"]
@@ -1072,7 +1205,21 @@ def test_site_report_composer_normalizes_numbered_markdown_headings_and_feed_url
                 "source_home_url": "https://digest.example/",
                 "source_issue_date": "2026-08-13",
                 "source_issue_url": "https://digest.example/archive/2026-08-13/",
-                "source_articles": [{"title": "Evidence", "url": "https://example.com/evidence"}],
+                "source_articles": [
+                    {
+                        "title": "Evidence",
+                        "url": "https://example.com/evidence",
+                        "snippet": "A security advisory describes exposure in deployed gateways.",
+                        "article_evidence": [
+                            {
+                                "origin": "summary",
+                                "text": "A security advisory describes exposure in deployed gateways.",
+                                "extraction_version": 1,
+                                "raw_text": "A security advisory describes exposure in deployed gateways.",
+                            }
+                        ],
+                    }
+                ],
                 "analysis_period": "August 2026",
                 "article_count": 1,
                 "grc_article_count": 1,
@@ -1129,7 +1276,12 @@ def test_site_report_composer_rejects_evidence_urls_absent_from_source_articles(
 def test_site_report_composer_decodes_escaped_evidence_url_delimiters():
     namespace = runpy.run_path(str(SITE_REPORT_COMPOSER))
     evidence_url = "HTTPS://example.com/O'Reilly/a)b"
-    sources = [{"title": "Evidence", "url": namespace["http_url"](evidence_url, "evidence URL")}]
+    sources = [
+        {
+            "title": "Evidence",
+            "url": namespace["http_url"](evidence_url, "evidence URL"),
+        }
+    ]
     body = "[Evidence](HTTPS://example.com/O'Reilly/a\\)b)"
     report = namespace["canonicalize_evidence_links"](body, sources)
     assert "[Evidence](HTTPS://example.com/O%27Reilly/a%29b)" in report
@@ -1145,8 +1297,35 @@ def test_site_report_composer_accepts_serialized_source_link_identity():
     namespace = runpy.run_path(str(SITE_REPORT_COMPOSER))
     title = r"Windows C:\[Temp] and C:\(Logs) advisory"
     source_url = "https://example.com/advisory)1?edition=(daily)"
-    sources = [{"title": title, "url": source_url}]
-    plan = {"regulatory_changes": [], "control_implications": [], "industry_impacts": []}
+    sources = [
+        {
+            "title": title,
+            "url": source_url,
+            "snippet": "A security advisory describes exposure in deployed gateways.",
+            "article_evidence": [
+                {
+                    "origin": "summary",
+                    "text": "A security advisory describes exposure in deployed gateways.",
+                    "extraction_version": 1,
+                    "raw_text": "A security advisory describes exposure in deployed gateways.",
+                }
+            ],
+        }
+    ]
+    plan = {
+        "regulatory_changes": [],
+        "control_implications": [
+            {
+                "control_id": "vulnerability_management",
+                "priority": "medium",
+                "source_ids": [1],
+                "focus": "security advisory",
+                "evidence_excerpt": "A security advisory describes exposure in deployed gateways.",
+                "evidence_origin": "summary",
+            }
+        ],
+        "industry_impacts": [],
+    }
     body = render_report_plan(plan, sources)
     normalized_sources = [{"title": title, "url": namespace["http_url"](source_url, "source URL")}]
     canonical = namespace["canonicalize_evidence_links"](body, normalized_sources)

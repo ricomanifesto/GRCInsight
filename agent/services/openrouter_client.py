@@ -108,6 +108,22 @@ class OpenRouterClient:
                                 "model": model.model_id,
                                 "max_tokens": self.max_tokens,
                                 "stream": False,
+                                **(
+                                    {
+                                        "provider": {
+                                            "allow_fallbacks": False,
+                                            "max_price": {
+                                                "prompt": 0,
+                                                "completion": 0,
+                                                "request": 0,
+                                                "image": 0,
+                                            },
+                                        }
+                                    }
+                                    if model.model_id.endswith(":free")
+                                    or model.model_id == "openrouter/free"
+                                    else {}
+                                ),
                                 "messages": [
                                     {"role": "system", "content": system_prompt},
                                     {"role": "user", "content": user_prompt},

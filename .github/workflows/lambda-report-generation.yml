@@ -439,7 +439,9 @@ jobs:
 
     - name: Validate generated site report
       if: steps.get-report.outputs.publishable == 'true'
-      run: make check-site
+      run: |
+        make check-site
+        python3 scripts/check_site_report.py --require-current-contract
 
     - name: Commit and push report
       id: publish
@@ -481,6 +483,7 @@ jobs:
           fi
           python3 scripts/build_site.py --archive-current
           make check-site
+          python3 scripts/check_site_report.py --require-current-contract
           git add site/index.md site/index.html site/evidence-manifest.json site/publication-state.json site/publication-history.json site/publication-history site/archive
           git commit --amend --no-edit
 

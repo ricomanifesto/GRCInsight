@@ -37,9 +37,10 @@ func TestReportMappingsPreserveFields(t *testing.T) {
 			ResolvedModel:   "google/example-model",
 			SourceArticles: []map[string]any{
 				{
-					"title": "Evidence",
-					"url":   "https://example.com/evidence",
-					"cves":  []string{"CVE-2026-12345"},
+					"title":            "Evidence",
+					"url":              "https://example.com/evidence",
+					"cves":             []string{"CVE-2026-12345"},
+					"article_evidence": []any{map[string]any{"origin": "content", "extraction_version": float64(1), "raw_text": "<p>A retained article passage describes supplier access to customer systems.</p>", "text": "A retained article passage describes supplier access to customer systems."}},
 				},
 			},
 			RegulationsMentioned: []string{"SOX"},
@@ -49,7 +50,7 @@ func TestReportMappingsPreserveFields(t *testing.T) {
 		},
 	}
 
-	if err := json.Unmarshal([]byte(`{"report_plan":{"regulatory_changes":[],"control_implications":[{"control_id":"governance","priority":"medium","source_ids":[1]}],"industry_impacts":[]}}`), &domainReport.Metadata); err != nil {
+	if err := json.Unmarshal([]byte(`{"report_plan":{"regulatory_changes":[],"control_implications":[{"control_id":"governance","priority":"medium","source_ids":[1],"focus":"supplier access","evidence_origin":"content","evidence_excerpt":"A retained article passage describes supplier access to customer systems."}],"industry_impacts":[]}}`), &domainReport.Metadata); err != nil {
 		t.Fatal(err)
 	}
 	dynamoReport := reportToDynamo(domainReport)
@@ -73,6 +74,17 @@ func TestReportMappingsPreserveFields(t *testing.T) {
 	}
 	if !reflect.DeepEqual(storedPlan, domainReport.Metadata.ReportPlan) {
 		t.Fatal("report plan changed during DynamoDB serialization")
+	}
+	sourceAttrs, err := attributevalue.MarshalMap(dynamoReport.Metadata.SourceArticles[0])
+	if err != nil {
+		t.Fatal(err)
+	}
+	var storedSource map[string]any
+	if err := attributevalue.UnmarshalMap(sourceAttrs, &storedSource); err != nil {
+		t.Fatal(err)
+	}
+	if !reflect.DeepEqual(storedSource["article_evidence"], domainReport.Metadata.SourceArticles[0]["article_evidence"]) {
+		t.Fatal("article evidence origin or text changed during DynamoDB serialization")
 	}
 	roundTripped := reportFromDynamo(dynamoReport)
 	encoded, err := json.Marshal(roundTripped.Metadata)

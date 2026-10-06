@@ -31,6 +31,14 @@ SOURCE = {
         "retrieved_at": "2026-10-05T22:00:00Z",
         "document": DOCUMENT,
     },
+    "article_evidence": [
+        {
+            "origin": "summary",
+            "text": "The United States final reporting rule updates reporting requirements.",
+            "extraction_version": 1,
+            "raw_text": "The United States final reporting rule updates reporting requirements.",
+        }
+    ],
 }
 
 
@@ -105,7 +113,9 @@ def install_http(monkeypatch, handler):
     return regulatory_sources.enrich_regulatory_sources
 
 
-def test_ingestion_fetches_fixed_endpoint_and_does_not_trust_supplied_attestation(monkeypatch):
+def test_ingestion_fetches_fixed_endpoint_and_does_not_trust_supplied_attestation(
+    monkeypatch,
+):
     calls = []
 
     def handler(request):
@@ -201,7 +211,10 @@ def test_date_provenance_survives_workflow_prompt_composer_and_manifest(monkeypa
     prompts = []
 
     async def analysis(articles):
-        return {"summary": {"grc_relevant_count": 1, "total_articles": 1}, "analysis": {}}
+        return {
+            "summary": {"grc_relevant_count": 1, "total_articles": 1},
+            "analysis": {},
+        }
 
     plan = {
         "regulatory_changes": [
@@ -213,7 +226,14 @@ def test_date_provenance_survives_workflow_prompt_composer_and_manifest(monkeypa
             }
         ],
         "control_implications": [
-            {"control_id": "governance", "priority": "medium", "source_ids": [1]}
+            {
+                "control_id": "governance",
+                "priority": "medium",
+                "source_ids": [1],
+                "focus": "final reporting rule",
+                "evidence_excerpt": SOURCE["snippet"],
+                "evidence_origin": "content",
+            }
         ],
         "industry_impacts": [],
     }
@@ -229,7 +249,8 @@ def test_date_provenance_survives_workflow_prompt_composer_and_manifest(monkeypa
     monkeypatch.setattr(workflow, "GRCModelService", lambda **kwargs: service)
     response = asyncio.run(
         workflow.run_grc_analysis_endpoint(
-            "https://digest.example/feed.xml", GRCAnalysisConfig(model="openrouter/example/model")
+            "https://digest.example/feed.xml",
+            GRCAnalysisConfig(model="openrouter/example/model"),
         )
     )
     assert response.status == "completed"
@@ -239,6 +260,14 @@ def test_date_provenance_survives_workflow_prompt_composer_and_manifest(monkeypa
     assert API_URL in prompts[0]
     record = response.metadata.source_articles[0]["effective_date_evidence"]
     assert record["document"] == DOCUMENT
+    assert response.metadata.source_articles[0]["article_evidence"] == [
+        {
+            "origin": "content",
+            "text": SOURCE["snippet"],
+            "extraction_version": 1,
+            "raw_text": SOURCE["snippet"],
+        }
+    ]
     assert response.metadata.report_plan == plan
     data = response.model_dump(mode="json")
     stored_body = data.pop("report")
@@ -252,7 +281,7 @@ def test_date_provenance_survives_workflow_prompt_composer_and_manifest(monkeypa
     manifest = composer["evidence_manifest"](data, composer["source_articles"](data["metadata"]))
     assert manifest["sources"][0]["effective_date_evidence"] == record
     assert manifest["report_plan"] == plan
-    assert manifest["report_contract_version"] == 3
+    assert manifest["report_contract_version"] == 4
     checker["validate_evidence_manifest"](
         markdown, builder["report_fields"](markdown), json.dumps(manifest)
     )

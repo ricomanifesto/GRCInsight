@@ -54,6 +54,11 @@ def test_openrouter_client_posts_chat_completion_with_nested_model_id():
         assert payload["model"] == "nvidia/nemotron-3-ultra-550b-a55b:free"
         assert payload["max_tokens"] == 4096
         assert payload["stream"] is False
+        assert payload["provider"] == {
+            "allow_fallbacks": False,
+            "max_price": {"prompt": 0, "completion": 0, "request": 0, "image": 0},
+        }
+        assert "models" not in payload
         assert payload["messages"] == [
             {"role": "system", "content": "system"},
             {"role": "user", "content": "user"},
