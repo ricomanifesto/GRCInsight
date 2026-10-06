@@ -280,6 +280,7 @@ def test_report_generation_retries_scratch_work_and_returns_complete_report():
     from core.report_plan import render_report_plan
 
     plan = {
+        "executive_brief": {"decision_frame": "exposure", "source_ids": [1]},
         "regulatory_changes": [],
         "control_implications": [
             {
@@ -822,6 +823,7 @@ def test_site_report_composer_owns_public_provenance_and_body_shape():
     from core.report_plan import render_report_plan
 
     plan = {
+        "executive_brief": {"decision_frame": "exposure", "source_ids": [1]},
         "regulatory_changes": [],
         "control_implications": [
             {
@@ -1157,6 +1159,7 @@ def test_site_report_composer_normalizes_numbered_markdown_headings_and_feed_url
     from core.report_plan import render_report_plan
 
     plan = {
+        "executive_brief": {"decision_frame": "exposure", "source_ids": [1]},
         "regulatory_changes": [],
         "control_implications": [
             {
@@ -1313,6 +1316,7 @@ def test_site_report_composer_accepts_serialized_source_link_identity():
         }
     ]
     plan = {
+        "executive_brief": {"decision_frame": "exposure", "source_ids": [1]},
         "regulatory_changes": [],
         "control_implications": [
             {

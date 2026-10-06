@@ -217,6 +217,7 @@ def test_date_provenance_survives_workflow_prompt_composer_and_manifest(monkeypa
         }
 
     plan = {
+        "executive_brief": {"decision_frame": "governance", "source_ids": [1]},
         "regulatory_changes": [
             {
                 "source_id": 1,
@@ -281,7 +282,7 @@ def test_date_provenance_survives_workflow_prompt_composer_and_manifest(monkeypa
     manifest = composer["evidence_manifest"](data, composer["source_articles"](data["metadata"]))
     assert manifest["sources"][0]["effective_date_evidence"] == record
     assert manifest["report_plan"] == plan
-    assert manifest["report_contract_version"] == 4
+    assert manifest["report_contract_version"] == 5
     checker["validate_evidence_manifest"](
         markdown, builder["report_fields"](markdown), json.dumps(manifest)
     )

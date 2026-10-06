@@ -11,17 +11,23 @@ from urllib.parse import quote, urlsplit
 
 from core.regulatory_dates import document_effective_date
 
-REPORT_CONTRACT_VERSION = 4
+REPORT_CONTRACT_VERSION = 5
 REGULATORY_SECTION = "Sourced Regulatory Changes"
 INFERENCE_SECTION = "Inferred Control and Governance Implications"
 NO_REGULATORY_CHANGES = "No sourced regulatory changes identified in the supplied evidence."
-REPORT_SECTION_TITLES = (
+LEGACY_REPORT_SECTION_TITLES = (
     "Executive Summary",
     REGULATORY_SECTION,
     INFERENCE_SECTION,
     "Industry Impact Analysis",
     "Risk Assessment",
     "Recommendations for Action",
+    "Source Highlights",
+)
+REPORT_SECTION_TITLES = (
+    "Executive Summary",
+    REGULATORY_SECTION,
+    "Evidence and Decisions",
     "Source Highlights",
 )
 # Bounded primary-publisher policy. A publisher's presence permits an evidenced
@@ -102,12 +108,13 @@ def _table_cells(line: str) -> list[str]:
 
 
 def validate_regulatory_evidence(
-    markdown: str, sources: list[dict[str, Any]]
+    markdown: str, sources: list[dict[str, Any]], *, contract_version: int = 3
 ) -> list[RegulatoryChange]:
     """Reject unsourced legal-change rows; unknown facts remain explicit nulls."""
     for source in sources:
         document_effective_date(source)
-    for title in (REGULATORY_SECTION, INFERENCE_SECTION):
+    inference_section = "Evidence and Decisions" if contract_version >= 5 else INFERENCE_SECTION
+    for title in (REGULATORY_SECTION, inference_section):
         if len(re.findall(rf"(?m)^## {re.escape(title)}\s*$", markdown)) != 1:
             raise ValueError(f"report requires one {title} section")
     if re.search(r"(?m)^## Key Regulatory Developments\s*$", markdown):

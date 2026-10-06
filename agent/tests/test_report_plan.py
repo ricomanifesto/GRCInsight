@@ -3,12 +3,13 @@
 from copy import deepcopy
 import json
 from pathlib import Path
+from typing import Any
 import re
 import runpy
 
 import pytest
 
-SOURCES = [
+SOURCES: list[dict[str, Any]] = [
     {
         "title": "Security advisory",
         "url": "https://example.com/advisory",
@@ -25,7 +26,8 @@ SOURCES = [
         ],
     }
 ]
-PLAN = {
+PLAN: dict[str, Any] = {
+    "executive_brief": {"decision_frame": "exposure", "source_ids": [1]},
     "regulatory_changes": [],
     "control_implications": [
         {
@@ -37,7 +39,7 @@ PLAN = {
             "evidence_origin": "summary",
         }
     ],
-    "industry_impacts": [{"sector_id": "technology", "source_ids": [1]}],
+    "industry_impacts": [],
 }
 
 
@@ -52,7 +54,7 @@ def test_report_plan_renders_only_owned_text_and_retained_source_identity():
     body = render_report_plan(plan, SOURCES)
     assert "## Executive Summary" in body
     assert "## Sourced Regulatory Changes" in body
-    assert "Inferred priority: High" in body
+    assert "Inferred review priority:** High" in body
     assert "[Security advisory](https://example.com/advisory)" in body
     assert "No sourced regulatory changes identified" in body
     validate_rendered_report(body, plan, SOURCES)
@@ -76,10 +78,11 @@ def test_report_plan_rejects_any_added_narrative_independent_of_phrasing(claim):
     body = render_report_plan(PLAN, SOURCES)
     for heading in (
         "Executive Summary",
-        "Inferred Control and Governance Implications",
+        "Evidence and Decisions",
         "Source Highlights",
     ):
         bad = body.replace(f"## {heading}\n", f"## {heading}\n{claim}\n")
+        assert bad != body
         with pytest.raises(ValueError, match="retained report plan"):
             validate_rendered_report(bad, PLAN, SOURCES)
 
@@ -238,6 +241,7 @@ def test_composer_preserves_source_ids_for_duplicate_urls():
         },
     ]
     plan = {
+        "executive_brief": {"decision_frame": "governance", "source_ids": [2]},
         "regulatory_changes": [],
         "control_implications": [
             {
@@ -298,7 +302,7 @@ def test_indexed_duplicate_sources_survive_full_publication(same_title):
     plan["control_implications"] = [
         {**PLAN["control_implications"][0], "source_ids": [i]} for i in [2, 3]
     ]
-    plan["industry_impacts"][0]["source_ids"] = [2, 3]
+    plan["executive_brief"]["source_ids"] = [2, 3]
     report, manifest = publish_plan(plan, sources)
     assert [s["title"] for s in manifest["sources"]] == [s["title"] for s in sources]
     assert report.count("[View in SentryDigest]") == 3

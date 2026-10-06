@@ -15,6 +15,7 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "agent"))
 
 from core.report_evidence import (  # noqa: E402
+    LEGACY_REPORT_SECTION_TITLES,
     REPORT_SECTION_TITLES as SECTION_TITLES,
     REPORT_CONTRACT_VERSION,
     validate_regulatory_evidence,
@@ -133,7 +134,7 @@ def canonical_section_title(line: str) -> str | None:
         if candidate == previous:
             break
     candidate = re.sub(r"[\s:;.!?–—-]+$", "", candidate).strip()
-    canonical_titles = {title.casefold(): title for title in SECTION_TITLES}
+    canonical_titles = {title.casefold(): title for title in (*SECTION_TITLES, *LEGACY_REPORT_SECTION_TITLES)}
     return canonical_titles.get(candidate.casefold()) if has_section_marker else None
 
 
@@ -142,7 +143,10 @@ def canonical_body(content: object) -> str:
     if not text:
         fail("report content is empty")
 
-    known = set(SECTION_TITLES)
+    titles = SECTION_TITLES if any(
+        canonical_section_title(line) == "Evidence and Decisions" for line in text.splitlines()
+    ) else LEGACY_REPORT_SECTION_TITLES
+    known = set(titles)
     lines = text.splitlines()
     body_start = None
     for index, line in enumerate(lines):
@@ -153,7 +157,7 @@ def canonical_body(content: object) -> str:
         fail("report content has no recognized top-level section")
 
     body_lines = []
-    section_counts = {title: 0 for title in SECTION_TITLES}
+    section_counts = {title: 0 for title in titles}
     for line in lines[body_start:]:
         section_title = canonical_section_title(line)
         if section_title in known:
@@ -663,7 +667,7 @@ def compose_report(data: dict, expected_feed_url: str, expected_model: str) -> s
     try:
         # Validate the stored body before adding handoffs. Source positions and raw
         # URL identities are immutable; escaping belongs only at the link boundary.
-        validate_regulatory_evidence(body, sources)
+        validate_regulatory_evidence(body, sources, contract_version=REPORT_CONTRACT_VERSION)
         validate_rendered_report(body, metadata.get("report_plan"), sources)
         body = render_report_plan(metadata.get("report_plan"), sources, include_digest=True)
         validate_evidence_links(body, serialized_sources)

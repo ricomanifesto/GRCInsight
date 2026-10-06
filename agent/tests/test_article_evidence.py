@@ -30,6 +30,7 @@ def source(summary=DETAIL, content="", title=TITLE):
 
 def plan(excerpt=DETAIL, origin="summary"):
     return {
+        "executive_brief": {"decision_frame": "exposure", "source_ids": [1]},
         "regulatory_changes": [],
         "industry_impacts": [],
         "control_implications": [

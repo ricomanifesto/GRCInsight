@@ -15,6 +15,7 @@ sys.path.insert(0, str(REPO_ROOT / "agent"))
 sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
 from core.report_evidence import (  # noqa: E402
+    LEGACY_REPORT_SECTION_TITLES,
     REPORT_SECTION_TITLES,
     REPORT_CONTRACT_VERSION,
     validate_regulatory_evidence,
@@ -60,6 +61,7 @@ PUBLIC_DESCRIPTION = (
     "and concise action-oriented reports."
 )
 REPORT_SECTION_LABELS = {
+    "Evidence and Decisions",
     "Executive Summary",
     "Key Regulatory Developments",
     "Sourced Regulatory Changes",
@@ -763,6 +765,7 @@ def validate_evidence_manifest(
             cves.add(cve.upper())
         if url in source_urls and manifest.get("report_contract_version", 1) not in {
             3,
+            4,
             REPORT_CONTRACT_VERSION,
         }:
             fail(f"evidence manifest repeats source URL: {url}")
@@ -843,6 +846,7 @@ def validate_evidence_manifest(
     if type(contract_version) is not int or contract_version not in {
         1,
         3,
+        4,
         REPORT_CONTRACT_VERSION,
     }:
         fail("unsupported report evidence contract version")
@@ -850,12 +854,13 @@ def validate_evidence_manifest(
         fail("new publication requires the current report contract")
     if "## Sourced Regulatory Changes" in body and contract_version not in {
         3,
+        4,
         REPORT_CONTRACT_VERSION,
     }:
         fail("structured reports require the current report contract and retained plan")
-    if contract_version in {3, REPORT_CONTRACT_VERSION}:
+    if contract_version in {3, 4, REPORT_CONTRACT_VERSION}:
         try:
-            validate_regulatory_evidence(body, raw_sources)
+            validate_regulatory_evidence(body, raw_sources, contract_version=contract_version)
             validate_rendered_report(
                 body,
                 manifest.get("report_plan"),
@@ -873,8 +878,9 @@ def validate_required_report_sections(markdown: str, artifact: str) -> None:
     section_counts = {
         label: sum(1 for line in lines if report_section_label(line) == label)
         for label in (
-            REPORT_SECTION_TITLES if "## Sourced Regulatory Changes" in markdown
-            else REPORT_SECTION_LABELS - {"Sourced Regulatory Changes", "Inferred Control and Governance Implications"}
+            REPORT_SECTION_TITLES if "## Evidence and Decisions" in markdown
+            else LEGACY_REPORT_SECTION_TITLES if "## Sourced Regulatory Changes" in markdown
+            else REPORT_SECTION_LABELS - {"Sourced Regulatory Changes", "Inferred Control and Governance Implications", "Evidence and Decisions"}
         )
     }
     missing = [label for label, count in section_counts.items() if count == 0]
