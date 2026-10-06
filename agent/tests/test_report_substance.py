@@ -89,12 +89,43 @@ def test_finding_must_be_bound_to_one_source_and_its_exact_evidence(field, value
         parse_report_plan(json.dumps(plan), [SOURCE, {**SOURCE, "snippet": "Different evidence."}])
 
 
-def test_title_only_evidence_cannot_be_promoted_to_a_finding():
-    source = {**SOURCE, "snippet": SOURCE["title"]}
+@pytest.mark.parametrize(
+    "title,excerpt",
+    [
+        ("Critical vulnerability in enterprise gateway permits remote code execution", suffix)
+        for suffix in (
+            "Critical vulnerability in enterprise gateway permits remote code execution",
+            "Critical vulnerability in enterprise gateway permits remote code execution.",
+            "“Critical vulnerability in enterprise gateway permits remote code execution.”",
+            "Critical vulnerability in enterprise gateway permits remote code execution…",
+            "critical vulnerability in enterprise gateway permits remote code execution.",
+            "Critical  vulnerability in enterprise gateway permits remote code execution.",
+        )
+    ]
+    + [
+        (
+            "‘Critical vulnerability in enterprise gateway permits remote code execution!’",
+            "Critical vulnerability in enterprise gateway permits remote code execution.",
+        )
+    ],
+)
+def test_title_only_evidence_cannot_be_promoted_to_a_finding(title, excerpt):
+    source = {**SOURCE, "title": title, "snippet": excerpt}
     plan = deepcopy(PLAN)
-    plan["control_implications"][0].update(focus="Spreadsheet", evidence_excerpt=source["snippet"])
-    with pytest.raises(ValueError):
+    plan["control_implications"][0].update(
+        focus="enterprise gateway", evidence_excerpt=source["snippet"]
+    )
+    with pytest.raises(ValueError, match="source title alone"):
         parse_report_plan(json.dumps(plan), [source])
+
+
+def test_excerpt_with_exposure_conditions_beyond_title_is_accepted():
+    title = "Critical vulnerability in enterprise gateway permits remote code execution"
+    excerpt = title + ", but exploitation requires an authenticated administrator session."
+    source = {**SOURCE, "title": title, "snippet": excerpt}
+    plan = deepcopy(PLAN)
+    plan["control_implications"][0].update(focus="enterprise gateway", evidence_excerpt=excerpt)
+    assert parse_report_plan(json.dumps(plan), [source]) == plan
 
 
 def test_distinct_events_in_the_same_control_are_not_collapsed():

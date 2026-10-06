@@ -9,6 +9,7 @@ Version 3 is supported only to verify immutable historical publications.
 from copy import deepcopy
 import json
 from typing import Any
+import unicodedata
 from urllib.parse import quote
 
 from core.regulatory_dates import document_effective_date
@@ -129,6 +130,21 @@ def _quoted_text(value: str) -> str:
     )
 
 
+def _title_only_text(value: str) -> str:
+    """Ignore cosmetic differences only when rejecting recycled source titles."""
+    text = " ".join(value.split()).casefold()
+    start, end = 0, len(text)
+    while start < end and (
+        text[start].isspace() or unicodedata.category(text[start]).startswith("P")
+    ):
+        start += 1
+    while end > start and (
+        text[end - 1].isspace() or unicodedata.category(text[end - 1]).startswith("P")
+    ):
+        end -= 1
+    return text[start:end]
+
+
 def _validate_finding(row: dict[str, Any], sources: list[dict[str, Any]]) -> None:
     if len(row["source_ids"]) != 1:
         raise ValueError("each finding requires exactly one source, not a citation bundle")
@@ -149,7 +165,7 @@ def _validate_finding(row: dict[str, Any], sources: list[dict[str, Any]]) -> Non
         or not _contains_complete_phrase(excerpt, focus)
     ):
         raise ValueError("finding excerpt and focus must match the selected source exactly")
-    if excerpt == str(source.get("title", "")).strip():
+    if _title_only_text(excerpt) == _title_only_text(str(source.get("title", ""))):
         raise ValueError("a source title alone is not finding evidence")
 
 
