@@ -2,12 +2,13 @@
 
 import json
 from pathlib import Path
+from typing import Any
 import runpy
 
 import pytest
 
 ROOT = Path(__file__).resolve().parents[2]
-SOURCE = {
+SOURCE: dict[str, Any] = {
     "title": "Final reporting rule",
     "url": "https://www.sec.gov/rules/final/example",
     "snippet": "The United States final reporting rule takes effect on 2027-01-01.",
@@ -452,6 +453,7 @@ def test_regulatory_change_description_and_date_role_must_match_evidence():
 
 def selection_plan():
     return {
+        "executive_brief": {"decision_frame": "governance", "source_ids": [1]},
         "regulatory_changes": [
             {
                 "source_id": 1,
@@ -524,7 +526,7 @@ def test_regulatory_contract_survives_composition_manifest_and_publication_valid
     )
     sources = composer["source_articles"](data["metadata"])
     manifest = composer["evidence_manifest"](data, sources)
-    assert manifest["report_contract_version"] == 4
+    assert manifest["report_contract_version"] == 5
     assert manifest["sources"][0]["snippet"] == SOURCE["snippet"]
     validate_manifest = checker["validate_evidence_manifest"]
     validate_manifest(

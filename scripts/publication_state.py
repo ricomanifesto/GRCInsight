@@ -22,6 +22,7 @@ CATEGORY_LABELS = {
     "provider_rate_limit": "provider rate limit",
     "provider_deadline": "provider deadline",
     "provider_provenance": "provider provenance",
+    "report_quality": "report quality validation",
     "unclassified_provider_failure": "unclassified provider failure",
 }
 PUBLISHED_FIELDS = {
@@ -93,6 +94,8 @@ def manifest_identity(manifest_bytes: bytes) -> tuple[str, datetime, str]:
 
 def classify_fallback_reason(reason: object) -> str:
     text = reason.lower() if isinstance(reason, str) else ""
+    if text.startswith("report quality validation failed:"):
+        return "report_quality"
     if "http 401" in text or "api_key" in text:
         return "provider_authentication"
     if "http 402" in text or "insufficient_quota" in text:

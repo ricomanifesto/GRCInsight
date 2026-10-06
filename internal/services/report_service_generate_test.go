@@ -108,7 +108,7 @@ func TestGenerateReport_PersistsReportAndArticles(t *testing.T) {
 		}},
 	}}
 
-	if err := json.Unmarshal([]byte(`{"report_plan":{"regulatory_changes":[],"control_implications":[{"control_id":"governance","priority":"medium","source_ids":[1],"focus":"supplier access","evidence_origin":"content","evidence_excerpt":"A retained article passage describes supplier access to customer systems."}],"industry_impacts":[]}}`), pc.resp.Metadata); err != nil {
+	if err := json.Unmarshal([]byte(`{"report_plan":{"executive_brief":{"decision_frame":"governance","source_ids":[1]},"regulatory_changes":[],"control_implications":[{"control_id":"governance","priority":"medium","source_ids":[1],"focus":"supplier access","evidence_origin":"content","evidence_excerpt":"A retained article passage describes supplier access to customer systems."}],"industry_impacts":[]}}`), pc.resp.Metadata); err != nil {
 		t.Fatal(err)
 	}
 	svc := &ReportService{

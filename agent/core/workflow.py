@@ -636,7 +636,11 @@ async def run_grc_analysis_endpoint(
             report_content = report_generation.content
             resolved_model = report_generation.resolved_model
             report_plan = report_generation.report_plan
-            if not resolved_model or resolved_model in {
+            if report_generation.failure_reason:
+                fallback_reason = report_generation.failure_reason
+                report_content = ""
+                resolved_model = ""
+            elif not resolved_model or resolved_model in {
                 "openrouter/free",
                 "openrouter/auto",
             }:

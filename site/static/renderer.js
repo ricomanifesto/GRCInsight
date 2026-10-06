@@ -170,6 +170,7 @@
       'Executive Summary',
       'Key Regulatory Developments',
       'Sourced Regulatory Changes',
+      'Evidence and Decisions',
       'Inferred Control and Governance Implications',
       'Industry Impact Analysis',
       'Risk Assessment',

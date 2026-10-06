@@ -3,6 +3,7 @@
 from copy import deepcopy
 import json
 from pathlib import Path
+from typing import Any
 import runpy
 
 import pytest
@@ -13,7 +14,7 @@ from core.report_plan import (
     validate_rendered_report,
 )
 
-SOURCE = {
+SOURCE: dict[str, Any] = {
     "title": "Spreadsheet code execution advisory",
     "url": "https://example.com/spreadsheet",
     "snippet": "The spreadsheet attack requires Java support. It has only been demonstrated as a proof of concept; no exploitation has been reported.",
@@ -28,7 +29,8 @@ SOURCE = {
         }
     ],
 }
-PLAN = {
+PLAN: dict[str, Any] = {
+    "executive_brief": {"decision_frame": "exposure", "source_ids": [1]},
     "regulatory_changes": [],
     "control_implications": [
         {
@@ -40,7 +42,7 @@ PLAN = {
             "evidence_origin": "summary",
         }
     ],
-    "industry_impacts": [{"sector_id": "technology", "source_ids": [1]}],
+    "industry_impacts": [],
 }
 
 
@@ -49,12 +51,13 @@ def test_reader_sees_event_limit_and_decision_without_opening_a_citation():
     body = render_report_plan(plan, [SOURCE])
     summary = body.split("## Sourced Regulatory Changes")[0]
     assert "Java support" in summary
-    assert "proof of concept" in summary
+    assert "proof of concept" not in summary
     assert body.count(str(SOURCE["snippet"])) == 1
     assert "proof of concept" in body and "no exploitation" in body
     assert "Evidence to request" in body
     assert "Owner" in body
-    assert "If applicable" in body
+    assert "confirm local applicability" in summary
+    assert "Decision trigger:" in body
     assert "This report separates" not in summary
     assert "No sourced regulatory changes" in body
     validate_rendered_report(body, plan, [SOURCE])
@@ -255,7 +258,7 @@ def test_finding_reaches_composition_manifest_and_compact_html():
         data, "https://digest.example/feed.xml", "openrouter/example/model"
     )
     manifest = composer["evidence_manifest"](data, composer["source_articles"](data["metadata"]))
-    assert manifest["report_contract_version"] == 4
+    assert manifest["report_contract_version"] == 5
     checker["validate_evidence_manifest"](
         markdown,
         builder["report_fields"](markdown),
@@ -267,7 +270,7 @@ def test_finding_reaches_composition_manifest_and_compact_html():
     assert "Java support" in html and "proof of concept" in html
     assert 'class="report-citation"' in html
     assert "View in SentryDigest" in html
-    for version in (1, 3, 5, True):
+    for version in (1, 3, 4, 6, True):
         with pytest.raises(SystemExit):
             checker["validate_evidence_manifest"](
                 markdown,
@@ -402,6 +405,7 @@ def test_primary_regulatory_only_report_remains_publishable():
 
     plan = selection_plan()
     plan["control_implications"] = []
+    plan["executive_brief"]["decision_frame"] = "regulatory"
     body = render_report_plan(plan, [PRIMARY_SOURCE])
     assert "final reporting rule" in body.split("## Sourced Regulatory Changes")[0]
     assert "| Unknown |" in body
