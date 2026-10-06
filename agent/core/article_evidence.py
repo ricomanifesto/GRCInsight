@@ -110,7 +110,7 @@ class _StaticText(HTMLParser):
             or "hidden" in attributes
             or str(attributes.get("aria-hidden", "")).casefold() == "true"
         )
-        if tag in _BLOCKS or tag in {"br", "hr"}:
+        if not hidden and (tag in _BLOCKS or tag in {"br", "hr"}):
             self.parts.append(" ")
         if tag not in _VOID:
             self.stack.append((tag, hidden))
@@ -119,8 +119,8 @@ class _StaticText(HTMLParser):
         if not self.stack or self.stack[-1][0] != tag:
             self.invalid = True
             return
-        self.stack.pop()
-        if tag in _BLOCKS:
+        _, hidden = self.stack.pop()
+        if not hidden and tag in _BLOCKS:
             self.parts.append(" ")
 
     def handle_startendtag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:

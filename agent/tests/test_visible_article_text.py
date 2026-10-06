@@ -115,6 +115,66 @@ def test_hidden_subtree_never_contributes_to_a_valid_quote():
     assert parse_report_plan(json.dumps(plan()), [item]) == plan()
 
 
+@pytest.mark.parametrize(
+    "hidden",
+    [
+        "<span hidden><p>ignored</p></span>",
+        "<div hidden>ignored</div>",
+        '<span aria-hidden="true"><p>ignored</p><br></span>',
+        "<span hidden><div><p>ignored</p><br><hr></div></span>",
+        "<template><div>ignored<br></div></template>",
+        "<nav><p>ignored</p></nav>",
+        "<br hidden>",
+        "<hr hidden>",
+    ],
+)
+def test_suppressed_elements_cannot_split_visible_words(hidden):
+    from core.report_plan import render_report_plan
+
+    expected = "The gateway is unaffected by the reported flaw; no action is required."
+    item = source(summary=expected.replace("unaffected", "un" + hidden + "affected"))
+    assert article_segments(item) == {"summary": expected}
+    selection = parse_report_plan(json.dumps(plan(expected)), [item])
+    body = render_report_plan(selection, [item])
+    assert expected in body
+    assert "un affected" not in body
+
+
+@pytest.mark.parametrize("markup", ["<br>", "<hr>", "</p><p>"])
+def test_visible_elements_still_separate_text(markup):
+    raw = "<p>The gateway requires" + markup + "an administrator session to exploit.</p>"
+    expected = "The gateway requires an administrator session to exploit."
+    assert article_segments(source(summary=raw)) == {"summary": expected}
+
+
+def test_suppressed_separator_semantics_survive_publication_validation():
+    from core.report_plan import render_report_plan
+    from test_report_evidence import stored_report
+    from test_report_substance import publication_tools
+
+    expected = "The gateway is unaffected by the reported flaw; no action is required."
+    raw = expected.replace("unaffected", "un<span hidden><p>ignored</p></span>affected")
+    item = source(summary=raw)
+    selection = plan(expected)
+    report = stored_report(render_report_plan(selection, [item]), selection)
+    report["metadata"]["source_articles"] = [item]
+    composer, checker, builder = publication_tools()
+    markdown = composer["compose_report"](
+        report, "https://digest.example/feed.xml", "openrouter/example/model"
+    )
+    manifest = composer["evidence_manifest"](
+        report, composer["source_articles"](report["metadata"])
+    )
+    checker["validate_evidence_manifest"](
+        markdown,
+        builder["report_fields"](markdown),
+        json.dumps(manifest),
+        require_current_contract=True,
+    )
+    assert expected in builder["render_report"](markdown)
+    assert manifest["sources"][0]["article_evidence"][0]["raw_text"] == raw
+
+
 def test_input_byte_bound_fails_closed_and_output_truncation_preserves_words():
     assert source(summary="x" * 4097)["article_evidence"] == []
     assert source(summary="é" * 2049)["article_evidence"] == []
