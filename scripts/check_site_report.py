@@ -664,6 +664,7 @@ def validate_evidence_manifest(
     manifest_text: str,
     *,
     require_current_schema: bool = False,
+    require_current_contract: bool = False,
 ) -> dict:
     try:
         manifest = json.loads(manifest_text)
@@ -760,7 +761,10 @@ def validate_evidence_manifest(
             ):
                 fail(f"evidence manifest source {index} has an invalid CVE")
             cves.add(cve.upper())
-        if url in source_urls and manifest.get("report_contract_version", 1) != REPORT_CONTRACT_VERSION:
+        if url in source_urls and manifest.get("report_contract_version", 1) not in {
+            3,
+            REPORT_CONTRACT_VERSION,
+        }:
             fail(f"evidence manifest repeats source URL: {url}")
         source_urls.add(url)
         source_cves.setdefault(url, set()).update(cves)
@@ -836,14 +840,29 @@ def validate_evidence_manifest(
         if not digest_urls or digest_urls != expected_digest_urls:
             fail("Source Highlights must link each highlighted SentryDigest item")
     contract_version = manifest.get("report_contract_version", 1)
-    if contract_version not in {1, REPORT_CONTRACT_VERSION}:
+    if type(contract_version) is not int or contract_version not in {
+        1,
+        3,
+        REPORT_CONTRACT_VERSION,
+    }:
         fail("unsupported report evidence contract version")
-    if "## Sourced Regulatory Changes" in body and contract_version != REPORT_CONTRACT_VERSION:
+    if require_current_contract and contract_version != REPORT_CONTRACT_VERSION:
+        fail("new publication requires the current report contract")
+    if "## Sourced Regulatory Changes" in body and contract_version not in {
+        3,
+        REPORT_CONTRACT_VERSION,
+    }:
         fail("structured reports require the current report contract and retained plan")
-    if contract_version == REPORT_CONTRACT_VERSION:
+    if contract_version in {3, REPORT_CONTRACT_VERSION}:
         try:
             validate_regulatory_evidence(body, raw_sources)
-            validate_rendered_report(body, manifest.get("report_plan"), raw_sources, include_digest=True)
+            validate_rendered_report(
+                body,
+                manifest.get("report_plan"),
+                raw_sources,
+                include_digest=True,
+                contract_version=contract_version,
+            )
         except ValueError as error:
             fail(str(error))
     return manifest
@@ -1042,6 +1061,15 @@ def validate_publication_surface(
 
 
 def main() -> None:
+    import argparse
+
+    parser = argparse.ArgumentParser(description="Validate published report evidence")
+    parser.add_argument(
+        "--require-current-contract",
+        action="store_true",
+        help="Reject legacy contracts when publishing a new report",
+    )
+    args = parser.parse_args()
     html = read_text(INDEX_HTML)
     markdown = read_text(INDEX_MD)
     sitemap_xml = read_text(SITEMAP_XML)
@@ -1121,6 +1149,7 @@ def main() -> None:
         metadata,
         evidence_manifest_text,
         require_current_schema=True,
+        require_current_contract=args.require_current_contract,
     )
     validate_publication_surface(
         html,

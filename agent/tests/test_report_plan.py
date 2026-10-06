@@ -12,7 +12,7 @@ SOURCES = [
     {
         "title": "Security advisory",
         "url": "https://example.com/advisory",
-        "snippet": "A vendor published a security advisory.",
+        "snippet": "A vendor published a security advisory for deployed gateways.",
         "digest_url": "https://digest.example/archive/2026-10-05/#advisory",
         "cves": [],
     }
@@ -20,14 +20,24 @@ SOURCES = [
 PLAN = {
     "regulatory_changes": [],
     "control_implications": [
-        {"control_id": "vulnerability_management", "priority": "high", "source_ids": [1]}
+        {
+            "control_id": "vulnerability_management",
+            "priority": "high",
+            "source_ids": [1],
+            "focus": "security advisory",
+            "evidence_excerpt": SOURCES[0]["snippet"],
+        }
     ],
     "industry_impacts": [{"sector_id": "technology", "source_ids": [1]}],
 }
 
 
 def test_report_plan_renders_only_owned_text_and_retained_source_identity():
-    from core.report_plan import parse_report_plan, render_report_plan, validate_rendered_report
+    from core.report_plan import (
+        parse_report_plan,
+        render_report_plan,
+        validate_rendered_report,
+    )
 
     plan = parse_report_plan(json.dumps(PLAN), SOURCES)
     body = render_report_plan(plan, SOURCES)
@@ -76,7 +86,11 @@ def test_report_plan_rejects_any_added_narrative_independent_of_phrasing(claim):
         },
         {
             "control_implications": [
-                {"control_id": "governance", "priority": "high tomorrow", "source_ids": [1]}
+                {
+                    "control_id": "governance",
+                    "priority": "high tomorrow",
+                    "source_ids": [1],
+                }
             ]
         },
         {
@@ -102,7 +116,11 @@ def test_report_plan_rejects_any_added_narrative_independent_of_phrasing(claim):
         },
         {
             "industry_impacts": [
-                {"sector_id": "technology", "source_ids": [1], "prose": "The deadline is tomorrow"}
+                {
+                    "sector_id": "technology",
+                    "source_ids": [1],
+                    "prose": "The deadline is tomorrow",
+                }
             ]
         },
     ],
@@ -147,6 +165,9 @@ def test_report_plan_escapes_source_title_pipes_in_regulatory_table(title):
         ],
     }
 
+    plan["control_implications"][0].update(
+        focus="final reporting rule", evidence_excerpt=source["snippet"]
+    )
     body = render_report_plan(plan, [source])
 
     assert r"\| Final Rule]" in body
@@ -202,7 +223,13 @@ def test_composer_preserves_source_ids_for_duplicate_urls():
     plan = {
         "regulatory_changes": [],
         "control_implications": [
-            {"control_id": "governance", "priority": "medium", "source_ids": [2]}
+            {
+                "control_id": "governance",
+                "priority": "medium",
+                "source_ids": [2],
+                "focus": "security advisory",
+                "evidence_excerpt": SOURCES[0]["snippet"],
+            }
         ],
         "industry_impacts": [],
     }
@@ -236,7 +263,10 @@ def publish_plan(plan, sources):
     )
     manifest = composer["evidence_manifest"](data, composer["source_articles"](data["metadata"]))
     checker["validate_evidence_manifest"](
-        report, builder["report_fields"](report), json.dumps(manifest), require_current_schema=True
+        report,
+        builder["report_fields"](report),
+        json.dumps(manifest),
+        require_current_schema=True,
     )
     return report, manifest
 
@@ -247,7 +277,10 @@ def test_indexed_duplicate_sources_survive_full_publication(same_title):
     sources.append({**sources[0], "title": sources[0]["title"] if same_title else "Second entry"})
     sources.append({**sources[0], "title": "Later source", "url": "https://example.com/later"})
     plan = deepcopy(PLAN)
-    plan["control_implications"][0]["source_ids"] = [2, 3]
+    plan["control_implications"] = [
+        {**PLAN["control_implications"][0], "source_ids": [i]} for i in [2, 3]
+    ]
+    plan["industry_impacts"][0]["source_ids"] = [2, 3]
     report, manifest = publish_plan(plan, sources)
     assert [s["title"] for s in manifest["sources"]] == [s["title"] for s in sources]
     assert report.count("[View in SentryDigest]") == 3
@@ -260,7 +293,9 @@ def test_markdown_url_serialization_preserves_distinct_digest_identities():
         for url in ("https://example.com/a_(b)", "https://example.com/a_%28b%29")
     ]
     plan = deepcopy(PLAN)
-    plan["control_implications"][0]["source_ids"] = [1, 2]
+    plan["control_implications"] = [
+        {**PLAN["control_implications"][0], "source_ids": [i]} for i in [1, 2]
+    ]
     report, manifest = publish_plan(plan, sources)
     assert [s["url"] for s in manifest["sources"]] == [s["url"] for s in sources]
     assert len({s["digest_url"] for s in manifest["sources"]}) == 2

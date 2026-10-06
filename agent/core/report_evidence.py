@@ -11,7 +11,7 @@ from urllib.parse import quote, urlsplit
 
 from core.regulatory_dates import document_effective_date
 
-REPORT_CONTRACT_VERSION = 3
+REPORT_CONTRACT_VERSION = 4
 REGULATORY_SECTION = "Sourced Regulatory Changes"
 INFERENCE_SECTION = "Inferred Control and Governance Implications"
 NO_REGULATORY_CHANGES = "No sourced regulatory changes identified in the supplied evidence."

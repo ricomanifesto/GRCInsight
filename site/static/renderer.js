@@ -312,9 +312,13 @@
     html = assembled.join('\n');
     // Restore links and fenced code blocks last so their content never affects
     // block parsing or receives a second escaping pass.
+    // Bounded numeric references emitted for literal quoted evidence. Restore
+    // after Markdown parsing, before links/code: do not alter their identities.
+    html = html.replace(/&amp;#(33|35|37|38|40|41|42|60|62|64|91|92|93|95|96|124);/g, '&#$1;');
     html = extractedLinks.restore(html, renderLink);
     html = renderEvidenceAffordances(html);
-    return html.replace(/%%CODEBLOCK_(\d+)%%/g, (_, i) => `<pre><code>${escapeHtml(codeBlocks[+i])}</code></pre>`);
+    html = html.replace(/%%CODEBLOCK_(\d+)%%/g, (_, i) => `<pre><code>${escapeHtml(codeBlocks[+i])}</code></pre>`);
+    return html;
   }
 
   const metadataLabels = {
