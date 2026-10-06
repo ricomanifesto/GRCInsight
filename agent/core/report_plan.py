@@ -339,9 +339,11 @@ def _validate_finding(row: dict[str, Any], sources: list[dict[str, Any]]) -> Non
     if not isinstance(origin, str) or origin not in segments:
         raise ValueError("finding requires a retained article evidence origin")
     if excerpt not in segments[origin] or not _contains_complete_phrase(segments[origin], excerpt):
-        raise ValueError("finding excerpt must match its selected article evidence segment exactly")
+        raise ValueError(
+            "evidence_excerpt: finding excerpt must match its selected article evidence segment exactly"
+        )
     if focus not in excerpt or not _contains_complete_phrase(excerpt, focus):
-        raise ValueError("finding focus must match the selected excerpt exactly")
+        raise ValueError("focus: finding focus must match the selected excerpt exactly")
     if not has_non_headline_text(excerpt, str(source.get("title", ""))):
         raise ValueError(
             "finding requires non-headline article evidence; a source title alone is insufficient"
@@ -434,7 +436,7 @@ def _validate_plan(
         findings = collection == "control_implications" and contract_version >= 4
         if findings:
             keys = keys | {"focus", "evidence_excerpt", "evidence_origin"}
-        for row in _list(plan[collection], 6 if findings else len(catalog)):
+        for index, row in enumerate(_list(plan[collection], 6 if findings else len(catalog))):
             row = _object(row, keys)
             _choice(row[identity], catalog)
             _source_ids(row["source_ids"], sources)
@@ -443,7 +445,17 @@ def _validate_plan(
                 raise ValueError("report plan repeats a catalog selection or finding source")
             seen.add(selection)
             if findings:
-                _validate_finding(row, sources)
+                try:
+                    _validate_finding(row, sources)
+                except ValueError as error:
+                    # Keep diagnostic identity application-owned. Never echo an
+                    # untrusted origin, candidate passage or source text in logs.
+                    origin = row["evidence_origin"]
+                    safe_origin = origin if origin in ("summary", "content") else "unsupported"
+                    raise ReportQualityError(
+                        f"{collection}[{index}] source_id={row['source_ids'][0]} "
+                        f"evidence_origin={safe_origin}: {error}"
+                    ) from error
                 if contract_version >= 5 and (
                     len(row["focus"]) > 80 or len(row["focus"].split()) > 8
                 ):

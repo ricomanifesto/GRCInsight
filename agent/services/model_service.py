@@ -219,6 +219,14 @@ class GRCModelService:
                 if attempt:
                     prompt += "\nThe prior response was not a valid report plan. Return only the complete JSON selection object, with no prose, fences or extra fields."
                     prompt += f"\nValidation diagnostic: {last_validation_error}"
+                    prompt += (
+                        "\nFor a grounding diagnostic, inspect the identified finding and source number. "
+                        "Copy the evidence_excerpt verbatim from that source's eligible evidence_origin "
+                        "segment, then copy a short complete focus phrase from that excerpt. "
+                        "Do not reconstruct, paraphrase, splice or change punctuation. "
+                        "If that source cannot support the finding, omit it and update the executive "
+                        "agenda to reference only supported findings."
+                    )
                 generation = await self._invoke(
                     system_prompt=self._get_report_system_prompt(),
                     user_prompt=prompt,
