@@ -439,3 +439,55 @@ def test_multiple_regulatory_leads_share_one_applicability_step_and_keep_subject
     assert "final reporting rule" in summary and "final disclosure rule" in summary
     assert primary["url"] in summary and second["url"] in summary
     validate_rendered_report(body, plan, [primary, second])
+
+
+def test_overlapping_source_excerpts_validate_as_independent_evidence_blocks():
+    plan = narrative_plan()
+    longer = SOURCE["snippet"] + " Additional source context describes the review scope."
+    second = {
+        **SOURCE,
+        "title": "Syndicated follow-up",
+        "url": "https://example.com/follow-up",
+        "snippet": longer,
+        "article_evidence": [
+            {"origin": "summary", "raw_text": longer, "text": longer, "extraction_version": 1}
+        ],
+    }
+    plan["control_implications"].append(
+        {**plan["control_implications"][0], "source_ids": [2], "evidence_excerpt": longer}
+    )
+    plan["executive_brief"]["source_ids"] = [1, 2]
+    body = render_report_plan(plan, [SOURCE, second])
+    assert body.count("**Source evidence:**") == 2
+    assert SOURCE["url"] in body and second["url"] in body
+    validate_rendered_report(body, plan, [SOURCE, second])
+
+
+def test_control_excerpt_inside_longer_regulatory_quote_is_not_duplicate_analysis():
+    from test_report_evidence import SOURCE as primary, selection_plan
+
+    longer = primary["snippet"] + " " + SOURCE["snippet"]
+    primary = {
+        **primary,
+        "snippet": longer,
+        "article_evidence": [
+            {"origin": "summary", "raw_text": longer, "text": longer, "extraction_version": 1}
+        ],
+    }
+    plan = narrative_plan()
+    regulation = selection_plan()["regulatory_changes"][0]
+    plan["regulatory_changes"] = [{**regulation, "source_id": 2, "evidence_excerpt": longer}]
+    body = render_report_plan(plan, [SOURCE, primary])
+    assert body.count("**Source evidence:**") == 1
+    validate_rendered_report(body, plan, [SOURCE, primary])
+
+
+def test_duplicate_explicit_evidence_block_still_fails_editorial_quality():
+    from core.report_plan import validate_editorial_quality
+
+    plan = narrative_plan()
+    body = render_report_plan(plan, [SOURCE])
+    block = next(line for line in body.splitlines() if line.startswith("**Source evidence:**"))
+    bad = body.replace("## Source Highlights", block + "\n\n## Source Highlights")
+    with pytest.raises(ValueError, match="source excerpts"):
+        validate_editorial_quality(bad, plan, [SOURCE])

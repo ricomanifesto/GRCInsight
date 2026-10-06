@@ -742,23 +742,17 @@ def validate_editorial_quality(body: str, plan: dict, sources: list[dict]) -> No
             raise ReportQualityError(
                 "editorial: executive decision must retain its supporting source citation"
             )
-    # Citation labels are immutable source identity, not repeated analysis.
-    # Keep them out of the excerpt-economy check while exact identity remains
-    # enforced independently by the source and whole-report validators.
-    prose, summary_prose = body, summary
+    # Match complete evidence blocks. A valid quotation may contain another
+    # source's entire excerpt; substring counts cannot distinguish those cases.
+    evidence_blocks = re.findall(r"(?m)^\*\*Source evidence:\*\* “([^\n]*)” (?=\[)", body)
+    summary_prose = summary
     for source in sources:
-        prose = prose.replace(_link(source), "")
         summary_prose = summary_prose.replace(_link(source), "")
+    regulatory_excerpts = {row["evidence_excerpt"] for row in plan["regulatory_changes"]}
     for row in plan["control_implications"]:
-        excerpt = (
-            row["evidence_excerpt"]
-            if any(
-                item["evidence_excerpt"] == row["evidence_excerpt"]
-                for item in plan["regulatory_changes"]
-            )
-            else _quoted_text(row["evidence_excerpt"])
-        )
-        if excerpt in summary_prose or prose.count(excerpt) != 1:
+        excerpt = _quoted_text(row["evidence_excerpt"])
+        expected_blocks = 0 if row["evidence_excerpt"] in regulatory_excerpts else 1
+        if excerpt in summary_prose or evidence_blocks.count(excerpt) != expected_blocks:
             raise ReportQualityError(
                 "editorial: source excerpts belong once in supporting findings, not repeated across sections"
             )
