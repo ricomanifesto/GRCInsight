@@ -9,9 +9,9 @@ Version 3 is supported only to verify immutable historical publications.
 from copy import deepcopy
 import json
 from typing import Any
-import unicodedata
 from urllib.parse import quote
 
+from core.article_evidence import article_segments, has_non_headline_text
 from core.regulatory_dates import document_effective_date
 from core.report_evidence import (
     NO_REGULATORY_CHANGES,
@@ -130,15 +130,6 @@ def _quoted_text(value: str) -> str:
     )
 
 
-def _title_only_text(value: str) -> str:
-    """Ignore cosmetic differences only when rejecting recycled source titles."""
-    return "".join(
-        character
-        for character in value.casefold()
-        if not character.isspace() and not unicodedata.category(character).startswith("P")
-    )
-
-
 def _validate_finding(row: dict[str, Any], sources: list[dict[str, Any]]) -> None:
     if len(row["source_ids"]) != 1:
         raise ValueError("each finding requires exactly one source, not a citation bundle")
@@ -152,15 +143,18 @@ def _validate_finding(row: dict[str, Any], sources: list[dict[str, Any]]) -> Non
             or any(c in value for c in "\r\n")
         ):
             raise ValueError("finding requires a bounded source excerpt and review focus")
-    snippet = source.get("snippet")
-    if (
-        not isinstance(snippet, str)
-        or not _contains_complete_phrase(snippet, excerpt)
-        or not _contains_complete_phrase(excerpt, focus)
-    ):
-        raise ValueError("finding excerpt and focus must match the selected source exactly")
-    if _title_only_text(excerpt) == _title_only_text(str(source.get("title", ""))):
-        raise ValueError("a source title alone is not finding evidence")
+    origin = row["evidence_origin"]
+    segments = article_segments(source)
+    if not isinstance(origin, str) or origin not in segments:
+        raise ValueError("finding requires a retained article evidence origin")
+    if not _contains_complete_phrase(segments[origin], excerpt):
+        raise ValueError("finding excerpt must match its selected article evidence segment exactly")
+    if not _contains_complete_phrase(excerpt, focus):
+        raise ValueError("finding focus must match the selected excerpt exactly")
+    if not has_non_headline_text(excerpt, str(source.get("title", ""))):
+        raise ValueError(
+            "finding requires non-headline article evidence; a source title alone is insufficient"
+        )
 
 
 def _object(value: Any, keys: set[str]) -> dict[str, Any]:
@@ -205,6 +199,9 @@ def _validate_plan(
     plan = _object(value, {"regulatory_changes", "control_implications", "industry_impacts"})
     if not 1 <= len(sources) <= 12:
         raise ValueError("report plan requires one to twelve retained sources")
+    if contract_version >= 4:
+        for source in sources:
+            article_segments(source)
     seen = set()
     for row in _list(plan["regulatory_changes"], 12):
         row = _object(row, {"source_id", "change", "jurisdiction", "evidence_excerpt"})
@@ -237,7 +234,7 @@ def _validate_plan(
         seen = set()
         findings = collection == "control_implications" and contract_version >= 4
         if findings:
-            keys = keys | {"focus", "evidence_excerpt"}
+            keys = keys | {"focus", "evidence_excerpt", "evidence_origin"}
         for row in _list(plan[collection], 6 if findings else len(catalog)):
             row = _object(row, keys)
             _choice(row[identity], catalog)

@@ -15,6 +15,12 @@ SOURCES = [
         "snippet": "A vendor published a security advisory for deployed gateways.",
         "digest_url": "https://digest.example/archive/2026-10-05/#advisory",
         "cves": [],
+        "article_evidence": [
+            {
+                "origin": "summary",
+                "text": "A vendor published a security advisory for deployed gateways.",
+            }
+        ],
     }
 ]
 PLAN = {
@@ -26,6 +32,7 @@ PLAN = {
             "source_ids": [1],
             "focus": "security advisory",
             "evidence_excerpt": SOURCES[0]["snippet"],
+            "evidence_origin": "summary",
         }
     ],
     "industry_impacts": [{"sector_id": "technology", "source_ids": [1]}],
@@ -152,6 +159,12 @@ def test_report_plan_escapes_source_title_pipes_in_regulatory_table(title):
         "title": title,
         "url": "https://www.sec.gov/rules/final/example",
         "snippet": "The United States final reporting rule changes reporting requirements.",
+        "article_evidence": [
+            {
+                "origin": "summary",
+                "text": "The United States final reporting rule changes reporting requirements.",
+            }
+        ],
     }
     plan = {
         **deepcopy(PLAN),
@@ -229,6 +242,7 @@ def test_composer_preserves_source_ids_for_duplicate_urls():
                 "source_ids": [2],
                 "focus": "security advisory",
                 "evidence_excerpt": SOURCES[0]["snippet"],
+                "evidence_origin": "summary",
             }
         ],
         "industry_impacts": [],
@@ -311,6 +325,9 @@ def test_regulatory_rows_resolve_duplicate_url_evidence_by_exact_selected_source
             **SOURCE,
             "title": "Another retained excerpt",
             "snippet": "A separate notice discusses public consultation.",
+            "article_evidence": [
+                {"origin": "summary", "text": "A separate notice discusses public consultation."}
+            ],
         },
     ]
     report, _ = publish_plan(selection_plan(), sources)

@@ -19,6 +19,12 @@ SOURCE = {
     "snippet": "The spreadsheet attack requires Java support. It has only been demonstrated as a proof of concept; no exploitation has been reported.",
     "cves": [],
     "digest_url": "https://digest.example/archive/2026-10-05/#spreadsheet",
+    "article_evidence": [
+        {
+            "origin": "summary",
+            "text": "The spreadsheet attack requires Java support. It has only been demonstrated as a proof of concept; no exploitation has been reported.",
+        }
+    ],
 }
 PLAN = {
     "regulatory_changes": [],
@@ -29,6 +35,7 @@ PLAN = {
             "source_ids": [1],
             "focus": "Java support",
             "evidence_excerpt": SOURCE["snippet"],
+            "evidence_origin": "summary",
         }
     ],
     "industry_impacts": [{"sector_id": "technology", "source_ids": [1]}],
@@ -86,7 +93,17 @@ def test_finding_must_be_bound_to_one_source_and_its_exact_evidence(field, value
     plan = deepcopy(PLAN)
     plan["control_implications"][0][field] = value
     with pytest.raises(ValueError):
-        parse_report_plan(json.dumps(plan), [SOURCE, {**SOURCE, "snippet": "Different evidence."}])
+        parse_report_plan(
+            json.dumps(plan),
+            [
+                SOURCE,
+                {
+                    **SOURCE,
+                    "snippet": "Different evidence.",
+                    "article_evidence": [{"origin": "summary", "text": "Different evidence."}],
+                },
+            ],
+        )
 
 
 @pytest.mark.parametrize(
@@ -122,7 +139,13 @@ def test_finding_must_be_bound_to_one_source_and_its_exact_evidence(field, value
     ],
 )
 def test_title_only_evidence_cannot_be_promoted_to_a_finding(title, excerpt):
-    source = {**SOURCE, "title": title, "snippet": excerpt}
+    excerpt = " ".join(excerpt.split())
+    source = {
+        **SOURCE,
+        "title": title,
+        "snippet": excerpt,
+        "article_evidence": [{"origin": "summary", "text": excerpt}],
+    }
     plan = deepcopy(PLAN)
     plan["control_implications"][0].update(
         focus="enterprise gateway", evidence_excerpt=source["snippet"]
@@ -134,7 +157,12 @@ def test_title_only_evidence_cannot_be_promoted_to_a_finding(title, excerpt):
 def test_excerpt_with_exposure_conditions_beyond_title_is_accepted():
     title = "Critical vulnerability in enterprise gateway permits remote code execution"
     excerpt = title + ", but exploitation requires an authenticated administrator session."
-    source = {**SOURCE, "title": title, "snippet": excerpt}
+    source = {
+        **SOURCE,
+        "title": title,
+        "snippet": excerpt,
+        "article_evidence": [{"origin": "summary", "text": excerpt}],
+    }
     plan = deepcopy(PLAN)
     plan["control_implications"][0].update(focus="enterprise gateway", evidence_excerpt=excerpt)
     assert parse_report_plan(json.dumps(plan), [source]) == plan
@@ -333,7 +361,12 @@ def test_quoted_evidence_is_literal_text_in_the_reader():
                 self.links.append(dict(attrs).get("href"))
 
     excerpt = "Java [support](https://untrusted.example) **requires** <img src=x> & &#42; @@GRCINSIGHT_LINK_0@@ %%CODEBLOCK_0%% for this demonstration."
-    source = {**SOURCE, "snippet": excerpt, "url": "https://example.com/evidence?literal=&#38;"}
+    source = {
+        **SOURCE,
+        "snippet": excerpt,
+        "url": "https://example.com/evidence?literal=&#38;",
+        "article_evidence": [{"origin": "summary", "text": excerpt}],
+    }
     plan = deepcopy(PLAN)
     plan["control_implications"][0].update(focus="Java [support]", evidence_excerpt=excerpt)
     body = render_report_plan(plan, [source])

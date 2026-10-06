@@ -463,6 +463,7 @@ def source_articles(metadata: dict) -> list[dict[str, object]]:
             {
                 "title": title, "url": raw_url, "digest_url": digest_url, "cves": cves,
                 "snippet": str(raw_source.get("snippet") or ""),
+                "article_evidence": raw_source.get("article_evidence"),
                 "effective_date_evidence": raw_source.get("effective_date_evidence"),
             }
         )

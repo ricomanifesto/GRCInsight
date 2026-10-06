@@ -94,9 +94,10 @@ func TestGenerateReport_PersistsReportAndArticles(t *testing.T) {
 			ResolvedModel:   "google/example-model",
 			SourceArticles: []map[string]any{
 				{
-					"title": "A1",
-					"url":   "https://ex.com/1",
-					"cves":  []string{"CVE-2026-12345"},
+					"title":            "A1",
+					"url":              "https://ex.com/1",
+					"cves":             []string{"CVE-2026-12345"},
+					"article_evidence": []any{map[string]any{"origin": "content", "text": "A retained article passage describes supplier access to customer systems."}},
 				},
 			},
 		},
@@ -107,7 +108,7 @@ func TestGenerateReport_PersistsReportAndArticles(t *testing.T) {
 		}},
 	}}
 
-	if err := json.Unmarshal([]byte(`{"report_plan":{"regulatory_changes":[],"control_implications":[{"control_id":"governance","priority":"medium","source_ids":[1]}],"industry_impacts":[]}}`), pc.resp.Metadata); err != nil {
+	if err := json.Unmarshal([]byte(`{"report_plan":{"regulatory_changes":[],"control_implications":[{"control_id":"governance","priority":"medium","source_ids":[1],"focus":"supplier access","evidence_origin":"content","evidence_excerpt":"A retained article passage describes supplier access to customer systems."}],"industry_impacts":[]}}`), pc.resp.Metadata); err != nil {
 		t.Fatal(err)
 	}
 	svc := &ReportService{
@@ -146,6 +147,9 @@ func TestGenerateReport_PersistsReportAndArticles(t *testing.T) {
 	}
 	if got := fr.updated.Metadata.SourceArticles[0]["cves"]; !reflect.DeepEqual(got, []string{"CVE-2026-12345"}) {
 		t.Fatalf("expected per-source CVEs to persist, got %#v", got)
+	}
+	if !reflect.DeepEqual(fr.updated.Metadata.SourceArticles[0]["article_evidence"], pc.resp.Metadata.SourceArticles[0]["article_evidence"]) {
+		t.Fatal("article evidence origin or text lost from Python response")
 	}
 	encoded, err := json.Marshal(fr.updated.Metadata)
 	if err != nil {

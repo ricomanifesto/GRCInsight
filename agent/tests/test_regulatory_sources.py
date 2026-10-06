@@ -31,6 +31,12 @@ SOURCE = {
         "retrieved_at": "2026-10-05T22:00:00Z",
         "document": DOCUMENT,
     },
+    "article_evidence": [
+        {
+            "origin": "summary",
+            "text": "The United States final reporting rule updates reporting requirements.",
+        }
+    ],
 }
 
 
@@ -224,6 +230,7 @@ def test_date_provenance_survives_workflow_prompt_composer_and_manifest(monkeypa
                 "source_ids": [1],
                 "focus": "final reporting rule",
                 "evidence_excerpt": SOURCE["snippet"],
+                "evidence_origin": "content",
             }
         ],
         "industry_impacts": [],
@@ -251,6 +258,9 @@ def test_date_provenance_survives_workflow_prompt_composer_and_manifest(monkeypa
     assert API_URL in prompts[0]
     record = response.metadata.source_articles[0]["effective_date_evidence"]
     assert record["document"] == DOCUMENT
+    assert response.metadata.source_articles[0]["article_evidence"] == [
+        {"origin": "content", "text": SOURCE["snippet"]}
+    ]
     assert response.metadata.report_plan == plan
     data = response.model_dump(mode="json")
     stored_body = data.pop("report")

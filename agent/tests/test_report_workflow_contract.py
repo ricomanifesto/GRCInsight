@@ -152,12 +152,24 @@ def test_report_prompt_requires_current_source_entities_and_readable_summary():
                     "url": "https://example.com/apt1",
                     "snippet": "Threat actor APT1 exploited CVE-2026-12345 against banks.",
                     "cves": ["CVE-2026-12345"],
+                    "article_evidence": [
+                        {
+                            "origin": "summary",
+                            "text": "Threat actor APT1 exploited CVE-2026-12345 against banks.",
+                        }
+                    ],
                 },
                 {
                     "title": "Cloud Security Alliance publishes guidance",
                     "url": "https://example.com/guidance",
                     "snippet": "The industry group called Cloud Security Alliance published guidance.",
                     "cves": [],
+                    "article_evidence": [
+                        {
+                            "origin": "summary",
+                            "text": "The industry group called Cloud Security Alliance published guidance.",
+                        }
+                    ],
                 },
             ],
         },
@@ -191,6 +203,12 @@ def test_report_prompt_globally_bounds_cve_evidence():
                     "url": f"https://example.com/advisory/{cves[11]}",
                     "snippet": "A vendor published fixes for " + ", ".join(cves) + ".",
                     "cves": cves,
+                    "article_evidence": [
+                        {
+                            "origin": "summary",
+                            "text": "A vendor published fixes for " + ", ".join(cves) + ".",
+                        }
+                    ],
                 }
             ],
         },
@@ -223,6 +241,9 @@ def test_report_prompt_serializes_exact_source_links_for_markdown():
                     "url": url,
                     "snippet": "Review the affected Windows paths.",
                     "cves": [],
+                    "article_evidence": [
+                        {"origin": "summary", "text": "Review the affected Windows paths."}
+                    ],
                 }
             ],
         },
@@ -256,6 +277,7 @@ def test_report_generation_retries_scratch_work_and_returns_complete_report():
                 "source_ids": [1],
                 "focus": "security advisory",
                 "evidence_excerpt": "A security advisory describes exposure in deployed gateways.",
+                "evidence_origin": "summary",
             }
         ],
         "industry_impacts": [],
@@ -265,6 +287,12 @@ def test_report_generation_retries_scratch_work_and_returns_complete_report():
             "title": "Evidence",
             "url": "https://example.com/evidence",
             "snippet": "A security advisory describes exposure in deployed gateways.",
+            "article_evidence": [
+                {
+                    "origin": "summary",
+                    "text": "A security advisory describes exposure in deployed gateways.",
+                }
+            ],
         }
     ]
     valid_report = render_report_plan(plan, sources)
@@ -789,6 +817,7 @@ def test_site_report_composer_owns_public_provenance_and_body_shape():
                 "source_ids": [1],
                 "focus": "security advisory",
                 "evidence_excerpt": "A security advisory describes exposure in deployed gateways.",
+                "evidence_origin": "summary",
             }
         ],
         "industry_impacts": [],
@@ -798,6 +827,12 @@ def test_site_report_composer_owns_public_provenance_and_body_shape():
             "title": "Evidence",
             "url": "https://example.com/evidence",
             "snippet": "A security advisory describes exposure in deployed gateways.",
+            "article_evidence": [
+                {
+                    "origin": "summary",
+                    "text": "A security advisory describes exposure in deployed gateways.",
+                }
+            ],
         }
     ]
     canonical = render_report_plan(plan, sources)
@@ -826,6 +861,12 @@ def test_site_report_composer_owns_public_provenance_and_body_shape():
                         "title": "Evidence",
                         "url": "https://example.com/evidence",
                         "snippet": "A security advisory describes exposure in deployed gateways.",
+                        "article_evidence": [
+                            {
+                                "origin": "summary",
+                                "text": "A security advisory describes exposure in deployed gateways.",
+                            }
+                        ],
                     },
                 ],
                 "analysis_period": "August 2026",
@@ -1069,6 +1110,12 @@ def test_site_report_composer_rejects_provenance_mismatch():
                     "title": "Evidence",
                     "url": "https://example.com/evidence",
                     "snippet": "A security advisory describes exposure in deployed gateways.",
+                    "article_evidence": [
+                        {
+                            "origin": "summary",
+                            "text": "A security advisory describes exposure in deployed gateways.",
+                        }
+                    ],
                 }
             ],
             "analysis_period": "August 2026",
@@ -1099,6 +1146,7 @@ def test_site_report_composer_normalizes_numbered_markdown_headings_and_feed_url
                 "source_ids": [1],
                 "focus": "security advisory",
                 "evidence_excerpt": "A security advisory describes exposure in deployed gateways.",
+                "evidence_origin": "summary",
             }
         ],
         "industry_impacts": [],
@@ -1108,6 +1156,12 @@ def test_site_report_composer_normalizes_numbered_markdown_headings_and_feed_url
             "title": "Evidence",
             "url": "https://example.com/evidence",
             "snippet": "A security advisory describes exposure in deployed gateways.",
+            "article_evidence": [
+                {
+                    "origin": "summary",
+                    "text": "A security advisory describes exposure in deployed gateways.",
+                }
+            ],
         }
     ]
     canonical = render_report_plan(plan, sources)
@@ -1135,6 +1189,12 @@ def test_site_report_composer_normalizes_numbered_markdown_headings_and_feed_url
                         "title": "Evidence",
                         "url": "https://example.com/evidence",
                         "snippet": "A security advisory describes exposure in deployed gateways.",
+                        "article_evidence": [
+                            {
+                                "origin": "summary",
+                                "text": "A security advisory describes exposure in deployed gateways.",
+                            }
+                        ],
                     }
                 ],
                 "analysis_period": "August 2026",
@@ -1219,6 +1279,12 @@ def test_site_report_composer_accepts_serialized_source_link_identity():
             "title": title,
             "url": source_url,
             "snippet": "A security advisory describes exposure in deployed gateways.",
+            "article_evidence": [
+                {
+                    "origin": "summary",
+                    "text": "A security advisory describes exposure in deployed gateways.",
+                }
+            ],
         }
     ]
     plan = {
@@ -1230,6 +1296,7 @@ def test_site_report_composer_accepts_serialized_source_link_identity():
                 "source_ids": [1],
                 "focus": "security advisory",
                 "evidence_excerpt": "A security advisory describes exposure in deployed gateways.",
+                "evidence_origin": "summary",
             }
         ],
         "industry_impacts": [],
