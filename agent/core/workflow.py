@@ -19,6 +19,7 @@ from models.api import (
 )
 from services.rss_service import RSSService
 from services.model_service import GRCModelService
+from services.regulatory_sources import enrich_regulatory_sources
 from core.entities import analyze_article_grc_content
 from core.reporting_identity import (
     ReportingIdentityError,
@@ -412,24 +413,30 @@ def _build_fallback_report(
             "",
             f"Dominant themes in the current batch include {', '.join(risk_categories[:3]) if risk_categories else 'operational cyber risk, third-party exposure, and regulatory monitoring'}. Business impact remains concentrated in incident response readiness, disclosure obligations, control effectiveness, and board-level risk oversight.",
             "",
-            "2) Key Regulatory Developments",
+            "2) Sourced Regulatory Changes",
+            "",
+            "No sourced regulatory changes identified in the supplied evidence.",
+            "",
+            "3) Inferred Control and Governance Implications",
+            "",
+            "These are inferred mappings and source mentions, not verified regulatory changes.",
             "Observations",
             *regulatory_lines,
             "Implications for Business",
             "- Teams should treat major cyber incidents, sanctions activity, and regulator advisories as compliance-relevant events even when source articles are operational in nature.",
             "- Evidence capture, executive escalation, and breach-notification decision support remain priority governance controls.",
             "",
-            "3) Industry Impact Analysis",
+            "4) Industry Impact Analysis",
             *industry_lines,
             "- Organizations in regulated or data-intensive sectors should expect the same cyber events to trigger legal, contractual, and supervisory scrutiny.",
             "",
-            "4) Risk Assessment",
+            "5) Risk Assessment",
             *risk_lines,
             "",
-            "5) Recommendations for Action",
+            "6) Recommendations for Action",
             *recommendation_lines,
             "",
-            "6) Source Highlights",
+            "7) Source Highlights",
             *highlights,
             "",
             "Notes and limitations",
@@ -574,7 +581,9 @@ async def run_grc_analysis_endpoint(
                 used_model_analysis = True
 
         grc_article_count = analysis_results.get("summary", {}).get("grc_relevant_count", 0)
-        source_evidence = _build_source_evidence(enriched_articles)
+        source_evidence = await enrich_regulatory_sources(
+            _build_source_evidence(enriched_articles), model_deadline=model_deadline
+        )
         analysis_results["source_evidence"] = source_evidence
         logger.info(f"Found {grc_article_count} articles with GRC content")
 
@@ -615,12 +624,14 @@ async def run_grc_analysis_endpoint(
         logger.info("Step 6: Generating comprehensive GRC report")
         report_content = ""
         resolved_model = ""
+        report_plan = None
         used_fallback_report = False
 
         if used_model_analysis and model_service is not None:
             report_generation = await model_service.generate_grc_report(analysis_results, feed_data)
             report_content = report_generation.content
             resolved_model = report_generation.resolved_model
+            report_plan = report_generation.report_plan
             if not resolved_model or resolved_model in {
                 "openrouter/free",
                 "openrouter/auto",
@@ -670,12 +681,15 @@ async def run_grc_analysis_endpoint(
             analysis_period=generated_at.strftime("%B %Y"),
             requested_model=config.model,
             resolved_model=resolved_model,
+            report_plan=None if used_fallback_report else report_plan,
             source_articles=[
                 {
                     "title": source["title"],
                     "url": source["url"],
                     "digest_url": source["digest_url"],
                     "cves": source["cves"],
+                    "snippet": source["snippet"],
+                    "effective_date_evidence": source["effective_date_evidence"],
                 }
                 for source in source_evidence
             ],

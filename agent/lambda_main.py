@@ -198,6 +198,7 @@ def handler(event, context):
                                 "requested_model": md.requested_model,
                                 "resolved_model": md.resolved_model,
                                 "source_articles": md.source_articles or [],
+                                "report_plan": md.report_plan,
                                 "regulations_mentioned": md.regulations_mentioned or [],
                                 "frameworks_referenced": md.frameworks_referenced or [],
                                 "industries_affected": md.industries_affected or [],

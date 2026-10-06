@@ -33,6 +33,7 @@ type ReportMetadata struct {
 	RequestedModel       string           `dynamodbav:"requested_model,omitempty" json:"requested_model,omitempty"`
 	ResolvedModel        string           `dynamodbav:"resolved_model,omitempty" json:"resolved_model,omitempty"`
 	SourceArticles       []map[string]any `dynamodbav:"source_articles,omitempty" json:"source_articles,omitempty"`
+	ReportPlan           map[string]any   `dynamodbav:"report_plan,omitempty" json:"report_plan,omitempty"`
 	RegulationsMentioned []string         `dynamodbav:"regulations_mentioned" json:"regulations_mentioned"`
 	FrameworksReferenced []string         `dynamodbav:"frameworks_referenced" json:"frameworks_referenced"`
 	IndustriesAffected   []string         `dynamodbav:"industries_affected" json:"industries_affected"`

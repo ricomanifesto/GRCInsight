@@ -37,6 +37,7 @@ type ReportMetadata struct {
 	RequestedModel       string           `json:"requested_model,omitempty"`
 	ResolvedModel        string           `json:"resolved_model,omitempty"`
 	SourceArticles       []map[string]any `json:"source_articles,omitempty"`
+	ReportPlan           map[string]any   `json:"report_plan,omitempty"`
 	RegulationsMentioned []string         `json:"regulations_mentioned"`
 	FrameworksReferenced []string         `json:"frameworks_referenced"`
 	IndustriesAffected   []string         `json:"industries_affected"`

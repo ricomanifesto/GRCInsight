@@ -14,6 +14,12 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "agent"))
 sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
+from core.report_evidence import (  # noqa: E402
+    REPORT_SECTION_TITLES,
+    REPORT_CONTRACT_VERSION,
+    validate_regulatory_evidence,
+)
+from core.report_plan import validate_rendered_report  # noqa: E402
 from core.reporting_identity import (  # noqa: E402
     ReportingIdentityError,
     legacy_sentrydigest_item_url as build_legacy_sentrydigest_item_url,
@@ -56,6 +62,8 @@ PUBLIC_DESCRIPTION = (
 REPORT_SECTION_LABELS = {
     "Executive Summary",
     "Key Regulatory Developments",
+    "Sourced Regulatory Changes",
+    "Inferred Control and Governance Implications",
     "Industry Impact Analysis",
     "Risk Assessment",
     "Recommendations for Action",
@@ -579,7 +587,7 @@ def has_http_scheme(value: str) -> bool:
 
 def markdown_inline_text(value: str) -> str:
     """Decode the escapes used to serialize a Markdown link label."""
-    return re.sub(r"\\([\\[\]()])", r"\1", value)
+    return re.sub(r"\\([\\[\]()|])", r"\1", value)
 
 
 def report_section_label(line: str) -> str | None:
@@ -726,13 +734,14 @@ def validate_evidence_manifest(
             fail(f"evidence manifest source {index} has no title")
         if not isinstance(url, str) or not has_http_scheme(url):
             fail(f"evidence manifest source {index} has no HTTP URL")
+        reporting_url = url
         url = canonical_http_url(url)
         if schema_version >= 2:
             digest_url = source.get("digest_url")
             if not isinstance(digest_url, str) or not has_http_scheme(digest_url):
                 fail(f"evidence manifest source {index} has no SentryDigest item URL")
             expected_digest_url = canonical_http_url(
-                sentrydigest_item_url(feed_home_url, digest_issue_date, url)
+                sentrydigest_item_url(feed_home_url, digest_issue_date, reporting_url)
                 if schema_version == 3
                 else legacy_sentrydigest_item_url(feed_home_url, url)
             )
@@ -751,10 +760,10 @@ def validate_evidence_manifest(
             ):
                 fail(f"evidence manifest source {index} has an invalid CVE")
             cves.add(cve.upper())
-        if url in source_urls:
+        if url in source_urls and manifest.get("report_contract_version", 1) != REPORT_CONTRACT_VERSION:
             fail(f"evidence manifest repeats source URL: {url}")
         source_urls.add(url)
-        source_cves[url] = cves
+        source_cves.setdefault(url, set()).update(cves)
         source_pairs.add((title, url))
 
     body_start = markdown.find("\n## ")
@@ -826,6 +835,17 @@ def validate_evidence_manifest(
         }
         if not digest_urls or digest_urls != expected_digest_urls:
             fail("Source Highlights must link each highlighted SentryDigest item")
+    contract_version = manifest.get("report_contract_version", 1)
+    if contract_version not in {1, REPORT_CONTRACT_VERSION}:
+        fail("unsupported report evidence contract version")
+    if "## Sourced Regulatory Changes" in body and contract_version != REPORT_CONTRACT_VERSION:
+        fail("structured reports require the current report contract and retained plan")
+    if contract_version == REPORT_CONTRACT_VERSION:
+        try:
+            validate_regulatory_evidence(body, raw_sources)
+            validate_rendered_report(body, manifest.get("report_plan"), raw_sources, include_digest=True)
+        except ValueError as error:
+            fail(str(error))
     return manifest
 
 
@@ -833,7 +853,10 @@ def validate_required_report_sections(markdown: str, artifact: str) -> None:
     lines = [line.strip() for line in markdown.splitlines() if line.strip()]
     section_counts = {
         label: sum(1 for line in lines if report_section_label(line) == label)
-        for label in REPORT_SECTION_LABELS
+        for label in (
+            REPORT_SECTION_TITLES if "## Sourced Regulatory Changes" in markdown
+            else REPORT_SECTION_LABELS - {"Sourced Regulatory Changes", "Inferred Control and Governance Implications"}
+        )
     }
     missing = [label for label, count in section_counts.items() if count == 0]
     repeated = [label for label, count in section_counts.items() if count > 1]
