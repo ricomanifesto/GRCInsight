@@ -172,6 +172,10 @@ def _extract_text(raw: str) -> str:
             return ""
         parser = _StaticText()
         parser.feed(raw)
+        # EOF recovery differs across Python patch versions: some emit an
+        # unfinished tag as data and others discard it. Neither is a receipt.
+        if parser.rawdata:
+            return ""
         parser.close()
     except (ValueError, UnicodeError):
         return ""
