@@ -450,6 +450,10 @@ def _validate_plan(
                     raise ReportQualityError(
                         "finding focus must be a short review label: at most eight words and 80 characters"
                     )
+                if contract_version >= 5 and row["focus"] == row["evidence_excerpt"]:
+                    raise ReportQualityError(
+                        "finding focus must be an identifying label shorter than its evidence passage"
+                    )
             if collection == "control_implications":
                 _choice(row["priority"], PRIORITIES)
     if contract_version >= 4:
@@ -701,6 +705,36 @@ def render_report_plan(
     return body
 
 
+def _editorial_content_roles(body: str, sources: list[dict]) -> tuple[list[str], str]:
+    """Separate quotations, analysis and immutable identity before checking economy.
+
+    Regulatory evidence has its own row validator. Citation labels and the source
+    index identify evidence; they are not extra analysis. Only explicit quotation
+    lines in Evidence and Decisions own a control finding's evidence passage.
+    Whole-report recomposition independently enforces exact structure and links.
+    """
+    quotes, analysis = [], []
+    section = ""
+    for line in body.splitlines():
+        if line.startswith("## "):
+            section = line[3:]
+            continue
+        if section not in {"Executive Summary", "Evidence and Decisions"}:
+            continue
+        block = (
+            re.fullmatch(r"\*\*Source evidence:\*\* “([^\n]*)” (\[.*)", line)
+            if section == "Evidence and Decisions"
+            else None
+        )
+        if block:
+            quotes.append(block.group(1))
+            continue
+        for source in sources:
+            line = line.replace(_link(source), "")
+        analysis.append(line)
+    return quotes, "\n".join(analysis)
+
+
 def validate_editorial_quality(body: str, plan: dict, sources: list[dict]) -> None:
     """Check presentation roles separately from exact source grounding.
 
@@ -742,17 +776,12 @@ def validate_editorial_quality(body: str, plan: dict, sources: list[dict]) -> No
             raise ReportQualityError(
                 "editorial: executive decision must retain its supporting source citation"
             )
-    # Match complete evidence blocks. A valid quotation may contain another
-    # source's entire excerpt; substring counts cannot distinguish those cases.
-    evidence_blocks = re.findall(r"(?m)^\*\*Source evidence:\*\* “([^\n]*)” (?=\[)", body)
-    summary_prose = summary
-    for source in sources:
-        summary_prose = summary_prose.replace(_link(source), "")
+    evidence_blocks, analysis_prose = _editorial_content_roles(body, sources)
     regulatory_excerpts = {row["evidence_excerpt"] for row in plan["regulatory_changes"]}
     for row in plan["control_implications"]:
         excerpt = _quoted_text(row["evidence_excerpt"])
         expected_blocks = 0 if row["evidence_excerpt"] in regulatory_excerpts else 1
-        if excerpt in summary_prose or evidence_blocks.count(excerpt) != expected_blocks:
+        if excerpt in analysis_prose or evidence_blocks.count(excerpt) != expected_blocks:
             raise ReportQualityError(
                 "editorial: source excerpts belong once in supporting findings, not repeated across sections"
             )

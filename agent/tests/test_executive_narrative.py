@@ -491,3 +491,44 @@ def test_duplicate_explicit_evidence_block_still_fails_editorial_quality():
     bad = body.replace("## Source Highlights", block + "\n\n## Source Highlights")
     with pytest.raises(ValueError, match="source excerpts"):
         validate_editorial_quality(bad, plan, [SOURCE])
+
+
+def test_nonlead_focus_cannot_be_the_entire_source_passage_in_v5():
+    excerpt = "Acme gateway administrators must verify authentication settings."
+    second = {
+        **SOURCE,
+        "title": "Acme gateway advisory",
+        "url": "https://example.com/acme",
+        "snippet": excerpt,
+        "article_evidence": [
+            {"origin": "summary", "raw_text": excerpt, "text": excerpt, "extraction_version": 1}
+        ],
+    }
+    plan = narrative_plan()
+    plan["control_implications"].append(
+        {
+            **plan["control_implications"][0],
+            "source_ids": [2],
+            "focus": excerpt,
+            "evidence_excerpt": excerpt,
+        }
+    )
+    with pytest.raises(ValueError, match="identifying label"):
+        parse_report_plan(json.dumps(plan), [SOURCE, second])
+    del plan["executive_brief"]
+    legacy = render_report_plan(plan, [SOURCE, second], contract_version=4)
+    validate_rendered_report(legacy, plan, [SOURCE, second], contract_version=4)
+
+
+@pytest.mark.parametrize("placement", ["heading", "decision_prose"])
+def test_exact_passage_reuse_outside_evidence_roles_fails_quality(placement):
+    from core.report_plan import validate_editorial_quality
+
+    plan = narrative_plan()
+    body = render_report_plan(plan, [SOURCE])
+    if placement == "heading":
+        bad = body.replace("### Java support", "### " + SOURCE["snippet"])
+    else:
+        bad = body.replace("**Decision trigger:**", SOURCE["snippet"] + "\n\n**Decision trigger:**")
+    with pytest.raises(ValueError, match="source excerpts"):
+        validate_editorial_quality(bad, plan, [SOURCE])
