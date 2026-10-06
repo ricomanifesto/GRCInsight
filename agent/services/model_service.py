@@ -65,7 +65,7 @@ def _sanitize_evidence_text(value: Any, allowed_cves: set[str]) -> str:
 
     def replace(match: re.Match[str]) -> str:
         cve = match.group(0).upper()
-        return cve if cve in allowed_cves else CVE_OMISSION_MARKER
+        return match.group(0) if cve in allowed_cves else CVE_OMISSION_MARKER
 
     return CVE_PATTERN.sub(replace, str(value))
 

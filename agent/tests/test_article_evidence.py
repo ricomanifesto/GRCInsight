@@ -175,3 +175,44 @@ def test_prompt_offers_only_article_segments_eligible_for_a_finding():
     )
     assert json.loads(segment_line.split("segments: ")[1]) == {"content": DETAIL}
     assert "evidence_origin" in prompt
+
+
+@pytest.mark.parametrize("cve", ["cve-2026-12345", "Cve-2026-12345"])
+def test_prompt_preserves_original_spelling_of_allowed_cves(cve):
+    from services.model_service import GRCModelService
+
+    detail = f"The gateway flaw {cve} requires an authenticated administrator session."
+    item = source(summary=detail)
+    service = GRCModelService.__new__(GRCModelService)
+    prompt = service._create_report_prompt({"source_evidence": [item]}, {})
+    segment_line = next(
+        line for line in prompt.splitlines() if "Eligible article evidence segments:" in line
+    )
+    assert json.loads(segment_line.split("segments: ")[1]) == {"summary": detail}
+    assert parse_report_plan(json.dumps(plan(detail)), [item]) == plan(detail)
+
+
+def test_prompt_still_omits_segments_with_cves_outside_the_bounded_set():
+    from services.model_service import GRCModelService
+
+    item = source(summary="The gateway flaw cve-2026-12345 requires administrator access.")
+    item["cves"] = []
+    service = GRCModelService.__new__(GRCModelService)
+    prompt = service._create_report_prompt({"source_evidence": [item]}, {})
+    segment_line = next(
+        line for line in prompt.splitlines() if "Eligible article evidence segments:" in line
+    )
+    assert json.loads(segment_line.split("segments: ")[1]) == {}
+
+
+@pytest.mark.parametrize("field", ["evidence_excerpt", "focus"])
+@pytest.mark.parametrize("separator", ["  ", "\t", "\u00a0"])
+def test_finding_rejects_changed_internal_whitespace(field, separator):
+    selection = plan()
+    selection["control_implications"][0][field] = (
+        DETAIL.replace("requires an", "requires" + separator + "an")
+        if field == "evidence_excerpt"
+        else "authenticated" + separator + "administrator"
+    )
+    with pytest.raises(ValueError, match="exactly"):
+        parse_report_plan(json.dumps(selection), [source()])

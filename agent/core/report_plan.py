@@ -147,9 +147,9 @@ def _validate_finding(row: dict[str, Any], sources: list[dict[str, Any]]) -> Non
     segments = article_segments(source)
     if not isinstance(origin, str) or origin not in segments:
         raise ValueError("finding requires a retained article evidence origin")
-    if not _contains_complete_phrase(segments[origin], excerpt):
+    if excerpt not in segments[origin] or not _contains_complete_phrase(segments[origin], excerpt):
         raise ValueError("finding excerpt must match its selected article evidence segment exactly")
-    if not _contains_complete_phrase(excerpt, focus):
+    if focus not in excerpt or not _contains_complete_phrase(excerpt, focus):
         raise ValueError("finding focus must match the selected excerpt exactly")
     if not has_non_headline_text(excerpt, str(source.get("title", ""))):
         raise ValueError(
