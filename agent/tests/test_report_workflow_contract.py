@@ -156,6 +156,8 @@ def test_report_prompt_requires_current_source_entities_and_readable_summary():
                         {
                             "origin": "summary",
                             "text": "Threat actor APT1 exploited CVE-2026-12345 against banks.",
+                            "extraction_version": 1,
+                            "raw_text": "Threat actor APT1 exploited CVE-2026-12345 against banks.",
                         }
                     ],
                 },
@@ -168,6 +170,8 @@ def test_report_prompt_requires_current_source_entities_and_readable_summary():
                         {
                             "origin": "summary",
                             "text": "The industry group called Cloud Security Alliance published guidance.",
+                            "extraction_version": 1,
+                            "raw_text": "The industry group called Cloud Security Alliance published guidance.",
                         }
                     ],
                 },
@@ -207,6 +211,8 @@ def test_report_prompt_globally_bounds_cve_evidence():
                         {
                             "origin": "summary",
                             "text": "A vendor published fixes for " + ", ".join(cves) + ".",
+                            "extraction_version": 1,
+                            "raw_text": "A vendor published fixes for " + ", ".join(cves) + ".",
                         }
                     ],
                 }
@@ -242,7 +248,12 @@ def test_report_prompt_serializes_exact_source_links_for_markdown():
                     "snippet": "Review the affected Windows paths.",
                     "cves": [],
                     "article_evidence": [
-                        {"origin": "summary", "text": "Review the affected Windows paths."}
+                        {
+                            "origin": "summary",
+                            "text": "Review the affected Windows paths.",
+                            "extraction_version": 1,
+                            "raw_text": "Review the affected Windows paths.",
+                        }
                     ],
                 }
             ],
@@ -291,6 +302,8 @@ def test_report_generation_retries_scratch_work_and_returns_complete_report():
                 {
                     "origin": "summary",
                     "text": "A security advisory describes exposure in deployed gateways.",
+                    "extraction_version": 1,
+                    "raw_text": "A security advisory describes exposure in deployed gateways.",
                 }
             ],
         }
@@ -831,6 +844,8 @@ def test_site_report_composer_owns_public_provenance_and_body_shape():
                 {
                     "origin": "summary",
                     "text": "A security advisory describes exposure in deployed gateways.",
+                    "extraction_version": 1,
+                    "raw_text": "A security advisory describes exposure in deployed gateways.",
                 }
             ],
         }
@@ -865,6 +880,8 @@ def test_site_report_composer_owns_public_provenance_and_body_shape():
                             {
                                 "origin": "summary",
                                 "text": "A security advisory describes exposure in deployed gateways.",
+                                "extraction_version": 1,
+                                "raw_text": "A security advisory describes exposure in deployed gateways.",
                             }
                         ],
                     },
@@ -1114,6 +1131,8 @@ def test_site_report_composer_rejects_provenance_mismatch():
                         {
                             "origin": "summary",
                             "text": "A security advisory describes exposure in deployed gateways.",
+                            "extraction_version": 1,
+                            "raw_text": "A security advisory describes exposure in deployed gateways.",
                         }
                     ],
                 }
@@ -1160,6 +1179,8 @@ def test_site_report_composer_normalizes_numbered_markdown_headings_and_feed_url
                 {
                     "origin": "summary",
                     "text": "A security advisory describes exposure in deployed gateways.",
+                    "extraction_version": 1,
+                    "raw_text": "A security advisory describes exposure in deployed gateways.",
                 }
             ],
         }
@@ -1193,6 +1214,8 @@ def test_site_report_composer_normalizes_numbered_markdown_headings_and_feed_url
                             {
                                 "origin": "summary",
                                 "text": "A security advisory describes exposure in deployed gateways.",
+                                "extraction_version": 1,
+                                "raw_text": "A security advisory describes exposure in deployed gateways.",
                             }
                         ],
                     }
@@ -1283,6 +1306,8 @@ def test_site_report_composer_accepts_serialized_source_link_identity():
                 {
                     "origin": "summary",
                     "text": "A security advisory describes exposure in deployed gateways.",
+                    "extraction_version": 1,
+                    "raw_text": "A security advisory describes exposure in deployed gateways.",
                 }
             ],
         }

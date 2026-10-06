@@ -35,6 +35,8 @@ SOURCE = {
         {
             "origin": "summary",
             "text": "The United States final reporting rule updates reporting requirements.",
+            "extraction_version": 1,
+            "raw_text": "The United States final reporting rule updates reporting requirements.",
         }
     ],
 }
@@ -259,7 +261,12 @@ def test_date_provenance_survives_workflow_prompt_composer_and_manifest(monkeypa
     record = response.metadata.source_articles[0]["effective_date_evidence"]
     assert record["document"] == DOCUMENT
     assert response.metadata.source_articles[0]["article_evidence"] == [
-        {"origin": "content", "text": SOURCE["snippet"]}
+        {
+            "origin": "content",
+            "text": SOURCE["snippet"],
+            "extraction_version": 1,
+            "raw_text": SOURCE["snippet"],
+        }
     ]
     assert response.metadata.report_plan == plan
     data = response.model_dump(mode="json")

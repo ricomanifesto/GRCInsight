@@ -48,10 +48,12 @@ def plan(excerpt=DETAIL, origin="summary"):
 def test_builder_keeps_article_fields_separate_from_the_headline():
     item = source(content="A separate article passage contains additional remediation details.")
     assert item["article_evidence"] == [
-        {"origin": "summary", "text": DETAIL},
+        {"origin": "summary", "text": DETAIL, "extraction_version": 1, "raw_text": DETAIL},
         {
             "origin": "content",
             "text": "A separate article passage contains additional remediation details.",
+            "extraction_version": 1,
+            "raw_text": "A separate article passage contains additional remediation details.",
         },
     ]
     assert parse_report_plan(json.dumps(plan()), [item]) == plan()

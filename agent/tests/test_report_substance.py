@@ -23,6 +23,8 @@ SOURCE = {
         {
             "origin": "summary",
             "text": "The spreadsheet attack requires Java support. It has only been demonstrated as a proof of concept; no exploitation has been reported.",
+            "extraction_version": 1,
+            "raw_text": "The spreadsheet attack requires Java support. It has only been demonstrated as a proof of concept; no exploitation has been reported.",
         }
     ],
 }
@@ -100,7 +102,14 @@ def test_finding_must_be_bound_to_one_source_and_its_exact_evidence(field, value
                 {
                     **SOURCE,
                     "snippet": "Different evidence.",
-                    "article_evidence": [{"origin": "summary", "text": "Different evidence."}],
+                    "article_evidence": [
+                        {
+                            "origin": "summary",
+                            "text": "Different evidence.",
+                            "extraction_version": 1,
+                            "raw_text": "Different evidence.",
+                        }
+                    ],
                 },
             ],
         )
@@ -144,7 +153,9 @@ def test_title_only_evidence_cannot_be_promoted_to_a_finding(title, excerpt):
         **SOURCE,
         "title": title,
         "snippet": excerpt,
-        "article_evidence": [{"origin": "summary", "text": excerpt}],
+        "article_evidence": [
+            {"origin": "summary", "text": excerpt, "extraction_version": 1, "raw_text": excerpt}
+        ],
     }
     plan = deepcopy(PLAN)
     plan["control_implications"][0].update(
@@ -161,7 +172,9 @@ def test_excerpt_with_exposure_conditions_beyond_title_is_accepted():
         **SOURCE,
         "title": title,
         "snippet": excerpt,
-        "article_evidence": [{"origin": "summary", "text": excerpt}],
+        "article_evidence": [
+            {"origin": "summary", "text": excerpt, "extraction_version": 1, "raw_text": excerpt}
+        ],
     }
     plan = deepcopy(PLAN)
     plan["control_implications"][0].update(focus="enterprise gateway", evidence_excerpt=excerpt)
@@ -360,12 +373,17 @@ def test_quoted_evidence_is_literal_text_in_the_reader():
             if tag == "a":
                 self.links.append(dict(attrs).get("href"))
 
-    excerpt = "Java [support](https://untrusted.example) **requires** <img src=x> & &#42; @@GRCINSIGHT_LINK_0@@ %%CODEBLOCK_0%% for this demonstration."
+    from core.article_evidence import capture_article_evidence
+
+    raw = "Java [support](https://untrusted.example) **requires** <img src=x> & &#42; @@GRCINSIGHT_LINK_0@@ %%CODEBLOCK_0%% for this demonstration."
+    receipts = capture_article_evidence(summary=raw, content="")
+    excerpt = receipts[0]["text"]
+    assert "<img" not in excerpt and "&#42;" not in excerpt
     source = {
         **SOURCE,
         "snippet": excerpt,
         "url": "https://example.com/evidence?literal=&#38;",
-        "article_evidence": [{"origin": "summary", "text": excerpt}],
+        "article_evidence": receipts,
     }
     plan = deepcopy(PLAN)
     plan["control_implications"][0].update(focus="Java [support]", evidence_excerpt=excerpt)

@@ -174,8 +174,18 @@ def test_run_grc_analysis_endpoint_marks_model_backed_reports(monkeypatch):
             "cves": [],
             "snippet": "NIST publishes new control guidance Framework control update NIST control guidance for regulated teams.",
             "article_evidence": [
-                {"origin": "summary", "text": "Framework control update"},
-                {"origin": "content", "text": "NIST control guidance for regulated teams."},
+                {
+                    "origin": "summary",
+                    "text": "Framework control update",
+                    "extraction_version": 1,
+                    "raw_text": "Framework control update",
+                },
+                {
+                    "origin": "content",
+                    "text": "NIST control guidance for regulated teams.",
+                    "extraction_version": 1,
+                    "raw_text": "NIST control guidance for regulated teams.",
+                },
             ],
             "effective_date_evidence": None,
         }
@@ -322,7 +332,12 @@ def test_run_grc_analysis_endpoint_skips_entries_without_linked_evidence(monkeyp
             "cves": ["CVE-2026-12345"],
             "snippet": "Linked item Can cite CVE-2026-12345 from this source.",
             "article_evidence": [
-                {"origin": "content", "text": "Can cite CVE-2026-12345 from this source."}
+                {
+                    "origin": "content",
+                    "text": "Can cite CVE-2026-12345 from this source.",
+                    "extraction_version": 1,
+                    "raw_text": "Can cite CVE-2026-12345 from this source.",
+                }
             ],
             "effective_date_evidence": None,
         }

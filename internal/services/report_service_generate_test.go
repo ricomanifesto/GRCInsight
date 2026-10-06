@@ -97,7 +97,7 @@ func TestGenerateReport_PersistsReportAndArticles(t *testing.T) {
 					"title":            "A1",
 					"url":              "https://ex.com/1",
 					"cves":             []string{"CVE-2026-12345"},
-					"article_evidence": []any{map[string]any{"origin": "content", "text": "A retained article passage describes supplier access to customer systems."}},
+					"article_evidence": []any{map[string]any{"origin": "content", "extraction_version": float64(1), "raw_text": "<p>A retained article passage describes supplier access to customer systems.</p>", "text": "A retained article passage describes supplier access to customer systems."}},
 				},
 			},
 		},

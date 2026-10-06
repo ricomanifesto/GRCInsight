@@ -19,6 +19,8 @@ SOURCES = [
             {
                 "origin": "summary",
                 "text": "A vendor published a security advisory for deployed gateways.",
+                "extraction_version": 1,
+                "raw_text": "A vendor published a security advisory for deployed gateways.",
             }
         ],
     }
@@ -163,6 +165,8 @@ def test_report_plan_escapes_source_title_pipes_in_regulatory_table(title):
             {
                 "origin": "summary",
                 "text": "The United States final reporting rule changes reporting requirements.",
+                "extraction_version": 1,
+                "raw_text": "The United States final reporting rule changes reporting requirements.",
             }
         ],
     }
@@ -326,7 +330,12 @@ def test_regulatory_rows_resolve_duplicate_url_evidence_by_exact_selected_source
             "title": "Another retained excerpt",
             "snippet": "A separate notice discusses public consultation.",
             "article_evidence": [
-                {"origin": "summary", "text": "A separate notice discusses public consultation."}
+                {
+                    "origin": "summary",
+                    "text": "A separate notice discusses public consultation.",
+                    "extraction_version": 1,
+                    "raw_text": "A separate notice discusses public consultation.",
+                }
             ],
         },
     ]
