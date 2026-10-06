@@ -268,12 +268,15 @@ def _executive_narrative(plan: dict[str, Any], sources: list[dict[str, Any]], ci
             if row
             else "verify jurisdiction and organizational applicability with the regulatory owner"
         )
-        if len(brief["source_ids"]) > 1:
-            prefix = ("First", "Next", "Then")[len(steps)]
-            steps.append(f"{prefix}, {step}.")
-        else:
-            steps.append(f"The next step is to {step}.")
-    agenda = " ".join(steps)
+        if step not in steps:
+            steps.append(step)
+    agenda = (
+        f"The next step is to {steps[0]}."
+        if len(steps) == 1
+        else " ".join(
+            f"{('First', 'Next', 'Then')[index]}, {step}." for index, step in enumerate(steps)
+        )
+    )
     lead_text = (
         leads[0]
         if len(leads) == 1

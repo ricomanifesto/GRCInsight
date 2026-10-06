@@ -384,3 +384,58 @@ def test_agenda_steps_do_not_repeat_the_selected_source_label():
     assert summary.count("Java support") == 1
     assert "“Java support”" in summary
     assert "The next step is to establish affected-asset and configuration scope." in summary
+
+
+def test_same_control_leads_share_one_agenda_step_and_keep_both_citations():
+    plan = narrative_plan()
+    plan["control_implications"].append({**plan["control_implications"][0], "source_ids": [2]})
+    plan["executive_brief"]["source_ids"] = [1, 2]
+    sources = [SOURCE, {**SOURCE, "title": "Second source", "url": "https://example.com/second"}]
+    body = render_report_plan(plan, sources)
+    summary = summary_of(body)
+    assert summary.count("establish affected-asset and configuration scope") == 1
+    assert "The next step is to establish affected-asset and configuration scope." in summary
+    assert SOURCE["url"] in summary and sources[1]["url"] in summary
+    validate_rendered_report(body, plan, sources)
+
+
+def test_multiple_regulatory_leads_share_one_applicability_step_and_keep_subjects():
+    from test_report_evidence import SOURCE as primary, selection_plan
+
+    second_excerpt = "The United States final disclosure rule takes effect on 2027-02-01."
+    second = {
+        **primary,
+        "title": "Final disclosure rule",
+        "url": "https://www.sec.gov/rules/final/second",
+        "snippet": second_excerpt,
+        "article_evidence": [
+            {
+                "origin": "summary",
+                "raw_text": second_excerpt,
+                "text": second_excerpt,
+                "extraction_version": 1,
+            }
+        ],
+    }
+    plan = selection_plan()
+    plan["control_implications"] = []
+    plan["regulatory_changes"].append(
+        {
+            "source_id": 2,
+            "change": "final disclosure rule",
+            "jurisdiction": "United States",
+            "evidence_excerpt": second_excerpt,
+        }
+    )
+    plan["executive_brief"] = {"decision_frame": "regulatory", "source_ids": [1, 2]}
+    body = render_report_plan(plan, [primary, second])
+    summary = summary_of(body)
+    assert (
+        summary.count(
+            "verify jurisdiction and organizational applicability with the regulatory owner"
+        )
+        == 1
+    )
+    assert "final reporting rule" in summary and "final disclosure rule" in summary
+    assert primary["url"] in summary and second["url"] in summary
+    validate_rendered_report(body, plan, [primary, second])
