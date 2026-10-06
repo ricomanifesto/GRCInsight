@@ -85,8 +85,9 @@ _VOID = {"br", "hr", "img", "wbr", "meta", "input", "source", "embed", "link"}
 
 class _StaticText(HTMLParser):
     def __init__(self) -> None:
-        # Entity decoding belongs to the single pre-parse boundary below.
-        super().__init__(convert_charrefs=False)
+        # Tokenize raw HTML first. The parser decodes references in text nodes
+        # after tokenization, so encoded quotes cannot terminate attributes.
+        super().__init__(convert_charrefs=True)
         self.stack: list[tuple[str, bool]] = []
         self.parts: list[str] = []
         self.invalid = False
@@ -134,7 +135,12 @@ class _StaticText(HTMLParser):
     def handle_data(self, data: str) -> None:
         if not any(hidden for _, hidden in self.stack):
             # Unconsumed angle brackets signal ambiguous or partially encoded markup.
-            if "<" in data or ">" in data:
+            if (
+                "<" in data
+                or ">" in data
+                or unescape(data) != data
+                or any(unicodedata.category(c).startswith("C") and c not in "\t\r\n" for c in data)
+            ):
                 self.invalid = True
             self.parts.append(data)
 
@@ -162,11 +168,10 @@ def _extract_text(raw: str) -> str:
     try:
         if len(raw.encode("utf-8")) > MAX_RAW_BYTES:
             return ""
-        decoded = unescape(raw)
-        if any(unicodedata.category(c).startswith("C") and c not in "\t\r\n" for c in decoded):
+        if any(unicodedata.category(c).startswith("C") and c not in "\t\r\n" for c in raw):
             return ""
         parser = _StaticText()
-        parser.feed(decoded)
+        parser.feed(raw)
         parser.close()
     except (ValueError, UnicodeError):
         return ""

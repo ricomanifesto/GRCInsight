@@ -49,6 +49,24 @@ def test_non_article_content_cannot_supply_finding_evidence(raw):
             parse_report_plan(json.dumps(plan(text)), [item])
 
 
+@pytest.mark.parametrize("reference", ["&quot;", "&#34;", "&#x22;"])
+def test_attribute_entities_cannot_change_markup_tokenization(reference):
+    raw = TITLE + '<span title="' + reference + "> new evidence words</span>"
+    item = source(summary=raw)
+    assert item["article_evidence"] == []
+    assert eligible_article_segments(item) == {}
+
+
+def test_valid_attribute_entities_never_enter_article_text():
+    raw = '<p title="&quot;> ignored attribute words">' + DETAIL + "</p>"
+    assert article_segments(source(summary=raw)) == {"summary": DETAIL}
+
+
+@pytest.mark.parametrize("reference", ["&amp;lt;", "&#x200b;", "&#x202e;", "&lt;"])
+def test_nested_or_invisible_text_references_fail_closed(reference):
+    assert source(summary=DETAIL + reference)["article_evidence"] == []
+
+
 def test_receipt_retains_raw_origin_and_deterministic_extraction_version():
     raw = f"<p>{TITLE}</p><p>The affected <b>gateway</b> requires an administrator session &amp; a valid token.</p>"
     expected = TITLE + " The affected gateway requires an administrator session & a valid token."
