@@ -272,8 +272,6 @@ jobs:
               exit 1
             fi
             echo "Report completed. Building site files..."
-            PUBLISHED_AT=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
-            echo "published_at=$PUBLISHED_AT" >> "$GITHUB_OUTPUT"
 
             CONTENT_LEN=$(printf %s "$CONTENT" | wc -c | tr -d ' ')
             echo "Content length (bytes): ${CONTENT_LEN:-0}"
@@ -286,6 +284,8 @@ jobs:
               --input report-data.json \
               --feed-url "$FEED_URL" \
               --model "$LLM_MODEL"
+            PUBLISHED_AT=$(python3 scripts/publication_state.py timestamp)
+            echo "published_at=$PUBLISHED_AT" >> "$GITHUB_OUTPUT"
             set +e
             python3 scripts/publication_state.py record-published \
               --manifest site/evidence-manifest.json \

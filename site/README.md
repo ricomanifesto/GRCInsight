@@ -4,6 +4,8 @@
 
 Generated report files should be changed through the publication scripts, not edited by hand.
 
+Publication event times come from `python3 scripts/publication_state.py timestamp`, which emits UTC with six fractional digits and a `Z` suffix. The generation workflow captures this value once after successful composition and reuses it through push retries. The chronology guard still rejects an event earlier than its report; it never rounds report times or advances an older event to bypass a newer publication.
+
 ## Files
 
 | Path | Purpose |
