@@ -61,6 +61,20 @@ class StalePublicationEvent(PublicationStateError):
     """A newer terminal publication event already exists."""
 
 
+def format_utc_timestamp(value: datetime) -> str:
+    """Format a parsed aware timestamp without echoing its original input."""
+    return (
+        value.astimezone(timezone.utc)
+        .isoformat(timespec="microseconds")
+        .replace("+00:00", "Z")
+    )
+
+
+def capture_event_timestamp() -> str:
+    """Read the UTC event clock without truncating fractional seconds."""
+    return format_utc_timestamp(datetime.now(timezone.utc))
+
+
 def parse_utc_timestamp(value: object, field: str) -> datetime:
     if not isinstance(value, str) or not value.strip():
         raise PublicationStateError(f"{field} must be a non-empty UTC timestamp")
@@ -196,7 +210,11 @@ def state_event(state: dict[str, object], event_at: str) -> dict[str, object]:
         state["report_generated_at"], "report_generated_at"
     )
     if event_time < generated:
-        raise PublicationStateError("publication event predates its report")
+        raise PublicationStateError(
+            "publication event predates its report; "
+            f"event_at={format_utc_timestamp(event_time)}; "
+            f"report_generated_at={format_utc_timestamp(generated)}"
+        )
     event: dict[str, object] = {
         "event_at": event_at,
         "outcome": state["outcome"],
@@ -343,6 +361,7 @@ def write_json(path: Path, value: dict[str, object]) -> None:
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     subparsers = parser.add_subparsers(dest="command", required=True)
+    subparsers.add_parser("timestamp")
 
     classify_parser = subparsers.add_parser("classify")
     classify_parser.add_argument("--report-data", type=Path, required=True)
@@ -365,6 +384,9 @@ def parse_args() -> argparse.Namespace:
 def main() -> int:
     args = parse_args()
     try:
+        if args.command == "timestamp":
+            print(capture_event_timestamp())
+            return 0
         if args.command == "classify":
             report_data = read_json(args.report_data, "report data")
             metadata = (
