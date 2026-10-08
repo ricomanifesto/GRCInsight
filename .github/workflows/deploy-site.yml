@@ -60,8 +60,17 @@ jobs:
         with:
           node-version: '24'
 
+      - name: Install Chromium system dependencies
+        timeout-minutes: 5
+        run: |
+          sudo python3 scripts/configure_pages_apt.py
+          npx --yes playwright@1.62.1 install-deps chromium
+
       - name: Install Chromium
-        run: npx --yes playwright@1.62.1 install --with-deps chromium
+        timeout-minutes: 5
+        env:
+          PLAYWRIGHT_DOWNLOAD_CONNECTION_TIMEOUT: '30000'
+        run: npx --yes playwright@1.62.1 install chromium
 
       - name: Start site preview
         run: |
