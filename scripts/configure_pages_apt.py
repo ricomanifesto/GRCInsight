@@ -11,6 +11,8 @@ APT::Update::Error-Mode "any";
 """
 AZURE = re.compile(r"(?m)^(https?://azure\.archive\.ubuntu\.com/ubuntu)(/?)(?=\s|$)")
 OFFICIAL = re.compile(r"(?m)^https://archive\.ubuntu\.com/ubuntu/?(?=\s|$)")
+# APT merges snippets in C-locale order; hosted runner defaults use zz-retries.
+DEFAULT_CONFIG = Path("/etc/apt/apt.conf.d/zzz-grcinsight-acquire")
 
 
 def configure(mirror_list: Path, config: Path) -> None:
@@ -31,9 +33,7 @@ def main() -> None:
     parser.add_argument(
         "--mirror-list", type=Path, default=Path("/etc/apt/apt-mirrors.txt")
     )
-    parser.add_argument(
-        "--config", type=Path, default=Path("/etc/apt/apt.conf.d/99grcinsight-acquire")
-    )
+    parser.add_argument("--config", type=Path, default=DEFAULT_CONFIG)
     args = parser.parse_args()
     configure(args.mirror_list, args.config)
     print("Ubuntu HTTPS mirror and bounded APT acquisition configured")

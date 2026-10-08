@@ -1,6 +1,7 @@
 """Pages installation must be bounded without bypassing package or reader gates."""
 
 from pathlib import Path
+from argparse import Namespace
 import runpy
 import subprocess
 import sys
@@ -62,6 +63,23 @@ def test_configuration_is_idempotent(tmp_path):
     before = mirror.read_bytes(), config.read_bytes()
     namespace["configure"](mirror, config)
     assert (mirror.read_bytes(), config.read_bytes()) == before
+
+
+def test_default_config_loads_after_runner_retry_override(monkeypatch, tmp_path):
+    namespace = runpy.run_path(str(SCRIPT))
+    captured = []
+    mirror = tmp_path / "mirrors"
+    mirror.write_text("https://archive.ubuntu.com/ubuntu\n")
+
+    def parse_args(parser):
+        captured.append(parser.get_default("config"))
+        return Namespace(mirror_list=mirror, config=tmp_path / "config")
+
+    monkeypatch.setattr(namespace["argparse"].ArgumentParser, "parse_args", parse_args)
+    namespace["main"]()
+    default = captured[0]
+    assert default.parent == Path("/etc/apt/apt.conf.d")
+    assert default.name.encode("ascii") > b"zz-retries"
 
 
 def test_workflow_keeps_install_and_visual_gates_mandatory():
