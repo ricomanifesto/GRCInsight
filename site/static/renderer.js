@@ -457,7 +457,21 @@
     };
   }
 
-  function renderReportSections(markdown) {
+  function renderReviewMap(rows) {
+    const groups = new Map();
+    rows.forEach((row, index) => {
+      if (!groups.has(row.control)) groups.set(row.control, []);
+      groups.get(row.control).push({ ...row, target: `finding-${index + 1}` });
+    });
+    const content = Array.from(groups, ([control, findings]) =>
+      `<div class="review-map-group"><h3>${escapeHtml(control)}<span class="review-map-count">${findings.length} ${findings.length === 1 ? 'finding' : 'findings'}</span></h3><ul>${findings.map(row =>
+        `<li><a href="#${row.target}"><span>${escapeHtml(row.focus)}</span><span class="review-priority"><span class="sr-only">Inferred review priority: </span>${escapeHtml(row.priority)}</span></a></li>`
+      ).join('')}</ul></div>`
+    ).join('');
+    return `<nav class="review-map" aria-label="Review map"><h2>Review map</h2><p>Inferred review priorities, not measured risk. Choose a finding to read its evidence and decision.</p><div class="review-map-groups">${content}</div></nav>`;
+  }
+
+  function renderReportSections(markdown, reviewMap = []) {
     // Historical source bytes remain unchanged. Make their classification limit
     // visible without claiming a modern evidence check ran at publication.
     markdown = normalizeReportMarkdown(markdown).replace(
@@ -474,17 +488,32 @@
       },
     );
     const html = renderMarkdown(markdown, true);
+    // The build supplies a bounded projection from the exact validated plan.
+    // A map must have one entry per rendered finding or it is omitted entirely.
+    const evidence = html.match(/<h2>Evidence and Decisions<\/h2>([\s\S]*?)(?=<h2>|$)/);
+    const findingCount = evidence ? (evidence[1].match(/<h3>/g) || []).length : 0;
+    const hasMap = Array.isArray(reviewMap) && reviewMap.length > 0 && reviewMap.length <= 6 &&
+      reviewMap.length === findingCount && html.includes('<h2>Executive Summary</h2>') &&
+      reviewMap.every(row => row && typeof row.focus === 'string' && row.focus.length > 0 &&
+        typeof row.control === 'string' && row.control.length > 0 && ['High', 'Medium', 'Low'].includes(row.priority));
     return html
       .split(/(?=<h2>)/)
       .map(part => part.replace(/^\s*(?:<hr>\s*)+/, '').replace(/(?:\s*<hr>)+\s*$/, '').trim())
       .filter(Boolean)
-      .map(part => `<section class="card">${part}</section>`)
+      .map(part => {
+        if (hasMap && part.startsWith('<h2>Evidence and Decisions</h2>')) {
+          let index = 0;
+          part = part.replace(/<h3>/g, () => `<h3 id="finding-${++index}" tabindex="-1">`);
+        }
+        const map = hasMap && part.startsWith('<h2>Executive Summary</h2>') ? renderReviewMap(reviewMap) : '';
+        return `<section class="card">${part}${map}</section>`;
+      })
       .join('');
   }
 
-  function renderReportDocument(markdown) {
+  function renderReportDocument(markdown, reviewMap = []) {
     const report = parseReportDocument(markdown);
-    return renderReportSections(report.bodyMarkdown) + renderReportMetadata(report.metadata);
+    return renderReportSections(report.bodyMarkdown, reviewMap) + renderReportMetadata(report.metadata);
   }
 
   window.GRCInsightRenderer = {

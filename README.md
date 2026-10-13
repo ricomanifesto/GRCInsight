@@ -51,6 +51,8 @@ Retained source positions and original URL identities remain unchanged through s
 
 The reading view uses compact numbered citations with full accessible titles, keyed by source title and URL so repeated URLs with different titles keep distinct highlights. Source Highlights keeps the complete source links and dated Digest context. Archived Markdown and evidence manifests retain their original bytes; archived HTML is rebuilt with the current reader. Older reports disclose that their regulatory context predates the separate evidence check. Failed-refresh notices derive both displayed timestamps from publication state and keep diagnostics under expandable details.
 
+The reading view adds a review map below the executive summary when a contract v5 plan exactly reproduces the report. It groups the same deduplicated findings by control area and links each to its supporting evidence and decision. Priorities are explicitly inferred review priorities, not measured risk. The map adds no model calls or domain claims. Reports without eligible findings or a matching plan remain readable without a map. The browser preserves the pre-rendered report as one snapshot; reload the page to read a newer publication.
+
 The stable article links shared with SentryDigest and SentryInsight follow SentryDigest's [reporting identity contract](https://github.com/ricomanifesto/SentryDigest/blob/main/contracts/README.md).
 
 ## Run It Locally

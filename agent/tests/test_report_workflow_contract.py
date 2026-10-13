@@ -977,12 +977,34 @@ def test_site_builder_gives_same_day_reports_unique_archive_keys():
     assert archive_slug(morning) != archive_slug(rerun)
 
 
-def test_site_builder_rebuilds_archive_reading_view_from_preserved_markdown():
-    builder = SITE_BUILDER.read_text()
-
-    assert "with_archive_detail_chrome" in builder
-    assert "Markdown and manifests retain publication-era evidence" in builder
-    assert "outputs[archive_page] = archive_detail_html(archived_markdown)" in builder
+def test_site_builder_rebuilds_archive_reading_view_from_preserved_markdown(tmp_path):
+    namespace = runpy.run_path(str(SITE_BUILDER))
+    snapshot = tmp_path / "2026-08-13T13-00-00Z"
+    snapshot.mkdir()
+    markdown = "# Historical report\n**Generated:** 2026-08-13T13:00:00Z\n\n## Executive Summary\nPreserved evidence.\n"
+    report = snapshot / "report.md"
+    report.write_text(markdown)
+    manifest = snapshot / "evidence-manifest.json"
+    manifest.write_text('{"report_contract_version": 1}\n')
+    before = {path: path.read_bytes() for path in (report, manifest)}
+    build = namespace["expected_outputs"]
+    build.__globals__["ARCHIVE_DIR"] = tmp_path
+    history = {
+        "history_started_at": "2026-08-13T13:00:00Z",
+        "max_entries": 30,
+        "events": [],
+        "schedule": {"cadence": "daily", "time_utc": "13:00"},
+    }
+    outputs = build(
+        markdown,
+        (REPO_ROOT / "site/index.html").read_text(),
+        publication_history=history,
+    )
+    html = outputs[snapshot / "index.html"]
+    assert "Preserved evidence." in html
+    assert "Historical context note" in html
+    assert "Review map" not in html
+    assert {path: path.read_bytes() for path in before} == before
 
 
 def test_site_report_check_validates_every_archive_manifest(tmp_path):

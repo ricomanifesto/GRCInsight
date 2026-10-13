@@ -14,6 +14,14 @@ import sys
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "scripts"))
+sys.path.insert(0, str(REPO_ROOT / "agent"))
+
+from core.report_plan import (  # noqa: E402
+    CONTROLS,
+    PRIORITIES,
+    report_finding_groups,
+    validate_rendered_report,
+)
 
 from publication_state import (  # noqa: E402
     PublicationStateError,
@@ -148,20 +156,56 @@ def archive_slug(value: datetime) -> str:
     return value.strftime("%Y-%m-%dT%H-%M-%SZ")
 
 
-def render_report(markdown: str) -> str:
+def review_map_rows(markdown: str, manifest: object) -> list[dict[str, str]]:
+    """Project only a v5 plan that exactly reproduces this report's body."""
+    if not isinstance(manifest, dict) or manifest.get("report_contract_version") != 5:
+        return []
+    body_start = re.search(r"^## ", markdown, re.MULTILINE)
+    if body_start is None:
+        return []
+    try:
+        plan = manifest["report_plan"]
+        validate_rendered_report(
+            markdown[body_start.start() :],
+            plan,
+            manifest["sources"],
+            include_digest=True,
+            contract_version=5,
+        )
+        return [
+            {
+                "focus": group[0]["focus"],
+                "control": CONTROLS[group[0]["control_id"]][0],
+                "priority": PRIORITIES[group[0]["priority"]],
+            }
+            for group in report_finding_groups(plan)
+        ]
+    except (ValueError, KeyError, TypeError, IndexError):
+        # This optional projection never repairs or substitutes report evidence.
+        return []
+
+
+def read_manifest(path: Path) -> object:
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except (FileNotFoundError, json.JSONDecodeError):
+        return None
+
+
+def render_report(markdown: str, manifest: object = None) -> str:
     node_script = r"""
 const fs = require('fs');
 const vm = require('vm');
 const rendererSource = fs.readFileSync(process.argv[1], 'utf8');
-const markdown = fs.readFileSync(0, 'utf8');
+const {markdown, reviewMap} = JSON.parse(fs.readFileSync(0, 'utf8'));
 const context = { window: {} };
 vm.createContext(context);
 vm.runInContext(rendererSource, context, { filename: 'renderer.js' });
-process.stdout.write(context.window.GRCInsightRenderer.renderReportDocument(markdown));
+process.stdout.write(context.window.GRCInsightRenderer.renderReportDocument(markdown, reviewMap));
 """
     result = subprocess.run(
         ["node", "-e", node_script, str(RENDERER_JS)],
-        input=markdown,
+        input=json.dumps({"markdown": markdown, "reviewMap": review_map_rows(markdown, manifest)}),
         capture_output=True,
         text=True,
     )
@@ -175,20 +219,19 @@ def current_index_html(
     markdown: str,
     publication_state: dict[str, object] | None = None,
     publication_history: dict[str, object] | None = None,
+    manifest: object = None,
 ) -> str:
     fields = report_fields(markdown)
     generated_raw = fields.get("generated", "")
     generated = parse_generated(generated_raw)
-    report_html = render_report(markdown)
+    report_html = render_report(markdown, manifest)
     report_node = (
         f"{REPORT_START}\n"
         f'          <div id="report" class="report" data-prerendered="true" '
         f'data-generated-at="{escape(generated_raw, quote=True)}">{report_html}</div>\n'
         f"          {REPORT_END}"
     )
-    region = re.compile(
-        rf"{re.escape(REPORT_START)}.*?{re.escape(REPORT_END)}", re.DOTALL
-    )
+    region = re.compile(rf"{re.escape(REPORT_START)}.*?{re.escape(REPORT_END)}", re.DOTALL)
     if len(region.findall(template)) != 1:
         fail("index.html must contain one report content marker pair")
     # A generated report may legitimately contain backslashes (for example,
@@ -209,8 +252,7 @@ def current_index_html(
     if count != 1:
         fail("index.html is missing the generated time element")
     notice_region = re.compile(
-        rf"{re.escape(PUBLICATION_NOTICE_START)}.*?"
-        rf"{re.escape(PUBLICATION_NOTICE_END)}",
+        rf"{re.escape(PUBLICATION_NOTICE_START)}.*?" rf"{re.escape(PUBLICATION_NOTICE_END)}",
         re.DOTALL,
     )
     if len(notice_region.findall(built)) != 1:
@@ -289,7 +331,7 @@ def with_archive_detail_chrome(html: str, generated: datetime) -> str:
     return html.replace(main_node, f"{context_node}\n    {main_node}", 1)
 
 
-def archive_detail_html(markdown: str) -> str:
+def archive_detail_html(markdown: str, manifest: object = None) -> str:
     fields = report_fields(markdown)
     title = fields.get("title", "GRC Intelligence Report")
     generated_raw = fields.get("generated", "")
@@ -311,7 +353,7 @@ def archive_detail_html(markdown: str) -> str:
         <nav class="header-links" aria-label="Report resources"><a href="../../">Latest report</a><a href="../">Archive</a><a href="report.md">Markdown</a></nav>
       </div>
     </header>
-    <main class="container archive-report">{render_report(markdown)}</main>
+    <main class="container archive-report">{render_report(markdown, manifest)}</main>
     <footer class="app-footer"><div class="container"><span>GRCInsight report archive</span></div></footer>
   </body>
 </html>
@@ -419,15 +461,17 @@ def expected_outputs(
         fail("publication history is required")
     outputs = {
         INDEX_HTML: current_index_html(
-            template, markdown, publication_state, publication_history
+            template,
+            markdown,
+            publication_state,
+            publication_history,
+            read_manifest(EVIDENCE_MANIFEST),
         ),
         PUBLICATION_HISTORY_INDEX: publication_history_html(publication_history),
     }
     reports: list[tuple[str, str, str, str]] = []
     if ARCHIVE_DIR.exists():
-        for report_md in sorted(
-            ARCHIVE_DIR.glob("????-??-??T??-??-??Z/report.md"), reverse=True
-        ):
+        for report_md in sorted(ARCHIVE_DIR.glob("????-??-??T??-??-??Z/report.md"), reverse=True):
             archived_markdown = read_text(report_md)
             fields = report_fields(archived_markdown)
             generated = parse_generated(fields.get("generated", ""))
@@ -440,7 +484,10 @@ def expected_outputs(
             # Markdown and manifests retain publication-era evidence; HTML is a
             # deterministic reader projection shared with the current report.
             archive_page = report_md.parent / "index.html"
-            outputs[archive_page] = archive_detail_html(archived_markdown)
+            outputs[archive_page] = archive_detail_html(
+                archived_markdown,
+                read_manifest(report_md.parent / "evidence-manifest.json"),
+            )
             reports.append(
                 (
                     report_key,

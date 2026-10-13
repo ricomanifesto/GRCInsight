@@ -1,6 +1,6 @@
 # GRCInsight Static Site
 
-`site/` is the exact GitHub Pages artifact. The current report and every archive page are rendered before deployment, so the evidence remains readable when JavaScript is unavailable. Browser JavaScript adds the contents index, human-readable date refresh, and an optional dark theme.
+`site/` is the exact GitHub Pages artifact. The current report and every archive page are rendered before deployment, so the evidence remains readable when JavaScript is unavailable. Browser JavaScript adds the contents index and an optional dark theme. It preserves the pre-rendered report and only fetches Markdown when that report is absent. Reloading the page obtains a newer publication.
 
 Generated report files should be changed through the publication scripts, not edited by hand.
 
@@ -28,6 +28,12 @@ Publication event times come from `python3 scripts/publication_state.py timestam
 `scripts/build_site.py --archive-current` snapshots the current Markdown and evidence manifest, then rebuilds the current page, archive, publication history, and related navigation. `scripts/check_site_report.py` validates the separately maintained sitemap.
 
 `static/renderer.js` is used by both the build and the browser. The controller in `static/app.js` does not contain a second Markdown implementation.
+
+## Review map
+
+The builder validates each contract v5 report against its own manifest before projecting a review map. Finding grouping and order are shared with the report composer; labels and inferred priorities come from the existing catalog. The renderer groups these entries by control and assigns matching static anchors to their evidence headings. Identical findings retain one target with every source citation. Legacy, absent or mismatched plans omit the map; publication evidence checks remain independent and unchanged.
+
+The map is rendered in HTML for current and eligible archived reports. No model request or browser manifest fetch is needed. Historical Markdown and manifests are unchanged. Counts describe displayed findings, and priorities remain inferences rather than quantified risk.
 
 ## Checks
 

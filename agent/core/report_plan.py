@@ -510,6 +510,32 @@ def _link(source: dict[str, Any]) -> str:
     return f"[{label}]({destination})"
 
 
+def report_finding_groups(plan: dict[str, Any]) -> list[list[dict[str, Any]]]:
+    """Return validated findings in publication order, preserving grouped source identities."""
+    lead_order = plan["executive_brief"]["source_ids"]
+    ordered = sorted(
+        plan["control_implications"],
+        key=lambda row: (
+            (
+                lead_order.index(row["source_ids"][0])
+                if row["source_ids"][0] in lead_order
+                else len(lead_order)
+            ),
+            list(PRIORITIES).index(row["priority"]),
+        ),
+    )
+    groups: dict[tuple, list[dict]] = {}
+    for row in ordered:
+        key = (
+            row["focus"],
+            row["evidence_excerpt"],
+            row["control_id"],
+            row["priority"],
+        )
+        groups.setdefault(key, []).append(row)
+    return list(groups.values())
+
+
 def render_report_plan(
     value: Any,
     sources: list[dict[str, Any]],
@@ -656,25 +682,9 @@ def render_report_plan(
     )
     if contract_version >= 5:
         executive = _executive_narrative(plan, sources, citations)
-        lead_order = plan["executive_brief"]["source_ids"]
-        ordered = sorted(
-            controls,
-            key=lambda row: (
-                (
-                    lead_order.index(row["source_ids"][0])
-                    if row["source_ids"][0] in lead_order
-                    else len(lead_order)
-                ),
-                list(PRIORITIES).index(row["priority"]),
-            ),
-        )
         decisions = []
-        groups: dict[tuple, list[dict]] = {}
-        for row in ordered:
-            key = (row["focus"], row["evidence_excerpt"], row["control_id"], row["priority"])
-            groups.setdefault(key, []).append(row)
         shown_excerpts = {row["evidence_excerpt"] for row in plan["regulatory_changes"]}
-        for group in groups.values():
+        for group in report_finding_groups(plan):
             row = group[0]
             ids = [item["source_ids"][0] for item in group]
             control = row["control_id"]
