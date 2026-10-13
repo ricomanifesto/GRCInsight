@@ -22,9 +22,23 @@ MAX_REQUEST_BYTES = 24000
 MAX_RESPONSE_BYTES = 131072
 LABELS = ("relevant", "irrelevant", "insufficient_evidence")
 CRITERIA = {
-    "relevant": "Evidence describes a concrete governance, compliance, regulatory, audit or control-review implication.",
-    "irrelevant": "Sufficient evidence is present but there is no concrete GRC implication; generic news or promotion alone does not qualify.",
-    "insufficient_evidence": "The supplied text is missing, ambiguous, or too limited to determine a GRC implication.",
+    "relevant": (
+        "A specific cybersecurity, operational, governance or compliance development that warrants "
+        "control review: an exploitable flaw or patch, end of product support or security updates, "
+        "unauthorized access, data loss, service disruption, enforcement action or financial crime, "
+        "or a concrete audit finding, policy or regulatory obligation. A named regulation or explicit "
+        "instruction to act is not required; a specific actual risk event is enough."
+    ),
+    "irrelevant": (
+        "Adequate text but only an event invitation, giveaway, vendor promotion, abstract trend or "
+        "opinion, aggregate contest or prize summary, unrelated everyday news, or an explicitly "
+        "fictional event with no real-world issue. No specific actual operational or control issue "
+        "is described."
+    ),
+    "insufficient_evidence": (
+        "No usable content or evidence too ambiguous to decide whether a concrete development "
+        "occurred. Do not use this merely because legal applicability is unspecified."
+    ),
 }
 
 
@@ -43,6 +57,9 @@ class ArticleDecision:
     def probability(self) -> float:
         return self.probabilities[self.label]
 
+    def usable(self, minimum_probability: float) -> bool:
+        return self.label != "insufficient_evidence" and self.probability >= minimum_probability
+
 
 @dataclass(frozen=True)
 class RelevanceResult:
@@ -55,8 +72,7 @@ class RelevanceResult:
 
     def usable(self, minimum_probability: float) -> bool:
         return bool(self.decisions) and all(
-            item.label != "insufficient_evidence" and item.probability >= minimum_probability
-            for item in self.decisions
+            item.usable(minimum_probability) for item in self.decisions
         )
 
 

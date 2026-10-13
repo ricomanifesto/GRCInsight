@@ -96,10 +96,18 @@ even when the report model uses a free route.
 - `GRC_RELEVANCE_MODE=off`: the existing generative analysis, with no decision calls.
 - `GRC_RELEVANCE_MODE=shadow`: run both analyses, retain the original result, and
   log aggregate decision timing, resolved models, usage and uncertainty counts.
-- `GRC_RELEVANCE_MODE=enabled`: replace the article-analysis call only when every
-  decision is valid, is relevant/irrelevant, and its selected-label probability
-  meets `GRC_RELEVANCE_MIN_PROBABILITY` (default `0.95`). Otherwise fall back for
-  the entire batch. This threshold is a starting value, not a measured guarantee.
+- `GRC_RELEVANCE_MODE=enabled`: accept each valid relevant/irrelevant decision
+  whose selected-label probability meets `GRC_RELEVANCE_MIN_PROBABILITY`
+  (default `0.95`). Analyze the uncertain or insufficient-evidence subset with
+  one generative call and map its selections back to the original positions.
+  Unavailable or invalid decisions still fall back for the entire batch. A
+  failed subset remains an analysis error for the existing caller to handle.
+  This threshold is a starting value, not a measured guarantee.
+
+The decision rubric includes concrete security and operational events, control
+or audit findings, enforcement and regulatory obligations. Abstract commentary,
+promotions and fictional events alone do not qualify; missing or ambiguous
+evidence remains uncertain. A named regulation is not required for relevance.
 
 The decision path handles up to 64 articles in batches of at most 12, with at
 most three requests in flight. Each request is capped at 24,000 UTF-8 bytes and
@@ -130,9 +138,12 @@ uv run python ../scripts/benchmark_relevance.py cases.json --run-paid --repeats 
 
 The first command validates a JSON array of `{"article": {...}, "expected": "relevant"}`
 without network calls. The second reports per-batch p50/p95 times, recall, false
-positives, missing results and fallback rate for Jev, the current model, and a
-local entity baseline. The enabled-path timing is an estimate that includes
-fallback; it is not a measured whole-report speedup. Cost unavailable from a
+positives and missing results for the current model, the actual enabled path
+including subset fallback, and a local entity baseline. It alternates paired
+execution order and reports the fraction of batches and articles requiring
+fallback. Decision usage comes from those same enabled calls. Measurements do
+not include report generation, workflow risk overrides or publication, and small
+replay samples do not establish production p95. Cost unavailable from a
 provider/client is reported as null. Failed partial batches can still be billed.
 Logs contain aggregate diagnostics, never article bodies or credentials. Live
 benchmark results and deployment configuration are required before claiming

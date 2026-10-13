@@ -15,7 +15,6 @@ from services.model_service import GRCModelService  # noqa: E402
 from services.relevance_decisions import (
     LABELS,
     MAX_ARTICLES,
-    RelevanceClient,
 )  # noqa: E402
 
 
@@ -53,14 +52,10 @@ def main():
         return
     if not settings.openrouter_api_key:
         parser.error("OPENROUTER_API_KEY is required for --run-paid")
-    # This replay calls each raw path directly, independent of the service mode.
+    # Only this replay process changes mode; no deployment configuration is written.
+    settings.grc_relevance_mode = "enabled"
     model = GRCModelService()
-    client = RelevanceClient(
-        api_key=settings.openrouter_api_key,
-        timeout=settings.grc_relevance_timeout_seconds,
-        focus_areas=tuple(settings.analysis_focus_areas),
-    )
-    report = asyncio.run(run_comparison(articles, expected, model, client, repeats=args.repeats))
+    report = asyncio.run(run_comparison(articles, expected, model, repeats=args.repeats))
     print(json.dumps(report, indent=2))
 
 

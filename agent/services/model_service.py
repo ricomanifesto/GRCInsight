@@ -16,6 +16,7 @@ from core.report_evidence import (
     REGULATORY_PUBLISHERS,
 )
 from core.article_evidence import eligible_article_segments
+from core.article_selection import selected_article_mask
 from core.entities import analyze_article_grc_content, detect_risk_categories
 from core.report_plan import (
     CONTROLS,
@@ -176,9 +177,33 @@ class GRCModelService:
             )
             return legacy
         decisions = await self._try_relevance(articles)
-        if decisions is not None and decisions.usable(self.relevance_min_probability):
-            return self._analysis_from_decisions(articles, decisions)
-        return await self._analyze_articles_with_model(articles)
+        if decisions is None:
+            return await self._analyze_articles_with_model(articles)
+        uncertain = [
+            item.index
+            for item in decisions.decisions
+            if not item.usable(self.relevance_min_probability)
+        ]
+        if len(uncertain) == len(articles):
+            return await self._analyze_articles_with_model(articles)
+        selected = [False] * len(articles)
+        for item in decisions.decisions:
+            if item.usable(self.relevance_min_probability):
+                selected[item.index] = item.label == "relevant"
+        fallback: dict[str, Any] = {}
+        if uncertain:
+            subset = [articles[index] for index in uncertain]
+            fallback = await self._analyze_articles_with_model(subset)
+            if "error" in fallback:
+                # Existing callers own degraded analysis. Do not disguise a failed
+                # subset as successful analysis or spend the deadline on a retry.
+                return {
+                    **fallback,
+                    "summary": {**fallback.get("summary", {}), "total_articles": len(articles)},
+                }
+            for index, chosen in zip(uncertain, selected_article_mask(subset, fallback)):
+                selected[index] = chosen
+        return self._analysis_from_selection(articles, selected, fallback.get("analysis", {}))
 
     async def _try_relevance(self, articles: List[ArticleInput]) -> RelevanceResult | None:
         diagnostics: dict[str, Any] = {"mode": self.relevance_mode}
@@ -186,11 +211,18 @@ class GRCModelService:
         try:
             assert self.relevance_client is not None
             result = await self.relevance_client.classify(articles)
+            uncertain_count = sum(
+                not item.usable(self.relevance_min_probability) for item in result.decisions
+            )
             diagnostics.update(
                 status=(
                     "shadow"
                     if self.relevance_mode == "shadow"
-                    else "used" if result.usable(self.relevance_min_probability) else "uncertain"
+                    else (
+                        "used"
+                        if not uncertain_count
+                        else "uncertain" if uncertain_count == len(result.decisions) else "partial"
+                    )
                 ),
                 models=list(result.models),
                 input_tokens=result.input_tokens,
@@ -198,11 +230,7 @@ class GRCModelService:
                 cost=result.cost,
                 elapsed_seconds=round(result.elapsed_seconds, 4),
                 article_count=len(result.decisions),
-                uncertain_count=sum(
-                    item.label == "insufficient_evidence"
-                    or item.probability < self.relevance_min_probability
-                    for item in result.decisions
-                ),
+                uncertain_count=uncertain_count,
             )
         except DecisionError as error:
             diagnostics["status"] = str(error)
@@ -213,15 +241,15 @@ class GRCModelService:
         logger.info("Article relevance pilot {}", json.dumps(diagnostics))
         return result
 
-    def _analysis_from_decisions(
-        self, articles: List[ArticleInput], result: RelevanceResult
+    def _analysis_from_selection(
+        self, articles: List[ArticleInput], selected: list[bool], fallback_analysis: dict[str, Any]
     ) -> Dict[str, Any]:
         """Project decisions and existing entity signals into the analysis contract."""
         local = [analyze_article_grc_content(article.model_dump()) for article in articles]
         indices = [
-            item.index
-            for item in result.decisions
-            if item.label == "relevant" or local[item.index].get("has_grc_content", False)
+            index
+            for index, chosen in enumerate(selected)
+            if chosen or local[index].get("has_grc_content", False)
         ]
         entities = {
             target: sorted({value for signal in local for value in signal.get(source, [])})
@@ -241,11 +269,14 @@ class GRCModelService:
                 )
             }
         )
+        analysis = {**entities, "risk_categories": risk_categories}
+        for key, values in analysis.items():
+            analysis[key] = sorted(set(values) | set(fallback_analysis.get(key, [])))
         return {
             "grc_article_indices": indices,
             "grc_articles": [{"title": articles[i].title, "url": articles[i].url} for i in indices],
             "summary": {"total_articles": len(articles), "grc_relevant_count": len(indices)},
-            "analysis": {**entities, "risk_categories": risk_categories},
+            "analysis": analysis,
         }
 
     async def _analyze_articles_with_model(self, articles: List[ArticleInput]) -> Dict[str, Any]:
