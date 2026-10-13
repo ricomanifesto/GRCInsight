@@ -12,6 +12,9 @@ env:
   GO_FUNCTION_NAME: grcinsight-go-function
   PYTHON_FUNCTION_NAME: grcinsight-python-function
   LLM_MODEL: ${{ vars.LLM_MODEL || 'openrouter/nvidia/nemotron-3-ultra-550b-a55b:free' }}
+  GRC_RELEVANCE_MODE: ${{ vars.GRC_RELEVANCE_MODE || 'off' }}
+  GRC_RELEVANCE_MIN_PROBABILITY: ${{ vars.GRC_RELEVANCE_MIN_PROBABILITY || '0.95' }}
+  GRC_RELEVANCE_TIMEOUT_SECONDS: ${{ vars.GRC_RELEVANCE_TIMEOUT_SECONDS || '4' }}
 
 jobs:
   deploy:
@@ -79,6 +82,28 @@ jobs:
               exit 1
               ;;
           esac
+          python3 - <<'PY'
+          import math
+          import os
+
+          if os.environ["GRC_RELEVANCE_MODE"] not in {"off", "shadow", "enabled"}:
+              raise SystemExit("Invalid GRC_RELEVANCE_MODE")
+          for name, minimum, maximum, exclusive in (
+              ("GRC_RELEVANCE_MIN_PROBABILITY", 0.5, 1, False),
+              ("GRC_RELEVANCE_TIMEOUT_SECONDS", 0, 10, True),
+          ):
+              try:
+                  value = float(os.environ[name])
+              except ValueError:
+                  raise SystemExit(f"Invalid {name}") from None
+              if (
+                  not math.isfinite(value)
+                  or value > maximum
+                  or value < minimum
+                  or (exclusive and value == minimum)
+              ):
+                  raise SystemExit(f"Invalid {name}")
+          PY
           echo "Using LLM_MODEL=$LLM_MODEL"
 
       - name: Attempt login to AWS Public ECR (optional)
@@ -216,7 +241,7 @@ jobs:
           aws lambda update-function-configuration \
             --function-name "$PYTHON_FUNCTION_NAME" \
             --region "$AWS_REGION" \
-            --environment "Variables={LLM_MODEL=$LLM_MODEL,OPENROUTER_API_KEY=$OPENROUTER_API_KEY,LOG_LEVEL=INFO,DDB_TABLE_NAME=grcinsight-reports,ARTICLES_TABLE_NAME=grcinsight-articles}" \
+            --environment "Variables={LLM_MODEL=$LLM_MODEL,OPENROUTER_API_KEY=$OPENROUTER_API_KEY,GRC_RELEVANCE_MODE=$GRC_RELEVANCE_MODE,GRC_RELEVANCE_MIN_PROBABILITY=$GRC_RELEVANCE_MIN_PROBABILITY,GRC_RELEVANCE_TIMEOUT_SECONDS=$GRC_RELEVANCE_TIMEOUT_SECONDS,LOG_LEVEL=INFO,DDB_TABLE_NAME=grcinsight-reports,ARTICLES_TABLE_NAME=grcinsight-articles}" \
             --query 'FunctionName' \
             --output text
           aws lambda wait function-updated \

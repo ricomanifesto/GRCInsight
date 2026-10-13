@@ -1,6 +1,80 @@
 import re
 from typing import List, Dict, Any
 
+RISK_CATEGORY_KEYWORDS = {
+    "Regulatory and enforcement activity": (
+        "regulator",
+        "regulatory",
+        "compliance",
+        "cisa",
+        "fbi",
+        "ofac",
+        "sanction",
+        "privacy",
+        "enforcement",
+        "directive",
+    ),
+    "Identity and access security": (
+        "identity",
+        "credential",
+        "access",
+        "mfa",
+        "password",
+        "privilege",
+        "account takeover",
+        "intune",
+    ),
+    "Third-party and supply chain exposure": (
+        "third-party",
+        "third party",
+        "vendor",
+        "supplier",
+        "supply chain",
+        "msp",
+    ),
+    "Vulnerability and patch management": (
+        "vulnerability",
+        "zero-day",
+        "zero day",
+        "patch",
+        "cve",
+        "exploit",
+        "rce",
+        "flaw",
+        "unauthenticated",
+    ),
+    "Ransomware and malware operations": (
+        "ransomware",
+        "malware",
+        "botnet",
+        "ddos",
+        "extortion",
+        "phishing",
+        "trojan",
+        "implant",
+    ),
+    "Cloud and data protection": (
+        "cloud",
+        "sharepoint",
+        "data breach",
+        "data exposure",
+        "data leak",
+        "data theft",
+        "storage",
+        "saas",
+    ),
+}
+
+
+def detect_risk_categories(text: str) -> List[str]:
+    """Infer coarse risk themes from article text without using an LLM."""
+    lowered = text.lower()
+    return [
+        category
+        for category, keywords in RISK_CATEGORY_KEYWORDS.items()
+        if any(keyword in lowered for keyword in keywords)
+    ]
+
 
 def extract_entities(text: str) -> Dict[str, Any]:
     """

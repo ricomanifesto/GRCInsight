@@ -86,6 +86,60 @@ The Go service listens on port 8080 and calls the Python service at `http://loca
 
 ## Checks
 
+### Optional article relevance pilot
+
+Article analysis can use `typesafe/jev-1.13` through OpenRouter's Decisions API.
+The pilot is server-configured and **off by default**. It uses the existing
+`OPENROUTER_API_KEY`; shadow and enabled modes can incur paid inference charges,
+even when the report model uses a free route.
+
+- `GRC_RELEVANCE_MODE=off`: the existing generative analysis, with no decision calls.
+- `GRC_RELEVANCE_MODE=shadow`: run both analyses, retain the original result, and
+  log aggregate decision timing, resolved models, usage and uncertainty counts.
+- `GRC_RELEVANCE_MODE=enabled`: replace the article-analysis call only when every
+  decision is valid, is relevant/irrelevant, and its selected-label probability
+  meets `GRC_RELEVANCE_MIN_PROBABILITY` (default `0.95`). Otherwise fall back for
+  the entire batch. This threshold is a starting value, not a measured guarantee.
+
+The decision path handles up to 64 articles in batches of at most 12, with at
+most three requests in flight. Each request is capped at 24,000 UTF-8 bytes and
+each response at 128 KiB. It sees at most 200 title characters and the first 500
+characters of content, or summary when content is empty. Its total timeout is
+`GRC_RELEVANCE_TIMEOUT_SECONDS` (default four, maximum ten), further bounded by
+the caller deadline with one second reserved for fallback. Failed or uncertain
+decisions add overhead; the existing fallback is not guaranteed to finish within
+the remaining caller budget. No decision requests remain running after fallback.
+
+Article positions preserve identity even when titles repeat. Existing local
+entity signals remain positive; the workflow also retains its existing local
+risk signals. Counts reflect the effective selection. Relevance probabilities
+are not relevance scores, legal applicability, or incident severity. Report
+authoring, retained evidence and publication validation stay on their existing
+paths, and no source is dropped from report evidence by this pilot.
+
+Use independently reviewed cases to compare quality and speed before activation:
+
+```bash
+# Each record has an ArticleInput object and an expected label:
+# relevant, irrelevant, or insufficient_evidence. Labels never enter model inputs.
+cd agent
+uv run python ../scripts/benchmark_relevance.py cases.json
+# Explicitly make paid calls, without generating or publishing a report:
+uv run python ../scripts/benchmark_relevance.py cases.json --run-paid --repeats 3
+```
+
+The first command validates a JSON array of `{"article": {...}, "expected": "relevant"}`
+without network calls. The second reports per-batch p50/p95 times, recall, false
+positives, missing results and fallback rate for Jev, the current model, and a
+local entity baseline. The enabled-path timing is an estimate that includes
+fallback; it is not a measured whole-report speedup. Cost unavailable from a
+provider/client is reported as null. Failed partial batches can still be billed.
+Logs contain aggregate diagnostics, never article bodies or credentials. Live
+benchmark results and deployment configuration are required before claiming
+production speed or quality improvements.
+
+### Repository validation
+
 ```bash
 make check
 ```

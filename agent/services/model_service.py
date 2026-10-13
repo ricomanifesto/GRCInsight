@@ -1,5 +1,6 @@
 """OpenRouter model service for GRC analysis."""
 
+import asyncio
 from dataclasses import dataclass
 from datetime import datetime, timezone
 import json
@@ -15,6 +16,7 @@ from core.report_evidence import (
     REGULATORY_PUBLISHERS,
 )
 from core.article_evidence import eligible_article_segments
+from core.entities import analyze_article_grc_content, detect_risk_categories
 from core.report_plan import (
     CONTROLS,
     CONTROL_REVIEWS,
@@ -30,6 +32,7 @@ from services.openrouter_client import (
     OpenRouterGeneration,
     parse_openrouter_model,
 )
+from services.relevance_decisions import DecisionError, RelevanceClient, RelevanceResult
 
 REPORT_CVE_LIMIT = 10
 CVE_PATTERN = re.compile(r"\bCVE-\d{4}-\d{4,}\b", re.IGNORECASE)
@@ -115,6 +118,19 @@ class GRCModelService:
             total_timeout=OPENROUTER_TOTAL_TIMEOUT_SECONDS,
             deadline=model_deadline,
         )
+        self.relevance_mode = settings.grc_relevance_mode
+        self.relevance_min_probability = settings.grc_relevance_min_probability
+        self.relevance_client = (
+            RelevanceClient(
+                api_key=settings.openrouter_api_key,
+                timeout=settings.grc_relevance_timeout_seconds,
+                deadline=model_deadline,
+                focus_areas=tuple(settings.analysis_focus_areas),
+            )
+            if self.relevance_mode != "off"
+            else None
+        )
+        self.last_relevance_diagnostics: dict[str, Any] | None = None
         logger.info(
             "Initialized model service with provider=%s model=%s",
             self.model.provider_id,
@@ -149,6 +165,90 @@ class GRCModelService:
         )
 
     async def analyze_articles_for_grc(self, articles: List[ArticleInput]) -> Dict[str, Any]:
+        """Use the optional relevance pilot without changing report generation."""
+        self.last_relevance_diagnostics = None
+        if self.relevance_client is None or not articles:
+            return await self._analyze_articles_with_model(articles)
+        if self.relevance_mode == "shadow":
+            # Both calls see the same caller deadline; the pilot has its own short cap.
+            legacy, _ = await asyncio.gather(
+                self._analyze_articles_with_model(articles), self._try_relevance(articles)
+            )
+            return legacy
+        decisions = await self._try_relevance(articles)
+        if decisions is not None and decisions.usable(self.relevance_min_probability):
+            return self._analysis_from_decisions(articles, decisions)
+        return await self._analyze_articles_with_model(articles)
+
+    async def _try_relevance(self, articles: List[ArticleInput]) -> RelevanceResult | None:
+        diagnostics: dict[str, Any] = {"mode": self.relevance_mode}
+        result = None
+        try:
+            assert self.relevance_client is not None
+            result = await self.relevance_client.classify(articles)
+            diagnostics.update(
+                status=(
+                    "shadow"
+                    if self.relevance_mode == "shadow"
+                    else "used" if result.usable(self.relevance_min_probability) else "uncertain"
+                ),
+                models=list(result.models),
+                input_tokens=result.input_tokens,
+                output_tokens=result.output_tokens,
+                cost=result.cost,
+                elapsed_seconds=round(result.elapsed_seconds, 4),
+                article_count=len(result.decisions),
+                uncertain_count=sum(
+                    item.label == "insufficient_evidence"
+                    or item.probability < self.relevance_min_probability
+                    for item in result.decisions
+                ),
+            )
+        except DecisionError as error:
+            diagnostics["status"] = str(error)
+        except Exception:
+            # The experimental path must not prevent the existing path from running.
+            diagnostics["status"] = "internal_error"
+        self.last_relevance_diagnostics = diagnostics
+        logger.info("Article relevance pilot {}", json.dumps(diagnostics))
+        return result
+
+    def _analysis_from_decisions(
+        self, articles: List[ArticleInput], result: RelevanceResult
+    ) -> Dict[str, Any]:
+        """Project decisions and existing entity signals into the analysis contract."""
+        local = [analyze_article_grc_content(article.model_dump()) for article in articles]
+        indices = [
+            item.index
+            for item in result.decisions
+            if item.label == "relevant" or local[item.index].get("has_grc_content", False)
+        ]
+        entities = {
+            target: sorted({value for signal in local for value in signal.get(source, [])})
+            for source, target in (
+                ("regulations", "regulations_mentioned"),
+                ("frameworks", "frameworks_referenced"),
+                ("industries", "industries_affected"),
+                ("regulatory_bodies", "regulatory_bodies"),
+            )
+        }
+        risk_categories = sorted(
+            {
+                category
+                for article in articles
+                for category in detect_risk_categories(
+                    "\n".join(filter(None, [article.title, article.summary, article.content]))
+                )
+            }
+        )
+        return {
+            "grc_article_indices": indices,
+            "grc_articles": [{"title": articles[i].title, "url": articles[i].url} for i in indices],
+            "summary": {"total_articles": len(articles), "grc_relevant_count": len(indices)},
+            "analysis": {**entities, "risk_categories": risk_categories},
+        }
+
+    async def _analyze_articles_with_model(self, articles: List[ArticleInput]) -> Dict[str, Any]:
         """Analyze articles for GRC-relevant content."""
         try:
             logger.info(f"Analyzing {len(articles)} articles for GRC content")
