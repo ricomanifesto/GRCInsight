@@ -293,3 +293,12 @@ def test_shadow_failure_keeps_legacy_analysis(monkeypatch):
     model.relevance_client.classify = AsyncMock(side_effect=DecisionError("invalid_response"))
     assert asyncio.run(model.analyze_articles_for_grc(articles())) == {"legacy": True}
     assert model.last_relevance_diagnostics["status"] == "invalid_response"
+
+
+def test_failed_decisions_do_not_reuse_previous_raw_result(monkeypatch):
+    model = service(monkeypatch, "enabled")
+    model.relevance_client.classify = AsyncMock(side_effect=[result(), DecisionError("timeout")])
+    asyncio.run(model.analyze_articles_for_grc(articles()))
+    assert model.last_relevance_result is not None
+    asyncio.run(model.analyze_articles_for_grc(articles()))
+    assert model.last_relevance_result is None

@@ -140,8 +140,10 @@ The first command validates a JSON array of `{"article": {...}, "expected": "rel
 without network calls. The second reports per-batch p50/p95 times, recall, false
 positives and missing results for the current model, the actual enabled path
 including subset fallback, and a local entity baseline. It alternates paired
-execution order and reports the fraction of batches and articles requiring
-fallback. Decision usage comes from those same enabled calls. Measurements do
+execution order with a fresh service and time budget for each measured path, and
+reports the fraction of batches and articles requiring fallback. Raw three-label
+quality and decision usage come from those same enabled calls; final selections
+are binary. Measurements do
 not include report generation, workflow risk overrides or publication, and small
 replay samples do not establish production p95. Cost unavailable from a
 provider/client is reported as null. Failed partial batches can still be billed.

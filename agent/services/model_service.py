@@ -132,6 +132,7 @@ class GRCModelService:
             else None
         )
         self.last_relevance_diagnostics: dict[str, Any] | None = None
+        self.last_relevance_result: RelevanceResult | None = None
         logger.info(
             "Initialized model service with provider=%s model=%s",
             self.model.provider_id,
@@ -168,6 +169,7 @@ class GRCModelService:
     async def analyze_articles_for_grc(self, articles: List[ArticleInput]) -> Dict[str, Any]:
         """Use the optional relevance pilot without changing report generation."""
         self.last_relevance_diagnostics = None
+        self.last_relevance_result = None
         if self.relevance_client is None or not articles:
             return await self._analyze_articles_with_model(articles)
         if self.relevance_mode == "shadow":
@@ -211,6 +213,7 @@ class GRCModelService:
         try:
             assert self.relevance_client is not None
             result = await self.relevance_client.classify(articles)
+            self.last_relevance_result = result
             uncertain_count = sum(
                 not item.usable(self.relevance_min_probability) for item in result.decisions
             )

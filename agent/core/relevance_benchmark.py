@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from collections import Counter
+from collections.abc import Callable
 import math
 from statistics import median
 import time
@@ -58,15 +59,13 @@ def _latencies(values: list[float]) -> dict[str, float]:
 async def run_comparison(
     articles: list[ArticleInput],
     expected: list[str],
-    model: GRCModelService,
+    model_factory: Callable[[], GRCModelService],
     *,
     repeats: int = 3,
 ) -> dict[str, Any]:
     """Measure the actual enabled policy, including any subset fallback."""
     if not 1 <= repeats <= 10 or len(articles) != len(expected):
         raise ValueError("Use one label per article and 1-10 repeats")
-    if model.relevance_mode != "enabled" or model.relevance_client is None:
-        raise ValueError("Benchmark requires an enabled relevance service")
     classification_metrics(expected, [None] * len(expected))
     local_started = time.perf_counter()
     local = [
@@ -75,6 +74,7 @@ async def run_comparison(
     ]
     local_elapsed = time.perf_counter() - local_started
     predictions: dict[str, list[str | None]] = {"legacy": [], "enabled": []}
+    decision_predictions: list[str | None] = []
     times: dict[str, list[float]] = {"legacy": [], "enabled": []}
     runs = []
     diagnostics = []
@@ -83,6 +83,11 @@ async def run_comparison(
         order = ["legacy", "enabled"] if repeat % 2 == 0 else ["enabled", "legacy"]
         run: dict[str, Any] = {"order": order}
         for path in order:
+            # Each path is an independent workflow. Never share its cumulative
+            # model deadline with another baseline, candidate or repetition.
+            model = model_factory()
+            if model.relevance_mode != "enabled" or model.relevance_client is None:
+                raise ValueError("Benchmark requires an enabled relevance service")
             started = time.perf_counter()
             analysis = (
                 await model._analyze_articles_with_model(articles)
@@ -106,6 +111,14 @@ async def run_comparison(
                 diagnostic = dict(model.last_relevance_diagnostics or {})
                 diagnostics.append(diagnostic)
                 run["decisions"] = diagnostic
+                raw_decisions = model.last_relevance_result
+                raw_predictions: list[str | None] = (
+                    [item.label for item in raw_decisions.decisions]
+                    if raw_decisions is not None
+                    else [None] * len(articles)
+                )
+                decision_predictions.extend(raw_predictions)
+                run["decision_predictions"] = raw_predictions
         runs.append(run)
     labels = expected * repeats
     costs = [item.get("cost") for item in diagnostics]
@@ -130,6 +143,7 @@ async def run_comparison(
             for path in predictions
         },
         "decisions": {
+            **classification_metrics(labels, decision_predictions),
             "statuses": dict(Counter(item.get("status", "unavailable") for item in diagnostics)),
             "fallback_batch_rate": sum(size > 0 for size in fallback_sizes) / repeats,
             "fallback_article_rate": sum(fallback_sizes) / (repeats * len(articles)),
@@ -144,7 +158,8 @@ async def run_comparison(
         },
         "limits": [
             "Measured article-analysis calls, not whole reports, Lambda latency or page loads.",
-            "Paired order alternates; small replay samples do not establish production p95.",
+            "Paired order alternates with a fresh service and workflow budget for each path.",
+            "Small replay samples do not establish production p95.",
             "Decisions statistics describe the same enabled calls, not a separate inference run.",
             "Effective selections include local entities; workflow risk overrides are not measured.",
             "Legacy and total enabled cost are unavailable from the client, not zero.",

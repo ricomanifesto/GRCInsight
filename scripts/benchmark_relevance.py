@@ -54,8 +54,7 @@ def main():
         parser.error("OPENROUTER_API_KEY is required for --run-paid")
     # Only this replay process changes mode; no deployment configuration is written.
     settings.grc_relevance_mode = "enabled"
-    model = GRCModelService()
-    report = asyncio.run(run_comparison(articles, expected, model, repeats=args.repeats))
+    report = asyncio.run(run_comparison(articles, expected, GRCModelService, repeats=args.repeats))
     print(json.dumps(report, indent=2))
 
 
