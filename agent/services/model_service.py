@@ -16,7 +16,7 @@ from core.report_evidence import (
     REGULATORY_PUBLISHERS,
 )
 from core.article_evidence import eligible_article_segments
-from core.entities import analyze_article_grc_content
+from core.entities import analyze_article_grc_content, detect_risk_categories
 from core.report_plan import (
     CONTROLS,
     CONTROL_REVIEWS,
@@ -232,11 +232,20 @@ class GRCModelService:
                 ("regulatory_bodies", "regulatory_bodies"),
             )
         }
+        risk_categories = sorted(
+            {
+                category
+                for article in articles
+                for category in detect_risk_categories(
+                    "\n".join(filter(None, [article.title, article.summary, article.content]))
+                )
+            }
+        )
         return {
             "grc_article_indices": indices,
             "grc_articles": [{"title": articles[i].title, "url": articles[i].url} for i in indices],
             "summary": {"total_articles": len(articles), "grc_relevant_count": len(indices)},
-            "analysis": {**entities, "risk_categories": []},
+            "analysis": {**entities, "risk_categories": risk_categories},
         }
 
     async def _analyze_articles_with_model(self, articles: List[ArticleInput]) -> Dict[str, Any]:

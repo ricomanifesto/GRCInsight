@@ -66,11 +66,15 @@ def test_enabled_uses_positions_and_preserves_local_entities(monkeypatch):
     model = service(monkeypatch, "enabled")
     model.relevance_client.classify = AsyncMock(return_value=result())
     inputs = articles()
-    inputs[1].content = "GDPR Article 5 requires a review."
+    inputs[1].content = "GDPR Article 5 requires a review of a vendor vulnerability."
     analysis = asyncio.run(model.analyze_articles_for_grc(inputs))
     assert analysis["grc_article_indices"] == [0, 1]
     assert analysis["summary"]["grc_relevant_count"] == 2
     assert analysis["analysis"]["regulations_mentioned"]
+    assert analysis["analysis"]["risk_categories"] == [
+        "Third-party and supply chain exposure",
+        "Vulnerability and patch management",
+    ]
     assert "relevance_score" not in analysis["grc_articles"][0]
     assert model.last_relevance_diagnostics["status"] == "used"
     model._analyze_articles_with_model.assert_not_called()

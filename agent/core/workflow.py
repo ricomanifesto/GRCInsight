@@ -22,7 +22,7 @@ from services.model_service import GRCModelService
 from services.regulatory_sources import enrich_regulatory_sources
 from core.article_evidence import capture_article_evidence
 from core.article_selection import selected_article_mask
-from core.entities import analyze_article_grc_content
+from core.entities import analyze_article_grc_content, detect_risk_categories
 from core.reporting_identity import (
     ReportingIdentityError,
     normalize_reporting_url,
@@ -41,80 +41,6 @@ REPORT_CVE_EVIDENCE_LIMIT = min(REPORT_CVE_LIMIT, SOURCE_EVIDENCE_LIMIT - 2)
 
 def _utc_now() -> datetime:
     return datetime.now(timezone.utc)
-
-
-def _detect_risk_categories(text: str) -> List[str]:
-    """Infer coarse risk themes from article text without using an LLM."""
-    catalog = {
-        "Regulatory and enforcement activity": [
-            "regulator",
-            "regulatory",
-            "compliance",
-            "cisa",
-            "fbi",
-            "ofac",
-            "sanction",
-            "privacy",
-            "enforcement",
-            "directive",
-        ],
-        "Identity and access security": [
-            "identity",
-            "credential",
-            "access",
-            "mfa",
-            "password",
-            "privilege",
-            "account takeover",
-            "intune",
-        ],
-        "Third-party and supply chain exposure": [
-            "third-party",
-            "third party",
-            "vendor",
-            "supplier",
-            "supply chain",
-            "msp",
-        ],
-        "Vulnerability and patch management": [
-            "vulnerability",
-            "zero-day",
-            "zero day",
-            "patch",
-            "cve",
-            "exploit",
-            "rce",
-            "flaw",
-            "unauthenticated",
-        ],
-        "Ransomware and malware operations": [
-            "ransomware",
-            "malware",
-            "botnet",
-            "ddos",
-            "extortion",
-            "phishing",
-            "trojan",
-            "implant",
-        ],
-        "Cloud and data protection": [
-            "cloud",
-            "sharepoint",
-            "data breach",
-            "data exposure",
-            "data leak",
-            "data theft",
-            "storage",
-            "saas",
-        ],
-    }
-
-    lowered = text.lower()
-    matched = []
-    for category, keywords in catalog.items():
-        if any(keyword in lowered for keyword in keywords):
-            matched.append(category)
-    return matched
 
 
 def _build_article_reason(local: Dict[str, Any], risk_categories: List[str]) -> str:
@@ -255,7 +181,7 @@ def _build_local_analysis(enriched_articles: List[ArticleInput]):
     for article in enriched_articles:
         local = analyze_article_grc_content(article.model_dump())
         text = "\n".join(filter(None, [article.title, article.summary, article.content]))
-        risk_categories = _detect_risk_categories(text)
+        risk_categories = detect_risk_categories(text)
         has_grc = local.get("has_grc_content", False) or bool(risk_categories)
 
         local["has_grc_content"] = has_grc

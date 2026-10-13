@@ -1,5 +1,10 @@
 from pathlib import Path
+import os
+import subprocess
+import textwrap
 import tomllib
+
+import pytest
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 
@@ -52,3 +57,55 @@ def test_lambda_deploy_wait_fails_closed():
     assert 'grep -q "Active\\tSuccessful"' not in workflow_source
     assert 'read -r STATE UPDATE_STATUS <<< "$STATUS"' in workflow_source
     assert 'if [ "$ready" != true ]; then' in workflow_source
+
+
+def test_lambda_deploy_forwards_relevance_pilot_configuration():
+    workflow_source = (REPO_ROOT / ".github/workflows/deploy-lambda.yml").read_text(
+        encoding="utf-8"
+    )
+
+    for name, default in (
+        ("GRC_RELEVANCE_MODE", "off"),
+        ("GRC_RELEVANCE_MIN_PROBABILITY", "0.95"),
+        ("GRC_RELEVANCE_TIMEOUT_SECONDS", "4"),
+    ):
+        assert f"{name}: ${{{{ vars.{name} || '{default}' }}}}" in workflow_source
+        assert f"{name}=${name}" in workflow_source
+
+
+@pytest.mark.parametrize(
+    ("mode", "probability", "timeout", "valid"),
+    [
+        ("off", "0.95", "4", True),
+        ("shadow", "0.5", "10", True),
+        ("enabled", "1", "0.1", True),
+        ("enabled,LOG_LEVEL=DEBUG", "0.95", "4", False),
+        ("off", "nan", "4", False),
+        ("off", "0.49", "4", False),
+        ("off", "1.01", "4", False),
+        ("off", "0.95", "inf", False),
+        ("off", "0.95", "0", False),
+        ("off", "0.95", "11", False),
+        ("off", "invalid", "4", False),
+    ],
+)
+def test_lambda_configuration_is_validated_before_deployment(mode, probability, timeout, valid):
+    workflow_source = (REPO_ROOT / ".github/workflows/deploy-lambda.yml").read_text()
+    validation = workflow_source.split("- name: Validate model runtime configuration", 1)[1]
+    script = textwrap.dedent(validation.split("run: |\n", 1)[1].split("\n      - name:", 1)[0])
+    result = subprocess.run(
+        ["bash", "-c", script],
+        env={
+            **os.environ,
+            "LLM_MODEL": "openrouter/test/model",
+            "OPENROUTER_API_KEY": "dummy-test-key",
+            "GRC_RELEVANCE_MODE": mode,
+            "GRC_RELEVANCE_MIN_PROBABILITY": probability,
+            "GRC_RELEVANCE_TIMEOUT_SECONDS": timeout,
+        },
+        capture_output=True,
+        text=True,
+        timeout=10,
+    )
+    assert (result.returncode == 0) is valid
+    assert "dummy-test-key" not in result.stdout + result.stderr
