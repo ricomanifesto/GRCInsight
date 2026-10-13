@@ -133,6 +133,21 @@ body {
 .report-citation { white-space: nowrap; font-variant-numeric: tabular-nums; font-weight: 600; padding: 0.15em 0.1em; }
 .source-number { color: var(--muted); font-variant-numeric: tabular-nums; }
 
+/* A navigation map of existing findings, not a quantitative risk assessment. */
+.review-map { margin-top: 30px; padding-top: 24px; border-top: 2px solid var(--accent); }
+.review-map h2 { margin-bottom: 8px; font-size: 25px; }
+.review-map > p { margin: 0 0 22px; color: var(--muted); font-size: 14px; line-height: 1.5; }
+.review-map-groups { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px; }
+.review-map-group h3 { margin: 0 0 12px; font-size: 18px; line-height: 1.25; }
+.review-map-count { display: block; margin-top: 5px; color: var(--muted); font: 14px/1.4 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+.review-map-group ul { margin: 0; list-style: none; }
+.review-map-group li { margin: 0; border-top: 1px solid var(--rule); }
+.review-map-group a { display: flex; flex-direction: column; align-items: flex-start; gap: 5px; padding: 12px 0; font-size: 15px; line-height: 1.4; overflow-wrap: anywhere; }
+.review-priority { color: var(--muted); font-size: 13px; text-decoration: none; }
+.review-priority::before { content: "↳ "; }
+.report h3[id^="finding-"], .archive-report h3[id^="finding-"] { scroll-margin-top: 90px; }
+.report h3[id^="finding-"]:target, .archive-report h3[id^="finding-"]:target { outline: 2px solid var(--accent); outline-offset: 6px; }
+
 .report-meta { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px 30px; margin: 24px 0 0; }
 .report-meta-item { min-width: 0; }
 .report-meta dt { margin-bottom: 3px; color: var(--muted); font-size: 13px; font-weight: 750; letter-spacing: 0.055em; text-transform: uppercase; }
@@ -207,6 +222,9 @@ a:focus-visible, button:focus-visible, select:focus-visible { outline: 3px solid
 }
 
 @media (max-width: 760px) {
+  .review-map-groups { grid-template-columns: 1fr; gap: 20px; }
+  .review-map-group a { flex-direction: row; justify-content: space-between; gap: 16px; }
+  .review-priority { flex-shrink: 0; }
   .container { padding-inline: 18px; }
   .app-header { padding: 26px 0 22px; }
   .brand-line { display: grid; gap: 2px; margin-bottom: 14px; }
@@ -226,6 +244,8 @@ a:focus-visible, button:focus-visible, select:focus-visible { outline: 3px solid
 
 /* Print: report only */
 @media print {
+  .review-map-group { break-inside: avoid; }
+  .review-map { break-inside: avoid; --ink: #000; --muted: #444; --accent: #000; --rule: #aaa; }
   :root { --paper: #fff; --ink: #000; --muted: #444; --rule: #aaa; --rule-strong: #555; --accent: #000; }
   body { background: #fff; color: #000; font-size: 10pt; }
   .app-header, .topbar, .sidebar, .app-footer, .theme-toggle { display: none !important; }

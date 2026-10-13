@@ -98,7 +98,9 @@
     reportEl.innerHTML = '<section class="card report-status"><p>Loading report…</p></section>';
   }
 
-  fetch('index.md', { cache: 'no-store' })
+  // A pre-rendered report and its evidence navigation are one validated snapshot.
+  // Fetch Markdown only to recover a page that has no pre-rendered report.
+  if (!hasPrerenderedReport) fetch('index.md', { cache: 'no-store' })
     .then(response => {
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       return response.text();
