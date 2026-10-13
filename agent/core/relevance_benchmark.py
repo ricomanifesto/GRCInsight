@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from collections import Counter
+from collections.abc import Callable
 import math
 from statistics import median
 import time
@@ -12,7 +13,7 @@ from core.article_selection import selected_article_mask
 from core.entities import analyze_article_grc_content
 from models.api import ArticleInput
 from services.model_service import GRCModelService
-from services.relevance_decisions import DecisionError, LABELS, RelevanceClient
+from services.relevance_decisions import LABELS
 
 
 def classification_metrics(expected: list[str], predicted: list[str | None]) -> dict[str, Any]:
@@ -58,12 +59,11 @@ def _latencies(values: list[float]) -> dict[str, float]:
 async def run_comparison(
     articles: list[ArticleInput],
     expected: list[str],
-    model: GRCModelService,
-    decisions: RelevanceClient,
+    model_factory: Callable[[], GRCModelService],
     *,
     repeats: int = 3,
 ) -> dict[str, Any]:
-    """Measure both stages; estimate enabled latency including whole-batch fallback."""
+    """Measure the actual enabled policy, including any subset fallback."""
     if not 1 <= repeats <= 10 or len(articles) != len(expected):
         raise ValueError("Use one label per article and 1-10 repeats")
     classification_metrics(expected, [None] * len(expected))
@@ -73,96 +73,96 @@ async def run_comparison(
         for article in articles
     ]
     local_elapsed = time.perf_counter() - local_started
-    legacy_predictions: list[str | None] = []
-    jev_predictions: list[str | None] = []
-    enabled_predictions: list[str | None] = []
-    legacy_times, jev_times, enabled_times = [], [], []
-    jev_costs: list[float | None] = []
-    errors: Counter[str] = Counter()
-    models: set[str] = set()
-    fallback_count = 0
-    input_tokens = 0
-    output_tokens = 0
-    for _ in range(repeats):
-        # Expected labels never enter either model request.
-        started = time.perf_counter()
-        baseline = await model._analyze_articles_with_model(articles)
-        legacy_elapsed = time.perf_counter() - started
-        legacy_times.append(legacy_elapsed)
-        selected = selected_article_mask(articles, baseline)
-        legacy: list[str | None] = (
-            [
-                "relevant" if chosen or signal else "irrelevant"
-                for chosen, signal in zip(selected, local)
-            ]
-            if "error" not in baseline
-            else [None] * len(articles)
-        )
-        legacy_predictions.extend(legacy)
-        started = time.perf_counter()
-        eligible = False
-        predicted: list[str | None] = [None] * len(articles)
-        try:
-            result = await decisions.classify(articles)
-            predicted = [item.label for item in result.decisions]
-            eligible = result.usable(model.relevance_min_probability)
-            jev_costs.append(result.cost)
-            input_tokens += result.input_tokens
-            output_tokens += result.output_tokens
-            models.update(result.models)
-        except DecisionError as error:
-            errors[str(error)] += 1
-            jev_costs.append(None)
-        jev_elapsed = time.perf_counter() - started
-        jev_times.append(jev_elapsed)
-        jev_predictions.extend(predicted)
-        if eligible:
-            enabled_predictions.extend(
-                "relevant" if label == "relevant" or signal else "irrelevant"
-                for label, signal in zip(predicted, local)
+    predictions: dict[str, list[str | None]] = {"legacy": [], "enabled": []}
+    decision_predictions: list[str | None] = []
+    times: dict[str, list[float]] = {"legacy": [], "enabled": []}
+    runs = []
+    diagnostics = []
+    for repeat in range(repeats):
+        # Alternate paired order. Expected labels never enter either request.
+        order = ["legacy", "enabled"] if repeat % 2 == 0 else ["enabled", "legacy"]
+        run: dict[str, Any] = {"order": order}
+        for path in order:
+            # Each path is an independent workflow. Never share its cumulative
+            # model deadline with another baseline, candidate or repetition.
+            model = model_factory()
+            if model.relevance_mode != "enabled" or model.relevance_client is None:
+                raise ValueError("Benchmark requires an enabled relevance service")
+            started = time.perf_counter()
+            analysis = (
+                await model._analyze_articles_with_model(articles)
+                if path == "legacy"
+                else await model.analyze_articles_for_grc(articles)
             )
-            enabled_times.append(jev_elapsed + local_elapsed)
-        else:
-            fallback_count += 1
-            enabled_predictions.extend(legacy)
-            enabled_times.append(jev_elapsed + legacy_elapsed)
+            elapsed = time.perf_counter() - started
+            times[path].append(elapsed)
+            selected = selected_article_mask(articles, analysis)
+            predicted: list[str | None] = (
+                [
+                    "relevant" if chosen or signal else "irrelevant"
+                    for chosen, signal in zip(selected, local)
+                ]
+                if "error" not in analysis
+                else [None] * len(articles)
+            )
+            predictions[path].extend(predicted)
+            run[path] = {"elapsed_seconds": elapsed, "predictions": predicted}
+            if path == "enabled":
+                diagnostic = dict(model.last_relevance_diagnostics or {})
+                diagnostics.append(diagnostic)
+                run["decisions"] = diagnostic
+                raw_decisions = model.last_relevance_result
+                raw_predictions: list[str | None] = (
+                    [item.label for item in raw_decisions.decisions]
+                    if raw_decisions is not None
+                    else [None] * len(articles)
+                )
+                decision_predictions.extend(raw_predictions)
+                run["decision_predictions"] = raw_predictions
+        runs.append(run)
     labels = expected * repeats
+    costs = [item.get("cost") for item in diagnostics]
+    fallback_sizes = [item.get("uncertain_count", len(articles)) for item in diagnostics]
     return {
         "cases": len(articles),
         "repeats": repeats,
+        "runs": runs,
         "local_entities": {
             "elapsed_seconds": local_elapsed,
             **classification_metrics(
                 expected, ["relevant" if value else "irrelevant" for value in local]
             ),
         },
-        "legacy": {
-            **_latencies(legacy_times),
-            **classification_metrics(labels, legacy_predictions),
-            "cost": None,
+        **{
+            path: {
+                **_latencies(times[path]),
+                **classification_metrics(labels, predictions[path]),
+                # The prose client does not expose billed usage.
+                "cost": None,
+            }
+            for path in predictions
         },
-        "jev": {
-            **_latencies(jev_times),
-            **classification_metrics(labels, jev_predictions),
-            "fallback_rate": fallback_count / repeats,
-            "models": sorted(models),
-            "errors": dict(errors),
-            "input_tokens_from_completed_batches": input_tokens,
-            "output_tokens_from_completed_batches": output_tokens,
-            "cost": (
-                sum(value or 0 for value in jev_costs)
-                if all(value is not None for value in jev_costs)
-                else None
+        "decisions": {
+            **classification_metrics(labels, decision_predictions),
+            "statuses": dict(Counter(item.get("status", "unavailable") for item in diagnostics)),
+            "fallback_batch_rate": sum(size > 0 for size in fallback_sizes) / repeats,
+            "fallback_article_rate": sum(fallback_sizes) / (repeats * len(articles)),
+            "models": sorted({name for item in diagnostics for name in item.get("models", [])}),
+            "input_tokens_from_completed_batches": sum(
+                item.get("input_tokens", 0) for item in diagnostics
             ),
-        },
-        "enabled_estimate": {
-            **_latencies(enabled_times),
-            **classification_metrics(labels, enabled_predictions),
+            "output_tokens_from_completed_batches": sum(
+                item.get("output_tokens", 0) for item in diagnostics
+            ),
+            "cost": sum(costs) if all(cost is not None for cost in costs) else None,
         },
         "limits": [
-            "Stage-only timings, not a whole report or page-load benchmark.",
-            "Enabled timings are estimates from separately measured calls; baseline runs first.",
-            "Legacy client does not expose billed usage; unavailable cost is null, never zero.",
+            "Measured article-analysis calls, not whole reports, Lambda latency or page loads.",
+            "Paired order alternates with a fresh service and workflow budget for each path.",
+            "Small replay samples do not establish production p95.",
+            "Decisions statistics describe the same enabled calls, not a separate inference run.",
+            "Effective selections include local entities; workflow risk overrides are not measured.",
+            "Legacy and total enabled cost are unavailable from the client, not zero.",
             "Failed multi-batch calls may incur cost not included in completed-call usage.",
             "Quality depends on independent review of expected labels and representative inputs.",
         ],
