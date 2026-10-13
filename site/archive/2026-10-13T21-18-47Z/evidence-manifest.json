@@ -1,0 +1,340 @@
+{
+  "schema_version": 3,
+  "report_contract_version": 5,
+  "report_plan": {
+    "control_implications": [
+      {
+        "control_id": "vulnerability_management",
+        "evidence_excerpt": "Citrix has released patches for yet another critical security flaw impacting NetScaler ADC and NetScaler Gateway that could result in remote code execution or denial-of-service (DoS) under certain conditions. \"CVE-2026-107406 is a memory overflow vulnerability that may lead to remote code execution or denial-of-service under specific configuration conditions,\" Citrix said. The vulnerability…",
+        "evidence_origin": "summary",
+        "focus": "NetScaler ADC and NetScaler Gateway",
+        "priority": "high",
+        "source_ids": [
+          1
+        ]
+      },
+      {
+        "control_id": "access_management",
+        "evidence_excerpt": "As enterprises race to deploy autonomous AI agents to accelerate business, a new report reveals they are tethered to security architectures built for a different era. The \"Horizons of Identity Security\" report from SailPoint highlights a critical “velocity paradox,” in which organizations invest in AI-speed business operations while continuing to rely on human-speed security controls, creating a…",
+        "evidence_origin": "summary",
+        "focus": "autonomous AI agents",
+        "priority": "medium",
+        "source_ids": [
+          2
+        ]
+      },
+      {
+        "control_id": "vulnerability_management",
+        "evidence_excerpt": "Microsoft says devices running unsupported versions of Windows will stop receiving security updates after next year's Windows Update certificate rotation…",
+        "evidence_origin": "summary",
+        "focus": "unsupported versions of Windows",
+        "priority": "high",
+        "source_ids": [
+          4
+        ]
+      },
+      {
+        "control_id": "incident_response",
+        "evidence_excerpt": "The U.S. Federal Bureau of Investigation (FBI) and Department of Justice (DoJ) have announced the disruption of malicious tools used by a China-linked advanced persistent threat group known as Flax Typhoon. To that end, the agencies seized several domains and blocked access to platforms that were used to scan, and in some cases infiltrate, U.S. critical infrastructure. The list of seized…",
+        "evidence_origin": "summary",
+        "focus": "China-linked advanced persistent threat group",
+        "priority": "high",
+        "source_ids": [
+          8
+        ]
+      },
+      {
+        "control_id": "vulnerability_management",
+        "evidence_excerpt": "A now-patched vulnerability in AWS Bedrock AgentCore could allow an attacker to use one AI chatbot to take over an organization's entire fleet.",
+        "evidence_origin": "summary",
+        "focus": "AWS Bedrock AgentCore",
+        "priority": "medium",
+        "source_ids": [
+          11
+        ]
+      },
+      {
+        "control_id": "third_party_risk",
+        "evidence_excerpt": "IDC Frontier, a major Japanese cloud and digital infrastructure company, disclosed that its IDCF Cloud service was targeted in a ransomware attack that caused an outage at a data center cluster serving the eastern part of the country…",
+        "evidence_origin": "summary",
+        "focus": "IDCF Cloud service",
+        "priority": "high",
+        "source_ids": [
+          12
+        ]
+      }
+    ],
+    "executive_brief": {
+      "decision_frame": "exposure",
+      "source_ids": [
+        1,
+        4,
+        2
+      ]
+    },
+    "industry_impacts": [],
+    "regulatory_changes": []
+  },
+  "generated_at": "2026-10-13T21:18:47.590819Z",
+  "feed_url": "https://ricomanifesto.github.io/SentryDigest/feed.xml",
+  "feed_home_url": "https://ricomanifesto.github.io/SentryDigest/",
+  "digest_issue_date": "2026-10-09",
+  "digest_issue_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-09/",
+  "requested_model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
+  "resolved_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+  "sources": [
+    {
+      "title": "Citrix Patches Critical NetScaler Flaw That Could Enable RCE in SAML Deployments",
+      "url": "https://thehackernews.com/2026/10/citrix-patches-critical-netscaler-flaw.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-09/#reporting-282fb784975a",
+      "cves": [
+        "CVE-2026-107406"
+      ],
+      "snippet": "Citrix Patches Critical NetScaler Flaw That Could Enable RCE in SAML Deployments Citrix has released patches for yet another critical security flaw impacting NetScaler ADC and NetScaler Gateway that could result in remote code execution or denial-of-service (DoS) under certain conditions. \"CVE-2026-107406 is a memory overflow vulnerability that may lead to remote code execution or denial-of-service under specific configuration conditions,\" Citrix said. The vulnerability… Citrix has released patches for yet another critical security flaw impacting NetScaler ADC and NetScaler Gateway that could result in remote code execution or denial-of-service (DoS) under certain conditions. \"CVE-2026-10740",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Citrix has released patches for yet another critical security flaw impacting NetScaler ADC and NetScaler Gateway that could result in remote code execution or denial-of-service (DoS) under certain conditions. \"CVE-2026-107406 is a memory overflow vulnerability that may lead to remote code execution or denial-of-service under specific configuration conditions,\" Citrix said. The vulnerability…",
+          "text": "Citrix has released patches for yet another critical security flaw impacting NetScaler ADC and NetScaler Gateway that could result in remote code execution or denial-of-service (DoS) under certain conditions. \"CVE-2026-107406 is a memory overflow vulnerability that may lead to remote code execution or denial-of-service under specific configuration conditions,\" Citrix said. The vulnerability…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Citrix has released patches for yet another critical security flaw impacting NetScaler ADC and NetScaler Gateway that could result in remote code execution or denial-of-service (DoS) under certain conditions. \"CVE-2026-107406 is a memory overflow vulnerability that may lead to remote code execution or denial-of-service under specific configuration conditions,\" Citrix said. The vulnerability…",
+          "text": "Citrix has released patches for yet another critical security flaw impacting NetScaler ADC and NetScaler Gateway that could result in remote code execution or denial-of-service (DoS) under certain conditions. \"CVE-2026-107406 is a memory overflow vulnerability that may lead to remote code execution or denial-of-service under specific configuration conditions,\" Citrix said. The vulnerability…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "The AI Velocity Paradox: Why Security Is Decades Behind AI Ambition",
+      "url": "https://thehackernews.com/2026/10/the-ai-velocity-paradox-why-security-is.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-09/#reporting-6a1c2def782f",
+      "cves": [],
+      "snippet": "The AI Velocity Paradox: Why Security Is Decades Behind AI Ambition As enterprises race to deploy autonomous AI agents to accelerate business, a new report reveals they are tethered to security architectures built for a different era. The \"Horizons of Identity Security\" report from SailPoint highlights a critical “velocity paradox,” in which organizations invest in AI-speed business operations while continuing to rely on human-speed security controls, creating a… As enterprises race to deploy autonomous AI agents to accelerate business, a new report reveals they are tethered to security architectures built for a different era. The \"Horizons of Identity Security\" report from SailPoint highlig",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "As enterprises race to deploy autonomous AI agents to accelerate business, a new report reveals they are tethered to security architectures built for a different era. The \"Horizons of Identity Security\" report from SailPoint highlights a critical “velocity paradox,” in which organizations invest in AI-speed business operations while continuing to rely on human-speed security controls, creating a…",
+          "text": "As enterprises race to deploy autonomous AI agents to accelerate business, a new report reveals they are tethered to security architectures built for a different era. The \"Horizons of Identity Security\" report from SailPoint highlights a critical “velocity paradox,” in which organizations invest in AI-speed business operations while continuing to rely on human-speed security controls, creating a…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "As enterprises race to deploy autonomous AI agents to accelerate business, a new report reveals they are tethered to security architectures built for a different era. The \"Horizons of Identity Security\" report from SailPoint highlights a critical “velocity paradox,” in which organizations invest in AI-speed business operations while continuing to rely on human-speed security controls, creating a…",
+          "text": "As enterprises race to deploy autonomous AI agents to accelerate business, a new report reveals they are tethered to security architectures built for a different era. The \"Horizons of Identity Security\" report from SailPoint highlights a critical “velocity paradox,” in which organizations invest in AI-speed business operations while continuing to rely on human-speed security controls, creating a…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Man admits to running network of 15,000 money mules for cybercriminals",
+      "url": "https://www.bleepingcomputer.com/news/security/ukrainian-russian-dual-citizen-admits-to-laundering-millions-for-cybercriminals/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-09/#reporting-776e8c0f8060",
+      "cves": [],
+      "snippet": "Man admits to running network of 15,000 money mules for cybercriminals ​A Ukrainian-Russian dual citizen has pleaded guilty to running a massive money laundering operation that laundered millions for cybercriminals worldwide… ​A Ukrainian-Russian dual citizen has pleaded guilty to running a massive money laundering operation that laundered millions for cybercriminals worldwide…",
+      "article_evidence": [],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Microsoft: Outdated Windows devices will stop receiving security updates",
+      "url": "https://www.bleepingcomputer.com/news/microsoft/microsoft-outdated-windows-devices-will-lose-security-protection-next-year/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-09/#reporting-e48d18dbbb87",
+      "cves": [],
+      "snippet": "Microsoft: Outdated Windows devices will stop receiving security updates Microsoft says devices running unsupported versions of Windows will stop receiving security updates after next year's Windows Update certificate rotation… Microsoft says devices running unsupported versions of Windows will stop receiving security updates after next year's Windows Update certificate rotation…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Microsoft says devices running unsupported versions of Windows will stop receiving security updates after next year's Windows Update certificate rotation…",
+          "text": "Microsoft says devices running unsupported versions of Windows will stop receiving security updates after next year's Windows Update certificate rotation…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Microsoft says devices running unsupported versions of Windows will stop receiving security updates after next year's Windows Update certificate rotation…",
+          "text": "Microsoft says devices running unsupported versions of Windows will stop receiving security updates after next year's Windows Update certificate rotation…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "GoBalance Flaw Lets Attackers Hijack .onion Addresses by Recovering Tor-Format Keys",
+      "url": "https://thehackernews.com/2026/10/gobalance-flaw-lets-attackers-hijack.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-09/#reporting-68ce0dcd2db0",
+      "cves": [],
+      "snippet": "GoBalance Flaw Lets Attackers Hijack .onion Addresses by Recovering Tor-Format Keys A bug in GoBalance, a tool many dark-web sites use to stay reachable during attacks, lets anyone work out the secret key that controls a site's .onion address using only public information, and then take that address over. Searchlight Cyber, which disclosed the flaw on October 8, says an attacker who recovers the key can redirect the site's visitors to a copy of the site they control. A bug in GoBalance, a tool many dark-web sites use to stay reachable during attacks, lets anyone work out the secret key that controls a site's .onion address using only public information, and then take that address over. Searc",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "A bug in GoBalance, a tool many dark-web sites use to stay reachable during attacks, lets anyone work out the secret key that controls a site's .onion address using only public information, and then take that address over. Searchlight Cyber, which disclosed the flaw on October 8, says an attacker who recovers the key can redirect the site's visitors to a copy of the site they control.",
+          "text": "A bug in GoBalance, a tool many dark-web sites use to stay reachable during attacks, lets anyone work out the secret key that controls a site's .onion address using only public information, and then take that address over. Searchlight Cyber, which disclosed the flaw on October 8, says an attacker who recovers the key can redirect the site's visitors to a copy of the site they control."
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "A bug in GoBalance, a tool many dark-web sites use to stay reachable during attacks, lets anyone work out the secret key that controls a site's .onion address using only public information, and then take that address over. Searchlight Cyber, which disclosed the flaw on October 8, says an attacker who recovers the key can redirect the site's visitors to a copy of the site they control.",
+          "text": "A bug in GoBalance, a tool many dark-web sites use to stay reachable during attacks, lets anyone work out the secret key that controls a site's .onion address using only public information, and then take that address over. Searchlight Cyber, which disclosed the flaw on October 8, says an attacker who recovers the key can redirect the site's visitors to a copy of the site they control."
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Citrix warns admins to patch new NetScaler RCE flaw immediately",
+      "url": "https://www.bleepingcomputer.com/news/security/citrix-warns-admins-to-patch-new-netscaler-rce-flaw-immediately/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-09/#reporting-0c103a036f9d",
+      "cves": [],
+      "snippet": "Citrix warns admins to patch new NetScaler RCE flaw immediately Citrix has warned IT administrators to patch systems immediately against a new critical vulnerability affecting NetScaler ADC networking appliances and NetScaler Gateway secure remote access solutions… Citrix has warned IT administrators to patch systems immediately against a new critical vulnerability affecting NetScaler ADC networking appliances and NetScaler Gateway secure remote access solutions…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Citrix has warned IT administrators to patch systems immediately against a new critical vulnerability affecting NetScaler ADC networking appliances and NetScaler Gateway secure remote access solutions…",
+          "text": "Citrix has warned IT administrators to patch systems immediately against a new critical vulnerability affecting NetScaler ADC networking appliances and NetScaler Gateway secure remote access solutions…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Citrix has warned IT administrators to patch systems immediately against a new critical vulnerability affecting NetScaler ADC networking appliances and NetScaler Gateway secure remote access solutions…",
+          "text": "Citrix has warned IT administrators to patch systems immediately against a new critical vulnerability affecting NetScaler ADC networking appliances and NetScaler Gateway secure remote access solutions…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Three Teams Demonstrate Remote Hacks of Fully Patched Google Pixel 10 at Pwn2Own",
+      "url": "https://thehackernews.com/2026/10/three-teams-demonstrate-remote-hacks-of.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-09/#reporting-b0109e34ecc8",
+      "cves": [],
+      "snippet": "Three Teams Demonstrate Remote Hacks of Fully Patched Google Pixel 10 at Pwn2Own Three research teams broke into Google's Pixel 10 on October 8 at Pwn2Own Ireland, a hacking contest in Cork whose rules require every target to be fully patched. The contest pays researchers to show working exploits and passes the flaws to the vendors. One of the three Pixel exploits earned Ikotas Labs $300,000, the contest's top prize, and made the team the overall winner. Trend Micro's Zero… Three research teams broke into Google's Pixel 10 on October 8 at Pwn2Own Ireland, a hacking contest in Cork whose rules require every target to be fully patched. The contest pays researchers to show working exploits and ",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Three research teams broke into Google's Pixel 10 on October 8 at Pwn2Own Ireland, a hacking contest in Cork whose rules require every target to be fully patched. The contest pays researchers to show working exploits and passes the flaws to the vendors. One of the three Pixel exploits earned Ikotas Labs $300,000, the contest's top prize, and made the team the overall winner. Trend Micro's Zero…",
+          "text": "Three research teams broke into Google's Pixel 10 on October 8 at Pwn2Own Ireland, a hacking contest in Cork whose rules require every target to be fully patched. The contest pays researchers to show working exploits and passes the flaws to the vendors. One of the three Pixel exploits earned Ikotas Labs $300,000, the contest's top prize, and made the team the overall winner. Trend Micro's Zero…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Three research teams broke into Google's Pixel 10 on October 8 at Pwn2Own Ireland, a hacking contest in Cork whose rules require every target to be fully patched. The contest pays researchers to show working exploits and passes the flaws to the vendors. One of the three Pixel exploits earned Ikotas Labs $300,000, the contest's top prize, and made the team the overall winner. Trend Micro's Zero…",
+          "text": "Three research teams broke into Google's Pixel 10 on October 8 at Pwn2Own Ireland, a hacking contest in Cork whose rules require every target to be fully patched. The contest pays researchers to show working exploits and passes the flaws to the vendors. One of the three Pixel exploits earned Ikotas Labs $300,000, the contest's top prize, and made the team the overall winner. Trend Micro's Zero…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "FBI Seizes 7 Domains, Disrupts Flax Typhoon Tools Used in Critical Infrastructure Intrusions",
+      "url": "https://thehackernews.com/2026/10/fbi-seizes-7-domains-disrupts-flax.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-09/#reporting-de0aa2292fa3",
+      "cves": [],
+      "snippet": "FBI Seizes 7 Domains, Disrupts Flax Typhoon Tools Used in Critical Infrastructure Intrusions The U.S. Federal Bureau of Investigation (FBI) and Department of Justice (DoJ) have announced the disruption of malicious tools used by a China-linked advanced persistent threat group known as Flax Typhoon. To that end, the agencies seized several domains and blocked access to platforms that were used to scan, and in some cases infiltrate, U.S. critical infrastructure. The list of seized… The U.S. Federal Bureau of Investigation (FBI) and Department of Justice (DoJ) have announced the disruption of malicious tools used by a China-linked advanced persistent threat group known as Flax Typhoon. To that ",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "The U.S. Federal Bureau of Investigation (FBI) and Department of Justice (DoJ) have announced the disruption of malicious tools used by a China-linked advanced persistent threat group known as Flax Typhoon. To that end, the agencies seized several domains and blocked access to platforms that were used to scan, and in some cases infiltrate, U.S. critical infrastructure. The list of seized…",
+          "text": "The U.S. Federal Bureau of Investigation (FBI) and Department of Justice (DoJ) have announced the disruption of malicious tools used by a China-linked advanced persistent threat group known as Flax Typhoon. To that end, the agencies seized several domains and blocked access to platforms that were used to scan, and in some cases infiltrate, U.S. critical infrastructure. The list of seized…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "The U.S. Federal Bureau of Investigation (FBI) and Department of Justice (DoJ) have announced the disruption of malicious tools used by a China-linked advanced persistent threat group known as Flax Typhoon. To that end, the agencies seized several domains and blocked access to platforms that were used to scan, and in some cases infiltrate, U.S. critical infrastructure. The list of seized…",
+          "text": "The U.S. Federal Bureau of Investigation (FBI) and Department of Justice (DoJ) have announced the disruption of malicious tools used by a China-linked advanced persistent threat group known as Flax Typhoon. To that end, the agencies seized several domains and blocked access to platforms that were used to scan, and in some cases infiltrate, U.S. critical infrastructure. The list of seized…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Hackers get $1,262,000 for 98 zero-days at Pwn2Own Ireland",
+      "url": "https://www.bleepingcomputer.com/news/security/hackers-earn-1262000-for-98-zero-days-at-pwn2own-ireland/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-09/#reporting-4628e43fc12e",
+      "cves": [],
+      "snippet": "Hackers get $1,262,000 for 98 zero-days at Pwn2Own Ireland The Pwn2Own Ireland 2026 hacking contest has concluded, with hackers collecting $1,262,000 in rewards after exploiting 98 zero-day flaws… The Pwn2Own Ireland 2026 hacking contest has concluded, with hackers collecting $1,262,000 in rewards after exploiting 98 zero-day flaws…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "The Pwn2Own Ireland 2026 hacking contest has concluded, with hackers collecting $1,262,000 in rewards after exploiting 98 zero-day flaws…",
+          "text": "The Pwn2Own Ireland 2026 hacking contest has concluded, with hackers collecting $1,262,000 in rewards after exploiting 98 zero-day flaws…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "The Pwn2Own Ireland 2026 hacking contest has concluded, with hackers collecting $1,262,000 in rewards after exploiting 98 zero-day flaws…",
+          "text": "The Pwn2Own Ireland 2026 hacking contest has concluded, with hackers collecting $1,262,000 in rewards after exploiting 98 zero-day flaws…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "FBI disrupts Chinese hacking tools used to breach critical infrastructure",
+      "url": "https://www.bleepingcomputer.com/news/security/fbi-disrupts-chinese-hacking-tools-used-to-breach-critical-infrastructure/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-09/#reporting-00e313529b90",
+      "cves": [],
+      "snippet": "FBI disrupts Chinese hacking tools used to breach critical infrastructure The FBI has seized seven domains used by Chinese state-sponsored hackers known as Flax Typhoon to operate two hacking tools, MicroScan and FishHub, used in attacks that breached critical infrastructure and other organizations worldwide… The FBI has seized seven domains used by Chinese state-sponsored hackers known as Flax Typhoon to operate two hacking tools, MicroScan and FishHub, used in attacks that breached critical infrastructure and other organizations worldwide…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "The FBI has seized seven domains used by Chinese state-sponsored hackers known as Flax Typhoon to operate two hacking tools, MicroScan and FishHub, used in attacks that breached critical infrastructure and other organizations worldwide…",
+          "text": "The FBI has seized seven domains used by Chinese state-sponsored hackers known as Flax Typhoon to operate two hacking tools, MicroScan and FishHub, used in attacks that breached critical infrastructure and other organizations worldwide…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "The FBI has seized seven domains used by Chinese state-sponsored hackers known as Flax Typhoon to operate two hacking tools, MicroScan and FishHub, used in attacks that breached critical infrastructure and other organizations worldwide…",
+          "text": "The FBI has seized seven domains used by Chinese state-sponsored hackers known as Flax Typhoon to operate two hacking tools, MicroScan and FishHub, used in attacks that breached critical infrastructure and other organizations worldwide…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "'AgentCorruption' Puts AWS Environments At Risk With Single Prompt",
+      "url": "https://www.darkreading.com/cloud-security/agentcorruption-aws-environments-at-risk-single-prompt",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-09/#reporting-668ca68c0b5e",
+      "cves": [],
+      "snippet": "'AgentCorruption' Puts AWS Environments At Risk With Single Prompt A now-patched vulnerability in AWS Bedrock AgentCore could allow an attacker to use one AI chatbot to take over an organization's entire fleet. A now-patched vulnerability in AWS Bedrock AgentCore could allow an attacker to use one AI chatbot to take over an organization's entire fleet.",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "A now-patched vulnerability in AWS Bedrock AgentCore could allow an attacker to use one AI chatbot to take over an organization's entire fleet.",
+          "text": "A now-patched vulnerability in AWS Bedrock AgentCore could allow an attacker to use one AI chatbot to take over an organization's entire fleet."
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "A now-patched vulnerability in AWS Bedrock AgentCore could allow an attacker to use one AI chatbot to take over an organization's entire fleet.",
+          "text": "A now-patched vulnerability in AWS Bedrock AgentCore could allow an attacker to use one AI chatbot to take over an organization's entire fleet."
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Ransomware attack disrupts Japan's IDCF Cloud used by govt clients",
+      "url": "https://www.bleepingcomputer.com/news/security/ransomware-attack-disrupts-japans-idcf-cloud-used-by-govt-clients/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-09/#reporting-82ee7a48c04d",
+      "cves": [],
+      "snippet": "Ransomware attack disrupts Japan's IDCF Cloud used by govt clients IDC Frontier, a major Japanese cloud and digital infrastructure company, disclosed that its IDCF Cloud service was targeted in a ransomware attack that caused an outage at a data center cluster serving the eastern part of the country… IDC Frontier, a major Japanese cloud and digital infrastructure company, disclosed that its IDCF Cloud service was targeted in a ransomware attack that caused an outage at a data center cluster serving the eastern part of the country…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "IDC Frontier, a major Japanese cloud and digital infrastructure company, disclosed that its IDCF Cloud service was targeted in a ransomware attack that caused an outage at a data center cluster serving the eastern part of the country…",
+          "text": "IDC Frontier, a major Japanese cloud and digital infrastructure company, disclosed that its IDCF Cloud service was targeted in a ransomware attack that caused an outage at a data center cluster serving the eastern part of the country…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "IDC Frontier, a major Japanese cloud and digital infrastructure company, disclosed that its IDCF Cloud service was targeted in a ransomware attack that caused an outage at a data center cluster serving the eastern part of the country…",
+          "text": "IDC Frontier, a major Japanese cloud and digital infrastructure company, disclosed that its IDCF Cloud service was targeted in a ransomware attack that caused an outage at a data center cluster serving the eastern part of the country…"
+        }
+      ],
+      "effective_date_evidence": null
+    }
+  ]
+}
