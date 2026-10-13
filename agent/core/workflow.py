@@ -21,6 +21,7 @@ from services.rss_service import RSSService
 from services.model_service import GRCModelService
 from services.regulatory_sources import enrich_regulatory_sources
 from core.article_evidence import capture_article_evidence
+from core.article_selection import selected_article_mask
 from core.entities import analyze_article_grc_content
 from core.reporting_identity import (
     ReportingIdentityError,
@@ -589,24 +590,13 @@ async def run_grc_analysis_endpoint(
             _build_source_evidence(enriched_articles), model_deadline=model_deadline
         )
         analysis_results["source_evidence"] = source_evidence
-        logger.info(f"Found {grc_article_count} articles with GRC content")
 
         # Build per-article output
-        identified = set()
-        for item in analysis_results.get("grc_articles", []) or []:
-            if isinstance(item, dict):
-                if item.get("url"):
-                    identified.add(item.get("url"))
-                if item.get("title"):
-                    identified.add(item.get("title"))
+        selected = selected_article_mask(enriched_articles, analysis_results)
 
         articles_out: List[ArticleRecord] = []
-        for art, local in zip(enriched_articles, local_signals):
-            has_grc = (
-                local.get("has_grc_content", False)
-                or (art.url in identified)
-                or (art.title in identified)
-            )
+        for art, local, model_selected in zip(enriched_articles, local_signals, selected):
+            has_grc = local.get("has_grc_content", False) or model_selected
             articles_out.append(
                 ArticleRecord(
                     title=art.title,
@@ -623,6 +613,11 @@ async def run_grc_analysis_endpoint(
                     regulatory_bodies=local.get("regulatory_bodies", []),
                 )
             )
+
+        if "grc_article_indices" in analysis_results:
+            grc_article_count = sum(article.has_grc_content for article in articles_out)
+            analysis_results["summary"]["grc_relevant_count"] = grc_article_count
+        logger.info(f"Found {grc_article_count} articles with GRC content")
 
         # Step 6: Generate comprehensive report
         logger.info("Step 6: Generating comprehensive GRC report")

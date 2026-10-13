@@ -12,6 +12,7 @@ from models.api import (
 )
 from services.model_service import GRCModelService
 from core.entities import analyze_article_grc_content
+from core.article_selection import selected_article_mask
 from core.runtime import (
     CALLER_DEADLINE_HEADER,
     deadline_from_unix_ms,
@@ -75,15 +76,11 @@ async def analyze_ar(request: AnalysisRequest, http_request: Request):
                 ),
             )
 
-        # Build a quick lookup of identified GRC articles by URL/title
-        identified = analysis.get("grc_articles", []) or []
-        identified_urls = {item.get("url", "") for item in identified if item.get("url")}
-        identified_titles = {item.get("title", "") for item in identified if item.get("title")}
+        selected = selected_article_mask(request.articles, analysis)
 
         # Map per-article results (augment with local entity extraction)
         results = []
-        for art in request.articles:
-            has_grc = (art.url in identified_urls) or (art.title in identified_titles)
+        for art, has_grc in zip(request.articles, selected):
             # Local entity extraction to populate details regardless of LLM output
             try:
                 local = analyze_article_grc_content(art.model_dump())
@@ -117,7 +114,11 @@ async def analyze_ar(request: AnalysisRequest, http_request: Request):
         analysis_data = analysis.get("analysis", {})
         summary = AnalysisSummary(
             total_articles=summary_data.get("total_articles", len(request.articles)),
-            grc_articles=summary_data.get("grc_relevant_count", 0),
+            grc_articles=(
+                sum(result.has_grc_content for result in results)
+                if "grc_article_indices" in analysis
+                else summary_data.get("grc_relevant_count", 0)
+            ),
             top_regulations=analysis_data.get("regulations_mentioned", []) or [],
             top_frameworks=analysis_data.get("frameworks_referenced", []) or [],
             affected_industries=analysis_data.get("industries_affected", []) or [],

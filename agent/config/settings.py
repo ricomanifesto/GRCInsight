@@ -1,7 +1,8 @@
 """Configuration settings for the FastAPI application."""
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
-from typing import List
+from pydantic import Field
+from typing import List, Literal
 
 
 class Settings(BaseSettings):
@@ -23,6 +24,9 @@ class Settings(BaseSettings):
     llm_model: str = "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free"
     llm_max_tokens: int = 16000
     openrouter_api_key: str = ""
+    grc_relevance_mode: Literal["off", "shadow", "enabled"] = "off"
+    grc_relevance_min_probability: float = Field(default=0.95, ge=0.5, le=1, allow_inf_nan=False)
+    grc_relevance_timeout_seconds: float = Field(default=4, gt=0, le=10, allow_inf_nan=False)
 
     # RSS configuration
     rss_timeout: int = 30
