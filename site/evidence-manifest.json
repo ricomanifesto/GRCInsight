@@ -6,7 +6,7 @@
       {
         "control_id": "vulnerability_management",
         "evidence_excerpt": "Citrix has released patches for yet another critical security flaw impacting NetScaler ADC and NetScaler Gateway that could result in remote code execution or denial-of-service (DoS) under certain conditions. \"CVE-2026-107406 is a memory overflow vulnerability that may lead to remote code execution or denial-of-service under specific configuration conditions,\" Citrix said. The vulnerability…",
-        "evidence_origin": "summary",
+        "evidence_origin": "content",
         "focus": "NetScaler ADC and NetScaler Gateway",
         "priority": "high",
         "source_ids": [
@@ -14,11 +14,11 @@
         ]
       },
       {
-        "control_id": "access_management",
+        "control_id": "governance",
         "evidence_excerpt": "As enterprises race to deploy autonomous AI agents to accelerate business, a new report reveals they are tethered to security architectures built for a different era. The \"Horizons of Identity Security\" report from SailPoint highlights a critical “velocity paradox,” in which organizations invest in AI-speed business operations while continuing to rely on human-speed security controls, creating a…",
-        "evidence_origin": "summary",
-        "focus": "autonomous AI agents",
-        "priority": "high",
+        "evidence_origin": "content",
+        "focus": "security architectures",
+        "priority": "medium",
         "source_ids": [
           2
         ]
@@ -26,7 +26,7 @@
       {
         "control_id": "vulnerability_management",
         "evidence_excerpt": "Microsoft says devices running unsupported versions of Windows will stop receiving security updates after next year's Windows Update certificate rotation…",
-        "evidence_origin": "summary",
+        "evidence_origin": "content",
         "focus": "unsupported versions of Windows",
         "priority": "high",
         "source_ids": [
@@ -35,18 +35,18 @@
       },
       {
         "control_id": "incident_response",
-        "evidence_excerpt": "The FBI has seized seven domains used by Chinese state-sponsored hackers known as Flax Typhoon to operate two hacking tools, MicroScan and FishHub, used in attacks that breached critical infrastructure and other organizations worldwide…",
-        "evidence_origin": "summary",
-        "focus": "MicroScan and FishHub",
-        "priority": "medium",
+        "evidence_excerpt": "The U.S. Federal Bureau of Investigation (FBI) and Department of Justice (DoJ) have announced the disruption of malicious tools used by a China-linked advanced persistent threat group known as Flax Typhoon. To that end, the agencies seized several domains and blocked access to platforms that were used to scan, and in some cases infiltrate, U.S. critical infrastructure. The list of seized…",
+        "evidence_origin": "content",
+        "focus": "Flax Typhoon",
+        "priority": "high",
         "source_ids": [
-          10
+          8
         ]
       },
       {
-        "control_id": "vulnerability_management",
+        "control_id": "access_management",
         "evidence_excerpt": "A now-patched vulnerability in AWS Bedrock AgentCore could allow an attacker to use one AI chatbot to take over an organization's entire fleet.",
-        "evidence_origin": "summary",
+        "evidence_origin": "content",
         "focus": "AWS Bedrock AgentCore",
         "priority": "high",
         "source_ids": [
@@ -56,7 +56,7 @@
       {
         "control_id": "incident_response",
         "evidence_excerpt": "IDC Frontier, a major Japanese cloud and digital infrastructure company, disclosed that its IDCF Cloud service was targeted in a ransomware attack that caused an outage at a data center cluster serving the eastern part of the country…",
-        "evidence_origin": "summary",
+        "evidence_origin": "content",
         "focus": "IDCF Cloud service",
         "priority": "high",
         "source_ids": [
@@ -65,17 +65,17 @@
       }
     ],
     "executive_brief": {
-      "decision_frame": "exposure",
+      "decision_frame": "separate",
       "source_ids": [
         1,
-        4,
+        2,
         11
       ]
     },
     "industry_impacts": [],
     "regulatory_changes": []
   },
-  "generated_at": "2026-10-12T13:33:58.645504Z",
+  "generated_at": "2026-10-13T13:18:07.035797Z",
   "feed_url": "https://ricomanifesto.github.io/SentryDigest/feed.xml",
   "feed_home_url": "https://ricomanifesto.github.io/SentryDigest/",
   "digest_issue_date": "2026-10-09",
