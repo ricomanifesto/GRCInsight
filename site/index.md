@@ -1,5 +1,5 @@
 # GRC Intelligence Report - 2026-10-15
-**Generated:** 2026-10-15T06:33:59.501166Z
+**Generated:** 2026-10-15T09:24:54.22704Z
 **Date of Issue:** October 2026
 **Analysis Period:** October 2026
 **Source:** [SentryDigest](https://ricomanifesto.github.io/SentryDigest/feed.xml)
@@ -64,25 +64,15 @@ No sourced regulatory changes identified in the supplied evidence.
 
 **Decision trigger:** If applicability is confirmed, decide on remediation or a documented exception; otherwise record why the finding does not apply.
 
-### Claude Code Desktop's preview pane — Data protection
+### Collabora Online - Built-in CODE Server — Vulnerability management
 
-**Source evidence:** “A bug in Claude Code Desktop's preview pane can allow adversaries to quietly steal credentials from developers, including SSH private keys, AWS credentials, and Claude 0Auth tokens.” [Anthropic 'SneakPeek' Flaw Is a Silent Zero-Click Threat](https://www.darkreading.com/threat-intelligence/new-anthropic-sneakpeek-silent-zero-click-threat)
+**Source evidence:** “Attackers exploited a flaw in an optional Nextcloud app, Collabora Online - Built-in CODE Server, to plant web shells on Nextcloud servers. Three administrators reported the issue on GitHub, with the first logged attack on September 10. A web shell is a small file that executes any command an attacker sends via a web request, with the rights of the web server account. The flaw…” [Hackers Backdoor Nextcloud Servers Through Critical Flaw in Collabora’s Built-in CODE App](https://thehackernews.com/2026/10/hackers-backdoor-nextcloud-servers.html)
 
-**Control decision (inference):** A data-protection decision depends on the data involved and the controls governing access to it.
+**Control decision (inference):** A remediation decision depends on matching deployed assets to the source's exposure conditions.
 
-**Inferred review priority:** Medium. **Owner:** Data and privacy owners. **Evidence to request:** data inventory, access restrictions, audit logs and a documented exposure assessment.
+**Inferred review priority:** High. **Owner:** Vulnerability and asset owners. **Evidence to request:** affected-asset inventory, installed versions, remediation status and an exception owner.
 
-**Decision trigger:** If relevant data is exposed to the reported access path, decide which protection or access change is needed.
-
-### resellers and distributors of its wallets — Third-party risk
-
-**Source evidence:** “Ledger has asked resellers and distributors of its wallets in Indonesia, Singapore, Thailand, the Philippines, Vietnam, Malaysia, and Hong Kong to suspend device sales and remove products from shelves while it investigates device tampering…” [Ledger asks sellers across Asia to halt sales after supply-chain attack](https://www.bleepingcomputer.com/news/security/ledger-asks-sellers-across-asia-to-halt-sales-after-supply-chain-attack/)
-
-**Control decision (inference):** A supplier-assurance decision depends on the access and control responsibilities you actually delegate.
-
-**Inferred review priority:** Medium. **Owner:** Supplier risk owner. **Evidence to request:** supplier access scope, control responsibilities and evidence of remediation assurance.
-
-**Decision trigger:** If the supplier dependency exists and assurance is insufficient, request evidence or escalate the assurance gap to its owner.
+**Decision trigger:** If applicability is confirmed, decide on remediation or a documented exception; otherwise record why the finding does not apply.
 
 ## Source Highlights
 

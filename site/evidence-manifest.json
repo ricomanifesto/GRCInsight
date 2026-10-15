@@ -44,23 +44,13 @@
         ]
       },
       {
-        "control_id": "data_protection",
-        "evidence_excerpt": "A bug in Claude Code Desktop's preview pane can allow adversaries to quietly steal credentials from developers, including SSH private keys, AWS credentials, and Claude 0Auth tokens.",
+        "control_id": "vulnerability_management",
+        "evidence_excerpt": "Attackers exploited a flaw in an optional Nextcloud app, Collabora Online - Built-in CODE Server, to plant web shells on Nextcloud servers. Three administrators reported the issue on GitHub, with the first logged attack on September 10. A web shell is a small file that executes any command an attacker sends via a web request, with the rights of the web server account. The flaw…",
         "evidence_origin": "summary",
-        "focus": "Claude Code Desktop's preview pane",
-        "priority": "medium",
+        "focus": "Collabora Online - Built-in CODE Server",
+        "priority": "high",
         "source_ids": [
-          5
-        ]
-      },
-      {
-        "control_id": "third_party_risk",
-        "evidence_excerpt": "Ledger has asked resellers and distributors of its wallets in Indonesia, Singapore, Thailand, the Philippines, Vietnam, Malaysia, and Hong Kong to suspend device sales and remove products from shelves while it investigates device tampering…",
-        "evidence_origin": "summary",
-        "focus": "resellers and distributors of its wallets",
-        "priority": "medium",
-        "source_ids": [
-          8
+          9
         ]
       }
     ],
@@ -75,7 +65,7 @@
     "industry_impacts": [],
     "regulatory_changes": []
   },
-  "generated_at": "2026-10-15T06:33:59.501166Z",
+  "generated_at": "2026-10-15T09:24:54.22704Z",
   "feed_url": "https://ricomanifesto.github.io/SentryDigest/feed.xml",
   "feed_home_url": "https://ricomanifesto.github.io/SentryDigest/",
   "digest_issue_date": "2026-10-15",
