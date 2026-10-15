@@ -15,42 +15,22 @@
       },
       {
         "control_id": "vulnerability_management",
+        "evidence_excerpt": "CVE-2026-104935, a high-severity authentication bypass + RCE vulnerability, was only partially discovered and patched in July, leaving an opening for threat actors to capitalize on.",
+        "evidence_origin": "summary",
+        "focus": "authentication bypass + RCE vulnerability",
+        "priority": "high",
+        "source_ids": [
+          2
+        ]
+      },
+      {
+        "control_id": "vulnerability_management",
         "evidence_excerpt": "A flaw in Linux's vhost subsystem lets a local user read and write kernel memory at will and become root across nearly a decade of kernel versions. In one virtualization setup, it lets an untrusted virtual machine write to the host's memory and hijack the program that runs the virtual machine. The bug is tracked as CVE-2026-74580 and named Vghost. Tencent Zhuque Lab, which found the…",
         "evidence_origin": "summary",
         "focus": "Linux's vhost subsystem",
         "priority": "high",
         "source_ids": [
           3
-        ]
-      },
-      {
-        "control_id": "access_management",
-        "evidence_excerpt": "A bug in Claude Code Desktop's preview pane can allow adversaries to quietly steal credentials from developers, including SSH private keys, AWS credentials, and Claude 0Auth tokens.",
-        "evidence_origin": "summary",
-        "focus": "Claude Code Desktop's preview pane",
-        "priority": "high",
-        "source_ids": [
-          5
-        ]
-      },
-      {
-        "control_id": "third_party_risk",
-        "evidence_excerpt": "The U.S. Department of Justice (DoJ) has disrupted the Famous Chollima threat group's operations by arresting two suspects, charging 14 individuals, and seizing nearly 187 laptops used in North Korean remote IT worker schemes…",
-        "evidence_origin": "summary",
-        "focus": "North Korean remote IT worker schemes",
-        "priority": "medium",
-        "source_ids": [
-          6
-        ]
-      },
-      {
-        "control_id": "incident_response",
-        "evidence_excerpt": "Microsoft and Health-ISAC, along with the Japan Cybercrime Control Center (JC3) and a coalition of private sector companies, such as Resecurity, Cloudflare, Oracle, Proofpoint, and TRM Labs, announced the disruption of three phishing kits, CoGUI (aka NX or FA), Haozi (aka Phoenix), and Iron Man System. \"Since January 2026, the threat actors behind these kits have been responsible for…",
-        "evidence_origin": "summary",
-        "focus": "three phishing kits",
-        "priority": "medium",
-        "source_ids": [
-          11
         ]
       },
       {
@@ -62,20 +42,40 @@
         "source_ids": [
           7
         ]
+      },
+      {
+        "control_id": "data_protection",
+        "evidence_excerpt": "A bug in Claude Code Desktop's preview pane can allow adversaries to quietly steal credentials from developers, including SSH private keys, AWS credentials, and Claude 0Auth tokens.",
+        "evidence_origin": "summary",
+        "focus": "Claude Code Desktop's preview pane",
+        "priority": "medium",
+        "source_ids": [
+          5
+        ]
+      },
+      {
+        "control_id": "third_party_risk",
+        "evidence_excerpt": "Ledger has asked resellers and distributors of its wallets in Indonesia, Singapore, Thailand, the Philippines, Vietnam, Malaysia, and Hong Kong to suspend device sales and remove products from shelves while it investigates device tampering…",
+        "evidence_origin": "summary",
+        "focus": "resellers and distributors of its wallets",
+        "priority": "medium",
+        "source_ids": [
+          8
+        ]
       }
     ],
     "executive_brief": {
       "decision_frame": "exposure",
       "source_ids": [
         1,
-        5,
+        2,
         3
       ]
     },
     "industry_impacts": [],
     "regulatory_changes": []
   },
-  "generated_at": "2026-10-15T03:25:06.000314Z",
+  "generated_at": "2026-10-15T06:33:59.501166Z",
   "feed_url": "https://ricomanifesto.github.io/SentryDigest/feed.xml",
   "feed_home_url": "https://ricomanifesto.github.io/SentryDigest/",
   "digest_issue_date": "2026-10-15",
