@@ -1,5 +1,5 @@
-# GRC Intelligence Report - 2026-10-14
-**Generated:** 2026-10-14T18:26:51.98018Z
+# GRC Intelligence Report - 2026-10-15
+**Generated:** 2026-10-15T00:46:47.785733Z
 **Date of Issue:** October 2026
 **Analysis Period:** October 2026
 **Source:** [SentryDigest](https://ricomanifesto.github.io/SentryDigest/feed.xml)
@@ -12,7 +12,7 @@
 
 ## Executive Summary
 
-Make confirmed exposure the basis for remediation and access-control decisions. Start by checking which reported conditions apply to “Ivanti Connect Secure &#40;ICS&#41; appliances” [CISA Urges Immediate Ivanti Connect Secure Updates as Honeypots Log 105 Exploit Attempts](https://thehackernews.com/2026/10/cisa-urges-immediate-ivanti-connect.html), “Linux's vhost subsystem” [AI-Found Linux Kernel Flaw Gives Local Users Root, and Can Break a Guest Out to the Host](https://thehackernews.com/2026/10/ai-found-linux-kernel-flaw-gives-local.html), and “Ghostscript interpreter and rendering engine” [Ghostscript flaw lets hackers hijack servers via PDF uploads](https://www.bleepingcomputer.com/news/security/ghostscript-flaw-lets-hackers-hijack-servers-via-pdf-uploads/). Use that assessment to decide where control evidence is sufficient and where an owner needs to investigate.
+Make confirmed exposure the basis for remediation and access-control decisions. Start by checking which reported conditions apply to “Ivanti Connect Secure &#40;ICS&#41; appliances” [CISA Urges Immediate Ivanti Connect Secure Updates as Honeypots Log 105 Exploit Attempts](https://thehackernews.com/2026/10/cisa-urges-immediate-ivanti-connect.html), “Linux's vhost subsystem” [AI-Found Linux Kernel Flaw Gives Local Users Root, and Can Break a Guest Out to the Host](https://thehackernews.com/2026/10/ai-found-linux-kernel-flaw-gives-local.html), and “Cisco Secure Email Gateway” [Cisco Warns of Active Attacks Exploiting New Critical Secure Email Gateway Vulnerability](https://thehackernews.com/2026/10/cisco-warns-of-active-attacks.html). Use that assessment to decide where control evidence is sufficient and where an owner needs to investigate.
 
 The next step is to establish affected-asset and configuration scope. These are proposed review priorities: confirm local applicability before assigning work. In each case, record the applicability decision and the evidence supporting the next step.
 
@@ -44,9 +44,9 @@ No sourced regulatory changes identified in the supplied evidence.
 
 **Decision trigger:** If applicability is confirmed, decide on remediation or a documented exception; otherwise record why the finding does not apply.
 
-### Ghostscript interpreter and rendering engine — Vulnerability management
+### Cisco Secure Email Gateway — Vulnerability management
 
-**Source evidence:** “A critical heap buffer overflow vulnerability &#40;CVE-2026-39919&#41; in the Ghostscript interpreter and rendering engine could allow remote code execution through specially crafted PDF files…” [Ghostscript flaw lets hackers hijack servers via PDF uploads](https://www.bleepingcomputer.com/news/security/ghostscript-flaw-lets-hackers-hijack-servers-via-pdf-uploads/)
+**Source evidence:** “Attackers are exploiting a critical flaw in Cisco Secure Email Gateway that lets a sender with no login write files to the appliance's operating system, Cisco said in an advisory on Wednesday. The attacker sends an email with a crafted attachment through the gateway and, if it succeeds, could then run commands as root. The appliance filters an organization's email for spam, malware…” [Cisco Warns of Active Attacks Exploiting New Critical Secure Email Gateway Vulnerability](https://thehackernews.com/2026/10/cisco-warns-of-active-attacks.html)
 
 **Control decision (inference):** A remediation decision depends on matching deployed assets to the source's exposure conditions.
 
@@ -54,9 +54,19 @@ No sourced regulatory changes identified in the supplied evidence.
 
 **Decision trigger:** If applicability is confirmed, decide on remediation or a documented exception; otherwise record why the finding does not apply.
 
-### Cryptomus — Third-party risk
+### Claude Code Desktop's preview pane — Data protection
 
-**Source evidence:** “The United Kingdom has issued economic sanctions against Cryptomus, a chameleonic cryptocurrency platform that experts say serves as a major conduit for payments related to ransomware, narcotics, darknet markets, fraud and cybercrime services that are helping Russia circumvent existing financial restrictions.” [U.K. Sanctions Cryptomus for RU Money Laundering](https://krebsonsecurity.com/2026/10/u-k-sanctions-cryptomus-for-ru-money-laundering/)
+**Source evidence:** “A bug in Claude Code Desktop's preview pane can allow adversaries to quietly steal credentials from developers, including SSH private keys, AWS credentials, and Claude 0Auth tokens.” [Anthropic 'SneakPeek' Flaw Is a Silent Zero-Click Threat](https://www.darkreading.com/threat-intelligence/new-anthropic-sneakpeek-silent-zero-click-threat)
+
+**Control decision (inference):** A data-protection decision depends on the data involved and the controls governing access to it.
+
+**Inferred review priority:** High. **Owner:** Data and privacy owners. **Evidence to request:** data inventory, access restrictions, audit logs and a documented exposure assessment.
+
+**Decision trigger:** If relevant data is exposed to the reported access path, decide which protection or access change is needed.
+
+### investigates device tampering — Third-party risk
+
+**Source evidence:** “Ledger has asked resellers and distributors of its wallets in Indonesia, Singapore, Thailand, the Philippines, Vietnam, Malaysia, and Hong Kong to suspend device sales and remove products from shelves while it investigates device tampering…” [Ledger asks sellers across Asia to halt sales after supply-chain attack](https://www.bleepingcomputer.com/news/security/ledger-asks-sellers-across-asia-to-halt-sales-after-supply-chain-attack/)
 
 **Control decision (inference):** A supplier-assurance decision depends on the access and control responsibilities you actually delegate.
 
@@ -64,37 +74,27 @@ No sourced regulatory changes identified in the supplied evidence.
 
 **Decision trigger:** If the supplier dependency exists and assurance is insufficient, request evidence or escalate the assurance gap to its owner.
 
-### curl — Vulnerability management
+### three phishing kits — Monitoring and detection
 
-**Source evidence:** “A flaw in how curl handles HTTP/2 uploads lets a malicious server receiving an upload corrupt the client's memory, and the researcher who reported it turned that into code execution on the uploading machine. The curl project fixed it on October 14 in curl 8.23.0. Taking over a client needs exact knowledge of its build and memory layout, and curl expects a real attack to end in a crash…” [curl Patches HTTP/2 Upload Flaw After PoC Demonstrates Client-Side Code Execution](https://thehackernews.com/2026/10/curl-patches-http2-upload-flaw-after.html)
+**Source evidence:** “Microsoft and Health-ISAC, along with the Japan Cybercrime Control Center &#40;JC3&#41; and a coalition of private sector companies, such as Resecurity, Cloudflare, Oracle, Proofpoint, and TRM Labs, announced the disruption of three phishing kits, CoGUI &#40;aka NX or FA&#41;, Haozi &#40;aka Phoenix&#41;, and Iron Man System. "Since January 2026, the threat actors behind these kits have been responsible for…” [Microsoft Disrupts 3 Phishing Kits Linked to Over 1 Billion Scam Messages](https://thehackernews.com/2026/10/microsoft-disrupts-3-phishing-kits.html)
 
-**Control decision (inference):** A remediation decision depends on matching deployed assets to the source's exposure conditions.
+**Control decision (inference):** A monitoring decision depends on distinguishing the reported behavior from authorized activity in your telemetry.
 
-**Inferred review priority:** Medium. **Owner:** Vulnerability and asset owners. **Evidence to request:** affected-asset inventory, installed versions, remediation status and an exception owner.
+**Inferred review priority:** Medium. **Owner:** Detection and monitoring owner. **Evidence to request:** log coverage, a detection test, alert routing and investigation ownership.
 
-**Decision trigger:** If applicability is confirmed, decide on remediation or a documented exception; otherwise record why the finding does not apply.
-
-### Cloned voices and synthetic video calls — Access management
-
-**Source evidence:** “Cloned voices and synthetic video calls now show up in payment fraud, help desk resets, and access requests. A structured drill shows security teams exactly where verification breaks down, while nothing is at stake. The call comes in at 4:40 on a Friday. It's the CFO, or it sounds exactly like her, asking the controller to push a supplier payment out before the weekend because a deal closes…” [How to Run a Deepfake Readiness Drill Before a Cloned Voice Calls Your Team](https://thehackernews.com/2026/10/how-to-run-deepfake-readiness-drill.html)
-
-**Control decision (inference):** An access-control decision depends on whether the reported path crosses a permission boundary in your environment.
-
-**Inferred review priority:** Medium. **Owner:** Identity and access owner. **Evidence to request:** access scope, authentication coverage, session revocation and a permission-test result.
-
-**Decision trigger:** If a permission gap is reproduced, assign a control correction and verify it; otherwise retain the test evidence.
+**Decision trigger:** If a detection test fails, assign the coverage or routing correction and repeat the test.
 
 ## Source Highlights
 
 - [CISA Urges Immediate Ivanti Connect Secure Updates as Honeypots Log 105 Exploit Attempts](https://thehackernews.com/2026/10/cisa-urges-immediate-ivanti-connect.html) · [View in SentryDigest](https://ricomanifesto.github.io/SentryDigest/archive/2026-10-14/#reporting-13d15f9231c4)
 - [AI-Found Linux Kernel Flaw Gives Local Users Root, and Can Break a Guest Out to the Host](https://thehackernews.com/2026/10/ai-found-linux-kernel-flaw-gives-local.html) · [View in SentryDigest](https://ricomanifesto.github.io/SentryDigest/archive/2026-10-14/#reporting-dce2d98112cc)
-- [Ghostscript flaw lets hackers hijack servers via PDF uploads](https://www.bleepingcomputer.com/news/security/ghostscript-flaw-lets-hackers-hijack-servers-via-pdf-uploads/) · [View in SentryDigest](https://ricomanifesto.github.io/SentryDigest/archive/2026-10-14/#reporting-521975252a51)
+- [Anthropic 'SneakPeek' Flaw Is a Silent Zero-Click Threat](https://www.darkreading.com/threat-intelligence/new-anthropic-sneakpeek-silent-zero-click-threat) · [View in SentryDigest](https://ricomanifesto.github.io/SentryDigest/archive/2026-10-14/#reporting-27378f9eca71)
+- [FBI raids DPRK IT worker laptop farms in Texas, US nationals arrested](https://www.bleepingcomputer.com/news/security/fbi-raids-dprk-it-worker-laptop-farms-in-texas-us-nationals-arrested/) · [View in SentryDigest](https://ricomanifesto.github.io/SentryDigest/archive/2026-10-14/#reporting-f5298475776f)
+- [Cisco Warns of Active Attacks Exploiting New Critical Secure Email Gateway Vulnerability](https://thehackernews.com/2026/10/cisco-warns-of-active-attacks.html) · [View in SentryDigest](https://ricomanifesto.github.io/SentryDigest/archive/2026-10-14/#reporting-402aaeff71af)
+- [Ledger asks sellers across Asia to halt sales after supply-chain attack](https://www.bleepingcomputer.com/news/security/ledger-asks-sellers-across-asia-to-halt-sales-after-supply-chain-attack/) · [View in SentryDigest](https://ricomanifesto.github.io/SentryDigest/archive/2026-10-14/#reporting-0077d1f981ae)
+- [Hackers Backdoor Nextcloud Servers Through Critical Flaw in Collabora’s Built-in CODE App](https://thehackernews.com/2026/10/hackers-backdoor-nextcloud-servers.html) · [View in SentryDigest](https://ricomanifesto.github.io/SentryDigest/archive/2026-10-14/#reporting-2720649a8fdd)
+- [Cisco patches new Secure Email Gateway zero-day exploited in attacks](https://www.bleepingcomputer.com/news/security/cisco-patches-actively-exploited-secure-email-gateway-zero-day/) · [View in SentryDigest](https://ricomanifesto.github.io/SentryDigest/archive/2026-10-14/#reporting-9960150300a6)
+- [Microsoft Disrupts 3 Phishing Kits Linked to Over 1 Billion Scam Messages](https://thehackernews.com/2026/10/microsoft-disrupts-3-phishing-kits.html) · [View in SentryDigest](https://ricomanifesto.github.io/SentryDigest/archive/2026-10-14/#reporting-fbe33babcbab)
+- [U.S. Shuts Down Over 40 Laptop Farms, Charges 14 in North Korean IT Worker Fraud](https://thehackernews.com/2026/10/us-shuts-down-over-40-laptop-farms.html) · [View in SentryDigest](https://ricomanifesto.github.io/SentryDigest/archive/2026-10-14/#reporting-6d011349c01c)
 - [Microsoft fixes VPN issues caused by September Windows updates](https://www.bleepingcomputer.com/news/microsoft/microsoft-fixes-vpn-issues-caused-by-september-windows-updates/) · [View in SentryDigest](https://ricomanifesto.github.io/SentryDigest/archive/2026-10-14/#reporting-9bde80472ad4)
 - [U.K. Sanctions Cryptomus for RU Money Laundering](https://krebsonsecurity.com/2026/10/u-k-sanctions-cryptomus-for-ru-money-laundering/) · [View in SentryDigest](https://ricomanifesto.github.io/SentryDigest/archive/2026-10-14/#reporting-679425e2c5ab)
-- [The Blind Spots of Agentic Pentesting and How to Close Them](https://www.bleepingcomputer.com/news/security/the-blind-spots-of-agentic-pentesting-and-how-to-close-them/) · [View in SentryDigest](https://ricomanifesto.github.io/SentryDigest/archive/2026-10-14/#reporting-1651735e0da5)
-- [Global takedown hits network behind 1 billion phishing messages](https://www.bleepingcomputer.com/news/security/global-takedown-hits-network-behind-1-billion-phishing-messages/) · [View in SentryDigest](https://ricomanifesto.github.io/SentryDigest/archive/2026-10-14/#reporting-d21e2d4e3bc5)
-- [Russian Influence Operation Widely Targeting Latin America](https://www.darkreading.com/cyberattacks-data-breaches/russian-influence-operation-targeting-latin-america) · [View in SentryDigest](https://ricomanifesto.github.io/SentryDigest/archive/2026-10-14/#reporting-1844a10e24ed)
-- [CISA warns admins to immediately fix Ivanti flaw exploited as zero-day](https://www.bleepingcomputer.com/news/security/cisa-warns-admins-to-immediately-fix-ivanti-flaw-exploited-as-zero-day/) · [View in SentryDigest](https://ricomanifesto.github.io/SentryDigest/archive/2026-10-14/#reporting-e05ffdb17dfb)
-- [curl Patches HTTP/2 Upload Flaw After PoC Demonstrates Client-Side Code Execution](https://thehackernews.com/2026/10/curl-patches-http2-upload-flaw-after.html) · [View in SentryDigest](https://ricomanifesto.github.io/SentryDigest/archive/2026-10-14/#reporting-05d981a16f27)
-- [How to Run a Deepfake Readiness Drill Before a Cloned Voice Calls Your Team](https://thehackernews.com/2026/10/how-to-run-deepfake-readiness-drill.html) · [View in SentryDigest](https://ricomanifesto.github.io/SentryDigest/archive/2026-10-14/#reporting-72b689a43b33)
-- [Hirudo Android malware replaces banking apps to evade security checks](https://www.bleepingcomputer.com/news/security/hirudo-android-malware-replaces-banking-apps-to-evade-security-checks/) · [View in SentryDigest](https://ricomanifesto.github.io/SentryDigest/archive/2026-10-14/#reporting-7a5799db26b5)

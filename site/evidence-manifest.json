@@ -24,43 +24,43 @@
         ]
       },
       {
-        "control_id": "vulnerability_management",
-        "evidence_excerpt": "A critical heap buffer overflow vulnerability (CVE-2026-39919) in the Ghostscript interpreter and rendering engine could allow remote code execution through specially crafted PDF files…",
+        "control_id": "data_protection",
+        "evidence_excerpt": "A bug in Claude Code Desktop's preview pane can allow adversaries to quietly steal credentials from developers, including SSH private keys, AWS credentials, and Claude 0Auth tokens.",
         "evidence_origin": "summary",
-        "focus": "Ghostscript interpreter and rendering engine",
+        "focus": "Claude Code Desktop's preview pane",
         "priority": "high",
         "source_ids": [
           3
         ]
       },
       {
-        "control_id": "third_party_risk",
-        "evidence_excerpt": "The United Kingdom has issued economic sanctions against Cryptomus, a chameleonic cryptocurrency platform that experts say serves as a major conduit for payments related to ransomware, narcotics, darknet markets, fraud and cybercrime services that are helping Russia circumvent existing financial restrictions.",
+        "control_id": "vulnerability_management",
+        "evidence_excerpt": "Attackers are exploiting a critical flaw in Cisco Secure Email Gateway that lets a sender with no login write files to the appliance's operating system, Cisco said in an advisory on Wednesday. The attacker sends an email with a crafted attachment through the gateway and, if it succeeds, could then run commands as root. The appliance filters an organization's email for spam, malware…",
         "evidence_origin": "summary",
-        "focus": "Cryptomus",
-        "priority": "medium",
+        "focus": "Cisco Secure Email Gateway",
+        "priority": "high",
         "source_ids": [
           5
         ]
       },
       {
-        "control_id": "vulnerability_management",
-        "evidence_excerpt": "A flaw in how curl handles HTTP/2 uploads lets a malicious server receiving an upload corrupt the client's memory, and the researcher who reported it turned that into code execution on the uploading machine. The curl project fixed it on October 14 in curl 8.23.0. Taking over a client needs exact knowledge of its build and memory layout, and curl expects a real attack to end in a crash…",
+        "control_id": "third_party_risk",
+        "evidence_excerpt": "Ledger has asked resellers and distributors of its wallets in Indonesia, Singapore, Thailand, the Philippines, Vietnam, Malaysia, and Hong Kong to suspend device sales and remove products from shelves while it investigates device tampering…",
         "evidence_origin": "summary",
-        "focus": "curl",
+        "focus": "investigates device tampering",
         "priority": "medium",
         "source_ids": [
-          10
+          6
         ]
       },
       {
-        "control_id": "access_management",
-        "evidence_excerpt": "Cloned voices and synthetic video calls now show up in payment fraud, help desk resets, and access requests. A structured drill shows security teams exactly where verification breaks down, while nothing is at stake. The call comes in at 4:40 on a Friday. It's the CFO, or it sounds exactly like her, asking the controller to push a supplier payment out before the weekend because a deal closes…",
+        "control_id": "monitoring",
+        "evidence_excerpt": "Microsoft and Health-ISAC, along with the Japan Cybercrime Control Center (JC3) and a coalition of private sector companies, such as Resecurity, Cloudflare, Oracle, Proofpoint, and TRM Labs, announced the disruption of three phishing kits, CoGUI (aka NX or FA), Haozi (aka Phoenix), and Iron Man System. \"Since January 2026, the threat actors behind these kits have been responsible for…",
         "evidence_origin": "summary",
-        "focus": "Cloned voices and synthetic video calls",
+        "focus": "three phishing kits",
         "priority": "medium",
         "source_ids": [
-          11
+          9
         ]
       }
     ],
@@ -69,13 +69,13 @@
       "source_ids": [
         1,
         2,
-        3
+        5
       ]
     },
     "industry_impacts": [],
     "regulatory_changes": []
   },
-  "generated_at": "2026-10-14T18:26:51.98018Z",
+  "generated_at": "2026-10-15T00:46:47.785733Z",
   "feed_url": "https://ricomanifesto.github.io/SentryDigest/feed.xml",
   "feed_home_url": "https://ricomanifesto.github.io/SentryDigest/",
   "digest_issue_date": "2026-10-14",
@@ -132,25 +132,177 @@
       "effective_date_evidence": null
     },
     {
-      "title": "Ghostscript flaw lets hackers hijack servers via PDF uploads",
-      "url": "https://www.bleepingcomputer.com/news/security/ghostscript-flaw-lets-hackers-hijack-servers-via-pdf-uploads/",
-      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-14/#reporting-521975252a51",
-      "cves": [
-        "CVE-2026-39919"
-      ],
-      "snippet": "Ghostscript flaw lets hackers hijack servers via PDF uploads A critical heap buffer overflow vulnerability (CVE-2026-39919) in the Ghostscript interpreter and rendering engine could allow remote code execution through specially crafted PDF files… A critical heap buffer overflow vulnerability (CVE-2026-39919) in the Ghostscript interpreter and rendering engine could allow remote code execution through specially crafted PDF files…",
+      "title": "Anthropic 'SneakPeek' Flaw Is a Silent Zero-Click Threat",
+      "url": "https://www.darkreading.com/threat-intelligence/new-anthropic-sneakpeek-silent-zero-click-threat",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-14/#reporting-27378f9eca71",
+      "cves": [],
+      "snippet": "Anthropic 'SneakPeek' Flaw Is a Silent Zero-Click Threat A bug in Claude Code Desktop's preview pane can allow adversaries to quietly steal credentials from developers, including SSH private keys, AWS credentials, and Claude 0Auth tokens. A bug in Claude Code Desktop's preview pane can allow adversaries to quietly steal credentials from developers, including SSH private keys, AWS credentials, and Claude 0Auth tokens.",
       "article_evidence": [
         {
           "extraction_version": 1,
           "origin": "summary",
-          "raw_text": "A critical heap buffer overflow vulnerability (CVE-2026-39919) in the Ghostscript interpreter and rendering engine could allow remote code execution through specially crafted PDF files…",
-          "text": "A critical heap buffer overflow vulnerability (CVE-2026-39919) in the Ghostscript interpreter and rendering engine could allow remote code execution through specially crafted PDF files…"
+          "raw_text": "A bug in Claude Code Desktop's preview pane can allow adversaries to quietly steal credentials from developers, including SSH private keys, AWS credentials, and Claude 0Auth tokens.",
+          "text": "A bug in Claude Code Desktop's preview pane can allow adversaries to quietly steal credentials from developers, including SSH private keys, AWS credentials, and Claude 0Auth tokens."
         },
         {
           "extraction_version": 1,
           "origin": "content",
-          "raw_text": "A critical heap buffer overflow vulnerability (CVE-2026-39919) in the Ghostscript interpreter and rendering engine could allow remote code execution through specially crafted PDF files…",
-          "text": "A critical heap buffer overflow vulnerability (CVE-2026-39919) in the Ghostscript interpreter and rendering engine could allow remote code execution through specially crafted PDF files…"
+          "raw_text": "A bug in Claude Code Desktop's preview pane can allow adversaries to quietly steal credentials from developers, including SSH private keys, AWS credentials, and Claude 0Auth tokens.",
+          "text": "A bug in Claude Code Desktop's preview pane can allow adversaries to quietly steal credentials from developers, including SSH private keys, AWS credentials, and Claude 0Auth tokens."
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "FBI raids DPRK IT worker laptop farms in Texas, US nationals arrested",
+      "url": "https://www.bleepingcomputer.com/news/security/fbi-raids-dprk-it-worker-laptop-farms-in-texas-us-nationals-arrested/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-14/#reporting-f5298475776f",
+      "cves": [],
+      "snippet": "FBI raids DPRK IT worker laptop farms in Texas, US nationals arrested The U.S. Department of Justice (DoJ) has disrupted the Famous Chollima threat group's operations by arresting two suspects, charging 14 individuals, and seizing nearly 187 laptops used in North Korean remote IT worker schemes… The U.S. Department of Justice (DoJ) has disrupted the Famous Chollima threat group's operations by arresting two suspects, charging 14 individuals, and seizing nearly 187 laptops used in North Korean remote IT worker schemes…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "The U.S. Department of Justice (DoJ) has disrupted the Famous Chollima threat group's operations by arresting two suspects, charging 14 individuals, and seizing nearly 187 laptops used in North Korean remote IT worker schemes…",
+          "text": "The U.S. Department of Justice (DoJ) has disrupted the Famous Chollima threat group's operations by arresting two suspects, charging 14 individuals, and seizing nearly 187 laptops used in North Korean remote IT worker schemes…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "The U.S. Department of Justice (DoJ) has disrupted the Famous Chollima threat group's operations by arresting two suspects, charging 14 individuals, and seizing nearly 187 laptops used in North Korean remote IT worker schemes…",
+          "text": "The U.S. Department of Justice (DoJ) has disrupted the Famous Chollima threat group's operations by arresting two suspects, charging 14 individuals, and seizing nearly 187 laptops used in North Korean remote IT worker schemes…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Cisco Warns of Active Attacks Exploiting New Critical Secure Email Gateway Vulnerability",
+      "url": "https://thehackernews.com/2026/10/cisco-warns-of-active-attacks.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-14/#reporting-402aaeff71af",
+      "cves": [],
+      "snippet": "Cisco Warns of Active Attacks Exploiting New Critical Secure Email Gateway Vulnerability Attackers are exploiting a critical flaw in Cisco Secure Email Gateway that lets a sender with no login write files to the appliance's operating system, Cisco said in an advisory on Wednesday. The attacker sends an email with a crafted attachment through the gateway and, if it succeeds, could then run commands as root. The appliance filters an organization's email for spam, malware… Attackers are exploiting a critical flaw in Cisco Secure Email Gateway that lets a sender with no login write files to the appliance's operating system, Cisco said in an advisory on Wednesday. The attacker sends an email with",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Attackers are exploiting a critical flaw in Cisco Secure Email Gateway that lets a sender with no login write files to the appliance's operating system, Cisco said in an advisory on Wednesday. The attacker sends an email with a crafted attachment through the gateway and, if it succeeds, could then run commands as root. The appliance filters an organization's email for spam, malware…",
+          "text": "Attackers are exploiting a critical flaw in Cisco Secure Email Gateway that lets a sender with no login write files to the appliance's operating system, Cisco said in an advisory on Wednesday. The attacker sends an email with a crafted attachment through the gateway and, if it succeeds, could then run commands as root. The appliance filters an organization's email for spam, malware…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Attackers are exploiting a critical flaw in Cisco Secure Email Gateway that lets a sender with no login write files to the appliance's operating system, Cisco said in an advisory on Wednesday. The attacker sends an email with a crafted attachment through the gateway and, if it succeeds, could then run commands as root. The appliance filters an organization's email for spam, malware…",
+          "text": "Attackers are exploiting a critical flaw in Cisco Secure Email Gateway that lets a sender with no login write files to the appliance's operating system, Cisco said in an advisory on Wednesday. The attacker sends an email with a crafted attachment through the gateway and, if it succeeds, could then run commands as root. The appliance filters an organization's email for spam, malware…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Ledger asks sellers across Asia to halt sales after supply-chain attack",
+      "url": "https://www.bleepingcomputer.com/news/security/ledger-asks-sellers-across-asia-to-halt-sales-after-supply-chain-attack/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-14/#reporting-0077d1f981ae",
+      "cves": [],
+      "snippet": "Ledger asks sellers across Asia to halt sales after supply-chain attack Ledger has asked resellers and distributors of its wallets in Indonesia, Singapore, Thailand, the Philippines, Vietnam, Malaysia, and Hong Kong to suspend device sales and remove products from shelves while it investigates device tampering… Ledger has asked resellers and distributors of its wallets in Indonesia, Singapore, Thailand, the Philippines, Vietnam, Malaysia, and Hong Kong to suspend device sales and remove products from shelves while it investigates device tampering…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Ledger has asked resellers and distributors of its wallets in Indonesia, Singapore, Thailand, the Philippines, Vietnam, Malaysia, and Hong Kong to suspend device sales and remove products from shelves while it investigates device tampering…",
+          "text": "Ledger has asked resellers and distributors of its wallets in Indonesia, Singapore, Thailand, the Philippines, Vietnam, Malaysia, and Hong Kong to suspend device sales and remove products from shelves while it investigates device tampering…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Ledger has asked resellers and distributors of its wallets in Indonesia, Singapore, Thailand, the Philippines, Vietnam, Malaysia, and Hong Kong to suspend device sales and remove products from shelves while it investigates device tampering…",
+          "text": "Ledger has asked resellers and distributors of its wallets in Indonesia, Singapore, Thailand, the Philippines, Vietnam, Malaysia, and Hong Kong to suspend device sales and remove products from shelves while it investigates device tampering…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Hackers Backdoor Nextcloud Servers Through Critical Flaw in Collabora’s Built-in CODE App",
+      "url": "https://thehackernews.com/2026/10/hackers-backdoor-nextcloud-servers.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-14/#reporting-2720649a8fdd",
+      "cves": [],
+      "snippet": "Hackers Backdoor Nextcloud Servers Through Critical Flaw in Collabora’s Built-in CODE App Attackers exploited a flaw in an optional Nextcloud app, Collabora Online - Built-in CODE Server, to plant web shells on Nextcloud servers. Three administrators reported the issue on GitHub, with the first logged attack on September 10. A web shell is a small file that executes any command an attacker sends via a web request, with the rights of the web server account. The flaw… Attackers exploited a flaw in an optional Nextcloud app, Collabora Online - Built-in CODE Server, to plant web shells on Nextcloud servers. Three administrators reported the issue on GitHub, with the first logged attack on Septem",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Attackers exploited a flaw in an optional Nextcloud app, Collabora Online - Built-in CODE Server, to plant web shells on Nextcloud servers. Three administrators reported the issue on GitHub, with the first logged attack on September 10. A web shell is a small file that executes any command an attacker sends via a web request, with the rights of the web server account. The flaw…",
+          "text": "Attackers exploited a flaw in an optional Nextcloud app, Collabora Online - Built-in CODE Server, to plant web shells on Nextcloud servers. Three administrators reported the issue on GitHub, with the first logged attack on September 10. A web shell is a small file that executes any command an attacker sends via a web request, with the rights of the web server account. The flaw…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Attackers exploited a flaw in an optional Nextcloud app, Collabora Online - Built-in CODE Server, to plant web shells on Nextcloud servers. Three administrators reported the issue on GitHub, with the first logged attack on September 10. A web shell is a small file that executes any command an attacker sends via a web request, with the rights of the web server account. The flaw…",
+          "text": "Attackers exploited a flaw in an optional Nextcloud app, Collabora Online - Built-in CODE Server, to plant web shells on Nextcloud servers. Three administrators reported the issue on GitHub, with the first logged attack on September 10. A web shell is a small file that executes any command an attacker sends via a web request, with the rights of the web server account. The flaw…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Cisco patches new Secure Email Gateway zero-day exploited in attacks",
+      "url": "https://www.bleepingcomputer.com/news/security/cisco-patches-actively-exploited-secure-email-gateway-zero-day/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-14/#reporting-9960150300a6",
+      "cves": [],
+      "snippet": "Cisco patches new Secure Email Gateway zero-day exploited in attacks Cisco has patched another actively exploited zero-day flaw in its Secure Email Gateway (SEG) that lets remote unauthenticated attackers execute commands with root privileges… Cisco has patched another actively exploited zero-day flaw in its Secure Email Gateway (SEG) that lets remote unauthenticated attackers execute commands with root privileges…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Cisco has patched another actively exploited zero-day flaw in its Secure Email Gateway (SEG) that lets remote unauthenticated attackers execute commands with root privileges…",
+          "text": "Cisco has patched another actively exploited zero-day flaw in its Secure Email Gateway (SEG) that lets remote unauthenticated attackers execute commands with root privileges…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Cisco has patched another actively exploited zero-day flaw in its Secure Email Gateway (SEG) that lets remote unauthenticated attackers execute commands with root privileges…",
+          "text": "Cisco has patched another actively exploited zero-day flaw in its Secure Email Gateway (SEG) that lets remote unauthenticated attackers execute commands with root privileges…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Microsoft Disrupts 3 Phishing Kits Linked to Over 1 Billion Scam Messages",
+      "url": "https://thehackernews.com/2026/10/microsoft-disrupts-3-phishing-kits.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-14/#reporting-fbe33babcbab",
+      "cves": [],
+      "snippet": "Microsoft Disrupts 3 Phishing Kits Linked to Over 1 Billion Scam Messages Microsoft and Health-ISAC, along with the Japan Cybercrime Control Center (JC3) and a coalition of private sector companies, such as Resecurity, Cloudflare, Oracle, Proofpoint, and TRM Labs, announced the disruption of three phishing kits, CoGUI (aka NX or FA), Haozi (aka Phoenix), and Iron Man System. \"Since January 2026, the threat actors behind these kits have been responsible for… Microsoft and Health-ISAC, along with the Japan Cybercrime Control Center (JC3) and a coalition of private sector companies, such as Resecurity, Cloudflare, Oracle, Proofpoint, and TRM Labs, announced the disruption of three phishing kits",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Microsoft and Health-ISAC, along with the Japan Cybercrime Control Center (JC3) and a coalition of private sector companies, such as Resecurity, Cloudflare, Oracle, Proofpoint, and TRM Labs, announced the disruption of three phishing kits, CoGUI (aka NX or FA), Haozi (aka Phoenix), and Iron Man System. \"Since January 2026, the threat actors behind these kits have been responsible for…",
+          "text": "Microsoft and Health-ISAC, along with the Japan Cybercrime Control Center (JC3) and a coalition of private sector companies, such as Resecurity, Cloudflare, Oracle, Proofpoint, and TRM Labs, announced the disruption of three phishing kits, CoGUI (aka NX or FA), Haozi (aka Phoenix), and Iron Man System. \"Since January 2026, the threat actors behind these kits have been responsible for…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Microsoft and Health-ISAC, along with the Japan Cybercrime Control Center (JC3) and a coalition of private sector companies, such as Resecurity, Cloudflare, Oracle, Proofpoint, and TRM Labs, announced the disruption of three phishing kits, CoGUI (aka NX or FA), Haozi (aka Phoenix), and Iron Man System. \"Since January 2026, the threat actors behind these kits have been responsible for…",
+          "text": "Microsoft and Health-ISAC, along with the Japan Cybercrime Control Center (JC3) and a coalition of private sector companies, such as Resecurity, Cloudflare, Oracle, Proofpoint, and TRM Labs, announced the disruption of three phishing kits, CoGUI (aka NX or FA), Haozi (aka Phoenix), and Iron Man System. \"Since January 2026, the threat actors behind these kits have been responsible for…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "U.S. Shuts Down Over 40 Laptop Farms, Charges 14 in North Korean IT Worker Fraud",
+      "url": "https://thehackernews.com/2026/10/us-shuts-down-over-40-laptop-farms.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-14/#reporting-6d011349c01c",
+      "cves": [],
+      "snippet": "U.S. Shuts Down Over 40 Laptop Farms, Charges 14 in North Korean IT Worker Fraud The U.S. Department of Justice (DoJ) on Tuesday charged 14 people and seized about 187 computers as part of its ongoing efforts to disrupt North Korea's fraudulent remote IT worker (ITW) scheme. The indictment charges a mix of U.S. citizens and Chinese nationals for their roles in an IT worker conspiracy affecting more than 70 U.S. companies, charging them with wire fraud conspiracy, money… The U.S. Department of Justice (DoJ) on Tuesday charged 14 people and seized about 187 computers as part of its ongoing efforts to disrupt North Korea's fraudulent remote IT worker (ITW) scheme. The indictment charges a mix o",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "The U.S. Department of Justice (DoJ) on Tuesday charged 14 people and seized about 187 computers as part of its ongoing efforts to disrupt North Korea's fraudulent remote IT worker (ITW) scheme. The indictment charges a mix of U.S. citizens and Chinese nationals for their roles in an IT worker conspiracy affecting more than 70 U.S. companies, charging them with wire fraud conspiracy, money…",
+          "text": "The U.S. Department of Justice (DoJ) on Tuesday charged 14 people and seized about 187 computers as part of its ongoing efforts to disrupt North Korea's fraudulent remote IT worker (ITW) scheme. The indictment charges a mix of U.S. citizens and Chinese nationals for their roles in an IT worker conspiracy affecting more than 70 U.S. companies, charging them with wire fraud conspiracy, money…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "The U.S. Department of Justice (DoJ) on Tuesday charged 14 people and seized about 187 computers as part of its ongoing efforts to disrupt North Korea's fraudulent remote IT worker (ITW) scheme. The indictment charges a mix of U.S. citizens and Chinese nationals for their roles in an IT worker conspiracy affecting more than 70 U.S. companies, charging them with wire fraud conspiracy, money…",
+          "text": "The U.S. Department of Justice (DoJ) on Tuesday charged 14 people and seized about 187 computers as part of its ongoing efforts to disrupt North Korea's fraudulent remote IT worker (ITW) scheme. The indictment charges a mix of U.S. citizens and Chinese nationals for their roles in an IT worker conspiracy affecting more than 70 U.S. companies, charging them with wire fraud conspiracy, money…"
         }
       ],
       "effective_date_evidence": null
@@ -195,160 +347,6 @@
           "origin": "content",
           "raw_text": "The United Kingdom has issued economic sanctions against Cryptomus, a chameleonic cryptocurrency platform that experts say serves as a major conduit for payments related to ransomware, narcotics, darknet markets, fraud and cybercrime services that are helping Russia circumvent existing financial restrictions.",
           "text": "The United Kingdom has issued economic sanctions against Cryptomus, a chameleonic cryptocurrency platform that experts say serves as a major conduit for payments related to ransomware, narcotics, darknet markets, fraud and cybercrime services that are helping Russia circumvent existing financial restrictions."
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "The Blind Spots of Agentic Pentesting and How to Close Them",
-      "url": "https://www.bleepingcomputer.com/news/security/the-blind-spots-of-agentic-pentesting-and-how-to-close-them/",
-      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-14/#reporting-1651735e0da5",
-      "cves": [],
-      "snippet": "The Blind Spots of Agentic Pentesting and How to Close Them AI-powered penetration testing can uncover complex attack paths, but safety restrictions and network limitations leave many assets and vulnerabilities untested. Picus Security explains how combining agentic pentesting with exposure validation and breach simulation can help close these gaps… AI-powered penetration testing can uncover complex attack paths, but safety restrictions and network limitations leave many assets and vulnerabilities untested. Picus Security explains how combining agentic pentesting with exposure validation and breach simulation can help close these gaps…",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "AI-powered penetration testing can uncover complex attack paths, but safety restrictions and network limitations leave many assets and vulnerabilities untested. Picus Security explains how combining agentic pentesting with exposure validation and breach simulation can help close these gaps…",
-          "text": "AI-powered penetration testing can uncover complex attack paths, but safety restrictions and network limitations leave many assets and vulnerabilities untested. Picus Security explains how combining agentic pentesting with exposure validation and breach simulation can help close these gaps…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "AI-powered penetration testing can uncover complex attack paths, but safety restrictions and network limitations leave many assets and vulnerabilities untested. Picus Security explains how combining agentic pentesting with exposure validation and breach simulation can help close these gaps…",
-          "text": "AI-powered penetration testing can uncover complex attack paths, but safety restrictions and network limitations leave many assets and vulnerabilities untested. Picus Security explains how combining agentic pentesting with exposure validation and breach simulation can help close these gaps…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "Global takedown hits network behind 1 billion phishing messages",
-      "url": "https://www.bleepingcomputer.com/news/security/global-takedown-hits-network-behind-1-billion-phishing-messages/",
-      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-14/#reporting-d21e2d4e3bc5",
-      "cves": [],
-      "snippet": "Global takedown hits network behind 1 billion phishing messages A massive cybercriminal ecosystem facilitating more than a billion malicious messages targeting over 75,000 organizations across 150 countries has been disrupted by law enforcement agencies and partners worldwide… A massive cybercriminal ecosystem facilitating more than a billion malicious messages targeting over 75,000 organizations across 150 countries has been disrupted by law enforcement agencies and partners worldwide…",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "A massive cybercriminal ecosystem facilitating more than a billion malicious messages targeting over 75,000 organizations across 150 countries has been disrupted by law enforcement agencies and partners worldwide…",
-          "text": "A massive cybercriminal ecosystem facilitating more than a billion malicious messages targeting over 75,000 organizations across 150 countries has been disrupted by law enforcement agencies and partners worldwide…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "A massive cybercriminal ecosystem facilitating more than a billion malicious messages targeting over 75,000 organizations across 150 countries has been disrupted by law enforcement agencies and partners worldwide…",
-          "text": "A massive cybercriminal ecosystem facilitating more than a billion malicious messages targeting over 75,000 organizations across 150 countries has been disrupted by law enforcement agencies and partners worldwide…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "Russian Influence Operation Widely Targeting Latin America",
-      "url": "https://www.darkreading.com/cyberattacks-data-breaches/russian-influence-operation-targeting-latin-america",
-      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-14/#reporting-1844a10e24ed",
-      "cves": [],
-      "snippet": "Russian Influence Operation Widely Targeting Latin America The AI-enabled operation used spoofed emails, fake government documents, and the creation of a local organization to target schools in Peru and Ecuador, among other efforts. The AI-enabled operation used spoofed emails, fake government documents, and the creation of a local organization to target schools in Peru and Ecuador, among other efforts.",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "The AI-enabled operation used spoofed emails, fake government documents, and the creation of a local organization to target schools in Peru and Ecuador, among other efforts.",
-          "text": "The AI-enabled operation used spoofed emails, fake government documents, and the creation of a local organization to target schools in Peru and Ecuador, among other efforts."
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "The AI-enabled operation used spoofed emails, fake government documents, and the creation of a local organization to target schools in Peru and Ecuador, among other efforts.",
-          "text": "The AI-enabled operation used spoofed emails, fake government documents, and the creation of a local organization to target schools in Peru and Ecuador, among other efforts."
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "CISA warns admins to immediately fix Ivanti flaw exploited as zero-day",
-      "url": "https://www.bleepingcomputer.com/news/security/cisa-warns-admins-to-immediately-fix-ivanti-flaw-exploited-as-zero-day/",
-      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-14/#reporting-e05ffdb17dfb",
-      "cves": [],
-      "snippet": "CISA warns admins to immediately fix Ivanti flaw exploited as zero-day The U.S. Cybersecurity and Infrastructure Security Agency (CISA) urged security teams to immediately patch an Ivanti Connect Secure (ICS) flaw exploited in zero-day attacks since at least October 1st… The U.S. Cybersecurity and Infrastructure Security Agency (CISA) urged security teams to immediately patch an Ivanti Connect Secure (ICS) flaw exploited in zero-day attacks since at least October 1st…",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) urged security teams to immediately patch an Ivanti Connect Secure (ICS) flaw exploited in zero-day attacks since at least October 1st…",
-          "text": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) urged security teams to immediately patch an Ivanti Connect Secure (ICS) flaw exploited in zero-day attacks since at least October 1st…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) urged security teams to immediately patch an Ivanti Connect Secure (ICS) flaw exploited in zero-day attacks since at least October 1st…",
-          "text": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) urged security teams to immediately patch an Ivanti Connect Secure (ICS) flaw exploited in zero-day attacks since at least October 1st…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "curl Patches HTTP/2 Upload Flaw After PoC Demonstrates Client-Side Code Execution",
-      "url": "https://thehackernews.com/2026/10/curl-patches-http2-upload-flaw-after.html",
-      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-14/#reporting-05d981a16f27",
-      "cves": [],
-      "snippet": "curl Patches HTTP/2 Upload Flaw After PoC Demonstrates Client-Side Code Execution A flaw in how curl handles HTTP/2 uploads lets a malicious server receiving an upload corrupt the client's memory, and the researcher who reported it turned that into code execution on the uploading machine. The curl project fixed it on October 14 in curl 8.23.0. Taking over a client needs exact knowledge of its build and memory layout, and curl expects a real attack to end in a crash… A flaw in how curl handles HTTP/2 uploads lets a malicious server receiving an upload corrupt the client's memory, and the researcher who reported it turned that into code execution on the uploading machine. The curl project fixe",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "A flaw in how curl handles HTTP/2 uploads lets a malicious server receiving an upload corrupt the client's memory, and the researcher who reported it turned that into code execution on the uploading machine. The curl project fixed it on October 14 in curl 8.23.0. Taking over a client needs exact knowledge of its build and memory layout, and curl expects a real attack to end in a crash…",
-          "text": "A flaw in how curl handles HTTP/2 uploads lets a malicious server receiving an upload corrupt the client's memory, and the researcher who reported it turned that into code execution on the uploading machine. The curl project fixed it on October 14 in curl 8.23.0. Taking over a client needs exact knowledge of its build and memory layout, and curl expects a real attack to end in a crash…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "A flaw in how curl handles HTTP/2 uploads lets a malicious server receiving an upload corrupt the client's memory, and the researcher who reported it turned that into code execution on the uploading machine. The curl project fixed it on October 14 in curl 8.23.0. Taking over a client needs exact knowledge of its build and memory layout, and curl expects a real attack to end in a crash…",
-          "text": "A flaw in how curl handles HTTP/2 uploads lets a malicious server receiving an upload corrupt the client's memory, and the researcher who reported it turned that into code execution on the uploading machine. The curl project fixed it on October 14 in curl 8.23.0. Taking over a client needs exact knowledge of its build and memory layout, and curl expects a real attack to end in a crash…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "How to Run a Deepfake Readiness Drill Before a Cloned Voice Calls Your Team",
-      "url": "https://thehackernews.com/2026/10/how-to-run-deepfake-readiness-drill.html",
-      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-14/#reporting-72b689a43b33",
-      "cves": [],
-      "snippet": "How to Run a Deepfake Readiness Drill Before a Cloned Voice Calls Your Team Cloned voices and synthetic video calls now show up in payment fraud, help desk resets, and access requests. A structured drill shows security teams exactly where verification breaks down, while nothing is at stake. The call comes in at 4:40 on a Friday. It's the CFO, or it sounds exactly like her, asking the controller to push a supplier payment out before the weekend because a deal closes… Cloned voices and synthetic video calls now show up in payment fraud, help desk resets, and access requests. A structured drill shows security teams exactly where verification breaks down, while nothing is at stake. The call come",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "Cloned voices and synthetic video calls now show up in payment fraud, help desk resets, and access requests. A structured drill shows security teams exactly where verification breaks down, while nothing is at stake. The call comes in at 4:40 on a Friday. It's the CFO, or it sounds exactly like her, asking the controller to push a supplier payment out before the weekend because a deal closes…",
-          "text": "Cloned voices and synthetic video calls now show up in payment fraud, help desk resets, and access requests. A structured drill shows security teams exactly where verification breaks down, while nothing is at stake. The call comes in at 4:40 on a Friday. It's the CFO, or it sounds exactly like her, asking the controller to push a supplier payment out before the weekend because a deal closes…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "Cloned voices and synthetic video calls now show up in payment fraud, help desk resets, and access requests. A structured drill shows security teams exactly where verification breaks down, while nothing is at stake. The call comes in at 4:40 on a Friday. It's the CFO, or it sounds exactly like her, asking the controller to push a supplier payment out before the weekend because a deal closes…",
-          "text": "Cloned voices and synthetic video calls now show up in payment fraud, help desk resets, and access requests. A structured drill shows security teams exactly where verification breaks down, while nothing is at stake. The call comes in at 4:40 on a Friday. It's the CFO, or it sounds exactly like her, asking the controller to push a supplier payment out before the weekend because a deal closes…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "Hirudo Android malware replaces banking apps to evade security checks",
-      "url": "https://www.bleepingcomputer.com/news/security/hirudo-android-malware-replaces-banking-apps-to-evade-security-checks/",
-      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-14/#reporting-7a5799db26b5",
-      "cves": [],
-      "snippet": "Hirudo Android malware replaces banking apps to evade security checks A new Android malware called Hirudo steals bank account credentials by replacing legitimate banking apps with modified versions that disable security checks… A new Android malware called Hirudo steals bank account credentials by replacing legitimate banking apps with modified versions that disable security checks…",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "A new Android malware called Hirudo steals bank account credentials by replacing legitimate banking apps with modified versions that disable security checks…",
-          "text": "A new Android malware called Hirudo steals bank account credentials by replacing legitimate banking apps with modified versions that disable security checks…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "A new Android malware called Hirudo steals bank account credentials by replacing legitimate banking apps with modified versions that disable security checks…",
-          "text": "A new Android malware called Hirudo steals bank account credentials by replacing legitimate banking apps with modified versions that disable security checks…"
         }
       ],
       "effective_date_evidence": null
