@@ -94,15 +94,33 @@ The pilot is server-configured and **off by default**. It uses the existing
 even when the report model uses a free route.
 
 - `GRC_RELEVANCE_MODE=off`: the existing generative analysis, with no decision calls.
-- `GRC_RELEVANCE_MODE=shadow`: run both analyses, retain the original result, and
-  log aggregate decision timing, resolved models, usage and uncertainty counts.
-- `GRC_RELEVANCE_MODE=enabled`: accept each valid relevant/irrelevant decision
-  whose selected-label probability meets `GRC_RELEVANCE_MIN_PROBABILITY`
-  (default `0.95`). Analyze the uncertain or insufficient-evidence subset with
-  one generative call and map its selections back to the original positions.
-  Unavailable or invalid decisions still fall back for the entire batch. A
-  failed subset remains an analysis error for the existing caller to handle.
-  This threshold is a starting value, not a measured guarantee.
+- `GRC_RELEVANCE_MODE=shadow`: run both analyses and retain the original result.
+  Log aggregate decision timing, resolved models, usage and uncertainty counts,
+  plus the per-article records the enabled route would produce.
+- `GRC_RELEVANCE_MODE=enabled`: apply selection policy `keep-uncertain-v1`.
+  - A relevant or irrelevant decision whose selected-label probability meets
+    `GRC_RELEVANCE_MIN_PROBABILITY` (default `0.95`) is accepted.
+  - Every uncertain or insufficient-evidence article stays selected.
+  - Those articles still go to one generative call, which only enriches report
+    aggregates; its prose selections never change article selection. A failed
+    call remains an analysis error for the existing caller to handle.
+  - All articles accepted as irrelevant is a valid zero selection, with no
+    generative call.
+  - Unavailable or invalid decisions, or a batch where every article is
+    uncertain, fall back to the existing analysis for the entire batch.
+  - The threshold is a starting value, not a measured guarantee.
+
+Each enabled or shadow call records one entry per article position, with no
+article text. An entry holds:
+
+- the SHA256 of the URL, the raw label, probabilities and confidence;
+- the route, its disposition and the reason for any full fallback;
+- the model selection, with the entity and risk-category overrides kept separate;
+- the effective selections of the report workflow (entity OR risk category OR
+  model) and of `/analyze` (entity OR model).
+
+An unknown model selection is never recorded as a drop. Cost unavailable from the
+provider stays null.
 
 The decision rubric includes concrete security and operational events, control
 or audit findings, enforcement and regulatory obligations. Abstract commentary,

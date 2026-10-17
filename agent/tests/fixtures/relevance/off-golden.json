@@ -1,0 +1,124 @@
+{
+  "articles": [
+    {
+      "content": "A vendor released a patch for an actively exploited remote access flaw. GDPR notices may follow.",
+      "published": "2026-10-01T00:00:00Z",
+      "title": "Vendor patches exploited gateway flaw",
+      "url": "https://news.example/a"
+    },
+    {
+      "content": "Join our free webinar about cloud trends and win a prize.",
+      "published": "2026-10-01T00:00:00Z",
+      "title": "Webinar: cloud trends",
+      "url": "https://news.example/b"
+    },
+    {
+      "content": "",
+      "published": "2026-10-02T00:00:00Z",
+      "summary": "The regulator fined a payments firm for PCI-DSS control failures.",
+      "title": "Regulator fines payments firm",
+      "url": "https://news.example/c"
+    },
+    {
+      "content": "A second listing with a repeated title.",
+      "published": "2026-10-02T00:00:00Z",
+      "title": "Webinar: cloud trends",
+      "url": "https://news.example/d"
+    }
+  ],
+  "decision_requests_sha256": [
+    {
+      "indices": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "sha256": "e6ea7a2b8ef5c598be9d67769c7a36e51578cd14b618f0d62e2caf629e201565"
+    }
+  ],
+  "note": "Captured from off mode at 7a10c111ca457ef5843b20ca6dc0c58259650e36 before the keep-uncertain change. Analysis lists are sorted because the parser builds them from sets.",
+  "off": {
+    "recognized": {
+      "analysis": {
+        "frameworks_referenced": [
+          "NIST"
+        ],
+        "industries_affected": [],
+        "regulations_mentioned": [
+          "GDPR",
+          "NIST",
+          "PCI-DSS"
+        ],
+        "regulatory_bodies": [],
+        "risk_categories": []
+      },
+      "grc_articles": [
+        {
+          "relevance_score": 7.0,
+          "summary": "GRC-relevant content identified",
+          "title": "Vendor patches exploited gateway flaw | relevance"
+        },
+        {
+          "relevance_score": 7.0,
+          "summary": "GRC-relevant content identified",
+          "title": "Regulator fines payments firm | relevance"
+        }
+      ],
+      "summary": {
+        "confidence_score": 0.8,
+        "grc_relevant_count": 2,
+        "total_articles": 4
+      }
+    },
+    "unrecognized": {
+      "analysis": {
+        "frameworks_referenced": [
+          "ISO 27001"
+        ],
+        "industries_affected": [],
+        "regulations_mentioned": [
+          "ISO 27001",
+          "SOX"
+        ],
+        "regulatory_bodies": [],
+        "risk_categories": []
+      },
+      "grc_articles": [
+        {
+          "relevance_score": 7.0,
+          "summary": "GRC analysis via comprehensive model evaluation",
+          "title": "Vendor patches exploited gateway flaw",
+          "url": "https://news.example/a"
+        },
+        {
+          "relevance_score": 7.0,
+          "summary": "GRC analysis via comprehensive model evaluation",
+          "title": "Webinar: cloud trends",
+          "url": "https://news.example/b"
+        },
+        {
+          "relevance_score": 7.0,
+          "summary": "GRC analysis via comprehensive model evaluation",
+          "title": "Regulator fines payments firm",
+          "url": "https://news.example/c"
+        },
+        {
+          "relevance_score": 7.0,
+          "summary": "GRC analysis via comprehensive model evaluation",
+          "title": "Webinar: cloud trends",
+          "url": "https://news.example/d"
+        }
+      ],
+      "summary": {
+        "confidence_score": 0.8,
+        "grc_relevant_count": 4,
+        "total_articles": 4
+      }
+    }
+  },
+  "prose": {
+    "recognized": "GRC-relevant articles:\nArticle 1: Title: Vendor patches exploited gateway flaw | relevance score 8 | Relevant: exploited flaw\nArticle 3: Title: Regulator fines payments firm | relevance score 9 | GRC compliance enforcement\nRegulations and frameworks: GDPR, PCI-DSS, NIST\nIndustries: Financial services\nRisk types: cyber, regulatory",
+    "unrecognized": "The batch covers a patch, a webinar and a fine. Frameworks: ISO 27001 and SOX."
+  }
+}
