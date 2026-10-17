@@ -182,6 +182,9 @@ def _reference(raw: dict[str, Any], where: str, errors: list[str]) -> str | None
             errors.append(f"{where}: disputed needs disagreeing labels without adjudication")
         return None
     if adjudication is not None:
+        if agree:
+            errors.append(f"{where}: adjudication only resolves a reviewer disagreement")
+            return None
         return adjudication["label"]
     if not agree:
         errors.append(f"{where}: disagreeing labels need adjudication")

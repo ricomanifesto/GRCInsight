@@ -1,10 +1,11 @@
 {
   "schema": "grc-relevance-gate-spec-v1",
   "status": "proposed, not accepted",
-  "description": "Readiness gates for the enabled relevance route. Tolerances are proposals until accepted; freeze threshold, batch_size, candidate_fingerprint and holdout_sha256 before any holdout replay. Passing gates is a review verdict, not an activation switch.",
+  "description": "Readiness gates for the enabled relevance route. Tolerances are proposals until accepted; freeze threshold, batch_size, candidate_fingerprint, evaluator_sha256 and holdout_sha256 before any holdout replay. Passing gates is a review verdict, not an activation switch.",
   "threshold": 0.95,
   "batch_size": 12,
   "candidate_fingerprint": null,
+  "evaluator_sha256": null,
   "holdout_sha256": null,
   "stratum_weights": {
     "local_negative": null,

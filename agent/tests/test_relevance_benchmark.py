@@ -283,9 +283,12 @@ def accepted_spec(validation):
     from services.relevance_selection import candidate_fingerprint
     from tests.relevance_fixtures import BATCH_SIZE, FOCUS_AREAS
 
+    from core.relevance_benchmark import evaluator_sha256
+
     return spec(
         status="accepted",
         batch_size=BATCH_SIZE,
+        evaluator_sha256=evaluator_sha256(),
         candidate_fingerprint=candidate_fingerprint(0.95, FOCUS_AREAS, batch_size=BATCH_SIZE),
         holdout_sha256=validation.holdout_sha256,
     )
@@ -303,6 +306,8 @@ def test_holdout_replay_requires_a_frozen_matching_spec():
         ({**frozen, "candidate_fingerprint": "0" * 64}, "fingerprint"),
         ({**frozen, "holdout_sha256": "0" * 64}, "holdout hash"),
         ({**frozen, "batch_size": 12}, "batch size"),
+        # Changed corpus or scoring code cannot re-judge a frozen holdout.
+        ({**frozen, "evaluator_sha256": "0" * 64}, "evaluator"),
     ]
     for gate_spec, message in refusals:
         with pytest.raises(ValueError, match=message):
@@ -396,6 +401,7 @@ def test_gate_template_is_a_proposal():
     template = load_gate_spec(TEMPLATE)
     assert template["status"] == "proposed, not accepted"
     assert template["candidate_fingerprint"] is None
+    assert template["evaluator_sha256"] is None
     assert template["holdout_sha256"] is None
     assert template["gates"]["G2"]["min_lower_bound"] == 0.9
 

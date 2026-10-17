@@ -105,6 +105,20 @@ def test_invalid_cases_are_rejected(mutate):
     assert "dev-01" not in {case.case_id for case in validation.cases}
 
 
+def test_adjudication_cannot_override_agreeing_reviewers():
+    cases = case_dicts()
+    agreed = by_id(cases, "dev-02")
+    agreed["adjudication"] = {
+        "labeler": "adjudicator-m",
+        "label": "relevant",
+        "rationale": "Overrides an agreement.",
+        "labeled_at": "2026-10-15T13:00:00+00:00",
+    }
+    validation = validate(cases)
+    assert any("adjudication only resolves" in error for error in validation.errors)
+    assert "dev-02" not in {case.case_id for case in validation.cases}
+
+
 def test_disagreeing_dual_review_needs_adjudication():
     cases = case_dicts()
     by_id(cases, "dev-03")["adjudication"] = None

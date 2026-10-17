@@ -10,6 +10,7 @@ import json
 import math
 from pathlib import Path
 from statistics import median
+import sys
 import time
 from typing import Any
 
@@ -29,6 +30,8 @@ from services.relevance_selection import (
     SELECTION_POLICY,
     SelectionRecord,
     candidate_fingerprint,
+    source_name,
+    source_sha256,
 )
 
 
@@ -515,6 +518,18 @@ def load_gate_spec(path: Path) -> dict[str, Any]:
     return spec
 
 
+def evaluator_sha256() -> str:
+    """Identity of the corpus contract and scoring code that judge a frozen holdout."""
+    from core import relevance_corpus
+
+    sources = {
+        source_name(module): source_sha256(module)
+        for module in (relevance_corpus, sys.modules[__name__])
+    }
+    encoded = json.dumps(sources, sort_keys=True, separators=(",", ":"))
+    return hashlib.sha256(encoded.encode("utf-8")).hexdigest()
+
+
 def _check_holdout(
     validation: CorpusValidation,
     spec: dict[str, Any] | None,
@@ -531,6 +546,8 @@ def _check_holdout(
     fingerprint = candidate_fingerprint(thresholds[0], focus_areas, batch_size=batch_size)
     if fingerprint != spec.get("candidate_fingerprint"):
         raise ValueError("Holdout replay refused: candidate fingerprint differs from the spec")
+    if evaluator_sha256() != spec.get("evaluator_sha256"):
+        raise ValueError("Holdout replay refused: evaluator code differs from the spec")
     if validation.holdout_sha256 is None or validation.holdout_sha256 != spec.get("holdout_sha256"):
         raise ValueError("Holdout replay refused: holdout hash differs from the spec")
 
@@ -662,6 +679,7 @@ async def replay_corpus(
         "verdict_scope": ("frozen holdout" if split == "holdout" else "development, informational"),
         "selection_policy": SELECTION_POLICY,
         "batch_size": batch_size,
+        "evaluator_sha256": evaluator_sha256(),
         "corpus": validation.summary(),
         "network_calls": 0,
         "results": results,

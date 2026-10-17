@@ -176,20 +176,31 @@ def test_fingerprint_is_stable_and_covers_candidate_identity(monkeypatch):
     with monkeypatch.context() as patch:
         patch.setattr(relevance_selection, "SELECTION_POLICY", "other")
         changed.add(fingerprint())
-    # Local entity, risk and effective-selection rules decide workflow selections.
-    original = relevance_selection._source_sha256
-    for changed_module in ("core.entities", "core.article_selection"):
+    # Every implementation that decides a selection is bound by its source, so a
+    # behavior change cannot reuse an accepted fingerprint.
+    sources = relevance_selection.selection_sources()
+    assert {
+        "services.relevance_decisions",
+        "services.relevance_selection",
+        "core.entities",
+        "core.article_selection",
+        "GRCModelService.analyze_articles_for_grc",
+        "GRCModelService._try_relevance",
+        "GRCModelService._analysis_from_selection",
+    } <= set(sources)
+    original = relevance_selection.source_sha256
+    for changed_source in sources:
         with monkeypatch.context() as patch:
             patch.setattr(
                 relevance_selection,
-                "_source_sha256",
-                lambda module, name=changed_module: (
-                    "0" * 64 if module.__name__ == name else original(module)
+                "source_sha256",
+                lambda value, name=changed_source: (
+                    "0" * 64 if relevance_selection.source_name(value) == name else original(value)
                 ),
             )
             changed.add(fingerprint())
     assert base not in changed
-    assert len(changed) == 14
+    assert len(changed) == 12 + len(sources)
 
 
 def test_records_describe_effective_selections_separately(monkeypatch):

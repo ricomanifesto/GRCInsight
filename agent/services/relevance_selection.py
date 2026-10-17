@@ -7,7 +7,7 @@ from dataclasses import asdict, dataclass
 import hashlib
 import inspect
 import json
-from types import ModuleType
+import sys
 from typing import Any
 
 from core import article_selection, entities
@@ -165,15 +165,41 @@ def selection_records(
     return tuple(records)
 
 
-def _source_sha256(module: ModuleType) -> str:
-    return hashlib.sha256(inspect.getsource(module).encode("utf-8")).hexdigest()
+# Route methods that turn decisions into the returned selection.
+ROUTE_METHODS = (
+    "analyze_articles_for_grc",
+    "_plan",
+    "_try_relevance",
+    "_record_selection",
+    "_record_legacy_selection",
+    "_analysis_from_selection",
+)
+
+
+def source_name(value: Any) -> str:
+    return getattr(value, "__qualname__", None) or value.__name__
+
+
+def source_sha256(value: Any) -> str:
+    return hashlib.sha256(inspect.getsource(value).encode("utf-8")).hexdigest()
+
+
+def selection_sources() -> dict[str, str]:
+    """Source hashes of every implementation that decides a replayed selection."""
+    # Imported here because the model service imports this module.
+    from services.model_service import GRCModelService
+
+    values: list[Any] = [relevance_decisions, sys.modules[__name__], entities, article_selection]
+    values.extend(getattr(GRCModelService, name) for name in ROUTE_METHODS)
+    return {source_name(value): source_sha256(value) for value in values}
 
 
 def candidate_fingerprint(threshold: float, focus_areas: Sequence[str], *, batch_size: int) -> str:
     """Hash everything that changes which articles a replayed candidate selects.
 
-    The replay batch size fixes request bytes and positions. The local rule sources
-    decide entity and risk overrides and the effective selections.
+    Implementation sources cover request building, dispositions, local rules and
+    the route, so a behavior change cannot keep an accepted fingerprint. The
+    replay batch size fixes request bytes and positions.
     """
     identity = {
         "model": relevance_decisions.MODEL,
@@ -191,9 +217,7 @@ def candidate_fingerprint(threshold: float, focus_areas: Sequence[str], *, batch
         "threshold": threshold,
         "selection_policy": SELECTION_POLICY,
         "batch_size": batch_size,
-        "local_rules": {
-            module.__name__: _source_sha256(module) for module in (entities, article_selection)
-        },
+        "sources": selection_sources(),
     }
     encoded = json.dumps(identity, sort_keys=True, separators=(",", ":"), ensure_ascii=False)
     return hashlib.sha256(encoded.encode("utf-8")).hexdigest()

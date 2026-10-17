@@ -193,8 +193,9 @@ uv run python ../scripts/benchmark_relevance.py --corpus corpus.jsonl \
   route mix and gate verdicts.
 - **Thresholds and holdout.** Threshold sweeps run on the development split only.
   A holdout replay needs an accepted gate spec whose threshold, batch size,
-  candidate fingerprint and holdout hash match. The fingerprint also covers the
-  local entity, risk-category and effective-selection rules.
+  candidate fingerprint, evaluator hash and holdout hash match. The fingerprint
+  hashes the source of the request builder, dispositions, local rules and route
+  methods; the evaluator hash covers the corpus contract and scoring code.
 - **Verdicts.** [`docs/relevance-gate-spec.template.json`](docs/relevance-gate-spec.template.json)
   holds proposed tolerances. Verdicts stay `remain_off` unless every gate passes,
   and latency, deployment and test-owned gates are outside the replay.
