@@ -149,13 +149,17 @@ def test_decision_requests_match_pre_change_bytes():
 
 
 def test_fingerprint_is_stable_and_covers_candidate_identity(monkeypatch):
-    base = candidate_fingerprint(0.95, FOCUS_AREAS)
-    assert base == candidate_fingerprint(0.95, list(FOCUS_AREAS))
+    from services import relevance_selection
+
+    def fingerprint(threshold=0.95, focus_areas=FOCUS_AREAS, batch_size=12):
+        return candidate_fingerprint(threshold, focus_areas, batch_size=batch_size)
+
+    base = fingerprint()
+    assert base == fingerprint(focus_areas=list(FOCUS_AREAS))
     assert len(base) == 64
-    changed = {
-        candidate_fingerprint(0.9, FOCUS_AREAS),
-        candidate_fingerprint(0.95, FOCUS_AREAS[:-1]),
-    }
+    changed = {fingerprint(threshold=0.9), fingerprint(focus_areas=FOCUS_AREAS[:-1])}
+    # The replay batch changes request bytes and positions.
+    changed.add(fingerprint(batch_size=4))
     for name, value in (
         ("MODEL", "typesafe/jev-2"),
         ("CRITERIA", {**relevance_decisions.CRITERIA, "relevant": "changed"}),
@@ -168,12 +172,24 @@ def test_fingerprint_is_stable_and_covers_candidate_identity(monkeypatch):
     ):
         with monkeypatch.context() as patch:
             patch.setattr(relevance_decisions, name, value)
-            changed.add(candidate_fingerprint(0.95, FOCUS_AREAS))
+            changed.add(fingerprint())
     with monkeypatch.context() as patch:
-        patch.setattr("services.relevance_selection.SELECTION_POLICY", "other")
-        changed.add(candidate_fingerprint(0.95, FOCUS_AREAS))
+        patch.setattr(relevance_selection, "SELECTION_POLICY", "other")
+        changed.add(fingerprint())
+    # Local entity, risk and effective-selection rules decide workflow selections.
+    original = relevance_selection._source_sha256
+    for changed_module in ("core.entities", "core.article_selection"):
+        with monkeypatch.context() as patch:
+            patch.setattr(
+                relevance_selection,
+                "_source_sha256",
+                lambda module, name=changed_module: (
+                    "0" * 64 if module.__name__ == name else original(module)
+                ),
+            )
+            changed.add(fingerprint())
     assert base not in changed
-    assert len(changed) == 11
+    assert len(changed) == 14
 
 
 def test_records_describe_effective_selections_separately(monkeypatch):

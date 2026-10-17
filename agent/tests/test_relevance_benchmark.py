@@ -281,11 +281,12 @@ def test_threshold_sweeps_are_development_only():
 
 def accepted_spec(validation):
     from services.relevance_selection import candidate_fingerprint
-    from tests.relevance_fixtures import FOCUS_AREAS
+    from tests.relevance_fixtures import BATCH_SIZE, FOCUS_AREAS
 
     return spec(
         status="accepted",
-        candidate_fingerprint=candidate_fingerprint(0.95, FOCUS_AREAS),
+        batch_size=BATCH_SIZE,
+        candidate_fingerprint=candidate_fingerprint(0.95, FOCUS_AREAS, batch_size=BATCH_SIZE),
         holdout_sha256=validation.holdout_sha256,
     )
 
@@ -301,6 +302,7 @@ def test_holdout_replay_requires_a_frozen_matching_spec():
         (spec(), "accepted gate spec"),
         ({**frozen, "candidate_fingerprint": "0" * 64}, "fingerprint"),
         ({**frozen, "holdout_sha256": "0" * 64}, "holdout hash"),
+        ({**frozen, "batch_size": 12}, "batch size"),
     ]
     for gate_spec, message in refusals:
         with pytest.raises(ValueError, match=message):

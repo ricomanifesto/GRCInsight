@@ -5,9 +5,12 @@ from __future__ import annotations
 from collections.abc import Sequence
 from dataclasses import asdict, dataclass
 import hashlib
+import inspect
 import json
+from types import ModuleType
 from typing import Any
 
+from core import article_selection, entities
 from core.article_selection import analyze_selected, local_overrides, workflow_selected
 from models.api import ArticleInput
 from services import relevance_decisions
@@ -162,8 +165,16 @@ def selection_records(
     return tuple(records)
 
 
-def candidate_fingerprint(threshold: float, focus_areas: Sequence[str]) -> str:
-    """Hash everything that changes which articles the enabled route selects."""
+def _source_sha256(module: ModuleType) -> str:
+    return hashlib.sha256(inspect.getsource(module).encode("utf-8")).hexdigest()
+
+
+def candidate_fingerprint(threshold: float, focus_areas: Sequence[str], *, batch_size: int) -> str:
+    """Hash everything that changes which articles a replayed candidate selects.
+
+    The replay batch size fixes request bytes and positions. The local rule sources
+    decide entity and risk overrides and the effective selections.
+    """
     identity = {
         "model": relevance_decisions.MODEL,
         "criteria": relevance_decisions.CRITERIA,
@@ -179,6 +190,10 @@ def candidate_fingerprint(threshold: float, focus_areas: Sequence[str]) -> str:
         },
         "threshold": threshold,
         "selection_policy": SELECTION_POLICY,
+        "batch_size": batch_size,
+        "local_rules": {
+            module.__name__: _source_sha256(module) for module in (entities, article_selection)
+        },
     }
     encoded = json.dumps(identity, sort_keys=True, separators=(",", ":"), ensure_ascii=False)
     return hashlib.sha256(encoded.encode("utf-8")).hexdigest()

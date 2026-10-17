@@ -520,12 +520,16 @@ def _check_holdout(
     spec: dict[str, Any] | None,
     thresholds: Sequence[float],
     focus_areas: Sequence[str],
+    batch_size: int,
 ) -> None:
     if spec is None or spec.get("status") != "accepted":
         raise ValueError("Holdout replay refused: it needs an accepted gate spec")
     if list(thresholds) != [spec.get("threshold")]:
         raise ValueError("Holdout replay refused: only the frozen threshold may run")
-    if candidate_fingerprint(thresholds[0], focus_areas) != spec.get("candidate_fingerprint"):
+    if batch_size != spec.get("batch_size"):
+        raise ValueError("Holdout replay refused: batch size differs from the spec")
+    fingerprint = candidate_fingerprint(thresholds[0], focus_areas, batch_size=batch_size)
+    if fingerprint != spec.get("candidate_fingerprint"):
         raise ValueError("Holdout replay refused: candidate fingerprint differs from the spec")
     if validation.holdout_sha256 is None or validation.holdout_sha256 != spec.get("holdout_sha256"):
         raise ValueError("Holdout replay refused: holdout hash differs from the spec")
@@ -551,7 +555,7 @@ async def replay_corpus(
     if not 1 <= batch_size <= 64:
         raise ValueError("Batch size must be between 1 and 64")
     if split == "holdout":
-        _check_holdout(validation, gate_spec, thresholds, focus_areas)
+        _check_holdout(validation, gate_spec, thresholds, focus_areas, batch_size)
     cases = [case for case in validation.cases if case.split == split]
     if not cases:
         raise ValueError(f"No {split} cases to replay")
@@ -619,7 +623,9 @@ async def replay_corpus(
         results.append(
             {
                 "threshold": threshold,
-                "candidate_fingerprint": candidate_fingerprint(threshold, focus_areas),
+                "candidate_fingerprint": candidate_fingerprint(
+                    threshold, focus_areas, batch_size=batch_size
+                ),
                 "batches": batches,
                 "route_mix": {
                     "dispositions": dict(Counter(row["disposition"] for row in threshold_rows)),
