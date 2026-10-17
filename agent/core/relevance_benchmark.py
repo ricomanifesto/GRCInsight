@@ -11,7 +11,6 @@ import math
 from pathlib import Path
 import re
 from statistics import median
-import sys
 import time
 from typing import Any
 
@@ -37,8 +36,6 @@ from services.relevance_selection import (
     SelectionRecord,
     article_key,
     candidate_fingerprint,
-    source_name,
-    source_sha256,
 )
 
 
@@ -545,23 +542,11 @@ def load_gate_spec(path: Path) -> dict[str, Any]:
     return spec
 
 
-def evaluator_sha256() -> str:
-    """Identity of the corpus contract and scoring code that judge a frozen holdout."""
-    from core import relevance_corpus
-
-    sources = {
-        source_name(module): source_sha256(module)
-        for module in (relevance_corpus, sys.modules[__name__])
-    }
-    encoded = json.dumps(sources, sort_keys=True, separators=(",", ":"))
-    return hashlib.sha256(encoded.encode("utf-8")).hexdigest()
-
-
 def _check_holdout(
     validation: CorpusValidation,
     spec: dict[str, Any] | None,
     thresholds: Sequence[float],
-    focus_areas: Sequence[str],
+    fingerprint: str,
     batch_size: int,
 ) -> None:
     if spec is None or spec.get("status") != "accepted":
@@ -570,11 +555,8 @@ def _check_holdout(
         raise ValueError("Holdout replay refused: only the frozen threshold may run")
     if batch_size != spec.get("batch_size"):
         raise ValueError("Holdout replay refused: batch size differs from the spec")
-    fingerprint = candidate_fingerprint(thresholds[0], focus_areas, batch_size=batch_size)
     if fingerprint != spec.get("candidate_fingerprint"):
         raise ValueError("Holdout replay refused: candidate fingerprint differs from the spec")
-    if evaluator_sha256() != spec.get("evaluator_sha256"):
-        raise ValueError("Holdout replay refused: evaluator code differs from the spec")
     if validation.holdout_sha256 is None or validation.holdout_sha256 != spec.get("holdout_sha256"):
         raise ValueError("Holdout replay refused: holdout hash differs from the spec")
 
@@ -586,6 +568,8 @@ async def replay_corpus(
     split: str,
     thresholds: Sequence[float],
     focus_areas: Sequence[str],
+    generative_model: str,
+    decision_timeout: float,
     batch_size: int = MAX_BATCH_ARTICLES,
     gate_spec: dict[str, Any] | None = None,
 ) -> tuple[list[dict[str, Any]], dict[str, Any]]:
@@ -598,8 +582,18 @@ async def replay_corpus(
         raise ValueError("Thresholds must be between 0.5 and 1")
     if not 1 <= batch_size <= 64:
         raise ValueError("Batch size must be between 1 and 64")
+
+    def fingerprint(threshold: float) -> str:
+        return candidate_fingerprint(
+            threshold,
+            focus_areas,
+            batch_size=batch_size,
+            generative_model=generative_model,
+            decision_timeout=decision_timeout,
+        )
+
     if split == "holdout":
-        _check_holdout(validation, gate_spec, thresholds, focus_areas, batch_size)
+        _check_holdout(validation, gate_spec, thresholds, fingerprint(thresholds[0]), batch_size)
     cases = [case for case in validation.cases if case.split == split]
     if not cases:
         raise ValueError(f"No {split} cases to replay")
@@ -675,9 +669,7 @@ async def replay_corpus(
         results.append(
             {
                 "threshold": threshold,
-                "candidate_fingerprint": candidate_fingerprint(
-                    threshold, focus_areas, batch_size=batch_size
-                ),
+                "candidate_fingerprint": fingerprint(threshold),
                 "batches": batches,
                 "route_mix": {
                     "dispositions": dict(Counter(row["disposition"] for row in threshold_rows)),
@@ -714,7 +706,6 @@ async def replay_corpus(
         "verdict_scope": ("frozen holdout" if split == "holdout" else "development, informational"),
         "selection_policy": SELECTION_POLICY,
         "batch_size": batch_size,
-        "evaluator_sha256": evaluator_sha256(),
         "corpus": validation.summary(),
         "network_calls": 0,
         "results": results,

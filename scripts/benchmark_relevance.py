@@ -62,6 +62,8 @@ def run_corpus(parser: argparse.ArgumentParser, args: argparse.Namespace) -> Non
                 split=args.split,
                 thresholds=args.threshold or [settings.grc_relevance_min_probability],
                 focus_areas=tuple(settings.analysis_focus_areas),
+                generative_model=settings.llm_model,
+                decision_timeout=settings.grc_relevance_timeout_seconds,
                 batch_size=args.batch_size,
                 gate_spec=spec,
             )

@@ -11,7 +11,6 @@ import pytest
 from config.settings import Settings
 from core.article_selection import analyze_selected, local_overrides, workflow_selected
 from models.api import ArticleInput
-from services import relevance_decisions
 from services.relevance_decisions import RelevanceClient
 from services.relevance_selection import (
     SELECTION_POLICY,
@@ -148,59 +147,87 @@ def test_decision_requests_match_pre_change_bytes():
     ] == GOLDEN["decision_requests_sha256"]
 
 
-def test_fingerprint_is_stable_and_covers_candidate_identity(monkeypatch):
-    from services import relevance_selection
+def fingerprint(
+    threshold=0.95,
+    focus_areas=FOCUS_AREAS,
+    batch_size=12,
+    generative_model="openrouter/provider/model",
+    decision_timeout=4.0,
+):
+    return candidate_fingerprint(
+        threshold,
+        focus_areas,
+        batch_size=batch_size,
+        generative_model=generative_model,
+        decision_timeout=decision_timeout,
+    )
 
-    def fingerprint(threshold=0.95, focus_areas=FOCUS_AREAS, batch_size=12):
-        return candidate_fingerprint(threshold, focus_areas, batch_size=batch_size)
+
+def test_fingerprint_binds_shipped_code_and_selection_configuration(monkeypatch):
+    from services import relevance_selection
 
     base = fingerprint()
     assert base == fingerprint(focus_areas=list(FOCUS_AREAS))
     assert len(base) == 64
-    changed = {fingerprint(threshold=0.9), fingerprint(focus_areas=FOCUS_AREAS[:-1])}
-    # The replay batch changes request bytes and positions.
-    changed.add(fingerprint(batch_size=4))
-    for name, value in (
-        ("MODEL", "typesafe/jev-2"),
-        ("CRITERIA", {**relevance_decisions.CRITERIA, "relevant": "changed"}),
-        ("INSTRUCTIONS", relevance_decisions.INSTRUCTIONS + " "),
-        ("MAX_TITLE_CHARS", 201),
-        ("MAX_TEXT_CHARS", 501),
-        ("MAX_BATCH_ARTICLES", 11),
-        ("MAX_ARTICLES", 63),
-        ("MAX_REQUEST_BYTES", 23999),
-    ):
-        with monkeypatch.context() as patch:
-            patch.setattr(relevance_decisions, name, value)
-            changed.add(fingerprint())
+    changed = {
+        fingerprint(threshold=0.9),
+        fingerprint(focus_areas=FOCUS_AREAS[:-1]),
+        # The replay batch changes request bytes and positions.
+        fingerprint(batch_size=4),
+        # The generative model decides every full legacy batch.
+        fingerprint(generative_model="openrouter/provider/other"),
+        # The decision timeout decides when a batch falls back.
+        fingerprint(decision_timeout=5.0),
+    }
     with monkeypatch.context() as patch:
         patch.setattr(relevance_selection, "SELECTION_POLICY", "other")
         changed.add(fingerprint())
-    # Every implementation that decides a selection is bound by its source, so a
-    # behavior change cannot reuse an accepted fingerprint.
-    sources = relevance_selection.selection_sources()
-    assert {
-        "services.relevance_decisions",
-        "services.relevance_selection",
-        "core.entities",
-        "core.article_selection",
-        "GRCModelService.analyze_articles_for_grc",
-        "GRCModelService._try_relevance",
-        "GRCModelService._analysis_from_selection",
-    } <= set(sources)
-    original = relevance_selection.source_sha256
-    for changed_source in sources:
-        with monkeypatch.context() as patch:
-            patch.setattr(
-                relevance_selection,
-                "source_sha256",
-                lambda value, name=changed_source: (
-                    "0" * 64 if relevance_selection.source_name(value) == name else original(value)
-                ),
-            )
-            changed.add(fingerprint())
+    # Any change to shipped agent code or locked dependencies changes the identity.
+    with monkeypatch.context() as patch:
+        patch.setattr(relevance_selection, "agent_source_sha256", lambda *_: "0" * 64)
+        changed.add(fingerprint())
     assert base not in changed
-    assert len(changed) == 12 + len(sources)
+    assert len(changed) == 7
+
+
+def test_agent_source_hash_covers_shipped_files_only(tmp_path):
+    from services.relevance_selection import AGENT_ROOT, agent_source_files, agent_source_sha256
+
+    root = tmp_path / "agent"
+    names = (
+        "services/model_service.py",
+        "core/entities.py",
+        "uv.lock",
+        "Dockerfile.lambda",
+        "tests/test_example.py",
+        ".venv/lib/module.py",
+        "core/__pycache__/entities.cpython-311.pyc",
+    )
+    for name in names:
+        path = root / name
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(name, encoding="utf-8")
+    base = agent_source_sha256(root)
+    for name, shipped in zip(names, (True, True, True, True, False, False, False)):
+        path = root / name
+        path.write_text(name + " changed", encoding="utf-8")
+        assert (agent_source_sha256(root) != base) is shipped, name
+        path.write_text(name, encoding="utf-8")
+    (root / "core/entities.py").rename(root / "core/renamed.py")
+    assert agent_source_sha256(root) != base
+
+    shipped = {path.relative_to(AGENT_ROOT).as_posix() for path in agent_source_files()}
+    assert {
+        "services/model_service.py",
+        "services/relevance_decisions.py",
+        "services/relevance_selection.py",
+        "core/entities.py",
+        "core/article_selection.py",
+        "core/relevance_benchmark.py",
+        "core/relevance_corpus.py",
+        "uv.lock",
+    } <= shipped
+    assert not any(name.startswith(("tests/", ".")) for name in shipped)
 
 
 def test_records_describe_effective_selections_separately(monkeypatch):

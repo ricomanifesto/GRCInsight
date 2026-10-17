@@ -5,12 +5,11 @@ from __future__ import annotations
 from collections.abc import Sequence
 from dataclasses import asdict, dataclass
 import hashlib
-import inspect
 import json
-import sys
+import os
+from pathlib import Path
 from typing import Any
 
-from core import article_selection, entities
 from core.article_selection import analyze_selected, local_overrides, workflow_selected
 from models.api import ArticleInput
 from services import relevance_decisions
@@ -165,59 +164,61 @@ def selection_records(
     return tuple(records)
 
 
-# Route methods that turn decisions into the returned selection.
-ROUTE_METHODS = (
-    "analyze_articles_for_grc",
-    "_plan",
-    "_try_relevance",
-    "_record_selection",
-    "_record_legacy_selection",
-    "_analysis_from_selection",
-)
+AGENT_ROOT = Path(__file__).resolve().parents[1]
+# Tests, caches and environments do not ship; everything else under the agent does.
+UNSHIPPED_DIRECTORIES = frozenset({"tests", "__pycache__"})
 
 
-def source_name(value: Any) -> str:
-    return getattr(value, "__qualname__", None) or value.__name__
+def agent_source_files(root: Path = AGENT_ROOT) -> list[Path]:
+    """Every shipped agent file: code, configuration, container and locked dependencies."""
+    files = []
+    for directory, subdirectories, names in os.walk(root):
+        subdirectories[:] = sorted(
+            name
+            for name in subdirectories
+            if not name.startswith(".") and name not in UNSHIPPED_DIRECTORIES
+        )
+        files.extend(
+            Path(directory) / name
+            for name in names
+            if not name.startswith(".") and not name.endswith(".pyc")
+        )
+    return sorted(files, key=lambda path: path.relative_to(root).as_posix())
 
 
-def source_sha256(value: Any) -> str:
-    return hashlib.sha256(inspect.getsource(value).encode("utf-8")).hexdigest()
+def agent_source_sha256(root: Path = AGENT_ROOT) -> str:
+    """Hash shipped agent paths and contents, so any code change is a new identity."""
+    digest = hashlib.sha256()
+    for path in agent_source_files(root):
+        name = path.relative_to(root).as_posix()
+        digest.update(f"{name}\0{hashlib.sha256(path.read_bytes()).hexdigest()}\n".encode())
+    return digest.hexdigest()
 
 
-def selection_sources() -> dict[str, str]:
-    """Source hashes of every implementation that decides a replayed selection."""
-    # Imported here because the model service imports this module.
-    from services.model_service import GRCModelService
+def candidate_fingerprint(
+    threshold: float,
+    focus_areas: Sequence[str],
+    *,
+    batch_size: int,
+    generative_model: str,
+    decision_timeout: float,
+) -> str:
+    """Identify a frozen candidate: shipped code plus the configuration that selects.
 
-    values: list[Any] = [relevance_decisions, sys.modules[__name__], entities, article_selection]
-    values.extend(getattr(GRCModelService, name) for name in ROUTE_METHODS)
-    return {source_name(value): source_sha256(value) for value in values}
-
-
-def candidate_fingerprint(threshold: float, focus_areas: Sequence[str], *, batch_size: int) -> str:
-    """Hash everything that changes which articles a replayed candidate selects.
-
-    Implementation sources cover request building, dispositions, local rules and
-    the route, so a behavior change cannot keep an accepted fingerprint. The
-    replay batch size fixes request bytes and positions.
+    The agent source hash covers the decision client, dispositions, local rules, the
+    route, the generative analyzer behind full legacy batches and the replay scoring
+    code. The configuration adds the generative model, the decision timeout that
+    decides when a batch falls back, the threshold, focus areas and replay batch size.
     """
     identity = {
-        "model": relevance_decisions.MODEL,
-        "criteria": relevance_decisions.CRITERIA,
-        "instructions": relevance_decisions.INSTRUCTIONS,
+        "agent_sources": agent_source_sha256(),
+        "selection_policy": SELECTION_POLICY,
+        "threshold": threshold,
         "focus_areas": relevance_decisions.focus_text(list(focus_areas))
         or relevance_decisions.DEFAULT_FOCUS,
-        "limits": {
-            "title_chars": relevance_decisions.MAX_TITLE_CHARS,
-            "text_chars": relevance_decisions.MAX_TEXT_CHARS,
-            "articles": relevance_decisions.MAX_ARTICLES,
-            "batch_articles": relevance_decisions.MAX_BATCH_ARTICLES,
-            "request_bytes": relevance_decisions.MAX_REQUEST_BYTES,
-        },
-        "threshold": threshold,
-        "selection_policy": SELECTION_POLICY,
         "batch_size": batch_size,
-        "sources": selection_sources(),
+        "generative_model": generative_model,
+        "decision_timeout": decision_timeout,
     }
     encoded = json.dumps(identity, sort_keys=True, separators=(",", ":"), ensure_ascii=False)
     return hashlib.sha256(encoded.encode("utf-8")).hexdigest()

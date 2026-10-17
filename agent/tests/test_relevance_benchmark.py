@@ -173,6 +173,8 @@ def replay(validation, responses, **options):
     from tests.relevance_fixtures import BATCH_SIZE, FOCUS_AREAS
 
     options.setdefault("split", "development")
+    options.setdefault("generative_model", "openrouter/provider/model")
+    options.setdefault("decision_timeout", 4.0)
     options.setdefault("thresholds", [0.95])
     options.setdefault("gate_spec", load_gate_spec(TEMPLATE))
     return asyncio.run(
@@ -326,13 +328,16 @@ def accepted_spec(validation):
     from services.relevance_selection import candidate_fingerprint
     from tests.relevance_fixtures import BATCH_SIZE, FOCUS_AREAS
 
-    from core.relevance_benchmark import evaluator_sha256
-
     return spec(
         status="accepted",
         batch_size=BATCH_SIZE,
-        evaluator_sha256=evaluator_sha256(),
-        candidate_fingerprint=candidate_fingerprint(0.95, FOCUS_AREAS, batch_size=BATCH_SIZE),
+        candidate_fingerprint=candidate_fingerprint(
+            0.95,
+            FOCUS_AREAS,
+            batch_size=BATCH_SIZE,
+            generative_model="openrouter/provider/model",
+            decision_timeout=4.0,
+        ),
         holdout_sha256=validation.holdout_sha256,
     )
 
@@ -349,12 +354,19 @@ def test_holdout_replay_requires_a_frozen_matching_spec():
         ({**frozen, "candidate_fingerprint": "0" * 64}, "fingerprint"),
         ({**frozen, "holdout_sha256": "0" * 64}, "holdout hash"),
         ({**frozen, "batch_size": 12}, "batch size"),
-        # Changed corpus or scoring code cannot re-judge a frozen holdout.
-        ({**frozen, "evaluator_sha256": "0" * 64}, "evaluator"),
     ]
     for gate_spec, message in refusals:
         with pytest.raises(ValueError, match=message):
             replay(validation, responses, split="holdout", gate_spec=gate_spec)
+    # A different selection configuration is a different candidate.
+    with pytest.raises(ValueError, match="fingerprint"):
+        replay(
+            validation,
+            responses,
+            split="holdout",
+            gate_spec=frozen,
+            generative_model="openrouter/provider/other",
+        )
     # The template is a proposal; it can never authorize a holdout replay.
     with pytest.raises(ValueError, match="accepted gate spec"):
         replay(validation, responses, split="holdout")
@@ -444,7 +456,7 @@ def test_gate_template_is_a_proposal():
     template = load_gate_spec(TEMPLATE)
     assert template["status"] == "proposed, not accepted"
     assert template["candidate_fingerprint"] is None
-    assert template["evaluator_sha256"] is None
+    assert "evaluator_sha256" not in template
     assert template["holdout_sha256"] is None
     assert template["gates"]["G2"]["min_lower_bound"] == 0.9
 
