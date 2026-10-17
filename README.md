@@ -94,15 +94,33 @@ The pilot is server-configured and **off by default**. It uses the existing
 even when the report model uses a free route.
 
 - `GRC_RELEVANCE_MODE=off`: the existing generative analysis, with no decision calls.
-- `GRC_RELEVANCE_MODE=shadow`: run both analyses, retain the original result, and
-  log aggregate decision timing, resolved models, usage and uncertainty counts.
-- `GRC_RELEVANCE_MODE=enabled`: accept each valid relevant/irrelevant decision
-  whose selected-label probability meets `GRC_RELEVANCE_MIN_PROBABILITY`
-  (default `0.95`). Analyze the uncertain or insufficient-evidence subset with
-  one generative call and map its selections back to the original positions.
-  Unavailable or invalid decisions still fall back for the entire batch. A
-  failed subset remains an analysis error for the existing caller to handle.
-  This threshold is a starting value, not a measured guarantee.
+- `GRC_RELEVANCE_MODE=shadow`: run both analyses and retain the original result.
+  Log aggregate decision timing, resolved models, usage and uncertainty counts,
+  plus the per-article records the enabled route would produce.
+- `GRC_RELEVANCE_MODE=enabled`: apply selection policy `keep-uncertain-v1`.
+  - A relevant or irrelevant decision whose selected-label probability meets
+    `GRC_RELEVANCE_MIN_PROBABILITY` (default `0.95`) is accepted.
+  - Every uncertain or insufficient-evidence article stays selected.
+  - Those articles still go to one generative call, which only enriches report
+    aggregates; its prose selections never change article selection. A failed
+    call remains an analysis error for the existing caller to handle.
+  - All articles accepted as irrelevant is a valid zero selection, with no
+    generative call.
+  - Unavailable or invalid decisions, or a batch where every article is
+    uncertain, fall back to the existing analysis for the entire batch.
+  - The threshold is a starting value, not a measured guarantee.
+
+Each enabled or shadow call records one entry per article position, with no
+article text. An entry holds:
+
+- the SHA256 of the URL, the raw label, probabilities and confidence;
+- the route, its disposition and the reason for any full fallback;
+- the model selection, with the entity and risk-category overrides kept separate;
+- the effective selections of the report workflow (entity OR risk category OR
+  model) and of `/analyze` (entity OR model).
+
+An unknown model selection is never recorded as a drop. Cost unavailable from the
+provider stays null.
 
 The decision rubric includes concrete security and operational events, control
 or audit findings, enforcement and regulatory obligations. Abstract commentary,
@@ -150,6 +168,39 @@ provider/client is reported as null. Failed partial batches can still be billed.
 Logs contain aggregate diagnostics, never article bodies or credentials. Live
 benchmark results and deployment configuration are required before claiming
 production speed or quality improvements.
+
+For readiness evidence, replay a labeled corpus offline instead. Each JSONL case
+carries article fields, a hash of the inference-visible text, an `event_id`, a
+`development` or `holdout` split, opaque labels with their review status, a
+critical flag and category tags:
+
+```bash
+cd agent
+uv run python ../scripts/benchmark_relevance.py --corpus corpus.jsonl
+uv run python ../scripts/benchmark_relevance.py --corpus corpus.jsonl \
+  --recordings recordings.jsonl --output-dir replay --threshold 0.9 --threshold 0.95
+```
+
+- **Validation.** It rejects events shared across splits and a holdout that does not
+  start after the development window. It flags CVEs and normalized URLs shared
+  across splits. Provisional and disputed cases are reported but never satisfy a gate.
+- **Replay.** Recorded decision bodies, keyed by the SHA256 of the exact request,
+  run through the real enabled route with no network or generative calls.
+  Recordings hold the raw body, request hash, model, capture time and status:
+  no headers or keys.
+- **Outputs.** `selections.jsonl` (per article) and `summary.json`: confusion counts
+  with denominators, Wilson intervals, local-negative and local-positive strata,
+  route mix and gate verdicts.
+- **Thresholds and holdout.** Threshold sweeps run on the development split only.
+  A holdout replay needs an accepted gate spec whose threshold, batch size,
+  candidate fingerprint and holdout hash match. The fingerprint hashes every
+  shipped agent file, including locked dependencies and the replay scoring code,
+  plus the threshold, focus areas, batch size, `LLM_MODEL` and
+  `GRC_RELEVANCE_TIMEOUT_SECONDS`. Run a holdout replay with the production
+  configuration; any code change requires a new freeze.
+- **Verdicts.** [`docs/relevance-gate-spec.template.json`](docs/relevance-gate-spec.template.json)
+  holds proposed tolerances. Verdicts stay `remain_off` unless every gate passes,
+  and latency, deployment and test-owned gates are outside the replay.
 
 ### Repository validation
 
