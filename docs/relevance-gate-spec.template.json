@@ -1,0 +1,80 @@
+{
+  "schema": "grc-relevance-gate-spec-v1",
+  "status": "proposed, not accepted",
+  "description": "Readiness gates for the enabled relevance route. Tolerances are proposals until accepted; freeze candidate_fingerprint and holdout_sha256 before any holdout replay. Passing gates is a review verdict, not an activation switch.",
+  "threshold": 0.95,
+  "candidate_fingerprint": null,
+  "holdout_sha256": null,
+  "stratum_weights": {
+    "local_negative": null,
+    "local_positive": null
+  },
+  "gates": {
+    "G1": {
+      "name": "critical_miss",
+      "source": "replay",
+      "measure": "Critical relevant cases whose workflow selection is not true",
+      "max_misses": 0,
+      "min_cases": 100
+    },
+    "G2": {
+      "name": "stratum_recall",
+      "source": "replay",
+      "measure": "Relevant local-negative cases selected; lower 95% Wilson bound",
+      "min_lower_bound": 0.9,
+      "min_cases": 50
+    },
+    "G3": {
+      "name": "overall_recall",
+      "source": "replay",
+      "measure": "Relevant cases selected by the workflow rule; lower 95% Wilson bound",
+      "min_lower_bound": 0.95,
+      "min_cases": 100
+    },
+    "G4": {
+      "name": "precision_benefit",
+      "source": "replay",
+      "measure": "Irrelevant local-negative cases not selected; reported only"
+    },
+    "G5": {
+      "name": "invariants",
+      "source": "replay",
+      "measure": "Records total and ordered; kept and unknown selections never dropped"
+    },
+    "G6": {
+      "name": "off_unchanged",
+      "source": "tests",
+      "measure": "Off output identical to the pre-change golden result; no decision client"
+    },
+    "G7": {
+      "name": "evidence_retained",
+      "source": "tests",
+      "measure": "source_evidence identical between off and enabled for the same input"
+    },
+    "G8": {
+      "name": "completion",
+      "source": "replay",
+      "measure": "Batches ending in legacy_full from decision errors; invariant failures",
+      "max_jev_error_rate": 0.1,
+      "min_batches": 20
+    },
+    "G9": {
+      "name": "latency",
+      "source": "live_timing",
+      "measure": "Paired analysis-stage median reduction with a bootstrap 95% interval excluding 0",
+      "min_median_reduction": 0.25,
+      "min_pairs": 10
+    },
+    "G10": {
+      "name": "cost_receipts",
+      "source": "replay",
+      "measure": "Decision requests without a usage cost receipt; missing is never zero",
+      "max_missing_rate": 0.1
+    },
+    "G11": {
+      "name": "rollback",
+      "source": "deployment",
+      "measure": "Off restored through the deploy path and read back"
+    }
+  }
+}

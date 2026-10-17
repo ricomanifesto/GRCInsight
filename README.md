@@ -169,6 +169,35 @@ Logs contain aggregate diagnostics, never article bodies or credentials. Live
 benchmark results and deployment configuration are required before claiming
 production speed or quality improvements.
 
+For readiness evidence, replay a labeled corpus offline instead. Each JSONL case
+carries article fields, a hash of the inference-visible text, an `event_id`, a
+`development` or `holdout` split, opaque labels with their review status, a
+critical flag and category tags:
+
+```bash
+cd agent
+uv run python ../scripts/benchmark_relevance.py --corpus corpus.jsonl
+uv run python ../scripts/benchmark_relevance.py --corpus corpus.jsonl \
+  --recordings recordings.jsonl --output-dir replay --threshold 0.9 --threshold 0.95
+```
+
+- **Validation.** It rejects events shared across splits and a holdout that does not
+  start after the development window. It flags CVEs and normalized URLs shared
+  across splits. Provisional and disputed cases are reported but never satisfy a gate.
+- **Replay.** Recorded decision bodies, keyed by the SHA256 of the exact request,
+  run through the real enabled route with no network or generative calls.
+  Recordings hold the raw body, request hash, model, capture time and status:
+  no headers or keys.
+- **Outputs.** `selections.jsonl` (per article) and `summary.json`: confusion counts
+  with denominators, Wilson intervals, local-negative and local-positive strata,
+  route mix and gate verdicts.
+- **Thresholds and holdout.** Threshold sweeps run on the development split only.
+  A holdout replay needs an accepted gate spec whose candidate fingerprint and
+  holdout hash match.
+- **Verdicts.** [`docs/relevance-gate-spec.template.json`](docs/relevance-gate-spec.template.json)
+  holds proposed tolerances. Verdicts stay `remain_off` unless every gate passes,
+  and latency, deployment and test-owned gates are outside the replay.
+
 ### Repository validation
 
 ```bash
