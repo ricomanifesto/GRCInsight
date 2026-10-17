@@ -264,6 +264,49 @@ def test_missing_recordings_count_as_unknown_in_denominators():
     recall = result["all_cases"]["selections"]["model_selected"]["recall"]
     assert recall["total"] == 3 and recall["successes"] == 1
     assert result["gates"]["gates"]["G8"]["verdict"] == "insufficient_evidence"
+    # A request with no recording has no cost receipt either.
+    assert result["requests"]["missing_usage"] == 2
+    assert result["batches"][0]["missing_usage"] == 1
+    assert result["requests"]["cost"] is None
+
+
+def test_missing_receipts_from_unrecorded_requests_fail_the_cost_gate():
+    from core.relevance_benchmark import RecordedResponses
+
+    # Only the holdout batch has full cost receipts; drop its recording.
+    validation, responses = replay_inputs()
+    holdout_request = list(responses.recordings)[-1]
+    trimmed = {key: value for key, value in responses.recordings.items() if key != holdout_request}
+    frozen = accepted_spec(validation)
+    _, summary = replay(validation, RecordedResponses(trimmed), split="holdout", gate_spec=frozen)
+    result = summary["results"][0]
+    assert result["requests"] == {
+        "replayed": 1,
+        "missing_recordings": 1,
+        "missing_usage": 1,
+        "cost": None,
+    }
+    assert result["gates"]["gates"]["G10"]["verdict"] == "fail"
+
+
+def test_cases_without_records_stay_in_denominators(monkeypatch):
+    from core import relevance_benchmark
+
+    async def lose_records(self, articles):
+        await relevance_benchmark.GRCModelService.analyze_articles_for_grc(self, articles)
+        self.last_selection_records = None
+        return {}
+
+    monkeypatch.setattr(relevance_benchmark._ReplayService, "replay", lose_records)
+    validation, responses = replay_inputs()
+    rows, summary = replay(validation, responses)
+    assert [row["case_id"] for row in rows] == [f"dev-0{number}" for number in range(1, 9)]
+    assert all(row["model_selected"] is None for row in rows)
+    assert all(row["reason"] == "missing_record" for row in rows)
+    assert all(row["workflow_selected"] is not False for row in rows)
+    result = summary["results"][0]
+    assert result["all_cases"]["selections"]["model_selected"]["recall"]["total"] == 3
+    assert result["gates"]["gates"]["G5"]["verdict"] == "fail"
 
 
 def test_threshold_sweeps_are_development_only():
@@ -417,7 +460,11 @@ def test_invalid_corpus_or_recordings_are_refused():
     with pytest.raises(ValueError, match="Corpus is invalid"):
         replay(validate_corpus(corpus_lines(cases)), responses)
     line = json.loads(recordings_lines()[0])
-    for bad in ({**line, "headers": {}}, {**line, "status_code": "200"}):
+    for bad in (
+        {**line, "headers": {}},
+        {**line, "status_code": "200"},
+        {**line, "request_sha256": "z" * 64},
+    ):
         with pytest.raises(ValueError, match="expected"):
             load_recordings([json.dumps(bad)])
     with pytest.raises(ValueError, match="duplicate"):

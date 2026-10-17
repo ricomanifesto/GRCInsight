@@ -9,6 +9,7 @@ import hashlib
 import json
 import math
 from pathlib import Path
+import re
 from statistics import median
 import sys
 import time
@@ -16,7 +17,12 @@ from typing import Any
 
 import httpx
 
-from core.article_selection import selected_article_mask
+from core.article_selection import (
+    analyze_selected,
+    local_overrides,
+    selected_article_mask,
+    workflow_selected,
+)
 from core.entities import analyze_article_grc_content
 from core.relevance_corpus import SPLITS, CorpusCase, CorpusValidation
 from models.api import ArticleInput
@@ -29,6 +35,7 @@ from services.relevance_selection import (
     LEGACY_FULL,
     SELECTION_POLICY,
     SelectionRecord,
+    article_key,
     candidate_fingerprint,
     source_name,
     source_sha256,
@@ -202,6 +209,7 @@ STRATA = ("local_negative", "local_positive")
 WILSON_Z = 1.959963984540054
 # Replay never authenticates anywhere; this value only satisfies the client.
 REPLAY_KEY = "offline-replay"
+SHA256_HEX = re.compile(r"[0-9a-f]{64}")
 
 
 @dataclass(frozen=True)
@@ -247,7 +255,7 @@ def load_recordings(lines: Iterable[str]) -> dict[str, Recording]:
             or set(raw) != RECORDING_FIELDS
             or raw["schema"] != RECORDING_SCHEMA
             or not isinstance(raw["request_sha256"], str)
-            or len(raw["request_sha256"]) != 64
+            or not SHA256_HEX.fullmatch(raw["request_sha256"])
             or not isinstance(raw["model"], str)
             or not isinstance(raw["captured_at"], str)
             or type(raw["status_code"]) is not int
@@ -397,6 +405,25 @@ def _invariant_failures(
         if record.model_selected is None and record.workflow_selected is False:
             failures.append(f"position {record.index}: unknown selection became a drop")
     return failures
+
+
+def _unrecorded(case: CorpusCase) -> dict[str, Any]:
+    """A case the route left without a record stays in every denominator as unknown."""
+    entity, risk = local_overrides(case.article)
+    return {
+        "article_key": article_key(case.article.url),
+        "route": None,
+        "disposition": None,
+        "reason": "missing_record",
+        "label": None,
+        "probabilities": None,
+        "confidence": None,
+        "model_selected": None,
+        "entity_override": entity,
+        "risk_override": risk,
+        "workflow_selected": workflow_selected(entity=entity, risk=risk, model=None),
+        "analyze_selected": analyze_selected(entity=entity, model=None),
+    }
 
 
 def _usage_missing(recording: Recording) -> bool:
@@ -607,25 +634,33 @@ async def replay_corpus(
                     "fallback_status": diagnostics.get("fallback_status"),
                     "requests": len(responses.requests) - requests_before,
                     "missing_recordings": len(responses.missing) - missing_before,
-                    "missing_usage": sum(
-                        _usage_missing(item) for item in responses.served[served_before:]
-                    ),
+                    # An unrecorded request has no cost receipt either.
+                    "missing_usage": len(responses.missing)
+                    - missing_before
+                    + sum(_usage_missing(item) for item in responses.served[served_before:]),
                     "cost": diagnostics.get("cost"),
                     "invariant_failures": _invariant_failures(batch, records),
                 }
             )
-            for case, record in zip(batch, records or ()):
+            by_position = {record.index: record for record in records or ()}
+            for position, case in enumerate(batch):
+                record = by_position.get(position)
+                fields = (
+                    {key: value for key, value in record.as_dict().items() if key != "index"}
+                    if record is not None
+                    else _unrecorded(case)
+                )
                 threshold_rows.append(
                     {
                         "case_id": case.case_id,
                         "split": case.split,
                         "threshold": threshold,
                         "batch": batch_number,
-                        "position": record.index,
-                        **{key: value for key, value in record.as_dict().items() if key != "index"},
+                        "position": position,
+                        **fields,
                         "stratum": (
                             "local_positive"
-                            if record.entity_override or record.risk_override
+                            if fields["entity_override"] or fields["risk_override"]
                             else "local_negative"
                         ),
                         "reference_label": case.reference_label,
