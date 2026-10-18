@@ -14,7 +14,7 @@
         ]
       },
       {
-        "control_id": "third_party_risk",
+        "control_id": "vulnerability_management",
         "evidence_excerpt": "The China-nexus cyber espionage group tracked as Armory Castle (previously UNC5221 or Warp Panda) exploited a newly disclosed security flaw in BeyondTrust Remote Support (formerly Bomgar) as a zero-day in late August 2026. The vulnerability, tracked as CVE-2026-102764 (CVSS score: 9.3), is a case of improper origin validation in an internal messaging component that could be exploited by a…",
         "evidence_origin": "summary",
         "focus": "BeyondTrust Remote Support",
@@ -24,23 +24,13 @@
         ]
       },
       {
-        "control_id": "vulnerability_management",
-        "evidence_excerpt": "A suspected advanced threat actor has been observed exploiting a security flaw in Fortinet FortiOS to deliver a previously unreported memory-resident ARM64 malware known as PEERSTITCH. The attack involves the exploitation of CVE-2025-61624 (CVSS score: 5.4), a path traversal flaw in the command line interpreter of FortiOS, FortiPAM, FortiProxy, and FortiSwitchManager that could allow a…",
-        "evidence_origin": "summary",
-        "focus": "Fortinet FortiOS",
-        "priority": "medium",
-        "source_ids": [
-          3
-        ]
-      },
-      {
         "control_id": "third_party_risk",
-        "evidence_excerpt": "Cybersecurity researchers are sounding the alarm related to an active campaign in which unknown threat actors are abusing a compromised Microsoft 365 (M365) credential belonging to ConnectWise Cloud Backup (formerly SkyKick) to gain unauthorized access to customers' M365 environments. ConnectWise Cloud Backup is a cloud-based backup and recovery service built for managed service providers (MSPs…",
+        "evidence_excerpt": "ConnectWise on Saturday said it has disabled seven ConnectWise application identities as it continues its investigation into an incident in which unknown threat actors obtained unauthorized access to the application identities and compromised Microsoft 365 tenants. The disabled identities are listed below - ConnectWise Cloud Backup - 506e08f9-6e9a-4da4-942b-a099a03644ae ConnectWise…",
         "evidence_origin": "summary",
         "focus": "ConnectWise Cloud Backup",
         "priority": "high",
         "source_ids": [
-          9
+          5
         ]
       },
       {
@@ -57,10 +47,20 @@
         "control_id": "third_party_risk",
         "evidence_excerpt": "Cybersecurity researchers have discovered a malicious npm package that's part of a recently disclosed software supply chain attack campaign dubbed MALFEX. The package, named \"imgdecode,\" was uploaded to the package registry on September 30, 2026, by a user named \"malfexteste8.\" It has been downloaded 979 times as of writing and is still available on npm as of writing. The latest version of…",
         "evidence_origin": "summary",
-        "focus": "malicious npm package",
+        "focus": "imgdecode",
         "priority": "medium",
         "source_ids": [
           8
+        ]
+      },
+      {
+        "control_id": "access_management",
+        "evidence_excerpt": "Cybersecurity researchers are sounding the alarm related to an active campaign in which unknown threat actors are abusing a compromised Microsoft 365 (M365) credential belonging to ConnectWise Cloud Backup (formerly SkyKick) to gain unauthorized access to customers' M365 environments. ConnectWise Cloud Backup is a cloud-based backup and recovery service built for managed service providers (MSPs…",
+        "evidence_origin": "summary",
+        "focus": "ConnectWise Cloud Backup",
+        "priority": "high",
+        "source_ids": [
+          9
         ]
       }
     ],
@@ -68,14 +68,14 @@
       "decision_frame": "separate",
       "source_ids": [
         1,
-        2,
+        5,
         9
       ]
     },
     "industry_impacts": [],
     "regulatory_changes": []
   },
-  "generated_at": "2026-10-18T18:20:14.791645Z",
+  "generated_at": "2026-10-18T21:15:37.803678Z",
   "feed_url": "https://ricomanifesto.github.io/SentryDigest/feed.xml",
   "feed_home_url": "https://ricomanifesto.github.io/SentryDigest/",
   "digest_issue_date": "2026-10-18",
@@ -156,11 +156,11 @@
       "effective_date_evidence": null
     },
     {
-      "title": "Hackers exploit SiteGuard WAF flaw to run commands as SYSTEM, root",
+      "title": "Hackers exploit SiteGuard WAF flaw to run commands as admins",
       "url": "https://www.bleepingcomputer.com/news/security/hackers-exploit-siteguard-waf-flaw-to-run-commands-as-system-root/",
       "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-18/#reporting-de332aa1deff",
       "cves": [],
-      "snippet": "Hackers exploit SiteGuard WAF flaw to run commands as SYSTEM, root Attackers are targeting an OS command injection vulnerability in SiteGuard Server Edition that lets them execute commands as root or SYSTEM on affected servers… Attackers are targeting an OS command injection vulnerability in SiteGuard Server Edition that lets them execute commands as root or SYSTEM on affected servers…",
+      "snippet": "Hackers exploit SiteGuard WAF flaw to run commands as admins Attackers are targeting an OS command injection vulnerability in SiteGuard Server Edition that lets them execute commands as root or SYSTEM on affected servers… Attackers are targeting an OS command injection vulnerability in SiteGuard Server Edition that lets them execute commands as root or SYSTEM on affected servers…",
       "article_evidence": [
         {
           "extraction_version": 1,
