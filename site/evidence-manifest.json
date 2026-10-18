@@ -54,13 +54,13 @@
         ]
       },
       {
-        "control_id": "change_management",
-        "evidence_excerpt": "Drupal has patched two critical vulnerabilities that could allow attackers to execute code remotely on websites running any supported version of the content management system…",
+        "control_id": "access_management",
+        "evidence_excerpt": "Cybersecurity researchers are sounding the alarm related to an active campaign in which unknown threat actors are abusing a compromised Microsoft 365 (M365) credential belonging to ConnectWise Cloud Backup (formerly SkyKick) to gain unauthorized access to customers' M365 environments. ConnectWise Cloud Backup is a cloud-based backup and recovery service built for managed service providers (MSPs…",
         "evidence_origin": "summary",
-        "focus": "patched two critical vulnerabilities",
-        "priority": "medium",
+        "focus": "compromised Microsoft 365 (M365) credential",
+        "priority": "high",
         "source_ids": [
-          6
+          8
         ]
       }
     ],
@@ -68,14 +68,14 @@
       "decision_frame": "separate",
       "source_ids": [
         1,
-        4,
-        6
+        2,
+        4
       ]
     },
     "industry_impacts": [],
     "regulatory_changes": []
   },
-  "generated_at": "2026-10-18T13:03:49.19359Z",
+  "generated_at": "2026-10-18T15:17:06.781207Z",
   "feed_url": "https://ricomanifesto.github.io/SentryDigest/feed.xml",
   "feed_home_url": "https://ricomanifesto.github.io/SentryDigest/",
   "digest_issue_date": "2026-10-18",
