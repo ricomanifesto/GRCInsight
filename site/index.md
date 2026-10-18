@@ -1,5 +1,5 @@
 # GRC Intelligence Report - 2026-10-18
-**Generated:** 2026-10-18T12:23:51.167167Z
+**Generated:** 2026-10-18T13:03:49.19359Z
 **Date of Issue:** October 2026
 **Analysis Period:** October 2026
 **Source:** [SentryDigest](https://ricomanifesto.github.io/SentryDigest/feed.xml)
@@ -12,9 +12,9 @@
 
 ## Executive Summary
 
-Assess the leading findings as separate decisions, each with its own applicability and evidence requirements. Begin with “Magento and Adobe Commerce” [Critical BlockStrap flaw lets hackers run code on Magento servers](https://www.bleepingcomputer.com/news/security/critical-blockstrap-flaw-lets-hackers-run-code-on-magento-servers/), “ConnectWise Cloud Backup” [ConnectWise Suspends Cloud Backup After Attackers Compromise Microsoft 365 Tenants](https://thehackernews.com/2026/10/connectwise-suspends-cloud-backup-after.html), and “Microsoft 365 &#40;M365&#41; credential” [Hackers Use Compromised ConnectWise Credential to Sign In to 173 Microsoft 365 Tenants](https://thehackernews.com/2026/10/hackers-use-compromised-connectwise.html). Use that assessment to decide where control evidence is sufficient and where an owner needs to investigate.
+Assess the leading findings as separate decisions, each with its own applicability and evidence requirements. Begin with “Magento and Adobe Commerce” [Critical BlockStrap flaw lets hackers run code on Magento servers](https://www.bleepingcomputer.com/news/security/critical-blockstrap-flaw-lets-hackers-run-code-on-magento-servers/), “ConnectWise Cloud Backup” [ConnectWise Suspends Cloud Backup After Attackers Compromise Microsoft 365 Tenants](https://thehackernews.com/2026/10/connectwise-suspends-cloud-backup-after.html), and “patched two critical vulnerabilities” [Drupal patches critical RCE flaws, warns exploits may emerge soon](https://www.bleepingcomputer.com/news/security/drupal-patches-critical-rce-flaws-warns-exploits-may-emerge-soon/). Use that assessment to decide where control evidence is sufficient and where an owner needs to investigate.
 
-First, establish affected-asset and configuration scope. Next, establish which supplier access and responsibilities are delegated. Then, test the relevant account and permission boundaries. These are proposed review priorities: confirm local applicability before assigning work. In each case, record the applicability decision and the evidence supporting the next step.
+First, establish affected-asset and configuration scope. Next, establish which supplier access and responsibilities are delegated. Then, test the proposed change and recovery assumptions. These are proposed review priorities: confirm local applicability before assigning work. In each case, record the applicability decision and the evidence supporting the next step.
 
 Some retained passages are truncated; consult the complete source before making a final decision. No primary-source regulatory change is established by this selection. Revise the agenda if the relevant product, activity or dependency is absent, or if stronger evidence changes the assessment.
 
@@ -44,15 +44,15 @@ No sourced regulatory changes identified in the supplied evidence.
 
 **Decision trigger:** If the supplier dependency exists and assurance is insufficient, request evidence or escalate the assurance gap to its owner.
 
-### Microsoft 365 &#40;M365&#41; credential — Access management
+### patched two critical vulnerabilities — Change management
 
-**Source evidence:** “Cybersecurity researchers are sounding the alarm related to an active campaign in which unknown threat actors are abusing a compromised Microsoft 365 &#40;M365&#41; credential belonging to ConnectWise Cloud Backup &#40;formerly SkyKick&#41; to gain unauthorized access to customers' M365 environments. ConnectWise Cloud Backup is a cloud-based backup and recovery service built for managed service providers &#40;MSPs…” [Hackers Use Compromised ConnectWise Credential to Sign In to 173 Microsoft 365 Tenants](https://thehackernews.com/2026/10/hackers-use-compromised-connectwise.html)
+**Source evidence:** “Drupal has patched two critical vulnerabilities that could allow attackers to execute code remotely on websites running any supported version of the content management system…” [Drupal patches critical RCE flaws, warns exploits may emerge soon](https://www.bleepingcomputer.com/news/security/drupal-patches-critical-rce-flaws-warns-exploits-may-emerge-soon/)
 
-**Control decision (inference):** An access-control decision depends on whether the reported path crosses a permission boundary in your environment.
+**Control decision (inference):** A change decision depends on evidence that the proposed remedy works and that recovery remains possible.
 
-**Inferred review priority:** High. **Owner:** Identity and access owner. **Evidence to request:** access scope, authentication coverage, session revocation and a permission-test result.
+**Inferred review priority:** Medium. **Owner:** Change and service owners. **Evidence to request:** change approval, rollout coverage, post-change validation and rollback ownership.
 
-**Decision trigger:** If a permission gap is reproduced, assign a control correction and verify it; otherwise retain the test evidence.
+**Decision trigger:** If validation or recovery evidence is missing, resolve that gap before relying on the change.
 
 ### BeyondTrust Remote Support — Vulnerability management
 
