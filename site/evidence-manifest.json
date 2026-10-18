@@ -24,6 +24,26 @@
         ]
       },
       {
+        "control_id": "vulnerability_management",
+        "evidence_excerpt": "A suspected advanced threat actor has been observed exploiting a security flaw in Fortinet FortiOS to deliver a previously unreported memory-resident ARM64 malware known as PEERSTITCH. The attack involves the exploitation of CVE-2025-61624 (CVSS score: 5.4), a path traversal flaw in the command line interpreter of FortiOS, FortiPAM, FortiProxy, and FortiSwitchManager that could allow a…",
+        "evidence_origin": "summary",
+        "focus": "Fortinet FortiOS",
+        "priority": "medium",
+        "source_ids": [
+          3
+        ]
+      },
+      {
+        "control_id": "vulnerability_management",
+        "evidence_excerpt": "Threat actors are exploiting a critical command execution flaw, now tracked as CVE-2026-110447, in the Collabora Online - Built-in CODE Server app (richdocumentscode) for Nextcloud…",
+        "evidence_origin": "summary",
+        "focus": "Collabora Online - Built-in CODE Server app",
+        "priority": "high",
+        "source_ids": [
+          4
+        ]
+      },
+      {
         "control_id": "third_party_risk",
         "evidence_excerpt": "ConnectWise has shut down customer access to its Cloud Backup service (formerly SkyKick Cloud Backup) after hackers accessed application identities and compromised Microsoft 365 tenants…",
         "evidence_origin": "summary",
@@ -35,32 +55,12 @@
       },
       {
         "control_id": "access_management",
-        "evidence_excerpt": "Cybersecurity researchers are sounding the alarm related to an active campaign in which unknown threat actors are abusing a compromised Microsoft 365 (M365) credential belonging to ConnectWise Cloud Backup (formerly SkyKick) to gain unauthorized access to customers' M365 environments.",
+        "evidence_excerpt": "Cybersecurity researchers are sounding the alarm related to an active campaign in which unknown threat actors are abusing a compromised Microsoft 365 (M365) credential belonging to ConnectWise Cloud Backup (formerly SkyKick) to gain unauthorized access to customers' M365 environments. ConnectWise Cloud Backup is a cloud-based backup and recovery service built for managed service providers (MSPs…",
         "evidence_origin": "summary",
-        "focus": "compromised Microsoft 365 (M365) credential",
+        "focus": "ConnectWise Cloud Backup",
         "priority": "high",
         "source_ids": [
           8
-        ]
-      },
-      {
-        "control_id": "third_party_risk",
-        "evidence_excerpt": "Cybersecurity researchers have discovered a malicious npm package that's part of a recently disclosed software supply chain attack campaign dubbed MALFEX. The package, named \"imgdecode,\" was uploaded to the package registry on September 30, 2026, by a user named \"malfexteste8.\" It has been downloaded 979 times as of writing and is still available on npm as of writing.",
-        "evidence_origin": "summary",
-        "focus": "malicious npm package",
-        "priority": "medium",
-        "source_ids": [
-          7
-        ]
-      },
-      {
-        "control_id": "vulnerability_management",
-        "evidence_excerpt": "A suspected advanced threat actor has been observed exploiting a security flaw in Fortinet FortiOS to deliver a previously unreported memory-resident ARM64 malware known as PEERSTITCH. The attack involves the exploitation of CVE-2025-61624 (CVSS score: 5.4), a path traversal flaw in the command line interpreter of FortiOS, FortiPAM, FortiProxy, and FortiSwitchManager that could allow a…",
-        "evidence_origin": "summary",
-        "focus": "Fortinet FortiOS",
-        "priority": "medium",
-        "source_ids": [
-          3
         ]
       }
     ],
@@ -75,7 +75,7 @@
     "industry_impacts": [],
     "regulatory_changes": []
   },
-  "generated_at": "2026-10-18T06:27:30.245073Z",
+  "generated_at": "2026-10-18T09:19:36.703204Z",
   "feed_url": "https://ricomanifesto.github.io/SentryDigest/feed.xml",
   "feed_home_url": "https://ricomanifesto.github.io/SentryDigest/",
   "digest_issue_date": "2026-10-18",

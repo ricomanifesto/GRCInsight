@@ -1,5 +1,5 @@
 # GRC Intelligence Report - 2026-10-18
-**Generated:** 2026-10-18T06:27:30.245073Z
+**Generated:** 2026-10-18T09:19:36.703204Z
 **Date of Issue:** October 2026
 **Analysis Period:** October 2026
 **Source:** [SentryDigest](https://ricomanifesto.github.io/SentryDigest/feed.xml)
@@ -54,25 +54,25 @@ No sourced regulatory changes identified in the supplied evidence.
 
 **Decision trigger:** If the supplier dependency exists and assurance is insufficient, request evidence or escalate the assurance gap to its owner.
 
-### compromised Microsoft 365 &#40;M365&#41; credential — Access management
+### Collabora Online - Built-in CODE Server app — Vulnerability management
 
-**Source evidence:** “Cybersecurity researchers are sounding the alarm related to an active campaign in which unknown threat actors are abusing a compromised Microsoft 365 &#40;M365&#41; credential belonging to ConnectWise Cloud Backup &#40;formerly SkyKick&#41; to gain unauthorized access to customers' M365 environments.” [Hackers Use Compromised ConnectWise Credential to Sign In to 173 Microsoft 365 Tenants](https://thehackernews.com/2026/10/hackers-use-compromised-connectwise.html)
+**Source evidence:** “Threat actors are exploiting a critical command execution flaw, now tracked as CVE-2026-110447, in the Collabora Online - Built-in CODE Server app &#40;richdocumentscode&#41; for Nextcloud…” [Hackers exploit Collabora RCE flaw to backdoor Nextcloud servers](https://www.bleepingcomputer.com/news/security/hackers-exploit-collabora-rce-flaw-to-backdoor-nextcloud-servers/)
+
+**Control decision (inference):** A remediation decision depends on matching deployed assets to the source's exposure conditions.
+
+**Inferred review priority:** High. **Owner:** Vulnerability and asset owners. **Evidence to request:** affected-asset inventory, installed versions, remediation status and an exception owner.
+
+**Decision trigger:** If applicability is confirmed, decide on remediation or a documented exception; otherwise record why the finding does not apply.
+
+### ConnectWise Cloud Backup — Access management
+
+**Source evidence:** “Cybersecurity researchers are sounding the alarm related to an active campaign in which unknown threat actors are abusing a compromised Microsoft 365 &#40;M365&#41; credential belonging to ConnectWise Cloud Backup &#40;formerly SkyKick&#41; to gain unauthorized access to customers' M365 environments. ConnectWise Cloud Backup is a cloud-based backup and recovery service built for managed service providers &#40;MSPs…” [Hackers Use Compromised ConnectWise Credential to Sign In to 173 Microsoft 365 Tenants](https://thehackernews.com/2026/10/hackers-use-compromised-connectwise.html)
 
 **Control decision (inference):** An access-control decision depends on whether the reported path crosses a permission boundary in your environment.
 
 **Inferred review priority:** High. **Owner:** Identity and access owner. **Evidence to request:** access scope, authentication coverage, session revocation and a permission-test result.
 
 **Decision trigger:** If a permission gap is reproduced, assign a control correction and verify it; otherwise retain the test evidence.
-
-### malicious npm package — Third-party risk
-
-**Source evidence:** “Cybersecurity researchers have discovered a malicious npm package that's part of a recently disclosed software supply chain attack campaign dubbed MALFEX. The package, named "imgdecode," was uploaded to the package registry on September 30, 2026, by a user named "malfexteste8." It has been downloaded 979 times as of writing and is still available on npm as of writing.” [MALFEX npm Package 'imgdecode' Hides Shellcode Loader in Windows Native Addon](https://thehackernews.com/2026/10/malfex-npm-package-imgdecode-hides.html)
-
-**Control decision (inference):** A supplier-assurance decision depends on the access and control responsibilities you actually delegate.
-
-**Inferred review priority:** Medium. **Owner:** Supplier risk owner. **Evidence to request:** supplier access scope, control responsibilities and evidence of remediation assurance.
-
-**Decision trigger:** If the supplier dependency exists and assurance is insufficient, request evidence or escalate the assurance gap to its owner.
 
 ### Fortinet FortiOS — Vulnerability management
 
