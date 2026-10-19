@@ -5,28 +5,8 @@
     "control_implications": [
       {
         "control_id": "vulnerability_management",
-        "evidence_excerpt": "The China-nexus cyber espionage group tracked as Armory Castle (previously UNC5221 or Warp Panda) exploited a newly disclosed security flaw in BeyondTrust Remote Support (formerly Bomgar) as a zero-day in late August 2026. The vulnerability, tracked as CVE-2026-102764 (CVSS score: 9.3), is a case of improper origin validation in an internal messaging component that could be exploited by a",
-        "evidence_origin": "summary",
-        "focus": "BeyondTrust Remote Support",
-        "priority": "high",
-        "source_ids": [
-          2
-        ]
-      },
-      {
-        "control_id": "third_party_risk",
-        "evidence_excerpt": "Cybersecurity researchers are sounding the alarm related to an active campaign in which unknown threat actors are abusing a compromised Microsoft 365 (M365) credential belonging to ConnectWise Cloud Backup (formerly SkyKick) to gain unauthorized access to customers' M365 environments. ConnectWise Cloud Backup is a cloud-based backup and recovery service built for managed service providers (MSPs",
-        "evidence_origin": "summary",
-        "focus": "ConnectWise Cloud Backup",
-        "priority": "high",
-        "source_ids": [
-          9
-        ]
-      },
-      {
-        "control_id": "vulnerability_management",
-        "evidence_excerpt": "Researchers warn that hackers could soon exploit a maximum-severity vulnerability (CVE-2026-103849) affecting Magento and Adobe Commerce, potentially allowing them to execute arbitrary PHP code on store servers",
-        "evidence_origin": "summary",
+        "evidence_excerpt": "Researchers warn that hackers could soon exploit a maximum-severity vulnerability (CVE-2026-103849) affecting Magento and Adobe Commerce, potentially allowing them to execute arbitrary PHP code on store servers…",
+        "evidence_origin": "content",
         "focus": "Magento and Adobe Commerce",
         "priority": "high",
         "source_ids": [
@@ -35,8 +15,18 @@
       },
       {
         "control_id": "vulnerability_management",
-        "evidence_excerpt": "A suspected advanced threat actor has been observed exploiting a security flaw in Fortinet FortiOS to deliver a previously unreported memory-resident ARM64 malware known as PEERSTITCH. The attack involves the exploitation of CVE-2025-61624 (CVSS score: 5.4), a path traversal flaw in the command line interpreter of FortiOS, FortiPAM, FortiProxy, and FortiSwitchManager that could allow a",
-        "evidence_origin": "summary",
+        "evidence_excerpt": "The China-nexus cyber espionage group tracked as Armory Castle (previously UNC5221 or Warp Panda) exploited a newly disclosed security flaw in BeyondTrust Remote Support (formerly Bomgar) as a zero-day in late August 2026. The vulnerability, tracked as CVE-2026-102764 (CVSS score: 9.3), is a case of improper origin validation in an internal messaging component that could be exploited by a…",
+        "evidence_origin": "content",
+        "focus": "BeyondTrust Remote Support",
+        "priority": "high",
+        "source_ids": [
+          2
+        ]
+      },
+      {
+        "control_id": "vulnerability_management",
+        "evidence_excerpt": "A suspected advanced threat actor has been observed exploiting a security flaw in Fortinet FortiOS to deliver a previously unreported memory-resident ARM64 malware known as PEERSTITCH. The attack involves the exploitation of CVE-2025-61624 (CVSS score: 5.4), a path traversal flaw in the command line interpreter of FortiOS, FortiPAM, FortiProxy, and FortiSwitchManager that could allow a…",
+        "evidence_origin": "content",
         "focus": "Fortinet FortiOS",
         "priority": "medium",
         "source_ids": [
@@ -44,49 +34,59 @@
         ]
       },
       {
-        "control_id": "vulnerability_management",
-        "evidence_excerpt": "Attackers are targeting an OS command injection vulnerability in SiteGuard Server Edition that lets them execute commands as root or SYSTEM on affected servers",
-        "evidence_origin": "summary",
-        "focus": "SiteGuard Server Edition",
-        "priority": "medium",
+        "control_id": "third_party_risk",
+        "evidence_excerpt": "Cybersecurity researchers are sounding the alarm related to an active campaign in which unknown threat actors are abusing a compromised Microsoft 365 (M365) credential belonging to ConnectWise Cloud Backup (formerly SkyKick) to gain unauthorized access to customers' M365 environments. ConnectWise Cloud Backup is a cloud-based backup and recovery service built for managed service providers (MSPs…",
+        "evidence_origin": "content",
+        "focus": "ConnectWise Cloud Backup",
+        "priority": "high",
         "source_ids": [
-          4
+          9
         ]
       },
       {
-        "control_id": "vulnerability_management",
-        "evidence_excerpt": "Drupal has patched two critical vulnerabilities that could allow attackers to execute code remotely on websites running any supported version of the content management system",
-        "evidence_origin": "summary",
-        "focus": "Drupal",
+        "control_id": "third_party_risk",
+        "evidence_excerpt": "Cybersecurity researchers have discovered a malicious npm package that's part of a recently disclosed software supply chain attack campaign dubbed MALFEX. The package, named \"imgdecode,\" was uploaded to the package registry on September 30, 2026, by a user named \"malfexteste8.\" It has been downloaded 979 times as of writing and is still available on npm as of writing. The latest version of…",
+        "evidence_origin": "content",
+        "focus": "malicious npm package",
         "priority": "medium",
         "source_ids": [
-          7
+          8
+        ]
+      },
+      {
+        "control_id": "access_management",
+        "evidence_excerpt": "Campaigns that impersonate popular AI brands are on the rise, and they typically use ClickFix-like tactics to target unsuspecting enterprise employees.",
+        "evidence_origin": "content",
+        "focus": "ClickFix-like tactics",
+        "priority": "medium",
+        "source_ids": [
+          11
         ]
       }
     ],
     "executive_brief": {
       "decision_frame": "separate",
       "source_ids": [
-        2,
+        1,
         9,
-        1
+        11
       ]
     },
     "industry_impacts": [],
     "regulatory_changes": []
   },
-  "generated_at": "2026-10-19T00:48:10.139323Z",
+  "generated_at": "2026-10-19T03:24:13.019387Z",
   "feed_url": "https://ricomanifesto.github.io/SentryDigest/feed.xml",
   "feed_home_url": "https://ricomanifesto.github.io/SentryDigest/",
-  "digest_issue_date": "2026-10-18",
-  "digest_issue_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-18/",
+  "digest_issue_date": "2026-10-19",
+  "digest_issue_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-19/",
   "requested_model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
   "resolved_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
   "sources": [
     {
       "title": "Critical BlockStrap flaw lets hackers run code on Magento servers",
       "url": "https://www.bleepingcomputer.com/news/security/critical-blockstrap-flaw-lets-hackers-run-code-on-magento-servers/",
-      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-18/#reporting-eef67d66b352",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-19/#reporting-eef67d66b352",
       "cves": [
         "CVE-2026-103849"
       ],
@@ -110,7 +110,7 @@
     {
       "title": "China-Linked Hackers Exploited BeyondTrust Zero-Day to Take Over Remote Support Servers",
       "url": "https://thehackernews.com/2026/10/china-linked-hackers-exploited.html",
-      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-18/#reporting-2f4ebff472d5",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-19/#reporting-2f4ebff472d5",
       "cves": [
         "CVE-2026-102764"
       ],
@@ -134,7 +134,7 @@
     {
       "title": "PEERSTITCH Malware Deployed via FortiOS Flaw Bypasses Checks on Tagged VPN Sessions",
       "url": "https://thehackernews.com/2026/10/attackers-exploit-fortios-flaw-to.html",
-      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-18/#reporting-a2dfa0394e06",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-19/#reporting-a2dfa0394e06",
       "cves": [
         "CVE-2025-61624"
       ],
@@ -158,7 +158,7 @@
     {
       "title": "Hackers exploit SiteGuard WAF flaw to run commands as admins",
       "url": "https://www.bleepingcomputer.com/news/security/hackers-exploit-siteguard-waf-flaw-to-run-commands-as-system-root/",
-      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-18/#reporting-de332aa1deff",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-19/#reporting-de332aa1deff",
       "cves": [],
       "snippet": "Hackers exploit SiteGuard WAF flaw to run commands as admins Attackers are targeting an OS command injection vulnerability in SiteGuard Server Edition that lets them execute commands as root or SYSTEM on affected servers… Attackers are targeting an OS command injection vulnerability in SiteGuard Server Edition that lets them execute commands as root or SYSTEM on affected servers…",
       "article_evidence": [
@@ -180,7 +180,7 @@
     {
       "title": "ConnectWise Suspends Cloud Backup After Attackers Compromise Microsoft 365 Tenants",
       "url": "https://thehackernews.com/2026/10/connectwise-suspends-cloud-backup-after.html",
-      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-18/#reporting-1a74dd4c9004",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-19/#reporting-1a74dd4c9004",
       "cves": [],
       "snippet": "ConnectWise Suspends Cloud Backup After Attackers Compromise Microsoft 365 Tenants ConnectWise on Saturday said it has disabled seven ConnectWise application identities as it continues its investigation into an incident in which unknown threat actors obtained unauthorized access to the application identities and compromised Microsoft 365 tenants. The disabled identities are listed below - ConnectWise Cloud Backup - 506e08f9-6e9a-4da4-942b-a099a03644ae ConnectWise… ConnectWise on Saturday said it has disabled seven ConnectWise application identities as it continues its investigation into an incident in which unknown threat actors obtained unauthorized access to the application identities and ",
       "article_evidence": [
@@ -202,7 +202,7 @@
     {
       "title": "Hackers breach Microsoft 365 tenants via ConnectWise supply-chain attack",
       "url": "https://www.bleepingcomputer.com/news/security/hackers-breach-microsoft-365-tenants-via-connectwise-supply-chain-attack/",
-      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-18/#reporting-622bd9511527",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-19/#reporting-622bd9511527",
       "cves": [],
       "snippet": "Hackers breach Microsoft 365 tenants via ConnectWise supply-chain attack ConnectWise has shut down customer access to its Cloud Backup service (formerly SkyKick Cloud Backup) after hackers accessed application identities and compromised Microsoft 365 tenants… ConnectWise has shut down customer access to its Cloud Backup service (formerly SkyKick Cloud Backup) after hackers accessed application identities and compromised Microsoft 365 tenants…",
       "article_evidence": [
@@ -224,7 +224,7 @@
     {
       "title": "Drupal patches critical RCE flaws, warns exploits may emerge soon",
       "url": "https://www.bleepingcomputer.com/news/security/drupal-patches-critical-rce-flaws-warns-exploits-may-emerge-soon/",
-      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-18/#reporting-978985bee2a5",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-19/#reporting-978985bee2a5",
       "cves": [],
       "snippet": "Drupal patches critical RCE flaws, warns exploits may emerge soon Drupal has patched two critical vulnerabilities that could allow attackers to execute code remotely on websites running any supported version of the content management system… Drupal has patched two critical vulnerabilities that could allow attackers to execute code remotely on websites running any supported version of the content management system…",
       "article_evidence": [
@@ -246,7 +246,7 @@
     {
       "title": "MALFEX npm Package 'imgdecode' Hides Shellcode Loader in Windows Native Addon",
       "url": "https://thehackernews.com/2026/10/malfex-npm-package-imgdecode-hides.html",
-      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-18/#reporting-219fd9eab491",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-19/#reporting-219fd9eab491",
       "cves": [],
       "snippet": "MALFEX npm Package 'imgdecode' Hides Shellcode Loader in Windows Native Addon Cybersecurity researchers have discovered a malicious npm package that's part of a recently disclosed software supply chain attack campaign dubbed MALFEX. The package, named \"imgdecode,\" was uploaded to the package registry on September 30, 2026, by a user named \"malfexteste8.\" It has been downloaded 979 times as of writing and is still available on npm as of writing. The latest version of… Cybersecurity researchers have discovered a malicious npm package that's part of a recently disclosed software supply chain attack campaign dubbed MALFEX. The package, named \"imgdecode,\" was uploaded to the package registry on S",
       "article_evidence": [
@@ -268,7 +268,7 @@
     {
       "title": "Hackers Use Compromised ConnectWise Credential to Sign In to 173 Microsoft 365 Tenants",
       "url": "https://thehackernews.com/2026/10/hackers-use-compromised-connectwise.html",
-      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-18/#reporting-614eb364146c",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-19/#reporting-614eb364146c",
       "cves": [],
       "snippet": "Hackers Use Compromised ConnectWise Credential to Sign In to 173 Microsoft 365 Tenants Cybersecurity researchers are sounding the alarm related to an active campaign in which unknown threat actors are abusing a compromised Microsoft 365 (M365) credential belonging to ConnectWise Cloud Backup (formerly SkyKick) to gain unauthorized access to customers' M365 environments. ConnectWise Cloud Backup is a cloud-based backup and recovery service built for managed service providers (MSPs… Cybersecurity researchers are sounding the alarm related to an active campaign in which unknown threat actors are abusing a compromised Microsoft 365 (M365) credential belonging to ConnectWise Cloud Backup (formerl",
       "article_evidence": [
@@ -290,7 +290,7 @@
     {
       "title": "BeyondTrust Remote Support Zero-Day Continues Trend of Exploited Edge Bugs",
       "url": "https://www.darkreading.com/endpoint-security/beyondtrust-remote-support-exploited-edge-bugs",
-      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-18/#reporting-92a3eccd55c6",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-19/#reporting-92a3eccd55c6",
       "cves": [],
       "snippet": "BeyondTrust Remote Support Zero-Day Continues Trend of Exploited Edge Bugs Ivanti, Cisco, and Palo Alto Networks all had vulnerabilities in edge devices come under fire this week. Now BeyondTrust joins the group. Ivanti, Cisco, and Palo Alto Networks all had vulnerabilities in edge devices come under fire this week. Now BeyondTrust joins the group.",
       "article_evidence": [
@@ -312,7 +312,7 @@
     {
       "title": "Fake Claude, ChatGPT Attacks Surge, Putting Developers at Risk",
       "url": "https://www.darkreading.com/application-security/fake-claude-chatgpt-attacks-developers-risk",
-      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-18/#reporting-3235ff50c52f",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-19/#reporting-3235ff50c52f",
       "cves": [],
       "snippet": "Fake Claude, ChatGPT Attacks Surge, Putting Developers at Risk Campaigns that impersonate popular AI brands are on the rise, and they typically use ClickFix-like tactics to target unsuspecting enterprise employees. Campaigns that impersonate popular AI brands are on the rise, and they typically use ClickFix-like tactics to target unsuspecting enterprise employees.",
       "article_evidence": [
@@ -334,7 +334,7 @@
     {
       "title": "Biomemory Launches DNA Shield, First Commercial Product Built on Its Molecular IT Platform",
       "url": "https://www.darkreading.com/data-privacy/biomemory-launches-dna-shield",
-      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-18/#reporting-20c2685a8d27",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-19/#reporting-20c2685a8d27",
       "cves": [],
       "snippet": "Biomemory Launches DNA Shield, First Commercial Product Built on Its Molecular IT Platform The launch follows the acquisition of catalog's assets and the appointment of Laurent Guengant as CEO earlier this year. The launch follows the acquisition of catalog's assets and the appointment of Laurent Guengant as CEO earlier this year.",
       "article_evidence": [
