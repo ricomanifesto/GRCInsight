@@ -4,33 +4,23 @@
   "report_plan": {
     "control_implications": [
       {
-        "control_id": "access_management",
-        "evidence_excerpt": "Cloud platform Railway published an urgent warning to users after detecting suspicious activity on its systems that store customer environment variables earlier this week…",
+        "control_id": "data_protection",
+        "evidence_excerpt": "Relatively small data breaches in India can turn quite serious, thanks to a sophisticated underground market for trading PII.",
         "evidence_origin": "summary",
-        "focus": "customer environment variables",
+        "focus": "PII",
         "priority": "high",
         "source_ids": [
           1
         ]
       },
       {
-        "control_id": "third_party_risk",
-        "evidence_excerpt": "The China-linked actor used an AI-enabled penetration-testing tool to automate and accelerate its attack on more than 2,200 tenants.",
+        "control_id": "access_management",
+        "evidence_excerpt": "Cloud platform Railway published an urgent warning to users after detecting suspicious activity on its systems that store customer environment variables earlier this week…",
         "evidence_origin": "summary",
-        "focus": "AI-enabled penetration-testing tool",
+        "focus": "environment variables",
         "priority": "high",
         "source_ids": [
           2
-        ]
-      },
-      {
-        "control_id": "data_protection",
-        "evidence_excerpt": "Japanese gaming giant Capcom has confirmed that hackers breached its membership service, CAPCOM ID, exposing more than 11.7 million customer email addresses and associated information…",
-        "evidence_origin": "summary",
-        "focus": "customer email addresses",
-        "priority": "high",
-        "source_ids": [
-          4
         ]
       },
       {
@@ -38,29 +28,39 @@
         "evidence_excerpt": "Des centaines de magasins ont subi des pertes se chiffrant en millions d'euros parce qu'ils avaient fait appel à des tiers pour gérer le micrologiciel OT obsolète qui pilotait leurs systèmes de climatisation.",
         "evidence_origin": "summary",
         "focus": "micrologiciel OT obsolète",
-        "priority": "medium",
-        "source_ids": [
-          5
-        ]
-      },
-      {
-        "control_id": "third_party_risk",
-        "evidence_excerpt": "Hackers compromised the LiteLLM project's PyPI package and published malicious Docker images with a payload that steals credentials, secrets, and environment variables…",
-        "evidence_origin": "summary",
-        "focus": "LiteLLM project's PyPI package",
         "priority": "high",
         "source_ids": [
           6
         ]
       },
       {
-        "control_id": "vulnerability_management",
-        "evidence_excerpt": "Attackers are exploiting a zero-day SQL injection flaw in Arista's VeloCloud Orchestrator (VCO), the central management system for VeloCloud SD-WAN networks, the company said in an advisory on October 22. The flaw lets anyone who can log in to the orchestrator, even with a read-only customer account, gain operator privileges, the top level of control over it.",
+        "control_id": "third_party_risk",
+        "evidence_excerpt": "Hackers compromised the LiteLLM project's PyPI package and published malicious Docker images with a payload that steals credentials, secrets, and environment variables…",
         "evidence_origin": "summary",
-        "focus": "VeloCloud Orchestrator (VCO)",
+        "focus": "PyPI package",
+        "priority": "high",
+        "source_ids": [
+          7
+        ]
+      },
+      {
+        "control_id": "governance",
+        "evidence_excerpt": "Right now, there is probably an AI agent running on a laptop somewhere in your network. It stores API keys and database passwords, can access your internal systems, and works without anyone watching. Nobody reviewed its access. Nobody owns it. If an employee had that much reach with that little oversight, you would call it an insider risk. So why do we still call the agent a productivity tool?",
+        "evidence_origin": "summary",
+        "focus": "AI agent",
         "priority": "high",
         "source_ids": [
           8
+        ]
+      },
+      {
+        "control_id": "vulnerability_management",
+        "evidence_excerpt": "Attackers are exploiting a zero-day SQL injection flaw in Arista's VeloCloud Orchestrator (VCO), the central management system for VeloCloud SD-WAN networks, the company said in an advisory on October 22. The flaw lets anyone who can log in to the orchestrator, even with a read-only customer account, gain operator privileges, the top level of control over it. For…",
+        "evidence_origin": "summary",
+        "focus": "VeloCloud Orchestrator",
+        "priority": "high",
+        "source_ids": [
+          9
         ]
       }
     ],
@@ -69,13 +69,13 @@
       "source_ids": [
         1,
         2,
-        4
+        8
       ]
     },
     "industry_impacts": [],
     "regulatory_changes": []
   },
-  "generated_at": "2026-10-23T06:41:44.428372Z",
+  "generated_at": "2026-10-23T09:23:56.455021Z",
   "feed_url": "https://ricomanifesto.github.io/SentryDigest/feed.xml",
   "feed_home_url": "https://ricomanifesto.github.io/SentryDigest/",
   "digest_issue_date": "2026-10-23",
@@ -83,6 +83,28 @@
   "requested_model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
   "resolved_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
   "sources": [
+    {
+      "title": "State Bank of India Suffers a Customer PII Data Leak",
+      "url": "https://www.darkreading.com/cyberattacks-data-breaches/state-bank-india-customer-pii-data-leak",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-23/#reporting-b9a055634559",
+      "cves": [],
+      "snippet": "State Bank of India Suffers a Customer PII Data Leak Relatively small data breaches in India can turn quite serious, thanks to a sophisticated underground market for trading PII. Relatively small data breaches in India can turn quite serious, thanks to a sophisticated underground market for trading PII.",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Relatively small data breaches in India can turn quite serious, thanks to a sophisticated underground market for trading PII.",
+          "text": "Relatively small data breaches in India can turn quite serious, thanks to a sophisticated underground market for trading PII."
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Relatively small data breaches in India can turn quite serious, thanks to a sophisticated underground market for trading PII.",
+          "text": "Relatively small data breaches in India can turn quite serious, thanks to a sophisticated underground market for trading PII."
+        }
+      ],
+      "effective_date_evidence": null
+    },
     {
       "title": "Railway warns devs to rotate secrets after potential breach",
       "url": "https://www.bleepingcomputer.com/news/security/railway-warns-devs-to-rotate-secrets-after-potential-breach/",
@@ -321,28 +343,6 @@
           "origin": "content",
           "raw_text": "Arista Networks released security updates to patch an actively exploited zero-day vulnerability affecting VeloCloud Orchestrator (VCO) On-Prem deployments…",
           "text": "Arista Networks released security updates to patch an actively exploited zero-day vulnerability affecting VeloCloud Orchestrator (VCO) On-Prem deployments…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "Two CVSS 9.0 Linux KSMBD RCE Flaws Disclosed on Public Mailing Lists Before Kernel Fixes",
-      "url": "https://thehackernews.com/2026/10/two-cvss-90-linux-ksmbd-rce-flaws.html",
-      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-23/#reporting-7c53f743c082",
-      "cves": [],
-      "snippet": "Two CVSS 9.0 Linux KSMBD RCE Flaws Disclosed on Public Mailing Lists Before Kernel Fixes Linux servers running KSMBD, the kernel's built-in SMB server, are exposed to two publicly reported remote code execution flaws rated 9.0 by Trend Micro's Zero Day Initiative, with no fix yet in the mainline kernel. One of them, ZDI-CAN-33774, can be triggered before any network authentication. The other, ZDI-CAN-33549, requires the SMB Direct transport and an RDMA-capable network… Linux servers running KSMBD, the kernel's built-in SMB server, are exposed to two publicly reported remote code execution flaws rated 9.0 by Trend Micro's Zero Day Initiative, with no fix yet in the mainline kernel. One of the",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "Linux servers running KSMBD, the kernel's built-in SMB server, are exposed to two publicly reported remote code execution flaws rated 9.0 by Trend Micro's Zero Day Initiative, with no fix yet in the mainline kernel. One of them, ZDI-CAN-33774, can be triggered before any network authentication. The other, ZDI-CAN-33549, requires the SMB Direct transport and an RDMA-capable network…",
-          "text": "Linux servers running KSMBD, the kernel's built-in SMB server, are exposed to two publicly reported remote code execution flaws rated 9.0 by Trend Micro's Zero Day Initiative, with no fix yet in the mainline kernel. One of them, ZDI-CAN-33774, can be triggered before any network authentication. The other, ZDI-CAN-33549, requires the SMB Direct transport and an RDMA-capable network…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "Linux servers running KSMBD, the kernel's built-in SMB server, are exposed to two publicly reported remote code execution flaws rated 9.0 by Trend Micro's Zero Day Initiative, with no fix yet in the mainline kernel. One of them, ZDI-CAN-33774, can be triggered before any network authentication. The other, ZDI-CAN-33549, requires the SMB Direct transport and an RDMA-capable network…",
-          "text": "Linux servers running KSMBD, the kernel's built-in SMB server, are exposed to two publicly reported remote code execution flaws rated 9.0 by Trend Micro's Zero Day Initiative, with no fix yet in the mainline kernel. One of them, ZDI-CAN-33774, can be triggered before any network authentication. The other, ZDI-CAN-33549, requires the SMB Direct transport and an RDMA-capable network…"
         }
       ],
       "effective_date_evidence": null
