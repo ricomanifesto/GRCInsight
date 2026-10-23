@@ -4,78 +4,78 @@
   "report_plan": {
     "control_implications": [
       {
-        "control_id": "vulnerability_management",
-        "evidence_excerpt": "eMudhra, an Indian certificate authority (CA), will withdraw from its global SSL/TLS certificate business, its board decided on Thursday. The decision came five days after a researcher reported recovering the private keys of eight of its intermediate CA certificates. eMudhra said it will replace affected customers' certificates with free ones from partners, though its…",
-        "evidence_origin": "content",
-        "focus": "intermediate CA certificates",
-        "priority": "high",
-        "source_ids": [
-          1
-        ]
-      },
-      {
-        "control_id": "vulnerability_management",
-        "evidence_excerpt": "Arista Networks released security updates to patch an actively exploited zero-day vulnerability affecting VeloCloud Orchestrator (VCO) On-Prem deployments…",
-        "evidence_origin": "content",
-        "focus": "VeloCloud Orchestrator (VCO) On-Prem deployments",
-        "priority": "high",
-        "source_ids": [
-          3
-        ]
-      },
-      {
         "control_id": "data_protection",
         "evidence_excerpt": "Social media giant Meta was ordered to pay 25 billion in penalties by a New Mexico court on Wednesday as part of a data privacy lawsuit that sprang from the company's Cambridge Analytica data scandal, which came to light in 2018. According to multiple reports from the Associated Press, the New York Times, Reuters, and the Wall Street Journal, state District Court Judge Francis J. Mathew called…",
-        "evidence_origin": "content",
+        "evidence_origin": "summary",
         "focus": "Cambridge Analytica data scandal",
-        "priority": "high",
-        "source_ids": [
-          5
-        ]
-      },
-      {
-        "control_id": "access_management",
-        "evidence_excerpt": "Right now, there is probably an AI agent running on a laptop somewhere in your network. It stores API keys and database passwords, can access your internal systems, and works without anyone watching. Nobody reviewed its access. Nobody owns it. If an employee had that much reach with that little oversight, you would call it an insider risk. So why do we still call the agent a productivity tool?",
-        "evidence_origin": "content",
-        "focus": "AI agent running on a laptop",
-        "priority": "medium",
-        "source_ids": [
-          10
-        ]
-      },
-      {
-        "control_id": "vulnerability_management",
-        "evidence_excerpt": "GitLab has released security patches for a maximum-severity Regular Expression Compiler flaw that can let remote attackers run arbitrary code on vulnerable servers…",
-        "evidence_origin": "content",
-        "focus": "Regular Expression Compiler flaw",
         "priority": "high",
         "source_ids": [
           11
         ]
       },
       {
-        "control_id": "data_protection",
-        "evidence_excerpt": "Platform-as-a-Service (PaaS) provider Railway on Wednesday disclosed \"anomalous activity\" related to systems that store customer environment variables. Upon further investigation, the company found that an unauthorized third party may have gained access to encrypted environment variables, and, in some cases, obtained the decrypted contents. The impact, it said, is limited to a \"subset of users…",
-        "evidence_origin": "content",
-        "focus": "encrypted environment variables",
+        "control_id": "third_party_risk",
+        "evidence_excerpt": "Des centaines de magasins ont subi des pertes se chiffrant en millions d'euros parce qu'ils avaient fait appel à des tiers pour gérer le micrologiciel OT obsolète qui pilotait leurs systèmes de climatisation.",
+        "evidence_origin": "summary",
+        "focus": "micrologiciel OT obsolète",
         "priority": "high",
         "source_ids": [
-          12
+          3
+        ]
+      },
+      {
+        "control_id": "third_party_risk",
+        "evidence_excerpt": "Hackers compromised the LiteLLM project's PyPI package and published malicious Docker images with a payload that steals credentials, secrets, and environment variables…",
+        "evidence_origin": "summary",
+        "focus": "LiteLLM project's PyPI package",
+        "priority": "high",
+        "source_ids": [
+          4
+        ]
+      },
+      {
+        "control_id": "access_management",
+        "evidence_excerpt": "Right now, there is probably an AI agent running on a laptop somewhere in your network. It stores API keys and database passwords, can access your internal systems, and works without anyone watching. Nobody reviewed its access. Nobody owns it. If an employee had that much reach with that little oversight, you would call it an insider risk. So why do we still call the agent a productivity tool?",
+        "evidence_origin": "summary",
+        "focus": "AI agent running on a laptop",
+        "priority": "medium",
+        "source_ids": [
+          5
+        ]
+      },
+      {
+        "control_id": "vulnerability_management",
+        "evidence_excerpt": "Attackers are exploiting a zero-day SQL injection flaw in Arista's VeloCloud Orchestrator (VCO), the central management system for VeloCloud SD-WAN networks, the company said in an advisory on October 22. The flaw lets anyone who can log in to the orchestrator, even with a read-only customer account, gain operator privileges, the top level of control over it.",
+        "evidence_origin": "summary",
+        "focus": "Arista's VeloCloud Orchestrator (VCO)",
+        "priority": "high",
+        "source_ids": [
+          6
+        ]
+      },
+      {
+        "control_id": "third_party_risk",
+        "evidence_excerpt": "eMudhra, an Indian certificate authority (CA), will withdraw from its global SSL/TLS certificate business, its board decided on Thursday. The decision came five days after a researcher reported recovering the private keys of eight of its intermediate CA certificates. eMudhra said it will replace affected customers' certificates with free ones from partners, though its…",
+        "evidence_origin": "summary",
+        "focus": "intermediate CA certificates",
+        "priority": "high",
+        "source_ids": [
+          7
         ]
       }
     ],
     "executive_brief": {
-      "decision_frame": "exposure",
+      "decision_frame": "separate",
       "source_ids": [
-        1,
-        3,
-        12
+        11,
+        6,
+        3
       ]
     },
     "industry_impacts": [],
     "regulatory_changes": []
   },
-  "generated_at": "2026-10-22T18:37:05.552439Z",
+  "generated_at": "2026-10-23T00:53:10.109409Z",
   "feed_url": "https://ricomanifesto.github.io/SentryDigest/feed.xml",
   "feed_home_url": "https://ricomanifesto.github.io/SentryDigest/",
   "digest_issue_date": "2026-10-22",
@@ -83,6 +83,138 @@
   "requested_model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
   "resolved_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
   "sources": [
+    {
+      "title": "What We Missed: Feds Lasso Texas Laptop Farms",
+      "url": "https://www.darkreading.com/insider-threats/texas-laptop-farms-north-korean-it-workers",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-22/#reporting-714df2670eae",
+      "cves": [],
+      "snippet": "What We Missed: Feds Lasso Texas Laptop Farms In this video, Dark Reading editors discuss some of the news they didn't get a chance to cover, from busting up North Korea's stateside infrastructure in \"Operation Lonestar Justice\" to Staples' gift card bonanza. In this video, Dark Reading editors discuss some of the news they didn't get a chance to cover, from busting up North Korea's stateside infrastructure in \"Operation Lonestar Justice\" to Staples' gift card bonanza.",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "In this video, Dark Reading editors discuss some of the news they didn't get a chance to cover, from busting up North Korea's stateside infrastructure in \"Operation Lonestar Justice\" to Staples' gift card bonanza.",
+          "text": "In this video, Dark Reading editors discuss some of the news they didn't get a chance to cover, from busting up North Korea's stateside infrastructure in \"Operation Lonestar Justice\" to Staples' gift card bonanza."
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "In this video, Dark Reading editors discuss some of the news they didn't get a chance to cover, from busting up North Korea's stateside infrastructure in \"Operation Lonestar Justice\" to Staples' gift card bonanza.",
+          "text": "In this video, Dark Reading editors discuss some of the news they didn't get a chance to cover, from busting up North Korea's stateside infrastructure in \"Operation Lonestar Justice\" to Staples' gift card bonanza."
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Capcom confirms data breach affecting 11.7 million accounts",
+      "url": "https://www.bleepingcomputer.com/news/security/capcom-confirms-data-breach-affecting-117-million-accounts/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-22/#reporting-1e6095c6e828",
+      "cves": [],
+      "snippet": "Capcom confirms data breach affecting 11.7 million accounts Japanese gaming giant Capcom has confirmed that hackers breached its membership service, CAPCOM ID, exposing more than 11.7 million customer email addresses and associated information… Japanese gaming giant Capcom has confirmed that hackers breached its membership service, CAPCOM ID, exposing more than 11.7 million customer email addresses and associated information…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Japanese gaming giant Capcom has confirmed that hackers breached its membership service, CAPCOM ID, exposing more than 11.7 million customer email addresses and associated information…",
+          "text": "Japanese gaming giant Capcom has confirmed that hackers breached its membership service, CAPCOM ID, exposing more than 11.7 million customer email addresses and associated information…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Japanese gaming giant Capcom has confirmed that hackers breached its membership service, CAPCOM ID, exposing more than 11.7 million customer email addresses and associated information…",
+          "text": "Japanese gaming giant Capcom has confirmed that hackers breached its membership service, CAPCOM ID, exposing more than 11.7 million customer email addresses and associated information…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Les supermarchés de l'UE paient d'un firmware de réfrigérateur non mis à jour",
+      "url": "https://www.darkreading.com/ics-ot-security/eu-grocers-unpatched-fridge-firmware-french",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-22/#reporting-507bd11e2057",
+      "cves": [],
+      "snippet": "Les supermarchés de l'UE paient d'un firmware de réfrigérateur non mis à jour Des centaines de magasins ont subi des pertes se chiffrant en millions d'euros parce qu'ils avaient fait appel à des tiers pour gérer le micrologiciel OT obsolète qui pilotait leurs systèmes de climatisation. Des centaines de magasins ont subi des pertes se chiffrant en millions d'euros parce qu'ils avaient fait appel à des tiers pour gérer le micrologiciel OT obsolète qui pilotait leurs systèmes de climatisation.",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Des centaines de magasins ont subi des pertes se chiffrant en millions d'euros parce qu'ils avaient fait appel à des tiers pour gérer le micrologiciel OT obsolète qui pilotait leurs systèmes de climatisation.",
+          "text": "Des centaines de magasins ont subi des pertes se chiffrant en millions d'euros parce qu'ils avaient fait appel à des tiers pour gérer le micrologiciel OT obsolète qui pilotait leurs systèmes de climatisation."
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Des centaines de magasins ont subi des pertes se chiffrant en millions d'euros parce qu'ils avaient fait appel à des tiers pour gérer le micrologiciel OT obsolète qui pilotait leurs systèmes de climatisation.",
+          "text": "Des centaines de magasins ont subi des pertes se chiffrant en millions d'euros parce qu'ils avaient fait appel à des tiers pour gérer le micrologiciel OT obsolète qui pilotait leurs systèmes de climatisation."
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "LiteLLM release pipeline hacked to distribute info-stealer malware",
+      "url": "https://www.bleepingcomputer.com/news/security/litellm-release-pipeline-hacked-to-distribute-info-stealer-malware/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-22/#reporting-37f56369e2ff",
+      "cves": [],
+      "snippet": "LiteLLM release pipeline hacked to distribute info-stealer malware Hackers compromised the LiteLLM project's PyPI package and published malicious Docker images with a payload that steals credentials, secrets, and environment variables… Hackers compromised the LiteLLM project's PyPI package and published malicious Docker images with a payload that steals credentials, secrets, and environment variables…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Hackers compromised the LiteLLM project's PyPI package and published malicious Docker images with a payload that steals credentials, secrets, and environment variables…",
+          "text": "Hackers compromised the LiteLLM project's PyPI package and published malicious Docker images with a payload that steals credentials, secrets, and environment variables…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Hackers compromised the LiteLLM project's PyPI package and published malicious Docker images with a payload that steals credentials, secrets, and environment variables…",
+          "text": "Hackers compromised the LiteLLM project's PyPI package and published malicious Docker images with a payload that steals credentials, secrets, and environment variables…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "The AI Agent Nobody Owns: Watch Expert Webinar On Your Newest Insider Threat",
+      "url": "https://thehackernews.com/2026/10/the-ai-agent-nobody-owns-watch-expert.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-22/#reporting-63d6bc3687b5",
+      "cves": [],
+      "snippet": "The AI Agent Nobody Owns: Watch Expert Webinar On Your Newest Insider Threat Right now, there is probably an AI agent running on a laptop somewhere in your network. It stores API keys and database passwords, can access your internal systems, and works without anyone watching. Nobody reviewed its access. Nobody owns it. If an employee had that much reach with that little oversight, you would call it an insider risk. So why do we still call the agent a productivity tool? Right now, there is probably an AI agent running on a laptop somewhere in your network. It stores API keys and database passwords, can access your internal systems, and works without anyone watching. Nobody reviewed its access",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Right now, there is probably an AI agent running on a laptop somewhere in your network. It stores API keys and database passwords, can access your internal systems, and works without anyone watching. Nobody reviewed its access. Nobody owns it. If an employee had that much reach with that little oversight, you would call it an insider risk. So why do we still call the agent a productivity tool?",
+          "text": "Right now, there is probably an AI agent running on a laptop somewhere in your network. It stores API keys and database passwords, can access your internal systems, and works without anyone watching. Nobody reviewed its access. Nobody owns it. If an employee had that much reach with that little oversight, you would call it an insider risk. So why do we still call the agent a productivity tool?"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Right now, there is probably an AI agent running on a laptop somewhere in your network. It stores API keys and database passwords, can access your internal systems, and works without anyone watching. Nobody reviewed its access. Nobody owns it. If an employee had that much reach with that little oversight, you would call it an insider risk. So why do we still call the agent a productivity tool?",
+          "text": "Right now, there is probably an AI agent running on a laptop somewhere in your network. It stores API keys and database passwords, can access your internal systems, and works without anyone watching. Nobody reviewed its access. Nobody owns it. If an employee had that much reach with that little oversight, you would call it an insider risk. So why do we still call the agent a productivity tool?"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Arista Warns of Critical VeloCloud SQL Injection Zero-Day Exploited in Attacks",
+      "url": "https://thehackernews.com/2026/10/arista-warns-of-critical-velocloud-sql.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-22/#reporting-5a3446099074",
+      "cves": [],
+      "snippet": "Arista Warns of Critical VeloCloud SQL Injection Zero-Day Exploited in Attacks Attackers are exploiting a zero-day SQL injection flaw in Arista's VeloCloud Orchestrator (VCO), the central management system for VeloCloud SD-WAN networks, the company said in an advisory on October 22. The flaw lets anyone who can log in to the orchestrator, even with a read-only customer account, gain operator privileges, the top level of control over it. For… Attackers are exploiting a zero-day SQL injection flaw in Arista's VeloCloud Orchestrator (VCO), the central management system for VeloCloud SD-WAN networks, the company said in an advisory on October 22. The flaw lets anyone who can log in to the orches",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Attackers are exploiting a zero-day SQL injection flaw in Arista's VeloCloud Orchestrator (VCO), the central management system for VeloCloud SD-WAN networks, the company said in an advisory on October 22. The flaw lets anyone who can log in to the orchestrator, even with a read-only customer account, gain operator privileges, the top level of control over it. For…",
+          "text": "Attackers are exploiting a zero-day SQL injection flaw in Arista's VeloCloud Orchestrator (VCO), the central management system for VeloCloud SD-WAN networks, the company said in an advisory on October 22. The flaw lets anyone who can log in to the orchestrator, even with a read-only customer account, gain operator privileges, the top level of control over it. For…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Attackers are exploiting a zero-day SQL injection flaw in Arista's VeloCloud Orchestrator (VCO), the central management system for VeloCloud SD-WAN networks, the company said in an advisory on October 22. The flaw lets anyone who can log in to the orchestrator, even with a read-only customer account, gain operator privileges, the top level of control over it. For…",
+          "text": "Attackers are exploiting a zero-day SQL injection flaw in Arista's VeloCloud Orchestrator (VCO), the central management system for VeloCloud SD-WAN networks, the company said in an advisory on October 22. The flaw lets anyone who can log in to the orchestrator, even with a read-only customer account, gain operator privileges, the top level of control over it. For…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
     {
       "title": "eMudhra to Exit Global SSL/TLS Business After 8 Intermediate CA Keys Found Easily Guessable",
       "url": "https://thehackernews.com/2026/10/emudhra-to-exit-global-ssltls-business.html",
@@ -211,138 +343,6 @@
           "origin": "content",
           "raw_text": "Microsoft says IT admins can re-enable the retired Exchange Web Services (EWS) API in Exchange Online to fix EWS apps that have stopped working…",
           "text": "Microsoft says IT admins can re-enable the retired Exchange Web Services (EWS) API in Exchange Online to fix EWS apps that have stopped working…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "Machine speed attacks require machine speed detection and response",
-      "url": "https://www.bleepingcomputer.com/news/security/machine-speed-attacks-require-machine-speed-detection-and-response/",
-      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-22/#reporting-32ea969a27fc",
-      "cves": [],
-      "snippet": "Machine speed attacks require machine speed detection and response Attackers can steal credentials and begin exfiltrating data within minutes, often before security teams can respond. Exaforce examines real-world attacks involving stolen GitHub tokens, malicious AI installers, and MFA phishing, explaining why faster detection and automated containment are critical… Attackers can steal credentials and begin exfiltrating data within minutes, often before security teams can respond. Exaforce examines real-world attacks involving stolen GitHub tokens, malicious AI installers, and MFA phishing, explaining why faster detection and automated containment are critical…",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "Attackers can steal credentials and begin exfiltrating data within minutes, often before security teams can respond. Exaforce examines real-world attacks involving stolen GitHub tokens, malicious AI installers, and MFA phishing, explaining why faster detection and automated containment are critical…",
-          "text": "Attackers can steal credentials and begin exfiltrating data within minutes, often before security teams can respond. Exaforce examines real-world attacks involving stolen GitHub tokens, malicious AI installers, and MFA phishing, explaining why faster detection and automated containment are critical…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "Attackers can steal credentials and begin exfiltrating data within minutes, often before security teams can respond. Exaforce examines real-world attacks involving stolen GitHub tokens, malicious AI installers, and MFA phishing, explaining why faster detection and automated containment are critical…",
-          "text": "Attackers can steal credentials and begin exfiltrating data within minutes, often before security teams can respond. Exaforce examines real-world attacks involving stolen GitHub tokens, malicious AI installers, and MFA phishing, explaining why faster detection and automated containment are critical…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "INTERPOL Arrests 1,462 Suspects, Disrupts 10,909 Cybercrime Networks in Global Crackdown",
-      "url": "https://thehackernews.com/2026/10/interpol-arrests-1462-suspects-disrupts.html",
-      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-22/#reporting-60f4824a9b32",
-      "cves": [],
-      "snippet": "INTERPOL Arrests 1,462 Suspects, Disrupts 10,909 Cybercrime Networks in Global Crackdown INTERPOL on Thursday announced that a coordinated law enforcement action has disrupted 10,909 malicious networks and recovered more than $105 million in illicit funds. In tandem, the effort saw law enforcement agencies from 21 countries arrest 1,462 suspects. Codenamed Operation Serengeti III, the cybercrime crackdown took place between June 29 and August 31, 2026. \"Authorities identified… INTERPOL on Thursday announced that a coordinated law enforcement action has disrupted 10,909 malicious networks and recovered more than $105 million in illicit funds. In tandem, the effort saw law enforcement agencies",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "INTERPOL on Thursday announced that a coordinated law enforcement action has disrupted 10,909 malicious networks and recovered more than $105 million in illicit funds. In tandem, the effort saw law enforcement agencies from 21 countries arrest 1,462 suspects. Codenamed Operation Serengeti III, the cybercrime crackdown took place between June 29 and August 31, 2026. \"Authorities identified…",
-          "text": "INTERPOL on Thursday announced that a coordinated law enforcement action has disrupted 10,909 malicious networks and recovered more than $105 million in illicit funds. In tandem, the effort saw law enforcement agencies from 21 countries arrest 1,462 suspects. Codenamed Operation Serengeti III, the cybercrime crackdown took place between June 29 and August 31, 2026. \"Authorities identified…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "INTERPOL on Thursday announced that a coordinated law enforcement action has disrupted 10,909 malicious networks and recovered more than $105 million in illicit funds. In tandem, the effort saw law enforcement agencies from 21 countries arrest 1,462 suspects. Codenamed Operation Serengeti III, the cybercrime crackdown took place between June 29 and August 31, 2026. \"Authorities identified…",
-          "text": "INTERPOL on Thursday announced that a coordinated law enforcement action has disrupted 10,909 malicious networks and recovered more than $105 million in illicit funds. In tandem, the effort saw law enforcement agencies from 21 countries arrest 1,462 suspects. Codenamed Operation Serengeti III, the cybercrime crackdown took place between June 29 and August 31, 2026. \"Authorities identified…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "Amazon says PHP2Shell exploitation began 4 days before patches",
-      "url": "https://www.bleepingcomputer.com/news/security/amazon-says-php2shell-exploitation-began-4-days-before-patches/",
-      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-22/#reporting-8432ce44e6fe",
-      "cves": [],
-      "snippet": "Amazon says PHP2Shell exploitation began 4 days before patches Security researchers at Amazon Threat Intelligence say attackers began targeting the PHP2Shell flaws four days before security patches were released on Wednesday… Security researchers at Amazon Threat Intelligence say attackers began targeting the PHP2Shell flaws four days before security patches were released on Wednesday…",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "Security researchers at Amazon Threat Intelligence say attackers began targeting the PHP2Shell flaws four days before security patches were released on Wednesday…",
-          "text": "Security researchers at Amazon Threat Intelligence say attackers began targeting the PHP2Shell flaws four days before security patches were released on Wednesday…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "Security researchers at Amazon Threat Intelligence say attackers began targeting the PHP2Shell flaws four days before security patches were released on Wednesday…",
-          "text": "Security researchers at Amazon Threat Intelligence say attackers began targeting the PHP2Shell flaws four days before security patches were released on Wednesday…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "The AI Agent Nobody Owns: Watch Expert Webinar On Your Newest Insider Threat",
-      "url": "https://thehackernews.com/2026/10/the-ai-agent-nobody-owns-watch-expert.html",
-      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-22/#reporting-63d6bc3687b5",
-      "cves": [],
-      "snippet": "The AI Agent Nobody Owns: Watch Expert Webinar On Your Newest Insider Threat Right now, there is probably an AI agent running on a laptop somewhere in your network. It stores API keys and database passwords, can access your internal systems, and works without anyone watching. Nobody reviewed its access. Nobody owns it. If an employee had that much reach with that little oversight, you would call it an insider risk. So why do we still call the agent a productivity tool? Right now, there is probably an AI agent running on a laptop somewhere in your network. It stores API keys and database passwords, can access your internal systems, and works without anyone watching. Nobody reviewed its access",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "Right now, there is probably an AI agent running on a laptop somewhere in your network. It stores API keys and database passwords, can access your internal systems, and works without anyone watching. Nobody reviewed its access. Nobody owns it. If an employee had that much reach with that little oversight, you would call it an insider risk. So why do we still call the agent a productivity tool?",
-          "text": "Right now, there is probably an AI agent running on a laptop somewhere in your network. It stores API keys and database passwords, can access your internal systems, and works without anyone watching. Nobody reviewed its access. Nobody owns it. If an employee had that much reach with that little oversight, you would call it an insider risk. So why do we still call the agent a productivity tool?"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "Right now, there is probably an AI agent running on a laptop somewhere in your network. It stores API keys and database passwords, can access your internal systems, and works without anyone watching. Nobody reviewed its access. Nobody owns it. If an employee had that much reach with that little oversight, you would call it an insider risk. So why do we still call the agent a productivity tool?",
-          "text": "Right now, there is probably an AI agent running on a laptop somewhere in your network. It stores API keys and database passwords, can access your internal systems, and works without anyone watching. Nobody reviewed its access. Nobody owns it. If an employee had that much reach with that little oversight, you would call it an insider risk. So why do we still call the agent a productivity tool?"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "GitLab warns of new max severity code execution vulnerability",
-      "url": "https://www.bleepingcomputer.com/news/security/gitlab-warns-of-new-max-severity-code-execution-vulnerability/",
-      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-22/#reporting-bbaceb69b77d",
-      "cves": [],
-      "snippet": "GitLab warns of new max severity code execution vulnerability GitLab has released security patches for a maximum-severity Regular Expression Compiler flaw that can let remote attackers run arbitrary code on vulnerable servers… GitLab has released security patches for a maximum-severity Regular Expression Compiler flaw that can let remote attackers run arbitrary code on vulnerable servers…",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "GitLab has released security patches for a maximum-severity Regular Expression Compiler flaw that can let remote attackers run arbitrary code on vulnerable servers…",
-          "text": "GitLab has released security patches for a maximum-severity Regular Expression Compiler flaw that can let remote attackers run arbitrary code on vulnerable servers…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "GitLab has released security patches for a maximum-severity Regular Expression Compiler flaw that can let remote attackers run arbitrary code on vulnerable servers…",
-          "text": "GitLab has released security patches for a maximum-severity Regular Expression Compiler flaw that can let remote attackers run arbitrary code on vulnerable servers…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "Railway Says Intruder May Have Accessed Customer Secrets, Urges Credential Rotation",
-      "url": "https://thehackernews.com/2026/10/railway-says-intruder-may-have-accessed.html",
-      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-22/#reporting-b5736c37c6a7",
-      "cves": [],
-      "snippet": "Railway Says Intruder May Have Accessed Customer Secrets, Urges Credential Rotation Platform-as-a-Service (PaaS) provider Railway on Wednesday disclosed \"anomalous activity\" related to systems that store customer environment variables. Upon further investigation, the company found that an unauthorized third party may have gained access to encrypted environment variables, and, in some cases, obtained the decrypted contents. The impact, it said, is limited to a \"subset of users… Platform-as-a-Service (PaaS) provider Railway on Wednesday disclosed \"anomalous activity\" related to systems that store customer environment variables. Upon further investigation, the company found that an unauthorized",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "Platform-as-a-Service (PaaS) provider Railway on Wednesday disclosed \"anomalous activity\" related to systems that store customer environment variables. Upon further investigation, the company found that an unauthorized third party may have gained access to encrypted environment variables, and, in some cases, obtained the decrypted contents. The impact, it said, is limited to a \"subset of users…",
-          "text": "Platform-as-a-Service (PaaS) provider Railway on Wednesday disclosed \"anomalous activity\" related to systems that store customer environment variables. Upon further investigation, the company found that an unauthorized third party may have gained access to encrypted environment variables, and, in some cases, obtained the decrypted contents. The impact, it said, is limited to a \"subset of users…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "Platform-as-a-Service (PaaS) provider Railway on Wednesday disclosed \"anomalous activity\" related to systems that store customer environment variables. Upon further investigation, the company found that an unauthorized third party may have gained access to encrypted environment variables, and, in some cases, obtained the decrypted contents. The impact, it said, is limited to a \"subset of users…",
-          "text": "Platform-as-a-Service (PaaS) provider Railway on Wednesday disclosed \"anomalous activity\" related to systems that store customer environment variables. Upon further investigation, the company found that an unauthorized third party may have gained access to encrypted environment variables, and, in some cases, obtained the decrypted contents. The impact, it said, is limited to a \"subset of users…"
         }
       ],
       "effective_date_evidence": null
