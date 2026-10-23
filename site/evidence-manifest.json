@@ -5,77 +5,77 @@
     "control_implications": [
       {
         "control_id": "vulnerability_management",
-        "evidence_excerpt": "Pillow, the most widely used image library for Python, can be made to run operating system commands on a server by specifying the name of a file it is told to open. The flaw, CVE-2026-112900, is in the way Pillow handles EPS images, which it opens by passing the file's name to Ghostscript, a separate program it runs to turn the image into pixels, without checking the name first.",
-        "evidence_origin": "summary",
-        "focus": "Pillow handles EPS images",
-        "priority": "high",
-        "source_ids": [
-          2
-        ]
-      },
-      {
-        "control_id": "vulnerability_management",
-        "evidence_excerpt": "Malicious Brotli data can make an application on an official build of Node.js run attacker-supplied code, security researchers at Imperva have demonstrated. Their \"Node2Shell\" proof of concept ran code on the official Node.js 24.22.0 image for Linux arm64, with no debugger or custom build, by feeding crafted data to the bundled Brotli decoder (CVE-2026-111497). Node.js disclosed the flaw…",
-        "evidence_origin": "summary",
-        "focus": "bundled Brotli decoder",
-        "priority": "high",
-        "source_ids": [
-          3
-        ]
-      },
-      {
-        "control_id": "monitoring",
-        "evidence_excerpt": "Threat actors have been observed unsuccessfully attempting to exploit the newly disclosed PHP2Shell vulnerabilities to rope infected systems into a Mirai botnet variant called Potassium, as it emerges that weaponizing the flaws may be harder than previously thought. The attacks aim to exploit CVE-2026-109618 and CVE-2026-109619 (CVSS scores: 9.2), which can result in unauthenticated remote…",
-        "evidence_origin": "summary",
-        "focus": "Mirai botnet variant called Potassium",
-        "priority": "medium",
-        "source_ids": [
-          4
-        ]
-      },
-      {
-        "control_id": "vulnerability_management",
-        "evidence_excerpt": "PHP has warned of another way an attacker could run code on a web server, two days after it shipped emergency fixes for the critical PHP2Shell flaws. The new issue, assigned CVE-2026-115560, affects only web applications configured in an unusual way, and PHP considers it an unlikely risk. The project is not issuing an emergency fix for it. Instead, it recommends turning off a feature called…",
+        "evidence_excerpt": "PHP has warned of another way an attacker could run code on a web server, two days after it shipped emergency fixes for the critical PHP2Shell flaws. The new issue, assigned CVE-2026-115560, affects only web applications configured in an unusual way, and PHP considers it an unlikely risk.The project is not issuing an emergency fix for it. Instead, it recommends turning off a feature called…",
         "evidence_origin": "summary",
         "focus": "web applications configured in an unusual way",
-        "priority": "low",
+        "priority": "medium",
         "source_ids": [
           1
         ]
       },
       {
-        "control_id": "third_party_risk",
-        "evidence_excerpt": "The China-linked actor used an AI-enabled penetration-testing tool to automate and accelerate its attack on more than 2,200 tenants.",
+        "control_id": "access_management",
+        "evidence_excerpt": "AI agents can be manipulated through malicious emails, websites, and plugins into executing commands, stealing data, or deleting files using their legitimate permissions. Gen Digital explains how its Agent Trust Hub helps protect agents through skill verification, secure connectivity, and runtime controls that intercept dangerous act…",
         "evidence_origin": "summary",
-        "focus": "AI-enabled penetration-testing tool",
+        "focus": "AI agents",
         "priority": "high",
+        "source_ids": [
+          5
+        ]
+      },
+      {
+        "control_id": "data_protection",
+        "evidence_excerpt": "Cybersecurity researchers have disclosed details of a large-scale campaign that has targeted exposed network edge devices such as Fortinet FortiGate and Palo Alto Networks GlobalProtect firewalls. \"Artifacts from this investigation also indicate that operators in this campaign have obtained access to numerous organizations worldwide, and have attempted to further compromise some victims…",
+        "evidence_origin": "summary",
+        "focus": "Fortinet FortiGate and Palo Alto Networks GlobalProtect firewalls",
+        "priority": "high",
+        "source_ids": [
+          7
+        ]
+      },
+      {
+        "control_id": "monitoring",
+        "evidence_excerpt": "Microsoft's Project Perception adds Guardian Agents to monitor and contain anomalous AI agents, but experts warn that policing unpredictable agents with other agents may multiply — not contain — the risk.",
+        "evidence_origin": "summary",
+        "focus": "Guardian Agents",
+        "priority": "medium",
         "source_ids": [
           10
         ]
       },
       {
-        "control_id": "data_protection",
-        "evidence_excerpt": "Relatively small data breaches in India can turn quite serious, thanks to a sophisticated underground market for trading PII.",
+        "control_id": "incident_response",
+        "evidence_excerpt": "The Russian state-sponsored hacking group Sandworm teamed up with another threat actor to carry out a destructive wiping attack targeting a Ukrainian logistics company last year. According to ESET, the attack involved UAC-0099 (aka Earth Sirrush) obtaining initial access to the target on July 16, 2025, via a spear-phishing email bearing a malware-laced attachment that led to the deployment of…",
         "evidence_origin": "summary",
-        "focus": "sophisticated underground market for trading PII",
+        "focus": "UAC-0099 (aka Earth Sirrush)",
+        "priority": "high",
+        "source_ids": [
+          11
+        ]
+      },
+      {
+        "control_id": "governance",
+        "evidence_excerpt": "The region is demonstrating what happens when exploits accelerate but assurance does not.",
+        "evidence_origin": "summary",
+        "focus": "assurance",
         "priority": "medium",
         "source_ids": [
-          8
+          6
         ]
       }
     ],
     "executive_brief": {
       "decision_frame": "separate",
       "source_ids": [
-        2,
-        3,
-        10
+        7,
+        11,
+        5
       ]
     },
     "industry_impacts": [],
     "regulatory_changes": []
   },
-  "generated_at": "2026-10-23T15:23:04.877081Z",
+  "generated_at": "2026-10-23T18:34:49.635799Z",
   "feed_url": "https://ricomanifesto.github.io/SentryDigest/feed.xml",
   "feed_home_url": "https://ricomanifesto.github.io/SentryDigest/",
   "digest_issue_date": "2026-10-23",
@@ -84,25 +84,25 @@
   "resolved_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
   "sources": [
     {
-      "title": "URGENT - PHP Warns of Another Unpatched RCE Two Days After Emergency PHP2Shell Patches",
+      "title": "PHP Warns of Another Unpatched RCE Two Days After Emergency PHP2Shell Patches",
       "url": "https://thehackernews.com/2026/10/urgent-php-warns-of-another-unpatched.html",
       "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-23/#reporting-d3e6fb1a3911",
       "cves": [
         "CVE-2026-115560"
       ],
-      "snippet": "URGENT - PHP Warns of Another Unpatched RCE Two Days After Emergency PHP2Shell Patches PHP has warned of another way an attacker could run code on a web server, two days after it shipped emergency fixes for the critical PHP2Shell flaws. The new issue, assigned CVE-2026-115560, affects only web applications configured in an unusual way, and PHP considers it an unlikely risk. The project is not issuing an emergency fix for it. Instead, it recommends turning off a feature called… PHP has warned of another way an attacker could run code on a web server, two days after it shipped emergency fixes for the critical PHP2Shell flaws. The new issue, assigned CVE-2026-115560, affects only web applicatio",
+      "snippet": "PHP Warns of Another Unpatched RCE Two Days After Emergency PHP2Shell Patches PHP has warned of another way an attacker could run code on a web server, two days after it shipped emergency fixes for the critical PHP2Shell flaws. The new issue, assigned CVE-2026-115560, affects only web applications configured in an unusual way, and PHP considers it an unlikely risk.The project is not issuing an emergency fix for it. Instead, it recommends turning off a feature called… PHP has warned of another way an attacker could run code on a web server, two days after it shipped emergency fixes for the critical PHP2Shell flaws. The new issue, assigned CVE-2026-115560, affects only web applications configu",
       "article_evidence": [
         {
           "extraction_version": 1,
           "origin": "summary",
-          "raw_text": "PHP has warned of another way an attacker could run code on a web server, two days after it shipped emergency fixes for the critical PHP2Shell flaws. The new issue, assigned CVE-2026-115560, affects only web applications configured in an unusual way, and PHP considers it an unlikely risk. The project is not issuing an emergency fix for it. Instead, it recommends turning off a feature called…",
-          "text": "PHP has warned of another way an attacker could run code on a web server, two days after it shipped emergency fixes for the critical PHP2Shell flaws. The new issue, assigned CVE-2026-115560, affects only web applications configured in an unusual way, and PHP considers it an unlikely risk. The project is not issuing an emergency fix for it. Instead, it recommends turning off a feature called…"
+          "raw_text": "PHP has warned of another way an attacker could run code on a web server, two days after it shipped emergency fixes for the critical PHP2Shell flaws. The new issue, assigned CVE-2026-115560, affects only web applications configured in an unusual way, and PHP considers it an unlikely risk.The project is not issuing an emergency fix for it. Instead, it recommends turning off a feature called…",
+          "text": "PHP has warned of another way an attacker could run code on a web server, two days after it shipped emergency fixes for the critical PHP2Shell flaws. The new issue, assigned CVE-2026-115560, affects only web applications configured in an unusual way, and PHP considers it an unlikely risk.The project is not issuing an emergency fix for it. Instead, it recommends turning off a feature called…"
         },
         {
           "extraction_version": 1,
           "origin": "content",
-          "raw_text": "PHP has warned of another way an attacker could run code on a web server, two days after it shipped emergency fixes for the critical PHP2Shell flaws. The new issue, assigned CVE-2026-115560, affects only web applications configured in an unusual way, and PHP considers it an unlikely risk. The project is not issuing an emergency fix for it. Instead, it recommends turning off a feature called…",
-          "text": "PHP has warned of another way an attacker could run code on a web server, two days after it shipped emergency fixes for the critical PHP2Shell flaws. The new issue, assigned CVE-2026-115560, affects only web applications configured in an unusual way, and PHP considers it an unlikely risk. The project is not issuing an emergency fix for it. Instead, it recommends turning off a feature called…"
+          "raw_text": "PHP has warned of another way an attacker could run code on a web server, two days after it shipped emergency fixes for the critical PHP2Shell flaws. The new issue, assigned CVE-2026-115560, affects only web applications configured in an unusual way, and PHP considers it an unlikely risk.The project is not issuing an emergency fix for it. Instead, it recommends turning off a feature called…",
+          "text": "PHP has warned of another way an attacker could run code on a web server, two days after it shipped emergency fixes for the critical PHP2Shell flaws. The new issue, assigned CVE-2026-115560, affects only web applications configured in an unusual way, and PHP considers it an unlikely risk.The project is not issuing an emergency fix for it. Instead, it recommends turning off a feature called…"
         }
       ],
       "effective_date_evidence": null
@@ -181,6 +181,116 @@
       "effective_date_evidence": null
     },
     {
+      "title": "You gave your AI agent access, but who is giving it orders?",
+      "url": "https://www.bleepingcomputer.com/news/security/you-gave-your-ai-agent-access-but-who-is-giving-it-orders/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-23/#reporting-92749712f915",
+      "cves": [],
+      "snippet": "You gave your AI agent access, but who is giving it orders? AI agents can be manipulated through malicious emails, websites, and plugins into executing commands, stealing data, or deleting files using their legitimate permissions. Gen Digital explains how its Agent Trust Hub helps protect agents through skill verification, secure connectivity, and runtime controls that intercept dangerous act… AI agents can be manipulated through malicious emails, websites, and plugins into executing commands, stealing data, or deleting files using their legitimate permissions. Gen Digital explains how its Agent Trust Hub helps protect agents through skill verification, secure connectivity, and runtime contr",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "AI agents can be manipulated through malicious emails, websites, and plugins into executing commands, stealing data, or deleting files using their legitimate permissions. Gen Digital explains how its Agent Trust Hub helps protect agents through skill verification, secure connectivity, and runtime controls that intercept dangerous act…",
+          "text": "AI agents can be manipulated through malicious emails, websites, and plugins into executing commands, stealing data, or deleting files using their legitimate permissions. Gen Digital explains how its Agent Trust Hub helps protect agents through skill verification, secure connectivity, and runtime controls that intercept dangerous act…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "AI agents can be manipulated through malicious emails, websites, and plugins into executing commands, stealing data, or deleting files using their legitimate permissions. Gen Digital explains how its Agent Trust Hub helps protect agents through skill verification, secure connectivity, and runtime controls that intercept dangerous act…",
+          "text": "AI agents can be manipulated through malicious emails, websites, and plugins into executing commands, stealing data, or deleting files using their legitimate permissions. Gen Digital explains how its Agent Trust Hub helps protect agents through skill verification, secure connectivity, and runtime controls that intercept dangerous act…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Why Caribbean Threats Cascade Into Global Cyber-Risk",
+      "url": "https://www.darkreading.com/cyber-risk/why-caribbean-threats-cascade-global-cyber-risk",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-23/#reporting-11a81d41fc58",
+      "cves": [],
+      "snippet": "Why Caribbean Threats Cascade Into Global Cyber-Risk The region is demonstrating what happens when exploits accelerate but assurance does not. The region is demonstrating what happens when exploits accelerate but assurance does not.",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "The region is demonstrating what happens when exploits accelerate but assurance does not.",
+          "text": "The region is demonstrating what happens when exploits accelerate but assurance does not."
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "The region is demonstrating what happens when exploits accelerate but assurance does not.",
+          "text": "The region is demonstrating what happens when exploits accelerate but assurance does not."
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Hackers Breach Enterprise Firewalls and VPNs, Exposing Over 70,000 Credentials",
+      "url": "https://thehackernews.com/2026/10/hackers-breach-enterprise-firewalls-and.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-23/#reporting-64b0ac9d140d",
+      "cves": [],
+      "snippet": "Hackers Breach Enterprise Firewalls and VPNs, Exposing Over 70,000 Credentials Cybersecurity researchers have disclosed details of a large-scale campaign that has targeted exposed network edge devices such as Fortinet FortiGate and Palo Alto Networks GlobalProtect firewalls. \"Artifacts from this investigation also indicate that operators in this campaign have obtained access to numerous organizations worldwide, and have attempted to further compromise some victims… Cybersecurity researchers have disclosed details of a large-scale campaign that has targeted exposed network edge devices such as Fortinet FortiGate and Palo Alto Networks GlobalProtect firewalls. \"Artifacts from this investigatio",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Cybersecurity researchers have disclosed details of a large-scale campaign that has targeted exposed network edge devices such as Fortinet FortiGate and Palo Alto Networks GlobalProtect firewalls. \"Artifacts from this investigation also indicate that operators in this campaign have obtained access to numerous organizations worldwide, and have attempted to further compromise some victims…",
+          "text": "Cybersecurity researchers have disclosed details of a large-scale campaign that has targeted exposed network edge devices such as Fortinet FortiGate and Palo Alto Networks GlobalProtect firewalls. \"Artifacts from this investigation also indicate that operators in this campaign have obtained access to numerous organizations worldwide, and have attempted to further compromise some victims…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Cybersecurity researchers have disclosed details of a large-scale campaign that has targeted exposed network edge devices such as Fortinet FortiGate and Palo Alto Networks GlobalProtect firewalls. \"Artifacts from this investigation also indicate that operators in this campaign have obtained access to numerous organizations worldwide, and have attempted to further compromise some victims…",
+          "text": "Cybersecurity researchers have disclosed details of a large-scale campaign that has targeted exposed network edge devices such as Fortinet FortiGate and Palo Alto Networks GlobalProtect firewalls. \"Artifacts from this investigation also indicate that operators in this campaign have obtained access to numerous organizations worldwide, and have attempted to further compromise some victims…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Cyber Insurance's New Reality: Underwriting Isn't Enough",
+      "url": "https://www.darkreading.com/cyber-risk/cyber-insurances-underwriting-isnt-enough",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-23/#reporting-55d5c18d6220",
+      "cves": [],
+      "snippet": "Cyber Insurance's New Reality: Underwriting Isn't Enough Rising AI, social engineering, and cloud risks are pushing carriers beyond risk transfer and deeper into cybersecurity itself. Rising AI, social engineering, and cloud risks are pushing carriers beyond risk transfer and deeper into cybersecurity itself.",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Rising AI, social engineering, and cloud risks are pushing carriers beyond risk transfer and deeper into cybersecurity itself.",
+          "text": "Rising AI, social engineering, and cloud risks are pushing carriers beyond risk transfer and deeper into cybersecurity itself."
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Rising AI, social engineering, and cloud risks are pushing carriers beyond risk transfer and deeper into cybersecurity itself.",
+          "text": "Rising AI, social engineering, and cloud risks are pushing carriers beyond risk transfer and deeper into cybersecurity itself."
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "HPE patches eight max severity RCE and auth bypass AOS flaws",
+      "url": "https://www.bleepingcomputer.com/news/security/hpe-patches-eight-max-severity-rce-and-auth-bypass-aos-flaws/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-23/#reporting-690940732ff7",
+      "cves": [],
+      "snippet": "HPE patches eight max severity RCE and auth bypass AOS flaws Hewlett Packard Enterprise (HPE) released security updates to patch 72 vulnerabilities in the Aruba Operating System (ArubaOS), including eight maximum-severity authentication bypass and code execution issues… Hewlett Packard Enterprise (HPE) released security updates to patch 72 vulnerabilities in the Aruba Operating System (ArubaOS), including eight maximum-severity authentication bypass and code execution issues…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Hewlett Packard Enterprise (HPE) released security updates to patch 72 vulnerabilities in the Aruba Operating System (ArubaOS), including eight maximum-severity authentication bypass and code execution issues…",
+          "text": "Hewlett Packard Enterprise (HPE) released security updates to patch 72 vulnerabilities in the Aruba Operating System (ArubaOS), including eight maximum-severity authentication bypass and code execution issues…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Hewlett Packard Enterprise (HPE) released security updates to patch 72 vulnerabilities in the Aruba Operating System (ArubaOS), including eight maximum-severity authentication bypass and code execution issues…",
+          "text": "Hewlett Packard Enterprise (HPE) released security updates to patch 72 vulnerabilities in the Aruba Operating System (ArubaOS), including eight maximum-severity authentication bypass and code execution issues…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
       "title": "AI Agents as Insider Threats: Inside Microsoft's Bet on a Unified Security Stack",
       "url": "https://www.darkreading.com/cybersecurity-operations/ai-agents-insider-threats-inside-microsoft-unified-security-stack",
       "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-23/#reporting-3729c69a11df",
@@ -242,116 +352,6 @@
           "origin": "content",
           "raw_text": "AI agents paying for API calls with the x402 SDKs could sign a payment for their full balance of a supported token if a malicious API asked for it, security firm V12 said on October 22. The cause was the SDKs' default client, which set no spending limit until releases on August 18 added one. The risk was limited to agents who automatically signed payments and whose apps set…",
           "text": "AI agents paying for API calls with the x402 SDKs could sign a payment for their full balance of a supported token if a malicious API asked for it, security firm V12 said on October 22. The cause was the SDKs' default client, which set no spending limit until releases on August 18 added one. The risk was limited to agents who automatically signed payments and whose apps set…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "State Bank of India Suffers a Customer PII Data Leak",
-      "url": "https://www.darkreading.com/cyberattacks-data-breaches/state-bank-india-customer-pii-data-leak",
-      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-23/#reporting-b9a055634559",
-      "cves": [],
-      "snippet": "State Bank of India Suffers a Customer PII Data Leak Relatively small data breaches in India can turn quite serious, thanks to a sophisticated underground market for trading PII. Relatively small data breaches in India can turn quite serious, thanks to a sophisticated underground market for trading PII.",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "Relatively small data breaches in India can turn quite serious, thanks to a sophisticated underground market for trading PII.",
-          "text": "Relatively small data breaches in India can turn quite serious, thanks to a sophisticated underground market for trading PII."
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "Relatively small data breaches in India can turn quite serious, thanks to a sophisticated underground market for trading PII.",
-          "text": "Relatively small data breaches in India can turn quite serious, thanks to a sophisticated underground market for trading PII."
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "Railway warns devs to rotate secrets after potential breach",
-      "url": "https://www.bleepingcomputer.com/news/security/railway-warns-devs-to-rotate-secrets-after-potential-breach/",
-      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-23/#reporting-ea40ccd76acf",
-      "cves": [],
-      "snippet": "Railway warns devs to rotate secrets after potential breach Cloud platform Railway published an urgent warning to users after detecting suspicious activity on its systems that store customer environment variables earlier this week… Cloud platform Railway published an urgent warning to users after detecting suspicious activity on its systems that store customer environment variables earlier this week…",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "Cloud platform Railway published an urgent warning to users after detecting suspicious activity on its systems that store customer environment variables earlier this week…",
-          "text": "Cloud platform Railway published an urgent warning to users after detecting suspicious activity on its systems that store customer environment variables earlier this week…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "Cloud platform Railway published an urgent warning to users after detecting suspicious activity on its systems that store customer environment variables earlier this week…",
-          "text": "Cloud platform Railway published an urgent warning to users after detecting suspicious activity on its systems that store customer environment variables earlier this week…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "Microsoft Links Storm-0940 to ConnectWise Supply Chain Attack",
-      "url": "https://www.darkreading.com/cyberattacks-data-breaches/microsoft-storm-0940-connectwise-supply-chain-attack",
-      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-23/#reporting-c8b85a504961",
-      "cves": [],
-      "snippet": "Microsoft Links Storm-0940 to ConnectWise Supply Chain Attack The China-linked actor used an AI-enabled penetration-testing tool to automate and accelerate its attack on more than 2,200 tenants. The China-linked actor used an AI-enabled penetration-testing tool to automate and accelerate its attack on more than 2,200 tenants.",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "The China-linked actor used an AI-enabled penetration-testing tool to automate and accelerate its attack on more than 2,200 tenants.",
-          "text": "The China-linked actor used an AI-enabled penetration-testing tool to automate and accelerate its attack on more than 2,200 tenants."
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "The China-linked actor used an AI-enabled penetration-testing tool to automate and accelerate its attack on more than 2,200 tenants.",
-          "text": "The China-linked actor used an AI-enabled penetration-testing tool to automate and accelerate its attack on more than 2,200 tenants."
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "What We Missed: Feds Lasso Texas Laptop Farms",
-      "url": "https://www.darkreading.com/insider-threats/texas-laptop-farms-north-korean-it-workers",
-      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-23/#reporting-714df2670eae",
-      "cves": [],
-      "snippet": "What We Missed: Feds Lasso Texas Laptop Farms In this video, Dark Reading editors discuss some of the news they didn't get a chance to cover, from busting up North Korea's stateside infrastructure in \"Operation Lonestar Justice\" to Staples' gift card bonanza. In this video, Dark Reading editors discuss some of the news they didn't get a chance to cover, from busting up North Korea's stateside infrastructure in \"Operation Lonestar Justice\" to Staples' gift card bonanza.",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "In this video, Dark Reading editors discuss some of the news they didn't get a chance to cover, from busting up North Korea's stateside infrastructure in \"Operation Lonestar Justice\" to Staples' gift card bonanza.",
-          "text": "In this video, Dark Reading editors discuss some of the news they didn't get a chance to cover, from busting up North Korea's stateside infrastructure in \"Operation Lonestar Justice\" to Staples' gift card bonanza."
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "In this video, Dark Reading editors discuss some of the news they didn't get a chance to cover, from busting up North Korea's stateside infrastructure in \"Operation Lonestar Justice\" to Staples' gift card bonanza.",
-          "text": "In this video, Dark Reading editors discuss some of the news they didn't get a chance to cover, from busting up North Korea's stateside infrastructure in \"Operation Lonestar Justice\" to Staples' gift card bonanza."
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "Capcom confirms data breach affecting 11.7 million accounts",
-      "url": "https://www.bleepingcomputer.com/news/security/capcom-confirms-data-breach-affecting-117-million-accounts/",
-      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-23/#reporting-1e6095c6e828",
-      "cves": [],
-      "snippet": "Capcom confirms data breach affecting 11.7 million accounts Japanese gaming giant Capcom has confirmed that hackers breached its membership service, CAPCOM ID, exposing more than 11.7 million customer email addresses and associated information… Japanese gaming giant Capcom has confirmed that hackers breached its membership service, CAPCOM ID, exposing more than 11.7 million customer email addresses and associated information…",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "Japanese gaming giant Capcom has confirmed that hackers breached its membership service, CAPCOM ID, exposing more than 11.7 million customer email addresses and associated information…",
-          "text": "Japanese gaming giant Capcom has confirmed that hackers breached its membership service, CAPCOM ID, exposing more than 11.7 million customer email addresses and associated information…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "Japanese gaming giant Capcom has confirmed that hackers breached its membership service, CAPCOM ID, exposing more than 11.7 million customer email addresses and associated information…",
-          "text": "Japanese gaming giant Capcom has confirmed that hackers breached its membership service, CAPCOM ID, exposing more than 11.7 million customer email addresses and associated information…"
         }
       ],
       "effective_date_evidence": null
