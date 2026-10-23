@@ -1,0 +1,356 @@
+{
+  "schema_version": 3,
+  "report_contract_version": 5,
+  "report_plan": {
+    "control_implications": [
+      {
+        "control_id": "vulnerability_management",
+        "evidence_excerpt": "Malicious Brotli data can make an application on an official build of Node.js run attacker-supplied code, security researchers at Imperva have demonstrated. Their \"Node2Shell\" proof of concept ran code on the official Node.js 24.22.0 image for Linux arm64, with no debugger or custom build, by feeding crafted data to the bundled Brotli decoder (CVE-2026-111497).",
+        "evidence_origin": "summary",
+        "focus": "bundled Brotli decoder",
+        "priority": "high",
+        "source_ids": [
+          1
+        ]
+      },
+      {
+        "control_id": "data_protection",
+        "evidence_excerpt": "Relatively small data breaches in India can turn quite serious, thanks to a sophisticated underground market for trading PII.",
+        "evidence_origin": "summary",
+        "focus": "underground market for trading PII",
+        "priority": "medium",
+        "source_ids": [
+          3
+        ]
+      },
+      {
+        "control_id": "access_management",
+        "evidence_excerpt": "Cloud platform Railway published an urgent warning to users after detecting suspicious activity on its systems that store customer environment variables earlier this week…",
+        "evidence_origin": "summary",
+        "focus": "systems that store customer environment variables",
+        "priority": "medium",
+        "source_ids": [
+          4
+        ]
+      },
+      {
+        "control_id": "third_party_risk",
+        "evidence_excerpt": "The China-linked actor used an AI-enabled penetration-testing tool to automate and accelerate its attack on more than 2,200 tenants.",
+        "evidence_origin": "summary",
+        "focus": "AI-enabled penetration-testing tool",
+        "priority": "high",
+        "source_ids": [
+          5
+        ]
+      },
+      {
+        "control_id": "vulnerability_management",
+        "evidence_excerpt": "Attackers are exploiting a zero-day SQL injection flaw in Arista's VeloCloud Orchestrator (VCO), the central management system for VeloCloud SD-WAN networks, the company said in an advisory on October 22. The flaw lets anyone who can log in to the orchestrator, even with a read-only customer account, gain operator privileges, the top level of control over it.",
+        "evidence_origin": "summary",
+        "focus": "VeloCloud Orchestrator (VCO)",
+        "priority": "high",
+        "source_ids": [
+          11
+        ]
+      },
+      {
+        "control_id": "third_party_risk",
+        "evidence_excerpt": "eMudhra, an Indian certificate authority (CA), will withdraw from its global SSL/TLS certificate business, its board decided on Thursday. The decision came five days after a researcher reported recovering the private keys of eight of its intermediate CA certificates.",
+        "evidence_origin": "summary",
+        "focus": "intermediate CA certificates",
+        "priority": "high",
+        "source_ids": [
+          12
+        ]
+      }
+    ],
+    "executive_brief": {
+      "decision_frame": "separate",
+      "source_ids": [
+        11,
+        5,
+        4
+      ]
+    },
+    "industry_impacts": [],
+    "regulatory_changes": []
+  },
+  "generated_at": "2026-10-23T12:42:47.489891Z",
+  "feed_url": "https://ricomanifesto.github.io/SentryDigest/feed.xml",
+  "feed_home_url": "https://ricomanifesto.github.io/SentryDigest/",
+  "digest_issue_date": "2026-10-23",
+  "digest_issue_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-23/",
+  "requested_model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
+  "resolved_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+  "sources": [
+    {
+      "title": "Researchers Demonstrate Node2Shell RCE Exploit on Node.js Build Using Crafted Brotli Data",
+      "url": "https://thehackernews.com/2026/10/researchers-demonstrate-node2shell-rce.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-23/#reporting-5119cb5ec018",
+      "cves": [
+        "CVE-2026-111497"
+      ],
+      "snippet": "Researchers Demonstrate Node2Shell RCE Exploit on Node.js Build Using Crafted Brotli Data Malicious Brotli data can make an application on an official build of Node.js run attacker-supplied code, security researchers at Imperva have demonstrated. Their \"Node2Shell\" proof of concept ran code on the official Node.js 24.22.0 image for Linux arm64, with no debugger or custom build, by feeding crafted data to the bundled Brotli decoder (CVE-2026-111497). Node.js disclosed the flaw… Malicious Brotli data can make an application on an official build of Node.js run attacker-supplied code, security researchers at Imperva have demonstrated. Their \"Node2Shell\" proof of concept ran code on the official ",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Malicious Brotli data can make an application on an official build of Node.js run attacker-supplied code, security researchers at Imperva have demonstrated. Their \"Node2Shell\" proof of concept ran code on the official Node.js 24.22.0 image for Linux arm64, with no debugger or custom build, by feeding crafted data to the bundled Brotli decoder (CVE-2026-111497). Node.js disclosed the flaw…",
+          "text": "Malicious Brotli data can make an application on an official build of Node.js run attacker-supplied code, security researchers at Imperva have demonstrated. Their \"Node2Shell\" proof of concept ran code on the official Node.js 24.22.0 image for Linux arm64, with no debugger or custom build, by feeding crafted data to the bundled Brotli decoder (CVE-2026-111497). Node.js disclosed the flaw…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Malicious Brotli data can make an application on an official build of Node.js run attacker-supplied code, security researchers at Imperva have demonstrated. Their \"Node2Shell\" proof of concept ran code on the official Node.js 24.22.0 image for Linux arm64, with no debugger or custom build, by feeding crafted data to the bundled Brotli decoder (CVE-2026-111497). Node.js disclosed the flaw…",
+          "text": "Malicious Brotli data can make an application on an official build of Node.js run attacker-supplied code, security researchers at Imperva have demonstrated. Their \"Node2Shell\" proof of concept ran code on the official Node.js 24.22.0 image for Linux arm64, with no debugger or custom build, by feeding crafted data to the bundled Brotli decoder (CVE-2026-111497). Node.js disclosed the flaw…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "PHP2Shell Exploit Attempts Hit Millions as Attackers Try to Deploy Mirai Malware",
+      "url": "https://thehackernews.com/2026/10/php2shell-exploit-attempts-hit-millions.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-23/#reporting-9d0cfa945b25",
+      "cves": [
+        "CVE-2026-109618",
+        "CVE-2026-109619"
+      ],
+      "snippet": "PHP2Shell Exploit Attempts Hit Millions as Attackers Try to Deploy Mirai Malware Threat actors have been observed unsuccessfully attempting to exploit the newly disclosed PHP2Shell vulnerabilities to rope infected systems into a Mirai botnet variant called Potassium, as it emerges that weaponizing the flaws may be harder than previously thought. The attacks aim to exploit CVE-2026-109618 and CVE-2026-109619 (CVSS scores: 9.2), which can result in unauthenticated remote… Threat actors have been observed unsuccessfully attempting to exploit the newly disclosed PHP2Shell vulnerabilities to rope infected systems into a Mirai botnet variant called Potassium, as it emerges that weaponizing the fla",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Threat actors have been observed unsuccessfully attempting to exploit the newly disclosed PHP2Shell vulnerabilities to rope infected systems into a Mirai botnet variant called Potassium, as it emerges that weaponizing the flaws may be harder than previously thought. The attacks aim to exploit CVE-2026-109618 and CVE-2026-109619 (CVSS scores: 9.2), which can result in unauthenticated remote…",
+          "text": "Threat actors have been observed unsuccessfully attempting to exploit the newly disclosed PHP2Shell vulnerabilities to rope infected systems into a Mirai botnet variant called Potassium, as it emerges that weaponizing the flaws may be harder than previously thought. The attacks aim to exploit CVE-2026-109618 and CVE-2026-109619 (CVSS scores: 9.2), which can result in unauthenticated remote…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Threat actors have been observed unsuccessfully attempting to exploit the newly disclosed PHP2Shell vulnerabilities to rope infected systems into a Mirai botnet variant called Potassium, as it emerges that weaponizing the flaws may be harder than previously thought. The attacks aim to exploit CVE-2026-109618 and CVE-2026-109619 (CVSS scores: 9.2), which can result in unauthenticated remote…",
+          "text": "Threat actors have been observed unsuccessfully attempting to exploit the newly disclosed PHP2Shell vulnerabilities to rope infected systems into a Mirai botnet variant called Potassium, as it emerges that weaponizing the flaws may be harder than previously thought. The attacks aim to exploit CVE-2026-109618 and CVE-2026-109619 (CVSS scores: 9.2), which can result in unauthenticated remote…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "State Bank of India Suffers a Customer PII Data Leak",
+      "url": "https://www.darkreading.com/cyberattacks-data-breaches/state-bank-india-customer-pii-data-leak",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-23/#reporting-b9a055634559",
+      "cves": [],
+      "snippet": "State Bank of India Suffers a Customer PII Data Leak Relatively small data breaches in India can turn quite serious, thanks to a sophisticated underground market for trading PII. Relatively small data breaches in India can turn quite serious, thanks to a sophisticated underground market for trading PII.",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Relatively small data breaches in India can turn quite serious, thanks to a sophisticated underground market for trading PII.",
+          "text": "Relatively small data breaches in India can turn quite serious, thanks to a sophisticated underground market for trading PII."
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Relatively small data breaches in India can turn quite serious, thanks to a sophisticated underground market for trading PII.",
+          "text": "Relatively small data breaches in India can turn quite serious, thanks to a sophisticated underground market for trading PII."
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Railway warns devs to rotate secrets after potential breach",
+      "url": "https://www.bleepingcomputer.com/news/security/railway-warns-devs-to-rotate-secrets-after-potential-breach/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-23/#reporting-ea40ccd76acf",
+      "cves": [],
+      "snippet": "Railway warns devs to rotate secrets after potential breach Cloud platform Railway published an urgent warning to users after detecting suspicious activity on its systems that store customer environment variables earlier this week… Cloud platform Railway published an urgent warning to users after detecting suspicious activity on its systems that store customer environment variables earlier this week…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Cloud platform Railway published an urgent warning to users after detecting suspicious activity on its systems that store customer environment variables earlier this week…",
+          "text": "Cloud platform Railway published an urgent warning to users after detecting suspicious activity on its systems that store customer environment variables earlier this week…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Cloud platform Railway published an urgent warning to users after detecting suspicious activity on its systems that store customer environment variables earlier this week…",
+          "text": "Cloud platform Railway published an urgent warning to users after detecting suspicious activity on its systems that store customer environment variables earlier this week…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Microsoft Links Storm-0940 to ConnectWise Supply Chain Attack",
+      "url": "https://www.darkreading.com/cyberattacks-data-breaches/microsoft-storm-0940-connectwise-supply-chain-attack",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-23/#reporting-c8b85a504961",
+      "cves": [],
+      "snippet": "Microsoft Links Storm-0940 to ConnectWise Supply Chain Attack The China-linked actor used an AI-enabled penetration-testing tool to automate and accelerate its attack on more than 2,200 tenants. The China-linked actor used an AI-enabled penetration-testing tool to automate and accelerate its attack on more than 2,200 tenants.",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "The China-linked actor used an AI-enabled penetration-testing tool to automate and accelerate its attack on more than 2,200 tenants.",
+          "text": "The China-linked actor used an AI-enabled penetration-testing tool to automate and accelerate its attack on more than 2,200 tenants."
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "The China-linked actor used an AI-enabled penetration-testing tool to automate and accelerate its attack on more than 2,200 tenants.",
+          "text": "The China-linked actor used an AI-enabled penetration-testing tool to automate and accelerate its attack on more than 2,200 tenants."
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "What We Missed: Feds Lasso Texas Laptop Farms",
+      "url": "https://www.darkreading.com/insider-threats/texas-laptop-farms-north-korean-it-workers",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-23/#reporting-714df2670eae",
+      "cves": [],
+      "snippet": "What We Missed: Feds Lasso Texas Laptop Farms In this video, Dark Reading editors discuss some of the news they didn't get a chance to cover, from busting up North Korea's stateside infrastructure in \"Operation Lonestar Justice\" to Staples' gift card bonanza. In this video, Dark Reading editors discuss some of the news they didn't get a chance to cover, from busting up North Korea's stateside infrastructure in \"Operation Lonestar Justice\" to Staples' gift card bonanza.",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "In this video, Dark Reading editors discuss some of the news they didn't get a chance to cover, from busting up North Korea's stateside infrastructure in \"Operation Lonestar Justice\" to Staples' gift card bonanza.",
+          "text": "In this video, Dark Reading editors discuss some of the news they didn't get a chance to cover, from busting up North Korea's stateside infrastructure in \"Operation Lonestar Justice\" to Staples' gift card bonanza."
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "In this video, Dark Reading editors discuss some of the news they didn't get a chance to cover, from busting up North Korea's stateside infrastructure in \"Operation Lonestar Justice\" to Staples' gift card bonanza.",
+          "text": "In this video, Dark Reading editors discuss some of the news they didn't get a chance to cover, from busting up North Korea's stateside infrastructure in \"Operation Lonestar Justice\" to Staples' gift card bonanza."
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Capcom confirms data breach affecting 11.7 million accounts",
+      "url": "https://www.bleepingcomputer.com/news/security/capcom-confirms-data-breach-affecting-117-million-accounts/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-23/#reporting-1e6095c6e828",
+      "cves": [],
+      "snippet": "Capcom confirms data breach affecting 11.7 million accounts Japanese gaming giant Capcom has confirmed that hackers breached its membership service, CAPCOM ID, exposing more than 11.7 million customer email addresses and associated information… Japanese gaming giant Capcom has confirmed that hackers breached its membership service, CAPCOM ID, exposing more than 11.7 million customer email addresses and associated information…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Japanese gaming giant Capcom has confirmed that hackers breached its membership service, CAPCOM ID, exposing more than 11.7 million customer email addresses and associated information…",
+          "text": "Japanese gaming giant Capcom has confirmed that hackers breached its membership service, CAPCOM ID, exposing more than 11.7 million customer email addresses and associated information…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Japanese gaming giant Capcom has confirmed that hackers breached its membership service, CAPCOM ID, exposing more than 11.7 million customer email addresses and associated information…",
+          "text": "Japanese gaming giant Capcom has confirmed that hackers breached its membership service, CAPCOM ID, exposing more than 11.7 million customer email addresses and associated information…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Les supermarchés de l'UE paient d'un firmware de réfrigérateur non mis à jour",
+      "url": "https://www.darkreading.com/ics-ot-security/eu-grocers-unpatched-fridge-firmware-french",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-23/#reporting-507bd11e2057",
+      "cves": [],
+      "snippet": "Les supermarchés de l'UE paient d'un firmware de réfrigérateur non mis à jour Des centaines de magasins ont subi des pertes se chiffrant en millions d'euros parce qu'ils avaient fait appel à des tiers pour gérer le micrologiciel OT obsolète qui pilotait leurs systèmes de climatisation. Des centaines de magasins ont subi des pertes se chiffrant en millions d'euros parce qu'ils avaient fait appel à des tiers pour gérer le micrologiciel OT obsolète qui pilotait leurs systèmes de climatisation.",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Des centaines de magasins ont subi des pertes se chiffrant en millions d'euros parce qu'ils avaient fait appel à des tiers pour gérer le micrologiciel OT obsolète qui pilotait leurs systèmes de climatisation.",
+          "text": "Des centaines de magasins ont subi des pertes se chiffrant en millions d'euros parce qu'ils avaient fait appel à des tiers pour gérer le micrologiciel OT obsolète qui pilotait leurs systèmes de climatisation."
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Des centaines de magasins ont subi des pertes se chiffrant en millions d'euros parce qu'ils avaient fait appel à des tiers pour gérer le micrologiciel OT obsolète qui pilotait leurs systèmes de climatisation.",
+          "text": "Des centaines de magasins ont subi des pertes se chiffrant en millions d'euros parce qu'ils avaient fait appel à des tiers pour gérer le micrologiciel OT obsolète qui pilotait leurs systèmes de climatisation."
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "LiteLLM release pipeline hacked to distribute info-stealer malware",
+      "url": "https://www.bleepingcomputer.com/news/security/litellm-release-pipeline-hacked-to-distribute-info-stealer-malware/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-23/#reporting-37f56369e2ff",
+      "cves": [],
+      "snippet": "LiteLLM release pipeline hacked to distribute info-stealer malware Hackers compromised the LiteLLM project's PyPI package and published malicious Docker images with a payload that steals credentials, secrets, and environment variables… Hackers compromised the LiteLLM project's PyPI package and published malicious Docker images with a payload that steals credentials, secrets, and environment variables…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Hackers compromised the LiteLLM project's PyPI package and published malicious Docker images with a payload that steals credentials, secrets, and environment variables…",
+          "text": "Hackers compromised the LiteLLM project's PyPI package and published malicious Docker images with a payload that steals credentials, secrets, and environment variables…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Hackers compromised the LiteLLM project's PyPI package and published malicious Docker images with a payload that steals credentials, secrets, and environment variables…",
+          "text": "Hackers compromised the LiteLLM project's PyPI package and published malicious Docker images with a payload that steals credentials, secrets, and environment variables…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "The AI Agent Nobody Owns: Watch Expert Webinar On Your Newest Insider Threat",
+      "url": "https://thehackernews.com/2026/10/the-ai-agent-nobody-owns-watch-expert.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-23/#reporting-63d6bc3687b5",
+      "cves": [],
+      "snippet": "The AI Agent Nobody Owns: Watch Expert Webinar On Your Newest Insider Threat Right now, there is probably an AI agent running on a laptop somewhere in your network. It stores API keys and database passwords, can access your internal systems, and works without anyone watching. Nobody reviewed its access. Nobody owns it. If an employee had that much reach with that little oversight, you would call it an insider risk. So why do we still call the agent a productivity tool? Right now, there is probably an AI agent running on a laptop somewhere in your network. It stores API keys and database passwords, can access your internal systems, and works without anyone watching. Nobody reviewed its access",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Right now, there is probably an AI agent running on a laptop somewhere in your network. It stores API keys and database passwords, can access your internal systems, and works without anyone watching. Nobody reviewed its access. Nobody owns it. If an employee had that much reach with that little oversight, you would call it an insider risk. So why do we still call the agent a productivity tool?",
+          "text": "Right now, there is probably an AI agent running on a laptop somewhere in your network. It stores API keys and database passwords, can access your internal systems, and works without anyone watching. Nobody reviewed its access. Nobody owns it. If an employee had that much reach with that little oversight, you would call it an insider risk. So why do we still call the agent a productivity tool?"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Right now, there is probably an AI agent running on a laptop somewhere in your network. It stores API keys and database passwords, can access your internal systems, and works without anyone watching. Nobody reviewed its access. Nobody owns it. If an employee had that much reach with that little oversight, you would call it an insider risk. So why do we still call the agent a productivity tool?",
+          "text": "Right now, there is probably an AI agent running on a laptop somewhere in your network. It stores API keys and database passwords, can access your internal systems, and works without anyone watching. Nobody reviewed its access. Nobody owns it. If an employee had that much reach with that little oversight, you would call it an insider risk. So why do we still call the agent a productivity tool?"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Arista Warns of Critical VeloCloud SQL Injection Zero-Day Exploited in Attacks",
+      "url": "https://thehackernews.com/2026/10/arista-warns-of-critical-velocloud-sql.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-23/#reporting-5a3446099074",
+      "cves": [],
+      "snippet": "Arista Warns of Critical VeloCloud SQL Injection Zero-Day Exploited in Attacks Attackers are exploiting a zero-day SQL injection flaw in Arista's VeloCloud Orchestrator (VCO), the central management system for VeloCloud SD-WAN networks, the company said in an advisory on October 22. The flaw lets anyone who can log in to the orchestrator, even with a read-only customer account, gain operator privileges, the top level of control over it. For… Attackers are exploiting a zero-day SQL injection flaw in Arista's VeloCloud Orchestrator (VCO), the central management system for VeloCloud SD-WAN networks, the company said in an advisory on October 22. The flaw lets anyone who can log in to the orches",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Attackers are exploiting a zero-day SQL injection flaw in Arista's VeloCloud Orchestrator (VCO), the central management system for VeloCloud SD-WAN networks, the company said in an advisory on October 22. The flaw lets anyone who can log in to the orchestrator, even with a read-only customer account, gain operator privileges, the top level of control over it. For…",
+          "text": "Attackers are exploiting a zero-day SQL injection flaw in Arista's VeloCloud Orchestrator (VCO), the central management system for VeloCloud SD-WAN networks, the company said in an advisory on October 22. The flaw lets anyone who can log in to the orchestrator, even with a read-only customer account, gain operator privileges, the top level of control over it. For…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Attackers are exploiting a zero-day SQL injection flaw in Arista's VeloCloud Orchestrator (VCO), the central management system for VeloCloud SD-WAN networks, the company said in an advisory on October 22. The flaw lets anyone who can log in to the orchestrator, even with a read-only customer account, gain operator privileges, the top level of control over it. For…",
+          "text": "Attackers are exploiting a zero-day SQL injection flaw in Arista's VeloCloud Orchestrator (VCO), the central management system for VeloCloud SD-WAN networks, the company said in an advisory on October 22. The flaw lets anyone who can log in to the orchestrator, even with a read-only customer account, gain operator privileges, the top level of control over it. For…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "eMudhra to Exit Global SSL/TLS Business After 8 Intermediate CA Keys Found Easily Guessable",
+      "url": "https://thehackernews.com/2026/10/emudhra-to-exit-global-ssltls-business.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-23/#reporting-23aef87bc264",
+      "cves": [],
+      "snippet": "eMudhra to Exit Global SSL/TLS Business After 8 Intermediate CA Keys Found Easily Guessable eMudhra, an Indian certificate authority (CA), will withdraw from its global SSL/TLS certificate business, its board decided on Thursday. The decision came five days after a researcher reported recovering the private keys of eight of its intermediate CA certificates. eMudhra said it will replace affected customers' certificates with free ones from partners, though its… eMudhra, an Indian certificate authority (CA), will withdraw from its global SSL/TLS certificate business, its board decided on Thursday. The decision came five days after a researcher reported recovering the private keys of eight of it",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "eMudhra, an Indian certificate authority (CA), will withdraw from its global SSL/TLS certificate business, its board decided on Thursday. The decision came five days after a researcher reported recovering the private keys of eight of its intermediate CA certificates. eMudhra said it will replace affected customers' certificates with free ones from partners, though its…",
+          "text": "eMudhra, an Indian certificate authority (CA), will withdraw from its global SSL/TLS certificate business, its board decided on Thursday. The decision came five days after a researcher reported recovering the private keys of eight of its intermediate CA certificates. eMudhra said it will replace affected customers' certificates with free ones from partners, though its…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "eMudhra, an Indian certificate authority (CA), will withdraw from its global SSL/TLS certificate business, its board decided on Thursday. The decision came five days after a researcher reported recovering the private keys of eight of its intermediate CA certificates. eMudhra said it will replace affected customers' certificates with free ones from partners, though its…",
+          "text": "eMudhra, an Indian certificate authority (CA), will withdraw from its global SSL/TLS certificate business, its board decided on Thursday. The decision came five days after a researcher reported recovering the private keys of eight of its intermediate CA certificates. eMudhra said it will replace affected customers' certificates with free ones from partners, though its…"
+        }
+      ],
+      "effective_date_evidence": null
+    }
+  ]
+}
