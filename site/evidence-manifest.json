@@ -27,7 +27,7 @@
         "control_id": "data_protection",
         "evidence_excerpt": "Japanese gaming giant Capcom has confirmed that hackers breached its membership service, CAPCOM ID, exposing more than 11.7 million customer email addresses and associated information…",
         "evidence_origin": "summary",
-        "focus": "customer email addresses and associated information",
+        "focus": "customer email addresses",
         "priority": "high",
         "source_ids": [
           4
@@ -44,13 +44,13 @@
         ]
       },
       {
-        "control_id": "governance",
-        "evidence_excerpt": "Right now, there is probably an AI agent running on a laptop somewhere in your network. It stores API keys and database passwords, can access your internal systems, and works without anyone watching. Nobody reviewed its access. Nobody owns it.",
+        "control_id": "third_party_risk",
+        "evidence_excerpt": "Hackers compromised the LiteLLM project's PyPI package and published malicious Docker images with a payload that steals credentials, secrets, and environment variables…",
         "evidence_origin": "summary",
-        "focus": "AI agent",
-        "priority": "medium",
+        "focus": "LiteLLM project's PyPI package",
+        "priority": "high",
         "source_ids": [
-          7
+          6
         ]
       },
       {
@@ -65,17 +65,17 @@
       }
     ],
     "executive_brief": {
-      "decision_frame": "exposure",
+      "decision_frame": "separate",
       "source_ids": [
         1,
-        4,
-        8
+        2,
+        4
       ]
     },
     "industry_impacts": [],
     "regulatory_changes": []
   },
-  "generated_at": "2026-10-23T03:27:39.713167Z",
+  "generated_at": "2026-10-23T06:41:44.428372Z",
   "feed_url": "https://ricomanifesto.github.io/SentryDigest/feed.xml",
   "feed_home_url": "https://ricomanifesto.github.io/SentryDigest/",
   "digest_issue_date": "2026-10-23",
