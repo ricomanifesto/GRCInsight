@@ -17,34 +17,44 @@
         "control_id": "vulnerability_management",
         "evidence_excerpt": "Pillow, the most widely used image library for Python, can be made to run operating system commands on a server by specifying the name of a file it is told to open. The flaw, CVE-2026-112900, is in the way Pillow handles EPS images, which it opens by passing the file's name to Ghostscript, a separate program it runs to turn the image into pixels, without checking the name first.",
         "evidence_origin": "summary",
-        "focus": "image library for Python",
+        "focus": "Pillow",
         "priority": "high",
         "source_ids": [
           2
         ]
       },
       {
+        "control_id": "vulnerability_management",
+        "evidence_excerpt": "Malicious Brotli data can make an application on an official build of Node.js run attacker-supplied code, security researchers at Imperva have demonstrated. Their \"Node2Shell\" proof of concept ran code on the official Node.js 24.22.0 image for Linux arm64, with no debugger or custom build, by feeding crafted data to the bundled Brotli decoder (CVE-2026-111497). Node.js disclosed the flaw…",
+        "evidence_origin": "summary",
+        "focus": "official build of Node.js",
+        "priority": "high",
+        "source_ids": [
+          3
+        ]
+      },
+      {
+        "control_id": "vulnerability_management",
+        "evidence_excerpt": "Threat actors have been observed unsuccessfully attempting to exploit the newly disclosed PHP2Shell vulnerabilities to rope infected systems into a Mirai botnet variant called Potassium, as it emerges that weaponizing the flaws may be harder than previously thought. The attacks aim to exploit CVE-2026-109618 and CVE-2026-109619 (CVSS scores: 9.2), which can result in unauthenticated remote…",
+        "evidence_origin": "summary",
+        "focus": "newly disclosed PHP2Shell vulnerabilities",
+        "priority": "medium",
+        "source_ids": [
+          4
+        ]
+      },
+      {
         "control_id": "access_management",
         "evidence_excerpt": "Threat actors don't need to rely on malware to breach organizations anymore. They're simply calling help desks and politely asking for access, with a little help from artificial intelligence.",
         "evidence_origin": "summary",
-        "focus": "calling help desks",
-        "priority": "medium",
+        "focus": "help desks",
+        "priority": "high",
         "source_ids": [
           5
         ]
       },
       {
         "control_id": "monitoring",
-        "evidence_excerpt": "Microsoft has announced plans to add AI-powered phishing detection to Teams messages starting in early November 2026…",
-        "evidence_origin": "summary",
-        "focus": "AI-powered phishing detection",
-        "priority": "low",
-        "source_ids": [
-          8
-        ]
-      },
-      {
-        "control_id": "incident_response",
         "evidence_excerpt": "Cybersecurity researchers have discovered an artificial intelligence (AI)-driven intrusion ecosystem run by affiliates of the INC and The Gentlemen ransomware groups. Central to the operation is an \"Autonomous Red Team Kill Chain Framework\" referred to as Phantom. The threat actor is assessed to be Russian-speaking and functions both as an intrusion and data-extortion operator, as well as an…",
         "evidence_origin": "summary",
         "focus": "Autonomous Red Team Kill Chain Framework",
@@ -52,22 +62,12 @@
         "source_ids": [
           11
         ]
-      },
-      {
-        "control_id": "change_management",
-        "evidence_excerpt": "Fixing the critical PHP flaws is not as simple as clicking \"Update.\" Here's how to assess your risk, and what you can do to protect yourself.",
-        "evidence_origin": "summary",
-        "focus": "critical PHP flaws",
-        "priority": "low",
-        "source_ids": [
-          7
-        ]
       }
     ],
     "executive_brief": {
       "decision_frame": "separate",
       "source_ids": [
-        1,
+        2,
         5,
         11
       ]
@@ -75,7 +75,7 @@
     "industry_impacts": [],
     "regulatory_changes": []
   },
-  "generated_at": "2026-10-24T03:22:46.064474Z",
+  "generated_at": "2026-10-24T09:19:41.930789Z",
   "feed_url": "https://ricomanifesto.github.io/SentryDigest/feed.xml",
   "feed_home_url": "https://ricomanifesto.github.io/SentryDigest/",
   "digest_issue_date": "2026-10-24",
