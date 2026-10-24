@@ -34,13 +34,23 @@
         ]
       },
       {
+        "control_id": "access_management",
+        "evidence_excerpt": "A new UEFI bootkit named BlackX, deployed in an espionage campaign in early 2026, exploited the old Baton Drop vulnerability to bypass Secure Boot and load a malicious driver designed to interfere with security solutions from Kaspersky and Avast…",
+        "evidence_origin": "summary",
+        "focus": "UEFI bootkit named BlackX",
+        "priority": "high",
+        "source_ids": [
+          6
+        ]
+      },
+      {
         "control_id": "third_party_risk",
         "evidence_excerpt": "LiteLLM on Friday revealed that an Agent Platform master key accidentally published to a public GitHub repository in late May 2026 ultimately allowed the threat actor to push a malicious version of the popular Python package. \"On May 27, 2026, a configuration file was committed to the public LiteLLM-Labs/lite-harness repository which inadvertently contained the master key to a deployment of…",
         "evidence_origin": "summary",
         "focus": "Agent Platform master key",
         "priority": "high",
         "source_ids": [
-          6
+          7
         ]
       },
       {
@@ -50,17 +60,7 @@
         "focus": "personalized artificial intelligence (AI) features",
         "priority": "medium",
         "source_ids": [
-          7
-        ]
-      },
-      {
-        "control_id": "access_management",
-        "evidence_excerpt": "Threat actors don't need to rely on malware to breach organizations anymore. They're simply calling help desks and politely asking for access, with a little help from artificial intelligence.",
-        "evidence_origin": "summary",
-        "focus": "calling help desks",
-        "priority": "medium",
-        "source_ids": [
-          9
+          8
         ]
       }
     ],
@@ -75,7 +75,7 @@
     "industry_impacts": [],
     "regulatory_changes": []
   },
-  "generated_at": "2026-10-24T15:21:59.686518Z",
+  "generated_at": "2026-10-24T18:22:43.392412Z",
   "feed_url": "https://ricomanifesto.github.io/SentryDigest/feed.xml",
   "feed_home_url": "https://ricomanifesto.github.io/SentryDigest/",
   "digest_issue_date": "2026-10-24",
@@ -200,6 +200,28 @@
           "origin": "content",
           "raw_text": "Threat actors have been observed unsuccessfully attempting to exploit the newly disclosed PHP2Shell vulnerabilities to rope infected systems into a Mirai botnet variant called Potassium, as it emerges that weaponizing the flaws may be harder than previously thought. The attacks aim to exploit CVE-2026-109618 and CVE-2026-109619 (CVSS scores: 9.2), which can result in unauthenticated remote…",
           "text": "Threat actors have been observed unsuccessfully attempting to exploit the newly disclosed PHP2Shell vulnerabilities to rope infected systems into a Mirai botnet variant called Potassium, as it emerges that weaponizing the flaws may be harder than previously thought. The attacks aim to exploit CVE-2026-109618 and CVE-2026-109619 (CVSS scores: 9.2), which can result in unauthenticated remote…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "BlackX UEFI bootkit exploits Baton Drop flaw to bypass Secure Boot",
+      "url": "https://www.bleepingcomputer.com/news/security/blackx-uefi-bootkit-exploits-baton-drop-flaw-to-bypass-secure-boot/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-24/#reporting-ed9fe79f62b5",
+      "cves": [],
+      "snippet": "BlackX UEFI bootkit exploits Baton Drop flaw to bypass Secure Boot A new UEFI bootkit named BlackX, deployed in an espionage campaign in early 2026, exploited the old Baton Drop vulnerability to bypass Secure Boot and load a malicious driver designed to interfere with security solutions from Kaspersky and Avast… A new UEFI bootkit named BlackX, deployed in an espionage campaign in early 2026, exploited the old Baton Drop vulnerability to bypass Secure Boot and load a malicious driver designed to interfere with security solutions from Kaspersky and Avast…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "A new UEFI bootkit named BlackX, deployed in an espionage campaign in early 2026, exploited the old Baton Drop vulnerability to bypass Secure Boot and load a malicious driver designed to interfere with security solutions from Kaspersky and Avast…",
+          "text": "A new UEFI bootkit named BlackX, deployed in an espionage campaign in early 2026, exploited the old Baton Drop vulnerability to bypass Secure Boot and load a malicious driver designed to interfere with security solutions from Kaspersky and Avast…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "A new UEFI bootkit named BlackX, deployed in an espionage campaign in early 2026, exploited the old Baton Drop vulnerability to bypass Secure Boot and load a malicious driver designed to interfere with security solutions from Kaspersky and Avast…",
+          "text": "A new UEFI bootkit named BlackX, deployed in an espionage campaign in early 2026, exploited the old Baton Drop vulnerability to bypass Secure Boot and load a malicious driver designed to interfere with security solutions from Kaspersky and Avast…"
         }
       ],
       "effective_date_evidence": null
@@ -332,28 +354,6 @@
           "origin": "content",
           "raw_text": "Fixing the critical PHP flaws is not as simple as clicking \"Update.\" Here's how to assess your risk, and what you can do to protect yourself.",
           "text": "Fixing the critical PHP flaws is not as simple as clicking \"Update.\" Here's how to assess your risk, and what you can do to protect yourself."
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "Microsoft Teams to get AI-powered, context-aware phishing detection",
-      "url": "https://www.bleepingcomputer.com/news/microsoft/microsoft-teams-to-get-ai-powered-context-aware-phishing-detection/",
-      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-24/#reporting-e3ceabcd0c4b",
-      "cves": [],
-      "snippet": "Microsoft Teams to get AI-powered, context-aware phishing detection Microsoft has announced plans to add AI-powered phishing detection to Teams messages starting in early November 2026… Microsoft has announced plans to add AI-powered phishing detection to Teams messages starting in early November 2026…",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "Microsoft has announced plans to add AI-powered phishing detection to Teams messages starting in early November 2026…",
-          "text": "Microsoft has announced plans to add AI-powered phishing detection to Teams messages starting in early November 2026…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "Microsoft has announced plans to add AI-powered phishing detection to Teams messages starting in early November 2026…",
-          "text": "Microsoft has announced plans to add AI-powered phishing detection to Teams messages starting in early November 2026…"
         }
       ],
       "effective_date_evidence": null
