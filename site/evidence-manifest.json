@@ -14,7 +14,7 @@
         ]
       },
       {
-        "control_id": "monitoring",
+        "control_id": "vulnerability_management",
         "evidence_excerpt": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Friday added two vulnerabilities impacting Collabora Online Built-in CODE Server and Arista VeloCloud Orchestrator (VCO) to its Known Exploited Vulnerabilities (KEV), citing reports of active exploitation in the wild. The critical-severity vulnerabilities are listed below - CVE-2026-110447 (CVSS score: 9.2) - An operating…",
         "evidence_origin": "summary",
         "focus": "Collabora Online Built-in CODE Server",
@@ -27,7 +27,7 @@
         "control_id": "vulnerability_management",
         "evidence_excerpt": "Pillow, the most widely used image library for Python, can be made to run operating system commands on a server by specifying the name of a file it is told to open. The flaw, CVE-2026-112900, is in the way Pillow handles EPS images, which it opens by passing the file's name to Ghostscript, a separate program it runs to turn the image into pixels, without checking the name first.",
         "evidence_origin": "summary",
-        "focus": "Pillow",
+        "focus": "most widely used image library",
         "priority": "high",
         "source_ids": [
           4
@@ -57,7 +57,7 @@
         "control_id": "access_management",
         "evidence_excerpt": "Threat actors don't need to rely on malware to breach organizations anymore. They're simply calling help desks and politely asking for access, with a little help from artificial intelligence.",
         "evidence_origin": "summary",
-        "focus": "help desks",
+        "focus": "calling help desks",
         "priority": "medium",
         "source_ids": [
           9
@@ -69,13 +69,13 @@
       "source_ids": [
         2,
         6,
-        4
+        7
       ]
     },
     "industry_impacts": [],
     "regulatory_changes": []
   },
-  "generated_at": "2026-10-24T13:09:26.672936Z",
+  "generated_at": "2026-10-24T15:21:59.686518Z",
   "feed_url": "https://ricomanifesto.github.io/SentryDigest/feed.xml",
   "feed_home_url": "https://ricomanifesto.github.io/SentryDigest/",
   "digest_issue_date": "2026-10-24",
