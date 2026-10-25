@@ -1,5 +1,5 @@
-# GRC Intelligence Report - 2026-10-24
-**Generated:** 2026-10-24T21:18:05.917268Z
+# GRC Intelligence Report - 2026-10-25
+**Generated:** 2026-10-25T00:49:40.524152Z
 **Date of Issue:** October 2026
 **Analysis Period:** October 2026
 **Source:** [SentryDigest](https://ricomanifesto.github.io/SentryDigest/feed.xml)
@@ -12,9 +12,9 @@
 
 ## Executive Summary
 
-Make confirmed exposure the basis for remediation and access-control decisions. Start by checking which reported conditions apply to “Collabora Online Built-in CODE Server” [CISA Flags Two Actively Exploited Critical Flaws in Collabora Online and Arista VeloCloud](https://thehackernews.com/2026/10/cisa-flags-two-actively-exploited.html), “Pillow” [Critical Flaw in Python’s Popular Pillow Image Library Allows Code Execution via a Crafted Image](https://thehackernews.com/2026/10/critical-flaw-in-pythons-popular-pillow.html), and “Agent Platform master key” [Leaked LiteLLM Master Key Let Attackers Steal GitHub Tokens and Hijack Release Pipeline](https://thehackernews.com/2026/10/leaked-litellm-master-key-let-attackers.html). Use that assessment to decide where control evidence is sufficient and where an owner needs to investigate.
+Make confirmed exposure the basis for remediation and access-control decisions. Start by checking which reported conditions apply to “Collabora Online Built-in CODE Server” [CISA Flags Two Actively Exploited Critical Flaws in Collabora Online and Arista VeloCloud](https://thehackernews.com/2026/10/cisa-flags-two-actively-exploited.html), “Google's Brotli decoder” [Brotli Decoder Flaw Behind Node.js RCE Also Affects Bun, Python and Other Widely Used Software](https://thehackernews.com/2026/10/brotli-decoder-flaw-behind-nodejs-rce.html), and “Pillow handles EPS images” [Critical Flaw in Python’s Popular Pillow Image Library Allows Code Execution via a Crafted Image](https://thehackernews.com/2026/10/critical-flaw-in-pythons-popular-pillow.html). Use that assessment to decide where control evidence is sufficient and where an owner needs to investigate.
 
-First, establish affected-asset and configuration scope. Next, test the relevant account and permission boundaries. These are proposed review priorities: confirm local applicability before assigning work. In each case, record the applicability decision and the evidence supporting the next step.
+The next step is to establish affected-asset and configuration scope. These are proposed review priorities: confirm local applicability before assigning work. In each case, record the applicability decision and the evidence supporting the next step.
 
 Some retained passages are truncated; consult the complete source before making a final decision. No primary-source regulatory change is established by this selection. Revise the agenda if the relevant product, activity or dependency is absent, or if stronger evidence changes the assessment.
 
@@ -34,7 +34,17 @@ No sourced regulatory changes identified in the supplied evidence.
 
 **Decision trigger:** If applicability is confirmed, decide on remediation or a documented exception; otherwise record why the finding does not apply.
 
-### Pillow — Vulnerability management
+### Google's Brotli decoder — Vulnerability management
+
+**Source evidence:** “A memory-corruption flaw in Google's Brotli decoder sits in many programs that unpack Brotli-compressed data, among them Bun, the Python Brotli and brotlicffi packages, and Envoy proxies set up to decompress Brotli. Tracked as CVE-2026-111497, the flaw allows crafted compressed data to overwrite past the end of a buffer and corrupt a program's memory, potentially…” [Brotli Decoder Flaw Behind Node.js RCE Also Affects Bun, Python and Other Widely Used Software](https://thehackernews.com/2026/10/brotli-decoder-flaw-behind-nodejs-rce.html)
+
+**Control decision (inference):** A remediation decision depends on matching deployed assets to the source's exposure conditions.
+
+**Inferred review priority:** High. **Owner:** Vulnerability and asset owners. **Evidence to request:** affected-asset inventory, installed versions, remediation status and an exception owner.
+
+**Decision trigger:** If applicability is confirmed, decide on remediation or a documented exception; otherwise record why the finding does not apply.
+
+### Pillow handles EPS images — Vulnerability management
 
 **Source evidence:** “Pillow, the most widely used image library for Python, can be made to run operating system commands on a server by specifying the name of a file it is told to open. The flaw, CVE-2026-112900, is in the way Pillow handles EPS images, which it opens by passing the file's name to Ghostscript, a separate program it runs to turn the image into pixels, without checking the name first.” [Critical Flaw in Python’s Popular Pillow Image Library Allows Code Execution via a Crafted Image](https://thehackernews.com/2026/10/critical-flaw-in-pythons-popular-pillow.html)
 
@@ -54,27 +64,17 @@ No sourced regulatory changes identified in the supplied evidence.
 
 **Decision trigger:** If a permission gap is reproduced, assign a control correction and verify it; otherwise retain the test evidence.
 
-### Google's Brotli decoder — Vulnerability management
+### newly disclosed PHP2Shell vulnerabilities — Monitoring and detection
 
-**Source evidence:** “A memory-corruption flaw in Google's Brotli decoder sits in many programs that unpack Brotli-compressed data, among them Bun, the Python Brotli and brotlicffi packages, and Envoy proxies set up to decompress Brotli. Tracked as CVE-2026-111497, the flaw allows crafted compressed data to overwrite past the end of a buffer and corrupt a program's memory, potentially…” [Brotli Decoder Flaw Behind Node.js RCE Also Affects Bun, Python and Other Widely Used Software](https://thehackernews.com/2026/10/brotli-decoder-flaw-behind-nodejs-rce.html)
+**Source evidence:** “Threat actors have been observed unsuccessfully attempting to exploit the newly disclosed PHP2Shell vulnerabilities to rope infected systems into a Mirai botnet variant called Potassium, as it emerges that weaponizing the flaws may be harder than previously thought. The attacks aim to exploit CVE-2026-109618 and CVE-2026-109619 &#40;CVSS scores: 9.2&#41;, which can result in unauthenticated remote…” [PHP2Shell Exploit Attempts Hit Millions as Attackers Try to Deploy Mirai Malware](https://thehackernews.com/2026/10/php2shell-exploit-attempts-hit-millions.html)
 
-**Control decision (inference):** A remediation decision depends on matching deployed assets to the source's exposure conditions.
+**Control decision (inference):** A monitoring decision depends on distinguishing the reported behavior from authorized activity in your telemetry.
 
-**Inferred review priority:** High. **Owner:** Vulnerability and asset owners. **Evidence to request:** affected-asset inventory, installed versions, remediation status and an exception owner.
+**Inferred review priority:** Medium. **Owner:** Detection and monitoring owner. **Evidence to request:** log coverage, a detection test, alert routing and investigation ownership.
 
-**Decision trigger:** If applicability is confirmed, decide on remediation or a documented exception; otherwise record why the finding does not apply.
+**Decision trigger:** If a detection test fails, assign the coverage or routing correction and repeat the test.
 
-### privacy policy — Data protection
-
-**Source evidence:** “Google has updated its privacy policy to spell out that using personalized artificial intelligence &#40;AI&#41; features in Search or Gemini could allow the company to serve targeted ads to users based on their activity on other connected Google services. "You may choose to allow certain Google services, including services like Search or Gemini Apps, to access data from other Google services you use…” [Google Says Gmail and Photos Data Shared With AI Search Could Be Used for Targeted Ads](https://thehackernews.com/2026/10/google-says-gmail-and-photos-data.html)
-
-**Control decision (inference):** A data-protection decision depends on the data involved and the controls governing access to it.
-
-**Inferred review priority:** Medium. **Owner:** Data and privacy owners. **Evidence to request:** data inventory, access restrictions, audit logs and a documented exposure assessment.
-
-**Decision trigger:** If relevant data is exposed to the reported access path, decide which protection or access change is needed.
-
-### help desks — Access management
+### calling help desks — Access management
 
 **Source evidence:** “Threat actors don't need to rely on malware to breach organizations anymore. They're simply calling help desks and politely asking for access, with a little help from artificial intelligence.” [Trust Is Not What It Seems — And Fraudsters Are Counting on It](https://www.darkreading.com/cyber-risk/trust-is-not-what-it-seems-and-fraudsters-are-counting-on-it)
 
