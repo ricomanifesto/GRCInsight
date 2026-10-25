@@ -27,14 +27,24 @@
         "control_id": "vulnerability_management",
         "evidence_excerpt": "Pillow, the most widely used image library for Python, can be made to run operating system commands on a server by specifying the name of a file it is told to open. The flaw, CVE-2026-112900, is in the way Pillow handles EPS images, which it opens by passing the file's name to Ghostscript, a separate program it runs to turn the image into pixels, without checking the name first.",
         "evidence_origin": "summary",
-        "focus": "Pillow",
+        "focus": "Pillow, the most widely used image library",
         "priority": "high",
         "source_ids": [
           4
         ]
       },
       {
-        "control_id": "third_party_risk",
+        "control_id": "access_management",
+        "evidence_excerpt": "A new UEFI bootkit named BlackX, deployed in an espionage campaign in early 2026, exploited the old Baton Drop vulnerability to bypass Secure Boot and load a malicious driver designed to interfere with security solutions from Kaspersky and Avast…",
+        "evidence_origin": "summary",
+        "focus": "UEFI bootkit named BlackX",
+        "priority": "high",
+        "source_ids": [
+          6
+        ]
+      },
+      {
+        "control_id": "access_management",
         "evidence_excerpt": "LiteLLM on Friday revealed that an Agent Platform master key accidentally published to a public GitHub repository in late May 2026 ultimately allowed the threat actor to push a malicious version of the popular Python package. \"On May 27, 2026, a configuration file was committed to the public LiteLLM-Labs/lite-harness repository which inadvertently contained the master key to a deployment of…",
         "evidence_origin": "summary",
         "focus": "Agent Platform master key",
@@ -52,22 +62,12 @@
         "source_ids": [
           8
         ]
-      },
-      {
-        "control_id": "access_management",
-        "evidence_excerpt": "Threat actors don't need to rely on malware to breach organizations anymore. They're simply calling help desks and politely asking for access, with a little help from artificial intelligence.",
-        "evidence_origin": "summary",
-        "focus": "help desks",
-        "priority": "medium",
-        "source_ids": [
-          10
-        ]
       }
     ],
     "executive_brief": {
-      "decision_frame": "separate",
+      "decision_frame": "exposure",
       "source_ids": [
-        2,
+        1,
         7,
         8
       ]
@@ -75,7 +75,7 @@
     "industry_impacts": [],
     "regulatory_changes": []
   },
-  "generated_at": "2026-10-25T03:22:59.350986Z",
+  "generated_at": "2026-10-25T06:30:24.963517Z",
   "feed_url": "https://ricomanifesto.github.io/SentryDigest/feed.xml",
   "feed_home_url": "https://ricomanifesto.github.io/SentryDigest/",
   "digest_issue_date": "2026-10-25",
