@@ -14,20 +14,10 @@
         ]
       },
       {
-        "control_id": "vulnerability_management",
-        "evidence_excerpt": "A memory-corruption flaw in Google's Brotli decoder sits in many programs that unpack Brotli-compressed data, among them Bun, Microsoft's .NET, the Python Brotli and brotlicffi packages, and Envoy proxies set up to decompress Brotli. Tracked as CVE-2026-111497, the flaw allows crafted compressed data to overwrite past the end of a buffer and corrupt a program's memory…",
+        "control_id": "monitoring",
+        "evidence_excerpt": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Friday added two vulnerabilities impacting Collabora Online Built-in CODE Server and Arista VeloCloud Orchestrator (VCO) to its Known Exploited Vulnerabilities (KEV), citing reports of active exploitation in the wild.",
         "evidence_origin": "summary",
-        "focus": "Google's Brotli decoder",
-        "priority": "high",
-        "source_ids": [
-          2
-        ]
-      },
-      {
-        "control_id": "vulnerability_management",
-        "evidence_excerpt": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Friday added two vulnerabilities impacting Collabora Online Built-in CODE Server and Arista VeloCloud Orchestrator (VCO) to its Known Exploited Vulnerabilities (KEV), citing reports of active exploitation in the wild. The critical-severity vulnerabilities are listed below - CVE-2026-110447 (CVSS score: 9.2) - An operating…",
-        "evidence_origin": "summary",
-        "focus": "Collabora Online Built-in CODE Server",
+        "focus": "Known Exploited Vulnerabilities",
         "priority": "high",
         "source_ids": [
           3
@@ -35,9 +25,9 @@
       },
       {
         "control_id": "access_management",
-        "evidence_excerpt": "Cybersecurity researchers have disclosed a Microsoft 365 campaign that has been observed leveraging an adversary-in-the-middle (AitM) relay to capture sign-in sessions and then replay the stolen tokens to break into email accounts at 79 organizations. Huntress, which observed the activity between July 14 and September 22, 2026, said it detected 497 successful Microsoft 365 sign-in events across…",
+        "evidence_excerpt": "Cybersecurity researchers have disclosed a Microsoft 365 campaign that has been observed leveraging an adversary-in-the-middle (AitM) relay to capture sign-in sessions and then replay the stolen tokens to break into email accounts at 79 organizations.",
         "evidence_origin": "summary",
-        "focus": "adversary-in-the-middle (AitM) relay",
+        "focus": "Microsoft 365 campaign",
         "priority": "high",
         "source_ids": [
           9
@@ -45,7 +35,7 @@
       },
       {
         "control_id": "third_party_risk",
-        "evidence_excerpt": "An automated campaign is using stolen GitHub tokens to plant workflows that print a repository's secrets into its GitHub Actions logs, which the attackers then download before deleting the runs. The attacks have succeeded in private repositories and GitHub Enterprise environments, according to an analysis by cloud security company Wiz. A GitHub safeguard that pauses…",
+        "evidence_excerpt": "An automated campaign is using stolen GitHub tokens to plant workflows that print a repository's secrets into its GitHub Actions logs, which the attackers then download before deleting the runs.",
         "evidence_origin": "summary",
         "focus": "stolen GitHub tokens",
         "priority": "medium",
@@ -55,27 +45,37 @@
       },
       {
         "control_id": "access_management",
-        "evidence_excerpt": "A single hacked device on a Tailscale network can be used to gain root access to other servers it can reach, according to a security researcher who published the findings this week. The attack requires two things: Tailscale SSH set up to allow port forwarding, and an attacker who already controls one device that the network's access rules permit to connect to the target. The findings were…",
+        "evidence_excerpt": "A single hacked device on a Tailscale network can be used to gain root access to other servers it can reach, according to a security researcher who published the findings this week. The attack requires two things: Tailscale SSH set up to allow port forwarding, and an attacker who already controls one device that the network's access rules permit to connect to the target.",
         "evidence_origin": "summary",
-        "focus": "Tailscale SSH",
+        "focus": "single hacked device",
         "priority": "medium",
         "source_ids": [
           12
         ]
+      },
+      {
+        "control_id": "vulnerability_management",
+        "evidence_excerpt": "A memory-corruption flaw in Google's Brotli decoder sits in many programs that unpack Brotli-compressed data, among them Bun, Microsoft's .NET, the Python Brotli and brotlicffi packages, and Envoy proxies set up to decompress Brotli.",
+        "evidence_origin": "summary",
+        "focus": "Google's Brotli decoder",
+        "priority": "medium",
+        "source_ids": [
+          2
+        ]
       }
     ],
     "executive_brief": {
-      "decision_frame": "exposure",
+      "decision_frame": "separate",
       "source_ids": [
         1,
-        2,
-        3
+        9,
+        10
       ]
     },
     "industry_impacts": [],
     "regulatory_changes": []
   },
-  "generated_at": "2026-10-26T14:44:37.23838Z",
+  "generated_at": "2026-10-26T15:39:35.164093Z",
   "feed_url": "https://ricomanifesto.github.io/SentryDigest/feed.xml",
   "feed_home_url": "https://ricomanifesto.github.io/SentryDigest/",
   "digest_issue_date": "2026-10-26",
