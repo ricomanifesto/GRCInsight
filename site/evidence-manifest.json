@@ -5,9 +5,9 @@
     "control_implications": [
       {
         "control_id": "vulnerability_management",
-        "evidence_excerpt": "PHP has rebuilt its official Windows packages for PHP 8.2 through 8.5 to fix CVE-2026-111497, a flaw in the Brotli compression library that the packages include. The flaw can let an attacker corrupt memory and potentially run code.",
+        "evidence_excerpt": "PHP has rebuilt its official Windows packages for PHP 8.2 through 8.5 to fix CVE-2026-111497, a flaw in the Brotli compression library that the packages include. The flaw can let an attacker corrupt memory and potentially run code. PHP says the flaw can be reached through the cURL extension when the extension decompresses HTTP responses automatically. cURL leaves that off by default, but…",
         "evidence_origin": "summary",
-        "focus": "Brotli compression library",
+        "focus": "official Windows packages for PHP 8.2 through 8.5",
         "priority": "high",
         "source_ids": [
           1
@@ -34,13 +34,13 @@
         ]
       },
       {
-        "control_id": "third_party_risk",
-        "evidence_excerpt": "South Korean police identified seven suspects linked to a cybercrime operation that breached more than 90 organizations in the country, with ARTEX AI pentesting framework used in most of the attacks…",
+        "control_id": "access_management",
+        "evidence_excerpt": "DreamHost has forced password resets for email and FTP/SFTP users following an incident that disrupted connections to the File Manager interface…",
         "evidence_origin": "summary",
-        "focus": "ARTEX AI pentesting framework",
-        "priority": "high",
+        "focus": "email and FTP/SFTP users",
+        "priority": "medium",
         "source_ids": [
-          6
+          9
         ]
       },
       {
@@ -54,7 +54,7 @@
         ]
       },
       {
-        "control_id": "access_management",
+        "control_id": "third_party_risk",
         "evidence_excerpt": "An ongoing supply chain attack is harvesting credentials and sensitive data from thousands of developer repositories.",
         "evidence_origin": "summary",
         "focus": "developer repositories",
@@ -65,9 +65,9 @@
       }
     ],
     "executive_brief": {
-      "decision_frame": "exposure",
+      "decision_frame": "separate",
       "source_ids": [
-        1,
+        2,
         4,
         11
       ]
@@ -75,7 +75,7 @@
     "industry_impacts": [],
     "regulatory_changes": []
   },
-  "generated_at": "2026-10-27T03:23:05.29896Z",
+  "generated_at": "2026-10-27T06:31:56.872734Z",
   "feed_url": "https://ricomanifesto.github.io/SentryDigest/feed.xml",
   "feed_home_url": "https://ricomanifesto.github.io/SentryDigest/",
   "digest_issue_date": "2026-10-27",
