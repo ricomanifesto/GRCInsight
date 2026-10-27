@@ -7,7 +7,7 @@
         "control_id": "vulnerability_management",
         "evidence_excerpt": "PHP has rebuilt its official Windows packages for PHP 8.2 through 8.5 to fix CVE-2026-111497, a flaw in the Brotli compression library that the packages include. The flaw can let an attacker corrupt memory and potentially run code.",
         "evidence_origin": "summary",
-        "focus": "official Windows packages",
+        "focus": "Brotli compression library",
         "priority": "high",
         "source_ids": [
           1
@@ -17,76 +17,76 @@
         "control_id": "vulnerability_management",
         "evidence_excerpt": "Two critical RCE vulnerabilities (CVE-2026-109618 and CVE-2026-109619), collectively tracked as PHP2Shell, have been successfully exploited in the wild…",
         "evidence_origin": "summary",
-        "focus": "critical RCE vulnerabilities",
+        "focus": "PHP2Shell",
         "priority": "high",
         "source_ids": [
           2
         ]
       },
       {
-        "control_id": "vulnerability_management",
-        "evidence_excerpt": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Friday added two vulnerabilities impacting Collabora Online Built-in CODE Server and Arista VeloCloud Orchestrator (VCO) to its Known Exploited Vulnerabilities (KEV), citing reports of active exploitation in the wild.",
+        "control_id": "data_protection",
+        "evidence_excerpt": "The University of Copenhagen in Denmark confirmed that hackers accessed one of its test environments containing personal data belonging to 525,000 people…",
         "evidence_origin": "summary",
-        "focus": "Collabora Online Built-in CODE Server",
-        "priority": "high",
-        "source_ids": [
-          3
-        ]
-      },
-      {
-        "control_id": "third_party_risk",
-        "evidence_excerpt": "An ongoing supply chain attack is harvesting credentials and sensitive data from thousands of developer repositories.",
-        "evidence_origin": "summary",
-        "focus": "supply chain attack",
+        "focus": "test environments containing personal data",
         "priority": "high",
         "source_ids": [
           4
         ]
       },
       {
-        "control_id": "access_management",
-        "evidence_excerpt": "Cybersecurity researchers are calling attention to what they say is a \"recurring social engineering pattern\" across hundreds of cases in which threat actors use Microsoft Teams' external chat creation feature to conduct impersonation scams or to deliver malware.",
+        "control_id": "third_party_risk",
+        "evidence_excerpt": "South Korean police identified seven suspects linked to a cybercrime operation that breached more than 90 organizations in the country, with ARTEX AI pentesting framework used in most of the attacks…",
         "evidence_origin": "summary",
-        "focus": "Microsoft Teams' external chat creation feature",
-        "priority": "medium",
+        "focus": "ARTEX AI pentesting framework",
+        "priority": "high",
         "source_ids": [
           6
         ]
       },
       {
-        "control_id": "governance",
-        "evidence_excerpt": "A new NIST, CISA, and NSA guide treats runaway agents as incidents to be rehearsed. The hard part of the response is answering whose authority the agent used, and that answer has to exist before the incident does…",
+        "control_id": "vulnerability_management",
+        "evidence_excerpt": "An unknown threat actor has infected 953 online stores, most of them running Magento, as part of a long-running campaign active since July 2025. According to Dutch e-commerce security company Sansec, the activity is designed to add a small piece of code to the store's pages that, when visited by unsuspecting users, serves malicious JavaScript loader code through Magento CMS blocks.",
         "evidence_origin": "summary",
-        "focus": "NIST, CISA, and NSA guide",
-        "priority": "medium",
+        "focus": "Magento CMS blocks",
+        "priority": "high",
         "source_ids": [
-          9
+          10
+        ]
+      },
+      {
+        "control_id": "access_management",
+        "evidence_excerpt": "An ongoing supply chain attack is harvesting credentials and sensitive data from thousands of developer repositories.",
+        "evidence_origin": "summary",
+        "focus": "developer repositories",
+        "priority": "high",
+        "source_ids": [
+          11
         ]
       }
     ],
     "executive_brief": {
-      "decision_frame": "separate",
+      "decision_frame": "exposure",
       "source_ids": [
-        3,
+        1,
         4,
-        9
+        11
       ]
     },
     "industry_impacts": [],
     "regulatory_changes": []
   },
-  "generated_at": "2026-10-26T21:18:04.102628Z",
+  "generated_at": "2026-10-27T03:23:05.29896Z",
   "feed_url": "https://ricomanifesto.github.io/SentryDigest/feed.xml",
   "feed_home_url": "https://ricomanifesto.github.io/SentryDigest/",
-  "digest_issue_date": "2026-10-26",
-  "digest_issue_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-26/",
+  "digest_issue_date": "2026-10-27",
+  "digest_issue_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-27/",
   "requested_model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
   "resolved_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
   "sources": [
     {
       "title": "PHP Issues Second Windows Security Update in Five Days to Fix Brotli Code Execution Flaw",
       "url": "https://thehackernews.com/2026/10/php-issues-second-windows-security.html",
-      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-26/#reporting-c85198bbddef",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-27/#reporting-c85198bbddef",
       "cves": [
         "CVE-2026-111497"
       ],
@@ -110,7 +110,7 @@
     {
       "title": "PHP2Shell security flaws now sucessfully exploited in the wild",
       "url": "https://www.bleepingcomputer.com/news/security/php2shell-security-flaws-now-sucessfully-exploited-in-the-wild/",
-      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-26/#reporting-7c54e769948b",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-27/#reporting-7c54e769948b",
       "cves": [
         "CVE-2026-109618",
         "CVE-2026-109619"
@@ -133,25 +133,177 @@
       "effective_date_evidence": null
     },
     {
-      "title": "CISA Flags Two Actively Exploited Critical Flaws in Collabora Online and Arista VeloCloud",
-      "url": "https://thehackernews.com/2026/10/cisa-flags-two-actively-exploited.html",
-      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-26/#reporting-ad7396463092",
-      "cves": [
-        "CVE-2026-110447"
-      ],
-      "snippet": "CISA Flags Two Actively Exploited Critical Flaws in Collabora Online and Arista VeloCloud The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Friday added two vulnerabilities impacting Collabora Online Built-in CODE Server and Arista VeloCloud Orchestrator (VCO) to its Known Exploited Vulnerabilities (KEV), citing reports of active exploitation in the wild. The critical-severity vulnerabilities are listed below - CVE-2026-110447 (CVSS score: 9.2) - An operating… The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Friday added two vulnerabilities impacting Collabora Online Built-in CODE Server and Arista VeloCloud Orchestrator (VCO) to its Known Exploited Vulne",
+      "title": "So Many AI Security Benchmarks, But None Tell the Whole Story",
+      "url": "https://www.darkreading.com/cybersecurity-analytics/benchmarking-security-of-ai-models-poses-challenges",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-27/#reporting-12bf2922831c",
+      "cves": [],
+      "snippet": "So Many AI Security Benchmarks, But None Tell the Whole Story Measuring AI model security gets complex fast — a growing patchwork of benchmarks targets different variables in the equation, but none replace testing against your own code and workflows. Measuring AI model security gets complex fast — a growing patchwork of benchmarks targets different variables in the equation, but none replace testing against your own code and workflows.",
       "article_evidence": [
         {
           "extraction_version": 1,
           "origin": "summary",
-          "raw_text": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Friday added two vulnerabilities impacting Collabora Online Built-in CODE Server and Arista VeloCloud Orchestrator (VCO) to its Known Exploited Vulnerabilities (KEV), citing reports of active exploitation in the wild. The critical-severity vulnerabilities are listed below - CVE-2026-110447 (CVSS score: 9.2) - An operating…",
-          "text": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Friday added two vulnerabilities impacting Collabora Online Built-in CODE Server and Arista VeloCloud Orchestrator (VCO) to its Known Exploited Vulnerabilities (KEV), citing reports of active exploitation in the wild. The critical-severity vulnerabilities are listed below - CVE-2026-110447 (CVSS score: 9.2) - An operating…"
+          "raw_text": "Measuring AI model security gets complex fast — a growing patchwork of benchmarks targets different variables in the equation, but none replace testing against your own code and workflows.",
+          "text": "Measuring AI model security gets complex fast — a growing patchwork of benchmarks targets different variables in the equation, but none replace testing against your own code and workflows."
         },
         {
           "extraction_version": 1,
           "origin": "content",
-          "raw_text": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Friday added two vulnerabilities impacting Collabora Online Built-in CODE Server and Arista VeloCloud Orchestrator (VCO) to its Known Exploited Vulnerabilities (KEV), citing reports of active exploitation in the wild. The critical-severity vulnerabilities are listed below - CVE-2026-110447 (CVSS score: 9.2) - An operating…",
-          "text": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Friday added two vulnerabilities impacting Collabora Online Built-in CODE Server and Arista VeloCloud Orchestrator (VCO) to its Known Exploited Vulnerabilities (KEV), citing reports of active exploitation in the wild. The critical-severity vulnerabilities are listed below - CVE-2026-110447 (CVSS score: 9.2) - An operating…"
+          "raw_text": "Measuring AI model security gets complex fast — a growing patchwork of benchmarks targets different variables in the equation, but none replace testing against your own code and workflows.",
+          "text": "Measuring AI model security gets complex fast — a growing patchwork of benchmarks targets different variables in the equation, but none replace testing against your own code and workflows."
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "University of Copenhagen data breach exposes data of 525,000 people",
+      "url": "https://www.bleepingcomputer.com/news/security/university-of-copenhagen-data-breach-exposes-data-of-525-000-people/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-27/#reporting-6d9d5e5887ab",
+      "cves": [],
+      "snippet": "University of Copenhagen data breach exposes data of 525,000 people The University of Copenhagen in Denmark confirmed that hackers accessed one of its test environments containing personal data belonging to 525,000 people… The University of Copenhagen in Denmark confirmed that hackers accessed one of its test environments containing personal data belonging to 525,000 people…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "The University of Copenhagen in Denmark confirmed that hackers accessed one of its test environments containing personal data belonging to 525,000 people…",
+          "text": "The University of Copenhagen in Denmark confirmed that hackers accessed one of its test environments containing personal data belonging to 525,000 people…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "The University of Copenhagen in Denmark confirmed that hackers accessed one of its test environments containing personal data belonging to 525,000 people…",
+          "text": "The University of Copenhagen in Denmark confirmed that hackers accessed one of its test environments containing personal data belonging to 525,000 people…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Risks & Rewards: How AI Is Redefining the CISO's Role",
+      "url": "https://www.darkreading.com/cybersecurity-careers/risks-rewards-ai-redefining-ciso-role",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-27/#reporting-711b61639b30",
+      "cves": [],
+      "snippet": "Risks & Rewards: How AI Is Redefining the CISO's Role Nvidia security executive Mark Weatherford says CISOs must help business leaders weigh AI's pros and cons, and ensure those deploying it own the risks. Nvidia security executive Mark Weatherford says CISOs must help business leaders weigh AI's pros and cons, and ensure those deploying it own the risks.",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Nvidia security executive Mark Weatherford says CISOs must help business leaders weigh AI's pros and cons, and ensure those deploying it own the risks.",
+          "text": "Nvidia security executive Mark Weatherford says CISOs must help business leaders weigh AI's pros and cons, and ensure those deploying it own the risks."
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Nvidia security executive Mark Weatherford says CISOs must help business leaders weigh AI's pros and cons, and ensure those deploying it own the risks.",
+          "text": "Nvidia security executive Mark Weatherford says CISOs must help business leaders weigh AI's pros and cons, and ensure those deploying it own the risks."
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Former pentester used ARTEX AI to steal 8.2 million data records",
+      "url": "https://www.bleepingcomputer.com/news/security/former-pentester-used-artex-ai-to-steal-82-million-data-records/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-27/#reporting-cb6e7d403caa",
+      "cves": [],
+      "snippet": "Former pentester used ARTEX AI to steal 8.2 million data records South Korean police identified seven suspects linked to a cybercrime operation that breached more than 90 organizations in the country, with ARTEX AI pentesting framework used in most of the attacks… South Korean police identified seven suspects linked to a cybercrime operation that breached more than 90 organizations in the country, with ARTEX AI pentesting framework used in most of the attacks…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "South Korean police identified seven suspects linked to a cybercrime operation that breached more than 90 organizations in the country, with ARTEX AI pentesting framework used in most of the attacks…",
+          "text": "South Korean police identified seven suspects linked to a cybercrime operation that breached more than 90 organizations in the country, with ARTEX AI pentesting framework used in most of the attacks…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "South Korean police identified seven suspects linked to a cybercrime operation that breached more than 90 organizations in the country, with ARTEX AI pentesting framework used in most of the attacks…",
+          "text": "South Korean police identified seven suspects linked to a cybercrime operation that breached more than 90 organizations in the country, with ARTEX AI pentesting framework used in most of the attacks…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "In-the-Wild Attack Abuses AI Agents' Trust in Markdown",
+      "url": "https://www.darkreading.com/application-security/in-the-wild-attack-ai-agents-trust-markdown",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-27/#reporting-631b0902569c",
+      "cves": [],
+      "snippet": "In-the-Wild Attack Abuses AI Agents' Trust in Markdown A new AI agent prompt injection technique exploits how coding assistants consume local instruction files, blurring the line between text documents and executable actions. A new AI agent prompt injection technique exploits how coding assistants consume local instruction files, blurring the line between text documents and executable actions.",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "A new AI agent prompt injection technique exploits how coding assistants consume local instruction files, blurring the line between text documents and executable actions.",
+          "text": "A new AI agent prompt injection technique exploits how coding assistants consume local instruction files, blurring the line between text documents and executable actions."
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "A new AI agent prompt injection technique exploits how coding assistants consume local instruction files, blurring the line between text documents and executable actions.",
+          "text": "A new AI agent prompt injection technique exploits how coding assistants consume local instruction files, blurring the line between text documents and executable actions."
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "OpenAI launches GPT-6.1 Terra with 3x faster AI agents, 50% lower pricing",
+      "url": "https://www.bleepingcomputer.com/news/artificial-intelligence/openai-launches-gpt-61-terra-with-3x-faster-ai-agents-50-percent-lower-pricing/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-27/#reporting-77ef2d30d345",
+      "cves": [],
+      "snippet": "OpenAI launches GPT-6.1 Terra with 3x faster AI agents, 50% lower pricing OpenAI has launched GPT-6.1 Terra, a new model focused on computer use, visual reasoning, coding, and everyday work, while costing significantly less than its larger models… OpenAI has launched GPT-6.1 Terra, a new model focused on computer use, visual reasoning, coding, and everyday work, while costing significantly less than its larger models…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "OpenAI has launched GPT-6.1 Terra, a new model focused on computer use, visual reasoning, coding, and everyday work, while costing significantly less than its larger models…",
+          "text": "OpenAI has launched GPT-6.1 Terra, a new model focused on computer use, visual reasoning, coding, and everyday work, while costing significantly less than its larger models…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "OpenAI has launched GPT-6.1 Terra, a new model focused on computer use, visual reasoning, coding, and everyday work, while costing significantly less than its larger models…",
+          "text": "OpenAI has launched GPT-6.1 Terra, a new model focused on computer use, visual reasoning, coding, and everyday work, while costing significantly less than its larger models…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "DreamHost forces password resets in ongoing \"incident\"",
+      "url": "https://www.bleepingcomputer.com/news/security/dreamhost-forces-email-ftp-sftp-password-resets-in-ongoing-incident/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-27/#reporting-e83553d746d5",
+      "cves": [],
+      "snippet": "DreamHost forces password resets in ongoing \"incident\" DreamHost has forced password resets for email and FTP/SFTP users following an incident that disrupted connections to the File Manager interface… DreamHost has forced password resets for email and FTP/SFTP users following an incident that disrupted connections to the File Manager interface…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "DreamHost has forced password resets for email and FTP/SFTP users following an incident that disrupted connections to the File Manager interface…",
+          "text": "DreamHost has forced password resets for email and FTP/SFTP users following an incident that disrupted connections to the File Manager interface…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "DreamHost has forced password resets for email and FTP/SFTP users following an incident that disrupted connections to the File Manager interface…",
+          "text": "DreamHost has forced password resets for email and FTP/SFTP users following an incident that disrupted connections to the File Manager interface…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Hackers Infect 953 Online Stores With Scanner-Evading JavaScript, Mostly on Magento",
+      "url": "https://thehackernews.com/2026/10/hackers-infect-953-online-stores-with.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-27/#reporting-4764a547323c",
+      "cves": [],
+      "snippet": "Hackers Infect 953 Online Stores With Scanner-Evading JavaScript, Mostly on Magento An unknown threat actor has infected 953 online stores, most of them running Magento, as part of a long-running campaign active since July 2025. According to Dutch e-commerce security company Sansec, the activity is designed to add a small piece of code to the store's pages that, when visited by unsuspecting users, serves malicious JavaScript loader code through Magento CMS blocks. \"When you… An unknown threat actor has infected 953 online stores, most of them running Magento, as part of a long-running campaign active since July 2025. According to Dutch e-commerce security company Sansec, the activity is desi",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "An unknown threat actor has infected 953 online stores, most of them running Magento, as part of a long-running campaign active since July 2025. According to Dutch e-commerce security company Sansec, the activity is designed to add a small piece of code to the store's pages that, when visited by unsuspecting users, serves malicious JavaScript loader code through Magento CMS blocks. \"When you…",
+          "text": "An unknown threat actor has infected 953 online stores, most of them running Magento, as part of a long-running campaign active since July 2025. According to Dutch e-commerce security company Sansec, the activity is designed to add a small piece of code to the store's pages that, when visited by unsuspecting users, serves malicious JavaScript loader code through Magento CMS blocks. \"When you…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "An unknown threat actor has infected 953 online stores, most of them running Magento, as part of a long-running campaign active since July 2025. According to Dutch e-commerce security company Sansec, the activity is designed to add a small piece of code to the store's pages that, when visited by unsuspecting users, serves malicious JavaScript loader code through Magento CMS blocks. \"When you…",
+          "text": "An unknown threat actor has infected 953 online stores, most of them running Magento, as part of a long-running campaign active since July 2025. According to Dutch e-commerce security company Sansec, the activity is designed to add a small piece of code to the store's pages that, when visited by unsuspecting users, serves malicious JavaScript loader code through Magento CMS blocks. \"When you…"
         }
       ],
       "effective_date_evidence": null
@@ -159,7 +311,7 @@
     {
       "title": "'Gheist' Weaponizes GitHub Tokens to Steal Cloud Secrets",
       "url": "https://www.darkreading.com/cyberattacks-data-breaches/gheist-stolen-github-tokens-cloud-secrets",
-      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-26/#reporting-9954d1a67aa0",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-27/#reporting-9954d1a67aa0",
       "cves": [],
       "snippet": "'Gheist' Weaponizes GitHub Tokens to Steal Cloud Secrets An ongoing supply chain attack is harvesting credentials and sensitive data from thousands of developer repositories. An ongoing supply chain attack is harvesting credentials and sensitive data from thousands of developer repositories.",
       "article_evidence": [
@@ -181,7 +333,7 @@
     {
       "title": "Critical 'HTTP2Shell' Brotli vulnerability triggers emergency patches",
       "url": "https://www.bleepingcomputer.com/news/security/critical-http2shell-brotli-vulnerability-triggers-emergency-patches/",
-      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-26/#reporting-f5846d497bb2",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-27/#reporting-f5846d497bb2",
       "cves": [],
       "snippet": "Critical 'HTTP2Shell' Brotli vulnerability triggers emergency patches A critical flaw dubbed 'HTTP2Shell' in Brotli, the C decoder library built into Node.js, could allow attackers to corrupt memory and access sensitive data… A critical flaw dubbed 'HTTP2Shell' in Brotli, the C decoder library built into Node.js, could allow attackers to corrupt memory and access sensitive data…",
       "article_evidence": [
@@ -196,160 +348,6 @@
           "origin": "content",
           "raw_text": "A critical flaw dubbed 'HTTP2Shell' in Brotli, the C decoder library built into Node.js, could allow attackers to corrupt memory and access sensitive data…",
           "text": "A critical flaw dubbed 'HTTP2Shell' in Brotli, the C decoder library built into Node.js, could allow attackers to corrupt memory and access sensitive data…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "Attackers Use Microsoft Teams IT Support Scams to Deploy Malware and Ransomware",
-      "url": "https://thehackernews.com/2026/10/attackers-use-microsoft-teams-it.html",
-      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-26/#reporting-4b8826d6a66e",
-      "cves": [],
-      "snippet": "Attackers Use Microsoft Teams IT Support Scams to Deploy Malware and Ransomware Cybersecurity researchers are calling attention to what they say is a \"recurring social engineering pattern\" across hundreds of cases in which threat actors use Microsoft Teams' external chat creation feature to conduct impersonation scams or to deliver malware. \"A consistent pattern of attacker behavior has emerged across these incidents: the use of the same throwaway tenants, the same 'IT… Cybersecurity researchers are calling attention to what they say is a \"recurring social engineering pattern\" across hundreds of cases in which threat actors use Microsoft Teams' external chat creation feature to conduct imper",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "Cybersecurity researchers are calling attention to what they say is a \"recurring social engineering pattern\" across hundreds of cases in which threat actors use Microsoft Teams' external chat creation feature to conduct impersonation scams or to deliver malware. \"A consistent pattern of attacker behavior has emerged across these incidents: the use of the same throwaway tenants, the same 'IT…",
-          "text": "Cybersecurity researchers are calling attention to what they say is a \"recurring social engineering pattern\" across hundreds of cases in which threat actors use Microsoft Teams' external chat creation feature to conduct impersonation scams or to deliver malware. \"A consistent pattern of attacker behavior has emerged across these incidents: the use of the same throwaway tenants, the same 'IT…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "Cybersecurity researchers are calling attention to what they say is a \"recurring social engineering pattern\" across hundreds of cases in which threat actors use Microsoft Teams' external chat creation feature to conduct impersonation scams or to deliver malware. \"A consistent pattern of attacker behavior has emerged across these incidents: the use of the same throwaway tenants, the same 'IT…",
-          "text": "Cybersecurity researchers are calling attention to what they say is a \"recurring social engineering pattern\" across hundreds of cases in which threat actors use Microsoft Teams' external chat creation feature to conduct impersonation scams or to deliver malware. \"A consistent pattern of attacker behavior has emerged across these incidents: the use of the same throwaway tenants, the same 'IT…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "Microsoft releases emergency .NET patches for critical Brotli flaw",
-      "url": "https://www.bleepingcomputer.com/news/microsoft/microsoft-releases-emergency-net-patches-for-critical-brotli-flaw/",
-      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-26/#reporting-5d414f2c6746",
-      "cves": [],
-      "snippet": "Microsoft releases emergency .NET patches for critical Brotli flaw Microsoft released emergency .NET security updates to patch a critical vulnerability known as Broccoli2Shell, also tracked as Node2Shell and HTTP2Shell… Microsoft released emergency .NET security updates to patch a critical vulnerability known as Broccoli2Shell, also tracked as Node2Shell and HTTP2Shell…",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "Microsoft released emergency .NET security updates to patch a critical vulnerability known as Broccoli2Shell, also tracked as Node2Shell and HTTP2Shell…",
-          "text": "Microsoft released emergency .NET security updates to patch a critical vulnerability known as Broccoli2Shell, also tracked as Node2Shell and HTTP2Shell…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "Microsoft released emergency .NET security updates to patch a critical vulnerability known as Broccoli2Shell, also tracked as Node2Shell and HTTP2Shell…",
-          "text": "Microsoft released emergency .NET security updates to patch a critical vulnerability known as Broccoli2Shell, also tracked as Node2Shell and HTTP2Shell…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "⚡ Weekly Recap: This2Shell, That2Shell, Everything's an RCE? Rogue AI, Supply Chain Chaos and More",
-      "url": "https://thehackernews.com/2026/10/weekly-recap-this2shell-that2shell.html",
-      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-26/#reporting-e0df996ac6f2",
-      "cves": [],
-      "snippet": "⚡ Weekly Recap: This2Shell, That2Shell, Everything's an RCE? Rogue AI, Supply Chain Chaos and More This2Shell, That2Shell, Everything2Shell. That's pretty much how the last week went. Critical bugs that let attackers run code remotely are showing up everywhere. Hackers are scanning for targets, some flaws are already being used in attacks, and security teams have more urgent patches than they can keep up with. And that's not even the full story. A leaked key led to a software supply-chain… This2Shell, That2Shell, Everything2Shell. That's pretty much how the last week went. Critical bugs that let attackers run code remotely are showing up everywhere. Hackers are scanning for targets, some fla",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "This2Shell, That2Shell, Everything2Shell. That's pretty much how the last week went. Critical bugs that let attackers run code remotely are showing up everywhere. Hackers are scanning for targets, some flaws are already being used in attacks, and security teams have more urgent patches than they can keep up with. And that's not even the full story. A leaked key led to a software supply-chain…",
-          "text": "This2Shell, That2Shell, Everything2Shell. That's pretty much how the last week went. Critical bugs that let attackers run code remotely are showing up everywhere. Hackers are scanning for targets, some flaws are already being used in attacks, and security teams have more urgent patches than they can keep up with. And that's not even the full story. A leaked key led to a software supply-chain…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "This2Shell, That2Shell, Everything2Shell. That's pretty much how the last week went. Critical bugs that let attackers run code remotely are showing up everywhere. Hackers are scanning for targets, some flaws are already being used in attacks, and security teams have more urgent patches than they can keep up with. And that's not even the full story. A leaked key led to a software supply-chain…",
-          "text": "This2Shell, That2Shell, Everything2Shell. That's pretty much how the last week went. Critical bugs that let attackers run code remotely are showing up everywhere. Hackers are scanning for targets, some flaws are already being used in attacks, and security teams have more urgent patches than they can keep up with. And that's not even the full story. A leaked key led to a software supply-chain…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "When an AI Agent Is the Incident, the Identity Record Is the Evidence",
-      "url": "https://www.bleepingcomputer.com/news/security/when-an-ai-agent-is-the-incident-the-identity-record-is-the-evidence/",
-      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-26/#reporting-f0b80253de2a",
-      "cves": [],
-      "snippet": "When an AI Agent Is the Incident, the Identity Record Is the Evidence A new NIST, CISA, and NSA guide treats runaway agents as incidents to be rehearsed. The hard part of the response is answering whose authority the agent used, and that answer has to exist before the incident does… A new NIST, CISA, and NSA guide treats runaway agents as incidents to be rehearsed. The hard part of the response is answering whose authority the agent used, and that answer has to exist before the incident does…",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "A new NIST, CISA, and NSA guide treats runaway agents as incidents to be rehearsed. The hard part of the response is answering whose authority the agent used, and that answer has to exist before the incident does…",
-          "text": "A new NIST, CISA, and NSA guide treats runaway agents as incidents to be rehearsed. The hard part of the response is answering whose authority the agent used, and that answer has to exist before the incident does…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "A new NIST, CISA, and NSA guide treats runaway agents as incidents to be rehearsed. The hard part of the response is answering whose authority the agent used, and that answer has to exist before the incident does…",
-          "text": "A new NIST, CISA, and NSA guide treats runaway agents as incidents to be rehearsed. The hard part of the response is answering whose authority the agent used, and that answer has to exist before the incident does…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "10 Software Security Practices Built for the Next 250 Years",
-      "url": "https://www.darkreading.com/cyberattacks-data-breaches/10-software-security-practices-built-250-years",
-      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-26/#reporting-9d30cfebb912",
-      "cves": [],
-      "snippet": "10 Software Security Practices Built for the Next 250 Years This Cybersecurity Awareness Month's theme, \"Securing the Next 250,\" asks us to look beyond vulnerabilities and consider what will make our digital systems resilient for generations. This Cybersecurity Awareness Month's theme, \"Securing the Next 250,\" asks us to look beyond vulnerabilities and consider what will make our digital systems resilient for generations.",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "This Cybersecurity Awareness Month's theme, \"Securing the Next 250,\" asks us to look beyond vulnerabilities and consider what will make our digital systems resilient for generations.",
-          "text": "This Cybersecurity Awareness Month's theme, \"Securing the Next 250,\" asks us to look beyond vulnerabilities and consider what will make our digital systems resilient for generations."
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "This Cybersecurity Awareness Month's theme, \"Securing the Next 250,\" asks us to look beyond vulnerabilities and consider what will make our digital systems resilient for generations.",
-          "text": "This Cybersecurity Awareness Month's theme, \"Securing the Next 250,\" asks us to look beyond vulnerabilities and consider what will make our digital systems resilient for generations."
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "Chinese man extradited for role in $36 million cryptocurrency scam",
-      "url": "https://www.bleepingcomputer.com/news/security/chinese-man-extradited-for-role-in-36-million-cryptocurrency-scam/",
-      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-26/#reporting-5a51b4b30386",
-      "cves": [],
-      "snippet": "Chinese man extradited for role in $36 million cryptocurrency scam A Chinese national was arraigned in California after being extradited from the Netherlands for his alleged involvement in a cryptocurrency investment scam that stole nearly $37 million from 174 victims in the United States… A Chinese national was arraigned in California after being extradited from the Netherlands for his alleged involvement in a cryptocurrency investment scam that stole nearly $37 million from 174 victims in the United States…",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "A Chinese national was arraigned in California after being extradited from the Netherlands for his alleged involvement in a cryptocurrency investment scam that stole nearly $37 million from 174 victims in the United States…",
-          "text": "A Chinese national was arraigned in California after being extradited from the Netherlands for his alleged involvement in a cryptocurrency investment scam that stole nearly $37 million from 174 victims in the United States…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "A Chinese national was arraigned in California after being extradited from the Netherlands for his alleged involvement in a cryptocurrency investment scam that stole nearly $37 million from 174 victims in the United States…",
-          "text": "A Chinese national was arraigned in California after being extradited from the Netherlands for his alleged involvement in a cryptocurrency investment scam that stole nearly $37 million from 174 victims in the United States…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "Two Critical Wasmtime Flaws Could Let Malicious WebAssembly Modules Escape Sandboxes",
-      "url": "https://thehackernews.com/2026/10/two-critical-wasmtime-flaws-could-let.html",
-      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-26/#reporting-f67f5ee9f8e3",
-      "cves": [],
-      "snippet": "Two Critical Wasmtime Flaws Could Let Malicious WebAssembly Modules Escape Sandboxes Two critical flaws in Wasmtime, a WebAssembly runtime that can be built into other software, could allow a malicious WebAssembly module to escape the sandbox intended to contain it, the project's maintainers say. An attacker would first need a vulnerable Wasmtime build to compile a module they control, and one of the flaws affects only ARM64 systems. Fixed versions were released on… Two critical flaws in Wasmtime, a WebAssembly runtime that can be built into other software, could allow a malicious WebAssembly module to escape the sandbox intended to contain it, the project's maintainers say. An attacker woul",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "Two critical flaws in Wasmtime, a WebAssembly runtime that can be built into other software, could allow a malicious WebAssembly module to escape the sandbox intended to contain it, the project's maintainers say. An attacker would first need a vulnerable Wasmtime build to compile a module they control, and one of the flaws affects only ARM64 systems. Fixed versions were released on…",
-          "text": "Two critical flaws in Wasmtime, a WebAssembly runtime that can be built into other software, could allow a malicious WebAssembly module to escape the sandbox intended to contain it, the project's maintainers say. An attacker would first need a vulnerable Wasmtime build to compile a module they control, and one of the flaws affects only ARM64 systems. Fixed versions were released on…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "Two critical flaws in Wasmtime, a WebAssembly runtime that can be built into other software, could allow a malicious WebAssembly module to escape the sandbox intended to contain it, the project's maintainers say. An attacker would first need a vulnerable Wasmtime build to compile a module they control, and one of the flaws affects only ARM64 systems. Fixed versions were released on…",
-          "text": "Two critical flaws in Wasmtime, a WebAssembly runtime that can be built into other software, could allow a malicious WebAssembly module to escape the sandbox intended to contain it, the project's maintainers say. An attacker would first need a vulnerable Wasmtime build to compile a module they control, and one of the flaws affects only ARM64 systems. Fixed versions were released on…"
         }
       ],
       "effective_date_evidence": null
