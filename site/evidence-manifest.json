@@ -6,7 +6,7 @@
       {
         "control_id": "vulnerability_management",
         "evidence_excerpt": "Threat actors are beginning to probe for a newly patched critical vulnerability in Oracle E-Business Suite (EBS), according to threat intelligence firm Defused Cyber. The vulnerability in question is CVE-2026-101767 (CVSS score: 9.8) , a case of improper authentication in the Oracle Application Object Library of Oracle E-Business Suite. It was patched by Oracle last week as part of its Critical…",
-        "evidence_origin": "summary",
+        "evidence_origin": "content",
         "focus": "Oracle E-Business Suite",
         "priority": "high",
         "source_ids": [
@@ -14,9 +14,9 @@
         ]
       },
       {
-        "control_id": "vulnerability_management",
+        "control_id": "monitoring",
         "evidence_excerpt": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Tuesday added two vulnerabilities impacting Adobe Commerce and Magento, and Google's Brotli decoder library to its Known Exploited Vulnerabilities (KEV) catalog, citing evidence of active exploitation. The vulnerabilities are listed below - CVE-2026-111497 (CVSS score: 9.2) - An unchecked return value vulnerability in…",
-        "evidence_origin": "summary",
+        "evidence_origin": "content",
         "focus": "Adobe Commerce and Magento",
         "priority": "high",
         "source_ids": [
@@ -24,69 +24,69 @@
         ]
       },
       {
+        "control_id": "third_party_risk",
+        "evidence_excerpt": "U.S. law enforcement has seized the primary domain of Virtualine, a bulletproof hosting service advertised on cybercrime forums for facilitating illegal activities…",
+        "evidence_origin": "content",
+        "focus": "Virtualine, a bulletproof hosting service",
+        "priority": "medium",
+        "source_ids": [
+          5
+        ]
+      },
+      {
         "control_id": "data_protection",
         "evidence_excerpt": "Sony Network Communications has confirmed a data breach that compromised approximately 2.5 million records containing current and former customers' personal information…",
-        "evidence_origin": "summary",
+        "evidence_origin": "content",
         "focus": "Sony Network Communications",
         "priority": "high",
         "source_ids": [
-          9
+          10
         ]
       },
       {
         "control_id": "incident_response",
         "evidence_excerpt": "Cybersecurity researchers have disclosed details of what appears to be an artificial intelligence (AI)-assisted attack orchestrated by a suspected China-nexus threat actor that has leveraged the PHP2Shell vulnerabilities to breach exposed systems. The activity, which was observed on October 25, 2026, involved an attacker combining PHP2Shell with a kernel privilege escalation exploit to root…",
-        "evidence_origin": "summary",
+        "evidence_origin": "content",
         "focus": "PHP2Shell vulnerabilities",
         "priority": "high",
         "source_ids": [
-          11
+          12
         ]
       },
       {
-        "control_id": "vulnerability_management",
-        "evidence_excerpt": "The critical Oracle PeopleSoft bug that ShinyHunters has exploited since May is not one flaw but three chained together, the researchers who reported it said this week. Oracle patched all three under a single identifier, CVE-2026-35273, in June. Its root is a server-side request forgery (SSRF) that reaches an internal management interface because PeopleSoft trusts its own loopback address…",
-        "evidence_origin": "summary",
-        "focus": "Oracle PeopleSoft",
-        "priority": "high",
-        "source_ids": [
-          3
-        ]
-      },
-      {
-        "control_id": "monitoring",
+        "control_id": "access_management",
         "evidence_excerpt": "The China-nexus cyber espionage group known as Volt Typhoon has been attributed to a now-disrupted covert access network dubbed Silent Train that has been put to use for zero-day exploitation and strategic access. \"First identified in late 2023, Silent Train uses rotating chains of compromised SOHO, IoT, and enterprise infrastructure,\" Lumen Technologies Black Lotus Labs said in a report shared…",
-        "evidence_origin": "summary",
-        "focus": "covert access network",
+        "evidence_origin": "content",
+        "focus": "SOHO, IoT, and enterprise infrastructure",
         "priority": "high",
         "source_ids": [
-          7
+          8
         ]
       }
     ],
     "executive_brief": {
       "decision_frame": "separate",
       "source_ids": [
-        4,
-        9,
-        11
+        1,
+        10,
+        12
       ]
     },
     "industry_impacts": [],
     "regulatory_changes": []
   },
-  "generated_at": "2026-10-29T00:39:18.614923Z",
+  "generated_at": "2026-10-29T03:19:29.395386Z",
   "feed_url": "https://ricomanifesto.github.io/SentryDigest/feed.xml",
   "feed_home_url": "https://ricomanifesto.github.io/SentryDigest/",
-  "digest_issue_date": "2026-10-28",
-  "digest_issue_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-28/",
+  "digest_issue_date": "2026-10-29",
+  "digest_issue_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-29/",
   "requested_model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
   "resolved_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
   "sources": [
     {
       "title": "Hackers Target Critical Oracle E-Business Suite RCE Flaw Days After Security Patch",
       "url": "https://thehackernews.com/2026/10/hackers-target-critical-oracle-e.html",
-      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-28/#reporting-f83598082f12",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-29/#reporting-f83598082f12",
       "cves": [
         "CVE-2026-101767"
       ],
@@ -110,7 +110,7 @@
     {
       "title": "Adobe Fixes 8 Critical Campaign Classic Flaws Allowing Code Execution and Security Bypass",
       "url": "https://thehackernews.com/2026/10/adobe-fixes-8-critical-campaign-classic.html",
-      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-28/#reporting-d4f5d5baa825",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-29/#reporting-d4f5d5baa825",
       "cves": [
         "CVE-2026-104351"
       ],
@@ -134,7 +134,7 @@
     {
       "title": "ShinyHunters-Exploited Oracle PeopleSoft Zero-Day Turns Out to Be Three Chained Flaws",
       "url": "https://thehackernews.com/2026/10/shinyhunters-exploited-oracle.html",
-      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-28/#reporting-1417a62a4b37",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-29/#reporting-1417a62a4b37",
       "cves": [
         "CVE-2026-35273"
       ],
@@ -158,7 +158,7 @@
     {
       "title": "Adobe Commerce PolyShell Attacks Breach Hundreds of Stores as Brotli Exploit Traffic Emerges",
       "url": "https://thehackernews.com/2026/10/adobe-commerce-polyshell-attacks-breach.html",
-      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-28/#reporting-5977b4ad9b07",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-29/#reporting-5977b4ad9b07",
       "cves": [
         "CVE-2026-111497"
       ],
@@ -182,7 +182,7 @@
     {
       "title": "Police seize Virtualine bulletproof service tied to ransowmare, cybercrime",
       "url": "https://www.bleepingcomputer.com/news/security/police-seize-virtualine-bulletproof-service-tied-to-ransowmare-cybercrime/",
-      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-28/#reporting-bce6775540c2",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-29/#reporting-bce6775540c2",
       "cves": [],
       "snippet": "Police seize Virtualine bulletproof service tied to ransowmare, cybercrime U.S. law enforcement has seized the primary domain of Virtualine, a bulletproof hosting service advertised on cybercrime forums for facilitating illegal activities… U.S. law enforcement has seized the primary domain of Virtualine, a bulletproof hosting service advertised on cybercrime forums for facilitating illegal activities…",
       "article_evidence": [
@@ -202,9 +202,31 @@
       "effective_date_evidence": null
     },
     {
+      "title": "GhostAction Hacking Wave Fizzles, But Attackers Lurk on in GitHub",
+      "url": "https://www.darkreading.com/application-security/ghostaction-hacking-wave-fizzles-attackers-github",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-29/#reporting-0756d72ac636",
+      "cves": [],
+      "snippet": "GhostAction Hacking Wave Fizzles, But Attackers Lurk on in GitHub The supply chain attack campaign's shift toward developer endpoints and cloud access signals what could be next for the cybercrime outfit. The supply chain attack campaign's shift toward developer endpoints and cloud access signals what could be next for the cybercrime outfit.",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "The supply chain attack campaign's shift toward developer endpoints and cloud access signals what could be next for the cybercrime outfit.",
+          "text": "The supply chain attack campaign's shift toward developer endpoints and cloud access signals what could be next for the cybercrime outfit."
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "The supply chain attack campaign's shift toward developer endpoints and cloud access signals what could be next for the cybercrime outfit.",
+          "text": "The supply chain attack campaign's shift toward developer endpoints and cloud access signals what could be next for the cybercrime outfit."
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
       "title": "Discord to let search engines index public server messages",
       "url": "https://www.bleepingcomputer.com/news/security/discord-to-let-search-engines-index-public-server-messages/",
-      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-28/#reporting-aae0c135c0f5",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-29/#reporting-aae0c135c0f5",
       "cves": [],
       "snippet": "Discord to let search engines index public server messages Discord will allow search engines to index discussions in Discoverable Servers and make them accessible on the web to users outside the platform without an account or invitation… Discord will allow search engines to index discussions in Discoverable Servers and make them accessible on the web to users outside the platform without an account or invitation…",
       "article_evidence": [
@@ -226,7 +248,7 @@
     {
       "title": "Volt Typhoon Used Covert Silent Train Network in Four Zero-Day Exploitation Campaigns",
       "url": "https://thehackernews.com/2026/10/volt-typhoon-used-covert-silent-train.html",
-      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-28/#reporting-3402ef3be45e",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-29/#reporting-3402ef3be45e",
       "cves": [],
       "snippet": "Volt Typhoon Used Covert Silent Train Network in Four Zero-Day Exploitation Campaigns The China-nexus cyber espionage group known as Volt Typhoon has been attributed to a now-disrupted covert access network dubbed Silent Train that has been put to use for zero-day exploitation and strategic access. \"First identified in late 2023, Silent Train uses rotating chains of compromised SOHO, IoT, and enterprise infrastructure,\" Lumen Technologies Black Lotus Labs said in a report shared… The China-nexus cyber espionage group known as Volt Typhoon has been attributed to a now-disrupted covert access network dubbed Silent Train that has been put to use for zero-day exploitation and strategic access. \"",
       "article_evidence": [
@@ -248,7 +270,7 @@
     {
       "title": "Google to Allow One-Tap Android App Installs From Approved Third-Party Stores Outside U.S.",
       "url": "https://thehackernews.com/2026/10/google-to-allow-one-tap-android-app.html",
-      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-28/#reporting-346aefdaad09",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-29/#reporting-346aefdaad09",
       "cves": [],
       "snippet": "Google to Allow One-Tap Android App Installs From Approved Third-Party Stores Outside U.S. Third-party Android app stores can now apply to Google for permission to install apps with one tap, without Android's usual confirmation screens, and to update them in the background. To qualify, a store must pass identity checks and send Google its full catalog, along with every new app and update, for ongoing malware scanning. Approved stores get the features from December 1, but only on… Third-party Android app stores can now apply to Google for permission to install apps with one tap, without Android's usual confirmation screens, and to update them in the background. To qualify, a store must pass i",
       "article_evidence": [
@@ -270,7 +292,7 @@
     {
       "title": "Sony ISP subsidiary data breach exposes 2.5 million customer records",
       "url": "https://www.bleepingcomputer.com/news/security/sony-isp-subsidiary-data-breach-exposes-25-million-customer-records/",
-      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-28/#reporting-cfdef39189ea",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-29/#reporting-cfdef39189ea",
       "cves": [],
       "snippet": "Sony ISP subsidiary data breach exposes 2.5 million customer records Sony Network Communications has confirmed a data breach that compromised approximately 2.5 million records containing current and former customers' personal information… Sony Network Communications has confirmed a data breach that compromised approximately 2.5 million records containing current and former customers' personal information…",
       "article_evidence": [
@@ -292,7 +314,7 @@
     {
       "title": "Researcher Reveals How Logic Bugs Alone Cracked Microsoft Edge in $175,000 Pwn2Own Win",
       "url": "https://thehackernews.com/2026/10/researcher-reveals-how-logic-bugs-alone.html",
-      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-28/#reporting-4abc2dcf4334",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-29/#reporting-4abc2dcf4334",
       "cves": [],
       "snippet": "Researcher Reveals How Logic Bugs Alone Cracked Microsoft Edge in $175,000 Pwn2Own Win A chain of logic flaws, with no memory corruption, can turn a malicious web page into code running on a Windows computer outside Microsoft Edge's sandbox, a security researcher has shown. Orange Tsai of DEVCORE published the full method on October 28, five months after the chain won $175,000 at the Pwn2Own Berlin contest in May. Microsoft fixed the Edge bugs the day after the contest… A chain of logic flaws, with no memory corruption, can turn a malicious web page into code running on a Windows computer outside Microsoft Edge's sandbox, a security researcher has shown. Orange Tsai of DEVCORE published the ",
       "article_evidence": [
@@ -314,7 +336,7 @@
     {
       "title": "PHP2Shell Attack Roots 25 Servers, Breaches U.S. Government-Affiliated Network",
       "url": "https://thehackernews.com/2026/10/php2shell-attack-roots-25-servers.html",
-      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-28/#reporting-257599f0048e",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-29/#reporting-257599f0048e",
       "cves": [],
       "snippet": "PHP2Shell Attack Roots 25 Servers, Breaches U.S. Government-Affiliated Network Cybersecurity researchers have disclosed details of what appears to be an artificial intelligence (AI)-assisted attack orchestrated by a suspected China-nexus threat actor that has leveraged the PHP2Shell vulnerabilities to breach exposed systems. The activity, which was observed on October 25, 2026, involved an attacker combining PHP2Shell with a kernel privilege escalation exploit to root… Cybersecurity researchers have disclosed details of what appears to be an artificial intelligence (AI)-assisted attack orchestrated by a suspected China-nexus threat actor that has leveraged the PHP2Shell vulnerabilities to br",
       "article_evidence": [
@@ -329,28 +351,6 @@
           "origin": "content",
           "raw_text": "Cybersecurity researchers have disclosed details of what appears to be an artificial intelligence (AI)-assisted attack orchestrated by a suspected China-nexus threat actor that has leveraged the PHP2Shell vulnerabilities to breach exposed systems. The activity, which was observed on October 25, 2026, involved an attacker combining PHP2Shell with a kernel privilege escalation exploit to root…",
           "text": "Cybersecurity researchers have disclosed details of what appears to be an artificial intelligence (AI)-assisted attack orchestrated by a suspected China-nexus threat actor that has leveraged the PHP2Shell vulnerabilities to breach exposed systems. The activity, which was observed on October 25, 2026, involved an attacker combining PHP2Shell with a kernel privilege escalation exploit to root…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "Volt Typhoon hides zero-day attacks using 'Silent Train' framework",
-      "url": "https://www.bleepingcomputer.com/news/security/volt-typhoon-hides-zero-day-attacks-using-silent-train-framework/",
-      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-28/#reporting-0b33a76a486a",
-      "cves": [],
-      "snippet": "Volt Typhoon hides zero-day attacks using 'Silent Train' framework Chinese state-sponsored hacking group Volt Typhoon has been using a framework that relies on rotating chains of connected devices compromised on demand, including for zero-day attacks targeting high-value systems… Chinese state-sponsored hacking group Volt Typhoon has been using a framework that relies on rotating chains of connected devices compromised on demand, including for zero-day attacks targeting high-value systems…",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "Chinese state-sponsored hacking group Volt Typhoon has been using a framework that relies on rotating chains of connected devices compromised on demand, including for zero-day attacks targeting high-value systems…",
-          "text": "Chinese state-sponsored hacking group Volt Typhoon has been using a framework that relies on rotating chains of connected devices compromised on demand, including for zero-day attacks targeting high-value systems…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "Chinese state-sponsored hacking group Volt Typhoon has been using a framework that relies on rotating chains of connected devices compromised on demand, including for zero-day attacks targeting high-value systems…",
-          "text": "Chinese state-sponsored hacking group Volt Typhoon has been using a framework that relies on rotating chains of connected devices compromised on demand, including for zero-day attacks targeting high-value systems…"
         }
       ],
       "effective_date_evidence": null
