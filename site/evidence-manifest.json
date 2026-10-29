@@ -5,8 +5,8 @@
     "control_implications": [
       {
         "control_id": "vulnerability_management",
-        "evidence_excerpt": "Threat actors are beginning to probe for a newly patched critical vulnerability in Oracle E-Business Suite (EBS), according to threat intelligence firm Defused Cyber. The vulnerability in question is CVE-2026-101767 (CVSS score: 9.8) , a case of improper authentication in the Oracle Application Object Library of Oracle E-Business Suite. It was patched by Oracle last week as part of its Critical…",
-        "evidence_origin": "content",
+        "evidence_excerpt": "Threat actors are beginning to probe for a newly patched critical vulnerability in Oracle E-Business Suite (EBS), according to threat intelligence firm Defused Cyber. The vulnerability in question is CVE-2026-101767 (CVSS score: 9.8) , a case of improper authentication in the Oracle Application Object Library of Oracle E-Business Suite.",
+        "evidence_origin": "summary",
         "focus": "Oracle E-Business Suite",
         "priority": "high",
         "source_ids": [
@@ -14,9 +14,9 @@
         ]
       },
       {
-        "control_id": "monitoring",
-        "evidence_excerpt": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Tuesday added two vulnerabilities impacting Adobe Commerce and Magento, and Google's Brotli decoder library to its Known Exploited Vulnerabilities (KEV) catalog, citing evidence of active exploitation. The vulnerabilities are listed below - CVE-2026-111497 (CVSS score: 9.2) - An unchecked return value vulnerability in…",
-        "evidence_origin": "content",
+        "control_id": "vulnerability_management",
+        "evidence_excerpt": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Tuesday added two vulnerabilities impacting Adobe Commerce and Magento, and Google's Brotli decoder library to its Known Exploited Vulnerabilities (KEV) catalog, citing evidence of active exploitation. The vulnerabilities are listed below - CVE-2026-111497 (CVSS score: 9.2) - An unchecked return value vulnerability in",
+        "evidence_origin": "summary",
         "focus": "Adobe Commerce and Magento",
         "priority": "high",
         "source_ids": [
@@ -24,19 +24,9 @@
         ]
       },
       {
-        "control_id": "third_party_risk",
-        "evidence_excerpt": "U.S. law enforcement has seized the primary domain of Virtualine, a bulletproof hosting service advertised on cybercrime forums for facilitating illegal activities…",
-        "evidence_origin": "content",
-        "focus": "Virtualine, a bulletproof hosting service",
-        "priority": "medium",
-        "source_ids": [
-          5
-        ]
-      },
-      {
         "control_id": "data_protection",
-        "evidence_excerpt": "Sony Network Communications has confirmed a data breach that compromised approximately 2.5 million records containing current and former customers' personal information…",
-        "evidence_origin": "content",
+        "evidence_excerpt": "Sony Network Communications has confirmed a data breach that compromised approximately 2.5 million records containing current and former customers' personal information",
+        "evidence_origin": "summary",
         "focus": "Sony Network Communications",
         "priority": "high",
         "source_ids": [
@@ -44,38 +34,48 @@
         ]
       },
       {
-        "control_id": "incident_response",
-        "evidence_excerpt": "Cybersecurity researchers have disclosed details of what appears to be an artificial intelligence (AI)-assisted attack orchestrated by a suspected China-nexus threat actor that has leveraged the PHP2Shell vulnerabilities to breach exposed systems. The activity, which was observed on October 25, 2026, involved an attacker combining PHP2Shell with a kernel privilege escalation exploit to root…",
-        "evidence_origin": "content",
-        "focus": "PHP2Shell vulnerabilities",
-        "priority": "high",
-        "source_ids": [
-          12
-        ]
-      },
-      {
-        "control_id": "access_management",
-        "evidence_excerpt": "The China-nexus cyber espionage group known as Volt Typhoon has been attributed to a now-disrupted covert access network dubbed Silent Train that has been put to use for zero-day exploitation and strategic access. \"First identified in late 2023, Silent Train uses rotating chains of compromised SOHO, IoT, and enterprise infrastructure,\" Lumen Technologies Black Lotus Labs said in a report shared…",
-        "evidence_origin": "content",
-        "focus": "SOHO, IoT, and enterprise infrastructure",
+        "control_id": "monitoring",
+        "evidence_excerpt": "The China-nexus cyber espionage group known as Volt Typhoon has been attributed to a now-disrupted covert access network dubbed Silent Train that has been put to use for zero-day exploitation and strategic access. \"First identified in late 2023, Silent Train uses rotating chains of compromised SOHO, IoT, and enterprise infrastructure,\" Lumen Technologies Black Lotus Labs said in a report shared",
+        "evidence_origin": "summary",
+        "focus": "Silent Train",
         "priority": "high",
         "source_ids": [
           8
         ]
+      },
+      {
+        "control_id": "third_party_risk",
+        "evidence_excerpt": "U.S. law enforcement has seized the primary domain of Virtualine, a bulletproof hosting service advertised on cybercrime forums for facilitating illegal activities",
+        "evidence_origin": "summary",
+        "focus": "Virtualine",
+        "priority": "medium",
+        "source_ids": [
+          5
+        ]
+      },
+      {
+        "control_id": "access_management",
+        "evidence_excerpt": "A chain of logic flaws, with no memory corruption, can turn a malicious web page into code running on a Windows computer outside Microsoft Edge's sandbox, a security researcher has shown. Orange Tsai of DEVCORE published the full method on October 28, five months after the chain won $175,000 at the Pwn2Own Berlin contest in May.",
+        "evidence_origin": "summary",
+        "focus": "Microsoft Edge",
+        "priority": "medium",
+        "source_ids": [
+          11
+        ]
       }
     ],
     "executive_brief": {
-      "decision_frame": "separate",
+      "decision_frame": "exposure",
       "source_ids": [
         1,
-        10,
-        12
+        4,
+        10
       ]
     },
     "industry_impacts": [],
     "regulatory_changes": []
   },
-  "generated_at": "2026-10-29T03:19:29.395386Z",
+  "generated_at": "2026-10-29T06:29:38.477838Z",
   "feed_url": "https://ricomanifesto.github.io/SentryDigest/feed.xml",
   "feed_home_url": "https://ricomanifesto.github.io/SentryDigest/",
   "digest_issue_date": "2026-10-29",
