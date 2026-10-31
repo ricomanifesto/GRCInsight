@@ -12,9 +12,7 @@ from loguru import logger
 
 from config.settings import settings
 from core.regulatory_dates import document_effective_date
-from core.report_evidence import (
-    REGULATORY_PUBLISHERS,
-)
+from core.report_evidence import REGULATORY_PUBLISHERS
 from core.article_evidence import eligible_article_segments
 from core.article_selection import selected_article_mask
 from core.entities import analyze_article_grc_content, detect_risk_categories
@@ -34,6 +32,14 @@ from services.openrouter_client import (
     parse_openrouter_model,
 )
 from services.relevance_decisions import DecisionError, RelevanceClient, RelevanceResult
+from services.relevance_selection import (
+    LEGACY_FULL,
+    SELECTION_POLICY,
+    SelectionPlan,
+    SelectionRecord,
+    plan_selection,
+    selection_records,
+)
 
 REPORT_CVE_LIMIT = 10
 CVE_PATTERN = re.compile(r"\bCVE-\d{4}-\d{4,}\b", re.IGNORECASE)
@@ -133,6 +139,7 @@ class GRCModelService:
         )
         self.last_relevance_diagnostics: dict[str, Any] | None = None
         self.last_relevance_result: RelevanceResult | None = None
+        self.last_selection_records: tuple[SelectionRecord, ...] | None = None
         logger.info(
             "Initialized model service with provider=%s model=%s",
             self.model.provider_id,
@@ -170,46 +177,127 @@ class GRCModelService:
         """Use the optional relevance pilot without changing report generation."""
         self.last_relevance_diagnostics = None
         self.last_relevance_result = None
+        self.last_selection_records = None
         if self.relevance_client is None or not articles:
             return await self._analyze_articles_with_model(articles)
         if self.relevance_mode == "shadow":
             # Both calls see the same caller deadline; the pilot has its own short cap.
-            legacy, _ = await asyncio.gather(
+            legacy, (result, failure) = await asyncio.gather(
                 self._analyze_articles_with_model(articles), self._try_relevance(articles)
             )
+            plan = self._plan(articles, result, failure)
+            # Keeping uncertain articles needs no subset output, so shadow records
+            # exactly what the enabled route would select.
+            self._record_legacy_selection(
+                articles,
+                plan,
+                legacy if plan.route == LEGACY_FULL else None,
+                "not_run" if plan.route != LEGACY_FULL else None,
+            )
             return legacy
-        decisions = await self._try_relevance(articles)
-        if decisions is None:
-            return await self._analyze_articles_with_model(articles)
-        uncertain = [
-            item.index
-            for item in decisions.decisions
-            if not item.usable(self.relevance_min_probability)
-        ]
-        if len(uncertain) == len(articles):
-            return await self._analyze_articles_with_model(articles)
-        selected = [False] * len(articles)
-        for item in decisions.decisions:
-            if item.usable(self.relevance_min_probability):
-                selected[item.index] = item.label == "relevant"
+        result, failure = await self._try_relevance(articles)
+        plan = self._plan(articles, result, failure)
+        if plan.model_selected is None:
+            legacy = await self._analyze_articles_with_model(articles)
+            self._record_legacy_selection(articles, plan, legacy)
+            return legacy
         fallback: dict[str, Any] = {}
-        if uncertain:
-            subset = [articles[index] for index in uncertain]
-            fallback = await self._analyze_articles_with_model(subset)
+        if plan.fallback_indices:
+            # Uncertain positions are already selected. This call only enriches
+            # aggregates; its prose selections never change article selection.
+            fallback = await self._analyze_articles_with_model(
+                [articles[index] for index in plan.fallback_indices]
+            )
             if "error" in fallback:
+                self._record_selection(articles, plan, fallback)
                 # Existing callers own degraded analysis. Do not disguise a failed
                 # subset as successful analysis or spend the deadline on a retry.
                 return {
                     **fallback,
                     "summary": {**fallback.get("summary", {}), "total_articles": len(articles)},
                 }
-            for index, chosen in zip(uncertain, selected_article_mask(subset, fallback)):
-                selected[index] = chosen
-        return self._analysis_from_selection(articles, selected, fallback.get("analysis", {}))
+        self._record_selection(articles, plan, fallback if plan.fallback_indices else None)
+        return self._analysis_from_selection(
+            articles, list(plan.model_selected), fallback.get("analysis", {})
+        )
 
-    async def _try_relevance(self, articles: List[ArticleInput]) -> RelevanceResult | None:
+    def _plan(
+        self, articles: List[ArticleInput], result: RelevanceResult | None, failure: str | None
+    ) -> SelectionPlan:
+        return plan_selection(result, failure, len(articles), self.relevance_min_probability)
+
+    def _record_legacy_selection(
+        self,
+        articles: List[ArticleInput],
+        plan: SelectionPlan,
+        analysis: dict[str, Any] | None,
+        fallback_status: str | None = None,
+    ) -> None:
+        """Record selections where the legacy result is returned regardless."""
+        try:
+            self._record_selection(articles, plan, analysis, fallback_status)
+        except Exception:
+            # Records must never prevent the existing legacy result.
+            assert self.last_relevance_diagnostics is not None
+            self.last_relevance_diagnostics["selection_status"] = "internal_error"
+            logger.warning("Article relevance selection records were unavailable")
+
+    def _record_selection(
+        self,
+        articles: List[ArticleInput],
+        plan: SelectionPlan,
+        analysis: dict[str, Any] | None,
+        fallback_status: str | None = None,
+    ) -> None:
+        """Record every position's selection; never log article text."""
+        failed = analysis is not None and "error" in analysis
+        legacy_selected = None
+        if plan.route == LEGACY_FULL and analysis is not None and not failed:
+            legacy_selected = selected_article_mask(articles, analysis)
+        records = selection_records(
+            articles, plan, legacy_selected=legacy_selected, analysis_failed=failed
+        )
+        if plan.route == LEGACY_FULL:
+            size = len(articles)
+        else:
+            size = len(plan.fallback_indices)
+        if fallback_status is None:
+            if analysis is None:
+                fallback_status = "not_needed"
+            else:
+                fallback_status = "error" if failed else "ok"
+        diagnostics = self.last_relevance_diagnostics
+        assert diagnostics is not None
+        diagnostics.update(
+            policy=SELECTION_POLICY,
+            threshold=self.relevance_min_probability,
+            route=plan.route,
+            reason=plan.reason,
+            fallback_status=fallback_status,
+            fallback_size=size,
+        )
+        self.last_selection_records = records
+        logger.info(
+            "Article relevance selection {}",
+            json.dumps(
+                {
+                    "mode": self.relevance_mode,
+                    "policy": SELECTION_POLICY,
+                    "route": plan.route,
+                    "reason": plan.reason,
+                    "fallback_status": fallback_status,
+                    "fallback_size": size,
+                    "records": [record.as_dict() for record in records],
+                }
+            ),
+        )
+
+    async def _try_relevance(
+        self, articles: List[ArticleInput]
+    ) -> tuple[RelevanceResult | None, str | None]:
         diagnostics: dict[str, Any] = {"mode": self.relevance_mode}
         result = None
+        failure = None
         try:
             assert self.relevance_client is not None
             result = await self.relevance_client.classify(articles)
@@ -224,7 +312,9 @@ class GRCModelService:
                     else (
                         "used"
                         if not uncertain_count
-                        else "uncertain" if uncertain_count == len(result.decisions) else "partial"
+                        else (
+                            "uncertain" if uncertain_count == len(result.decisions) else "partial"
+                        )
                     )
                 ),
                 models=list(result.models),
@@ -236,13 +326,17 @@ class GRCModelService:
                 uncertain_count=uncertain_count,
             )
         except DecisionError as error:
-            diagnostics["status"] = str(error)
+            failure = str(error)
+            diagnostics["status"] = failure
         except Exception:
             # The experimental path must not prevent the existing path from running.
-            diagnostics["status"] = "internal_error"
+            result = None
+            self.last_relevance_result = None
+            failure = "internal_error"
+            diagnostics["status"] = failure
         self.last_relevance_diagnostics = diagnostics
         logger.info("Article relevance pilot {}", json.dumps(diagnostics))
-        return result
+        return result, failure
 
     def _analysis_from_selection(
         self, articles: List[ArticleInput], selected: list[bool], fallback_analysis: dict[str, Any]
