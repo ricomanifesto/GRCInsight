@@ -1,0 +1,88 @@
+{
+  "schema_version": 3,
+  "generated_at": "2026-09-22T16:43:43.066697Z",
+  "feed_url": "https://ricomanifesto.github.io/SentryDigest/feed.xml",
+  "feed_home_url": "https://ricomanifesto.github.io/SentryDigest/",
+  "digest_issue_date": "2026-09-22",
+  "digest_issue_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-22/",
+  "requested_model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
+  "resolved_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+  "sources": [
+    {
+      "title": "WordPress Comment2Shell Flaw Can Turn Anonymous Comment XSS Into RCE via Admin Session",
+      "url": "https://thehackernews.com/2026/09/wordpress-comment2shell-flaw-can-turn.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-22/#reporting-fc67da5b97ae",
+      "cves": [
+        "CVE-2026-93485"
+      ]
+    },
+    {
+      "title": "Zyxel and Veeam Flaws Under Active Exploitation With Command and SYSTEM Access",
+      "url": "https://thehackernews.com/2026/09/zyxel-and-veeam-flaws-under-active.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-22/#reporting-b6c97dd33bcf",
+      "cves": [
+        "CVE-2026-7273"
+      ]
+    },
+    {
+      "title": "New Windows Defender zero-day blocks Microsoft antivirus updates",
+      "url": "https://www.bleepingcomputer.com/news/security/new-windows-defender-zero-day-blocks-microsoft-antivirus-updates/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-22/#reporting-9228fd09d525",
+      "cves": []
+    },
+    {
+      "title": "Malicious npm Package indexed-btree Hid Its Loader in Runtime Code Before Removal",
+      "url": "https://thehackernews.com/2026/09/malicious-npm-package-indexed-btree-hid.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-22/#reporting-9806c677170e",
+      "cves": []
+    },
+    {
+      "title": "CISA orders feds to patch Zyxel flaw exploited for data theft",
+      "url": "https://www.bleepingcomputer.com/news/security/cisa-orders-feds-to-patch-actively-exploited-zyxel-flaw-by-thursday/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-22/#reporting-1f3d832dd553",
+      "cves": []
+    },
+    {
+      "title": "SideCopy Broadens India Targeting to Academia With ReverseRAT Spear-Phishing",
+      "url": "https://thehackernews.com/2026/09/sidecopy-broadens-india-targeting-to.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-22/#reporting-c8f864c65cb4",
+      "cves": []
+    },
+    {
+      "title": "One Hidden Meta Muse Setting Could Let Attackers Turn the AI Assistant Into a Backdoor",
+      "url": "https://thehackernews.com/2026/09/one-hidden-meta-muse-setting-could-let.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-22/#reporting-f549f03719ff",
+      "cves": []
+    },
+    {
+      "title": "How AI Agents Can Trigger Runaway Costs for Enterprises",
+      "url": "https://www.darkreading.com/application-security/how-ai-agents-can-trigger-runaway-costs",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-22/#reporting-a194e1862792",
+      "cves": []
+    },
+    {
+      "title": "BigCommerce alerts merchants of data breach linked to Ribon apps",
+      "url": "https://www.bleepingcomputer.com/news/security/bigcommerce-alerts-merchants-of-data-breach-linked-to-ribon-apps/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-22/#reporting-7a6663942eb5",
+      "cves": []
+    },
+    {
+      "title": "CISA alerts of active exploitation of three Linux kernel flaws",
+      "url": "https://www.bleepingcomputer.com/news/security/cisa-alerts-of-active-exploitation-of-three-linux-kernel-flaws/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-22/#reporting-522af8b6ffea",
+      "cves": []
+    },
+    {
+      "title": "ShinyHunters Hacked Clop. Now What About Clop's Victims?",
+      "url": "https://www.darkreading.com/cyberattacks-data-breaches/shinyhunters-hacked-clop-what-about-clops-victims",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-22/#reporting-757c3ffb6189",
+      "cves": []
+    },
+    {
+      "title": "Cybercriminals Are Hiding New Malware in Torrents for Popular Films",
+      "url": "https://www.darkreading.com/cyberattacks-data-breaches/cybercriminals-hiding-new-malware-torrents-popular-films",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-22/#reporting-f3c6cee66ad8",
+      "cves": []
+    }
+  ]
+}

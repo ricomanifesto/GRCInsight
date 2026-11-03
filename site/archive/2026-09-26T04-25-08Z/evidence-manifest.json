@@ -1,0 +1,88 @@
+{
+  "schema_version": 3,
+  "generated_at": "2026-09-26T04:25:08.337554Z",
+  "feed_url": "https://ricomanifesto.github.io/SentryDigest/feed.xml",
+  "feed_home_url": "https://ricomanifesto.github.io/SentryDigest/",
+  "digest_issue_date": "2026-09-25",
+  "digest_issue_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-25/",
+  "requested_model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
+  "resolved_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+  "sources": [
+    {
+      "title": "CISA warns of Sharepoint, WSO2, Adobe Commerce flaws exploited in attacks",
+      "url": "https://www.bleepingcomputer.com/news/security/cisa-warns-of-sharepoint-wso2-adobe-commerce-flaws-exploited-in-attacks/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-25/#reporting-2e9b76e63d00",
+      "cves": [
+        "CVE-2026-5430"
+      ]
+    },
+    {
+      "title": "Roundcube Pre-Auth SQL Injection Flaw Actively Exploited in the Wild",
+      "url": "https://thehackernews.com/2026/09/roundcube-pre-auth-sql-injection-flaw.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-25/#reporting-8479bfbd51e5",
+      "cves": [
+        "CVE-2026-48842"
+      ]
+    },
+    {
+      "title": "ShinyHunters hacked Clop leak site using Grav CMS path traversal flaw",
+      "url": "https://www.bleepingcomputer.com/news/security/shinyhunters-hacked-clop-leak-site-using-grav-cms-path-traversal-flaw/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-25/#reporting-6e342a8a97cf",
+      "cves": []
+    },
+    {
+      "title": "AI Sandbox Escapes: Why Forensic Readiness Matters More Than Containment",
+      "url": "https://www.darkreading.com/cyberattacks-data-breaches/ai-sandbox-escapes-forensic-readiness",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-25/#reporting-b8cf2c66bdcb",
+      "cves": []
+    },
+    {
+      "title": "Elementor WordPress flaw lets attackers create admin accounts",
+      "url": "https://www.bleepingcomputer.com/news/security/elementor-wordpress-flaw-lets-attackers-create-admin-accounts/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-25/#reporting-53c3f861257c",
+      "cves": []
+    },
+    {
+      "title": "What We Missed: Google Gemini Joins the AI Escape Party",
+      "url": "https://www.darkreading.com/cyber-risk/what-we-missed-google-gemini-ai-escape-party",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-25/#reporting-2776184929ae",
+      "cves": []
+    },
+    {
+      "title": "Anthropic rolls out up to $250 in free Claude Code credits, but only for cloud sessions",
+      "url": "https://www.bleepingcomputer.com/news/artificial-intelligence/anthropic-rolls-out-up-to-250-in-free-claude-code-credits-but-only-for-cloud-sessions/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-25/#reporting-5324567d954d",
+      "cves": []
+    },
+    {
+      "title": "OpenAI is preparing a $500 ChatGPT Pro Max plan with faster Codex",
+      "url": "https://www.bleepingcomputer.com/news/artificial-intelligence/openai-is-preparing-a-500-chatgpt-pro-max-plan-with-faster-codex/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-25/#reporting-9c3f4fd62157",
+      "cves": []
+    },
+    {
+      "title": "With the Rise of AI Agents, SOC 2 Should Adapt or Risk Irrelevance",
+      "url": "https://www.bleepingcomputer.com/news/security/with-the-rise-of-ai-agents-soc-2-should-adapt-or-risk-irrelevance/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-25/#reporting-d6c9977600d4",
+      "cves": []
+    },
+    {
+      "title": "Stopping IT Worker Scams Requires Revamped HR Process",
+      "url": "https://www.darkreading.com/cyber-risk/stopping-it-worker-scams-revamped-hr-process",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-25/#reporting-fba7dac2bfe1",
+      "cves": []
+    },
+    {
+      "title": "Compromised GitHub Actions Came Back Online and Resumed Executing Mini Shai-Hulud Malware",
+      "url": "https://thehackernews.com/2026/09/compromised-github-actions-came-back.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-25/#reporting-6c0fd01aad01",
+      "cves": []
+    },
+    {
+      "title": "PamStealer macOS Malware Adds Live C2 Payload Decryption and Multi-Layer Persistence",
+      "url": "https://thehackernews.com/2026/09/pamstealer-macos-malware-adds-live-c2.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-25/#reporting-4731c385479b",
+      "cves": []
+    }
+  ]
+}

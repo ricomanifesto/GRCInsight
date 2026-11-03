@@ -1,0 +1,92 @@
+{
+  "schema_version": 3,
+  "generated_at": "2026-09-16T17:27:42.658132Z",
+  "feed_url": "https://ricomanifesto.github.io/SentryDigest/feed.xml",
+  "feed_home_url": "https://ricomanifesto.github.io/SentryDigest/",
+  "digest_issue_date": "2026-09-16",
+  "digest_issue_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-16/",
+  "requested_model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
+  "resolved_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+  "sources": [
+    {
+      "title": "Attackers Exploit Issabel Framework Flaw Enabling Unauthenticated OS Command Execution",
+      "url": "https://thehackernews.com/2026/09/attackers-exploit-issabel-framework.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-16/#reporting-4a519778a75a",
+      "cves": [
+        "CVE-2026-89026"
+      ]
+    },
+    {
+      "title": "Google Patches Pixel Modem Flaw Amid Signs of Limited Targeted Exploitation",
+      "url": "https://thehackernews.com/2026/09/google-patches-pixel-modem-flaw-amid.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-16/#reporting-8f4404937cb6",
+      "cves": [
+        "CVE-2026-58704"
+      ]
+    },
+    {
+      "title": "Acronis cPanel Backup Plugin Vulnerability Exploited in Targeted Attacks",
+      "url": "https://thehackernews.com/2026/09/acronis-cpanel-backup-plugin.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-16/#reporting-7b88c993f377",
+      "cves": [
+        "CVE-2026-87886"
+      ]
+    },
+    {
+      "title": "Active Exploitation Attempts Target WSO2 API Manager JWT Bypass With Forged Admin Tokens",
+      "url": "https://thehackernews.com/2026/09/active-exploitation-attempts-target.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-16/#reporting-3db834775cc6",
+      "cves": [
+        "CVE-2026-5430"
+      ]
+    },
+    {
+      "title": "Three Threat Groups Target Russian Enterprises With Backdoors, Ransomware, and Wipers",
+      "url": "https://thehackernews.com/2026/09/three-threat-groups-target-russian.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-16/#reporting-27afdbdfcf69",
+      "cves": []
+    },
+    {
+      "title": "One Extension Could Hijack AI Assistants Across Chrome, Comet, Edge, Opera Neon and Claude",
+      "url": "https://thehackernews.com/2026/09/one-extension-could-hijack-ai.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-16/#reporting-d58c7f1a86f6",
+      "cves": []
+    },
+    {
+      "title": "The true cost of a ransomware attack, with and without BCDR",
+      "url": "https://www.bleepingcomputer.com/news/security/the-true-cost-of-a-ransomware-attack-with-and-without-bcdr/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-16/#reporting-df68e97f1c76",
+      "cves": []
+    },
+    {
+      "title": "Attacker Hijacks AI Coding Assistant Session, Spreads Shai-Hulud Across About 100 Repositories",
+      "url": "https://thehackernews.com/2026/09/attacker-hijacks-ai-coding-assistant.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-16/#reporting-ffa867bf23d6",
+      "cves": []
+    },
+    {
+      "title": "Parallels Desktop Flaw Lets Non-Admin Mac Users Gain Root, but Intel Macs Can't Install Fix",
+      "url": "https://thehackernews.com/2026/09/parallels-desktop-flaw-lets-non-admin.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-16/#reporting-f1a5ac76bbe3",
+      "cves": []
+    },
+    {
+      "title": "Microsoft says Copilot buttons still missing in classic Outlook",
+      "url": "https://www.bleepingcomputer.com/news/microsoft/microsoft-shares-workaround-for-missing-outlook-copilot-buttons/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-16/#reporting-d150c8d4cf07",
+      "cves": []
+    },
+    {
+      "title": "Webinar: What happens in the first hours of a Google Workspace breach",
+      "url": "https://www.bleepingcomputer.com/news/security/webinar-what-happens-in-the-first-hours-of-a-google-workspace-breach/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-16/#reporting-7b0b53cd6f29",
+      "cves": []
+    },
+    {
+      "title": "N0va Phishkit Targets US and EU Businesses: A New Challenge for Identity Security",
+      "url": "https://thehackernews.com/2026/09/n0va-phishkit-targets-us-and-eu.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-16/#reporting-f2f24ea2e19a",
+      "cves": []
+    }
+  ]
+}

@@ -1,0 +1,90 @@
+{
+  "schema_version": 3,
+  "generated_at": "2026-09-10T16:15:16.496025Z",
+  "feed_url": "https://ricomanifesto.github.io/SentryDigest/feed.xml",
+  "feed_home_url": "https://ricomanifesto.github.io/SentryDigest/",
+  "digest_issue_date": "2026-09-10",
+  "digest_issue_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-10/",
+  "requested_model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
+  "resolved_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+  "sources": [
+    {
+      "title": "Cisco confirms CVE-2026-20079 Secure FMC flaw exploited in attacks",
+      "url": "https://www.bleepingcomputer.com/news/security/cisco-confirms-cve-2026-20079-secure-fmc-flaw-exploited-in-attacks/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-10/#reporting-8e055682245b",
+      "cves": [
+        "CVE-2026-20079"
+      ]
+    },
+    {
+      "title": "Chrome V8 Zero-Day Exploited in the Wild Enables Code Execution Inside Sandbox",
+      "url": "https://thehackernews.com/2026/09/chrome-v8-zero-day-exploited-in-wild.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-10/#reporting-375dd8a3b2ed",
+      "cves": [
+        "CVE-2026-87491"
+      ]
+    },
+    {
+      "title": "Researcher Drops New Microsoft Defender PoC Showing ShieldBreak Patch Can Be Bypassed",
+      "url": "https://thehackernews.com/2026/09/researcher-drops-new-microsoft-defender.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-10/#reporting-b163f3fc8d81",
+      "cves": [
+        "CVE-2026-69414"
+      ]
+    },
+    {
+      "title": "CISA: WatchGuard RCE flaw now exploited in ransomware attacks",
+      "url": "https://www.bleepingcomputer.com/news/security/cisa-watchguard-rce-flaw-now-exploited-in-ransomware-attacks/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-10/#reporting-e8f0461d2748",
+      "cves": []
+    },
+    {
+      "title": "Microsoft fixes bug that wiped Windows desktop settings",
+      "url": "https://www.bleepingcomputer.com/news/microsoft/microsoft-fixes-bug-that-wiped-windows-desktop-settings/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-10/#reporting-8b5cb7068fea",
+      "cves": []
+    },
+    {
+      "title": "Nearly 1 in 10 Exposed LiteLLM Gateways Accepted the Example \"sk-1234\" Admin Key",
+      "url": "https://thehackernews.com/2026/09/nearly-1-in-10-exposed-litellm-gateways.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-10/#reporting-fd5c4de79625",
+      "cves": []
+    },
+    {
+      "title": "Anthropic Discloses Fourth AI Hacking Incident Involving Claude Opus 4.6",
+      "url": "https://thehackernews.com/2026/09/anthropic-ai-models-breached-real.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-10/#reporting-fa7734e88a6b",
+      "cves": []
+    },
+    {
+      "title": "EU Cyber Resilience Act to Enforce New Reporting Requirements",
+      "url": "https://www.darkreading.com/cybersecurity-operations/eu-cyber-resilience-act-reporting-requirements",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-10/#reporting-7605d83887d6",
+      "cves": []
+    },
+    {
+      "title": "Trezor warns users of email provider breach, phishing attacks",
+      "url": "https://www.bleepingcomputer.com/news/security/trezor-warns-users-of-email-provider-breach-phishing-attacks/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-10/#reporting-06d5e914515a",
+      "cves": []
+    },
+    {
+      "title": "AdaptHealth confirms 4.1 million people exposed in July cyberattack",
+      "url": "https://www.bleepingcomputer.com/news/security/adapthealth-confirms-41-million-people-exposed-in-july-cyberattack/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-10/#reporting-1e9110d4393f",
+      "cves": []
+    },
+    {
+      "title": "Mythos Vulnerability Firehose Hits a Human Bottleneck",
+      "url": "https://www.darkreading.com/application-security/mythos-vulnerability-firehose-hits-human-bottleneck",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-10/#reporting-323b6c23b480",
+      "cves": []
+    },
+    {
+      "title": "Skullcandy Dime 3 earbuds expose users to Bluetooth hijacking",
+      "url": "https://www.bleepingcomputer.com/news/security/skullcandy-dime-3-earbuds-expose-users-to-bluetooth-hijacking/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-10/#reporting-39904fbf6822",
+      "cves": []
+    }
+  ]
+}

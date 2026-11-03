@@ -1,0 +1,90 @@
+{
+  "schema_version": 3,
+  "generated_at": "2026-09-18T11:00:02.780701Z",
+  "feed_url": "https://ricomanifesto.github.io/SentryDigest/feed.xml",
+  "feed_home_url": "https://ricomanifesto.github.io/SentryDigest/",
+  "digest_issue_date": "2026-09-18",
+  "digest_issue_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-18/",
+  "requested_model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
+  "resolved_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+  "sources": [
+    {
+      "title": "Critical Docker Sandboxes Flaw Lets Malicious Guest Code Read and Modify macOS Host Files",
+      "url": "https://thehackernews.com/2026/09/critical-docker-sandboxes-flaw-lets.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-18/#reporting-c7d368380dd4",
+      "cves": [
+        "CVE-2026-77179"
+      ]
+    },
+    {
+      "title": "Critical Unbound DNSSEC Validator Flaw Could Allow RCE via a Malicious DNS Zone",
+      "url": "https://thehackernews.com/2026/09/critical-unbound-dnssec-validator-flaw.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-18/#reporting-4341f2269a01",
+      "cves": [
+        "CVE-2026-81642"
+      ]
+    },
+    {
+      "title": "Cisco Warns of New Zero-Day ISE Auth Bypass (CVSS 10.0) Exploited in Active Attacks",
+      "url": "https://thehackernews.com/2026/09/cisco-warns-of-new-zero-day-ise-auth.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-18/#reporting-fefb67106246",
+      "cves": [
+        "CVE-2026-76460"
+      ]
+    },
+    {
+      "title": "New RatHat Android malware uses AI to automate device control",
+      "url": "https://www.bleepingcomputer.com/news/security/new-rathat-android-malware-uses-ai-to-automate-device-control/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-18/#reporting-a81acfaa2d14",
+      "cves": []
+    },
+    {
+      "title": "CISA Ditches Weekly Vulnerability Roundups for Risk-Based Focus",
+      "url": "https://www.darkreading.com/cyber-risk/cisa-ditches-weekly-vuln-roundups-risk-based-focus",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-18/#reporting-233799071bd0",
+      "cves": []
+    },
+    {
+      "title": "China's FamousSparrow APT Spies on US Politics in Latin America",
+      "url": "https://www.darkreading.com/cyberattacks-data-breaches/china-famoussparrow-spies-latin-america",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-18/#reporting-f49c7ff5423e",
+      "cves": []
+    },
+    {
+      "title": "OpenAI details more cases of AI agents taking unauthorized actions",
+      "url": "https://www.bleepingcomputer.com/news/security/openai-details-more-cases-of-ai-agents-taking-unauthorized-actions/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-18/#reporting-254f056eaae3",
+      "cves": []
+    },
+    {
+      "title": "Critical Check Point Management Flaw Lets Unauthenticated Attackers Run Code as Root",
+      "url": "https://thehackernews.com/2026/09/critical-check-point-management-server.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-18/#reporting-1276fb6b0a48",
+      "cves": []
+    },
+    {
+      "title": "ThreatsDay: Self-Rewriting Agents, 800+ Flaws Patched, Insider SIM Swaps and 22 More New Stories",
+      "url": "https://thehackernews.com/2026/09/threatsday-self-rewriting-agents-800.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-18/#reporting-27eee14cdf14",
+      "cves": []
+    },
+    {
+      "title": "Brevo supply-chain attack injected ClickFix scripts on customer sites",
+      "url": "https://www.bleepingcomputer.com/news/security/brevo-supply-chain-attack-injected-clickfix-scripts-on-customer-sites/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-18/#reporting-ff28c02e7e1b",
+      "cves": []
+    },
+    {
+      "title": "Iran-Linked Handala Hack Tied to HEAVYGRAM Telegram Backdoor That Can Steal Passwords",
+      "url": "https://thehackernews.com/2026/09/iran-linked-handala-hack-tied-to.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-18/#reporting-a2011e05889e",
+      "cves": []
+    },
+    {
+      "title": "What Recent AI-Powered Attacks Mean for Your Identity Security",
+      "url": "https://www.bleepingcomputer.com/news/security/what-recent-ai-powered-attacks-mean-for-your-identity-security/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-18/#reporting-6f8939c423c2",
+      "cves": []
+    }
+  ]
+}

@@ -1,0 +1,90 @@
+{
+  "schema_version": 3,
+  "generated_at": "2026-08-21T15:42:15.957063Z",
+  "feed_url": "https://ricomanifesto.github.io/SentryDigest/feed.xml",
+  "feed_home_url": "https://ricomanifesto.github.io/SentryDigest/",
+  "digest_issue_date": "2026-08-21",
+  "digest_issue_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-21/",
+  "requested_model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
+  "resolved_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+  "sources": [
+    {
+      "title": "GitLab CVE-2026-19478 Comes Under Active Exploitation Within Days of Disclosure",
+      "url": "https://thehackernews.com/2026/08/gitlab-cve-2026-19478-comes-under.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-21/#reporting-7850fb529146",
+      "cves": [
+        "CVE-2026-19478"
+      ]
+    },
+    {
+      "title": "Microsoft Entra ID Flaw (CVSS 10.0) Exploited in Wild, Allows Remote Code Execution",
+      "url": "https://thehackernews.com/2026/08/microsoft-entra-id-flaw-cvss-100.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-21/#reporting-630ad3fed036",
+      "cves": [
+        "CVE-2026-69836"
+      ]
+    },
+    {
+      "title": "Attackers Exploit Zimbra SNMP Flaw for Unauthenticated Remote Code Execution",
+      "url": "https://thehackernews.com/2026/08/attackers-exploit-zimbra-snmp-flaw-for.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-21/#reporting-572e047ecd00",
+      "cves": [
+        "CVE-2026-73570"
+      ]
+    },
+    {
+      "title": "Calling on Cyber Pros to Help Defend City Hall",
+      "url": "https://www.darkreading.com/cyber-risk/calling-on-cyber-pros-to-help-city-hall",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-21/#reporting-fdc0a385d432",
+      "cves": []
+    },
+    {
+      "title": "CISA orders feds to patch actively exploited TrueConf Server flaws",
+      "url": "https://www.bleepingcomputer.com/news/security/cisa-orders-feds-to-patch-actively-exploited-trueconf-server-flaws/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-21/#reporting-7cc11dd0cff0",
+      "cves": []
+    },
+    {
+      "title": "Wazuh and AI For Enhanced SOC Workflows",
+      "url": "https://thehackernews.com/2026/08/wazuh-and-ai-for-enhanced-soc-workflows.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-21/#reporting-315a7872c693",
+      "cves": []
+    },
+    {
+      "title": "Microsoft warns of max severity Entra ID flaw exploited in attacks",
+      "url": "https://www.bleepingcomputer.com/news/microsoft/microsoft-warns-of-max-severity-entra-id-flaw-exploited-in-attacks/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-21/#reporting-4afb6e3d2eca",
+      "cves": []
+    },
+    {
+      "title": "Hackers abuse FTP server banners to deliver new Windows malware",
+      "url": "https://www.bleepingcomputer.com/news/security/hackers-abuse-ftp-server-banners-to-deliver-new-windows-malware/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-21/#reporting-24de1cffcbc0",
+      "cves": []
+    },
+    {
+      "title": "SickKids data breach exposes employee and job applicant info",
+      "url": "https://www.bleepingcomputer.com/news/security/sickkids-data-breach-exposes-employee-and-job-applicant-info/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-21/#reporting-c28837178a42",
+      "cves": []
+    },
+    {
+      "title": "Cisco Patches Nine Crosswork and Secure Workload Flaws, Five Scoring CVSS 10.0",
+      "url": "https://thehackernews.com/2026/08/cisco-patches-nine-crosswork-and-secure.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-21/#reporting-51c8d451f6eb",
+      "cves": []
+    },
+    {
+      "title": "New CUSTODY Framework Constrains AI Agents Inside the Network",
+      "url": "https://www.darkreading.com/perimeter/new-custody-framework-constrains-ai-agents-inside-network",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-21/#reporting-0c1b8ac41907",
+      "cves": []
+    },
+    {
+      "title": "Rust Supply Chain Attack Puts Build-Time Malware in Crates with 245 Million Downloads",
+      "url": "https://thehackernews.com/2026/08/rust-supply-chain-attack-puts-build.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-21/#reporting-41850b0deaa2",
+      "cves": []
+    }
+  ]
+}

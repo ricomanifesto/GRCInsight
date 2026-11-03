@@ -1,0 +1,90 @@
+{
+  "schema_version": 3,
+  "generated_at": "2026-09-18T16:53:01.162398Z",
+  "feed_url": "https://ricomanifesto.github.io/SentryDigest/feed.xml",
+  "feed_home_url": "https://ricomanifesto.github.io/SentryDigest/",
+  "digest_issue_date": "2026-09-18",
+  "digest_issue_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-18/",
+  "requested_model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
+  "resolved_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+  "sources": [
+    {
+      "title": "Microsoft Patches CVSS 10.0 Azure AI Foundry Flaw Enabling Unauthorized Privilege Escalation",
+      "url": "https://thehackernews.com/2026/09/microsoft-patches-cvss-100-azure-ai.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-18/#reporting-baffdffe1456",
+      "cves": [
+        "CVE-2026-85889"
+      ]
+    },
+    {
+      "title": "Critical Docker Sandboxes Flaw Lets Malicious Guest Code Read and Modify macOS Host Files",
+      "url": "https://thehackernews.com/2026/09/critical-docker-sandboxes-flaw-lets.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-18/#reporting-c7d368380dd4",
+      "cves": [
+        "CVE-2026-77179"
+      ]
+    },
+    {
+      "title": "Critical Unbound DNSSEC Validator Flaw Could Allow RCE via a Malicious DNS Zone",
+      "url": "https://thehackernews.com/2026/09/critical-unbound-dnssec-validator-flaw.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-18/#reporting-4341f2269a01",
+      "cves": [
+        "CVE-2026-81642"
+      ]
+    },
+    {
+      "title": "Gyazo server flaw exploited to steal 23.6 million user records",
+      "url": "https://www.bleepingcomputer.com/news/security/gyazo-server-flaw-exploited-to-steal-236-million-user-records/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-18/#reporting-2d1da8cc0f6e",
+      "cves": []
+    },
+    {
+      "title": "Transparent Tribe Deploys New Rust Backdoor Using Private GitHub Repositories for C2",
+      "url": "https://thehackernews.com/2026/09/transparent-tribe-deploys-new-rust.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-18/#reporting-eb5aad65b251",
+      "cves": []
+    },
+    {
+      "title": "Fake LastPass Authenticator GitHub repos push new Rapuncel infostealer",
+      "url": "https://www.bleepingcomputer.com/news/security/fake-lastpass-authenticator-github-repos-push-new-rapuncel-infostealer/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-18/#reporting-a8f08aec4665",
+      "cves": []
+    },
+    {
+      "title": "Secure enterprise sharing with access reviews for Microsoft 365",
+      "url": "https://www.bleepingcomputer.com/news/security/secure-enterprise-sharing-with-access-reviews-for-microsoft-365/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-18/#reporting-cd92185ba9f6",
+      "cves": []
+    },
+    {
+      "title": "Microsoft Teams will let admins block custom file extensions",
+      "url": "https://www.bleepingcomputer.com/news/security/microsoft-teams-will-let-admins-block-custom-file-extensions/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-18/#reporting-e202dff50387",
+      "cves": []
+    },
+    {
+      "title": "Webinar: Which Google Workspace security controls actually matter?",
+      "url": "https://www.bleepingcomputer.com/news/security/webinar-which-google-workspace-security-controls-actually-matter/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-18/#reporting-aa1f421fb24c",
+      "cves": []
+    },
+    {
+      "title": "Microsoft fixes bug behind ‘Defender Antivirus is turned off’ alerts",
+      "url": "https://www.bleepingcomputer.com/news/security/microsoft-fixes-bug-behind-defender-antivirus-is-turned-off-alerts/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-18/#reporting-4bce3b8937f2",
+      "cves": []
+    },
+    {
+      "title": "An Abandoned CDN Domain Was Re-Registered. Thousands of Sites Still Call It.",
+      "url": "https://thehackernews.com/2026/09/an-abandoned-cdn-domain-was-re.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-18/#reporting-8513523c6f09",
+      "cves": []
+    },
+    {
+      "title": "Plugin4Shell Lets Repository Owners Swap Pinned Plugin Code Across Four AI Coding Agents",
+      "url": "https://thehackernews.com/2026/09/plugin4shell-lets-repository-owners.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-18/#reporting-68651eea862d",
+      "cves": []
+    }
+  ]
+}

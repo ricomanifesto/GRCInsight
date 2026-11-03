@@ -1,0 +1,74 @@
+{
+  "generated_at": "2026-08-13T23:41:23.312819Z",
+  "feed_url": "https://ricomanifesto.github.io/SentryDigest/feed.xml",
+  "sources": [
+    {
+      "title": "Critical VMware vCenter RCE flaw exploited for reverse SSH access",
+      "url": "https://www.bleepingcomputer.com/news/security/critical-vmware-vcenter-rce-flaw-exploited-for-reverse-ssh-access/",
+      "cves": [
+        "CVE-2026-59310"
+      ]
+    },
+    {
+      "title": "Attackers Exploit SharePoint Authentication Bypass After Public PoC Release",
+      "url": "https://thehackernews.com/2026/08/attackers-exploit-sharepoint.html",
+      "cves": [
+        "CVE-2026-55040"
+      ]
+    },
+    {
+      "title": "Hackers exploit critical Adobe Commerce flaw to hijack customer accounts",
+      "url": "https://www.bleepingcomputer.com/news/security/hackers-exploit-critical-adobe-commerce-flaw-to-hijack-customer-accounts/",
+      "cves": [
+        "CVE-2026-71362"
+      ]
+    },
+    {
+      "title": "Adobe Patches Three CVSS 10.0 ColdFusion and Campaign Classic Flaws",
+      "url": "https://thehackernews.com/2026/08/adobe-patches-three-cvss-100-coldfusion.html",
+      "cves": [
+        "CVE-2026-48362"
+      ]
+    },
+    {
+      "title": "Ukraine shuts down 94 fraudulent call centers, seize millions in cash",
+      "url": "https://www.bleepingcomputer.com/news/security/ukraine-shuts-down-94-fraudulent-call-centers-seize-millions-in-cash/",
+      "cves": []
+    },
+    {
+      "title": "Akira hackers disable EDR with Safe Mode, steal data but fail to encrypt",
+      "url": "https://www.bleepingcomputer.com/news/security/akira-hackers-disable-edr-with-safe-mode-steal-data-but-fail-to-encrypt/",
+      "cves": []
+    },
+    {
+      "title": "Global Threat Campaign Hits Critical VMware vCenter Flaw",
+      "url": "https://www.darkreading.com/vulnerabilities-threats/global-threat-campaign-critical-vmware-vcenter-flaw",
+      "cves": []
+    },
+    {
+      "title": "Hackers breach govt webmail while running parallel crypto fraud",
+      "url": "https://www.bleepingcomputer.com/news/security/hackers-breach-govt-webmail-while-running-parallel-crypto-fraud/",
+      "cves": []
+    },
+    {
+      "title": "Microsoft patches LegacyHive Windows zero-day vulnerability",
+      "url": "https://www.bleepingcomputer.com/news/microsoft/microsoft-patches-legacyhive-windows-zero-day-vulnerability/",
+      "cves": []
+    },
+    {
+      "title": "AI 'watermark removers' flood the web. Almost none can prove they work.",
+      "url": "https://www.bleepingcomputer.com/news/security/ai-watermark-removers-flood-the-web-almost-none-can-prove-they-work/",
+      "cves": []
+    },
+    {
+      "title": "Trezor discloses data breach affecting nearly 14,000 customers",
+      "url": "https://www.bleepingcomputer.com/news/security/trezor-discloses-data-breach-affecting-nearly-14-000-customers/",
+      "cves": []
+    },
+    {
+      "title": "Who Vets AI’s Code? The Scale Challenge Facing Open Source Ingestion",
+      "url": "https://www.bleepingcomputer.com/news/security/who-vets-ais-code-the-scale-challenge-facing-open-source-ingestion/",
+      "cves": []
+    }
+  ]
+}

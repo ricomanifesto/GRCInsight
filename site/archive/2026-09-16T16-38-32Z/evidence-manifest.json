@@ -1,0 +1,88 @@
+{
+  "schema_version": 3,
+  "generated_at": "2026-09-16T16:38:32.481709Z",
+  "feed_url": "https://ricomanifesto.github.io/SentryDigest/feed.xml",
+  "feed_home_url": "https://ricomanifesto.github.io/SentryDigest/",
+  "digest_issue_date": "2026-09-16",
+  "digest_issue_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-16/",
+  "requested_model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
+  "resolved_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+  "sources": [
+    {
+      "title": "Active Exploitation Attempts Target WSO2 API Manager JWT Bypass With Forged Admin Tokens",
+      "url": "https://thehackernews.com/2026/09/active-exploitation-attempts-target.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-16/#reporting-3db834775cc6",
+      "cves": [
+        "CVE-2026-5430"
+      ]
+    },
+    {
+      "title": "Cisco Secure Email Gateway Flaw Exploited in the Wild, Enables Root Command Execution",
+      "url": "https://thehackernews.com/2026/09/cisco-secure-email-gateway-flaw.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-16/#reporting-afc835b3ebd2",
+      "cves": [
+        "CVE-2026-76461"
+      ]
+    },
+    {
+      "title": "Windows Server 2022 reaches end of mainstream support next month",
+      "url": "https://www.bleepingcomputer.com/news/microsoft/windows-server-2022-reaches-end-of-mainstream-support-next-month/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-16/#reporting-9780a1191d2e",
+      "cves": []
+    },
+    {
+      "title": "Google fixes actively exploited Android zero-day on Pixel devices",
+      "url": "https://www.bleepingcomputer.com/news/security/google-fixes-actively-exploited-android-zero-day-on-pixel-devices/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-16/#reporting-a267aa5e6441",
+      "cves": []
+    },
+    {
+      "title": "Attackers Exploit WooCommerce Wholesale Lead Capture Flaw to Plant PHP Web Shells",
+      "url": "https://thehackernews.com/2026/09/attackers-exploit-woocommerce-wholesale.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-16/#reporting-eee1a3572e34",
+      "cves": []
+    },
+    {
+      "title": "Cyber Op Targets South Korean Media & Automotive Sectors",
+      "url": "https://www.darkreading.com/cyberattacks-data-breaches/cyber-south-korean-media-automotive",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-16/#reporting-b4e702cc1770",
+      "cves": []
+    },
+    {
+      "title": "Acronis warns of actively exploited flaw in its cPanel backup plugin",
+      "url": "https://www.bleepingcomputer.com/news/security/acronis-warns-of-actively-exploited-flaw-in-its-cpanel-backup-plugin/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-16/#reporting-61abe81ccc88",
+      "cves": []
+    },
+    {
+      "title": "Malcious Admin Menu Editor Pro plugin backdoors 1,500 WordPress sites",
+      "url": "https://www.bleepingcomputer.com/news/security/malcious-admin-menu-editor-pro-plugin-backdoors-1-500-wordpress-sites/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-16/#reporting-85fda3d5eeb6",
+      "cves": []
+    },
+    {
+      "title": "Microsoft Issues Emergency Fixes After Massive Patch Tuesday",
+      "url": "https://www.darkreading.com/application-security/microsoft-emergency-fixes-patch-tuesday",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-16/#reporting-5b3e6060de6c",
+      "cves": []
+    },
+    {
+      "title": "Black Hat USA 2026 | The 'Breaking' News: The OpenAI–Hugging Face Incident",
+      "url": "https://www.darkreading.com/vulnerabilities-threats/bhusa26huggingfacetalk",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-16/#reporting-990957c2387d",
+      "cves": []
+    },
+    {
+      "title": "KREMLIN Banking Malware Hijacks Chrome and Edge to Steal Credentials and Session Tokens",
+      "url": "https://thehackernews.com/2026/09/kremlin-banking-malware-hijacks-chrome.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-16/#reporting-e6910dbe4779",
+      "cves": []
+    },
+    {
+      "title": "VectraRAT Can Hack Windows Enterprises for $250 per Month",
+      "url": "https://www.darkreading.com/endpoint-security/vectrarat-hack-windows-enterprises",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-16/#reporting-e55cfacdec13",
+      "cves": []
+    }
+  ]
+}

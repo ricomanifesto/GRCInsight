@@ -1,0 +1,86 @@
+{
+  "schema_version": 3,
+  "generated_at": "2026-09-29T15:23:32.722178Z",
+  "feed_url": "https://ricomanifesto.github.io/SentryDigest/feed.xml",
+  "feed_home_url": "https://ricomanifesto.github.io/SentryDigest/",
+  "digest_issue_date": "2026-09-29",
+  "digest_issue_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-29/",
+  "requested_model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
+  "resolved_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+  "sources": [
+    {
+      "title": "Apple Patches CoreGraphics Flaw Possibly Exploited in Targeted Attacks",
+      "url": "https://thehackernews.com/2026/09/apple-patches-coregraphics-flaw.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-29/#reporting-3e5bc5aeb6b9",
+      "cves": [
+        "CVE-2026-86950"
+      ]
+    },
+    {
+      "title": "Vietnamese man charged in $16 million 'pig butchering' crypto scam",
+      "url": "https://www.bleepingcomputer.com/news/security/vietnamese-man-charged-in-16-million-pig-butchering-crypto-scam/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-29/#reporting-e28c990b80ea",
+      "cves": []
+    },
+    {
+      "title": "Kiteworks patches critical flaw, brings customer systems online",
+      "url": "https://www.bleepingcomputer.com/news/security/kiteworks-lifts-shutdown-warning-after-patching-critical-flaw/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-29/#reporting-d37d4f7b043d",
+      "cves": []
+    },
+    {
+      "title": "Dutch Police Arrest 24-Year-Old Amsterdam Man in ShinyHunters Investigation",
+      "url": "https://thehackernews.com/2026/09/dutch-police-arrest-24-year-old.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-29/#reporting-b8f949116244",
+      "cves": []
+    },
+    {
+      "title": "Apple patches CoreGraphics zero-day flaw exploited in attacks",
+      "url": "https://www.bleepingcomputer.com/news/security/apple-patches-coregraphics-zero-day-flaw-exploited-in-attacks/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-29/#reporting-bfc2554a53b3",
+      "cves": []
+    },
+    {
+      "title": "Official MCP Python SDK Flaw Can Let Malicious Servers Steal OAuth Credentials",
+      "url": "https://thehackernews.com/2026/09/official-mcp-python-sdk-flaw-can-let.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-29/#reporting-c401e28ae2c1",
+      "cves": []
+    },
+    {
+      "title": "OpenAI Shelves GPT-6.1 Astra After Tests Find Deception and Unauthorized Actions",
+      "url": "https://thehackernews.com/2026/09/openai-shelves-gpt-61-astra-after-tests.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-29/#reporting-710938735c9f",
+      "cves": []
+    },
+    {
+      "title": "OpenAI Pauses Tool Use After Agent Bypasses Internet Controls to Reach External Chatbot",
+      "url": "https://thehackernews.com/2026/09/openai-pauses-tool-use-after-agent.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-29/#reporting-50972d407b47",
+      "cves": []
+    },
+    {
+      "title": "One Packet Can Crash OT Servers in Industrial Sectors",
+      "url": "https://www.darkreading.com/ics-ot-security/one-packet-crash-servers-tdengine",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-29/#reporting-ae5b26793ac1",
+      "cves": []
+    },
+    {
+      "title": "Japan's Keio confirms ransomware attack disrupted business systems",
+      "url": "https://www.bleepingcomputer.com/news/security/japans-keio-confirms-ransomware-attack-disrupted-business-systems/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-29/#reporting-ccc11f98d4a8",
+      "cves": []
+    },
+    {
+      "title": "Times Car confirms data breach affecting 6.6 million user accounts",
+      "url": "https://www.bleepingcomputer.com/news/security/times-car-confirms-data-breach-affecting-66-million-user-accounts/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-29/#reporting-12100c223846",
+      "cves": []
+    },
+    {
+      "title": "Carbonato Botnet Puts an AI Agent on Hacked Docker Hosts",
+      "url": "https://www.darkreading.com/identity-access-management-security/carbonato-botnet-ai-agent-hacked-docker-hosts",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-29/#reporting-6c46ed3fad49",
+      "cves": []
+    }
+  ]
+}

@@ -1,0 +1,86 @@
+{
+  "schema_version": 3,
+  "generated_at": "2026-09-11T16:17:12.635856Z",
+  "feed_url": "https://ricomanifesto.github.io/SentryDigest/feed.xml",
+  "feed_home_url": "https://ricomanifesto.github.io/SentryDigest/",
+  "digest_issue_date": "2026-09-11",
+  "digest_issue_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-11/",
+  "requested_model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
+  "resolved_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+  "sources": [
+    {
+      "title": "Cisco FMC Flaws Exploited to Steal Credentials and Deploy Qilin Ransomware",
+      "url": "https://thehackernews.com/2026/09/cisco-fmc-flaws-exploited-to-steal.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-11/#reporting-788925358fae",
+      "cves": [
+        "CVE-2026-20079"
+      ]
+    },
+    {
+      "title": "Microsoft fixes Teams, Outlook launch failures on ARM Windows PCs",
+      "url": "https://www.bleepingcomputer.com/news/microsoft/microsoft-fixes-teams-outlook-launch-failures-on-arm-windows-pcs/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-11/#reporting-726c616a6c1c",
+      "cves": []
+    },
+    {
+      "title": "Trezor: 347,000 users targeted in phishing attacks after Brevo breach",
+      "url": "https://www.bleepingcomputer.com/news/security/trezor-347-000-users-targeted-in-phishing-attacks-after-brevo-breach/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-11/#reporting-42df196f2b73",
+      "cves": []
+    },
+    {
+      "title": "Attackers Chain JFrog Artifactory Flaws to Gain Admin Control and Plant Backdoors",
+      "url": "https://thehackernews.com/2026/09/attackers-chain-jfrog-artifactory-flaws.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-11/#reporting-6d77d0f66755",
+      "cves": []
+    },
+    {
+      "title": "China-Linked UNC3569 Exploited Sogou Input Method Flaw to Deploy GRAYRABBIT Backdoor",
+      "url": "https://thehackernews.com/2026/09/china-linked-unc3569-exploited-sogou.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-11/#reporting-11c8b517d375",
+      "cves": []
+    },
+    {
+      "title": "Conti ransomware gang member sentenced to 4 years in prison",
+      "url": "https://www.bleepingcomputer.com/news/security/conti-ransomware-gang-member-sentenced-to-four-years-in-prison/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-11/#reporting-07c0f38a80ce",
+      "cves": []
+    },
+    {
+      "title": "PaperCut Replaces Emergency Patches With Fixes for Two Actively Exploited Flaws",
+      "url": "https://thehackernews.com/2026/09/papercut-replaces-emergency-patches.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-11/#reporting-af3b87dfbf9c",
+      "cves": []
+    },
+    {
+      "title": "Indonesia Hit by Android Banking App-Cloning Campaign",
+      "url": "https://www.darkreading.com/mobile-security/indonesia-android-banking-app-cloning-campaign",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-11/#reporting-133227570f5c",
+      "cves": []
+    },
+    {
+      "title": "New Android malware encrypts files, steals data, and harasses victims",
+      "url": "https://www.bleepingcomputer.com/news/security/new-android-malware-encrypts-files-steals-data-and-harasses-victims/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-11/#reporting-b8fb164281cc",
+      "cves": []
+    },
+    {
+      "title": "Voice Callers Exploit BYOD to Reach Microsoft 365, Corporate Data",
+      "url": "https://www.darkreading.com/threat-intelligence/voice-callers-exploit-byod-microsoft-365-corporate-data",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-11/#reporting-432786c4f1ef",
+      "cves": []
+    },
+    {
+      "title": "September Windows Server updates break Remote Desktop Services",
+      "url": "https://www.bleepingcomputer.com/news/microsoft/september-windows-server-updates-break-remote-desktop-services/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-11/#reporting-5125040d57bf",
+      "cves": []
+    },
+    {
+      "title": "Surfshark VPN says hackers breached internal testing, proxy servers",
+      "url": "https://www.bleepingcomputer.com/news/security/surfshark-vpn-says-hackers-breached-internal-testing-proxy-servers/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-11/#reporting-1b1eebcbc6b8",
+      "cves": []
+    }
+  ]
+}

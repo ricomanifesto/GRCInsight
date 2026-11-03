@@ -1,0 +1,88 @@
+{
+  "schema_version": 3,
+  "generated_at": "2026-09-25T16:59:42.510475Z",
+  "feed_url": "https://ricomanifesto.github.io/SentryDigest/feed.xml",
+  "feed_home_url": "https://ricomanifesto.github.io/SentryDigest/",
+  "digest_issue_date": "2026-09-25",
+  "digest_issue_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-25/",
+  "requested_model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
+  "resolved_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+  "sources": [
+    {
+      "title": "Roundcube Pre-Auth SQL Injection Flaw Actively Exploited in the Wild",
+      "url": "https://thehackernews.com/2026/09/roundcube-pre-auth-sql-injection-flaw.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-25/#reporting-8479bfbd51e5",
+      "cves": [
+        "CVE-2026-48842"
+      ]
+    },
+    {
+      "title": "WSO2 and Adobe Commerce Flaws Exploited in Attacks, Added to CISA KEV",
+      "url": "https://thehackernews.com/2026/09/wso2-and-adobe-commerce-flaws-exploited.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-25/#reporting-9b34a9a8785c",
+      "cves": [
+        "CVE-2026-5430"
+      ]
+    },
+    {
+      "title": "Bitget Says Suspected North Korean Hackers Stole $351.6M After Backend Compromise",
+      "url": "https://thehackernews.com/2026/09/bitget-says-suspected-north-korean.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-25/#reporting-0fba6d21f983",
+      "cves": []
+    },
+    {
+      "title": "Microsoft: Recent Windows updates cause desktop loading issues",
+      "url": "https://www.bleepingcomputer.com/news/microsoft/microsoft-recent-windows-updates-cause-desktop-loading-issues/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-25/#reporting-a32e62f50e70",
+      "cves": []
+    },
+    {
+      "title": "Hackers steal $351.6 million in Bitget crypto exchange hack",
+      "url": "https://www.bleepingcomputer.com/news/security/hackers-steal-3516-million-in-bitget-crypto-exchange-hack/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-25/#reporting-4ef5d17c6103",
+      "cves": []
+    },
+    {
+      "title": "Russia's Hybrid Cyber-Physical War in Europe Heats Up",
+      "url": "https://www.darkreading.com/physical-security/russia-hybrid-cyber-physical-war-europe",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-25/#reporting-e56c0a307f67",
+      "cves": []
+    },
+    {
+      "title": "Cloudflare Fixes Flaw That Let One Container Read Another Customer's Leftover Disk Data",
+      "url": "https://thehackernews.com/2026/09/cloudflare-fixes-flaw-that-let-one.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-25/#reporting-b6378b315cd4",
+      "cves": []
+    },
+    {
+      "title": "'Salesbleed' Exploits Salesforce Agents to Enable Slack Phishing",
+      "url": "https://www.darkreading.com/application-security/salesbleed-exploits-salesforce-agents-slack-phishing",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-25/#reporting-9e7b4de9cac3",
+      "cves": []
+    },
+    {
+      "title": "MacSync malware uses public iCloud calendars to deliver new payloads",
+      "url": "https://www.bleepingcomputer.com/news/security/macsync-malware-uses-public-icloud-calendars-to-deliver-new-payloads/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-25/#reporting-7265697f416b",
+      "cves": []
+    },
+    {
+      "title": "SectopRAT Returns, Hiding Inside a Legitimate Application",
+      "url": "https://www.darkreading.com/cyberattacks-data-breaches/sectoprat-returns-hiding-inside-legitimate-application",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-25/#reporting-4e2ff3ee1aa8",
+      "cves": []
+    },
+    {
+      "title": "New Carbonato malware uses AI agents to hijack exposed Docker hosts",
+      "url": "https://www.bleepingcomputer.com/news/security/new-carbonato-malware-uses-ai-agents-to-hijack-exposed-docker-hosts/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-25/#reporting-8692e38436e8",
+      "cves": []
+    },
+    {
+      "title": "Unpatched OnePlus Flaws Let Installed Android Apps Gain Root Without Permissions",
+      "url": "https://thehackernews.com/2026/09/unpatched-oneplus-flaws-let-installed.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-25/#reporting-7a9b3e084e40",
+      "cves": []
+    }
+  ]
+}

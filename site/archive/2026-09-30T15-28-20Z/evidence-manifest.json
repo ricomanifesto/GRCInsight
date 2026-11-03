@@ -1,0 +1,88 @@
+{
+  "schema_version": 3,
+  "generated_at": "2026-09-30T15:28:20.185382Z",
+  "feed_url": "https://ricomanifesto.github.io/SentryDigest/feed.xml",
+  "feed_home_url": "https://ricomanifesto.github.io/SentryDigest/",
+  "digest_issue_date": "2026-09-30",
+  "digest_issue_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-30/",
+  "requested_model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
+  "resolved_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+  "sources": [
+    {
+      "title": "Citrix NetScaler CVE-2026-88772 Exploit Details Show Pre-Auth Path to Shellcode Execution",
+      "url": "https://thehackernews.com/2026/09/citrix-netscaler-cve-2026-88772-exploit.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-30/#reporting-a2c9b41769a0",
+      "cves": [
+        "CVE-2026-88772"
+      ]
+    },
+    {
+      "title": "Apple Zero-Day Vulnerability Weaponized in Targeted Attacks",
+      "url": "https://www.darkreading.com/cyberattacks-data-breaches/apple-zero-day-vulnerability-weaponized-targeted-attacks",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-30/#reporting-d49e0531691d",
+      "cves": [
+        "CVE-2026-86950"
+      ]
+    },
+    {
+      "title": "TeamViewer urges users to patch severe flaws “as soon as possible”",
+      "url": "https://www.bleepingcomputer.com/news/security/teamviewer-urges-users-to-patch-severe-flaws-as-soon-as-possible/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-30/#reporting-8889e814016c",
+      "cves": []
+    },
+    {
+      "title": "AI Coding Agents Exposed 13,000 Internal Images, Including Billing Records, on GitHub",
+      "url": "https://thehackernews.com/2026/09/ai-coding-agents-exposed-13000-internal.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-30/#reporting-d36b3ecb6626",
+      "cves": []
+    },
+    {
+      "title": "Bitget hacked via zero-day in third-party security products",
+      "url": "https://www.bleepingcomputer.com/news/security/bitget-hacked-via-zero-day-in-third-party-security-products/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-30/#reporting-52ffe63dd45a",
+      "cves": []
+    },
+    {
+      "title": "US-Focused CSuite Phishing Steals Microsoft 365 Sessions and Deploys RMM Tools for Remote Access",
+      "url": "https://thehackernews.com/2026/09/us-focused-csuite-phishing-steals.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-30/#reporting-4e63cd870861",
+      "cves": []
+    },
+    {
+      "title": "Attackers Exploit NetScaler Flaw for Root Access, Deploy WHIPSHOT and SLAPSHOT",
+      "url": "https://thehackernews.com/2026/09/attackers-exploit-netscaler-flaw-for.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-30/#reporting-7595f834fb9c",
+      "cves": []
+    },
+    {
+      "title": "OpenSSL Fixes High-Severity DTLS Flaw That Can Leak Heap Memory Unencrypted",
+      "url": "https://thehackernews.com/2026/09/openssl-fixes-high-severity-dtls-flaw.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-30/#reporting-1b25f217f425",
+      "cves": []
+    },
+    {
+      "title": "South Africa Seeks Help After Cyberattack Targets Air Traffic Control",
+      "url": "https://www.darkreading.com/cyberattacks-data-breaches/south-africa-help-cyberattack-air-traffic-control",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-30/#reporting-22d143dd8ff5",
+      "cves": []
+    },
+    {
+      "title": "Microsoft is rolling out Linux container support to WSL",
+      "url": "https://www.bleepingcomputer.com/news/microsoft/microsoft-is-rolling-out-linux-container-support-to-wsl/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-30/#reporting-3b6b222f8b8e",
+      "cves": []
+    },
+    {
+      "title": "Signal adds encypted local backup support to iOS, desktop apps",
+      "url": "https://www.bleepingcomputer.com/news/security/signal-adds-encypted-local-backup-support-to-ios-desktop-apps/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-30/#reporting-1e9b704f29a5",
+      "cves": []
+    },
+    {
+      "title": "Unsloth Studio Flaw Turns Routine Model Inspection Into Code Execution",
+      "url": "https://www.darkreading.com/application-security/unsloth-studio-flaw-model-inspection-code-execution",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-30/#reporting-b9ebd84c7b27",
+      "cves": []
+    }
+  ]
+}

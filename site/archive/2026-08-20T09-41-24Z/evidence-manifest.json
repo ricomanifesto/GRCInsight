@@ -1,0 +1,90 @@
+{
+  "schema_version": 3,
+  "generated_at": "2026-08-20T09:41:24.171268Z",
+  "feed_url": "https://ricomanifesto.github.io/SentryDigest/feed.xml",
+  "feed_home_url": "https://ricomanifesto.github.io/SentryDigest/",
+  "digest_issue_date": "2026-08-20",
+  "digest_issue_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-20/",
+  "requested_model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
+  "resolved_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+  "sources": [
+    {
+      "title": "Elementor Pro Flaw Could Let Unauthenticated Attackers Upload PHP and Execute Code",
+      "url": "https://thehackernews.com/2026/08/elementor-pro-flaw-could-let.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-20/#reporting-b1da55ba0134",
+      "cves": [
+        "CVE-2026-32475"
+      ]
+    },
+    {
+      "title": "Critical macOS, SharePoint, vCenter, and Microsoft IKE Flaws Under Active Exploitation",
+      "url": "https://thehackernews.com/2026/08/critical-macos-sharepoint-vcenter-and.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-20/#reporting-d18e92ac17a1",
+      "cves": [
+        "CVE-2026-65400"
+      ]
+    },
+    {
+      "title": "Critical GitLab Zero-Click Flaw Poses Mitigation Challenges",
+      "url": "https://www.darkreading.com/application-security/critical-gitlab-zero-click-flaw-mitigation-challenges",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-20/#reporting-c81f051852d3",
+      "cves": [
+        "CVE-2026-19478"
+      ]
+    },
+    {
+      "title": "Microsoft says August Windows updates may cause gaming issues",
+      "url": "https://www.bleepingcomputer.com/news/microsoft/microsoft-august-windows-updates-may-cause-gaming-issues-reboots/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-20/#reporting-2c9d3178c27e",
+      "cves": []
+    },
+    {
+      "title": "OpenAI confirms ChatGPT is down as logins and signups fail",
+      "url": "https://www.bleepingcomputer.com/news/artificial-intelligence/openai-confirms-chatgpt-is-down-as-logins-and-signups-fail/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-20/#reporting-eac982b66ebc",
+      "cves": []
+    },
+    {
+      "title": "Rogue ransomware affiliate poses as recovery firm to steal payments",
+      "url": "https://www.bleepingcomputer.com/news/security/rogue-ransomware-affiliate-ransom-busters-poses-as-recovery-firm/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-20/#reporting-2b2f8778b756",
+      "cves": []
+    },
+    {
+      "title": "Sakura Internet hack exposes data of up to 1.36 million accounts",
+      "url": "https://www.bleepingcomputer.com/news/security/sakura-internet-hack-exposes-data-of-up-to-136-million-accounts/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-20/#reporting-36ba4d341c08",
+      "cves": []
+    },
+    {
+      "title": "No-Filter 'Kriminal' AI Platform Raises Cybercrime Concerns",
+      "url": "https://www.darkreading.com/application-security/no-filter-kriminal-ai-platform-cybercrime-concerns",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-20/#reporting-f8f419ba570e",
+      "cves": []
+    },
+    {
+      "title": "Healthtech firm CareCloud data breach impacts 3.7 million patients",
+      "url": "https://www.bleepingcomputer.com/news/security/healthtech-firm-carecloud-data-breach-impacts-37-million-patients/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-20/#reporting-fd9aa5790c84",
+      "cves": []
+    },
+    {
+      "title": "Cloudflare Workers Spectre Attack Leaks JWT From Co-Located Worker at 12 Bits/Second",
+      "url": "https://thehackernews.com/2026/08/cloudflare-workers-spectre-attack-leaks.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-20/#reporting-ef4c1d5e9e0f",
+      "cves": []
+    },
+    {
+      "title": "Hackers compromise 14,500 Dahua web cameras in 35-day campaign",
+      "url": "https://www.bleepingcomputer.com/news/security/hackers-compromise-14-500-dahua-web-cameras-in-35-day-campaign/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-20/#reporting-90794440e1d1",
+      "cves": []
+    },
+    {
+      "title": "OpenAI Pauses Frontier RL Training as It Tightens Defenses Against Unsafe AI Behavior",
+      "url": "https://thehackernews.com/2026/08/openai-pauses-frontier-rl-training-as.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-20/#reporting-542c6d33a2f5",
+      "cves": []
+    }
+  ]
+}

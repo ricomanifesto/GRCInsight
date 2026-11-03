@@ -1,0 +1,92 @@
+{
+  "schema_version": 3,
+  "generated_at": "2026-10-02T18:27:53.161334Z",
+  "feed_url": "https://ricomanifesto.github.io/SentryDigest/feed.xml",
+  "feed_home_url": "https://ricomanifesto.github.io/SentryDigest/",
+  "digest_issue_date": "2026-10-02",
+  "digest_issue_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-02/",
+  "requested_model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
+  "resolved_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+  "sources": [
+    {
+      "title": "Critical FortiMail Zero-Day Flaw Exploited in Attacks Allows Unauthenticated Arbitrary File Writes",
+      "url": "https://thehackernews.com/2026/10/critical-fortimail-zero-day-flaw.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-02/#reporting-da984ff8e8ff",
+      "cves": [
+        "CVE-2026-104286"
+      ]
+    },
+    {
+      "title": "CISA Adds Exploited Cisco Catalyst SD-WAN Manager Auth Bypass to KEV",
+      "url": "https://thehackernews.com/2026/10/cisa-adds-exploited-cisco-catalyst-sd.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-02/#reporting-346b23ad75b1",
+      "cves": [
+        "CVE-2026-76504"
+      ]
+    },
+    {
+      "title": "Apple CoreGraphics PoC Emerges as WhatsApp PDF Checks Hint at Possible Delivery Path",
+      "url": "https://thehackernews.com/2026/10/apple-coregraphics-poc-emerges-as.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-02/#reporting-43ea94fc4334",
+      "cves": [
+        "CVE-2026-86950"
+      ]
+    },
+    {
+      "title": "The EDR blind spot: 3 ways browser attacks evade endpoint telemetry",
+      "url": "https://www.bleepingcomputer.com/news/security/the-edr-blind-spot-3-ways-browser-attacks-evade-endpoint-telemetry/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-02/#reporting-f4b6d95f5f5a",
+      "cves": []
+    },
+    {
+      "title": "Vulnerability Backlogs Are an Ownership Problem",
+      "url": "https://www.darkreading.com/cybersecurity-operations/vulnerability-backlogs-ownership-problem",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-02/#reporting-a0646754e8cc",
+      "cves": []
+    },
+    {
+      "title": "Malicious Linux Implants Mimic Asian Mail Security Products",
+      "url": "https://www.darkreading.com/threat-intelligence/malicious-linux-implants-mimic-asian-mail-security",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-02/#reporting-13d969ca40e8",
+      "cves": []
+    },
+    {
+      "title": "Dell asks admins to patch max severity CSM flaws as soon as possible",
+      "url": "https://www.bleepingcomputer.com/news/security/new-max-severity-dell-csm-flaws-give-hackers-admin-privileges/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-02/#reporting-778774296a1f",
+      "cves": []
+    },
+    {
+      "title": "OpenAI Parts Ways With Three Safety Researchers Over Sensitive Information Mishandling",
+      "url": "https://thehackernews.com/2026/10/openai-parts-ways-with-three-safety.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-02/#reporting-e5ad3ab89f77",
+      "cves": []
+    },
+    {
+      "title": "Why CISOs Struggle to Answer the Board's Three Hardest Questions, and How to Fix the Report",
+      "url": "https://thehackernews.com/2026/10/why-cisos-struggle-to-answer-boards.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-02/#reporting-43a11e7cfe0b",
+      "cves": []
+    },
+    {
+      "title": "Microsoft’s X account hacked in crypto pump-and-dump scheme",
+      "url": "https://www.bleepingcomputer.com/news/security/microsofts-x-account-hacked-in-crypto-token-pump-and-dump-scheme/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-02/#reporting-b8b4a1085f35",
+      "cves": []
+    },
+    {
+      "title": "Android 17 Advanced Protection Locks Accessibility Services to Verified Accessibility Tools",
+      "url": "https://thehackernews.com/2026/10/android-17-advanced-protection-locks.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-02/#reporting-e9bd716f670a",
+      "cves": []
+    },
+    {
+      "title": "Fortinet warns of critical FortiMail flaw exploited in zero-day attacks",
+      "url": "https://www.bleepingcomputer.com/news/security/fortinet-warns-of-critical-fortimail-flaw-exploited-in-zero-day-attacks/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-02/#reporting-b4ba5b4eb39d",
+      "cves": [
+        "CVE-2026-104286"
+      ]
+    }
+  ]
+}

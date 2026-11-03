@@ -1,0 +1,88 @@
+{
+  "schema_version": 3,
+  "generated_at": "2026-08-19T09:40:45.45261Z",
+  "feed_url": "https://ricomanifesto.github.io/SentryDigest/feed.xml",
+  "feed_home_url": "https://ricomanifesto.github.io/SentryDigest/",
+  "digest_issue_date": "2026-08-19",
+  "digest_issue_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-19/",
+  "requested_model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
+  "resolved_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+  "sources": [
+    {
+      "title": "Critical GitLab Zero-Click Flaw Poses Mitigation Challenges",
+      "url": "https://www.darkreading.com/application-security/critical-gitlab-zero-click-flaw-mitigation-challenges",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-19/#reporting-c81f051852d3",
+      "cves": [
+        "CVE-2026-19478"
+      ]
+    },
+    {
+      "title": "Forminator WordPress Flaw Can Enable Unauthenticated RCE via Malicious PHP Uploads",
+      "url": "https://thehackernews.com/2026/08/forminator-wordpress-flaw-can-enable.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-19/#reporting-b83af1627135",
+      "cves": [
+        "CVE-2026-15748"
+      ]
+    },
+    {
+      "title": "China-Linked Hacker Shows AI Capabilities in APAC Attack",
+      "url": "https://www.darkreading.com/cyberattacks-data-breaches/china-linked-hacker-ai-capabilities-apac-attack",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-19/#reporting-b7712547b45e",
+      "cves": []
+    },
+    {
+      "title": "'CoSnitch' Attack Tricked Copilot into Mapping Out Architecture",
+      "url": "https://www.darkreading.com/vulnerabilities-threats/cosnitch-attack-copilot-mapping-out-architecture",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-19/#reporting-cd21e9704a97",
+      "cves": []
+    },
+    {
+      "title": "Comcast turns your Xfinity WiFi into a home motion detector",
+      "url": "https://www.bleepingcomputer.com/news/security/comcast-turns-your-xfinity-wifi-into-a-home-motion-detector/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-19/#reporting-6ffb3f471f4f",
+      "cves": []
+    },
+    {
+      "title": "CISOs Break Their Silence in 'Declassified' Docuseries",
+      "url": "https://www.darkreading.com/cyber-risk/cisos-break-their-silence-in-declassified-docuseries",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-19/#reporting-2da9958060b2",
+      "cves": []
+    },
+    {
+      "title": "Microsoft Copilot Personal Flaws Could Let One Click Exfiltrate Data From Connected Apps",
+      "url": "https://thehackernews.com/2026/08/microsoft-copilot-personal-flaws-could.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-19/#reporting-3db875d507ea",
+      "cves": []
+    },
+    {
+      "title": "Attackers Exploit MLflow SSRF Flaw to Steal Cloud Credentials and Secrets",
+      "url": "https://thehackernews.com/2026/08/attackers-exploit-mlflow-ssrf-flaw-to.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-19/#reporting-c960f83a4e1f",
+      "cves": []
+    },
+    {
+      "title": "Clop created custom web shell for Windchill data theft attacks",
+      "url": "https://www.bleepingcomputer.com/news/security/clop-created-custom-web-shell-for-windchill-data-theft-attacks/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-19/#reporting-851d3dad3622",
+      "cves": []
+    },
+    {
+      "title": "Ransom Busters Claims It Hacked Ransomware Servers, Asks Victims for Up to $60,000",
+      "url": "https://thehackernews.com/2026/08/ransom-busters-claims-it-hacked.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-19/#reporting-ee1a3760dd26",
+      "cves": []
+    },
+    {
+      "title": "Your Controls Block Known Attacks. What About the Behavior?",
+      "url": "https://www.bleepingcomputer.com/news/security/your-controls-block-known-attacks-what-about-the-behavior/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-19/#reporting-a83ffd80f6bb",
+      "cves": []
+    },
+    {
+      "title": "'Ransom Busters': Ransomware Actor Poses as Incident-Recovery Service",
+      "url": "https://www.darkreading.com/cyberattacks-data-breaches/ransom-busters-ransomware-actor-incident-recovery-service",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-19/#reporting-1f616d071c66",
+      "cves": []
+    }
+  ]
+}

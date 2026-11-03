@@ -1,0 +1,88 @@
+{
+  "schema_version": 3,
+  "generated_at": "2026-10-05T00:56:28.092653Z",
+  "feed_url": "https://ricomanifesto.github.io/SentryDigest/feed.xml",
+  "feed_home_url": "https://ricomanifesto.github.io/SentryDigest/",
+  "digest_issue_date": "2026-10-04",
+  "digest_issue_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-04/",
+  "requested_model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
+  "resolved_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+  "sources": [
+    {
+      "title": "Dell CSM Flaws Enable Unauthenticated Admin Access and Root on Kubernetes Nodes",
+      "url": "https://thehackernews.com/2026/10/dell-csm-flaws-enable-unauthenticated.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-04/#reporting-5f13530361d7",
+      "cves": [
+        "CVE-2026-63688"
+      ]
+    },
+    {
+      "title": "Critical FortiMail Zero-Day Flaw Exploited in Attacks Allows Unauthenticated Arbitrary File Writes",
+      "url": "https://thehackernews.com/2026/10/critical-fortimail-zero-day-flaw.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-04/#reporting-da984ff8e8ff",
+      "cves": [
+        "CVE-2026-104286"
+      ]
+    },
+    {
+      "title": "Anthropic asks Claude users to share voice data for AI model training",
+      "url": "https://www.bleepingcomputer.com/news/artificial-intelligence/anthropic-asks-claude-users-to-share-voice-data-for-ai-model-training/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-04/#reporting-36473df9dd8c",
+      "cves": []
+    },
+    {
+      "title": "ShinyHunters Suspect Rey Reportedly Detained in Jordan, Helping FBI Identify Group Members",
+      "url": "https://thehackernews.com/2026/10/shinyhunters-suspect-rey-reportedly.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-04/#reporting-5b2c328286db",
+      "cves": []
+    },
+    {
+      "title": "China-Aligned TA419 Targets U.S. AI Policy Experts With Microsoft AitM Phishing",
+      "url": "https://thehackernews.com/2026/10/china-aligned-ta419-targets-us-ai.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-04/#reporting-aac5cc1a7d26",
+      "cves": []
+    },
+    {
+      "title": "Google Gemini could soon get full access to your Mac’s files, apps and the web",
+      "url": "https://www.bleepingcomputer.com/news/google/google-gemini-could-soon-get-full-access-to-your-macs-files-apps-and-the-web/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-04/#reporting-4e1146b9767f",
+      "cves": []
+    },
+    {
+      "title": "ShinyHunters hacker reportedly detained in Jordan, aiding FBI",
+      "url": "https://www.bleepingcomputer.com/news/security/shinyhunters-hacker-reportedly-detained-in-jordan-aiding-fbi/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-04/#reporting-a48481198b82",
+      "cves": []
+    },
+    {
+      "title": "MI5 Says China’s MSS Funded Research Involving 100+ U.K.-Linked Academics",
+      "url": "https://thehackernews.com/2026/10/mi5-says-chinas-mss-funded-research.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-04/#reporting-515631664ea5",
+      "cves": []
+    },
+    {
+      "title": "Warlock Exploits SharePoint Flaws to Disable Security Tools and Deploy Ransomware",
+      "url": "https://thehackernews.com/2026/10/warlock-exploits-sharepoint-flaws-to.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-04/#reporting-d5d7c3b1775b",
+      "cves": []
+    },
+    {
+      "title": "Danish university DTU breach exposes data of up to 200,000 people",
+      "url": "https://www.bleepingcomputer.com/news/security/danish-university-dtu-breach-exposes-data-of-up-to-200-000-people/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-04/#reporting-c24f61f66f61",
+      "cves": []
+    },
+    {
+      "title": "The State of Cybersecurity in 2026: Key Segments, Insights, and Innovations",
+      "url": "https://thehackernews.com/2026/10/the-state-of-cybersecurity-in-2026key.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-04/#reporting-71c997ccf55f",
+      "cves": []
+    },
+    {
+      "title": "RemoteThreat Bets Security Teams Need to Test What Happens After Defenses Fail",
+      "url": "https://www.darkreading.com/cybersecurity-operations/remotethreat-bets-security-teams-need-to-test-what-happens-after-defenses-fail",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-04/#reporting-5a09c5ac00e9",
+      "cves": []
+    }
+  ]
+}

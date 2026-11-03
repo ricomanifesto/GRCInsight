@@ -1,0 +1,88 @@
+{
+  "schema_version": 3,
+  "generated_at": "2026-08-19T15:41:40.845011Z",
+  "feed_url": "https://ricomanifesto.github.io/SentryDigest/feed.xml",
+  "feed_home_url": "https://ricomanifesto.github.io/SentryDigest/",
+  "digest_issue_date": "2026-08-19",
+  "digest_issue_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-19/",
+  "requested_model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
+  "resolved_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+  "sources": [
+    {
+      "title": "Critical macOS, SharePoint, vCenter, and Microsoft IKE Flaws Under Active Exploitation",
+      "url": "https://thehackernews.com/2026/08/critical-macos-sharepoint-vcenter-and.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-19/#reporting-d18e92ac17a1",
+      "cves": [
+        "CVE-2026-65400"
+      ]
+    },
+    {
+      "title": "Critical GitLab Zero-Click Flaw Poses Mitigation Challenges",
+      "url": "https://www.darkreading.com/application-security/critical-gitlab-zero-click-flaw-mitigation-challenges",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-19/#reporting-c81f051852d3",
+      "cves": [
+        "CVE-2026-19478"
+      ]
+    },
+    {
+      "title": "StopAndProtect Uses Nearly 2,000 Hacked WordPress Sites to Spread Malware and Steal Data",
+      "url": "https://thehackernews.com/2026/08/stopandprotect-uses-nearly-2000-hacked.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-19/#reporting-d147b1677752",
+      "cves": []
+    },
+    {
+      "title": "Microsoft fixes known issue causing Windows Defender crashes",
+      "url": "https://www.bleepingcomputer.com/news/microsoft/microsoft-fixes-known-issue-causing-windows-defender-crashes/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-19/#reporting-906994debebf",
+      "cves": []
+    },
+    {
+      "title": "Critical RCE flaw in Windows IKE Extension now actively exploited",
+      "url": "https://www.bleepingcomputer.com/news/security/cisa-critical-windows-ike-extension-flaw-now-exploited-in-attacks/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-19/#reporting-3fe1d408edde",
+      "cves": []
+    },
+    {
+      "title": "Windows 11 24H2 Home and Pro reach end of support in 2 months",
+      "url": "https://www.bleepingcomputer.com/news/microsoft/windows-11-24h2-home-and-pro-reach-end-of-support-in-2-months/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-19/#reporting-7519abc26fd1",
+      "cves": []
+    },
+    {
+      "title": "CISA: Medusa ransomware hit over 500 critical infrastructure orgs",
+      "url": "https://www.bleepingcomputer.com/news/security/cisa-medusa-ransomware-hit-over-500-critical-infrastructure-orgs/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-19/#reporting-5ef6f15942f8",
+      "cves": []
+    },
+    {
+      "title": "Microsoft Links 30+ Rotating Domains to MacSync Stealer Infrastructure",
+      "url": "https://thehackernews.com/2026/08/microsoft-links-30-rotating-domains-to.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-19/#reporting-c0cb35055ffe",
+      "cves": []
+    },
+    {
+      "title": "Clop-Linked Windchill Web Shell Decrypts Credentials and Maps Engineering Data",
+      "url": "https://thehackernews.com/2026/08/clop-linked-windchill-web-shell.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-19/#reporting-0a363bcfbc5d",
+      "cves": []
+    },
+    {
+      "title": "China-Linked Hacker Shows AI Capabilities in APAC Attack",
+      "url": "https://www.darkreading.com/cyberattacks-data-breaches/china-linked-hacker-ai-capabilities-apac-attack",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-19/#reporting-b7712547b45e",
+      "cves": []
+    },
+    {
+      "title": "'CoSnitch' Attack Tricked Copilot into Mapping Out Architecture",
+      "url": "https://www.darkreading.com/vulnerabilities-threats/cosnitch-attack-copilot-mapping-out-architecture",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-19/#reporting-cd21e9704a97",
+      "cves": []
+    },
+    {
+      "title": "Comcast turns your Xfinity WiFi into a home motion detector",
+      "url": "https://www.bleepingcomputer.com/news/security/comcast-turns-your-xfinity-wifi-into-a-home-motion-detector/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-19/#reporting-6ffb3f471f4f",
+      "cves": []
+    }
+  ]
+}

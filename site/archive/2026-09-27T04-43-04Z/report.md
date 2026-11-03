@@ -1,0 +1,80 @@
+# GRC Intelligence Report - 2026-09-27
+**Generated:** 2026-09-27T04:43:04.028011Z
+**Date of Issue:** September 2026
+**Analysis Period:** September 2026
+**Source:** [SentryDigest](https://ricomanifesto.github.io/SentryDigest/feed.xml)
+**Source Issue:** [SentryDigest 2026-09-26](https://ricomanifesto.github.io/SentryDigest/archive/2026-09-26/)
+**Articles Analyzed:** 30
+**GRC-Relevant Articles:** 30
+**Authoring Model:** nvidia/nemotron-3-ultra-550b-a55b:free
+**Requested Route:** openrouter/nvidia/nemotron-3-ultra-550b-a55b:free
+**Analysis Mode:** Model-backed
+
+## Executive Summary
+
+Organizations face renewed mass exploitation of critical enterprise software vulnerabilities this quarter, with threat actors demonstrating sophisticated web application firewall bypass techniques against Oracle PeopleSoft (CVE-2026-35273) and active exploitation of Microsoft SharePoint (CVE-2026-65660), WSO2 (CVE-2026-5430), and Roundcube Webmail (CVE-2026-48842) flaws now listed in the CISA Known Exploited Vulnerabilities catalog [ShinyHunters uses WAF bypass trick in Oracle PeopleSoft attacks](https://www.bleepingcomputer.com/news/security/shinyhunters-uses-waf-bypass-trick-in-oracle-peoplesoft-attacks/) [SharePoint RCE and MikroTik RouterOS Flaws Actively Exploited in the Wild](https://thehackernews.com/2026/09/sharepoint-rce-and-mikrotik-routeros.html) [CISA warns of Sharepoint, WSO2, Adobe Commerce flaws exploited in attacks](https://www.bleepingcomputer.com/news/security/cisa-warns-of-sharepoint-wso2-adobe-commerce-flaws-exploited-in-attacks/) [Roundcube Pre-Auth SQL Injection Flaw Actively Exploited in the Wild](https://thehackernews.com/2026/09/roundcube-pre-auth-sql-injection-flaw.html).
+
+Supply chain risk has escalated through compromised third-party GitHub Actions that remained accessible for over a week after re-enablement despite containing malicious Mini Shai-Hulud payloads, while AI agent deployments introduce novel data exposure vectors as evidenced by OpenAI agents uploading user-provided images to third-party hosting services [GitHub Actions re-enabled with Mini Shai-Hulud payload still active](https://www.bleepingcomputer.com/news/security/github-actions-re-enabled-with-mini-shai-hulud-payload-still-active/) [OpenAI's AI agents accidentally uploaded user-provided images to third-party sites](https://www.bleepingcomputer.com/news/artificial-intelligence/openais-ai-agents-accidentally-uploaded-user-provided-images-to-third-party-sites/).
+
+Malware-as-a-service platforms continue to evolve, with Lunex Stealer leveraging AMD driver abuse to disable security monitoring and harvest browser credentials through ClickFix-style social engineering, and a high-severity Elementor WordPress plugin CSRF flaw (CVSS 8.8) enabling unauthenticated administrative account creation [Lunex Stealer Abuses AMD Driver to Disable Security Monitoring and Steal Browser Credentials](https://thehackernews.com/2026/09/lunex-stealer-abuses-amd-driver-to.html) [Elementor CSRF Flaw Lets Attackers Take Over Sites After Admin Clicks Crafted Link](https://thehackernews.com/2026/09/elementor-csrf-flaw-lets-attackers-take.html).
+
+Microsoft has paused the KB5002907 Microsoft 365 update after it deactivated perpetual Office 2016 and 2019 licenses, highlighting operational risk from patch management processes, while industry discourse shifts toward zero-trust architectures for AI agents following intrusion incidents during agent evaluations [Microsoft pauses KB5002907 update after Office license deactivations](https://www.bleepingcomputer.com/news/microsoft/microsoft-365-kb5002907-update-paused-after-office-license-deactivations/) [Zero Trust for AI Agents Starts With Fixing Zero Visibility](https://thehackernews.com/2026/09/zero-trust-for-ai-agents-starts-with.html).
+
+## Key Regulatory Developments
+
+| Regulation / Framework | Development | Business Impact | Source |
+|------------------------|-------------|-----------------|--------|
+| CISA Known Exploited Vulnerabilities (KEV) Catalog | Added CVE-2026-65660 (Microsoft SharePoint code injection, CVSS 8.8) and MikroTik RouterOS flaw citing active exploitation | Federal agencies required to remediate per BOD 22-01; enterprises should prioritize patching to align with federal baseline | [SharePoint RCE and MikroTik RouterOS Flaws Actively Exploited in the Wild](https://thehackernews.com/2026/09/sharepoint-rce-and-mikrotik-routeros.html) |
+| CISA Known Exploited Vulnerabilities (KEV) Catalog | Added WSO2 authentication bypass (CVE-2026-5430) citing active exploitation across multiple WSO2 products | Organizations using WSO2 Identity Server, API Manager, or API Microgateway must apply mitigations immediately | [CISA warns of Sharepoint, WSO2, Adobe Commerce flaws exploited in attacks](https://www.bleepingcomputer.com/news/security/cisa-warns-of-sharepoint-wso2-adobe-commerce-flaws-exploited-in-attacks/) |
+
+## Industry Impact Analysis
+
+| Sector / Technology | Vulnerability Exposure | Exploitation Status | Source |
+|---------------------|------------------------|---------------------|--------|
+| Enterprise ERP (Oracle PeopleSoft) | CVE-2026-35273 (CVSS 9.8) — unauthenticated RCE | Active mass exploitation; WAF bypass via URL-encoding trick | [ShinyHunters uses WAF bypass trick in Oracle PeopleSoft attacks](https://www.bleepingcomputer.com/news/security/shinyhunters-uses-waf-bypass-trick-in-oracle-peoplesoft-attacks/) [Attackers Bypass WAFs to Exploit Oracle PeopleSoft Flaw and Deploy Web Shells](https://thehackernews.com/2026/09/attackers-bypass-wafs-to-exploit-oracle.html) |
+| Collaboration Platforms (Microsoft SharePoint) | CVE-2026-65660 (CVSS 8.8) — code injection | Active exploitation; added to CISA KEV | [SharePoint RCE and MikroTik RouterOS Flaws Actively Exploited in the Wild](https://thehackernews.com/2026/09/sharepoint-rce-and-mikrotik-routeros.html) |
+| Identity & Access Management (WSO2) | CVE-2026-5430 — authentication bypass | Active exploitation across multiple WSO2 products | [CISA warns of Sharepoint, WSO2, Adobe Commerce flaws exploited in attacks](https://www.bleepingcomputer.com/news/security/cisa-warns-of-sharepoint-wso2-adobe-commerce-flaws-exploited-in-attacks/) |
+| Email Infrastructure (Roundcube Webmail) | CVE-2026-48842 (CVSS 8.1) — pre-auth SQL injection in virtuser_query plugin | Active exploitation; patched in 1.6.16 and 1.7.1 | [Roundcube Pre-Auth SQL Injection Flaw Actively Exploited in the Wild](https://thehackernews.com/2026/09/roundcube-pre-auth-sql-injection-flaw.html) |
+| Network Infrastructure (MikroTik RouterOS) | Undisclosed CVE added to CISA KEV | Active exploitation | [SharePoint RCE and MikroTik RouterOS Flaws Actively Exploited in the Wild](https://thehackernews.com/2026/09/sharepoint-rce-and-mikrotik-routeros.html) |
+| E-commerce (Adobe Commerce) | Flaw exploited in attacks per CISA warning | Active exploitation | [CISA warns of Sharepoint, WSO2, Adobe Commerce flaws exploited in attacks](https://www.bleepingcomputer.com/news/security/cisa-warns-of-sharepoint-wso2-adobe-commerce-flaws-exploited-in-attacks/) |
+| Web Content Management (Elementor WordPress) | CSRF flaw (CVSS 8.8), no CVE assigned | Proof-of-concept disclosed; unauthenticated admin takeover via crafted link | [Elementor CSRF Flaw Lets Attackers Take Over Sites After Admin Clicks Crafted Link](https://thehackernews.com/2026/09/elementor-csrf-flaw-lets-attackers-take.html) |
+| Software Supply Chain (GitHub Actions) | Mini Shai-Hulud malicious payload in third-party actions | Compromised actions re-enabled and accessible >1 week post-disclosure | [GitHub Actions re-enabled with Mini Shai-Hulud payload still active](https://www.bleepingcomputer.com/news/security/github-actions-re-enabled-with-mini-shai-hulud-payload-still-active/) |
+
+## Risk Assessment
+
+| Risk Category | Key Findings | Severity Indicator |
+|---------------|--------------|-------------------|
+| Vulnerability Management | Four critical/high-severity CVEs (CVE-2026-35273, CVE-2026-65660, CVE-2026-5430, CVE-2026-48842) under active exploitation with CISA KEV listings; WAF bypass techniques defeating perimeter defenses | Critical **Evidence:** [ShinyHunters uses WAF bypass trick in Oracle PeopleSoft attacks](https://www.bleepingcomputer.com/news/security/shinyhunters-uses-waf-bypass-trick-in-oracle-peoplesoft-attacks/); [Roundcube Pre-Auth SQL Injection Flaw Actively Exploited in the Wild](https://thehackernews.com/2026/09/roundcube-pre-auth-sql-injection-flaw.html); [CISA warns of Sharepoint, WSO2, Adobe Commerce flaws exploited in attacks](https://www.bleepingcomputer.com/news/security/cisa-warns-of-sharepoint-wso2-adobe-commerce-flaws-exploited-in-attacks/); [SharePoint RCE and MikroTik RouterOS Flaws Actively Exploited in the Wild](https://thehackernews.com/2026/09/sharepoint-rce-and-mikrotik-routeros.html) |
+| Supply Chain Integrity | Malicious GitHub Actions payloads persisted in public registry for >1 week after re-enablement; third-party action verification gaps | High |
+| AI Agent Governance | Autonomous agents uploading sensitive user data to unauthorized third-party destinations; zero-visibility deployment patterns | High |
+| Malware Evolution | MaaS platform (Lunex) abusing legitimate driver signatures to disable EDR/telemetry; ClickFix social engineering at scale | High |
+| Web Application Security | Elementor CSRF (CVSS 8.8) enables full site takeover via single admin click; widespread WordPress plugin deployment | High |
+| Patch Management Operations | Microsoft 365 update causing unintended license deactivation for perpetual Office 2016/2019; rollback/pause required | Medium |
+
+## Recommendations for Action
+
+1. **Immediate Patching Sprint** — Deploy emergency patches for CVE-2026-35273 (Oracle PeopleSoft), CVE-2026-65660 (SharePoint), CVE-2026-5430 (WSO2), and CVE-2026-48842 (Roundcube) within 72 hours per CISA KEV guidance; validate WAF rule effectiveness against URL-encoding bypass variants [ShinyHunters uses WAF bypass trick in Oracle PeopleSoft attacks](https://www.bleepingcomputer.com/news/security/shinyhunters-uses-waf-bypass-trick-in-oracle-peoplesoft-attacks/) [SharePoint RCE and MikroTik RouterOS Flaws Actively Exploited in the Wild](https://thehackernews.com/2026/09/sharepoint-rce-and-mikrotik-routeros.html) [CISA warns of Sharepoint, WSO2, Adobe Commerce flaws exploited in attacks](https://www.bleepingcomputer.com/news/security/cisa-warns-of-sharepoint-wso2-adobe-commerce-flaws-exploited-in-attacks/) [Roundcube Pre-Auth SQL Injection Flaw Actively Exploited in the Wild](https://thehackernews.com/2026/09/roundcube-pre-auth-sql-injection-flaw.html).
+
+2. **Software Supply Chain Hardening** — Audit all third-party GitHub Actions in CI/CD pipelines; pin actions to immutable commit SHAs; implement policy-as-code to block unpinned or unverified actions; monitor for Mini Shai-Hulud indicators [GitHub Actions re-enabled with Mini Shai-Hulud payload still active](https://www.bleepingcomputer.com/news/security/github-actions-re-enabled-with-mini-shai-hulud-payload-still-active/).
+
+3. **AI Agent Data Governance** — Enforce egress controls and data loss prevention for autonomous agent workloads; require explicit allowlists for external API destinations; implement session-level audit logging for agent file operations [OpenAI's AI agents accidentally uploaded user-provided images to third-party sites](https://www.bleepingcomputer.com/news/artificial-intelligence/openais-ai-agents-accidentally-uploaded-user-provided-images-to-third-party-sites/) [Zero Trust for AI Agents Starts With Fixing Zero Visibility](https://thehackernews.com/2026/09/zero-trust-for-ai-agents-starts-with.html).
+
+4. **Endpoint Detection Enhancement** — Update EDR signatures for Lunex Stealer AMD driver abuse patterns; deploy application control policies restricting unsigned driver loads; conduct phishing simulations incorporating ClickFix CAPTCHA lures [Lunex Stealer Abuses AMD Driver to Disable Security Monitoring and Steal Browser Credentials](https://thehackernews.com/2026/09/lunex-stealer-abuses-amd-driver-to.html).
+
+5. **Web Asset Remediation** — Update Elementor Website Builder plugin to patched version immediately; audit WordPress admin accounts for unauthorized additions; implement CSRF token validation at WAF layer [Elementor CSRF Flaw Lets Attackers Take Over Sites After Admin Clicks Crafted Link](https://thehackernews.com/2026/09/elementor-csrf-flaw-lets-attackers-take.html).
+
+6. **Patch Validation Protocol** — Establish pre-deployment testing for Microsoft 365 updates in staging environments covering perpetual license scenarios; maintain rollback playbooks for license-impacting changes [Microsoft pauses KB5002907 update after Office license deactivations](https://www.bleepingcomputer.com/news/microsoft/microsoft-365-kb5002907-update-paused-after-office-license-deactivations/).
+
+## Source Highlights
+
+- [ShinyHunters uses WAF bypass trick in Oracle PeopleSoft attacks](https://www.bleepingcomputer.com/news/security/shinyhunters-uses-waf-bypass-trick-in-oracle-peoplesoft-attacks/) · [View in SentryDigest](https://ricomanifesto.github.io/SentryDigest/archive/2026-09-26/#reporting-77ddfbcd4e34)
+- [SharePoint RCE and MikroTik RouterOS Flaws Actively Exploited in the Wild](https://thehackernews.com/2026/09/sharepoint-rce-and-mikrotik-routeros.html) · [View in SentryDigest](https://ricomanifesto.github.io/SentryDigest/archive/2026-09-26/#reporting-049c4c6d156c)
+- [CISA warns of Sharepoint, WSO2, Adobe Commerce flaws exploited in attacks](https://www.bleepingcomputer.com/news/security/cisa-warns-of-sharepoint-wso2-adobe-commerce-flaws-exploited-in-attacks/) · [View in SentryDigest](https://ricomanifesto.github.io/SentryDigest/archive/2026-09-26/#reporting-2e9b76e63d00)
+- [Roundcube Pre-Auth SQL Injection Flaw Actively Exploited in the Wild](https://thehackernews.com/2026/09/roundcube-pre-auth-sql-injection-flaw.html) · [View in SentryDigest](https://ricomanifesto.github.io/SentryDigest/archive/2026-09-26/#reporting-8479bfbd51e5)
+- [Lunex Stealer Abuses AMD Driver to Disable Security Monitoring and Steal Browser Credentials](https://thehackernews.com/2026/09/lunex-stealer-abuses-amd-driver-to.html) · [View in SentryDigest](https://ricomanifesto.github.io/SentryDigest/archive/2026-09-26/#reporting-9f09894f2cc8)
+- [Microsoft pauses KB5002907 update after Office license deactivations](https://www.bleepingcomputer.com/news/microsoft/microsoft-365-kb5002907-update-paused-after-office-license-deactivations/) · [View in SentryDigest](https://ricomanifesto.github.io/SentryDigest/archive/2026-09-26/#reporting-b597d5341c3f)
+- [GitHub Actions re-enabled with Mini Shai-Hulud payload still active](https://www.bleepingcomputer.com/news/security/github-actions-re-enabled-with-mini-shai-hulud-payload-still-active/) · [View in SentryDigest](https://ricomanifesto.github.io/SentryDigest/archive/2026-09-26/#reporting-fa5c037c6dc2)
+- [OpenAI's AI agents accidentally uploaded user-provided images to third-party sites](https://www.bleepingcomputer.com/news/artificial-intelligence/openais-ai-agents-accidentally-uploaded-user-provided-images-to-third-party-sites/) · [View in SentryDigest](https://ricomanifesto.github.io/SentryDigest/archive/2026-09-26/#reporting-17579509bdfc)
+- [Attackers Bypass WAFs to Exploit Oracle PeopleSoft Flaw and Deploy Web Shells](https://thehackernews.com/2026/09/attackers-bypass-wafs-to-exploit-oracle.html) · [View in SentryDigest](https://ricomanifesto.github.io/SentryDigest/archive/2026-09-26/#reporting-124ca5b2bbe4)
+- [Zero Trust for AI Agents Starts With Fixing Zero Visibility](https://thehackernews.com/2026/09/zero-trust-for-ai-agents-starts-with.html) · [View in SentryDigest](https://ricomanifesto.github.io/SentryDigest/archive/2026-09-26/#reporting-3c874b7b99d0)
+- [Elementor CSRF Flaw Lets Attackers Take Over Sites After Admin Clicks Crafted Link](https://thehackernews.com/2026/09/elementor-csrf-flaw-lets-attackers-take.html) · [View in SentryDigest](https://ricomanifesto.github.io/SentryDigest/archive/2026-09-26/#reporting-087d84aa6c29)

@@ -1,0 +1,90 @@
+{
+  "schema_version": 3,
+  "generated_at": "2026-09-22T00:02:12.550254Z",
+  "feed_url": "https://ricomanifesto.github.io/SentryDigest/feed.xml",
+  "feed_home_url": "https://ricomanifesto.github.io/SentryDigest/",
+  "digest_issue_date": "2026-09-21",
+  "digest_issue_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-21/",
+  "requested_model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
+  "resolved_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+  "sources": [
+    {
+      "title": "SolarWinds Patches ARM Hard-Coded Key Flaw Enabling Unauthenticated RCE",
+      "url": "https://thehackernews.com/2026/09/solarwinds-patches-arm-hard-coded-key.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-21/#reporting-531e97a39e7b",
+      "cves": [
+        "CVE-2026-28326"
+      ]
+    },
+    {
+      "title": "Critical Pre-Auth RCE in Orkes Conductor Workflow Platform Exploited in the Wild",
+      "url": "https://thehackernews.com/2026/09/critical-pre-auth-rce-in-orkes.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-21/#reporting-c8cb9ca3b0db",
+      "cves": [
+        "CVE-2026-58138"
+      ]
+    },
+    {
+      "title": "CISA Flags Three Linux Kernel Vulnerabilities Exploited in the Wild",
+      "url": "https://thehackernews.com/2026/09/cisa-flags-three-linux-kernel.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-21/#reporting-7abc6bd4255f",
+      "cves": [
+        "CVE-2025-39682"
+      ]
+    },
+    {
+      "title": "Cybercriminals Are Hiding New Malware in Torrents for Popular Films",
+      "url": "https://www.darkreading.com/cyberattacks-data-breaches/cybercriminals-hiding-new-malware-torrents-popular-films",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-21/#reporting-f3c6cee66ad8",
+      "cves": []
+    },
+    {
+      "title": "WordPress Click2Shell flaw lets hackers execute PHP on the server",
+      "url": "https://www.bleepingcomputer.com/news/security/wordpress-click2shell-flaw-lets-hackers-execute-php-on-the-server/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-21/#reporting-7c13e8164b6a",
+      "cves": []
+    },
+    {
+      "title": "Microsoft to retire Microsoft 365 Companion apps in December",
+      "url": "https://www.bleepingcomputer.com/news/microsoft/microsoft-to-retire-microsoft-365-companion-apps-in-december/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-21/#reporting-142127a10774",
+      "cves": []
+    },
+    {
+      "title": "Fake LastPass Authenticator Installer Abuses Microsoft-Signed Driver to Kill Antivirus and EDR",
+      "url": "https://thehackernews.com/2026/09/fake-lastpass-authenticator-installer.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-21/#reporting-f2aa6f9693d4",
+      "cves": []
+    },
+    {
+      "title": "Contagious Interview Campaign Compromises 30,000 Devices, Steals $10.71M in Crypto",
+      "url": "https://thehackernews.com/2026/09/contagious-interview-campaign.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-21/#reporting-c533abc4730a",
+      "cves": []
+    },
+    {
+      "title": "Google Fined €403 Million Over GDPR Violations Tied to Location Data",
+      "url": "https://thehackernews.com/2026/09/google-fined-403-million-over-gdpr.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-21/#reporting-d1a929f886de",
+      "cves": []
+    },
+    {
+      "title": "Google fined €403 million over location data privacy violations",
+      "url": "https://www.bleepingcomputer.com/news/security/google-fined-403-million-over-location-data-privacy-violations/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-21/#reporting-aa000b550ad7",
+      "cves": []
+    },
+    {
+      "title": "Rogue Behavior: OpenAI Reveals More Model Misalignment Incidents",
+      "url": "https://www.darkreading.com/cyber-risk/rogue-behavior-openai-more-model-misalignment-incidents",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-21/#reporting-5e201f4edcfa",
+      "cves": []
+    },
+    {
+      "title": "Microsoft fixes broken Excel copy and paste for all Office users",
+      "url": "https://www.bleepingcomputer.com/news/microsoft/microsoft-fixes-broken-excel-copy-and-paste-for-all-office-users/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-21/#reporting-908cc308e69b",
+      "cves": []
+    }
+  ]
+}

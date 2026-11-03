@@ -1,0 +1,94 @@
+{
+  "schema_version": 3,
+  "generated_at": "2026-09-27T11:48:34.838278Z",
+  "feed_url": "https://ricomanifesto.github.io/SentryDigest/feed.xml",
+  "feed_home_url": "https://ricomanifesto.github.io/SentryDigest/",
+  "digest_issue_date": "2026-09-27",
+  "digest_issue_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-27/",
+  "requested_model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
+  "resolved_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+  "sources": [
+    {
+      "title": "ShinyHunters uses WAF bypass trick in Oracle PeopleSoft attacks",
+      "url": "https://www.bleepingcomputer.com/news/security/shinyhunters-uses-waf-bypass-trick-in-oracle-peoplesoft-attacks/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-27/#reporting-77ddfbcd4e34",
+      "cves": [
+        "CVE-2026-35273"
+      ]
+    },
+    {
+      "title": "SharePoint RCE and MikroTik RouterOS Flaws Actively Exploited in the Wild",
+      "url": "https://thehackernews.com/2026/09/sharepoint-rce-and-mikrotik-routeros.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-27/#reporting-049c4c6d156c",
+      "cves": [
+        "CVE-2026-65660"
+      ]
+    },
+    {
+      "title": "CISA warns of Sharepoint, WSO2, Adobe Commerce flaws exploited in attacks",
+      "url": "https://www.bleepingcomputer.com/news/security/cisa-warns-of-sharepoint-wso2-adobe-commerce-flaws-exploited-in-attacks/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-27/#reporting-2e9b76e63d00",
+      "cves": [
+        "CVE-2026-5430"
+      ]
+    },
+    {
+      "title": "Roundcube Pre-Auth SQL Injection Flaw Actively Exploited in the Wild",
+      "url": "https://thehackernews.com/2026/09/roundcube-pre-auth-sql-injection-flaw.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-27/#reporting-8479bfbd51e5",
+      "cves": [
+        "CVE-2026-48842"
+      ]
+    },
+    {
+      "title": "Lunex Stealer Abuses AMD Driver to Disable Security Monitoring and Steal Browser Credentials",
+      "url": "https://thehackernews.com/2026/09/lunex-stealer-abuses-amd-driver-to.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-27/#reporting-9f09894f2cc8",
+      "cves": []
+    },
+    {
+      "title": "Claude Opus 5.5 uses 95% fewer em dashes, but its answers are getting longer",
+      "url": "https://www.bleepingcomputer.com/news/artificial-intelligence/claude-opus-55-uses-95-percent-fewer-em-dashes-but-its-answers-are-getting-longer/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-27/#reporting-1d5487d8b2c1",
+      "cves": []
+    },
+    {
+      "title": "Microsoft pauses KB5002907 update after Office license deactivations",
+      "url": "https://www.bleepingcomputer.com/news/microsoft/microsoft-365-kb5002907-update-paused-after-office-license-deactivations/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-27/#reporting-b597d5341c3f",
+      "cves": []
+    },
+    {
+      "title": "GitHub Actions re-enabled with Mini Shai-Hulud payload still active",
+      "url": "https://www.bleepingcomputer.com/news/security/github-actions-re-enabled-with-mini-shai-hulud-payload-still-active/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-27/#reporting-fa5c037c6dc2",
+      "cves": []
+    },
+    {
+      "title": "OpenAI's AI agents accidentally uploaded user-provided images to third-party sites",
+      "url": "https://www.bleepingcomputer.com/news/artificial-intelligence/openais-ai-agents-accidentally-uploaded-user-provided-images-to-third-party-sites/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-27/#reporting-17579509bdfc",
+      "cves": []
+    },
+    {
+      "title": "Attackers Bypass WAFs to Exploit Oracle PeopleSoft Flaw and Deploy Web Shells",
+      "url": "https://thehackernews.com/2026/09/attackers-bypass-wafs-to-exploit-oracle.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-27/#reporting-124ca5b2bbe4",
+      "cves": [
+        "CVE-2026-35273"
+      ]
+    },
+    {
+      "title": "Zero Trust for AI Agents Starts With Fixing Zero Visibility",
+      "url": "https://thehackernews.com/2026/09/zero-trust-for-ai-agents-starts-with.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-27/#reporting-3c874b7b99d0",
+      "cves": []
+    },
+    {
+      "title": "Elementor CSRF Flaw Lets Attackers Take Over Sites After Admin Clicks Crafted Link",
+      "url": "https://thehackernews.com/2026/09/elementor-csrf-flaw-lets-attackers-take.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-27/#reporting-087d84aa6c29",
+      "cves": []
+    }
+  ]
+}

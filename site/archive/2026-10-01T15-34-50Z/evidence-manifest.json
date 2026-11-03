@@ -1,0 +1,90 @@
+{
+  "schema_version": 3,
+  "generated_at": "2026-10-01T15:34:50.075333Z",
+  "feed_url": "https://ricomanifesto.github.io/SentryDigest/feed.xml",
+  "feed_home_url": "https://ricomanifesto.github.io/SentryDigest/",
+  "digest_issue_date": "2026-10-01",
+  "digest_issue_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-01/",
+  "requested_model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
+  "resolved_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+  "sources": [
+    {
+      "title": "CISA Adds Exploited Cisco Catalyst SD-WAN Manager Auth Bypass to KEV",
+      "url": "https://thehackernews.com/2026/10/cisa-adds-exploited-cisco-catalyst-sd.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-01/#reporting-346b23ad75b1",
+      "cves": [
+        "CVE-2026-76504"
+      ]
+    },
+    {
+      "title": "Apple CoreGraphics PoC Emerges as WhatsApp PDF Checks Hint at Possible Delivery Path",
+      "url": "https://thehackernews.com/2026/10/apple-coregraphics-poc-emerges-as.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-01/#reporting-43ea94fc4334",
+      "cves": [
+        "CVE-2026-86950"
+      ]
+    },
+    {
+      "title": "Attackers Exploit Zimbra Flaw to Deploy Web Shells and Harvest Authentication Secrets",
+      "url": "https://thehackernews.com/2026/09/attackers-exploit-zimbra-flaw-to-deploy.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-01/#reporting-fe95a2c38caf",
+      "cves": [
+        "CVE-2026-73570"
+      ]
+    },
+    {
+      "title": "How Financial Services Companies Can Modernize Their Software Supply Chain",
+      "url": "https://thehackernews.com/2026/10/how-financial-services-companies-can.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-01/#reporting-1866931397ea",
+      "cves": []
+    },
+    {
+      "title": "Microsoft enables Windows settings backup by default for orgs",
+      "url": "https://www.bleepingcomputer.com/news/microsoft/microsoft-enables-windows-settings-backup-by-default-for-orgs/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-01/#reporting-52279358df2a",
+      "cves": []
+    },
+    {
+      "title": "OpenAI Disrupts Reasoning Extraction Campaign Linked to Moonshot AI Associates",
+      "url": "https://thehackernews.com/2026/10/openai-disrupts-reasoning-extraction.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-01/#reporting-33c11d72966e",
+      "cves": []
+    },
+    {
+      "title": "Hackers stole Pentagon personnel records of over 3 million people",
+      "url": "https://www.bleepingcomputer.com/news/security/hackers-breach-pentagon-human-resources-management-system-steal-data-of-nearly-3-million-people/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-01/#reporting-4f07180fa121",
+      "cves": []
+    },
+    {
+      "title": "Google Rolls Out Gemini 4 Argon to Trusted Cyber Defenders, Plans Guardrail-Free Version",
+      "url": "https://thehackernews.com/2026/10/google-rolls-out-gemini-4-argon-to.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-01/#reporting-0a705b1644e1",
+      "cves": []
+    },
+    {
+      "title": "Metamask discloses security incident affecting its infrastructure",
+      "url": "https://www.bleepingcomputer.com/news/security/metamask-discloses-security-incident-affecting-its-infrastructure/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-01/#reporting-a3f893b99aeb",
+      "cves": []
+    },
+    {
+      "title": "Bitget Confirms Third-Party Zero-Day Behind $387.5 Million Cryptocurrency Theft",
+      "url": "https://thehackernews.com/2026/10/bitget-confirms-third-party-zero-day.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-01/#reporting-b4409a570832",
+      "cves": []
+    },
+    {
+      "title": "MetaMask Security Incident Prompts Exit of Affected Ethereum Validators",
+      "url": "https://thehackernews.com/2026/10/metamask-security-incident-prompts-exit.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-01/#reporting-65e6681dca63",
+      "cves": []
+    },
+    {
+      "title": "Citrix NetScaler Post-Exploitation Payload Creates Superuser, Maps Web Shell to CSS-Like URLs",
+      "url": "https://thehackernews.com/2026/10/citrix-netscaler-post-exploitation.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-01/#reporting-87574535fedc",
+      "cves": []
+    }
+  ]
+}

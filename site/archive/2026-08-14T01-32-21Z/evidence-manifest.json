@@ -1,0 +1,90 @@
+{
+  "schema_version": 2,
+  "generated_at": "2026-08-14T01:32:21.49596Z",
+  "feed_url": "https://ricomanifesto.github.io/SentryDigest/feed.xml",
+  "feed_home_url": "https://ricomanifesto.github.io/SentryDigest/",
+  "requested_model": "openrouter/openrouter/free",
+  "resolved_model": "nvidia/nemotron-nano-9b-v2:free",
+  "sources": [
+    {
+      "title": "Critical VMware vCenter RCE flaw exploited for reverse SSH access",
+      "url": "https://www.bleepingcomputer.com/news/security/critical-vmware-vcenter-rce-flaw-exploited-for-reverse-ssh-access/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/#reporting-a4f4d669c4c8",
+      "cves": [
+        "CVE-2026-59310"
+      ]
+    },
+    {
+      "title": "Attackers Exploit SharePoint Authentication Bypass After Public PoC Release",
+      "url": "https://thehackernews.com/2026/08/attackers-exploit-sharepoint.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/#reporting-3c5ef5fa5324",
+      "cves": [
+        "CVE-2026-55040"
+      ]
+    },
+    {
+      "title": "Hackers exploit critical Adobe Commerce flaw to hijack customer accounts",
+      "url": "https://www.bleepingcomputer.com/news/security/hackers-exploit-critical-adobe-commerce-flaw-to-hijack-customer-accounts/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/#reporting-815318592eae",
+      "cves": [
+        "CVE-2026-71362"
+      ]
+    },
+    {
+      "title": "Adobe Patches Three CVSS 10.0 ColdFusion and Campaign Classic Flaws",
+      "url": "https://thehackernews.com/2026/08/adobe-patches-three-cvss-100-coldfusion.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/#reporting-ee8b70611ea8",
+      "cves": [
+        "CVE-2026-48362"
+      ]
+    },
+    {
+      "title": "Ukraine shuts down 94 fraudulent call centers, seize millions in cash",
+      "url": "https://www.bleepingcomputer.com/news/security/ukraine-shuts-down-94-fraudulent-call-centers-seize-millions-in-cash/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/#reporting-2ef1deb56f00",
+      "cves": []
+    },
+    {
+      "title": "Akira hackers disable EDR with Safe Mode, steal data but fail to encrypt",
+      "url": "https://www.bleepingcomputer.com/news/security/akira-hackers-disable-edr-with-safe-mode-steal-data-but-fail-to-encrypt/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/#reporting-dace2be75c67",
+      "cves": []
+    },
+    {
+      "title": "Global Threat Campaign Hits Critical VMware vCenter Flaw",
+      "url": "https://www.darkreading.com/vulnerabilities-threats/global-threat-campaign-critical-vmware-vcenter-flaw",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/#reporting-7a20fee85e3d",
+      "cves": []
+    },
+    {
+      "title": "Hackers breach govt webmail while running parallel crypto fraud",
+      "url": "https://www.bleepingcomputer.com/news/security/hackers-breach-govt-webmail-while-running-parallel-crypto-fraud/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/#reporting-209727c80af4",
+      "cves": []
+    },
+    {
+      "title": "Microsoft patches LegacyHive Windows zero-day vulnerability",
+      "url": "https://www.bleepingcomputer.com/news/microsoft/microsoft-patches-legacyhive-windows-zero-day-vulnerability/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/#reporting-8e33415aceb9",
+      "cves": []
+    },
+    {
+      "title": "AI 'watermark removers' flood the web. Almost none can prove they work.",
+      "url": "https://www.bleepingcomputer.com/news/security/ai-watermark-removers-flood-the-web-almost-none-can-prove-they-work/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/#reporting-00e63bf6755c",
+      "cves": []
+    },
+    {
+      "title": "Trezor discloses data breach affecting nearly 14,000 customers",
+      "url": "https://www.bleepingcomputer.com/news/security/trezor-discloses-data-breach-affecting-nearly-14-000-customers/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/#reporting-edfb56fa72f5",
+      "cves": []
+    },
+    {
+      "title": "Who Vets AI’s Code? The Scale Challenge Facing Open Source Ingestion",
+      "url": "https://www.bleepingcomputer.com/news/security/who-vets-ais-code-the-scale-challenge-facing-open-source-ingestion/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/#reporting-93f55ea09cbb",
+      "cves": []
+    }
+  ]
+}

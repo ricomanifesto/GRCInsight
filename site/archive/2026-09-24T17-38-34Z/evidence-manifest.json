@@ -1,0 +1,91 @@
+{
+  "schema_version": 3,
+  "generated_at": "2026-09-24T17:38:34.461066Z",
+  "feed_url": "https://ricomanifesto.github.io/SentryDigest/feed.xml",
+  "feed_home_url": "https://ricomanifesto.github.io/SentryDigest/",
+  "digest_issue_date": "2026-09-24",
+  "digest_issue_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-24/",
+  "requested_model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
+  "resolved_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+  "sources": [
+    {
+      "title": "Attackers Exploit WordPress CVE-2026-87902 Within Hours of Disclosure",
+      "url": "https://thehackernews.com/2026/09/attackers-exploit-wordpress-cve-2026.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-24/#reporting-baff1d5496fd",
+      "cves": [
+        "CVE-2026-87902"
+      ]
+    },
+    {
+      "title": "Check Point warns of hackers exploiting Security Gateway VPN RCE flaw",
+      "url": "https://www.bleepingcomputer.com/news/security/check-point-warns-of-hackers-exploiting-security-gateway-vpn-rce-flaw/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-24/#reporting-702aeb848c91",
+      "cves": [
+        "CVE-2026-85102"
+      ]
+    },
+    {
+      "title": "MikroTrick Chain Let Attackers Take Over MikroTik Routers Without a Password or SSH Key",
+      "url": "https://thehackernews.com/2026/09/mikrotrick-chain-let-attackers-take.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-24/#reporting-20d13eec11e1",
+      "cves": [
+        "CVE-2026-67279",
+        "CVE-2026-86060"
+      ]
+    },
+    {
+      "title": "Placeholder third-party[.]com Referenced Across 1,700+ Repositories Now Serves Malicious Content",
+      "url": "https://thehackernews.com/2026/09/placeholder-third-partycom-referenced.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-24/#reporting-e32e04002703",
+      "cves": []
+    },
+    {
+      "title": "3 Cyber Threats That Defined the Summer of 2026",
+      "url": "https://www.darkreading.com/cyberattacks-data-breaches/3-cyber-threats-defined-summer-2026",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-24/#reporting-3f4d35272a0b",
+      "cves": []
+    },
+    {
+      "title": "Hacked Ukrainian Sites Serve Fake Cloudflare ClickFix Lures for Psychedelic Stealer",
+      "url": "https://thehackernews.com/2026/09/hacked-ukrainian-sites-serve-fake.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-24/#reporting-f6922c0e9c4b",
+      "cves": []
+    },
+    {
+      "title": "How to Build A SASE Framework for Modern Cybersecurity",
+      "url": "https://www.darkreading.com/cloud-security/how-to-build-sase-framework",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-24/#reporting-acf3df0908a9",
+      "cves": []
+    },
+    {
+      "title": "FedRAMP VDR & VER: Daily Scans Are Only the Beginning",
+      "url": "https://www.bleepingcomputer.com/news/security/fedramp-vdr-and-ver-daily-scans-are-only-the-beginning/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-24/#reporting-1c3c43c41079",
+      "cves": []
+    },
+    {
+      "title": "Ghost Service Accounts Enable M365 Data Theft in Chile",
+      "url": "https://www.darkreading.com/cyberattacks-data-breaches/ghost-service-accounts-m365-data-theft-chile",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-24/#reporting-75c374a3d121",
+      "cves": []
+    },
+    {
+      "title": "Hackers now exploit critical Roundcube flaw in code injection attacks",
+      "url": "https://www.bleepingcomputer.com/news/security/critical-roundcube-flaw-now-actively-exploited-in-code-injection-attacks/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-24/#reporting-d7761a75ee2f",
+      "cves": []
+    },
+    {
+      "title": "Prompt-Injection Bug Hits $4B Agentic AI App 'Manus'",
+      "url": "https://www.darkreading.com/application-security/prompt-injection-bug-agentic-ai-app-manus",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-24/#reporting-f8ad8d75a50e",
+      "cves": []
+    },
+    {
+      "title": "Windows 11 KB5124010 update released with 46 changes and fixes",
+      "url": "https://www.bleepingcomputer.com/news/microsoft/windows-11-kb5124010-update-released-with-46-changes-and-fixes/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-24/#reporting-1f4ae2ff4c87",
+      "cves": []
+    }
+  ]
+}

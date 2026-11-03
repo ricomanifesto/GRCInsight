@@ -1,0 +1,86 @@
+{
+  "schema_version": 3,
+  "generated_at": "2026-09-29T21:24:46.068146Z",
+  "feed_url": "https://ricomanifesto.github.io/SentryDigest/feed.xml",
+  "feed_home_url": "https://ricomanifesto.github.io/SentryDigest/",
+  "digest_issue_date": "2026-09-29",
+  "digest_issue_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-29/",
+  "requested_model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
+  "resolved_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+  "sources": [
+    {
+      "title": "Apple Patches CoreGraphics Flaw Possibly Exploited in Targeted Attacks",
+      "url": "https://thehackernews.com/2026/09/apple-patches-coregraphics-flaw.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-29/#reporting-3e5bc5aeb6b9",
+      "cves": [
+        "CVE-2026-86950"
+      ]
+    },
+    {
+      "title": "Former US Air Force members sent to prison over BEC attacks",
+      "url": "https://www.bleepingcomputer.com/news/security/former-us-air-force-members-sent-to-prison-over-bec-attacks/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-29/#reporting-c4e96687c614",
+      "cves": []
+    },
+    {
+      "title": "Windows 11 2026 Update released, here's everything you need to know",
+      "url": "https://www.bleepingcomputer.com/news/microsoft/windows-11-2026-update-released-heres-everything-you-need-to-know/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-29/#reporting-dc3f4e0491ba",
+      "cves": []
+    },
+    {
+      "title": "New Spectre v2 attack variant leaks Linux root password hash in minutes",
+      "url": "https://www.bleepingcomputer.com/news/security/new-spectre-v2-attack-variant-leaks-linux-root-password-hash-in-minutes/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-29/#reporting-189887844e80",
+      "cves": []
+    },
+    {
+      "title": "Cloudflare Announces Public Certificate Authority for the Post-Quantum Web",
+      "url": "https://www.darkreading.com/cloud-security/cloudflare-announces-public-certificate-authority-post-quantum-web",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-29/#reporting-b153e6d84313",
+      "cves": []
+    },
+    {
+      "title": "New Spectre-v2 BTR Attack Leaks Linux Memory Despite Existing Defenses",
+      "url": "https://thehackernews.com/2026/09/new-spectre-v2-btr-attack-leaks-linux.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-29/#reporting-f429d2e637ac",
+      "cves": []
+    },
+    {
+      "title": "Automated AI agent used to breach cybersecurity nonprofit DIVD",
+      "url": "https://www.bleepingcomputer.com/news/security/automated-ai-agent-used-to-breach-cybersecurity-nonprofit-divd/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-29/#reporting-adeb98974472",
+      "cves": []
+    },
+    {
+      "title": "'NeedyMantis' Provides Long-Term Access to Compromised Networks",
+      "url": "https://www.darkreading.com/threat-intelligence/needymantis-long-term-access-compromised-networks",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-29/#reporting-b9d84f936393",
+      "cves": []
+    },
+    {
+      "title": "Dual NetScaler Zero-Days Trigger Chaos for Citrix Customers",
+      "url": "https://www.darkreading.com/vulnerabilities-threats/netscaler-zero-days-chaos-citrix",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-29/#reporting-c7a5b95ceb99",
+      "cves": []
+    },
+    {
+      "title": "Kiteworks Fixes Critical Flaw Found During Nine-Hour Precautionary Shutdown",
+      "url": "https://thehackernews.com/2026/09/kiteworks-fixes-critical-flaw-found.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-29/#reporting-ef8a09af0278",
+      "cves": []
+    },
+    {
+      "title": "Catch threats before they escalate with real-time Identity Telemetry",
+      "url": "https://www.bleepingcomputer.com/news/security/catch-threats-before-they-escalate-with-real-time-identity-telemetry/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-29/#reporting-f45ff54e25bb",
+      "cves": []
+    },
+    {
+      "title": "101 Malicious npm Packages Add Developers' WhatsApp Accounts to Groups Without Consent",
+      "url": "https://thehackernews.com/2026/09/101-malicious-npm-packages-add.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-29/#reporting-a748e8f0fd47",
+      "cves": []
+    }
+  ]
+}

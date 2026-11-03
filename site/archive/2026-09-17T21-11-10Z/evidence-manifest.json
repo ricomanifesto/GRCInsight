@@ -1,0 +1,90 @@
+{
+  "schema_version": 3,
+  "generated_at": "2026-09-17T21:11:10.858313Z",
+  "feed_url": "https://ricomanifesto.github.io/SentryDigest/feed.xml",
+  "feed_home_url": "https://ricomanifesto.github.io/SentryDigest/",
+  "digest_issue_date": "2026-09-17",
+  "digest_issue_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-17/",
+  "requested_model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
+  "resolved_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+  "sources": [
+    {
+      "title": "Critical Unbound DNSSEC Validator Flaw Could Allow RCE via a Malicious DNS Zone",
+      "url": "https://thehackernews.com/2026/09/critical-unbound-dnssec-validator-flaw.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-17/#reporting-4341f2269a01",
+      "cves": [
+        "CVE-2026-81642"
+      ]
+    },
+    {
+      "title": "Cisco Warns of New Zero-Day ISE Auth Bypass (CVSS 10.0) Exploited in Active Attacks",
+      "url": "https://thehackernews.com/2026/09/cisco-warns-of-new-zero-day-ise-auth.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-17/#reporting-fefb67106246",
+      "cves": [
+        "CVE-2026-76460"
+      ]
+    },
+    {
+      "title": "Attackers Exploit Issabel Framework Flaw Enabling Unauthenticated OS Command Execution",
+      "url": "https://thehackernews.com/2026/09/attackers-exploit-issabel-framework.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-17/#reporting-4a519778a75a",
+      "cves": [
+        "CVE-2026-89026"
+      ]
+    },
+    {
+      "title": "What Recent AI-Powered Attacks Mean for Your Identity Security",
+      "url": "https://www.bleepingcomputer.com/news/security/what-recent-ai-powered-attacks-mean-for-your-identity-security/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-17/#reporting-6f8939c423c2",
+      "cves": []
+    },
+    {
+      "title": "Windows 11 24H2 Home and Pro reach end of support in October",
+      "url": "https://www.bleepingcomputer.com/news/microsoft/windows-11-24h2-home-and-pro-reach-end-of-support-in-october/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-17/#reporting-58fd66004430",
+      "cves": []
+    },
+    {
+      "title": "Can You Prove a New CVE Is Exploitable Before Attackers Do? Learn How in This Webinar",
+      "url": "https://thehackernews.com/2026/09/can-you-prove-new-cve-is-exploitable.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-17/#reporting-852ff302b4ad",
+      "cves": []
+    },
+    {
+      "title": "US takes down NightmareStresser DDoS-for-hire platform",
+      "url": "https://www.bleepingcomputer.com/news/security/fbi-seizes-nightmarestresser-service-linked-to-thousands-of-ddos-attacks/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-17/#reporting-97289c2c314a",
+      "cves": []
+    },
+    {
+      "title": "CISO's Expert Guide to Agentic Pentesting for Websites",
+      "url": "https://thehackernews.com/2026/09/cisos-expert-guide-to-agentic.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-17/#reporting-3cc3e48c3179",
+      "cves": []
+    },
+    {
+      "title": "China-Aligned FamousSparrow Deploys SparroWocky Backdoor Across Latin America",
+      "url": "https://thehackernews.com/2026/09/china-aligned-famoussparrow-deploys.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-17/#reporting-f355c5f46acf",
+      "cves": []
+    },
+    {
+      "title": "OpenAI Reveals Six Model Incidents Involving Hidden Failures and Unauthorized Uploads",
+      "url": "https://thehackernews.com/2026/09/openai-reveals-six-model-incidents.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-17/#reporting-93c6a644a8f8",
+      "cves": []
+    },
+    {
+      "title": "Chinese hackers use SparroWocky malware in govt espionage attacks",
+      "url": "https://www.bleepingcomputer.com/news/security/chinese-hackers-use-sparrowocky-malware-in-govt-espionage-attacks/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-17/#reporting-ab0296330fd9",
+      "cves": []
+    },
+    {
+      "title": "Microsoft shares workaround for Windows domain login issues",
+      "url": "https://www.bleepingcomputer.com/news/microsoft/microsoft-releases-workaround-for-windows-domain-login-authentication-issues/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-17/#reporting-c8c67fe6b031",
+      "cves": []
+    }
+  ]
+}

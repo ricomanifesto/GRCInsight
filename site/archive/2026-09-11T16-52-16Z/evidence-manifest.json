@@ -1,0 +1,88 @@
+{
+  "schema_version": 3,
+  "generated_at": "2026-09-11T16:52:16.374063Z",
+  "feed_url": "https://ricomanifesto.github.io/SentryDigest/feed.xml",
+  "feed_home_url": "https://ricomanifesto.github.io/SentryDigest/",
+  "digest_issue_date": "2026-09-11",
+  "digest_issue_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-11/",
+  "requested_model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
+  "resolved_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+  "sources": [
+    {
+      "title": "GitLab urges users to patch max severity path traversal flaw",
+      "url": "https://www.bleepingcomputer.com/news/security/gitlab-urges-users-to-patch-max-severity-path-traversal-flaw/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-11/#reporting-3b1ca1686e68",
+      "cves": [
+        "CVE-2026-85706"
+      ]
+    },
+    {
+      "title": "Cisco FMC Flaws Exploited to Steal Credentials and Deploy Qilin Ransomware",
+      "url": "https://thehackernews.com/2026/09/cisco-fmc-flaws-exploited-to-steal.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-11/#reporting-788925358fae",
+      "cves": [
+        "CVE-2026-20079"
+      ]
+    },
+    {
+      "title": "Papercut AI Swarm Attack Heralds Changes for Cyber Kill Chain",
+      "url": "https://www.darkreading.com/cyberattacks-data-breaches/papercut-ai-swarm-attack-cyber-kill-chain",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-11/#reporting-3c8d9734ba4d",
+      "cves": []
+    },
+    {
+      "title": "Claude Used to Automate Exploitation and Data Theft Across Multiple Victims",
+      "url": "https://thehackernews.com/2026/09/claude-used-to-automate-exploitation.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-11/#reporting-0f8accb03f10",
+      "cves": []
+    },
+    {
+      "title": "Russian State-Sponsored Hackers Use Claude to Rebuild Malware After Detection",
+      "url": "https://thehackernews.com/2026/09/russian-state-sponsored-hackers-use.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-11/#reporting-dae251a2004b",
+      "cves": []
+    },
+    {
+      "title": "How Threat Actors Are Turning Trusted AI Platforms Into an Attack Surface",
+      "url": "https://www.bleepingcomputer.com/news/security/how-threat-actors-are-turning-trusted-ai-platforms-into-an-attack-surface/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-11/#reporting-4cfe00191671",
+      "cves": []
+    },
+    {
+      "title": "Your Critical Vulnerabilities Might Not Be Your Biggest Risk",
+      "url": "https://thehackernews.com/2026/09/your-critical-vulnerabilities-might-not.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-11/#reporting-336c262bc83e",
+      "cves": []
+    },
+    {
+      "title": "Microsoft fixes Teams, Outlook launch failures on ARM Windows PCs",
+      "url": "https://www.bleepingcomputer.com/news/microsoft/microsoft-fixes-teams-outlook-launch-failures-on-arm-windows-pcs/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-11/#reporting-726c616a6c1c",
+      "cves": []
+    },
+    {
+      "title": "Trezor: 347,000 users targeted in phishing attacks after Brevo breach",
+      "url": "https://www.bleepingcomputer.com/news/security/trezor-347-000-users-targeted-in-phishing-attacks-after-brevo-breach/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-11/#reporting-42df196f2b73",
+      "cves": []
+    },
+    {
+      "title": "Attackers Chain JFrog Artifactory Flaws to Gain Admin Control and Plant Backdoors",
+      "url": "https://thehackernews.com/2026/09/attackers-chain-jfrog-artifactory-flaws.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-11/#reporting-6d77d0f66755",
+      "cves": []
+    },
+    {
+      "title": "China-Linked UNC3569 Exploited Sogou Input Method Flaw to Deploy GRAYRABBIT Backdoor",
+      "url": "https://thehackernews.com/2026/09/china-linked-unc3569-exploited-sogou.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-11/#reporting-11c8b517d375",
+      "cves": []
+    },
+    {
+      "title": "Conti ransomware gang member sentenced to 4 years in prison",
+      "url": "https://www.bleepingcomputer.com/news/security/conti-ransomware-gang-member-sentenced-to-four-years-in-prison/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-11/#reporting-07c0f38a80ce",
+      "cves": []
+    }
+  ]
+}

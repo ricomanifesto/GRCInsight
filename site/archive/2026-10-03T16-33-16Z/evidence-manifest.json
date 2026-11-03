@@ -1,0 +1,88 @@
+{
+  "schema_version": 3,
+  "generated_at": "2026-10-03T16:33:16.98497Z",
+  "feed_url": "https://ricomanifesto.github.io/SentryDigest/feed.xml",
+  "feed_home_url": "https://ricomanifesto.github.io/SentryDigest/",
+  "digest_issue_date": "2026-10-03",
+  "digest_issue_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-03/",
+  "requested_model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
+  "resolved_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+  "sources": [
+    {
+      "title": "Dell CSM Flaws Enable Unauthenticated Admin Access and Root on Kubernetes Nodes",
+      "url": "https://thehackernews.com/2026/10/dell-csm-flaws-enable-unauthenticated.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-03/#reporting-5f13530361d7",
+      "cves": [
+        "CVE-2026-63688"
+      ]
+    },
+    {
+      "title": "Critical FortiMail Zero-Day Flaw Exploited in Attacks Allows Unauthenticated Arbitrary File Writes",
+      "url": "https://thehackernews.com/2026/10/critical-fortimail-zero-day-flaw.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-03/#reporting-da984ff8e8ff",
+      "cves": [
+        "CVE-2026-104286"
+      ]
+    },
+    {
+      "title": "The State of Cybersecurity in 2026: Key Segments, Insights, and Innovations",
+      "url": "https://thehackernews.com/2026/10/the-state-of-cybersecurity-in-2026key.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-03/#reporting-71c997ccf55f",
+      "cves": []
+    },
+    {
+      "title": "RemoteThreat Bets Security Teams Need to Test What Happens After Defenses Fail",
+      "url": "https://www.darkreading.com/cybersecurity-operations/remotethreat-bets-security-teams-need-to-test-what-happens-after-defenses-fail",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-03/#reporting-5a09c5ac00e9",
+      "cves": []
+    },
+    {
+      "title": "Frontline Education breach exposes school district employee data",
+      "url": "https://www.bleepingcomputer.com/news/security/frontline-education-data-breach-impacts-school-district-employees/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-03/#reporting-1a019c2da706",
+      "cves": []
+    },
+    {
+      "title": "Warlock ransomware breach SharePoint in water, telecom operator attacks",
+      "url": "https://www.bleepingcomputer.com/news/security/warlock-ransomware-breach-sharepoint-in-water-telecom-operator-attacks/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-03/#reporting-e611cb20ae49",
+      "cves": []
+    },
+    {
+      "title": "GitLab Patches Critical 9.9 AI Gateway Flaw Allowing Command Execution on Self-Hosted Servers",
+      "url": "https://thehackernews.com/2026/10/gitlab-patches-critical-self-hosted-ai.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-03/#reporting-5ef20bc51467",
+      "cves": []
+    },
+    {
+      "title": "Antino Backdoor Uses Outlook and OneDrive for C2 in China-Nexus Espionage Campaign",
+      "url": "https://thehackernews.com/2026/10/antino-backdoor-uses-outlook-and.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-03/#reporting-2fb0abb39d71",
+      "cves": []
+    },
+    {
+      "title": "Kiteworks & Citrix Incidents Show Challenges of Zero-Day Response",
+      "url": "https://www.darkreading.com/cybersecurity-operations/kiteworks-citrix-incidents-challenges-zero-day-response",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-03/#reporting-c85075d09d16",
+      "cves": []
+    },
+    {
+      "title": "SWIFT Banking & Government Middleware Enables RCE",
+      "url": "https://www.darkreading.com/cybersecurity-operations/swift-banking-govt-middleware-rce",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-03/#reporting-f071bbafdb42",
+      "cves": []
+    },
+    {
+      "title": "GitLab warns of critical RCE vulnerability in AI Gateway service",
+      "url": "https://www.bleepingcomputer.com/news/security/gitlab-warns-of-critical-rce-vulnerability-in-ai-gateway-service/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-03/#reporting-9814dffcb60c",
+      "cves": []
+    },
+    {
+      "title": "Is Your Organization Ready for 2027's AI Accountability Era?",
+      "url": "https://www.darkreading.com/cybersecurity-operations/is-your-organization-ready-for-2027-s-ai-accountability-era-",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-03/#reporting-04957202ca08",
+      "cves": []
+    }
+  ]
+}

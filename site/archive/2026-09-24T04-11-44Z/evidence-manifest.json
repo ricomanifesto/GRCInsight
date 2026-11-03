@@ -1,0 +1,99 @@
+{
+  "schema_version": 3,
+  "generated_at": "2026-09-24T04:11:44.011138Z",
+  "feed_url": "https://ricomanifesto.github.io/SentryDigest/feed.xml",
+  "feed_home_url": "https://ricomanifesto.github.io/SentryDigest/",
+  "digest_issue_date": "2026-09-23",
+  "digest_issue_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-23/",
+  "requested_model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
+  "resolved_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+  "sources": [
+    {
+      "title": "Check Point warns of hackers exploiting Security Gateway VPN RCE flaw",
+      "url": "https://www.bleepingcomputer.com/news/security/check-point-warns-of-hackers-exploiting-security-gateway-vpn-rce-flaw/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-23/#reporting-702aeb848c91",
+      "cves": [
+        "CVE-2026-85102"
+      ]
+    },
+    {
+      "title": "Hackers start exploiting critical WordPress flaw for code execution",
+      "url": "https://www.bleepingcomputer.com/news/security/hackers-start-exploiting-critical-wordpress-flaw-for-code-execution/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-23/#reporting-368846adf0a4",
+      "cves": [
+        "CVE-2026-87902"
+      ]
+    },
+    {
+      "title": "MikroTrick Chain Let Attackers Take Over MikroTik Routers Without a Password or SSH Key",
+      "url": "https://thehackernews.com/2026/09/mikrotrick-chain-let-attackers-take.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-23/#reporting-20d13eec11e1",
+      "cves": [
+        "CVE-2026-67279",
+        "CVE-2026-86060"
+      ]
+    },
+    {
+      "title": "Exploit Released for Unpatched Ubuntu Linux Flaw Enabling Host-Root Container Escape",
+      "url": "https://thehackernews.com/2026/09/exploit-released-for-unpatched-ubuntu.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-23/#reporting-a94e39978082",
+      "cves": [
+        "CVE-2026-80521"
+      ]
+    },
+    {
+      "title": "F5 Patches Critical BIG-IP APM Zero-Day Exploited for Unauthenticated RCE on OAuth Servers",
+      "url": "https://thehackernews.com/2026/09/f5-patches-critical-big-ip-apm-zero-day.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-23/#reporting-54af9eeed99c",
+      "cves": [
+        "CVE-2026-94127"
+      ]
+    },
+    {
+      "title": "Chinese Hackers Exploit Chrome-Windows Zero-Day Chain to Deploy CLEANGULP Malware",
+      "url": "https://thehackernews.com/2026/09/chinese-hackers-exploit-chrome-windows.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-23/#reporting-47e5a40f39f4",
+      "cves": [
+        "CVE-2026-85046",
+        "CVE-2026-87491",
+        "CVE-2026-85880"
+      ]
+    },
+    {
+      "title": "EDR Evasion Stack Helps Process Injection Slip Past Defenses",
+      "url": "https://www.darkreading.com/endpoint-security/edr-evasion-stack-helps-process-injection-slip-past-defenses",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-23/#reporting-ce08fe4b2a6e",
+      "cves": []
+    },
+    {
+      "title": "GitLab Email Addresses Can Be Weaponized for Supply Chain Attacks",
+      "url": "https://www.darkreading.com/application-security/gitlab-email-addresses-supply-chain-attacks",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-23/#reporting-1c23b8ad7b78",
+      "cves": []
+    },
+    {
+      "title": "Attackers Use Malicious Terraform Providers to Deliver Go Malware via HashiCorp Registry",
+      "url": "https://thehackernews.com/2026/09/attackers-use-malicious-terraform.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-23/#reporting-d1ccb5f32ae9",
+      "cves": []
+    },
+    {
+      "title": "A Leaked GitLab Issue Email Address Lets Anyone Push Code and Run CI Jobs as You",
+      "url": "https://thehackernews.com/2026/09/a-leaked-gitlab-issue-email-address.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-23/#reporting-88652842189a",
+      "cves": []
+    },
+    {
+      "title": "Malicious AI agents steal 600K credit cards, infect 100+ sites with skimmers",
+      "url": "https://www.bleepingcomputer.com/news/security/malicious-ai-agents-steal-600k-credit-cards-infect-100-plus-sites-with-skimmers/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-23/#reporting-8b8a2ad63964",
+      "cves": []
+    },
+    {
+      "title": "UAE, Saudi Arabia Face Onslaught of Increasingly Complex Cyberattacks",
+      "url": "https://www.darkreading.com/threat-intelligence/uae-saudi-arabia-face-onslaught-of-increasingly-sophisticated-automated-cyberattacks",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-23/#reporting-e8c276516926",
+      "cves": []
+    }
+  ]
+}

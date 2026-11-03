@@ -1,0 +1,93 @@
+{
+  "schema_version": 3,
+  "generated_at": "2026-09-28T15:24:00.421182Z",
+  "feed_url": "https://ricomanifesto.github.io/SentryDigest/feed.xml",
+  "feed_home_url": "https://ricomanifesto.github.io/SentryDigest/",
+  "digest_issue_date": "2026-09-28",
+  "digest_issue_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-28/",
+  "requested_model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
+  "resolved_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+  "sources": [
+    {
+      "title": "CISA Says Attackers Are Exploiting Two Critical Citrix NetScaler Flaws Globally",
+      "url": "https://thehackernews.com/2026/09/cisa-says-attackers-are-exploiting-two.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-28/#reporting-d10d67a734db",
+      "cves": [
+        "CVE-2026-88771"
+      ]
+    },
+    {
+      "title": "Citrix confirms two NetScaler RCE zero-days exploited in attacks",
+      "url": "https://www.bleepingcomputer.com/news/security/citrix-admins-warned-to-shut-down-netscalers-over-2-exploited-zero-days/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-28/#reporting-0954e8dba9d8",
+      "cves": [
+        "CVE-2026-88771",
+        "CVE-2026-88772"
+      ]
+    },
+    {
+      "title": "ShinyHunters uses WAF bypass trick in Oracle PeopleSoft attacks",
+      "url": "https://www.bleepingcomputer.com/news/security/shinyhunters-uses-waf-bypass-trick-in-oracle-peoplesoft-attacks/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-28/#reporting-77ddfbcd4e34",
+      "cves": [
+        "CVE-2026-35273"
+      ]
+    },
+    {
+      "title": "SharePoint RCE and MikroTik RouterOS Flaws Actively Exploited in the Wild",
+      "url": "https://thehackernews.com/2026/09/sharepoint-rce-and-mikrotik-routeros.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-28/#reporting-049c4c6d156c",
+      "cves": [
+        "CVE-2026-65660"
+      ]
+    },
+    {
+      "title": "Webinar: How to Govern AI Agents, Reduce Excessive Access, and Control Shadow AI",
+      "url": "https://thehackernews.com/2026/09/webinar-how-to-govern-ai-agents-reduce.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-28/#reporting-e51480e96d84",
+      "cves": []
+    },
+    {
+      "title": "Carbonato Botnet Compromises Docker Hosts to Deploy Telegram-Controlled Hermes AI Agent",
+      "url": "https://thehackernews.com/2026/09/carbonato-botnet-compromises-docker.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-28/#reporting-a2739f1e6c8a",
+      "cves": []
+    },
+    {
+      "title": "Bitget resumes Bitcoin withdrawals after $387.5 million crypto heist",
+      "url": "https://www.bleepingcomputer.com/news/security/bitget-resumes-bitcoin-withdrawals-after-3875-million-crypto-heist/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-28/#reporting-2098b2b0b957",
+      "cves": []
+    },
+    {
+      "title": "JADEPUFFER-Linked Attackers Used Compromised Service Principals to Delete Azure Resources",
+      "url": "https://thehackernews.com/2026/09/jadepuffer-linked-attackers-used.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-28/#reporting-6170da865280",
+      "cves": []
+    },
+    {
+      "title": "US soldier gets 70 months in prison for extorting 10 tech, telecom firms",
+      "url": "https://www.bleepingcomputer.com/news/security/us-soldier-gets-70-months-in-prison-for-extorting-10-tech-telecom-firms/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-28/#reporting-55c3c36e526c",
+      "cves": []
+    },
+    {
+      "title": "CISA orders feds to patch exploited Citrix flaws by Wednesday",
+      "url": "https://www.bleepingcomputer.com/news/security/cisa-orders-feds-to-patch-exploited-citrix-flaws-by-wednesday/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-28/#reporting-2e6e934ea7b8",
+      "cves": []
+    },
+    {
+      "title": "OpenAI is preparing “o,” an always-on ChatGPT assistant that could handle email",
+      "url": "https://www.bleepingcomputer.com/news/artificial-intelligence/openai-is-preparing-o-an-always-on-chatgpt-assistant-that-could-handle-email/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-28/#reporting-2483bce2bbb2",
+      "cves": []
+    },
+    {
+      "title": "Cloudflare fixes Containers cross-tenant flaw exposing customer data",
+      "url": "https://www.bleepingcomputer.com/news/security/cloudflare-fixes-containers-cross-tenant-flaw-exposing-customer-data/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-28/#reporting-cf659e9658b9",
+      "cves": []
+    }
+  ]
+}

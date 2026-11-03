@@ -1,0 +1,92 @@
+{
+  "schema_version": 3,
+  "generated_at": "2026-10-01T06:39:10.712158Z",
+  "feed_url": "https://ricomanifesto.github.io/SentryDigest/feed.xml",
+  "feed_home_url": "https://ricomanifesto.github.io/SentryDigest/",
+  "digest_issue_date": "2026-10-01",
+  "digest_issue_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-01/",
+  "requested_model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
+  "resolved_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+  "sources": [
+    {
+      "title": "Attackers Exploit Zimbra Flaw to Deploy Web Shells and Harvest Authentication Secrets",
+      "url": "https://thehackernews.com/2026/09/attackers-exploit-zimbra-flaw-to-deploy.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-01/#reporting-fe95a2c38caf",
+      "cves": [
+        "CVE-2026-73570"
+      ]
+    },
+    {
+      "title": "Cisco Warns of Attackers Exploiting Critical Authentication Bypass in SD-WAN Manager",
+      "url": "https://thehackernews.com/2026/09/cisco-warns-of-attackers-exploiting.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-01/#reporting-9475c717ac1e",
+      "cves": [
+        "CVE-2026-76504"
+      ]
+    },
+    {
+      "title": "Citrix NetScaler CVE-2026-88772 Exploit Details Show Pre-Auth Path to Shellcode Execution",
+      "url": "https://thehackernews.com/2026/09/citrix-netscaler-cve-2026-88772-exploit.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-01/#reporting-a2c9b41769a0",
+      "cves": [
+        "CVE-2026-88772"
+      ]
+    },
+    {
+      "title": "Apple Zero-Day Vulnerability Weaponized in Targeted Attacks",
+      "url": "https://www.darkreading.com/cyberattacks-data-breaches/apple-zero-day-vulnerability-weaponized-targeted-attacks",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-01/#reporting-d49e0531691d",
+      "cves": [
+        "CVE-2026-86950"
+      ]
+    },
+    {
+      "title": "Bitget Confirms Third-Party Zero-Day Behind $387.5 Million Cryptocurrency Theft",
+      "url": "https://thehackernews.com/2026/10/bitget-confirms-third-party-zero-day.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-01/#reporting-b4409a570832",
+      "cves": []
+    },
+    {
+      "title": "MetaMask Security Incident Prompts Exit of Affected Ethereum Validators",
+      "url": "https://thehackernews.com/2026/10/metamask-security-incident-prompts-exit.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-01/#reporting-65e6681dca63",
+      "cves": []
+    },
+    {
+      "title": "Citrix NetScaler Post-Exploitation Payload Creates Superuser, Maps Web Shell to CSS-Like URLs",
+      "url": "https://thehackernews.com/2026/10/citrix-netscaler-post-exploitation.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-01/#reporting-87574535fedc",
+      "cves": []
+    },
+    {
+      "title": "Malicious Custom GPTs Turn ChatGPT Into RAT Delivery Lure",
+      "url": "https://www.darkreading.com/cyberattacks-data-breaches/malicious-custom-gpts-chatgpt-rat-delivery-lure",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-01/#reporting-298d890b9a3c",
+      "cves": []
+    },
+    {
+      "title": "Trump, Tech Giants Strike Voluntary AI Safety Accord",
+      "url": "https://www.darkreading.com/cyber-risk/trump-tech-giants-strike-voluntary-ai-safety-accord",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-01/#reporting-cb10f964c9d0",
+      "cves": []
+    },
+    {
+      "title": "Russian state hackers use new RedFlick technique to push malware",
+      "url": "https://www.bleepingcomputer.com/news/security/russian-state-hackers-use-new-redflick-technique-to-push-malware/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-01/#reporting-2d28f457acee",
+      "cves": []
+    },
+    {
+      "title": "DIVD says Zammad zero-days enabled AI-driven network breach",
+      "url": "https://www.bleepingcomputer.com/news/security/divd-says-zammad-zero-days-enabled-ai-driven-network-breach/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-01/#reporting-3776ad1cae04",
+      "cves": []
+    },
+    {
+      "title": "As AI Reshapes the SOC Career Ladder, Satisfaction Rises for 91%, but Entry Gets Harder for Nearly Half",
+      "url": "https://www.darkreading.com/cybersecurity-careers/ai-reshapes-soc-career-ladder",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-01/#reporting-2cf02acd767a",
+      "cves": []
+    }
+  ]
+}

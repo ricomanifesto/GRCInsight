@@ -1,0 +1,530 @@
+(function () {
+  // Canonical rendering contract for the GRC report. One module owns the
+  // Markdown -> HTML transform and URL sanitization; the page controller and
+  // the Node renderer check both consume these exports and nothing else.
+
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' })[c]);
+  }
+
+  function escapeAttribute(s) {
+    return escapeHtml(s).replace(/"/g, '&quot;');
+  }
+
+  function decodeMarkdownEscapes(value) {
+    return String(value).replace(/\\([\\\[\]()|])/g, '$1');
+  }
+
+  function sanitizeMarkdownUrl(url) {
+    const value = decodeMarkdownEscapes(url).trim();
+    if (!value || /[\s"<>]/.test(value)) return null;
+    if (/^(https?:\/\/|\/(?!\/)|\.{0,2}\/|#)/i.test(value)) return value;
+    if (!/^[a-z][a-z0-9+.-]*:/i.test(value)) return value;
+    return null;
+  }
+
+  function renderMarkdownLink(text, url) {
+    const safeUrl = sanitizeMarkdownUrl(url);
+    if (!safeUrl) return text;
+    const className = text === 'View in SentryDigest' ? ' class="digest-handoff"' : '';
+    return `<a${className} href="${escapeAttribute(safeUrl)}" target="_blank" rel="noopener">${text}</a>`;
+  }
+
+  function renderInlineText(value) {
+    const decoded = decodeMarkdownEscapes(value);
+    let html = escapeHtml(decoded);
+    html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+    html = html.replace(/\*([^*]+)\*/g, '<em>$1</em>');
+    return html;
+  }
+
+  function renderLinkLabel(value) {
+    return escapeHtml(decodeMarkdownEscapes(value));
+  }
+
+  function extractMarkdownLinks(value) {
+    const source = String(value);
+    const links = [];
+    let markdown = '';
+    let cursor = 0;
+    while (cursor < source.length) {
+      const labelStart = source.indexOf('[', cursor);
+      if (labelStart < 0) {
+        markdown += source.slice(cursor);
+        break;
+      }
+      let labelDepth = 1;
+      let labelEscaped = false;
+      let labelEnd = -1;
+      for (let index = labelStart + 1; index < source.length; index += 1) {
+        const character = source[index];
+        if (labelEscaped) {
+          labelEscaped = false;
+          continue;
+        }
+        if (character === '\\') {
+          labelEscaped = true;
+          continue;
+        }
+        if (character === '[') labelDepth += 1;
+        if (character === ']') {
+          labelDepth -= 1;
+          if (labelDepth === 0) {
+            labelEnd = index;
+            break;
+          }
+        }
+      }
+      if (labelEnd < 0) {
+        markdown += source.slice(cursor);
+        break;
+      }
+      if (source[labelEnd + 1] !== '(') {
+        markdown += source.slice(cursor, labelStart + 1);
+        cursor = labelStart + 1;
+        continue;
+      }
+      const destinationStartMarker = labelEnd;
+
+      let depth = 1;
+      let escaped = false;
+      let destinationEnd = -1;
+      for (let index = destinationStartMarker + 2; index < source.length; index += 1) {
+        const character = source[index];
+        if (escaped) {
+          escaped = false;
+          continue;
+        }
+        if (character === '\\') {
+          escaped = true;
+          continue;
+        }
+        if (character === '(') depth += 1;
+        if (character === ')') {
+          depth -= 1;
+          if (depth === 0) {
+            destinationEnd = index;
+            break;
+          }
+        }
+      }
+      if (destinationEnd < 0) {
+        markdown += source.slice(cursor, destinationStartMarker + 2);
+        cursor = destinationStartMarker + 2;
+        continue;
+      }
+
+      const token = `@@GRCINSIGHT_LINK_${links.length}@@`;
+      markdown += source.slice(cursor, labelStart) + token;
+      links.push({
+        token,
+        position: labelStart,
+        text: source.slice(labelStart + 1, destinationStartMarker),
+        url: source.slice(destinationStartMarker + 2, destinationEnd),
+      });
+      cursor = destinationEnd + 1;
+    }
+    return {
+      markdown,
+      links,
+      restore(html, renderLink = link => renderMarkdownLink(renderLinkLabel(link.text), link.url)) {
+        links.forEach(link => {
+          html = html.replace(
+            link.token,
+            renderLink(link),
+          );
+        });
+        return html;
+      },
+    };
+  }
+
+  function renderInlineMarkdown(value) {
+    const extracted = extractMarkdownLinks(value);
+    return extracted.restore(renderInlineText(extracted.markdown));
+  }
+
+  function renderEvidenceAffordances(html) {
+    const evidence = '<span class="evidence-label">Evidence</span>';
+    html = html.replace(
+      /<p>((?:(?!<\/p>)[\s\S])*?)\s*<strong>Evidence:<\/strong>\s*([\s\S]*?)<\/p>/g,
+      (_match, claim, links) => `<p>${claim.trim()}</p><aside class="evidence-note" aria-label="Evidence">${evidence}${links.trim()}</aside>`,
+    );
+    html = html.replace(
+      /<li>((?:(?!<\/li>)[\s\S])*?)\s*<strong>Evidence:<\/strong>\s*([\s\S]*?)<\/li>/g,
+      (_match, claim, links) => `<li>${claim.trim()}<aside class="evidence-note" aria-label="Evidence">${evidence}${links.trim()}</aside></li>`,
+    );
+    html = html.replace(
+      /<td>((?:(?!<\/td>)[\s\S])*?)\s*<strong>Evidence:<\/strong>\s*([\s\S]*?)<\/td>/g,
+      (_match, claim, links) => `<td>${claim.trim()}<div class="evidence-inline">${evidence}${links.trim()}</div></td>`,
+    );
+    return html;
+  }
+
+  // Reports are sometimes generated with numbered section headers ("1. Executive
+  // Summary") instead of Markdown h2. Promote the known section labels to h2 so
+  // the page treats them as top-level sections; leave numbered prose untouched.
+  function normalizeReportMarkdown(markdown) {
+    if (typeof markdown !== 'string') return markdown;
+    const expectedSectionTitles = new Set([
+      'Executive Summary',
+      'Key Regulatory Developments',
+      'Sourced Regulatory Changes',
+      'Evidence and Decisions',
+      'Inferred Control and Governance Implications',
+      'Industry Impact Analysis',
+      'Risk Assessment',
+      'Recommendations for Action',
+      'Source Highlights',
+    ]);
+    return markdown.replace(/^\d{1,2}[\).]\s+([^\n]+)$/gm, (line, title) => {
+      const normalizedTitle = title.trim();
+      return expectedSectionTitles.has(normalizedTitle) ? `## ${normalizedTitle}` : line;
+    });
+  }
+
+  function renderTable(block) {
+    const rows = block.trim().split('\n').filter(r => r.trim());
+    if (rows.length < 2) return block;
+    const parseRow = r => r.replace(/^\|/, '').replace(/\|$/, '').split('|').map(c => c.trim());
+    const headers = parseRow(rows[0]);
+    const isSeparator = rows[1] && /^\s*\|?[\s\-:|]+\|?\s*$/.test(rows[1]);
+    const startIdx = isSeparator ? 2 : 1;
+    let html = '<div class="table-wrap"><table><thead><tr>';
+    headers.forEach(h => { html += `<th>${h}</th>`; });
+    html += '</tr></thead><tbody>';
+    for (let i = startIdx; i < rows.length; i++) {
+      html += '<tr>';
+      parseRow(rows[i]).forEach(c => { html += `<td>${c}</td>`; });
+      html += '</tr>';
+    }
+    return html + '</tbody></table></div>';
+  }
+
+  function renderNestedList(block) {
+    const lines = block.trim().split(/\n/).filter(l => /^\s*-\s+/.test(l));
+    let html = '';
+    let level = 0;
+    const open = n => { for (let i = 0; i < n; i++) html += '<ul>'; };
+    const close = n => { for (let i = 0; i < n; i++) html += '</ul>'; };
+    lines.forEach((line, idx) => {
+      const m = line.match(/^(\s*)-\s+(.*)$/);
+      const indent = Math.floor((m[1] || '').length / 2) + 1; // 2 spaces per level, base 1
+      if (idx === 0) { open(indent); level = indent; }
+      else if (indent > level) { open(indent - level); level = indent; }
+      else if (indent < level) { close(level - indent); level = indent; }
+      html += `<li>${m[2]}</li>`;
+    });
+    close(level);
+    return html;
+  }
+
+  function renderOrderedLists(markdown) {
+    const lines = markdown.split('\n');
+    const output = [];
+    let index = 0;
+
+    while (index < lines.length) {
+      const firstItem = lines[index].match(/^\d+\.\s+(.*)$/);
+      if (!firstItem) {
+        output.push(lines[index]);
+        index += 1;
+        continue;
+      }
+
+      const items = [];
+      while (index < lines.length) {
+        const item = lines[index].match(/^\d+\.\s+(.*)$/);
+        if (!item) break;
+
+        items.push(item[1]);
+        index += 1;
+
+        // A blank line makes a Markdown list "loose"; it does not end the
+        // list when the next non-blank line is another numbered item.
+        let nextItem = index;
+        while (nextItem < lines.length && !lines[nextItem].trim()) nextItem += 1;
+        if (nextItem < lines.length && /^\d+\.\s+/.test(lines[nextItem])) {
+          index = nextItem;
+        }
+      }
+
+      output.push('<ol>' + items.map(item => `<li>${item}</li>`).join('') + '</ol>');
+    }
+
+    return output.join('\n');
+  }
+
+  // Pure Markdown -> HTML for the report body. No DOM access, so the same
+  // function renders in the browser and under the Node renderer check.
+  function renderMarkdown(md, compactCitations = false) {
+    md = normalizeReportMarkdown(md);
+
+    // Pull fenced code blocks out before escaping, restore them afterwards.
+    const codeBlocks = [];
+    md = md.replace(/^```[\s\S]*?^```/gm, m => {
+      codeBlocks.push(m.replace(/^```\w*\n?/, '').replace(/\n?```$/, ''));
+      return `%%CODEBLOCK_${codeBlocks.length - 1}%%`;
+    });
+
+    // Extract links before escaping the surrounding Markdown. Escaping first
+    // turns query separators into &amp;, which would then be escaped a second
+    // time when the URL is written into href.
+    const extractedLinks = extractMarkdownLinks(md);
+    const renderLink = compactCitations ? citationRenderer(md, extractedLinks.links) : undefined;
+    let html = escapeHtml(extractedLinks.markdown);
+    html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+    html = html.replace(/\*([^*]+)\*/g, '<em>$1</em>');
+    html = html.replace(/^####\s+(.*)$/gm, '<h4>$1</h4>');
+    html = html.replace(/^###\s+(.*)$/gm, '<h3>$1</h3>');
+    html = html.replace(/^##\s+(.*)$/gm, '<h2>$1</h2>');
+    html = html.replace(/^#\s+(.*)$/gm, '<h1>$1</h1>');
+    // Tables run before HR so the separator row is not eaten by the HR rule.
+    html = html.replace(/^(?:\|.+\|(?:\n|$)){2,}/gm, m => renderTable(m));
+    html = html.replace(/^-{3,}[ \t]*$/gm, '<hr>');
+    html = html.replace(/^_{3,}[ \t]*$/gm, '<hr>');
+    html = html.replace(/^\*{3,}[ \t]*$/gm, '<hr>');
+    html = html.replace(/^(?:&gt;\s?.*(?:\n|$))+/gm, m => `<blockquote>${m.replace(/^&gt;\s?/gm, '').trim()}</blockquote>`);
+    // Leading indent is horizontal whitespace only ([ \t]*, not \s*) so the
+    // pattern never reaches across the blank line that precedes a list.
+    html = html.replace(/^(?:[ \t]*-\s+.*(?:\n|$))+/gm, m => renderNestedList(m));
+    html = renderOrderedLists(html);
+    // Assemble paragraphs line by line rather than by blank-line splitting.
+    // Each block construct above consumes the newline that ended its last line,
+    // which can collapse the blank line separating it from an adjacent
+    // paragraph; grouping by line keeps that paragraph in its own <p> instead
+    // of leaking it out as loose inline nodes. Block-level lines (and the
+    // single-line code-block placeholders) pass through untouched.
+    const blockLine = /^\s*(?:<(?:h\d|ul|ol|li|table|div|hr|pre|blockquote)|%%CODEBLOCK_\d+%%)/;
+    const assembled = [];
+    let paragraph = [];
+    const flushParagraph = () => {
+      if (!paragraph.length) return;
+      const text = paragraph.join('\n').trim();
+      if (text) assembled.push(`<p>${text}</p>`);
+      paragraph = [];
+    };
+    html.split('\n').forEach(line => {
+      if (!line.trim()) { flushParagraph(); return; }
+      if (blockLine.test(line)) { flushParagraph(); assembled.push(line); return; }
+      paragraph.push(line);
+    });
+    flushParagraph();
+    html = assembled.join('\n');
+    // Restore links and fenced code blocks last so their content never affects
+    // block parsing or receives a second escaping pass.
+    // Bounded numeric references emitted for literal quoted evidence. Restore
+    // after Markdown parsing, before links/code: do not alter their identities.
+    html = html.replace(/&amp;#(33|35|37|38|40|41|42|60|62|64|91|92|93|95|96|124);/g, '&#$1;');
+    html = extractedLinks.restore(html, renderLink);
+    html = renderEvidenceAffordances(html);
+    html = html.replace(/%%CODEBLOCK_(\d+)%%/g, (_, i) => `<pre><code>${escapeHtml(codeBlocks[+i])}</code></pre>`);
+    return html;
+  }
+
+  const metadataLabels = {
+    'generated': 'Generated',
+    'date of issue': 'Date of issue',
+    'analysis period': 'Analysis period',
+    'source': 'Source',
+    'source issue': 'Source issue',
+    'total articles analyzed': 'Articles analyzed',
+    'articles analyzed': 'Articles analyzed',
+    'grc-relevant articles': 'GRC-relevant articles',
+    'authoring model': 'Authoring model',
+    'requested route': 'Requested route',
+    'model': 'Model',
+    'analysis mode': 'Analysis mode',
+  };
+
+  const metadataOrder = [
+    'generated',
+    'date of issue',
+    'analysis period',
+    'source',
+    'source issue',
+    'articles analyzed',
+    'grc-relevant articles',
+    'authoring model',
+    'requested route',
+    'model',
+    'analysis mode',
+  ];
+
+  function parseReportDocument(markdown) {
+    const normalized = normalizeReportMarkdown(String(markdown || ''));
+    const lines = normalized.split('\n');
+    let title = '';
+    const metadata = {};
+    let bodyStart = lines.length;
+
+    lines.forEach((line, index) => {
+      if (bodyStart !== lines.length) return;
+      if (!title && /^#\s+/.test(line)) {
+        title = line.replace(/^#\s+/, '').trim();
+        return;
+      }
+      if (/^##\s+/.test(line)) {
+        bodyStart = index;
+        return;
+      }
+
+      const standard = line.match(/^\*\*([^*]+?):\*\*\s*(.+?)\s*$/);
+      const legacy = line.match(/^\*\*([^*]+?):\s*(.+?)\*\*\s*$/);
+      const match = standard || legacy;
+      if (!match) return;
+      const key = match[1].trim().toLowerCase();
+      if (metadataLabels[key]) metadata[key] = match[2].trim();
+    });
+
+    if (metadata['total articles analyzed'] && !metadata['articles analyzed']) {
+      metadata['articles analyzed'] = metadata['total articles analyzed'];
+    }
+
+    return {
+      title,
+      metadata,
+      bodyMarkdown: lines.slice(bodyStart).join('\n').trim(),
+    };
+  }
+
+  function renderGeneratedTimestamp(value) {
+    const parsed = new Date(value);
+    if (Number.isNaN(parsed.getTime())) return renderInlineMarkdown(value);
+
+    const months = [
+      'January', 'February', 'March', 'April', 'May', 'June',
+      'July', 'August', 'September', 'October', 'November', 'December',
+    ];
+    const hours = parsed.getUTCHours();
+    const minutes = String(parsed.getUTCMinutes()).padStart(2, '0');
+    const meridiem = hours >= 12 ? 'PM' : 'AM';
+    const displayHour = hours % 12 || 12;
+    const display = `${months[parsed.getUTCMonth()]} ${parsed.getUTCDate()}, ${parsed.getUTCFullYear()} at ${displayHour}:${minutes} ${meridiem} UTC`;
+    return `<time datetime="${escapeAttribute(value)}">${display}</time>`;
+  }
+
+  function renderReportMetadata(metadata) {
+    const metadataItems = metadataOrder
+      .filter(key => metadata[key])
+      .map(key => {
+        const value = key === 'generated'
+          ? renderGeneratedTimestamp(metadata[key])
+          : renderInlineMarkdown(metadata[key]);
+        return `<div class="report-meta-item"><dt>${metadataLabels[key]}</dt><dd>${value}</dd></div>`;
+      })
+      .join('');
+    const manifestItem = '<div class="report-meta-item report-meta-evidence"><dt>Evidence manifest</dt><dd><a class="manifest-link" href="evidence-manifest.json" target="_blank" rel="noopener">Machine-readable JSON</a></dd></div>';
+    const requestedRoute = String(metadata['requested route'] || '').trim().toLowerCase();
+    const routedByAlias = /(?:^|\/)openrouter\/(?:free|auto)$/.test(requestedRoute);
+    const routeMeaning = routedByAlias
+      ? 'routing alias selected for the run'
+      : 'model route configured for the run';
+    const modelExplanation = requestedRoute && metadata['authoring model']
+      ? `<p class="provenance-explanation">The requested route is the OpenRouter ${routeMeaning}; the authoring model is the upstream model attested with the completed report.</p>`
+      : '';
+    if (!metadataItems) return '';
+    return `<section class="card report-provenance"><h2>About this report</h2><dl class="report-meta">${metadataItems}${manifestItem}</dl>${modelExplanation}</section>`;
+  }
+
+  function citationRenderer(markdown, links) {
+    const sourceSection = /^## Source Highlights\s*$/m.exec(markdown);
+    const sourceStart = sourceSection ? sourceSection.index : markdown.length;
+    const followingSection = markdown.slice(sourceStart + (sourceSection?.[0].length || 0)).search(/^## /m);
+    const sourceEnd = followingSection < 0 ? markdown.length : sourceStart + sourceSection[0].length + followingSection;
+    const registry = new Map();
+    const eligible = link => /^https?:\/\//i.test(link.url) && sanitizeMarkdownUrl(link.url) && decodeMarkdownEscapes(link.text) !== 'View in SentryDigest';
+    const isHighlight = link => link.position >= sourceStart && link.position < sourceEnd;
+    const sourceIdentity = link => JSON.stringify([sanitizeMarkdownUrl(link.url), decodeMarkdownEscapes(link.text)]);
+    links.filter(isHighlight).forEach(link => {
+      const identity = sourceIdentity(link);
+      if (eligible(link) && !registry.has(identity)) registry.set(identity, { number: registry.size + 1 });
+    });
+    const highlighted = new Set();
+    return link => {
+      const url = sanitizeMarkdownUrl(link.url);
+      const identity = sourceIdentity(link);
+      const citation = eligible(link) && registry.get(identity);
+      if (!citation) return renderMarkdownLink(renderLinkLabel(link.text), link.url);
+      const number = citation.number;
+      if (isHighlight(link)) {
+        const marker = highlighted.has(identity) ? '' : `<span class="source-number" id="source-${number}">[${number}]</span> `;
+        highlighted.add(identity);
+        return marker + renderMarkdownLink(renderLinkLabel(link.text), link.url);
+      }
+      const title = decodeMarkdownEscapes(link.text);
+      return `<a class="report-citation" href="${escapeAttribute(url)}" aria-label="${escapeAttribute(`Source ${number}: ${title}`)}" title="${escapeAttribute(title)}" target="_blank" rel="noopener">[${number}]</a>`;
+    };
+  }
+
+  function renderReviewMap(rows) {
+    const groups = new Map();
+    rows.forEach((row, index) => {
+      if (!groups.has(row.control)) groups.set(row.control, []);
+      groups.get(row.control).push({ ...row, target: `finding-${index + 1}` });
+    });
+    const content = Array.from(groups, ([control, findings]) =>
+      `<div class="review-map-group"><h3>${escapeHtml(control)}<span class="review-map-count">${findings.length} ${findings.length === 1 ? 'finding' : 'findings'}</span></h3><ul>${findings.map(row =>
+        `<li><a href="#${row.target}"><span>${escapeHtml(row.focus)}</span><span class="review-priority"><span class="sr-only">Inferred review priority: </span>${escapeHtml(row.priority)}</span></a></li>`
+      ).join('')}</ul></div>`
+    ).join('');
+    return `<nav class="review-map" aria-label="Review map"><h2>Review map</h2><p>Inferred review priorities, not measured risk. Choose a finding to read its evidence and decision.</p><div class="review-map-groups">${content}</div></nav>`;
+  }
+
+  function renderReportSections(markdown, reviewMap = []) {
+    // Historical source bytes remain unchanged. Make their classification limit
+    // visible without claiming a modern evidence check ran at publication.
+    markdown = normalizeReportMarkdown(markdown).replace(
+      /^## Key Regulatory Developments\s*\n([\s\S]*?)(?=^## |(?![\s\S]))/gm,
+      (_match, content) => {
+        const rows = content.split('\n').filter(line => /^\|/.test(line.trim()));
+        const dataRows = rows.slice(2);
+        const allImplied = dataRows.length > 0 && dataRows.every(line => /\b(?:implied|inferred)\b/i.test(line.split('|')[1] || ''));
+        const heading = allImplied ? 'Inferred Control and Governance Implications' : 'Regulatory and Control Context';
+        const note = allImplied
+          ? 'These are inferred mappings, not verified regulatory changes.'
+          : 'This retained report predates separate validation of regulatory changes and inferred control mappings. Verify legal claims against the original regulatory publication.';
+        return `## ${heading}\n\n${note}\n\n${content}`;
+      },
+    );
+    const html = renderMarkdown(markdown, true);
+    // The build supplies a bounded projection from the exact validated plan.
+    // A map must have one entry per rendered finding or it is omitted entirely.
+    const evidence = html.match(/<h2>Evidence and Decisions<\/h2>([\s\S]*?)(?=<h2>|$)/);
+    const findingCount = evidence ? (evidence[1].match(/<h3>/g) || []).length : 0;
+    const hasMap = Array.isArray(reviewMap) && reviewMap.length > 0 && reviewMap.length <= 6 &&
+      reviewMap.length === findingCount && html.includes('<h2>Executive Summary</h2>') &&
+      reviewMap.every(row => row && typeof row.focus === 'string' && row.focus.length > 0 &&
+        typeof row.control === 'string' && row.control.length > 0 && ['High', 'Medium', 'Low'].includes(row.priority));
+    return html
+      .split(/(?=<h2>)/)
+      .map(part => part.replace(/^\s*(?:<hr>\s*)+/, '').replace(/(?:\s*<hr>)+\s*$/, '').trim())
+      .filter(Boolean)
+      .map(part => {
+        if (hasMap && part.startsWith('<h2>Evidence and Decisions</h2>')) {
+          let index = 0;
+          part = part.replace(/<h3>/g, () => `<h3 id="finding-${++index}" tabindex="-1">`);
+        }
+        const map = hasMap && part.startsWith('<h2>Executive Summary</h2>') ? renderReviewMap(reviewMap) : '';
+        return `<section class="card">${part}${map}</section>`;
+      })
+      .join('');
+  }
+
+  function renderReportDocument(markdown, reviewMap = []) {
+    const report = parseReportDocument(markdown);
+    return renderReportSections(report.bodyMarkdown, reviewMap) + renderReportMetadata(report.metadata);
+  }
+
+  window.GRCInsightRenderer = {
+    escapeHtml,
+    escapeAttribute,
+    sanitizeMarkdownUrl,
+    renderMarkdownLink,
+    renderInlineMarkdown,
+    normalizeReportMarkdown,
+    renderMarkdown,
+    parseReportDocument,
+    renderReportDocument,
+  };
+})();

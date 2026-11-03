@@ -1,0 +1,94 @@
+{
+  "schema_version": 3,
+  "generated_at": "2026-09-20T20:38:07.290472Z",
+  "feed_url": "https://ricomanifesto.github.io/SentryDigest/feed.xml",
+  "feed_home_url": "https://ricomanifesto.github.io/SentryDigest/",
+  "digest_issue_date": "2026-09-20",
+  "digest_issue_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-20/",
+  "requested_model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
+  "resolved_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+  "sources": [
+    {
+      "title": "SolarWinds Patches ARM Hard-Coded Key Flaw Enabling Unauthenticated RCE",
+      "url": "https://thehackernews.com/2026/09/solarwinds-patches-arm-hard-coded-key.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-20/#reporting-531e97a39e7b",
+      "cves": [
+        "CVE-2026-28326"
+      ]
+    },
+    {
+      "title": "Critical Pre-Auth RCE in Orkes Conductor Workflow Platform Exploited in the Wild",
+      "url": "https://thehackernews.com/2026/09/critical-pre-auth-rce-in-orkes.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-20/#reporting-c8cb9ca3b0db",
+      "cves": [
+        "CVE-2026-58138"
+      ]
+    },
+    {
+      "title": "CISA Flags Three Linux Kernel Vulnerabilities Exploited in the Wild",
+      "url": "https://thehackernews.com/2026/09/cisa-flags-three-linux-kernel.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-20/#reporting-7abc6bd4255f",
+      "cves": [
+        "CVE-2025-39682"
+      ]
+    },
+    {
+      "title": "Cisco Zero-Day Highlights API Endpoint Authentication Issues",
+      "url": "https://www.darkreading.com/vulnerabilities-threats/cisco-zero-day-api-endpoint-authentication-issues",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-20/#reporting-4bd8cbc1dbe9",
+      "cves": [
+        "CVE-2026-76460"
+      ]
+    },
+    {
+      "title": "Microsoft Patches CVSS 10.0 Azure AI Foundry Flaw Enabling Unauthorized Privilege Escalation",
+      "url": "https://thehackernews.com/2026/09/microsoft-patches-cvss-100-azure-ai.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-20/#reporting-baffdffe1456",
+      "cves": [
+        "CVE-2026-85889"
+      ]
+    },
+    {
+      "title": "Malicious npm packages evade install-script defenses at runtime",
+      "url": "https://www.bleepingcomputer.com/news/security/malicious-npm-packages-evade-install-script-defenses-at-runtime/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-20/#reporting-20c9213dc91f",
+      "cves": []
+    },
+    {
+      "title": "Researchers escape OpenAI Codex sandbox to run commands on host",
+      "url": "https://www.bleepingcomputer.com/news/security/researchers-escape-openai-codex-sandbox-to-run-commands-on-host/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-20/#reporting-8cf078285ecf",
+      "cves": []
+    },
+    {
+      "title": "Claude Opus 5 Helped Researchers Take Over OpenAI Staff Accounts via Chained Flaws",
+      "url": "https://thehackernews.com/2026/09/claude-opus-5-helped-researchers-take.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-20/#reporting-cccf7b5fb8fe",
+      "cves": []
+    },
+    {
+      "title": "BragJack attacks hijack AI browser agents through malicious extensions",
+      "url": "https://www.bleepingcomputer.com/news/security/bragjack-attacks-hijack-ai-browser-agents-through-malicious-extensions/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-20/#reporting-fb9113f4b47a",
+      "cves": []
+    },
+    {
+      "title": "North Korean WaterPlum hackers infected 30,000 devices worldwide",
+      "url": "https://www.bleepingcomputer.com/news/security/north-korean-waterplum-hackers-infected-30-000-devices-worldwide/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-20/#reporting-f02d07cbc73e",
+      "cves": []
+    },
+    {
+      "title": "ShinyHunters hacks Clop leak site, threatens to extort ransomware gang",
+      "url": "https://www.bleepingcomputer.com/news/security/shinyhunters-hacks-clop-leak-site-threatens-to-extort-ransomware-gang/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-20/#reporting-14e87e3a15b5",
+      "cves": []
+    },
+    {
+      "title": "Can You Prove a New CVE Is Exploitable Before Attackers Do? Learn How in This Webinar",
+      "url": "https://thehackernews.com/2026/09/can-you-prove-new-cve-is-exploitable.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-20/#reporting-852ff302b4ad",
+      "cves": []
+    }
+  ]
+}

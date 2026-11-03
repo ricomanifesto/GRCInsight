@@ -1,0 +1,92 @@
+{
+  "schema_version": 3,
+  "generated_at": "2026-10-02T03:27:10.823907Z",
+  "feed_url": "https://ricomanifesto.github.io/SentryDigest/feed.xml",
+  "feed_home_url": "https://ricomanifesto.github.io/SentryDigest/",
+  "digest_issue_date": "2026-10-02",
+  "digest_issue_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-02/",
+  "requested_model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
+  "resolved_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+  "sources": [
+    {
+      "title": "Fortinet warns of critical FortiMail flaw exploited in zero-day attacks",
+      "url": "https://www.bleepingcomputer.com/news/security/fortinet-warns-of-critical-fortimail-flaw-exploited-in-zero-day-attacks/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-02/#reporting-b4ba5b4eb39d",
+      "cves": [
+        "CVE-2026-104286"
+      ]
+    },
+    {
+      "title": "CISA Adds Exploited Cisco Catalyst SD-WAN Manager Auth Bypass to KEV",
+      "url": "https://thehackernews.com/2026/10/cisa-adds-exploited-cisco-catalyst-sd.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-02/#reporting-346b23ad75b1",
+      "cves": [
+        "CVE-2026-76504"
+      ]
+    },
+    {
+      "title": "Apple CoreGraphics PoC Emerges as WhatsApp PDF Checks Hint at Possible Delivery Path",
+      "url": "https://thehackernews.com/2026/10/apple-coregraphics-poc-emerges-as.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-02/#reporting-43ea94fc4334",
+      "cves": [
+        "CVE-2026-86950"
+      ]
+    },
+    {
+      "title": "Attackers Exploit Zimbra Flaw to Deploy Web Shells and Harvest Authentication Secrets",
+      "url": "https://thehackernews.com/2026/09/attackers-exploit-zimbra-flaw-to-deploy.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-02/#reporting-fe95a2c38caf",
+      "cves": [
+        "CVE-2026-73570"
+      ]
+    },
+    {
+      "title": "Alleged KillSec Ransomware Mastermind a 16-Year-Old",
+      "url": "https://www.darkreading.com/cyberattacks-data-breaches/killsec-ransomware-mastermind-16-year-old",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-02/#reporting-575e8d221d0b",
+      "cves": []
+    },
+    {
+      "title": "Autonomous AI agents tried to hack US, Canadian government websites",
+      "url": "https://www.bleepingcomputer.com/news/security/autonomous-ai-agents-tried-to-hack-us-canadian-government-websites/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-02/#reporting-b2099d009ed0",
+      "cves": []
+    },
+    {
+      "title": "Microsoft says threat actors are ahead in the early AI race",
+      "url": "https://www.bleepingcomputer.com/news/security/microsoft-says-threat-actors-are-ahead-in-the-early-ai-race/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-02/#reporting-8b472bb05c2f",
+      "cves": []
+    },
+    {
+      "title": "Police Arrest 16-Year-Old Suspected of Running KillSec, Seize Ransomware Leak Site and Servers",
+      "url": "https://thehackernews.com/2026/10/police-arrest-16-year-old-suspected-of.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-02/#reporting-1ba8da53d09e",
+      "cves": []
+    },
+    {
+      "title": "ThreatsDay: AI-Powered Zero-Day Chain, 543K Live Secrets, Model Inspection RCE and 13 More Stories",
+      "url": "https://thehackernews.com/2026/10/threatsday-ai-powered-zero-day-chain.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-02/#reporting-ab51ae9f2bbe",
+      "cves": []
+    },
+    {
+      "title": "WordPress Backdoor Rebuilds Itself After Cleanup Using Files, Database, and Shared Memory",
+      "url": "https://thehackernews.com/2026/10/wordpress-backdoor-rebuilds-itself.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-02/#reporting-dcd4b62c704a",
+      "cves": []
+    },
+    {
+      "title": "Police dismantle KillSec ransomware gang allegedly led by 16-year-old",
+      "url": "https://www.bleepingcomputer.com/news/security/police-dismantle-killsec-ransomware-gang-allegedly-led-by-16-year-old/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-02/#reporting-624e1a7a0804",
+      "cves": []
+    },
+    {
+      "title": "The Day-One Hole in Zero Trust Architecture",
+      "url": "https://www.bleepingcomputer.com/news/security/the-day-one-hole-in-zero-trust-architecture/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-02/#reporting-929134258e6a",
+      "cves": []
+    }
+  ]
+}

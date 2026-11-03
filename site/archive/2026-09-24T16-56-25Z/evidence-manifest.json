@@ -1,0 +1,95 @@
+{
+  "schema_version": 3,
+  "generated_at": "2026-09-24T16:56:25.786282Z",
+  "feed_url": "https://ricomanifesto.github.io/SentryDigest/feed.xml",
+  "feed_home_url": "https://ricomanifesto.github.io/SentryDigest/",
+  "digest_issue_date": "2026-09-24",
+  "digest_issue_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-24/",
+  "requested_model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
+  "resolved_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+  "sources": [
+    {
+      "title": "Attackers Exploit WordPress CVE-2026-87902 Within Hours of Disclosure",
+      "url": "https://thehackernews.com/2026/09/attackers-exploit-wordpress-cve-2026.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-24/#reporting-baff1d5496fd",
+      "cves": [
+        "CVE-2026-87902"
+      ]
+    },
+    {
+      "title": "Check Point warns of hackers exploiting Security Gateway VPN RCE flaw",
+      "url": "https://www.bleepingcomputer.com/news/security/check-point-warns-of-hackers-exploiting-security-gateway-vpn-rce-flaw/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-24/#reporting-702aeb848c91",
+      "cves": [
+        "CVE-2026-85102"
+      ]
+    },
+    {
+      "title": "MikroTrick Chain Let Attackers Take Over MikroTik Routers Without a Password or SSH Key",
+      "url": "https://thehackernews.com/2026/09/mikrotrick-chain-let-attackers-take.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-24/#reporting-20d13eec11e1",
+      "cves": [
+        "CVE-2026-67279",
+        "CVE-2026-86060"
+      ]
+    },
+    {
+      "title": "Exploit Released for Unpatched Ubuntu Linux Flaw Enabling Host-Root Container Escape",
+      "url": "https://thehackernews.com/2026/09/exploit-released-for-unpatched-ubuntu.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-24/#reporting-a94e39978082",
+      "cves": [
+        "CVE-2026-80521"
+      ]
+    },
+    {
+      "title": "F5 Patches Critical BIG-IP APM Zero-Day Exploited for Unauthenticated RCE on OAuth Servers",
+      "url": "https://thehackernews.com/2026/09/f5-patches-critical-big-ip-apm-zero-day.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-24/#reporting-54af9eeed99c",
+      "cves": [
+        "CVE-2026-94127"
+      ]
+    },
+    {
+      "title": "CISA: Ransomware gangs now exploiting critical TeamCity flaw",
+      "url": "https://www.bleepingcomputer.com/news/security/cisa-ransomware-gangs-now-exploiting-critical-teamcity-flaw/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-24/#reporting-f5dd20ff54d8",
+      "cves": []
+    },
+    {
+      "title": "OpenAI hacked Australian Medicare govt site, probed data providers",
+      "url": "https://www.bleepingcomputer.com/news/security/openai-hacked-australian-medicare-govt-site-probed-data-providers/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-24/#reporting-7e0f816f375f",
+      "cves": []
+    },
+    {
+      "title": "17,000 URLs Reveal How ClickFix Turns Trusted Websites Into Malware Traps: Report by CTM360",
+      "url": "https://thehackernews.com/2026/09/17000-urls-reveal-how-clickfix-turns.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-24/#reporting-5408002adacb",
+      "cves": []
+    },
+    {
+      "title": "Microsoft fixes bug that broke Windows File History backup feature",
+      "url": "https://www.bleepingcomputer.com/news/microsoft/microsoft-fixes-windows-backup-feature-broken-by-september-updates/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-24/#reporting-97c422976cf7",
+      "cves": []
+    },
+    {
+      "title": "OpenAI Agent Bypassed Australian Medicare Portal Controls to Access Non-Public Files",
+      "url": "https://thehackernews.com/2026/09/openai-agent-bypassed-australian.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-24/#reporting-7a413f58e46a",
+      "cves": []
+    },
+    {
+      "title": "TeamFiltration Campaign Compromises Seven Microsoft 365 Accounts Using Default Passwords",
+      "url": "https://thehackernews.com/2026/09/teamfiltration-compromises-seven.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-24/#reporting-b54ca687b5eb",
+      "cves": []
+    },
+    {
+      "title": "Placeholder domain used in dev docs now serves ClickFix attacks",
+      "url": "https://www.bleepingcomputer.com/news/security/placeholder-domain-used-in-dev-docs-now-serves-clickfix-attacks/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-24/#reporting-3c5d9756b70d",
+      "cves": []
+    }
+  ]
+}

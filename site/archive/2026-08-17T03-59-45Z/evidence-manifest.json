@@ -1,0 +1,86 @@
+{
+  "schema_version": 3,
+  "generated_at": "2026-08-17T03:59:45.079776Z",
+  "feed_url": "https://ricomanifesto.github.io/SentryDigest/feed.xml",
+  "feed_home_url": "https://ricomanifesto.github.io/SentryDigest/",
+  "digest_issue_date": "2026-08-17",
+  "digest_issue_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-17/",
+  "requested_model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
+  "resolved_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+  "sources": [
+    {
+      "title": "Attackers Exploit SharePoint Authentication Bypass After Public PoC Release",
+      "url": "https://thehackernews.com/2026/08/attackers-exploit-sharepoint.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-17/#reporting-3c5ef5fa5324",
+      "cves": [
+        "CVE-2026-55040"
+      ]
+    },
+    {
+      "title": "SafePal data breach impacts 39,798 customers, stolen info for sale",
+      "url": "https://www.bleepingcomputer.com/news/security/safepal-data-breach-impacts-39-798-customers-stolen-info-for-sale/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-17/#reporting-847da71208bc",
+      "cves": []
+    },
+    {
+      "title": "Anthropic confirms Claude is down in major outage affecting multiple services",
+      "url": "https://www.bleepingcomputer.com/news/artificial-intelligence/anthropic-confirms-claude-is-down-in-major-outage-affecting-multiple-services/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-17/#reporting-0748ca510918",
+      "cves": []
+    },
+    {
+      "title": "Large-scale DDoS attacks disrupted Threema secure messaging service",
+      "url": "https://www.bleepingcomputer.com/news/security/large-scale-ddos-attacks-disrupted-threema-secure-messaging-service/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-17/#reporting-6565f6821662",
+      "cves": []
+    },
+    {
+      "title": "New AmnesiaStealer macOS malware hijacks browser sessions via remote control",
+      "url": "https://www.bleepingcomputer.com/news/security/new-amnesiastealer-macos-malware-hijacks-browser-sessions-via-remote-control/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-17/#reporting-0a6826eb0448",
+      "cves": []
+    },
+    {
+      "title": "New Evooo1Bot Linux botnet turns routers into traffic relay nodes",
+      "url": "https://www.bleepingcomputer.com/news/security/new-evooo1bot-linux-botnet-turns-routers-into-traffic-relay-nodes/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-17/#reporting-2ef1bbe49955",
+      "cves": []
+    },
+    {
+      "title": "How Anthropic plans to watermark Claude's AI-generated text",
+      "url": "https://www.bleepingcomputer.com/news/artificial-intelligence/how-anthropic-plans-to-watermark-claudes-ai-generated-text/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-17/#reporting-adf27a5de8bb",
+      "cves": []
+    },
+    {
+      "title": "Mission-Driven Security: Inside a Global Bank's Defense",
+      "url": "https://www.darkreading.com/cybersecurity-operations/mission-driven-security-inside-global-bank-defense",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-17/#reporting-4ae5bf990f47",
+      "cves": []
+    },
+    {
+      "title": "Hackers arrested over €30M bank fraud exploiting service provider flaw",
+      "url": "https://www.bleepingcomputer.com/news/security/hackers-arrested-over-30m-bank-fraud-exploiting-service-provider-flaw/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-17/#reporting-f425d96c2c87",
+      "cves": []
+    },
+    {
+      "title": "Amid AI-Driven Bug-Hunt Tsunami, NIST Looks to … AI",
+      "url": "https://www.darkreading.com/vulnerabilities-threats/ai-driven-bug-tsunami-nist-looks-to-ai",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-17/#reporting-f9fa1931bdf6",
+      "cves": []
+    },
+    {
+      "title": "Scottish Govt Suffers Potentially Widening Data Breach at Prosecutor's Office",
+      "url": "https://www.darkreading.com/cyberattacks-data-breaches/scottish-govt-data-breach-prosecutors-office",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-17/#reporting-9f7d0a43b985",
+      "cves": []
+    },
+    {
+      "title": "Hackers exploit macOS Screen Sharing flaw to deploy Monero miner",
+      "url": "https://www.bleepingcomputer.com/news/security/hackers-exploit-macos-screen-sharing-flaw-to-deploy-monero-miner/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-17/#reporting-f3d1727276b9",
+      "cves": []
+    }
+  ]
+}

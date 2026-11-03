@@ -1,0 +1,88 @@
+{
+  "schema_version": 3,
+  "generated_at": "2026-08-20T18:49:12.23917Z",
+  "feed_url": "https://ricomanifesto.github.io/SentryDigest/feed.xml",
+  "feed_home_url": "https://ricomanifesto.github.io/SentryDigest/",
+  "digest_issue_date": "2026-08-20",
+  "digest_issue_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-20/",
+  "requested_model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
+  "resolved_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+  "sources": [
+    {
+      "title": "Attackers Exploit Zimbra SNMP Flaw for Unauthenticated Remote Code Execution",
+      "url": "https://thehackernews.com/2026/08/attackers-exploit-zimbra-snmp-flaw-for.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-20/#reporting-572e047ecd00",
+      "cves": [
+        "CVE-2026-73570"
+      ]
+    },
+    {
+      "title": "Elementor Pro Flaw Could Let Unauthenticated Attackers Upload PHP and Execute Code",
+      "url": "https://thehackernews.com/2026/08/elementor-pro-flaw-could-let.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-20/#reporting-b1da55ba0134",
+      "cves": [
+        "CVE-2026-32475"
+      ]
+    },
+    {
+      "title": "Pakistan's Transparent Tribe Refreshes Toolset for Afghan Cyberattacks",
+      "url": "https://www.darkreading.com/cyberattacks-data-breaches/pakistan-transparent-tribe-afghan-cyberattacks",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-20/#reporting-03ef212068a6",
+      "cves": []
+    },
+    {
+      "title": "Critical Elementor Pro bug exposes WordPress sites to RCE attacks",
+      "url": "https://www.bleepingcomputer.com/news/security/critical-elementor-pro-bug-exposes-wordpress-sites-to-rce-attacks/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-20/#reporting-541e0309d10b",
+      "cves": []
+    },
+    {
+      "title": "How MSPs can catch phishing attacks email filters miss",
+      "url": "https://www.bleepingcomputer.com/news/security/how-msps-can-catch-phishing-attacks-email-filters-miss/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-20/#reporting-41d45d363a36",
+      "cves": []
+    },
+    {
+      "title": "Isolated-vm Flaw Lets Sandboxed JavaScript Escape to Host for Potential RCE",
+      "url": "https://thehackernews.com/2026/08/isolated-vm-flaw-lets-sandboxed.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-20/#reporting-01bed0d17131",
+      "cves": []
+    },
+    {
+      "title": "Critical NetScaler Flaw Can Bypass Authentication on Certain Gateway and AAA Servers",
+      "url": "https://thehackernews.com/2026/08/critical-netscaler-flaw-can-bypass.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-20/#reporting-88c8957eed48",
+      "cves": []
+    },
+    {
+      "title": "'Grandoreiro' Malware Resurfaces With Mexico Campaign",
+      "url": "https://www.darkreading.com/cyberattacks-data-breaches/grandoreiro-resurfaces-mexico-campaign",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-20/#reporting-b43c0890291c",
+      "cves": []
+    },
+    {
+      "title": "Citrix urges admins to patch new NetScaler flaws as soon as possible",
+      "url": "https://www.bleepingcomputer.com/news/security/citrix-urges-admins-to-patch-new-netscaler-flaws-as-soon-as-possible/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-20/#reporting-1c6b6eea4c8b",
+      "cves": []
+    },
+    {
+      "title": "Zombie Card Attack Can Revive Expired Visa Cards for Contactless Payments",
+      "url": "https://thehackernews.com/2026/08/zombie-card-attack-can-revive-expired.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-20/#reporting-b398c0708051",
+      "cves": []
+    },
+    {
+      "title": "Why \"Shady AI\" is Security's Next Big Governance Problem",
+      "url": "https://thehackernews.com/2026/08/why-shady-ai-is-securitys-next-big.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-20/#reporting-64fb72e4f152",
+      "cves": []
+    },
+    {
+      "title": "CDN Tsunami Attack Abuses HTTP/3 Translation for Up to 350x DoS Amplification",
+      "url": "https://thehackernews.com/2026/08/cdn-tsunami-attack-abuses-http3.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-20/#reporting-6740d03ebc5e",
+      "cves": []
+    }
+  ]
+}

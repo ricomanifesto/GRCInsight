@@ -1,0 +1,92 @@
+{
+  "schema_version": 3,
+  "generated_at": "2026-09-04T03:57:45.611618Z",
+  "feed_url": "https://ricomanifesto.github.io/SentryDigest/feed.xml",
+  "feed_home_url": "https://ricomanifesto.github.io/SentryDigest/",
+  "digest_issue_date": "2026-09-03",
+  "digest_issue_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-03/",
+  "requested_model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
+  "resolved_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+  "sources": [
+    {
+      "title": "Critical Cisco Nexus 9000 Flaw Lets Unauthenticated Remote Attackers Run Code as Root",
+      "url": "https://thehackernews.com/2026/09/critical-cisco-nexus-9000-flaw-lets.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-03/#reporting-10869e1cb2f9",
+      "cves": [
+        "CVE-2026-20212"
+      ]
+    },
+    {
+      "title": "Critical Elementor Pro flaw exploited to take over WordPress sites",
+      "url": "https://www.bleepingcomputer.com/news/security/critical-elementor-pro-flaw-exploited-to-take-over-wordpress-sites/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-03/#reporting-12bd6356b4bc",
+      "cves": [
+        "CVE-2026-32475"
+      ]
+    },
+    {
+      "title": "CISA Adds Seven Exploited Flaws as Attackers Deploy Reverse Shells and Crypto Miners",
+      "url": "https://thehackernews.com/2026/09/cisa-adds-seven-exploited-flaws-as.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-03/#reporting-bf0dadca2770",
+      "cves": [
+        "CVE-2026-83548"
+      ]
+    },
+    {
+      "title": "Hackers exploit Sangoma Switchvox flaw to deploy reverse shells",
+      "url": "https://www.bleepingcomputer.com/news/security/hackers-exploit-sangoma-switchvox-flaw-to-deploy-reverse-shells/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-03/#reporting-b6a094e0db0f",
+      "cves": [
+        "CVE-2026-9586"
+      ]
+    },
+    {
+      "title": "[Virtual Event] What Every Enterprise Should Know About Securing Cloud Assets in the Age of AI",
+      "url": "https://www.darkreading.com/events/virtual-event-what-every-enterprise-know-securing-cloud-2026",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-03/#reporting-a5c502fdcf06",
+      "cves": []
+    },
+    {
+      "title": "[Virtual Event] Building a Secure AI Strategy for the Enterprise",
+      "url": "https://www.darkreading.com/events/virtual-event-building-secure-ai-strategy-enterprise-2026",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-03/#reporting-dca03da12610",
+      "cves": []
+    },
+    {
+      "title": "French hospital fined €500,000 after breach exposes data of 727,000",
+      "url": "https://www.bleepingcomputer.com/news/security/french-hospital-fined-500-000-after-breach-exposes-data-of-727-000/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-03/#reporting-0310538b67d5",
+      "cves": []
+    },
+    {
+      "title": "Large Enterprises Targeted in Fake Merger & Acquisition Scams",
+      "url": "https://www.darkreading.com/cyberattacks-data-breaches/large-enterprises-fake-merger-acquisition-scams",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-03/#reporting-b38f4c9e8193",
+      "cves": []
+    },
+    {
+      "title": "Coder's registry infrastructure compromised to push malicious modules",
+      "url": "https://www.bleepingcomputer.com/news/security/coders-registry-infrastructure-compromised-to-push-malicious-modules/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-03/#reporting-25f09ace8141",
+      "cves": []
+    },
+    {
+      "title": "What We Missed: Did ShinyHunters 'Breach' ReliaQuest?",
+      "url": "https://www.darkreading.com/cybersecurity-operations/what-we-missed-did-shinyhunters-breach-reliaquest",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-03/#reporting-657cfe30a45c",
+      "cves": []
+    },
+    {
+      "title": "HPE patches critical ArubaOS-CX remote code execution flaw",
+      "url": "https://www.bleepingcomputer.com/news/security/hpe-patches-critical-arubaos-cx-remote-code-execution-flaw/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-03/#reporting-d0cdf0878d94",
+      "cves": []
+    },
+    {
+      "title": "ThreatsDay: CEO Phishing Kits, 5K Dropbox Account Hacks, OAuth Traps + 17 More Stories",
+      "url": "https://thehackernews.com/2026/09/threatsday-ceo-phishing-kits-5k-dropbox.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-03/#reporting-eae08603ec40",
+      "cves": []
+    }
+  ]
+}

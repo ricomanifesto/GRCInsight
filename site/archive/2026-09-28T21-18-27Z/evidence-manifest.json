@@ -1,0 +1,93 @@
+{
+  "schema_version": 3,
+  "generated_at": "2026-09-28T21:18:27.576653Z",
+  "feed_url": "https://ricomanifesto.github.io/SentryDigest/feed.xml",
+  "feed_home_url": "https://ricomanifesto.github.io/SentryDigest/",
+  "digest_issue_date": "2026-09-28",
+  "digest_issue_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-28/",
+  "requested_model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
+  "resolved_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+  "sources": [
+    {
+      "title": "CISA Says Attackers Are Exploiting Two Critical Citrix NetScaler Flaws Globally",
+      "url": "https://thehackernews.com/2026/09/cisa-says-attackers-are-exploiting-two.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-28/#reporting-d10d67a734db",
+      "cves": [
+        "CVE-2026-88771"
+      ]
+    },
+    {
+      "title": "Citrix confirms two NetScaler RCE zero-days exploited in attacks",
+      "url": "https://www.bleepingcomputer.com/news/security/citrix-admins-warned-to-shut-down-netscalers-over-2-exploited-zero-days/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-28/#reporting-0954e8dba9d8",
+      "cves": [
+        "CVE-2026-88771",
+        "CVE-2026-88772"
+      ]
+    },
+    {
+      "title": "ShinyHunters uses WAF bypass trick in Oracle PeopleSoft attacks",
+      "url": "https://www.bleepingcomputer.com/news/security/shinyhunters-uses-waf-bypass-trick-in-oracle-peoplesoft-attacks/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-28/#reporting-77ddfbcd4e34",
+      "cves": [
+        "CVE-2026-35273"
+      ]
+    },
+    {
+      "title": "SharePoint RCE and MikroTik RouterOS Flaws Actively Exploited in the Wild",
+      "url": "https://thehackernews.com/2026/09/sharepoint-rce-and-mikrotik-routeros.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-28/#reporting-049c4c6d156c",
+      "cves": [
+        "CVE-2026-65660"
+      ]
+    },
+    {
+      "title": "Chrome Store Hosts 'Poper Blocker' Spyware Downloaded by Millions",
+      "url": "https://www.darkreading.com/application-security/chrome-store-poper-blocker-spyware-downloaded-millions",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-28/#reporting-9ea947543a47",
+      "cves": []
+    },
+    {
+      "title": "JadePuffer agentic AI attacks target Azure, destroy cloud resources",
+      "url": "https://www.bleepingcomputer.com/news/security/jadepuffer-agentic-ai-attacks-target-azure-destroy-cloud-resources/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-28/#reporting-178f19609d47",
+      "cves": []
+    },
+    {
+      "title": "JadePuffer AI Actor Compromises Azure Tenant in Destructive Cloud Attack",
+      "url": "https://www.darkreading.com/cloud-security/jadepuffer-ai-actor-azure-tenant-destructive-cloud-attack",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-28/#reporting-1820f6c11fcc",
+      "cves": []
+    },
+    {
+      "title": "Dutch Police Arrest ‘Reformed’ Hacker in Shiny Hunters Investigation",
+      "url": "https://krebsonsecurity.com/2026/09/dutch-police-arrest-reformed-hacker-in-shiny-hunters-investigation/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-28/#reporting-c919c2b059f3",
+      "cves": []
+    },
+    {
+      "title": "⚡ Weekly Recap: $387M Crypto Hack, Citrix Exploits, AI Agents Go Off-Script, and More Threats",
+      "url": "https://thehackernews.com/2026/09/weekly-recap-387m-crypto-hack-citrix.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-28/#reporting-92a47b18db9b",
+      "cves": []
+    },
+    {
+      "title": "80,000+ Organizations Had AI Logins Stolen: From Shadow AI to LLMjacking",
+      "url": "https://www.bleepingcomputer.com/news/security/80-000-plus-organizations-had-ai-logins-stolen-from-shadow-ai-to-llmjacking/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-28/#reporting-cdfc9fd9c096",
+      "cves": []
+    },
+    {
+      "title": "Webinar: How to Govern AI Agents, Reduce Excessive Access, and Control Shadow AI",
+      "url": "https://thehackernews.com/2026/09/webinar-how-to-govern-ai-agents-reduce.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-28/#reporting-e51480e96d84",
+      "cves": []
+    },
+    {
+      "title": "Carbonato Botnet Compromises Docker Hosts to Deploy Telegram-Controlled Hermes AI Agent",
+      "url": "https://thehackernews.com/2026/09/carbonato-botnet-compromises-docker.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-28/#reporting-a2739f1e6c8a",
+      "cves": []
+    }
+  ]
+}

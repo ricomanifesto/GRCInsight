@@ -1,0 +1,92 @@
+{
+  "schema_version": 3,
+  "generated_at": "2026-09-09T20:50:48.26673Z",
+  "feed_url": "https://ricomanifesto.github.io/SentryDigest/feed.xml",
+  "feed_home_url": "https://ricomanifesto.github.io/SentryDigest/",
+  "digest_issue_date": "2026-09-09",
+  "digest_issue_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-09/",
+  "requested_model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
+  "resolved_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+  "sources": [
+    {
+      "title": "Chrome V8 Zero-Day Exploited in the Wild Enables Code Execution Inside Sandbox",
+      "url": "https://thehackernews.com/2026/09/chrome-v8-zero-day-exploited-in-wild.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-09/#reporting-375dd8a3b2ed",
+      "cves": [
+        "CVE-2026-87491"
+      ]
+    },
+    {
+      "title": "Researcher Drops New Microsoft Defender PoC Showing ShieldBreak Patch Can Be Bypassed",
+      "url": "https://thehackernews.com/2026/09/researcher-drops-new-microsoft-defender.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-09/#reporting-b163f3fc8d81",
+      "cves": [
+        "CVE-2026-69414"
+      ]
+    },
+    {
+      "title": "SAP Patches CVSS 10.0 Kernel Flaw Enabling Unauthenticated Remote Code Execution",
+      "url": "https://thehackernews.com/2026/09/sap-patches-cvss-100-kernel-flaw.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-09/#reporting-419df1f3701a",
+      "cves": [
+        "CVE-2026-44756"
+      ]
+    },
+    {
+      "title": "N-able N-central Pre-Auth RCE Flaw Exploited in the Wild",
+      "url": "https://thehackernews.com/2026/09/n-able-n-central-pre-auth-rce-flaw.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-09/#reporting-4b40f1884595",
+      "cves": [
+        "CVE-2026-86218"
+      ]
+    },
+    {
+      "title": "Veradigm warns of patient data breach after ransomware gang claims attack",
+      "url": "https://www.bleepingcomputer.com/news/security/veradigm-discloses-patient-data-breach-after-gentlemen-gang-claims-attack/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-09/#reporting-1f143425b810",
+      "cves": []
+    },
+    {
+      "title": "Identity-Based AI Attack Threatens Security of Enterprise Data",
+      "url": "https://www.darkreading.com/threat-intelligence/identity-based-ai-attack-security-enterprise-data",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-09/#reporting-22db05aa27de",
+      "cves": []
+    },
+    {
+      "title": "Infostealer Logs Expose Replayable AI Tokens That Can Bypass MFA",
+      "url": "https://thehackernews.com/2026/09/infostealer-logs-expose-replayable-ai.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-09/#reporting-a7397cc291ce",
+      "cves": []
+    },
+    {
+      "title": "MFA's Weakest Link: Account Recovery Is the New Attack Path",
+      "url": "https://www.bleepingcomputer.com/news/security/mfas-weakest-link-account-recovery-is-the-new-attack-path/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-09/#reporting-7b70efb6ff4b",
+      "cves": []
+    },
+    {
+      "title": "Webinar: Learn How to Answer “Are We Exposed?” Faster After a New CVE",
+      "url": "https://thehackernews.com/2026/09/webinar-learn-how-to-answer-are-we.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-09/#reporting-8abca2d5974c",
+      "cves": []
+    },
+    {
+      "title": "DeepSeek Harness Flaw Let AI Agents Disable Their Own File Sandbox Without Approval",
+      "url": "https://thehackernews.com/2026/09/deepseek-harness-flaw-let-ai-agents.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-09/#reporting-c33829733f1a",
+      "cves": []
+    },
+    {
+      "title": "Alby Hub Critical Flaw Could Let Attackers Take Over Internet-Exposed Bitcoin Wallets",
+      "url": "https://thehackernews.com/2026/09/alby-hub-critical-flaw-could-let.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-09/#reporting-6724d5b1aa87",
+      "cves": []
+    },
+    {
+      "title": "Over 36,000 exposed Plex servers vulnerable to recent flaws",
+      "url": "https://www.bleepingcomputer.com/news/security/over-36-000-plex-servers-unpatched-against-recently-disclosed-flaws/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-09/#reporting-4d22feb60955",
+      "cves": []
+    }
+  ]
+}

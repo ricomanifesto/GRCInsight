@@ -1,0 +1,90 @@
+{
+  "schema_version": 3,
+  "generated_at": "2026-09-27T21:11:33.359851Z",
+  "feed_url": "https://ricomanifesto.github.io/SentryDigest/feed.xml",
+  "feed_home_url": "https://ricomanifesto.github.io/SentryDigest/",
+  "digest_issue_date": "2026-09-27",
+  "digest_issue_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-27/",
+  "requested_model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
+  "resolved_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+  "sources": [
+    {
+      "title": "ShinyHunters uses WAF bypass trick in Oracle PeopleSoft attacks",
+      "url": "https://www.bleepingcomputer.com/news/security/shinyhunters-uses-waf-bypass-trick-in-oracle-peoplesoft-attacks/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-27/#reporting-77ddfbcd4e34",
+      "cves": [
+        "CVE-2026-35273"
+      ]
+    },
+    {
+      "title": "SharePoint RCE and MikroTik RouterOS Flaws Actively Exploited in the Wild",
+      "url": "https://thehackernews.com/2026/09/sharepoint-rce-and-mikrotik-routeros.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-27/#reporting-049c4c6d156c",
+      "cves": [
+        "CVE-2026-65660"
+      ]
+    },
+    {
+      "title": "CISA warns of Sharepoint, WSO2, Adobe Commerce flaws exploited in attacks",
+      "url": "https://www.bleepingcomputer.com/news/security/cisa-warns-of-sharepoint-wso2-adobe-commerce-flaws-exploited-in-attacks/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-27/#reporting-2e9b76e63d00",
+      "cves": [
+        "CVE-2026-5430"
+      ]
+    },
+    {
+      "title": "Citrix admins warned to shut down NetScalers over 2 exploited zero-days",
+      "url": "https://www.bleepingcomputer.com/news/security/citrix-admins-warned-to-shut-down-netscalers-over-2-exploited-zero-days/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-27/#reporting-0954e8dba9d8",
+      "cves": []
+    },
+    {
+      "title": "Cloudflare fixes Containers cross-tenant flaw exposing customer data",
+      "url": "https://www.bleepingcomputer.com/news/security/cloudflare-fixes-containers-cross-tenant-flaw-exposing-customer-data/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-27/#reporting-cf659e9658b9",
+      "cves": []
+    },
+    {
+      "title": "Anthropic turns Claude into an AI marketplace with 2,000+ plugins and connectors",
+      "url": "https://www.bleepingcomputer.com/news/artificial-intelligence/anthropic-turns-claude-into-an-ai-marketplace-with-2-000-plus-plugins-and-connectors/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-27/#reporting-b3dddf9b03fd",
+      "cves": []
+    },
+    {
+      "title": "Warning: Two Unpatched Citrix NetScaler RCE Zero-Days Under Active Exploitation",
+      "url": "https://thehackernews.com/2026/09/warning-two-unpatched-citrix-netscaler.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-27/#reporting-1e494cdab5bb",
+      "cves": []
+    },
+    {
+      "title": "Lunex Stealer Abuses AMD Driver to Disable Security Monitoring and Steal Browser Credentials",
+      "url": "https://thehackernews.com/2026/09/lunex-stealer-abuses-amd-driver-to.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-27/#reporting-9f09894f2cc8",
+      "cves": []
+    },
+    {
+      "title": "Claude Opus 5.5 uses 95% fewer em dashes, but its answers are getting longer",
+      "url": "https://www.bleepingcomputer.com/news/artificial-intelligence/claude-opus-55-uses-95-percent-fewer-em-dashes-but-its-answers-are-getting-longer/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-27/#reporting-1d5487d8b2c1",
+      "cves": []
+    },
+    {
+      "title": "Microsoft pauses KB5002907 update after Office license deactivations",
+      "url": "https://www.bleepingcomputer.com/news/microsoft/microsoft-365-kb5002907-update-paused-after-office-license-deactivations/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-27/#reporting-b597d5341c3f",
+      "cves": []
+    },
+    {
+      "title": "GitHub Actions re-enabled with Mini Shai-Hulud payload still active",
+      "url": "https://www.bleepingcomputer.com/news/security/github-actions-re-enabled-with-mini-shai-hulud-payload-still-active/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-27/#reporting-fa5c037c6dc2",
+      "cves": []
+    },
+    {
+      "title": "OpenAI's AI agents accidentally uploaded user-provided images to third-party sites",
+      "url": "https://www.bleepingcomputer.com/news/artificial-intelligence/openais-ai-agents-accidentally-uploaded-user-provided-images-to-third-party-sites/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-27/#reporting-17579509bdfc",
+      "cves": []
+    }
+  ]
+}

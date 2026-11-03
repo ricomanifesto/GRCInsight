@@ -1,0 +1,88 @@
+{
+  "schema_version": 3,
+  "generated_at": "2026-08-20T03:32:30.012982Z",
+  "feed_url": "https://ricomanifesto.github.io/SentryDigest/feed.xml",
+  "feed_home_url": "https://ricomanifesto.github.io/SentryDigest/",
+  "digest_issue_date": "2026-08-19",
+  "digest_issue_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-19/",
+  "requested_model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
+  "resolved_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+  "sources": [
+    {
+      "title": "Critical macOS, SharePoint, vCenter, and Microsoft IKE Flaws Under Active Exploitation",
+      "url": "https://thehackernews.com/2026/08/critical-macos-sharepoint-vcenter-and.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-19/#reporting-d18e92ac17a1",
+      "cves": [
+        "CVE-2026-65400"
+      ]
+    },
+    {
+      "title": "Critical GitLab Zero-Click Flaw Poses Mitigation Challenges",
+      "url": "https://www.darkreading.com/application-security/critical-gitlab-zero-click-flaw-mitigation-challenges",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-19/#reporting-c81f051852d3",
+      "cves": [
+        "CVE-2026-19478"
+      ]
+    },
+    {
+      "title": "Hackers compromise 14,500 Dahua web cameras in 35-day campaign",
+      "url": "https://www.bleepingcomputer.com/news/security/hackers-compromise-14-500-dahua-web-cameras-in-35-day-campaign/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-19/#reporting-90794440e1d1",
+      "cves": []
+    },
+    {
+      "title": "US warns of AI-powered attacks on Siemens PLCs in critical infrastructure",
+      "url": "https://www.bleepingcomputer.com/news/security/us-warns-of-ai-powered-attacks-on-siemens-plcs-in-critical-infrastructure/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-19/#reporting-71fc6995d69e",
+      "cves": []
+    },
+    {
+      "title": "SilkParasite Threatens Central Asian Orgs With Flurry of RATs",
+      "url": "https://www.darkreading.com/threat-intelligence/silkparasite-central-asian-orgs-flurry-rats",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-19/#reporting-5790559cab49",
+      "cves": []
+    },
+    {
+      "title": "US charges Iranian hackers over $3.4 billion intellectual property theft",
+      "url": "https://www.bleepingcomputer.com/news/security/us-charges-iranian-hackers-over-34-billion-intellectual-property-theft/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-19/#reporting-b7fff6367cfe",
+      "cves": []
+    },
+    {
+      "title": "Password spraying attacks surge 155x as hackers exploit MFA gaps",
+      "url": "https://www.bleepingcomputer.com/news/security/password-spraying-attacks-surge-155x-as-hackers-exploit-mfa-gaps/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-19/#reporting-3480c4754671",
+      "cves": []
+    },
+    {
+      "title": "SilkParasite Espionage Campaign Targets Central Asian Governments with Five New RATs",
+      "url": "https://thehackernews.com/2026/08/silkparasite-espionage-campaign-targets.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-19/#reporting-9382709941ad",
+      "cves": []
+    },
+    {
+      "title": "Hackers Compromised 14,500+ Dahua Devices Using Credential Attacks, Auth Bypasses, and P2P",
+      "url": "https://thehackernews.com/2026/08/hackers-compromised-14500-dahua-devices.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-19/#reporting-b3d652ff51df",
+      "cves": []
+    },
+    {
+      "title": "Phishing 3.0: The Fight Moves to Agent Versus Agent",
+      "url": "https://thehackernews.com/2026/08/phishing-30-fight-moves-to-agent-versus.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-19/#reporting-8feab542b039",
+      "cves": []
+    },
+    {
+      "title": "StopAndProtect Uses Nearly 2,000 Hacked WordPress Sites to Spread Malware and Steal Data",
+      "url": "https://thehackernews.com/2026/08/stopandprotect-uses-nearly-2000-hacked.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-19/#reporting-d147b1677752",
+      "cves": []
+    },
+    {
+      "title": "Microsoft fixes known issue causing Windows Defender crashes",
+      "url": "https://www.bleepingcomputer.com/news/microsoft/microsoft-fixes-known-issue-causing-windows-defender-crashes/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-19/#reporting-906994debebf",
+      "cves": []
+    }
+  ]
+}

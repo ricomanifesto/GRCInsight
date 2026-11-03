@@ -1,0 +1,89 @@
+{
+  "schema_version": 3,
+  "generated_at": "2026-09-08T11:01:13.773941Z",
+  "feed_url": "https://ricomanifesto.github.io/SentryDigest/feed.xml",
+  "feed_home_url": "https://ricomanifesto.github.io/SentryDigest/",
+  "digest_issue_date": "2026-09-08",
+  "digest_issue_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-08/",
+  "requested_model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
+  "resolved_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+  "sources": [
+    {
+      "title": "Critical VMware Workstation and Fusion Flaw Lets VM Admins Execute Host Code",
+      "url": "https://thehackernews.com/2026/09/critical-vmware-workstation-and-fusion.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-08/#reporting-e74c4bc78631",
+      "cves": [
+        "CVE-2026-59346"
+      ]
+    },
+    {
+      "title": "Attackers Exploit PaperCut Flaws to Steal Credentials From Schools and Universities",
+      "url": "https://thehackernews.com/2026/09/attackers-exploit-papercut-flaws-to.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-08/#reporting-c08f05268e88",
+      "cves": [
+        "CVE-2026-81578",
+        "CVE-2026-82078"
+      ]
+    },
+    {
+      "title": "[Virtual Event] What Every Enterprise Should Know About Securing Cloud Assets in the Age of AI",
+      "url": "https://www.darkreading.com/events/virtual-event-what-every-enterprise-know-securing-cloud-2026",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-08/#reporting-a5c502fdcf06",
+      "cves": []
+    },
+    {
+      "title": "[Virtual Event] Building a Secure AI Strategy for the Enterprise",
+      "url": "https://www.darkreading.com/events/virtual-event-building-secure-ai-strategy-enterprise-2026",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-08/#reporting-dca03da12610",
+      "cves": []
+    },
+    {
+      "title": "PEEP Turns Chrome and Edge Into Post-Compromise Backdoors for Host Command Execution",
+      "url": "https://thehackernews.com/2026/09/peep-turns-chrome-and-edge-into-post.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-08/#reporting-6c94379fcb16",
+      "cves": []
+    },
+    {
+      "title": "Magento StyleSmuggler zero-day exploited to deploy Linux backdoor",
+      "url": "https://www.bleepingcomputer.com/news/security/magento-stylesmuggler-zero-day-exploited-to-deploy-linux-backdoor/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-08/#reporting-9dd82c8cbcbd",
+      "cves": []
+    },
+    {
+      "title": "Fake IT Calls Target Executives in Microsoft 365 Data Theft and Extortion Attacks",
+      "url": "https://thehackernews.com/2026/09/microsoft-365-attackers-use-help-desk.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-08/#reporting-9c92a7066f1f",
+      "cves": []
+    },
+    {
+      "title": "BigBear Microsoft 365 phishing service bypassed MFA at 258 organizations",
+      "url": "https://www.bleepingcomputer.com/news/security/bigbear-microsoft-365-phishing-service-bypassed-mfa-at-258-organizations/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-08/#reporting-71696e8a5894",
+      "cves": []
+    },
+    {
+      "title": "⚡ Weekly Recap: Chrome 0-Day, Router Hijacks, Coder Supply Chain Attack and More",
+      "url": "https://thehackernews.com/2026/09/weekly-recap-chrome-0-day-router.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-08/#reporting-24d56919cba7",
+      "cves": []
+    },
+    {
+      "title": "Mathspace discloses data breach affecting over 1 million people",
+      "url": "https://www.bleepingcomputer.com/news/security/mathspace-discloses-data-breach-affecting-over-1-million-people/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-08/#reporting-c4d7fdfa6754",
+      "cves": []
+    },
+    {
+      "title": "Trezor data breach impact now reaches 81,000 customers",
+      "url": "https://www.bleepingcomputer.com/news/security/trezor-data-breach-impact-now-reaches-81-000-customers/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-08/#reporting-93b61032b3b3",
+      "cves": []
+    },
+    {
+      "title": "Your Cloud Security Checklist Doesn't Work the Way You Think It Does",
+      "url": "https://thehackernews.com/2026/09/your-cloud-security-checklist-doesnt.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-08/#reporting-c09a5ec87b1f",
+      "cves": []
+    }
+  ]
+}

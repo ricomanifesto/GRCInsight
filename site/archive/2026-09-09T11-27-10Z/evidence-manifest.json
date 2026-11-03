@@ -1,0 +1,92 @@
+{
+  "schema_version": 3,
+  "generated_at": "2026-09-09T11:27:10.063995Z",
+  "feed_url": "https://ricomanifesto.github.io/SentryDigest/feed.xml",
+  "feed_home_url": "https://ricomanifesto.github.io/SentryDigest/",
+  "digest_issue_date": "2026-09-09",
+  "digest_issue_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-09/",
+  "requested_model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
+  "resolved_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+  "sources": [
+    {
+      "title": "Chrome V8 Zero-Day Exploited in the Wild Enables Code Execution Inside Sandbox",
+      "url": "https://thehackernews.com/2026/09/chrome-v8-zero-day-exploited-in-wild.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-09/#reporting-375dd8a3b2ed",
+      "cves": [
+        "CVE-2026-87491"
+      ]
+    },
+    {
+      "title": "Researcher Drops New Microsoft Defender PoC Showing ShieldBreak Patch Can Be Bypassed",
+      "url": "https://thehackernews.com/2026/09/researcher-drops-new-microsoft-defender.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-09/#reporting-b163f3fc8d81",
+      "cves": [
+        "CVE-2026-69414"
+      ]
+    },
+    {
+      "title": "SAP Patches CVSS 10.0 Kernel Flaw Enabling Unauthenticated Remote Code Execution",
+      "url": "https://thehackernews.com/2026/09/sap-patches-cvss-100-kernel-flaw.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-09/#reporting-419df1f3701a",
+      "cves": [
+        "CVE-2026-44756"
+      ]
+    },
+    {
+      "title": "N-able N-central Pre-Auth RCE Flaw Exploited in the Wild",
+      "url": "https://thehackernews.com/2026/09/n-able-n-central-pre-auth-rce-flaw.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-09/#reporting-4b40f1884595",
+      "cves": [
+        "CVE-2026-86218"
+      ]
+    },
+    {
+      "title": "Over 36,000 exposed Plex servers vulnerable to recent flaws",
+      "url": "https://www.bleepingcomputer.com/news/security/over-36-000-plex-servers-unpatched-against-recently-disclosed-flaws/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-09/#reporting-4d22feb60955",
+      "cves": []
+    },
+    {
+      "title": "Man gets 15 years for extorting women with AI-generated porn videos",
+      "url": "https://www.bleepingcomputer.com/news/security/man-gets-15-years-in-prison-for-cyberstalking-and-sextortion/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-09/#reporting-75062f3bb4ff",
+      "cves": []
+    },
+    {
+      "title": "New cPanel Flaw Lets a Hosting Account With Mail Privileges Run Code as Root",
+      "url": "https://thehackernews.com/2026/09/new-cpanel-flaw-lets-hosting-account.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-09/#reporting-369f97b0285e",
+      "cves": []
+    },
+    {
+      "title": "F5 BIG-IP APM Malware Injects a PHP Web Shell Into Memory, Evading Disk Scans",
+      "url": "https://thehackernews.com/2026/09/f5-big-ip-apm-malware-injects-php-web.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-09/#reporting-88a0315141ea",
+      "cves": []
+    },
+    {
+      "title": "New Microsoft Defender 'ShieldCrash' zero-day grants SYSTEM access",
+      "url": "https://www.bleepingcomputer.com/news/security/new-microsoft-defender-shieldcrash-zero-day-grants-system-access/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-09/#reporting-aa6e936777c6",
+      "cves": []
+    },
+    {
+      "title": "Google warns of new Chrome zero-day bug exploited in attacks",
+      "url": "https://www.bleepingcomputer.com/news/security/google-patches-seventh-chrome-zero-day-exploited-in-attacks-this-year/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-09/#reporting-7c0412571004",
+      "cves": []
+    },
+    {
+      "title": "Microsoft Patches Record 974 Flaws, Including Two Exploited Windows Zero-Days",
+      "url": "https://thehackernews.com/2026/09/microsoft-patches-record-974-flaws.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-09/#reporting-07d47a2f7f2e",
+      "cves": []
+    },
+    {
+      "title": "Microsoft adds age-awareness APIs that can tell if users are children, teens, or adults",
+      "url": "https://www.bleepingcomputer.com/news/microsoft/microsoft-adds-age-awareness-apis-that-can-tell-if-users-are-children-teens-or-adults/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-09/#reporting-d9942c7c320c",
+      "cves": []
+    }
+  ]
+}

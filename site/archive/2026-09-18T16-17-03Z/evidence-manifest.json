@@ -1,0 +1,90 @@
+{
+  "schema_version": 3,
+  "generated_at": "2026-09-18T16:17:03.281661Z",
+  "feed_url": "https://ricomanifesto.github.io/SentryDigest/feed.xml",
+  "feed_home_url": "https://ricomanifesto.github.io/SentryDigest/",
+  "digest_issue_date": "2026-09-18",
+  "digest_issue_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-18/",
+  "requested_model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
+  "resolved_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+  "sources": [
+    {
+      "title": "Critical Docker Sandboxes Flaw Lets Malicious Guest Code Read and Modify macOS Host Files",
+      "url": "https://thehackernews.com/2026/09/critical-docker-sandboxes-flaw-lets.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-18/#reporting-c7d368380dd4",
+      "cves": [
+        "CVE-2026-77179"
+      ]
+    },
+    {
+      "title": "Critical Unbound DNSSEC Validator Flaw Could Allow RCE via a Malicious DNS Zone",
+      "url": "https://thehackernews.com/2026/09/critical-unbound-dnssec-validator-flaw.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-18/#reporting-4341f2269a01",
+      "cves": [
+        "CVE-2026-81642"
+      ]
+    },
+    {
+      "title": "Cisco Warns of New Zero-Day ISE Auth Bypass (CVSS 10.0) Exploited in Active Attacks",
+      "url": "https://thehackernews.com/2026/09/cisco-warns-of-new-zero-day-ise-auth.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-18/#reporting-fefb67106246",
+      "cves": [
+        "CVE-2026-76460"
+      ]
+    },
+    {
+      "title": "WeaselBiscuit Stealer Spreads via 13 npm Packages to Harvest Chrome Extension Storage",
+      "url": "https://thehackernews.com/2026/09/weaselbiscuit-stealer-spreads-via-13.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-18/#reporting-987fdbb14989",
+      "cves": []
+    },
+    {
+      "title": "New Check Point flaw lets hackers execute code with root privileges",
+      "url": "https://www.bleepingcomputer.com/news/security/check-point-warns-critical-flaw-lets-hackers-execute-code-as-root/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-18/#reporting-9bc8b96fcffe",
+      "cves": []
+    },
+    {
+      "title": "Claimed Bug Bounty Hunter Likely Used LLM to Build PhantomRaven npm Stealer",
+      "url": "https://thehackernews.com/2026/09/claimed-bug-bounty-hunter-likely-used.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-18/#reporting-1963d1923e71",
+      "cves": []
+    },
+    {
+      "title": "Microsoft fixes broken copy and paste for Excel 2016 users",
+      "url": "https://www.bleepingcomputer.com/news/microsoft/microsoft-fixes-broken-copy-and-paste-for-excel-2016-users/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-18/#reporting-602f02d2e111",
+      "cves": []
+    },
+    {
+      "title": "AI Agent Breaches Spanish Organization, Modifies Personal Data",
+      "url": "https://www.darkreading.com/cyberattacks-data-breaches/ai-agent-breaches-spanish-organization-personal-data",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-18/#reporting-af1e6c2ba625",
+      "cves": []
+    },
+    {
+      "title": "RatHat Android Malware Abuses ADB to Retain Shell Access After Uninstall",
+      "url": "https://thehackernews.com/2026/09/rathat-android-malware-abuses-adb-to.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-18/#reporting-d520678c4afb",
+      "cves": []
+    },
+    {
+      "title": "New RatHat Android malware uses AI to automate device control",
+      "url": "https://www.bleepingcomputer.com/news/security/new-rathat-android-malware-uses-ai-to-automate-device-control/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-18/#reporting-a81acfaa2d14",
+      "cves": []
+    },
+    {
+      "title": "CISA Ditches Weekly Vulnerability Roundups for Risk-Based Focus",
+      "url": "https://www.darkreading.com/cyber-risk/cisa-ditches-weekly-vuln-roundups-risk-based-focus",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-18/#reporting-233799071bd0",
+      "cves": []
+    },
+    {
+      "title": "China's FamousSparrow APT Spies on US Politics in Latin America",
+      "url": "https://www.darkreading.com/cyberattacks-data-breaches/china-famoussparrow-spies-latin-america",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-18/#reporting-f49c7ff5423e",
+      "cves": []
+    }
+  ]
+}

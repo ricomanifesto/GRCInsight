@@ -1,0 +1,91 @@
+{
+  "schema_version": 3,
+  "generated_at": "2026-09-14T23:48:44.409008Z",
+  "feed_url": "https://ricomanifesto.github.io/SentryDigest/feed.xml",
+  "feed_home_url": "https://ricomanifesto.github.io/SentryDigest/",
+  "digest_issue_date": "2026-09-14",
+  "digest_issue_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-14/",
+  "requested_model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
+  "resolved_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+  "sources": [
+    {
+      "title": "Hackers exploit Tencent app flaw to deploy GrayRabbit malware",
+      "url": "https://www.bleepingcomputer.com/news/security/hackers-exploit-tencent-app-flaw-to-deploy-grayrabbit-malware/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-14/#reporting-b2a972265875",
+      "cves": [
+        "CVE-2026-51990"
+      ]
+    },
+    {
+      "title": "CISA Adds 5 Actively Exploited Artifactory, ScreenConnect, and RouterOS Flaws to KEV",
+      "url": "https://thehackernews.com/2026/09/cisa-adds-5-actively-exploited.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-14/#reporting-0ddc7c58e041",
+      "cves": [
+        "CVE-2026-42016"
+      ]
+    },
+    {
+      "title": "Dutch NCSC: Critical Check Point VPN flaws exploitation is imminent",
+      "url": "https://www.bleepingcomputer.com/news/security/dutch-ncsc-critical-check-point-vpn-flaws-exploitation-is-imminent/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-14/#reporting-59b3d76728f8",
+      "cves": [
+        "CVE-2026-85102",
+        "CVE-2026-85103"
+      ]
+    },
+    {
+      "title": "Twitch extension with 30K installs exposes users’ OAuth tokens",
+      "url": "https://www.bleepingcomputer.com/news/security/twitch-extension-with-30k-installs-exposes-users-oauth-tokens/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-14/#reporting-0c060fb984f7",
+      "cves": []
+    },
+    {
+      "title": "Hackers hijack HBO Max Reddit account to push malware in ClickFix ads",
+      "url": "https://www.bleepingcomputer.com/news/security/hackers-hijack-hbo-max-reddit-account-to-push-malware-in-clickfix-ads/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-14/#reporting-6aad7771fb49",
+      "cves": []
+    },
+    {
+      "title": "New DDRop Attack Breaks Intel TDX and AMD SEV-SNP Confidential Computing",
+      "url": "https://thehackernews.com/2026/09/new-ddrop-attack-breaks-intel-tdx-and.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-14/#reporting-d1e3ec219567",
+      "cves": []
+    },
+    {
+      "title": "3BB Attacker Used MeshCentral Backdoor for Root Access, Targeted Subscriber Credentials",
+      "url": "https://thehackernews.com/2026/09/3bb-attacker-used-meshcentral-backdoor.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-14/#reporting-2e4ea22accc3",
+      "cves": []
+    },
+    {
+      "title": "Telegram Desktop Flaw Lets Hidden JavaScript Exfiltrate Messages From HTML Exports",
+      "url": "https://thehackernews.com/2026/09/telegram-desktop-flaw-lets-hidden.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-14/#reporting-7b20c25c5672",
+      "cves": []
+    },
+    {
+      "title": "Red Heron Exploits Gitea RCE to Compromise 13 Organizations Across Six Countries",
+      "url": "https://thehackernews.com/2026/09/red-heron-exploits-gitea-rce-to.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-14/#reporting-09d1dd4eafdf",
+      "cves": []
+    },
+    {
+      "title": "Anthropic CEO: Time to Shift From Improving to Controlling AI",
+      "url": "https://www.darkreading.com/cyber-risk/anthropic-ceo-shift-from-improving-to-controlling-ai",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-14/#reporting-722811b86b4d",
+      "cves": []
+    },
+    {
+      "title": "Hackers target exposed Vite dev servers to steal AWS, Azure secrets",
+      "url": "https://www.bleepingcomputer.com/news/security/hackers-target-exposed-vite-dev-servers-to-steal-aws-azure-secrets/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-14/#reporting-5aa4d6dc4864",
+      "cves": []
+    },
+    {
+      "title": "WordPress Adds Automated Plugin Reviews to Block High-Risk Updates Before Distribution",
+      "url": "https://thehackernews.com/2026/09/wordpress-adds-automated-plugin-reviews.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-14/#reporting-0c1a781fba3e",
+      "cves": []
+    }
+  ]
+}

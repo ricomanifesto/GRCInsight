@@ -1,0 +1,92 @@
+{
+  "schema_version": 3,
+  "generated_at": "2026-08-17T13:36:36.011738Z",
+  "feed_url": "https://ricomanifesto.github.io/SentryDigest/feed.xml",
+  "feed_home_url": "https://ricomanifesto.github.io/SentryDigest/",
+  "digest_issue_date": "2026-08-17",
+  "digest_issue_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-17/",
+  "requested_model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
+  "resolved_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+  "sources": [
+    {
+      "title": "Microsoft working on Defender patch for ShieldBreak zero-day",
+      "url": "https://www.bleepingcomputer.com/news/security/microsoft-working-on-defender-patch-for-shieldbreak-zero-day/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-17/#reporting-9da7db7cc2a6",
+      "cves": [
+        "CVE-2026-69414"
+      ]
+    },
+    {
+      "title": "Suspected China-Nexus Actor Exploits VMware vCenter Flaw, Deploys Babuk-Derived Ransomware",
+      "url": "https://thehackernews.com/2026/08/suspected-china-nexus-actor-exploits.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-17/#reporting-f632e57bed8c",
+      "cves": [
+        "CVE-2026-59310"
+      ]
+    },
+    {
+      "title": "SAP Commerce Cloud CVE-2026-58231 Targeted in Exploitation Attempts Days After Patch",
+      "url": "https://thehackernews.com/2026/08/sap-commerce-cloud-cve-2026-58231.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-17/#reporting-32f4f04d99f8",
+      "cves": [
+        "CVE-2026-58231"
+      ]
+    },
+    {
+      "title": "Apple macOS Screen Sharing Flaw Exploited on Internet-Exposed Macs to Install Monero Miner",
+      "url": "https://thehackernews.com/2026/08/apple-macos-screen-sharing-flaw.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-17/#reporting-b90ffb4f7f9b",
+      "cves": [
+        "CVE-2026-65400"
+      ]
+    },
+    {
+      "title": "Windows Server 2022 reaches end of mainstream support in 60 days",
+      "url": "https://www.bleepingcomputer.com/news/microsoft/windows-server-2022-reaches-end-of-mainstream-support-in-60-days/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-17/#reporting-47cc0c0a3276",
+      "cves": []
+    },
+    {
+      "title": "How MCP Servers Can Expose Enterprise Secrets",
+      "url": "https://thehackernews.com/2026/08/how-mcp-servers-can-expose-enterprise.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-17/#reporting-5ab36643acff",
+      "cves": []
+    },
+    {
+      "title": "Philips and GE investigating Clop ransomware data theft claims",
+      "url": "https://www.bleepingcomputer.com/news/security/philips-and-ge-investigating-clop-ransomware-data-theft-claims/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-17/#reporting-1982bb8549d6",
+      "cves": []
+    },
+    {
+      "title": "Unisoc VoLTE Video Call Exploit Chain Can Give Attackers Full Android Kernel Access",
+      "url": "https://thehackernews.com/2026/08/unisoc-volte-video-call-exploit-chain.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-17/#reporting-797946889533",
+      "cves": []
+    },
+    {
+      "title": "French tax authority data breach affects 678,000 individuals",
+      "url": "https://www.bleepingcomputer.com/news/security/french-tax-authority-data-breach-affects-678-000-individuals/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-17/#reporting-651dff2e0053",
+      "cves": []
+    },
+    {
+      "title": "Evooo1Bot Linux Botnet Exploits Known Flaws to Turn Edge Devices Into SOCKS5 Proxies",
+      "url": "https://thehackernews.com/2026/08/evooo1bot-linux-botnet-exploits-known.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-17/#reporting-7637e999c644",
+      "cves": []
+    },
+    {
+      "title": "SafePal data breach impacts 39,798 customers, stolen info for sale",
+      "url": "https://www.bleepingcomputer.com/news/security/safepal-data-breach-impacts-39-798-customers-stolen-info-for-sale/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-17/#reporting-847da71208bc",
+      "cves": []
+    },
+    {
+      "title": "Anthropic confirms Claude is down in major outage affecting multiple services",
+      "url": "https://www.bleepingcomputer.com/news/artificial-intelligence/anthropic-confirms-claude-is-down-in-major-outage-affecting-multiple-services/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-17/#reporting-0748ca510918",
+      "cves": []
+    }
+  ]
+}

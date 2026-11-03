@@ -1,0 +1,86 @@
+{
+  "schema_version": 3,
+  "generated_at": "2026-09-10T20:44:22.178686Z",
+  "feed_url": "https://ricomanifesto.github.io/SentryDigest/feed.xml",
+  "feed_home_url": "https://ricomanifesto.github.io/SentryDigest/",
+  "digest_issue_date": "2026-09-10",
+  "digest_issue_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-10/",
+  "requested_model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
+  "resolved_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+  "sources": [
+    {
+      "title": "CISA Flags Exploited Cisco, Citrix, Fortinet Flaws, Sets Sept. 12 Federal Patch Deadline",
+      "url": "https://thehackernews.com/2026/09/cisa-flags-exploited-cisco-citrix.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-10/#reporting-10251c3ec1ce",
+      "cves": [
+        "CVE-2026-20079"
+      ]
+    },
+    {
+      "title": "AI-powered attack exploited PaperCut flaws to hack 395 organizations",
+      "url": "https://www.bleepingcomputer.com/news/security/ai-powered-attack-exploited-papercut-flaws-to-hack-395-organizations/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-10/#reporting-09079ade99ff",
+      "cves": []
+    },
+    {
+      "title": "Cisco FMC flaws exploited by ransomware gang, state-sponsored hackers",
+      "url": "https://www.bleepingcomputer.com/news/security/cisco-fmc-flaws-exploited-by-ransomware-gang-state-sponsored-hackers/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-10/#reporting-da907d9c99a0",
+      "cves": []
+    },
+    {
+      "title": "Nightmare-Eclipse Strikes Again with 'ShieldCrash' Windows Exploit",
+      "url": "https://www.darkreading.com/vulnerabilities-threats/nightmare-eclipse-strikes-again-shieldcrash-windows-exploit",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-10/#reporting-fd125d81e655",
+      "cves": []
+    },
+    {
+      "title": "IDScan confirms breach tied to 153 million stolen driver’s licenses",
+      "url": "https://www.bleepingcomputer.com/news/security/idscan-confirms-breach-tied-to-153-million-stolen-drivers-licenses/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-10/#reporting-5c2c44a4efea",
+      "cves": []
+    },
+    {
+      "title": "Google Play Early Access Abused to Push Thousands of Deceptive Android Apps",
+      "url": "https://thehackernews.com/2026/09/google-play-early-access-abused-to-push.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-10/#reporting-ec21f6065228",
+      "cves": []
+    },
+    {
+      "title": "New 'BlueMoon' kit exploited Windows and Chrome zero-day flaws",
+      "url": "https://www.bleepingcomputer.com/news/security/new-bluemoon-kit-exploited-windows-and-chrome-zero-day-flaws/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-10/#reporting-87c0628b9f68",
+      "cves": []
+    },
+    {
+      "title": "The Top 4 Threats We Found by Investigating Every Alert for a Quarter",
+      "url": "https://www.bleepingcomputer.com/news/security/the-top-4-threats-we-found-by-investigating-every-alert-for-a-quarter/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-10/#reporting-b046b5002a57",
+      "cves": []
+    },
+    {
+      "title": "Check Point Discloses Two 9.8-Rated VPN Certificate Flaws Enabling Unauthenticated RCE",
+      "url": "https://thehackernews.com/2026/09/check-point-discloses-two-98-rated-vpn.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-10/#reporting-33af29f71c8c",
+      "cves": []
+    },
+    {
+      "title": "PaperCut Attacker Uses Hundreds of AI Agents to Compromise 440+ Instances",
+      "url": "https://thehackernews.com/2026/09/papercut-attacker-uses-hundreds-of-ai.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-10/#reporting-cd20e349d2f5",
+      "cves": []
+    },
+    {
+      "title": "Gigabud Creates Android Work Profiles to Hide From Banking App Malware Checks",
+      "url": "https://thehackernews.com/2026/09/gigabud-creates-android-work-profiles.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-10/#reporting-4cb585b593c9",
+      "cves": []
+    },
+    {
+      "title": "Microsoft says September updates fix mouse settings reset issues",
+      "url": "https://www.bleepingcomputer.com/news/microsoft/microsoft-resolves-mouse-settings-reset-bug-windows-11-update/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-10/#reporting-96264ce6cb02",
+      "cves": []
+    }
+  ]
+}

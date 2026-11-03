@@ -1,0 +1,88 @@
+{
+  "schema_version": 3,
+  "generated_at": "2026-08-15T12:49:31.610264Z",
+  "feed_url": "https://ricomanifesto.github.io/SentryDigest/feed.xml",
+  "feed_home_url": "https://ricomanifesto.github.io/SentryDigest/",
+  "digest_issue_date": "2026-08-15",
+  "digest_issue_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-15/",
+  "requested_model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
+  "resolved_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+  "sources": [
+    {
+      "title": "Critical VMware vCenter RCE flaw exploited for reverse SSH access",
+      "url": "https://www.bleepingcomputer.com/news/security/critical-vmware-vcenter-rce-flaw-exploited-for-reverse-ssh-access/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-15/#reporting-a4f4d669c4c8",
+      "cves": [
+        "CVE-2026-59310"
+      ]
+    },
+    {
+      "title": "Attackers Exploit SharePoint Authentication Bypass After Public PoC Release",
+      "url": "https://thehackernews.com/2026/08/attackers-exploit-sharepoint.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-15/#reporting-3c5ef5fa5324",
+      "cves": [
+        "CVE-2026-55040"
+      ]
+    },
+    {
+      "title": "How Anthropic plans to watermark Claude's AI-generated text",
+      "url": "https://www.bleepingcomputer.com/news/artificial-intelligence/how-anthropic-plans-to-watermark-claudes-ai-generated-text/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-15/#reporting-adf27a5de8bb",
+      "cves": []
+    },
+    {
+      "title": "Mission-Driven Security: Inside a Global Bank's Defense",
+      "url": "https://www.darkreading.com/cybersecurity-operations/mission-driven-security-inside-global-bank-defense",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-15/#reporting-4ae5bf990f47",
+      "cves": []
+    },
+    {
+      "title": "Hackers arrested over €30M bank fraud exploiting service provider flaw",
+      "url": "https://www.bleepingcomputer.com/news/security/hackers-arrested-over-30m-bank-fraud-exploiting-service-provider-flaw/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-15/#reporting-f425d96c2c87",
+      "cves": []
+    },
+    {
+      "title": "Amid AI-Driven Bug-Hunt Tsunami, NIST Looks to … AI",
+      "url": "https://www.darkreading.com/vulnerabilities-threats/ai-driven-bug-tsunami-nist-looks-to-ai",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-15/#reporting-f9fa1931bdf6",
+      "cves": []
+    },
+    {
+      "title": "Scottish Govt Suffers Potentially Widening Data Breach at Prosecutor's Office",
+      "url": "https://www.darkreading.com/cyberattacks-data-breaches/scottish-govt-data-breach-prosecutors-office",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-15/#reporting-9f7d0a43b985",
+      "cves": []
+    },
+    {
+      "title": "Hackers exploit macOS Screen Sharing flaw to deploy Monero miner",
+      "url": "https://www.bleepingcomputer.com/news/security/hackers-exploit-macos-screen-sharing-flaw-to-deploy-monero-miner/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-15/#reporting-f3d1727276b9",
+      "cves": []
+    },
+    {
+      "title": "The Modern Attack Chain: Rethinking Google Workspace Security in the Age of AI",
+      "url": "https://www.bleepingcomputer.com/news/security/the-modern-attack-chain-rethinking-google-workspace-security-in-the-age-of-ai/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-15/#reporting-4c9d6b022a5d",
+      "cves": []
+    },
+    {
+      "title": "What Boards Need to Know About Tech Risk",
+      "url": "https://www.darkreading.com/cyber-risk/what-boards-must-know-tech-risk",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-15/#reporting-f9f5eb360a33",
+      "cves": []
+    },
+    {
+      "title": "Max severity SAP Commerce Cloud flaw now targeted in attacks",
+      "url": "https://www.bleepingcomputer.com/news/security/max-severity-sap-commerce-cloud-flaw-now-targeted-in-attacks/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-15/#reporting-99dadd313b8c",
+      "cves": []
+    },
+    {
+      "title": "Cyera's Oasis Security Buy Is All About AI Agent Control",
+      "url": "https://www.darkreading.com/identity-access-management-security/cyera-oasis-security-acquisition-ai-agent-control",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-15/#reporting-5bfa349da239",
+      "cves": []
+    }
+  ]
+}

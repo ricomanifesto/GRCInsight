@@ -1,0 +1,88 @@
+{
+  "schema_version": 3,
+  "generated_at": "2026-09-25T17:40:08.403885Z",
+  "feed_url": "https://ricomanifesto.github.io/SentryDigest/feed.xml",
+  "feed_home_url": "https://ricomanifesto.github.io/SentryDigest/",
+  "digest_issue_date": "2026-09-25",
+  "digest_issue_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-25/",
+  "requested_model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
+  "resolved_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+  "sources": [
+    {
+      "title": "Roundcube Pre-Auth SQL Injection Flaw Actively Exploited in the Wild",
+      "url": "https://thehackernews.com/2026/09/roundcube-pre-auth-sql-injection-flaw.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-25/#reporting-8479bfbd51e5",
+      "cves": [
+        "CVE-2026-48842"
+      ]
+    },
+    {
+      "title": "WSO2 and Adobe Commerce Flaws Exploited in Attacks, Added to CISA KEV",
+      "url": "https://thehackernews.com/2026/09/wso2-and-adobe-commerce-flaws-exploited.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-25/#reporting-9b34a9a8785c",
+      "cves": [
+        "CVE-2026-5430"
+      ]
+    },
+    {
+      "title": "Anthropic rolls out up to $250 in free Claude Code credits, but only for cloud sessions",
+      "url": "https://www.bleepingcomputer.com/news/artificial-intelligence/anthropic-rolls-out-up-to-250-in-free-claude-code-credits-but-only-for-cloud-sessions/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-25/#reporting-5324567d954d",
+      "cves": []
+    },
+    {
+      "title": "OpenAI is preparing a $500 ChatGPT Pro Max plan with faster Codex",
+      "url": "https://www.bleepingcomputer.com/news/artificial-intelligence/openai-is-preparing-a-500-chatgpt-pro-max-plan-with-faster-codex/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-25/#reporting-9c3f4fd62157",
+      "cves": []
+    },
+    {
+      "title": "With the Rise of AI Agents, SOC 2 Should Adapt or Risk Irrelevance",
+      "url": "https://www.bleepingcomputer.com/news/security/with-the-rise-of-ai-agents-soc-2-should-adapt-or-risk-irrelevance/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-25/#reporting-d6c9977600d4",
+      "cves": []
+    },
+    {
+      "title": "Stopping IT Worker Scams Requires Revamped HR Process",
+      "url": "https://www.darkreading.com/cyber-risk/stopping-it-worker-scams-revamped-hr-process",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-25/#reporting-fba7dac2bfe1",
+      "cves": []
+    },
+    {
+      "title": "Compromised GitHub Actions Came Back Online and Resumed Executing Mini Shai-Hulud Malware",
+      "url": "https://thehackernews.com/2026/09/compromised-github-actions-came-back.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-25/#reporting-6c0fd01aad01",
+      "cves": []
+    },
+    {
+      "title": "PamStealer macOS Malware Adds Live C2 Payload Decryption and Multi-Layer Persistence",
+      "url": "https://thehackernews.com/2026/09/pamstealer-macos-malware-adds-live-c2.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-25/#reporting-4731c385479b",
+      "cves": []
+    },
+    {
+      "title": "Microsoft plans to deprecate Windows Deployment Services",
+      "url": "https://www.bleepingcomputer.com/news/microsoft/microsoft-to-deprecate-windows-deployment-services-after-windows-server-2025/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-25/#reporting-b77adcfbe2b6",
+      "cves": []
+    },
+    {
+      "title": "Rydox marketplace admin pleads guilty, faces 22 years in prison",
+      "url": "https://www.bleepingcomputer.com/news/security/rydox-marketplace-admin-pleads-guilty-faces-22-years-in-prison/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-25/#reporting-e20c79b40799",
+      "cves": []
+    },
+    {
+      "title": "The SOC Doesn't Need to Start Over with Every Alert",
+      "url": "https://thehackernews.com/2026/09/the-soc-doesnt-need-to-start-over-with.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-25/#reporting-5859ebb6f1f8",
+      "cves": []
+    },
+    {
+      "title": "Bitget Says Suspected North Korean Hackers Stole $351.6M After Backend Compromise",
+      "url": "https://thehackernews.com/2026/09/bitget-says-suspected-north-korean.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-25/#reporting-0fba6d21f983",
+      "cves": []
+    }
+  ]
+}

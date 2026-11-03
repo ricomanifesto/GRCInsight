@@ -1,0 +1,90 @@
+{
+  "schema_version": 3,
+  "generated_at": "2026-10-01T21:26:03.478476Z",
+  "feed_url": "https://ricomanifesto.github.io/SentryDigest/feed.xml",
+  "feed_home_url": "https://ricomanifesto.github.io/SentryDigest/",
+  "digest_issue_date": "2026-10-01",
+  "digest_issue_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-01/",
+  "requested_model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
+  "resolved_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+  "sources": [
+    {
+      "title": "CISA Adds Exploited Cisco Catalyst SD-WAN Manager Auth Bypass to KEV",
+      "url": "https://thehackernews.com/2026/10/cisa-adds-exploited-cisco-catalyst-sd.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-01/#reporting-346b23ad75b1",
+      "cves": [
+        "CVE-2026-76504"
+      ]
+    },
+    {
+      "title": "Apple CoreGraphics PoC Emerges as WhatsApp PDF Checks Hint at Possible Delivery Path",
+      "url": "https://thehackernews.com/2026/10/apple-coregraphics-poc-emerges-as.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-01/#reporting-43ea94fc4334",
+      "cves": [
+        "CVE-2026-86950"
+      ]
+    },
+    {
+      "title": "Attackers Exploit Zimbra Flaw to Deploy Web Shells and Harvest Authentication Secrets",
+      "url": "https://thehackernews.com/2026/09/attackers-exploit-zimbra-flaw-to-deploy.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-01/#reporting-fe95a2c38caf",
+      "cves": [
+        "CVE-2026-73570"
+      ]
+    },
+    {
+      "title": "Police Arrest 16-Year-Old Suspected of Running KillSec, Seize Ransomware Leak Site and Servers",
+      "url": "https://thehackernews.com/2026/10/police-arrest-16-year-old-suspected-of.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-01/#reporting-1ba8da53d09e",
+      "cves": []
+    },
+    {
+      "title": "ThreatsDay: AI-Powered Zero-Day Chain, 543K Live Secrets, Model Inspection RCE and 13 More Stories",
+      "url": "https://thehackernews.com/2026/10/threatsday-ai-powered-zero-day-chain.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-01/#reporting-ab51ae9f2bbe",
+      "cves": []
+    },
+    {
+      "title": "WordPress Backdoor Rebuilds Itself After Cleanup Using Files, Database, and Shared Memory",
+      "url": "https://thehackernews.com/2026/10/wordpress-backdoor-rebuilds-itself.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-01/#reporting-dcd4b62c704a",
+      "cves": []
+    },
+    {
+      "title": "Police dismantle KillSec ransomware gang allegedly led by 16-year-old",
+      "url": "https://www.bleepingcomputer.com/news/security/police-dismantle-killsec-ransomware-gang-allegedly-led-by-16-year-old/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-01/#reporting-624e1a7a0804",
+      "cves": []
+    },
+    {
+      "title": "The Day-One Hole in Zero Trust Architecture",
+      "url": "https://www.bleepingcomputer.com/news/security/the-day-one-hole-in-zero-trust-architecture/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-01/#reporting-929134258e6a",
+      "cves": []
+    },
+    {
+      "title": "Kiteworks patches max severity code injection vulnerability",
+      "url": "https://www.bleepingcomputer.com/news/security/kiteworks-patches-max-severity-email-protection-gateway-code-injection-vulnerability/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-01/#reporting-3e59dcb3b502",
+      "cves": []
+    },
+    {
+      "title": "Warlock Ransomware Hits Large Spanish, Portuguese Orgs",
+      "url": "https://www.darkreading.com/cyberattacks-data-breaches/warlock-ransomware-spanish-portuguese",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-01/#reporting-cb1c29fbd6b4",
+      "cves": []
+    },
+    {
+      "title": "How Financial Services Companies Can Modernize Their Software Supply Chain",
+      "url": "https://thehackernews.com/2026/10/how-financial-services-companies-can.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-01/#reporting-1866931397ea",
+      "cves": []
+    },
+    {
+      "title": "Microsoft enables Windows settings backup by default for orgs",
+      "url": "https://www.bleepingcomputer.com/news/microsoft/microsoft-enables-windows-settings-backup-by-default-for-orgs/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-01/#reporting-52279358df2a",
+      "cves": []
+    }
+  ]
+}

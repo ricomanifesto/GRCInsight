@@ -1,0 +1,90 @@
+{
+  "schema_version": 3,
+  "generated_at": "2026-09-26T16:10:04.704252Z",
+  "feed_url": "https://ricomanifesto.github.io/SentryDigest/feed.xml",
+  "feed_home_url": "https://ricomanifesto.github.io/SentryDigest/",
+  "digest_issue_date": "2026-09-26",
+  "digest_issue_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-26/",
+  "requested_model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
+  "resolved_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+  "sources": [
+    {
+      "title": "SharePoint RCE and MikroTik RouterOS Flaws Actively Exploited in the Wild",
+      "url": "https://thehackernews.com/2026/09/sharepoint-rce-and-mikrotik-routeros.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-26/#reporting-049c4c6d156c",
+      "cves": [
+        "CVE-2026-65660"
+      ]
+    },
+    {
+      "title": "CISA warns of Sharepoint, WSO2, Adobe Commerce flaws exploited in attacks",
+      "url": "https://www.bleepingcomputer.com/news/security/cisa-warns-of-sharepoint-wso2-adobe-commerce-flaws-exploited-in-attacks/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-26/#reporting-2e9b76e63d00",
+      "cves": [
+        "CVE-2026-5430"
+      ]
+    },
+    {
+      "title": "Roundcube Pre-Auth SQL Injection Flaw Actively Exploited in the Wild",
+      "url": "https://thehackernews.com/2026/09/roundcube-pre-auth-sql-injection-flaw.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-26/#reporting-8479bfbd51e5",
+      "cves": [
+        "CVE-2026-48842"
+      ]
+    },
+    {
+      "title": "Elementor CSRF Flaw Lets Attackers Take Over Sites After Admin Clicks Crafted Link",
+      "url": "https://thehackernews.com/2026/09/elementor-csrf-flaw-lets-attackers-take.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-26/#reporting-087d84aa6c29",
+      "cves": []
+    },
+    {
+      "title": "Kiteworks Urges Customers to Shut Down Systems for 9 Hours Over Possible Cyber Attack",
+      "url": "https://thehackernews.com/2026/09/kiteworks-urges-customers-to-shut-down.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-26/#reporting-16e6f1ff0925",
+      "cves": []
+    },
+    {
+      "title": "U.S. Soldier Gets 70 Months in Prison for AT&T, Verizon Extortions",
+      "url": "https://krebsonsecurity.com/2026/09/u-s-soldier-gets-70-months-in-prison-for-att-verizon-extortions/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-26/#reporting-5569bca5352e",
+      "cves": []
+    },
+    {
+      "title": "Kiteworks urges 6-hour server shutdown over potential zero-day attacks",
+      "url": "https://www.bleepingcomputer.com/news/security/kiteworks-urges-6-hour-server-shutdown-over-potential-zero-day-attacks/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-26/#reporting-3e6437721d93",
+      "cves": []
+    },
+    {
+      "title": "ShinyHunters hacked Clop leak site using Grav CMS path traversal flaw",
+      "url": "https://www.bleepingcomputer.com/news/security/shinyhunters-hacked-clop-leak-site-using-grav-cms-path-traversal-flaw/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-26/#reporting-6e342a8a97cf",
+      "cves": []
+    },
+    {
+      "title": "AI Sandbox Escapes: Why Forensic Readiness Matters More Than Containment",
+      "url": "https://www.darkreading.com/cyberattacks-data-breaches/ai-sandbox-escapes-forensic-readiness",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-26/#reporting-b8cf2c66bdcb",
+      "cves": []
+    },
+    {
+      "title": "Elementor WordPress flaw lets attackers create admin accounts",
+      "url": "https://www.bleepingcomputer.com/news/security/elementor-wordpress-flaw-lets-attackers-create-admin-accounts/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-26/#reporting-53c3f861257c",
+      "cves": []
+    },
+    {
+      "title": "What We Missed: Google Gemini Joins the AI Escape Party",
+      "url": "https://www.darkreading.com/cyber-risk/what-we-missed-google-gemini-ai-escape-party",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-26/#reporting-2776184929ae",
+      "cves": []
+    },
+    {
+      "title": "Anthropic rolls out up to $250 in free Claude Code credits, but only for cloud sessions",
+      "url": "https://www.bleepingcomputer.com/news/artificial-intelligence/anthropic-rolls-out-up-to-250-in-free-claude-code-credits-but-only-for-cloud-sessions/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-26/#reporting-5324567d954d",
+      "cves": []
+    }
+  ]
+}

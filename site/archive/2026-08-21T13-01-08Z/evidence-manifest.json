@@ -1,0 +1,90 @@
+{
+  "schema_version": 3,
+  "generated_at": "2026-08-21T13:01:08.30049Z",
+  "feed_url": "https://ricomanifesto.github.io/SentryDigest/feed.xml",
+  "feed_home_url": "https://ricomanifesto.github.io/SentryDigest/",
+  "digest_issue_date": "2026-08-21",
+  "digest_issue_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-21/",
+  "requested_model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
+  "resolved_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+  "sources": [
+    {
+      "title": "GitLab CVE-2026-19478 Comes Under Active Exploitation Within Days of Disclosure",
+      "url": "https://thehackernews.com/2026/08/gitlab-cve-2026-19478-comes-under.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-21/#reporting-7850fb529146",
+      "cves": [
+        "CVE-2026-19478"
+      ]
+    },
+    {
+      "title": "Microsoft Entra ID Flaw (CVSS 10.0) Exploited in Wild, Allows Remote Code Execution",
+      "url": "https://thehackernews.com/2026/08/microsoft-entra-id-flaw-cvss-100.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-21/#reporting-630ad3fed036",
+      "cves": [
+        "CVE-2026-69836"
+      ]
+    },
+    {
+      "title": "Attackers Exploit Zimbra SNMP Flaw for Unauthenticated Remote Code Execution",
+      "url": "https://thehackernews.com/2026/08/attackers-exploit-zimbra-snmp-flaw-for.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-21/#reporting-572e047ecd00",
+      "cves": [
+        "CVE-2026-73570"
+      ]
+    },
+    {
+      "title": "Calling on Cyber Pros to Help Defend City Hall",
+      "url": "https://www.darkreading.com/cyber-risk/calling-on-cyber-pros-to-help-city-hall",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-21/#reporting-fdc0a385d432",
+      "cves": []
+    },
+    {
+      "title": "New CUSTODY Framework Constrains AI Agents Inside the Network",
+      "url": "https://www.darkreading.com/perimeter/new-custody-framework-constrains-ai-agents-inside-network",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-21/#reporting-0c1b8ac41907",
+      "cves": []
+    },
+    {
+      "title": "Rust Supply Chain Attack Puts Build-Time Malware in Crates with 245 Million Downloads",
+      "url": "https://thehackernews.com/2026/08/rust-supply-chain-attack-puts-build.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-21/#reporting-41850b0deaa2",
+      "cves": []
+    },
+    {
+      "title": "Suspected Russian Hackers Abuse Google OAuth and WhatsApp Linking to Hijack Accounts",
+      "url": "https://thehackernews.com/2026/08/suspected-russian-hackers-abuse-google.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-21/#reporting-42c3afc04079",
+      "cves": []
+    },
+    {
+      "title": "What We Missed: Delta Flight Disrupted With Wi-Fi Hack",
+      "url": "https://www.darkreading.com/cyber-risk/delta-flight-disrupted-wi-fi-hack",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-21/#reporting-1f71631e2514",
+      "cves": []
+    },
+    {
+      "title": "Hackers poison arrayref Rust crate to push infostealer malware",
+      "url": "https://www.bleepingcomputer.com/news/security/hackers-poison-arrayref-rust-crate-to-push-infostealer-malware/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-21/#reporting-000b292e537a",
+      "cves": []
+    },
+    {
+      "title": "N-able Bug Exposes Password Vault Master Keys",
+      "url": "https://www.darkreading.com/vulnerabilities-threats/n-able-bug-password-vault-master-keys",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-21/#reporting-323fe5d7a664",
+      "cves": []
+    },
+    {
+      "title": "Money and Mindset: The Two Biggest Roadblocks to Cyber Policing",
+      "url": "https://www.darkreading.com/cybersecurity-operations/money-and-mindset-the-two-biggest-roadblocks-to-cyber-policing",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-21/#reporting-434d13dce6a3",
+      "cves": []
+    },
+    {
+      "title": "ThreatsDay: Gogs 10.0 RCE, n8n Workflow-to-RCE, $10M Reward, GLM-5.3 AI Exploit, and More",
+      "url": "https://thehackernews.com/2026/08/threatsday-gogs-100-rce-n8n-workflow-to.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-21/#reporting-50bcfcb6813f",
+      "cves": []
+    }
+  ]
+}

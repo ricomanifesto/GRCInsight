@@ -1,0 +1,94 @@
+{
+  "schema_version": 3,
+  "generated_at": "2026-09-04T16:44:26.385672Z",
+  "feed_url": "https://ricomanifesto.github.io/SentryDigest/feed.xml",
+  "feed_home_url": "https://ricomanifesto.github.io/SentryDigest/",
+  "digest_issue_date": "2026-09-04",
+  "digest_issue_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-04/",
+  "requested_model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
+  "resolved_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+  "sources": [
+    {
+      "title": "Critical Citrix NetScaler auth bypass now leveraged in attacks",
+      "url": "https://www.bleepingcomputer.com/news/security/hackers-target-critical-citrix-netscaler-auth-bypass-in-attacks/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-04/#reporting-7483ae5401bd",
+      "cves": [
+        "CVE-2026-19490"
+      ]
+    },
+    {
+      "title": "Over 440,000 Exploit Attempts Target Super Forms and Elementor Pro RCE Flaws",
+      "url": "https://thehackernews.com/2026/09/over-440000-exploit-attempts-target.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-04/#reporting-7eb26d7003dc",
+      "cves": [
+        "CVE-2026-14894"
+      ]
+    },
+    {
+      "title": "Google Releases Chrome Update to Patch Actively Exploited V8 Zero-Day",
+      "url": "https://thehackernews.com/2026/09/google-releases-chrome-update-to-patch.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-04/#reporting-49749711ba07",
+      "cves": [
+        "CVE-2026-85046"
+      ]
+    },
+    {
+      "title": "Critical Cisco Nexus 9000 Flaw Lets Unauthenticated Remote Attackers Run Code as Root",
+      "url": "https://thehackernews.com/2026/09/critical-cisco-nexus-9000-flaw-lets.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-04/#reporting-10869e1cb2f9",
+      "cves": [
+        "CVE-2026-20212"
+      ]
+    },
+    {
+      "title": "Critical Elementor Pro flaw exploited to take over WordPress sites",
+      "url": "https://www.bleepingcomputer.com/news/security/critical-elementor-pro-flaw-exploited-to-take-over-wordpress-sites/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-04/#reporting-12bd6356b4bc",
+      "cves": [
+        "CVE-2026-32475"
+      ]
+    },
+    {
+      "title": "[Virtual Event] What Every Enterprise Should Know About Securing Cloud Assets in the Age of AI",
+      "url": "https://www.darkreading.com/events/virtual-event-what-every-enterprise-know-securing-cloud-2026",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-04/#reporting-a5c502fdcf06",
+      "cves": []
+    },
+    {
+      "title": "[Virtual Event] Building a Secure AI Strategy for the Enterprise",
+      "url": "https://www.darkreading.com/events/virtual-event-building-secure-ai-strategy-enterprise-2026",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-04/#reporting-dca03da12610",
+      "cves": []
+    },
+    {
+      "title": "New Ted Backdoor Hides Inside Victims' Own HAProxy Builds to Intercept Web Traffic",
+      "url": "https://thehackernews.com/2026/09/new-ted-backdoor-hides-inside-victims.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-04/#reporting-b1ea25ffc370",
+      "cves": []
+    },
+    {
+      "title": "Microsoft says some users can’t open the Teams desktop client",
+      "url": "https://www.bleepingcomputer.com/news/microsoft/microsoft-says-some-users-cant-open-the-teams-desktop-client/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-04/#reporting-fface7014a8e",
+      "cves": []
+    },
+    {
+      "title": "39 New Methods That Compromise Passkey Authentication",
+      "url": "https://www.bleepingcomputer.com/news/security/39-new-methods-that-compromise-passkey-authentication/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-04/#reporting-a1caa1ba3e69",
+      "cves": []
+    },
+    {
+      "title": "New CrowdStrike 'FalconFlank' zero-day grants SYSTEM privileges",
+      "url": "https://www.bleepingcomputer.com/news/security/new-crowdstrike-falconflank-zero-day-grants-system-privileges/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-04/#reporting-beea4dd696f2",
+      "cves": []
+    },
+    {
+      "title": "AI Is Ending the Era of Hidden Vulnerabilities — Are Vendors Ready?",
+      "url": "https://www.darkreading.com/vulnerabilities-threats/ai-ending-era-hidden-vulnerabilities-are-vendors-ready",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-04/#reporting-e611d74c39b6",
+      "cves": []
+    }
+  ]
+}

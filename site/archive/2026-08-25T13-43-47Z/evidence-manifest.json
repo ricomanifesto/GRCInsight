@@ -1,0 +1,86 @@
+{
+  "schema_version": 3,
+  "generated_at": "2026-08-25T13:43:47.86254Z",
+  "feed_url": "https://ricomanifesto.github.io/SentryDigest/feed.xml",
+  "feed_home_url": "https://ricomanifesto.github.io/SentryDigest/",
+  "digest_issue_date": "2026-08-21",
+  "digest_issue_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-21/",
+  "requested_model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
+  "resolved_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+  "sources": [
+    {
+      "title": "GitLab CVE-2026-19478 Comes Under Active Exploitation Within Days of Disclosure",
+      "url": "https://thehackernews.com/2026/08/gitlab-cve-2026-19478-comes-under.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-21/#reporting-7850fb529146",
+      "cves": [
+        "CVE-2026-19478"
+      ]
+    },
+    {
+      "title": "14 Trojanized npm Packages Drop RedC2 4.0 Linux Backdoor With AI-Assisted C2",
+      "url": "https://thehackernews.com/2026/08/14-trojanized-npm-packages-drop-redc2.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-21/#reporting-4b6135796923",
+      "cves": []
+    },
+    {
+      "title": "New SynkLoader malware pushed in Microsoft Teams phishing campaign",
+      "url": "https://www.bleepingcomputer.com/news/security/new-synkloader-malware-pushed-in-microsoft-teams-phishing-campaign/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-21/#reporting-e9e0eed4def8",
+      "cves": []
+    },
+    {
+      "title": "OWASP Flags Top AI Skill Risks in New Security Blueprint",
+      "url": "https://www.darkreading.com/application-security/owasp-flags-top-ai-skill-risks-security-blueprint",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-21/#reporting-52236a821b54",
+      "cves": []
+    },
+    {
+      "title": "Hundreds of leaked AWS keys give full control over corporate accounts",
+      "url": "https://www.bleepingcomputer.com/news/security/hundreds-of-leaked-aws-keys-give-full-control-over-corporate-accounts/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-21/#reporting-5af2f8bcbf22",
+      "cves": []
+    },
+    {
+      "title": "Microsoft Defender's Own Driver Can Be Weaponized to Delete Security Software at Boot",
+      "url": "https://thehackernews.com/2026/08/microsoft-defenders-own-driver-can-be.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-21/#reporting-befbe5399e80",
+      "cves": []
+    },
+    {
+      "title": "Android Car Malware Spreads Through Built-In Updaters for Ad Fraud, Proxy Botnet",
+      "url": "https://thehackernews.com/2026/08/android-car-malware-spreads-through.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-21/#reporting-a068075960f8",
+      "cves": []
+    },
+    {
+      "title": "Microsoft blames Windows gaming issues on RGB lighting devices",
+      "url": "https://www.bleepingcomputer.com/news/microsoft/microsoft-blames-windows-gaming-issues-on-rgb-lighting-devices/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-21/#reporting-68f7c56418ab",
+      "cves": []
+    },
+    {
+      "title": "Is Online Privacy Possible? How Digital Identities Can Help",
+      "url": "https://www.bleepingcomputer.com/news/security/is-online-privacy-possible-how-digital-identities-can-help/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-21/#reporting-6b617776fd34",
+      "cves": []
+    },
+    {
+      "title": "Calling on Cyber Pros to Help Defend City Hall",
+      "url": "https://www.darkreading.com/cyber-risk/cyber-pros-help-city-hall",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-21/#reporting-1771315afd33",
+      "cves": []
+    },
+    {
+      "title": "Microsoft rolls out Classic Outlook theme for New Outlook users",
+      "url": "https://www.bleepingcomputer.com/news/microsoft/microsoft-rolls-out-classic-outlook-theme-for-new-outlook-users/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-21/#reporting-63d2761273e2",
+      "cves": []
+    },
+    {
+      "title": "OpenAI Adds Controls That Should've Been There Already",
+      "url": "https://www.darkreading.com/application-security/openai-adds-controls-already",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-21/#reporting-742cf8651e8b",
+      "cves": []
+    }
+  ]
+}

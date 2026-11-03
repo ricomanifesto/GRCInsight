@@ -1,0 +1,90 @@
+{
+  "schema_version": 3,
+  "generated_at": "2026-10-05T21:25:01.769011Z",
+  "feed_url": "https://ricomanifesto.github.io/SentryDigest/feed.xml",
+  "feed_home_url": "https://ricomanifesto.github.io/SentryDigest/",
+  "digest_issue_date": "2026-10-05",
+  "digest_issue_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-05/",
+  "requested_model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
+  "resolved_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+  "sources": [
+    {
+      "title": "Microsoft Exchange Flaw Lets Authenticated Attackers Read Other Users' Mailboxes",
+      "url": "https://thehackernews.com/2026/10/microsoft-exchange-flaw-lets.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-05/#reporting-00260114e730",
+      "cves": [
+        "CVE-2026-96940"
+      ]
+    },
+    {
+      "title": "Attackers Target Rejetto HFS Flaw That Enables Admin Session Forgery and RCE",
+      "url": "https://thehackernews.com/2026/10/attackers-target-rejetto-hfs-flaw-that.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-05/#reporting-00cd8ad7dcd1",
+      "cves": [
+        "CVE-2026-61500"
+      ]
+    },
+    {
+      "title": "New NetScaler Zero-Day Exploited in Targeted Attacks Can Knock SAML Deployments Offline",
+      "url": "https://thehackernews.com/2026/10/new-netscaler-zero-day-exploited-in.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-05/#reporting-6f62c8557a69",
+      "cves": [
+        "CVE-2026-88779"
+      ]
+    },
+    {
+      "title": "IQVIA fined $7.8 million for failing to properly anonymize health data",
+      "url": "https://www.bleepingcomputer.com/news/security/iqvia-fined-78-million-for-failing-to-properly-anonymize-health-data/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-05/#reporting-c4a34e321696",
+      "cves": []
+    },
+    {
+      "title": "Chinese Hackers Impersonate US Officials for AI Cyber Espionage",
+      "url": "https://www.darkreading.com/cyberattacks-data-breaches/chinese-actor-impersonates-us-officials-cyber-espionage",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-05/#reporting-0a4d991d1221",
+      "cves": []
+    },
+    {
+      "title": "Denmark population registry data breach affects 8.8 million people",
+      "url": "https://www.bleepingcomputer.com/news/security/denmark-population-registry-data-breach-affects-88-million-people/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-05/#reporting-2b5b7c2cd2df",
+      "cves": []
+    },
+    {
+      "title": "New Dell System Update flaw lets hackers gain root privileges",
+      "url": "https://www.bleepingcomputer.com/news/security/new-dell-system-update-flaw-lets-hackers-gain-root-privileges/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-05/#reporting-8529f42bd2dd",
+      "cves": []
+    },
+    {
+      "title": "South Korea probes bank breaches amid suspected AI-powered attacks",
+      "url": "https://www.bleepingcomputer.com/news/security/south-korea-probes-bank-breaches-amid-suspected-ai-powered-attacks/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-05/#reporting-d9fe3a1e916f",
+      "cves": []
+    },
+    {
+      "title": "⚡ Weekly Recap: NetScaler and FortiMail 0-Days, AI Coding Leaks, Spectre v2 and Ransomware Arrests",
+      "url": "https://thehackernews.com/2026/10/weekly-recap-netscaler-and-fortimail-0.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-05/#reporting-634898ddff2f",
+      "cves": []
+    },
+    {
+      "title": "tenfold CE: Our free Identity Governance tool just got 2 new features",
+      "url": "https://www.bleepingcomputer.com/news/security/tenfold-ce-our-free-identity-governance-tool-just-got-2-new-features/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-05/#reporting-8cedd832950d",
+      "cves": []
+    },
+    {
+      "title": "Alleged dev of Ploutus ATM malware appears in US court after arrest",
+      "url": "https://www.bleepingcomputer.com/news/security/suspected-dev-of-ploutus-atm-malware-appears-in-us-court-after-arrest/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-05/#reporting-7f005eff5309",
+      "cves": []
+    },
+    {
+      "title": "Need for Speed: AI-Driven Attacks Are Changing Security Strategies",
+      "url": "https://www.darkreading.com/cyber-risk/ai-attacks-security-strategies",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-05/#reporting-97f2c37978ca",
+      "cves": []
+    }
+  ]
+}

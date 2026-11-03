@@ -1,0 +1,94 @@
+{
+  "schema_version": 3,
+  "generated_at": "2026-08-18T13:01:22.726085Z",
+  "feed_url": "https://ricomanifesto.github.io/SentryDigest/feed.xml",
+  "feed_home_url": "https://ricomanifesto.github.io/SentryDigest/",
+  "digest_issue_date": "2026-08-18",
+  "digest_issue_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-18/",
+  "requested_model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
+  "resolved_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+  "sources": [
+    {
+      "title": "Critical GitLab GraphQL Flaw Could Let Unauthenticated Attackers Delete Public Projects",
+      "url": "https://thehackernews.com/2026/08/critical-gitlab-graphql-flaw-could-let.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-18/#reporting-7ed54789e434",
+      "cves": [
+        "CVE-2026-19478"
+      ]
+    },
+    {
+      "title": "Forminator WordPress Flaw Can Enable Unauthenticated RCE via Malicious PHP Uploads",
+      "url": "https://thehackernews.com/2026/08/forminator-wordpress-flaw-can-enable.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-18/#reporting-b83af1627135",
+      "cves": [
+        "CVE-2026-15748"
+      ]
+    },
+    {
+      "title": "Certighost and the Privilege Hiding in Your Certificate Authority",
+      "url": "https://www.bleepingcomputer.com/news/security/certighost-and-the-privilege-hiding-in-your-certificate-authority/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-18/#reporting-c7510fc0ce5f",
+      "cves": [
+        "CVE-2026-54121"
+      ]
+    },
+    {
+      "title": "Microsoft working on Defender patch for ShieldBreak zero-day",
+      "url": "https://www.bleepingcomputer.com/news/security/microsoft-working-on-defender-patch-for-shieldbreak-zero-day/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-18/#reporting-9da7db7cc2a6",
+      "cves": [
+        "CVE-2026-69414"
+      ]
+    },
+    {
+      "title": "Suspected China-Nexus Actor Exploits VMware vCenter Flaw, Deploys Babuk-Derived Ransomware",
+      "url": "https://thehackernews.com/2026/08/suspected-china-nexus-actor-exploits.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-18/#reporting-f632e57bed8c",
+      "cves": [
+        "CVE-2026-59310"
+      ]
+    },
+    {
+      "title": "Microsoft confirms outage affecting search in Microsoft 365 apps",
+      "url": "https://www.bleepingcomputer.com/news/microsoft/microsoft-working-to-fix-bug-behind-microsoft-365-search-issues/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-18/#reporting-727e9dd4d812",
+      "cves": []
+    },
+    {
+      "title": "SafePal Hardware Wallet Maker Says Flaw Exposed Data of Nearly 40,000 Customers",
+      "url": "https://thehackernews.com/2026/08/safepal-hardware-wallet-maker-says-flaw.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-18/#reporting-5e10185b7da2",
+      "cves": []
+    },
+    {
+      "title": "Microsoft starts removing WMIC tool used by cybercriminals",
+      "url": "https://www.bleepingcomputer.com/news/microsoft/microsoft-removes-wmic-lolbin-tool-in-windows-11-beta-builds/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-18/#reporting-25a892e0e074",
+      "cves": []
+    },
+    {
+      "title": "CISA Flags Actively Exploited Ray Flaw That Can Trigger Browser-Based RCE",
+      "url": "https://thehackernews.com/2026/08/cisa-flags-actively-exploited-ray-flaw.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-18/#reporting-c8f5936ef6e3",
+      "cves": []
+    },
+    {
+      "title": "Video Call Exploit Chains Two Flaws in Unisoc Modems",
+      "url": "https://www.darkreading.com/mobile-security/video-call-exploit-chains-two-flaws-unisoc-modems",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-18/#reporting-41f91fb7fcb0",
+      "cves": []
+    },
+    {
+      "title": "'Turf War' Between Claude Agents Leads to Self-Replicating Malware",
+      "url": "https://www.darkreading.com/threat-intelligence/turf-war-claude-agents-self-replicating-malware",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-18/#reporting-9b6a27ccd9dd",
+      "cves": []
+    },
+    {
+      "title": "Hacker claims 3.6 million Azure account records stolen from major companies",
+      "url": "https://www.bleepingcomputer.com/news/security/hacker-claims-36-million-azure-account-records-stolen-from-major-companies/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-08-18/#reporting-51cdb8f86fcc",
+      "cves": []
+    }
+  ]
+}

@@ -1,0 +1,92 @@
+{
+  "schema_version": 3,
+  "generated_at": "2026-10-05T15:24:23.259372Z",
+  "feed_url": "https://ricomanifesto.github.io/SentryDigest/feed.xml",
+  "feed_home_url": "https://ricomanifesto.github.io/SentryDigest/",
+  "digest_issue_date": "2026-10-05",
+  "digest_issue_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-05/",
+  "requested_model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
+  "resolved_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+  "sources": [
+    {
+      "title": "Attackers Target Rejetto HFS Flaw That Enables Admin Session Forgery and RCE",
+      "url": "https://thehackernews.com/2026/10/attackers-target-rejetto-hfs-flaw-that.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-05/#reporting-00cd8ad7dcd1",
+      "cves": [
+        "CVE-2026-61500"
+      ]
+    },
+    {
+      "title": "New NetScaler Zero-Day Exploited in Targeted Attacks Can Knock SAML Deployments Offline",
+      "url": "https://thehackernews.com/2026/10/new-netscaler-zero-day-exploited-in.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-05/#reporting-6f62c8557a69",
+      "cves": [
+        "CVE-2026-88779"
+      ]
+    },
+    {
+      "title": "Dell CSM Flaws Enable Unauthenticated Admin Access and Root on Kubernetes Nodes",
+      "url": "https://thehackernews.com/2026/10/dell-csm-flaws-enable-unauthenticated.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-05/#reporting-5f13530361d7",
+      "cves": [
+        "CVE-2026-63688"
+      ]
+    },
+    {
+      "title": "Apple Plans Tighter macOS Full Disk Access Controls Over AI Agent Data Access",
+      "url": "https://thehackernews.com/2026/10/apple-plans-tighter-macos-full-disk.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-05/#reporting-b4cc986e4abe",
+      "cves": []
+    },
+    {
+      "title": "OpenAI will show visual ads in ChatGPT while you generate images",
+      "url": "https://www.bleepingcomputer.com/news/artificial-intelligence/openai-will-show-visual-ads-in-chatgpt-while-you-generate-images/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-05/#reporting-56efa4232e03",
+      "cves": []
+    },
+    {
+      "title": "Microsoft: Windows KB5124010 update crashes some games and apps",
+      "url": "https://www.bleepingcomputer.com/news/microsoft/microsoft-windows-kb5124010-update-crashes-some-games-and-apps/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-05/#reporting-4804d8ee1798",
+      "cves": []
+    },
+    {
+      "title": "Google halts open-source bug bounty program amid AI spam surge",
+      "url": "https://www.bleepingcomputer.com/news/google/google-halts-open-source-bug-bounty-program-amid-ai-spam-surge/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-05/#reporting-64e40df3b34a",
+      "cves": []
+    },
+    {
+      "title": "Citrix patches NetScaler SAML zero-day exploited in attacks",
+      "url": "https://www.bleepingcomputer.com/news/security/citrix-patches-netscaler-saml-zero-day-exploited-in-attacks/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-05/#reporting-8873deea669b",
+      "cves": [
+        "CVE-2026-88779"
+      ]
+    },
+    {
+      "title": "Anthropic asks Claude users to share voice data for AI model training",
+      "url": "https://www.bleepingcomputer.com/news/artificial-intelligence/anthropic-asks-claude-users-to-share-voice-data-for-ai-model-training/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-05/#reporting-36473df9dd8c",
+      "cves": []
+    },
+    {
+      "title": "ShinyHunters Suspect Rey Reportedly Detained in Jordan, Helping FBI Identify Group Members",
+      "url": "https://thehackernews.com/2026/10/shinyhunters-suspect-rey-reportedly.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-05/#reporting-5b2c328286db",
+      "cves": []
+    },
+    {
+      "title": "China-Aligned TA419 Targets U.S. AI Policy Experts With Microsoft AitM Phishing",
+      "url": "https://thehackernews.com/2026/10/china-aligned-ta419-targets-us-ai.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-05/#reporting-aac5cc1a7d26",
+      "cves": []
+    },
+    {
+      "title": "Google Gemini could soon get full access to your Mac’s files, apps and the web",
+      "url": "https://www.bleepingcomputer.com/news/google/google-gemini-could-soon-get-full-access-to-your-macs-files-apps-and-the-web/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-10-05/#reporting-4e1146b9767f",
+      "cves": []
+    }
+  ]
+}

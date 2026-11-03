@@ -1,0 +1,88 @@
+{
+  "schema_version": 3,
+  "generated_at": "2026-09-16T04:16:50.997251Z",
+  "feed_url": "https://ricomanifesto.github.io/SentryDigest/feed.xml",
+  "feed_home_url": "https://ricomanifesto.github.io/SentryDigest/",
+  "digest_issue_date": "2026-09-15",
+  "digest_issue_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-15/",
+  "requested_model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
+  "resolved_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+  "sources": [
+    {
+      "title": "Cisco Secure Email Gateway Flaw Exploited in the Wild, Enables Root Command Execution",
+      "url": "https://thehackernews.com/2026/09/cisco-secure-email-gateway-flaw.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-15/#reporting-afc835b3ebd2",
+      "cves": [
+        "CVE-2026-76461"
+      ]
+    },
+    {
+      "title": "Maximum Severity GitLab Flaw Puts Supply Chains at Risk",
+      "url": "https://www.darkreading.com/cyberattacks-data-breaches/maximum-severity-gitlab-flaw-supply-chains-risk",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-15/#reporting-238d9d5bfc83",
+      "cves": [
+        "CVE-2026-85706"
+      ]
+    },
+    {
+      "title": "Malcious Admin Menu Editor Pro plugin backdoors 1,500 WordPress sites",
+      "url": "https://www.bleepingcomputer.com/news/security/malcious-admin-menu-editor-pro-plugin-backdoors-1-500-wordpress-sites/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-15/#reporting-85fda3d5eeb6",
+      "cves": []
+    },
+    {
+      "title": "Microsoft Issues Emergency Fixes After Massive Patch Tuesday",
+      "url": "https://www.darkreading.com/application-security/microsoft-emergency-fixes-patch-tuesday",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-15/#reporting-5b3e6060de6c",
+      "cves": []
+    },
+    {
+      "title": "Black Hat USA 2026 | The 'Breaking' News: The OpenAI–Hugging Face Incident",
+      "url": "https://www.darkreading.com/vulnerabilities-threats/bhusa26huggingfacetalk",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-15/#reporting-990957c2387d",
+      "cves": []
+    },
+    {
+      "title": "KREMLIN Banking Malware Hijacks Chrome and Edge to Steal Credentials and Session Tokens",
+      "url": "https://thehackernews.com/2026/09/kremlin-banking-malware-hijacks-chrome.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-15/#reporting-e6910dbe4779",
+      "cves": []
+    },
+    {
+      "title": "VectraRAT Can Hack Windows Enterprises for $250 per Month",
+      "url": "https://www.darkreading.com/endpoint-security/vectrarat-hack-windows-enterprises",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-15/#reporting-e55cfacdec13",
+      "cves": []
+    },
+    {
+      "title": "CenterPoint Energy confirms customer data stolen in cyberattack",
+      "url": "https://www.bleepingcomputer.com/news/security/centerpoint-energy-confirms-customer-data-stolen-in-cyberattack/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-15/#reporting-17561f6ddeba",
+      "cves": []
+    },
+    {
+      "title": "Iranian Hackers Use Telegram-Controlled Malware to Spy on Dissidents and Journalists",
+      "url": "https://thehackernews.com/2026/09/iranian-hackers-use-telegram-controlled.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-15/#reporting-41594bea7c5a",
+      "cves": []
+    },
+    {
+      "title": "BambooToken Malware Uses MQTT to Control Windows and Linux Systems",
+      "url": "https://thehackernews.com/2026/09/bambootoken-malware-uses-mqtt-to.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-15/#reporting-999d56a1d809",
+      "cves": []
+    },
+    {
+      "title": "BambooToken malware controls Windows and Linux systems via MQTT",
+      "url": "https://www.bleepingcomputer.com/news/security/bambootoken-malware-controls-windows-and-linux-systems-via-mqtt/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-15/#reporting-05ce5f8d2829",
+      "cves": []
+    },
+    {
+      "title": "Hackers target WordPress sites via third-party WooCommerce plugin",
+      "url": "https://www.bleepingcomputer.com/news/security/hackers-target-wordpress-sites-via-third-party-woocommerce-plugin/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-15/#reporting-beff2a4f92d5",
+      "cves": []
+    }
+  ]
+}

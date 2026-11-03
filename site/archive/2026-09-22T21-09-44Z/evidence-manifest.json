@@ -1,0 +1,96 @@
+{
+  "schema_version": 3,
+  "generated_at": "2026-09-22T21:09:44.238117Z",
+  "feed_url": "https://ricomanifesto.github.io/SentryDigest/feed.xml",
+  "feed_home_url": "https://ricomanifesto.github.io/SentryDigest/",
+  "digest_issue_date": "2026-09-22",
+  "digest_issue_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-22/",
+  "requested_model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
+  "resolved_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+  "sources": [
+    {
+      "title": "D-Link warns of max severity zero-day bug in DIR-822A routers",
+      "url": "https://www.bleepingcomputer.com/news/security/d-link-warns-of-max-severity-zero-day-bug-in-dir-822a-routers/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-22/#reporting-16a35ceaca98",
+      "cves": [
+        "CVE-2026-86296"
+      ]
+    },
+    {
+      "title": "New CVSS 10.0 VeloCloud Orchestrator Flaw Actively Exploited in Certificate-Based Setups",
+      "url": "https://thehackernews.com/2026/09/new-cvss-100-velocloud-orchestrator.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-22/#reporting-f619ad1c6009",
+      "cves": [
+        "CVE-2026-93952"
+      ]
+    },
+    {
+      "title": "New Linux Kernel Flaw Gives ARM64 KVM Guests Read-Write Access to Host Memory",
+      "url": "https://thehackernews.com/2026/09/new-linux-kernel-flaw-gives-arm64-kvm.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-22/#reporting-319e5d081a9a",
+      "cves": [
+        "CVE-2026-89775"
+      ]
+    },
+    {
+      "title": "SharePoint Flaw Initially Listed as Spoofing by Microsoft Enables Authenticated RCE",
+      "url": "https://thehackernews.com/2026/09/sharepoint-flaw-initially-listed-as.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-22/#reporting-b3e51b621cf3",
+      "cves": [
+        "CVE-2026-65660"
+      ]
+    },
+    {
+      "title": "WordPress Comment2Shell Flaw Can Turn Anonymous Comment XSS Into RCE via Admin Session",
+      "url": "https://thehackernews.com/2026/09/wordpress-comment2shell-flaw-can-turn.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-22/#reporting-fc67da5b97ae",
+      "cves": [
+        "CVE-2026-93485"
+      ]
+    },
+    {
+      "title": "Zyxel and Veeam Flaws Under Active Exploitation With Command and SYSTEM Access",
+      "url": "https://thehackernews.com/2026/09/zyxel-and-veeam-flaws-under-active.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-22/#reporting-b6c97dd33bcf",
+      "cves": [
+        "CVE-2026-7273"
+      ]
+    },
+    {
+      "title": "Check Point warns of Management Server zero-day exploited in attacks",
+      "url": "https://www.bleepingcomputer.com/news/security/check-point-patches-management-server-zero-day-exploited-in-attacks/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-22/#reporting-20fee5056b0e",
+      "cves": []
+    },
+    {
+      "title": "EvilTokens PhaaS disrupted after compromising 12,000 Microsoft accounts",
+      "url": "https://www.bleepingcomputer.com/news/security/eviltokens-phaas-disrupted-after-compromising-12-000-microsoft-accounts/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-22/#reporting-684de1d265d4",
+      "cves": []
+    },
+    {
+      "title": "Webinar tomorrow: Inside real-world Google Workspace breaches",
+      "url": "https://www.bleepingcomputer.com/news/security/webinar-tomorrow-inside-real-world-google-workspace-breaches/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-22/#reporting-eac3948f2b43",
+      "cves": []
+    },
+    {
+      "title": "AI Agents Are Rewriting the Rules of Lateral Movement",
+      "url": "https://thehackernews.com/2026/09/ai-agents-are-rewriting-rules-of.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-22/#reporting-456273433b44",
+      "cves": []
+    },
+    {
+      "title": "More Than a Third of Industrial Orgs See Cybersecurity Risk as a Top Obstacle to Growth, Study Finds",
+      "url": "https://www.darkreading.com/cyber-risk/third-industrial-orgs-see-cybersecurity-risk-top-obstacle",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-22/#reporting-3e22df20a883",
+      "cves": []
+    },
+    {
+      "title": "DORA Year Two: Can Your SOC Actually See the Attack?",
+      "url": "https://thehackernews.com/2026/09/dora-year-two-can-your-soc-actually-see.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-22/#reporting-7a101672fcce",
+      "cves": []
+    }
+  ]
+}

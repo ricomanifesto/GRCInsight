@@ -1,0 +1,86 @@
+{
+  "schema_version": 3,
+  "generated_at": "2026-09-25T11:35:22.276519Z",
+  "feed_url": "https://ricomanifesto.github.io/SentryDigest/feed.xml",
+  "feed_home_url": "https://ricomanifesto.github.io/SentryDigest/",
+  "digest_issue_date": "2026-09-25",
+  "digest_issue_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-25/",
+  "requested_model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
+  "resolved_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+  "sources": [
+    {
+      "title": "Attackers Exploit WordPress CVE-2026-87902 Within Hours of Disclosure",
+      "url": "https://thehackernews.com/2026/09/attackers-exploit-wordpress-cve-2026.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-25/#reporting-baff1d5496fd",
+      "cves": [
+        "CVE-2026-87902"
+      ]
+    },
+    {
+      "title": "'Salesbleed' Exploits Salesforce Agents to Enable Slack Phishing",
+      "url": "https://www.darkreading.com/application-security/salesbleed-exploits-salesforce-agents-slack-phishing",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-25/#reporting-9e7b4de9cac3",
+      "cves": []
+    },
+    {
+      "title": "MacSync malware uses public iCloud calendars to deliver new payloads",
+      "url": "https://www.bleepingcomputer.com/news/security/macsync-malware-uses-public-icloud-calendars-to-deliver-new-payloads/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-25/#reporting-7265697f416b",
+      "cves": []
+    },
+    {
+      "title": "SectopRAT Returns, Hiding Inside a Legitimate Application",
+      "url": "https://www.darkreading.com/cyberattacks-data-breaches/sectoprat-returns-hiding-inside-legitimate-application",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-25/#reporting-4e2ff3ee1aa8",
+      "cves": []
+    },
+    {
+      "title": "New Carbonato malware uses AI agents to hijack exposed Docker hosts",
+      "url": "https://www.bleepingcomputer.com/news/security/new-carbonato-malware-uses-ai-agents-to-hijack-exposed-docker-hosts/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-25/#reporting-8692e38436e8",
+      "cves": []
+    },
+    {
+      "title": "Unpatched OnePlus Flaws Let Installed Android Apps Gain Root Without Permissions",
+      "url": "https://thehackernews.com/2026/09/unpatched-oneplus-flaws-let-installed.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-25/#reporting-7a9b3e084e40",
+      "cves": []
+    },
+    {
+      "title": "ThreatsDay: AI Search Poisoning, AI Coding Tool Leaking Repos, One-Click Code Execution and 13 More Stories",
+      "url": "https://thehackernews.com/2026/09/threatsday-ai-search-poisoning-ai.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-25/#reporting-37f6b04fa6f0",
+      "cves": []
+    },
+    {
+      "title": "Exposed GitLab project email addresses let attackers push code",
+      "url": "https://www.bleepingcomputer.com/news/security/exposed-gitlab-project-email-addresses-let-attackers-push-code/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-25/#reporting-d8d3bf9e01bc",
+      "cves": []
+    },
+    {
+      "title": "Placeholder third-party[.]com Referenced Across 1,700+ Repositories Now Serves Malicious Content",
+      "url": "https://thehackernews.com/2026/09/placeholder-third-partycom-referenced.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-25/#reporting-e32e04002703",
+      "cves": []
+    },
+    {
+      "title": "3 Cyber Threats That Defined the Summer of 2026",
+      "url": "https://www.darkreading.com/cyberattacks-data-breaches/3-cyber-threats-defined-summer-2026",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-25/#reporting-3f4d35272a0b",
+      "cves": []
+    },
+    {
+      "title": "Hacked Ukrainian Sites Serve Fake Cloudflare ClickFix Lures for Psychedelic Stealer",
+      "url": "https://thehackernews.com/2026/09/hacked-ukrainian-sites-serve-fake.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-25/#reporting-f6922c0e9c4b",
+      "cves": []
+    },
+    {
+      "title": "How to Build A SASE Framework for Modern Cybersecurity",
+      "url": "https://www.darkreading.com/cloud-security/how-to-build-sase-framework",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-25/#reporting-acf3df0908a9",
+      "cves": []
+    }
+  ]
+}

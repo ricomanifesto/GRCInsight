@@ -1,0 +1,93 @@
+{
+  "schema_version": 3,
+  "generated_at": "2026-09-13T04:13:30.438202Z",
+  "feed_url": "https://ricomanifesto.github.io/SentryDigest/feed.xml",
+  "feed_home_url": "https://ricomanifesto.github.io/SentryDigest/",
+  "digest_issue_date": "2026-09-12",
+  "digest_issue_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-12/",
+  "requested_model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
+  "resolved_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+  "sources": [
+    {
+      "title": "CISA Adds 5 Actively Exploited Artifactory, ScreenConnect, and RouterOS Flaws to KEV",
+      "url": "https://thehackernews.com/2026/09/cisa-adds-5-actively-exploited.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-12/#reporting-0ddc7c58e041",
+      "cves": [
+        "CVE-2026-42016"
+      ]
+    },
+    {
+      "title": "Dutch NCSC: Critical Check Point VPN flaws exploitation is imminent",
+      "url": "https://www.bleepingcomputer.com/news/security/dutch-ncsc-critical-check-point-vpn-flaws-exploitation-is-imminent/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-12/#reporting-59b3d76728f8",
+      "cves": [
+        "CVE-2026-85102",
+        "CVE-2026-85103"
+      ]
+    },
+    {
+      "title": "GitLab CVSS 10 File-Read Flaw Draws In-the-Wild Probes After Disclosure",
+      "url": "https://thehackernews.com/2026/09/gitlab-cvss-10-file-read-flaw-draws-in.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-12/#reporting-a8b89596a45d",
+      "cves": [
+        "CVE-2026-85706"
+      ]
+    },
+    {
+      "title": "Cisco FMC Flaws Exploited to Steal Credentials and Deploy Qilin Ransomware",
+      "url": "https://thehackernews.com/2026/09/cisco-fmc-flaws-exploited-to-steal.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-12/#reporting-788925358fae",
+      "cves": [
+        "CVE-2026-20079"
+      ]
+    },
+    {
+      "title": "When the Whole Company Adopts AI: What It Does to Your SOC",
+      "url": "https://thehackernews.com/2026/09/when-whole-company-adopts-ai-what-it.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-12/#reporting-d66479afd965",
+      "cves": []
+    },
+    {
+      "title": "OpenAI Agents Linked to RubyGems Campaign That Gained RCE on RubyDoc Servers",
+      "url": "https://thehackernews.com/2026/09/openai-agents-linked-to-rubygems.html",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-12/#reporting-f05890c0a6ff",
+      "cves": []
+    },
+    {
+      "title": "Hackers abused Claude to extract secrets from 1.8M Android apps",
+      "url": "https://www.bleepingcomputer.com/news/security/hackers-abused-claude-to-extract-secrets-from-18m-android-apps/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-12/#reporting-ed5e0e272a95",
+      "cves": []
+    },
+    {
+      "title": "Threat Actor Generates 1M Personalized Fraud Emails in 3 Days",
+      "url": "https://www.darkreading.com/cyberattacks-data-breaches/1m-personalized-fraud-emails-3-days",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-12/#reporting-9846387cf4d2",
+      "cves": []
+    },
+    {
+      "title": "Florida confirms DMV database breached via stolen police account",
+      "url": "https://www.bleepingcomputer.com/news/security/florida-confirms-dmv-database-breached-via-stolen-police-account/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-12/#reporting-a16d62911725",
+      "cves": []
+    },
+    {
+      "title": "CISA Calls for More Guidance, Less Spin, as Cyber Outages Escalate",
+      "url": "https://www.darkreading.com/cyber-risk/cisa-calls-for-more-guidance-less-spin-as-cyber-outages-escalate",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-12/#reporting-c299141b7513",
+      "cves": []
+    },
+    {
+      "title": "Why AI Is So Good at Scamming Humans",
+      "url": "https://www.darkreading.com/cyber-risk/ai-scamming-humans",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-12/#reporting-149efb9377d4",
+      "cves": []
+    },
+    {
+      "title": "Passkey-themed phishing attacks lead to Microsoft 365 data theft",
+      "url": "https://www.bleepingcomputer.com/news/security/passkey-themed-phishing-attacks-lead-to-microsoft-365-data-theft/",
+      "digest_url": "https://ricomanifesto.github.io/SentryDigest/archive/2026-09-12/#reporting-82dfd2b2ae38",
+      "cves": []
+    }
+  ]
+}
