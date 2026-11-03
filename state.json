@@ -21,6 +21,14 @@
       "handle": "report_20261103_181529_349",
       "run_id": "41691893021",
       "stage": "invoked"
+    },
+    {
+      "admission_key": "digest:3fd4e6d1cd052b5ee8f858379699675f260309f7",
+      "at": "2026-11-03T18:16:09.476Z",
+      "binding": "none",
+      "outcome": "retained",
+      "run_id": "41691893021",
+      "stage": "completed"
     }
   ],
   "schema_version": 1,
