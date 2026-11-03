@@ -2,6 +2,7 @@ name: Generate GRC Report with Lambda
 
 on:
   repository_dispatch:
+    types: [sentrydigest-updated]
   schedule:
     - cron: '0 13 * * *'  # Once daily at 8 AM CT (13:00 UTC)
   workflow_dispatch:
@@ -10,6 +11,10 @@ on:
         description: 'RSS Feed URL'
         required: false
         default: 'https://ricomanifesto.github.io/SentryDigest/feed.xml'
+      readmit:
+        description: 'Re-admit after an uncertain earlier generation (true/false)'
+        required: false
+        default: 'false'
 
 concurrency:
   group: grcinsight-report-${{ github.ref }}
@@ -27,6 +32,8 @@ jobs:
     permissions:
       actions: write
       contents: write
+    outputs:
+      head_sha: ${{ steps.head.outputs.head_sha }}
 
     steps:
     - name: Checkout repository
@@ -60,7 +67,27 @@ jobs:
         --local-artifact contracts/reporting-identity-v1.json
         --canonical-artifact "$RUNNER_TEMP/reporting-identity-v1.json"
 
+    - name: Set up Node.js
+      uses: actions/setup-node@v6
+      with:
+        node-version: '24'
+
+    # Admission before any AWS or model call: SentryDigest release events are
+    # bound to the release's commit-addressed feed snapshot; duplicate, stale
+    # and unbindable events stop here; an earlier generation whose outcome is
+    # unknown is re-attached by its report ID, or held until re-admitted.
+    - name: Admit generation
+      id: admission
+      env:
+        READMIT: ${{ github.event.inputs.readmit || 'false' }}
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        node publication/cli.js admit --event-name "$GITHUB_EVENT_NAME" --event-path "$GITHUB_EVENT_PATH" \
+          --run-id "$GITHUB_RUN_ID" --run-attempt "$GITHUB_RUN_ATTEMPT" --readmit "$READMIT"
+
     - name: Configure AWS credentials
+      if: steps.admission.outputs.decision == 'admitted' || steps.admission.outputs.decision == 'reattach'
       uses: aws-actions/configure-aws-credentials@v6.2.1
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -69,6 +96,7 @@ jobs:
 
     - name: Health check (Go Lambda)
       id: health
+      if: steps.admission.outputs.decision == 'admitted' || steps.admission.outputs.decision == 'reattach'
       run: |
         set -e
         PAYLOAD='{"httpMethod":"GET","path":"/health","headers":{}}'
@@ -104,12 +132,16 @@ jobs:
 
     - name: Set feed URL
       id: feed-url
+      if: steps.admission.outputs.decision == 'admitted' || steps.admission.outputs.decision == 'reattach'
       env:
+        ADMITTED_FEED_URL: ${{ steps.admission.outputs.feed_url }}
         DISPATCH_FEED_URL: ${{ github.event.client_payload.feed_url }}
         WORKFLOW_FEED_URL: ${{ github.event.inputs.feed_url }}
       run: |
         FEED_URL=""
-        if [ "$GITHUB_EVENT_NAME" = "repository_dispatch" ]; then
+        if [ -n "$ADMITTED_FEED_URL" ]; then
+          FEED_URL="$ADMITTED_FEED_URL"
+        elif [ "$GITHUB_EVENT_NAME" = "repository_dispatch" ]; then
           FEED_URL="$DISPATCH_FEED_URL"
         elif [ "$GITHUB_EVENT_NAME" = "workflow_dispatch" ]; then
           FEED_URL="$WORKFLOW_FEED_URL"
@@ -131,8 +163,16 @@ jobs:
         echo "Using FEED_URL=$FEED_URL"
         printf 'FEED_URL=%s\n' "$FEED_URL" >> "$GITHUB_OUTPUT"
 
+    - name: Record generation start
+      id: start
+      if: steps.admission.outputs.decision == 'admitted'
+      env:
+        ADMISSION_KEY: ${{ steps.admission.outputs.admission_key }}
+      run: node publication/cli.js invoked --key "$ADMISSION_KEY" --run-id "$GITHUB_RUN_ID"
+
     - name: Invoke Lambda report generation
       id: lambda-invoke
+      if: steps.admission.outputs.decision == 'admitted'
       env:
         FEED_URL: ${{ steps.feed-url.outputs.FEED_URL }}
       run: |
@@ -178,16 +218,29 @@ jobs:
           exit 1
         fi
 
+    - name: Record report handle
+      id: handle
+      if: (steps.admission.outputs.decision == 'admitted' && steps.lambda-invoke.outputs.REPORT_ID) || steps.admission.outputs.decision == 'reattach'
+      env:
+        ADMISSION_KEY: ${{ steps.admission.outputs.admission_key }}
+        DECISION: ${{ steps.admission.outputs.decision }}
+        REPORT_ID: ${{ steps.lambda-invoke.outputs.REPORT_ID || steps.admission.outputs.reattach_handle }}
+      run: |
+        if [ "$DECISION" = "admitted" ]; then
+          node publication/cli.js invoked --key "$ADMISSION_KEY" --run-id "$GITHUB_RUN_ID" --handle "$REPORT_ID"
+        fi
+        echo "REPORT_ID=$REPORT_ID" >> "$GITHUB_OUTPUT"
+
     - name: Retrieve generated report
       id: get-report
-      if: steps.lambda-invoke.outputs.REPORT_ID
+      if: steps.handle.outputs.REPORT_ID
       env:
         FEED_URL: ${{ steps.feed-url.outputs.FEED_URL }}
       run: |
         set -e
-        echo "Retrieving report ID: ${{ steps.lambda-invoke.outputs.REPORT_ID }}"
+        echo "Retrieving report ID: ${{ steps.handle.outputs.REPORT_ID }}"
 
-        REPORT_ID=${{ steps.lambda-invoke.outputs.REPORT_ID }}
+        REPORT_ID=${{ steps.handle.outputs.REPORT_ID }}
         MAX_ATTEMPTS=${MAX_ATTEMPTS:-90}   # up to ~15 minutes
         SLEEP_SECONDS=${SLEEP_SECONDS:-10}
 
@@ -520,3 +573,38 @@ jobs:
       env:
         GH_TOKEN: ${{ github.token }}
       run: gh workflow run deploy-site.yml --ref "$GITHUB_REF_NAME"
+
+    # Recorded only once the report's fate is known; a failed or interrupted
+    # retrieval stays uncertain so the next run re-attaches by report ID.
+    - name: Record generation outcome
+      if: always() && steps.handle.outputs.REPORT_ID && (steps.get-report.outcome == 'success' || steps.retain.outputs.retained == 'true')
+      env:
+        ADMISSION_KEY: ${{ steps.admission.outputs.admission_key }}
+        BINDING: ${{ steps.admission.outputs.binding }}
+        PUBLISHED: ${{ steps.publish.outputs.published }}
+        RETAINED: ${{ steps.retain.outputs.retained }}
+      run: |
+        if [ "$PUBLISHED" = "true" ]; then OUTCOME=published
+        elif [ "$RETAINED" = "true" ]; then OUTCOME=retained
+        else OUTCOME=not-published
+        fi
+        node publication/cli.js complete --key "$ADMISSION_KEY" --run-id "$GITHUB_RUN_ID" --outcome "$OUTCOME" --binding "$BINDING"
+
+    - name: Record published head
+      id: head
+      if: always()
+      run: |
+        git fetch --quiet origin "$GITHUB_REF_NAME"
+        echo "head_sha=$(git rev-parse FETCH_HEAD)" >> "$GITHUB_OUTPUT"
+
+  # Publishes the pushed report or retained-state commit, or resumes the
+  # current release when this run pushed nothing.
+  publish:
+    needs: generate-report
+    if: always()
+    permissions:
+      contents: write
+    uses: ./.github/workflows/publish-production.yml
+    with:
+      invocation: publish
+      source_sha: ${{ needs.generate-report.outputs.head_sha || github.sha }}

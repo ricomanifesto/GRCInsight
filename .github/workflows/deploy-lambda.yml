@@ -1,8 +1,20 @@
 name: Build and Deploy Lambda
 
+# Pushes deploy only when a Lambda image input changes: the Go and Python
+# sources, their module files, the Lambda Dockerfiles and the configuration the
+# Go image copies. Site, report, publication, documentation and workflow-only
+# changes do not redeploy; use the manual dispatch for those.
 on:
   push:
     branches: [ main ]
+    paths:
+      - 'Dockerfile.lambda'
+      - 'go.mod'
+      - 'go.sum'
+      - 'cmd/**'
+      - 'internal/**'
+      - 'configs/**'
+      - 'agent/**'
   workflow_dispatch:
 
 env:

@@ -1,0 +1,86 @@
+name: Publish Production
+
+# The only publisher of the production artifact branch. Report and retained
+# publication-state commits are pushed by the generation workflow with the
+# workflow token, which starts no push-triggered workflow, so that workflow
+# calls this one with its pushed commit. It can also be run manually. Every
+# publish runs the static-site gate on the exact source first. While
+# publication is disabled in publication/site.json it only builds and validates.
+
+on:
+  workflow_call:
+    inputs:
+      invocation:
+        type: string
+        required: true
+      source_sha:
+        type: string
+        required: false
+        default: ''
+  workflow_dispatch:
+    inputs:
+      invocation:
+        description: 'publish, resume, rollback or resolve'
+        type: choice
+        options: [publish, resume, rollback, resolve]
+        default: resume
+      source_sha:
+        description: 'Full source commit to publish (publish)'
+        required: false
+      release_key:
+        description: 'Target release key (rollback) or the tip release key (resolve)'
+        required: false
+      reason:
+        description: 'Rollback reason'
+        required: false
+      attestation:
+        description: 'Operator attestation (resolve)'
+        required: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: publish-production
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ inputs.source_sha || github.sha }}
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+
+      - name: Run repository gate
+        if: inputs.invocation == 'publish'
+        run: make check-site
+
+      - name: Configure Git
+        run: |
+          git config user.email "action@github.com"
+          git config user.name "GitHub Action"
+
+      - name: Run publisher
+        env:
+          INVOCATION: ${{ inputs.invocation }}
+          SOURCE_SHA: ${{ inputs.source_sha || github.sha }}
+          RELEASE_KEY: ${{ inputs.release_key }}
+          REASON: ${{ inputs.reason }}
+          ATTESTATION: ${{ inputs.attestation }}
+        run: |
+          case "$INVOCATION" in
+            publish) set -- --source "$SOURCE_SHA" ;;
+            resume) set -- ;;
+            rollback) set -- --target "$RELEASE_KEY" --reason "$REASON" ;;
+            resolve) set -- --release "$RELEASE_KEY" --attestation "$ATTESTATION" ;;
+            *) echo "Unknown invocation $INVOCATION" >&2; exit 1 ;;
+          esac
+          node publication/cli.js "$INVOCATION" "$@"

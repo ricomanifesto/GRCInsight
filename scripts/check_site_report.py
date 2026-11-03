@@ -34,6 +34,7 @@ from build_site import (  # noqa: E402
     ARCHIVE_CONTEXT_START,
     DATED_DIGEST_HANDOFF_BOUNDARY,
 )
+from public_site import emitted_origin  # noqa: E402
 from publication_state import (  # noqa: E402
     PublicationStateError,
     category_label,
@@ -54,7 +55,7 @@ RENDERER_JS = SITE_DIR / "static" / "renderer.js"
 STYLE_CSS = SITE_DIR / "static" / "style.css"
 ARCHIVE_DIR = SITE_DIR / "archive"
 ARCHIVE_INDEX = ARCHIVE_DIR / "index.html"
-PUBLIC_SITE_URL = "https://ricomanifesto.github.io/GRCInsight/"
+PUBLIC_SITE_URL = emitted_origin("GRCInsight")
 PUBLIC_DESCRIPTION = (
     "GRCInsight turns regulatory and security feeds into audit-ready GRC "
     "intelligence, with framework mapping, agency signals, industry relevance, "

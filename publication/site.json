@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "site": "GRCInsight",
+  "repository": "ricomanifesto/GRCInsight",
+  "origins": {
+    "SentryDigest": {
+      "legacy": "https://ricomanifesto.github.io/SentryDigest/",
+      "production": "https://sentrydigest.ricomanifesto.com/",
+      "emitted": "legacy"
+    },
+    "SentryInsight": {
+      "legacy": "https://ricomanifesto.github.io/SentryInsight/",
+      "production": "https://sentryinsight.ricomanifesto.com/",
+      "emitted": "legacy"
+    },
+    "GRCInsight": {
+      "legacy": "https://ricomanifesto.github.io/GRCInsight/",
+      "production": "https://grcinsight.ricomanifesto.com/",
+      "emitted": "legacy"
+    }
+  },
+  "publication": {
+    "mode": "disabled",
+    "proof": "off"
+  },
+  "artifact_branch": "vercel-production",
+  "state_branch": "publication-state",
+  "payload_builder": [
+    "python3",
+    "-B",
+    "scripts/build_static_artifact.py"
+  ],
+  "proof_samples": {
+    "machine_endpoint": "publication-state.json",
+    "sitemap": "sitemap.xml",
+    "asset": "static/style.css",
+    "dated_archive": "^archive/\\d{4}-\\d{2}-\\d{2}T\\d{2}-\\d{2}-\\d{2}Z/index\\.html$"
+  }
+}

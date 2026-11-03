@@ -1,4 +1,4 @@
-.PHONY: test-go test-agent lint-agent format-agent type-agent check-agent check-go-format check-site check e2e fmt-go
+.PHONY: test-go test-agent lint-agent format-agent type-agent check-agent check-go-format check-site static-artifact test-static-artifact check e2e fmt-go
 
 GOCACHE_DIR ?= $(CURDIR)/.cache/go-build
 GOMODCACHE_DIR ?= $(CURDIR)/.cache/go-mod
@@ -35,6 +35,15 @@ check-site:
 	$(PYTHON) scripts/build_site.py --check
 	$(PYTHON) scripts/check_site_report.py
 	$(PYTHON) scripts/check_site_renderer.py
+
+static-artifact:
+	@test -n "$(REVISION)" && test -n "$(ARTIFACT_STORE)" && test -n "$(ARTIFACT_RECEIPTS)" || \
+		{ echo "Set REVISION, ARTIFACT_STORE and ARTIFACT_RECEIPTS"; exit 2; }
+	$(PYTHON) scripts/build_static_artifact.py --revision "$(REVISION)" \
+		--output "$(ARTIFACT_STORE)" --receipts "$(ARTIFACT_RECEIPTS)"
+
+test-static-artifact:
+	$(PYTHON) -m pytest scripts/tests -q -p no:cacheprovider
 
 check: check-go-format test-go check-agent check-site
 

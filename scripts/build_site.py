@@ -23,6 +23,7 @@ from core.report_plan import (  # noqa: E402
     validate_rendered_report,
 )
 
+from public_site import emitted_origin  # noqa: E402
 from publication_state import (  # noqa: E402
     PublicationStateError,
     category_label,
@@ -45,7 +46,7 @@ PUBLICATION_NOTICE_START = "<!-- PUBLICATION_NOTICE_START -->"
 PUBLICATION_NOTICE_END = "<!-- PUBLICATION_NOTICE_END -->"
 ARCHIVE_CONTEXT_START = "<!-- ARCHIVE_CONTEXT_START -->"
 ARCHIVE_CONTEXT_END = "<!-- ARCHIVE_CONTEXT_END -->"
-PUBLIC_SITE_URL = "https://ricomanifesto.github.io/GRCInsight/"
+PUBLIC_SITE_URL = emitted_origin("GRCInsight")
 DATED_DIGEST_HANDOFF_BOUNDARY = datetime(
     2026, 8, 14, 4, 49, 12, 35_399, tzinfo=timezone.utc
 )

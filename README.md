@@ -167,6 +167,17 @@ make test-agent
 make check-site
 ```
 
+### Static artifact
+
+`scripts/build_static_artifact.py` copies the tracked `site/` tree of one commit, byte for byte, into `builds/<sha256>/artifact/` with a prebuilt `deploy/.vercel/output/` layout whose config is only `{"version": 3}`. It refuses files that differ from that commit, symlinks, private or implementation files, incomplete archive entries, and JSON or XML that does not parse. That commit's own `make check-site` gate must pass on the copy before the build is accepted. `current.json` names the accepted build. A failed, interrupted or concurrent build leaves the accepted build in place.
+
+```bash
+make static-artifact REVISION="$(git rev-parse HEAD)" ARTIFACT_STORE=<store> ARTIFACT_RECEIPTS=<receipts-dir>
+make test-static-artifact
+```
+
+The store and the receipts directory must be outside the repository. Route acceptance for a built store is `scripts/tests/static_artifact_acceptance.py`. Reader acceptance in `scripts/tests/artifact_browser/` uses an existing Playwright 1.62.1 install, since this repository has no Node manifest.
+
 ## Deployment and Publishing
 
 - [Lambda deployment guide](docs/README-Lambda-Deployment.md)
