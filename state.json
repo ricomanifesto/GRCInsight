@@ -21,6 +21,23 @@
       "source_revision": "46e30db03f6e1eaaafef28021a3366c3f355778c",
       "stage": "released",
       "tree_digest": "688935707ad3c391727bc27142d8d4070b67c5547bb79dac0033f5b88ce96059"
+    },
+    {
+      "at": "2026-11-03T16:23:33.383Z",
+      "proof": {
+        "absent": [],
+        "checked_at": "2026-11-03T16:23:32.592Z",
+        "failures": [
+          "origin request failed: fetch failed"
+        ],
+        "ok": false,
+        "origin": "https://grcinsight.ricomanifesto.com/",
+        "samples": [],
+        "tls": true
+      },
+      "release_key": "6ef8ba426927ffd883a2a850bcf26dda59b3e5a1448a73dff63589211c266d78",
+      "release_ref": "4ad2c56268b9e515a125111326696828e67d12a2",
+      "stage": "verification-failed"
     }
   ],
   "schema_version": 1,
