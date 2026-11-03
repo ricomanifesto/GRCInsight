@@ -10,6 +10,17 @@
       "source_revision": "69fd6dc35baf1c1b2c3299302256c2f7fe71a303",
       "stage": "released",
       "tree_digest": "6cb7a71d211f800739a9e6c80aa296e1e8ae489ba82d9d24ff5869edd7fae6d9"
+    },
+    {
+      "at": "2026-11-03T16:18:19.064Z",
+      "kind": "release",
+      "payload_digest": "645fc298b6291258db7f6ae93bbba51275d2afb09f21679cf5b59a4e4ed2c233",
+      "proof": "on",
+      "release_key": "6ef8ba426927ffd883a2a850bcf26dda59b3e5a1448a73dff63589211c266d78",
+      "release_ref": "4ad2c56268b9e515a125111326696828e67d12a2",
+      "source_revision": "46e30db03f6e1eaaafef28021a3366c3f355778c",
+      "stage": "released",
+      "tree_digest": "688935707ad3c391727bc27142d8d4070b67c5547bb79dac0033f5b88ce96059"
     }
   ],
   "schema_version": 1,
