@@ -1,7 +1,7 @@
 # GRC Reports Archive
 
 The public report archive is available at
-[ricomanifesto.github.io/GRCInsight/archive/](https://ricomanifesto.github.io/GRCInsight/archive/).
+[grcinsight.ricomanifesto.com/archive/](https://grcinsight.ricomanifesto.com/archive/).
 
 Model-backed reports are preserved under
 `site/archive/YYYY-MM-DDTHH-MM-SSZ/` by the report-publication workflow, so
@@ -12,7 +12,7 @@ public archive.
 ## Latest Report
 
 The most current report is available at the
-[GRCInsight reader](https://ricomanifesto.github.io/GRCInsight/).
+[GRCInsight reader](https://grcinsight.ricomanifesto.com/).
 
 ## Report History
 
