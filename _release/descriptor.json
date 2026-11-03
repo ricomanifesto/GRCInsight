@@ -12,11 +12,11 @@
   "payload_file_count": 976,
   "publication_mode": {
     "mode": "prepare",
-    "proof": "off"
+    "proof": "on"
   },
-  "release_key": "08a2372ab63bd7a38a17501b81ca56230b7cbfd43e8cff541d51504d3405d8bf",
+  "release_key": "6ef8ba426927ffd883a2a850bcf26dda59b3e5a1448a73dff63589211c266d78",
   "schema_version": 1,
   "site": "GRCInsight",
-  "source_committed_at": "2026-11-03T16:13:03.000Z",
-  "source_revision": "69fd6dc35baf1c1b2c3299302256c2f7fe71a303"
+  "source_committed_at": "2026-11-03T16:16:39.000Z",
+  "source_revision": "46e30db03f6e1eaaafef28021a3366c3f355778c"
 }
