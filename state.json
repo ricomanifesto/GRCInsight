@@ -38,6 +38,12 @@
       "run_attempt": "1",
       "run_id": "41719406542",
       "stage": "admitted"
+    },
+    {
+      "admission_key": "digest:8a48e83f6d4f6a3c6ac48cc9992d3f4f9fa1e98c",
+      "at": "2026-11-03T21:12:01.979Z",
+      "run_id": "41719406542",
+      "stage": "invoked"
     }
   ],
   "schema_version": 1,
