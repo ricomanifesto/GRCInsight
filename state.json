@@ -1,0 +1,17 @@
+{
+  "records": [
+    {
+      "at": "2026-11-03T16:14:56.354Z",
+      "kind": "release",
+      "payload_digest": "645fc298b6291258db7f6ae93bbba51275d2afb09f21679cf5b59a4e4ed2c233",
+      "proof": "off",
+      "release_key": "08a2372ab63bd7a38a17501b81ca56230b7cbfd43e8cff541d51504d3405d8bf",
+      "release_ref": "3efbd2769d84b2c671eb532cb3ae525fe9d277a3",
+      "source_revision": "69fd6dc35baf1c1b2c3299302256c2f7fe71a303",
+      "stage": "released",
+      "tree_digest": "6cb7a71d211f800739a9e6c80aa296e1e8ae489ba82d9d24ff5869edd7fae6d9"
+    }
+  ],
+  "schema_version": 1,
+  "site": "GRCInsight"
+}
