@@ -13,12 +13,17 @@ retrieval, relevance pilot or model inference occurs. The ordinary selected
 the exact mock transport and a synthetic key. Unsupported family variants and
 the model's known latest alias are refused before legacy routing.
 
-The fixed policy accepts only text, pins Google AI Studio's standard tier,
+The fixed policy accepts only text, pins `google-vertex/global` (provider Google)
+at the default standard tier,
 disables fallbacks and requests supported parameters, no data collection and ZDR
 filtering. It caps applicable token rates at $2/M input and $10/M combined
-reasoning/visible output, with zero per-request pricing. Provider eligibility and
-effective privacy/retention settings remain unverified. No filter is relaxed on
-failure. Current free model defaults and their four zero-price ceilings remain.
+reasoning/visible output, with zero per-request pricing. ZDR filtering does not
+mean zero retention: SafetyRetention may retain flagged prompts for up to 90 days
+for safety, without training. Effective account eligibility and privacy/retention
+policy remain unverified; future live use requires separate data, retention and
+budget approval. The ordinary selected profile remains disabled. No filter is
+relaxed on failure. Current free model defaults and their four zero-price
+ceilings remain.
 
 The report request uses strict JSON Schema for the current selection object.
 The existing parser independently validates exact source quotations, source IDs,
