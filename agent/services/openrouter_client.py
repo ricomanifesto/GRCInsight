@@ -15,6 +15,12 @@ import httpx
 from services.model_route import RouteActivation, selected_route, validate_completion
 
 OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"
+SERVER_MAX_OUTPUT_TOKENS = 16000
+
+
+def validate_output_limit(value) -> None:
+    if type(value) is not int or not 1 <= value <= SERVER_MAX_OUTPUT_TOKENS:
+        raise ValueError("Model output allowance exceeds the server policy")
 
 
 class GenerationMode(Enum):
@@ -72,6 +78,7 @@ class OpenRouterClient:
         clock: Callable[[], float] = time.monotonic,
         activation: RouteActivation = RouteActivation.DISABLED,
     ) -> None:
+        validate_output_limit(max_tokens)
         if max_attempts < 1:
             raise ValueError("max_attempts must be at least 1")
         if timeout <= 0:
@@ -103,6 +110,8 @@ class OpenRouterClient:
         route = selected_route(model.model_id, model.provider_id)
         if route is not None:
             route.require_offline(self.activation, self.transport, self.api_key, self.base_url)
+        else:
+            validate_output_limit(self.max_tokens)
         if not isinstance(mode, GenerationMode):
             raise ValueError("Unsupported generation mode")
         payload: dict[str, Any] = {
@@ -114,7 +123,9 @@ class OpenRouterClient:
                 {"role": "user", "content": user_prompt},
             ],
         }
-        if model.model_id.endswith(":free") or model.model_id == "openrouter/free":
+        if route is None:
+            # Every unowned chat route is free-only, including aliases/routers
+            # and caller-selected IDs without a :free suffix.
             payload["provider"] = {
                 "allow_fallbacks": False,
                 "max_price": {"prompt": 0, "completion": 0, "request": 0, "image": 0},

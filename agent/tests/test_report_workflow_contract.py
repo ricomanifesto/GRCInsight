@@ -2011,8 +2011,9 @@ def test_lambda_deploy_sets_explicit_model_runtime_environment():
     assert (
         "direct Lambda model-backed analysis requires openrouter/provider-model format" in workflow
     )
-    assert "LLM_MODEL=$LLM_MODEL" in workflow
-    assert "OPENROUTER_API_KEY=$OPENROUTER_API_KEY" in workflow
+    assert "update_lambda_environment.py" in workflow
+    assert "--function-kind python" in workflow
+    assert "OPENROUTER_API_KEY=$OPENROUTER_API_KEY" not in workflow
     assert "ANTHROPIC_API_KEY=" not in workflow
 
 
@@ -2021,24 +2022,42 @@ def test_manual_lambda_deploy_uses_openrouter_secret():
 
     assert "OPENROUTER_API_KEY is not set" in script
     assert "openrouter/provider-model format" in script
-    assert "OPENROUTER_API_KEY=${OPENROUTER_API_KEY}" in script
+    assert "update_lambda_environment.py" in script
+    assert "--function-kind python" in script
+    assert "OPENROUTER_API_KEY=${OPENROUTER_API_KEY}" not in script
 
 
 def test_lambda_configuration_updates_do_not_dump_openrouter_secret():
     workflow = DEPLOY_WORKFLOW.read_text()
     script = DEPLOY_SCRIPT.read_text()
 
-    assert "OPENROUTER_API_KEY=$OPENROUTER_API_KEY" in workflow
+    assert "OPENROUTER_API_KEY=$OPENROUTER_API_KEY" not in workflow
+    assert "aws lambda update-function-configuration" not in workflow
+    assert "--environment" not in workflow
+    assert workflow.count("update_lambda_environment.py") == 2
     workflow_mutations = (
         workflow.count("aws lambda update-function-code")
         + workflow.count("aws lambda update-function-configuration")
         + workflow.count("aws lambda create-function")
     )
     assert workflow.count("--query 'FunctionName'") >= workflow_mutations
-    assert "OPENROUTER_API_KEY=${OPENROUTER_API_KEY}" in script
+    assert "OPENROUTER_API_KEY=${OPENROUTER_API_KEY}" not in script
+    assert "aws lambda update-function-configuration" not in script
+    assert "--environment" not in script
+    assert script.count("update_lambda_environment.py") == 2
     script_mutations = (
         script.count("aws lambda update-function-code")
         + script.count("aws lambda update-function-configuration")
         + script.count("aws lambda create-function")
     )
     assert script.count("--query 'FunctionName'") >= script_mutations
+
+
+def test_regular_lambda_release_verifies_existing_repositories_without_permission_mutations():
+    workflow = DEPLOY_WORKFLOW.read_text()
+    assert "aws ecr describe-repositories" in workflow
+    assert "aws ecr get-repository-policy" in workflow
+    assert "check_ecr_retrieval_policy.py" in workflow
+    assert "aws ecr create-repository" not in workflow
+    assert "aws ecr set-repository-policy" not in workflow
+    assert "aws iam " not in workflow

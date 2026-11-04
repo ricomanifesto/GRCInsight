@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # AWS Lambda Deployment Script for GRCInsight
+set +x
 set -e
 
 echo "Deploying GRCInsight to AWS Lambda..."
@@ -182,13 +183,6 @@ if aws lambda get-function --function-name $GO_FUNCTION_NAME --region $AWS_REGIO
         --region $AWS_REGION \
         --query 'FunctionName' \
         --output text
-    # Ensure environment variables are configured
-    aws lambda update-function-configuration \
-        --function-name $GO_FUNCTION_NAME \
-        --region $AWS_REGION \
-        --environment Variables="{\n            GO_ENV=production,\n            GIN_MODE=release,\n            PYTHON_LAMBDA_FUNCTION_NAME=$PYTHON_FUNCTION_NAME,\n            PYTHON_INVOKE_ASYNC=true\n        }" \
-        --query 'FunctionName' \
-        --output text
 else
     print_warning "Creating new Go Lambda function..."
     aws lambda create-function \
@@ -199,10 +193,15 @@ else
         --timeout 900 \
         --memory-size 1024 \
         --region $AWS_REGION \
-        --environment Variables="{\n            GO_ENV=production,\n            GIN_MODE=release,\n            PYTHON_LAMBDA_FUNCTION_NAME=$PYTHON_FUNCTION_NAME,\n            PYTHON_INVOKE_ASYNC=true\n        }" \
         --query 'FunctionName' \
         --output text
 fi
+
+# Wait for code/create completion before the revision-checked environment merge.
+aws lambda wait function-active-v2 --function-name "$GO_FUNCTION_NAME" --region "$AWS_REGION"
+aws lambda wait function-updated-v2 --function-name "$GO_FUNCTION_NAME" --region "$AWS_REGION"
+python3 -I -B scripts/update_lambda_environment.py \
+    --function-kind go --account-id "$AWS_ACCOUNT_ID" --region "$AWS_REGION"
 
 # Create/update Python Lambda function
 print_status "Deploying Python Lambda function..."
@@ -212,13 +211,6 @@ if aws lambda get-function --function-name $PYTHON_FUNCTION_NAME --region $AWS_R
         --function-name $PYTHON_FUNCTION_NAME \
         --image-uri $PYTHON_IMAGE_URI \
         --region $AWS_REGION \
-        --query 'FunctionName' \
-        --output text
-    # Ensure environment variables are configured
-    aws lambda update-function-configuration \
-        --function-name $PYTHON_FUNCTION_NAME \
-        --region $AWS_REGION \
-        --environment Variables="{\n            LLM_MODEL=${LLM_MODEL},\n            OPENROUTER_API_KEY=${OPENROUTER_API_KEY},\n            LOG_LEVEL=INFO,\n            DDB_TABLE_NAME=grcinsight-reports\n        }" \
         --query 'FunctionName' \
         --output text
 else
@@ -231,10 +223,14 @@ else
         --timeout 900 \
         --memory-size 2048 \
         --region $AWS_REGION \
-        --environment Variables="{\n            LLM_MODEL=${LLM_MODEL},\n            OPENROUTER_API_KEY=${OPENROUTER_API_KEY},\n            LOG_LEVEL=INFO,\n            DDB_TABLE_NAME=grcinsight-reports\n        }" \
         --query 'FunctionName' \
         --output text
 fi
+
+aws lambda wait function-active-v2 --function-name "$PYTHON_FUNCTION_NAME" --region "$AWS_REGION"
+aws lambda wait function-updated-v2 --function-name "$PYTHON_FUNCTION_NAME" --region "$AWS_REGION"
+python3 -I -B scripts/update_lambda_environment.py \
+    --function-kind python --account-id "$AWS_ACCOUNT_ID" --region "$AWS_REGION"
 
 # Ensure IAM policy for DynamoDB and Lambda invoke is attached to the role
 print_status "Ensuring IAM policies for DynamoDB and Lambda invoke..."

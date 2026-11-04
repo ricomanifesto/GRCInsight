@@ -35,6 +35,7 @@ from services.openrouter_client import (
     OpenRouterGeneration,
     parse_openrouter_model,
     GenerationMode,
+    validate_output_limit,
 )
 from services.model_route import ENDPOINT_BASE, OFFLINE_KEY, RouteActivation, selected_route
 from services.relevance_decisions import DecisionError, RelevanceClient, RelevanceResult
@@ -119,13 +120,11 @@ class GRCModelService:
             # Settings() has already loaded the environment at module import.
             # Refuse before key-attribute access or creation of either client.
             route.require_offline(activation, transport, OFFLINE_KEY, ENDPOINT_BASE)
-        configured_max_tokens = (
-            (settings.llm_max_tokens if max_tokens is None else max_tokens)
-            if route
-            else (max_tokens or settings.llm_max_tokens)
-        )
+        configured_max_tokens = settings.llm_max_tokens if max_tokens is None else max_tokens
         if route:
             route.validate_output(configured_max_tokens)
+        else:
+            validate_output_limit(configured_max_tokens)
         self.max_tokens = configured_max_tokens
         timeout = max(120.0, float(configured_max_tokens) / 20)
         api_key = OFFLINE_KEY if route else settings.openrouter_api_key
