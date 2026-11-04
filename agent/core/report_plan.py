@@ -205,6 +205,85 @@ class ReportQualityError(ValueError):
     """An actionable editorial-contract refusal, distinct from provider failure."""
 
 
+def report_plan_response_format() -> dict[str, Any]:
+    """Provider schema for current selections; host grounding remains mandatory."""
+
+    def obj(properties):
+        return {
+            "type": "object",
+            "properties": properties,
+            "required": list(properties),
+            "additionalProperties": False,
+        }
+
+    source_id = {"type": "integer", "minimum": 1, "maximum": 12}
+    text = {"type": "string"}
+    schema = obj(
+        {
+            "regulatory_changes": {
+                "type": "array",
+                "maxItems": 12,
+                "items": obj(
+                    {
+                        "source_id": source_id,
+                        "change": text,
+                        "jurisdiction": text,
+                        "evidence_excerpt": text,
+                    }
+                ),
+            },
+            "control_implications": {
+                "type": "array",
+                "maxItems": 6,
+                "items": obj(
+                    {
+                        "control_id": {"type": "string", "enum": list(CONTROLS)},
+                        "priority": {"type": "string", "enum": list(PRIORITIES)},
+                        "source_ids": {
+                            "type": "array",
+                            "minItems": 1,
+                            "maxItems": 1,
+                            "items": source_id,
+                        },
+                        "focus": text,
+                        "evidence_excerpt": text,
+                        "evidence_origin": {"type": "string", "enum": ["summary", "content"]},
+                    }
+                ),
+            },
+            "industry_impacts": {
+                "type": "array",
+                "maxItems": 0,
+                "items": obj(
+                    {
+                        "sector_id": {"type": "string", "enum": list(SECTORS)},
+                        "source_ids": {"type": "array", "items": source_id},
+                    }
+                ),
+            },
+            "executive_brief": obj(
+                {
+                    "decision_frame": {"type": "string", "enum": list(DECISION_FRAMES)},
+                    "source_ids": {
+                        "type": "array",
+                        "minItems": 1,
+                        "maxItems": 3,
+                        "items": source_id,
+                    },
+                }
+            ),
+        }
+    )
+    return {
+        "type": "json_schema",
+        "json_schema": {
+            "name": "grc_report_plan",
+            "strict": True,
+            "schema": schema,
+        },
+    }
+
+
 def _validate_executive_brief(plan: dict[str, Any], sources: list[dict[str, Any]]) -> None:
     try:
         brief = _object(plan.get("executive_brief"), {"decision_frame", "source_ids"})

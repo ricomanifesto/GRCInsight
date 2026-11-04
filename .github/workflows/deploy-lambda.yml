@@ -75,6 +75,7 @@ jobs:
         env:
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
         run: |
+          set +x
           set -e
           case "$LLM_MODEL" in
             */*) ;;
@@ -153,37 +154,14 @@ jobs:
           echo "AWS_ACCOUNT_ID=$ACCOUNT_ID" >> "$GITHUB_ENV"
           echo "registry=${ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com" >> "$GITHUB_OUTPUT"
 
-      - name: Ensure ECR repositories exist
-        run: |
-          set -e
-          for repo in "$GO_REPO_NAME" "$PYTHON_REPO_NAME"; do
-            if ! aws ecr describe-repositories --repository-names "$repo" --region "$AWS_REGION" > /dev/null 2>&1; then
-              aws ecr create-repository --repository-name "$repo" --region "$AWS_REGION" --image-scanning-configuration scanOnPush=true
-              echo "Created ECR repo: $repo"
-            else
-              echo "ECR repo exists: $repo"
-            fi
-          done
-
-      - name: Ensure ECR repository policies allow Lambda image retrieval
+      - name: Verify preprovisioned ECR repositories and Lambda retrieval access
         run: |
           set -euo pipefail
-          apply_policy() {
-            local repo="$1"
-            # Same-account Lambda functions need unconditional service-principal access
-            # so inactive functions can re-fetch the image for optimization/caching.
-            local policy_text
-            policy_text=$(jq -cn \
-              '{Version:"2012-10-17",Statement:[{Sid:"LambdaECRImageRetrievalPolicy",Effect:"Allow",Principal:{Service:"lambda.amazonaws.com"},Action:["ecr:BatchGetImage","ecr:GetDownloadUrlForLayer"]}]}')
-            aws ecr set-repository-policy \
-              --repository-name "$repo" \
-              --region "$AWS_REGION" \
-              --policy-text "$policy_text" >/dev/null
-            echo "Applied Lambda ECR retrieval policy to $repo"
-          }
-
-          apply_policy "$GO_REPO_NAME"
-          apply_policy "$PYTHON_REPO_NAME"
+          for repo in "$GO_REPO_NAME" "$PYTHON_REPO_NAME"; do
+            aws ecr describe-repositories --repository-names "$repo" --region "$AWS_REGION" > /dev/null
+            aws ecr get-repository-policy --repository-name "$repo" --region "$AWS_REGION" --output json |
+              python3 -I -B scripts/check_ecr_retrieval_policy.py
+          done
 
       - name: Login to Amazon ECR
         run: |
@@ -227,19 +205,10 @@ jobs:
           aws lambda wait function-updated \
             --function-name "$GO_FUNCTION_NAME" \
             --region "$AWS_REGION"
-          aws lambda update-function-configuration \
-            --function-name "$GO_FUNCTION_NAME" \
-            --region "$AWS_REGION" \
-            --environment "Variables={GO_ENV=production,GIN_MODE=release,PYTHON_LAMBDA_FUNCTION_NAME=$PYTHON_FUNCTION_NAME,PYTHON_INVOKE_ASYNC=true,DDB_TABLE_NAME=grcinsight-reports,ARTICLES_TABLE_NAME=grcinsight-articles,SERVICE_VERSION=${{ github.sha }},SERVER_ALLOWED_ORIGINS=https://ricomanifesto.github.io}" \
-            --query 'FunctionName' \
-            --output text
-          aws lambda wait function-updated \
-            --function-name "$GO_FUNCTION_NAME" \
-            --region "$AWS_REGION"
+          python3 -I -B scripts/update_lambda_environment.py \
+            --function-kind go --account-id "$AWS_ACCOUNT_ID" --region "$AWS_REGION"
 
       - name: Update Python Lambda to new image
-        env:
-          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
         run: |
           aws lambda update-function-code \
             --function-name "$PYTHON_FUNCTION_NAME" \
@@ -250,15 +219,14 @@ jobs:
           aws lambda wait function-updated \
             --function-name "$PYTHON_FUNCTION_NAME" \
             --region "$AWS_REGION"
-          aws lambda update-function-configuration \
-            --function-name "$PYTHON_FUNCTION_NAME" \
-            --region "$AWS_REGION" \
-            --environment "Variables={LLM_MODEL=$LLM_MODEL,OPENROUTER_API_KEY=$OPENROUTER_API_KEY,GRC_RELEVANCE_MODE=$GRC_RELEVANCE_MODE,GRC_RELEVANCE_MIN_PROBABILITY=$GRC_RELEVANCE_MIN_PROBABILITY,GRC_RELEVANCE_TIMEOUT_SECONDS=$GRC_RELEVANCE_TIMEOUT_SECONDS,LOG_LEVEL=INFO,DDB_TABLE_NAME=grcinsight-reports,ARTICLES_TABLE_NAME=grcinsight-articles}" \
-            --query 'FunctionName' \
-            --output text
-          aws lambda wait function-updated \
-            --function-name "$PYTHON_FUNCTION_NAME" \
-            --region "$AWS_REGION"
+
+      - name: Merge Python Lambda runtime environment
+        env:
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+        run: |
+          set +x
+          python3 -I -B scripts/update_lambda_environment.py \
+            --function-kind python --account-id "$AWS_ACCOUNT_ID" --region "$AWS_REGION"
 
       - name: Wait for Lambda updates to complete
         run: |
@@ -285,9 +253,43 @@ jobs:
             fi
           done
 
+      - name: Verify deployed image references
+        run: |
+          set -euo pipefail
+          verify_image() {
+            local function_name="$1" expected="$2" actual
+            actual=$(aws lambda get-function --function-name "$function_name" \
+              --region "$AWS_REGION" --query 'Code.ImageUri' --output text)
+            if [ "$actual" != "$expected" ]; then
+              echo "Deployed Lambda image reference does not match this release" >&2
+              exit 1
+            fi
+          }
+          verify_image "$GO_FUNCTION_NAME" "$GO_IMAGE_SHA"
+          verify_image "$PYTHON_FUNCTION_NAME" "$PYTHON_IMAGE_SHA"
+
       - name: Smoke test Go Lambda health
         run: |
-          set -e
+          set -euo pipefail
+          export AWS_MAX_ATTEMPTS=1
+          GO_HEALTH_MODE=$(aws lambda get-function-concurrency \
+            --function-name "$GO_FUNCTION_NAME" --region "$AWS_REGION" --output json |
+            python3 -I -B scripts/check_lambda_maintenance.py)
+          if [ "$GO_HEALTH_MODE" = "paused" ]; then
+            echo "Go API health deferred while reserved concurrency is zero"
+            aws lambda invoke \
+              --function-name "$PYTHON_FUNCTION_NAME" \
+              --payload '{"health_check":true}' \
+              --cli-binary-format raw-in-base64-out --region "$AWS_REGION" \
+              "$RUNNER_TEMP/python-health.json" >/dev/null
+            if [ "$(jq -r '.statusCode // empty' "$RUNNER_TEMP/python-health.json")" != "200" ] || \
+               [ "$(jq -r '.body.status // empty' "$RUNNER_TEMP/python-health.json")" != "healthy" ]; then
+              echo "Python Lambda non-inference health check failed" >&2
+              exit 1
+            fi
+            echo "Python non-inference health verified; operator restoration and Go health remain deferred"
+            exit 0
+          fi
           aws lambda invoke \
             --function-name "$GO_FUNCTION_NAME" \
             --payload '{"httpMethod":"GET","path":"/health"}' \

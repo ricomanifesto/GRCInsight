@@ -44,6 +44,10 @@ func NewReportService(
 
 // GenerateReport generates a new GRC report
 func (s *ReportService) GenerateReport(req *apiModels.GenerateReportRequest) (*models.Report, error) {
+	config, err := req.Config.WithDefaults()
+	if err != nil {
+		return nil, fmt.Errorf("invalid analysis configuration: %w", err)
+	}
 	s.logger.Info("Starting report generation")
 
 	// Create report record
@@ -59,7 +63,7 @@ func (s *ReportService) GenerateReport(req *apiModels.GenerateReportRequest) (*m
 	}
 
 	// Build workflow request
-	workflowReq := &apiModels.WorkflowRequest{FeedURL: req.FeedURL, Config: req.Config}
+	workflowReq := &apiModels.WorkflowRequest{FeedURL: req.FeedURL, Config: config}
 
 	if s.pythonClient.IsAsync() {
 		// Async mode: fire-and-forget, return processing status

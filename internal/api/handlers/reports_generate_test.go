@@ -30,3 +30,24 @@ func TestGenerateReport_InvalidBody_Returns400(t *testing.T) {
 		t.Fatalf("expected 400, got %d", w.Code)
 	}
 }
+
+func TestGenerateReportInvalidOutputReturns400BeforeService(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+	for _, cap := range []string{"0", "-1", "16001", "true", "false", "8000.0", `"8000"`, "null"} {
+		t.Run(cap, func(t *testing.T) {
+			logger := logrus.New()
+			logger.SetOutput(io.Discard)
+			h := &ReportsHandler{reportService: nil, logger: logger}
+			router := gin.New()
+			router.POST("/api/v1/reports/generate", h.GenerateReport)
+			body := `{"feed_url":"https://feed.example.test/rss","config":{"max_tokens":` + cap + `}}`
+			request := httptest.NewRequest(http.MethodPost, "/api/v1/reports/generate", strings.NewReader(body))
+			request.Header.Set("Content-Type", "application/json")
+			response := httptest.NewRecorder()
+			router.ServeHTTP(response, request)
+			if response.Code != http.StatusBadRequest {
+				t.Fatalf("status %d, want 400", response.Code)
+			}
+		})
+	}
+}

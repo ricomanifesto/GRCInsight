@@ -1,6 +1,11 @@
 package models
 
-import "time"
+import (
+	"bytes"
+	"encoding/json"
+	"errors"
+	"time"
+)
 
 // WorkflowRequest represents a request to run the complete GRC workflow
 type WorkflowRequest struct {
@@ -37,6 +42,57 @@ type GRCAnalysisConfig struct {
 	Model      string   `json:"model"`
 	MaxTokens  int      `json:"max_tokens"`
 	FocusAreas []string `json:"focus_areas"`
+}
+
+// MaxOutputTokens is the omitted-request default and the server output ceiling.
+const MaxOutputTokens = 16000
+
+// WithDefaults preserves the zero-value Go construction contract. Explicit JSON
+// zero is rejected by UnmarshalJSON, while omitted/programmatic zero means unset.
+func (c GRCAnalysisConfig) WithDefaults() (GRCAnalysisConfig, error) {
+	if c.MaxTokens == 0 {
+		c.MaxTokens = MaxOutputTokens
+	}
+	if c.MaxTokens < 1 || c.MaxTokens > MaxOutputTokens {
+		return c, errors.New("max_tokens must be an integer between 1 and 16000")
+	}
+	return c, nil
+}
+
+func (c *GRCAnalysisConfig) UnmarshalJSON(data []byte) error {
+	if bytes.Equal(bytes.TrimSpace(data), []byte("null")) {
+		return errors.New("analysis config must be an object")
+	}
+	var wire struct {
+		Model      string          `json:"model"`
+		MaxTokens  json.RawMessage `json:"max_tokens"`
+		FocusAreas []string        `json:"focus_areas"`
+	}
+	if err := json.Unmarshal(data, &wire); err != nil {
+		return err
+	}
+	value := GRCAnalysisConfig{Model: wire.Model, MaxTokens: MaxOutputTokens, FocusAreas: wire.FocusAreas}
+	if wire.MaxTokens != nil {
+		if bytes.Equal(bytes.TrimSpace(wire.MaxTokens), []byte("null")) ||
+			json.Unmarshal(wire.MaxTokens, &value.MaxTokens) != nil || value.MaxTokens == 0 {
+			return errors.New("max_tokens must be an integer between 1 and 16000")
+		}
+	}
+	normalized, err := value.WithDefaults()
+	if err != nil {
+		return err
+	}
+	*c = normalized
+	return nil
+}
+
+func (c GRCAnalysisConfig) MarshalJSON() ([]byte, error) {
+	normalized, err := c.WithDefaults()
+	if err != nil {
+		return nil, err
+	}
+	type wireConfig GRCAnalysisConfig
+	return json.Marshal(wireConfig(normalized))
 }
 
 // ArticleInput represents an article for analysis

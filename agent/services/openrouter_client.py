@@ -5,14 +5,27 @@ from __future__ import annotations
 import asyncio
 from collections.abc import Callable
 from dataclasses import dataclass
+from enum import Enum
 import json
 import re
 import time
 from typing import Any
 
 import httpx
+from services.model_route import RouteActivation, selected_route, validate_completion
 
 OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"
+SERVER_MAX_OUTPUT_TOKENS = 16000
+
+
+def validate_output_limit(value) -> None:
+    if type(value) is not int or not 1 <= value <= SERVER_MAX_OUTPUT_TOKENS:
+        raise ValueError("Model output allowance exceeds the server policy")
+
+
+class GenerationMode(Enum):
+    TEXT = "text"
+    REPORT_PLAN = "report_plan"
 
 
 @dataclass(frozen=True)
@@ -29,6 +42,7 @@ class OpenRouterGeneration:
 
     text: str
     resolved_model: str
+    usage: dict[str, int | float] | None = None
 
 
 def parse_openrouter_model(model_name: str) -> OpenRouterModel:
@@ -62,7 +76,9 @@ class OpenRouterClient:
         transport: httpx.AsyncBaseTransport | None = None,
         max_attempts: int = 2,
         clock: Callable[[], float] = time.monotonic,
+        activation: RouteActivation = RouteActivation.DISABLED,
     ) -> None:
+        validate_output_limit(max_tokens)
         if max_attempts < 1:
             raise ValueError("max_attempts must be at least 1")
         if timeout <= 0:
@@ -79,6 +95,7 @@ class OpenRouterClient:
         self.clock = clock
         self._deadline = deadline
         self._total_timeout_applied = False
+        self.activation = activation
 
     async def generate(
         self,
@@ -87,8 +104,52 @@ class OpenRouterClient:
         user_prompt: str,
         model: OpenRouterModel,
         title: str,
+        mode: GenerationMode = GenerationMode.TEXT,
     ) -> OpenRouterGeneration:
         """Generate text and retain OpenRouter's resolved upstream model."""
+        route = selected_route(model.model_id, model.provider_id)
+        if route is not None:
+            route.require_offline(self.activation, self.transport, self.api_key, self.base_url)
+        else:
+            validate_output_limit(self.max_tokens)
+            # These documented model forms can add separately billed server
+            # search/tools, outside provider token price ceilings.
+            if any(
+                part.strip().casefold() == "online" for part in model.model_id.split(":")[1:]
+            ) or re.search(r"@\s*preset\s*/", model.model_id, re.IGNORECASE):
+                raise ValueError("Unowned indirect model configuration is disabled")
+        if not isinstance(mode, GenerationMode):
+            raise ValueError("Unsupported generation mode")
+        payload: dict[str, Any] = {
+            "model": model.model_id,
+            "max_tokens": self.max_tokens,
+            "stream": False,
+            "messages": [
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": user_prompt},
+            ],
+        }
+        if route is None:
+            # Every unowned chat route is free-only, including aliases/routers
+            # and caller-selected IDs without a :free suffix.
+            payload["provider"] = {
+                "allow_fallbacks": False,
+                "max_price": {"prompt": 0, "completion": 0, "request": 0, "image": 0},
+            }
+        if route is not None:
+            payload.update(
+                provider=route.provider_payload(),
+                service_tier="default",
+                reasoning={"effort": "low", "exclude": True},
+            )
+            if mode is GenerationMode.REPORT_PLAN:
+                from core.report_plan import report_plan_response_format
+
+                payload["response_format"] = report_plan_response_format()
+            route.validate_input(payload)
+        # A paid operation has one transport attempt. The free route retains
+        # its established retry behavior and caller deadline.
+        attempts = 1 if route is not None else self.max_attempts
         async with httpx.AsyncClient(
             base_url=self.base_url,
             timeout=self.timeout,
@@ -99,52 +160,35 @@ class OpenRouterClient:
                 "X-Title": title,
             },
         ) as client:
-            for attempt in range(self.max_attempts):
+            for attempt in range(attempts):
                 try:
                     async with asyncio.timeout(self._remaining_timeout()):
                         response = await client.post(
                             "/chat/completions",
-                            json={
-                                "model": model.model_id,
-                                "max_tokens": self.max_tokens,
-                                "stream": False,
-                                **(
-                                    {
-                                        "provider": {
-                                            "allow_fallbacks": False,
-                                            "max_price": {
-                                                "prompt": 0,
-                                                "completion": 0,
-                                                "request": 0,
-                                                "image": 0,
-                                            },
-                                        }
-                                    }
-                                    if model.model_id.endswith(":free")
-                                    or model.model_id == "openrouter/free"
-                                    else {}
-                                ),
-                                "messages": [
-                                    {"role": "system", "content": system_prompt},
-                                    {"role": "user", "content": user_prompt},
-                                ],
-                            },
+                            json=payload,
                         )
                     self._raise_for_status(response)
-                    return self._extract_generation(self._decode_payload(response))
+                    decoded = self._decode_payload(response)
+                    if route is not None:
+                        usage = validate_completion(decoded, model.model_id, self.max_tokens)
+                        generation = self._extract_generation(decoded)
+                        return OpenRouterGeneration(
+                            generation.text, generation.resolved_model, usage
+                        )
+                    return self._extract_generation(decoded)
                 except TimeoutError as exc:
                     error = OpenRouterError(
                         "OpenRouter request deadline exceeded",
                         retryable=True,
                     )
-                    if attempt + 1 >= self.max_attempts:
+                    if attempt + 1 >= attempts:
                         raise error from exc
                 except httpx.RequestError as exc:
                     error = OpenRouterError("OpenRouter request failed", retryable=True)
-                    if attempt + 1 >= self.max_attempts:
+                    if attempt + 1 >= attempts:
                         raise error from exc
                 except OpenRouterError as error:
-                    if not error.retryable or attempt + 1 >= self.max_attempts:
+                    if not error.retryable or attempt + 1 >= attempts:
                         raise
 
         raise OpenRouterError("OpenRouter request failed")

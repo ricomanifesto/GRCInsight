@@ -8,6 +8,8 @@ import re
 from typing import List, Dict, Any
 from urllib.parse import quote
 
+import httpx
+
 from loguru import logger
 
 from config.settings import settings
@@ -32,7 +34,10 @@ from services.openrouter_client import (
     OpenRouterClient,
     OpenRouterGeneration,
     parse_openrouter_model,
+    GenerationMode,
+    validate_output_limit,
 )
+from services.model_route import ENDPOINT_BASE, OFFLINE_KEY, RouteActivation, selected_route
 from services.relevance_decisions import DecisionError, RelevanceClient, RelevanceResult
 
 REPORT_CVE_LIMIT = 10
@@ -103,23 +108,37 @@ class GRCModelService:
         model_name: str | None = None,
         max_tokens: int | None = None,
         model_deadline: float | None = None,
+        *,
+        activation: RouteActivation = RouteActivation.DISABLED,
+        transport: httpx.AsyncBaseTransport | None = None,
     ):
         """Initialize model service."""
         configured_model = model_name or settings.llm_model
-        configured_max_tokens = max_tokens or settings.llm_max_tokens
         self.model = parse_openrouter_model(configured_model)
+        route = selected_route(self.model.model_id, self.model.provider_id)
+        if route is not None:
+            # Settings() has already loaded the environment at module import.
+            # Refuse before key-attribute access or creation of either client.
+            route.require_offline(activation, transport, OFFLINE_KEY, ENDPOINT_BASE)
+        configured_max_tokens = settings.llm_max_tokens if max_tokens is None else max_tokens
+        if route:
+            route.validate_output(configured_max_tokens)
+        else:
+            validate_output_limit(configured_max_tokens)
         self.max_tokens = configured_max_tokens
         timeout = max(120.0, float(configured_max_tokens) / 20)
-        if not settings.openrouter_api_key:
+        api_key = OFFLINE_KEY if route else settings.openrouter_api_key
+        if not api_key:
             raise ValueError("OPENROUTER_API_KEY is required for model-backed analysis")
         self.client = OpenRouterClient(
-            api_key=settings.openrouter_api_key,
+            api_key=api_key,
             max_tokens=configured_max_tokens,
             timeout=min(timeout, OPENROUTER_ATTEMPT_TIMEOUT_SECONDS),
             total_timeout=OPENROUTER_TOTAL_TIMEOUT_SECONDS,
             deadline=model_deadline,
+            **({"activation": activation, "transport": transport} if route else {}),
         )
-        self.relevance_mode = settings.grc_relevance_mode
+        self.relevance_mode = "off" if route else settings.grc_relevance_mode
         self.relevance_min_probability = settings.grc_relevance_min_probability
         self.relevance_client = (
             RelevanceClient(
@@ -156,7 +175,12 @@ class GRCModelService:
         return str(content)
 
     async def _invoke(
-        self, *, system_prompt: str, user_prompt: str, title: str
+        self,
+        *,
+        system_prompt: str,
+        user_prompt: str,
+        title: str,
+        mode: GenerationMode = GenerationMode.TEXT,
     ) -> OpenRouterGeneration:
         """Invoke the configured model through the selected model client."""
         return await self.client.generate(
@@ -164,6 +188,7 @@ class GRCModelService:
             user_prompt=user_prompt,
             model=self.model,
             title=title,
+            mode=mode,
         )
 
     async def analyze_articles_for_grc(self, articles: List[ArticleInput]) -> Dict[str, Any]:
@@ -348,7 +373,9 @@ class GRCModelService:
 
             sources = analysis_data.get("source_evidence", [])
             last_validation_error = ""
-            for attempt in range(2):
+            model = getattr(self, "model", None)
+            attempts = 1 if model and selected_route(model.model_id, model.provider_id) else 2
+            for attempt in range(attempts):
                 prompt = report_prompt
                 if attempt:
                     prompt += "\nThe prior response was not a valid report plan. Return only the complete JSON selection object, with no prose, fences or extra fields."
@@ -367,13 +394,14 @@ class GRCModelService:
                     title=(
                         "GRC intelligence report retry" if attempt else "GRC intelligence report"
                     ),
+                    mode=GenerationMode.REPORT_PLAN,
                 )
                 try:
                     plan = parse_report_plan(generation.text, sources)
                     content = render_report_plan(plan, sources)
                 except ValueError as error:
                     last_validation_error = str(error)[:240]
-                    if attempt:
+                    if attempt + 1 >= attempts:
                         raise ReportQualityError(
                             "Report quality validation failed: model did not return a valid report plan after retry; "
                             f"{last_validation_error}"

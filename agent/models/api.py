@@ -10,7 +10,7 @@ class GRCAnalysisConfig(BaseModel):
     """Configuration for GRC analysis."""
 
     model: str = "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free"
-    max_tokens: int = 16000
+    max_tokens: int = Field(default=16000, strict=True, ge=1, le=16000)
     focus_areas: List[str] = Field(default_factory=list)
 
 
