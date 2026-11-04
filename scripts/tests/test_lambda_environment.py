@@ -133,8 +133,11 @@ def test_aws_cli_uses_private_stdin_and_one_attempt_without_key_environment(monk
     argv, kwargs = calls[0]
     assert KEY not in " ".join(argv)
     assert argv[1:3] == ["lambda", "update-function-configuration"]
-    assert argv[argv.index("--cli-input-json") + 1] == "file:///dev/stdin"
-    assert json.loads(kwargs["input"])["Environment"]["Variables"] == OWNED
+    assert "--cli-input-json" not in argv
+    assert argv[argv.index("--environment") + 1] == "file:///dev/stdin"
+    assert argv[argv.index("--function-name") + 1] == ARN
+    assert argv[argv.index("--revision-id") + 1] == REVISION
+    assert json.loads(kwargs["input"])["Variables"] == OWNED
     assert kwargs["env"]["AWS_MAX_ATTEMPTS"] == "1"
     assert kwargs["env"]["AWS_CONFIG_FILE"] == "/dev/null"
     assert "OPENROUTER_API_KEY" not in kwargs["env"]
@@ -159,7 +162,9 @@ def test_cli_failure_discards_raw_diagnostics_and_does_not_retry(monkeypatch):
         },
     )
     with pytest.raises(deploy.EnvironmentUpdateError) as error:
-        client.update({"Environment": {"Variables": OWNED}})
+        client.update(
+            {"FunctionName": ARN, "RevisionId": REVISION, "Environment": {"Variables": OWNED}}
+        )
     assert len(calls) == 1 and KEY not in str(error.value)
 
 

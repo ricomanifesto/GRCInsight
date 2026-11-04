@@ -201,23 +201,37 @@ class AwsCli:
             "2",
             "--cli-read-timeout",
             "5",
-            "--cli-input-json",
-            "file:///dev/stdin",
             "--output",
             "json",
             "--no-cli-pager",
         ]
+        private_input = None
         if operation == "update-function-configuration":
             argv += [
+                "--function-name",
+                payload["FunctionName"],
+                "--revision-id",
+                payload["RevisionId"],
+                "--environment",
+                "file:///dev/stdin",
                 "--query",
                 "{FunctionArn:FunctionArn,FunctionName:FunctionName,Version:Version,RevisionId:RevisionId}",
+            ]
+            private_input = json.dumps(payload["Environment"], allow_nan=False).encode()
+        elif operation == "get-function-configuration":
+            argv += [
+                "--function-name",
+                payload["FunctionName"],
+                "--qualifier",
+                payload["Qualifier"],
             ]
         elif operation == "get-caller-identity":
             argv += ["--query", "{Account:Account}"]
         try:
             result = subprocess.run(
                 argv,
-                input=json.dumps(payload, allow_nan=False).encode(),
+                input=private_input,
+                stdin=subprocess.DEVNULL if private_input is None else None,
                 env=self.environment,
                 stdout=subprocess.PIPE,
                 stderr=subprocess.DEVNULL,

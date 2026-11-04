@@ -75,8 +75,14 @@ overriding configured service endpoint URLs. Child environments do not inherit
 proxy, debug or OpenRouter-key variables and disable the pager. A non-database
 history destination is exported at the start for all manual AWS descendants,
 including direct existence checks/waiters, so CLI history cannot persist private
-configuration responses. The helper sends environment JSON only over stdin and retains the
-single-attempt RevisionId-CAS merge. GitHub Actions continues to use isolated
+configuration responses. Some older CLI versions refuse history-enabled contexts
+instead of continuing without history; the read-only preflight then fails closed
+before effects. Use an existing history-disabled context; the script does not edit
+operator history or profile settings. The helper sends only the private Environment
+structure over stdin via `--environment file:///dev/stdin`; nonsecret function ARN,
+qualifier and revision use native CLI flags. It does not use whole-request
+`--cli-input-json` on stdin. The single-attempt RevisionId-CAS merge remains.
+GitHub Actions continues to use isolated
 explicit environment credentials and `/dev/null` config files; it does not enable
 manual profile mode. The broader manual bootstrap effects still require separate
 operator review and are not the normal existing-function release path.

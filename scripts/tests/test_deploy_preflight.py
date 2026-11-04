@@ -159,7 +159,13 @@ def test_manual_config_endpoint_overrides_cannot_receive_private_json(monkeypatc
         manual_cli_auth=True,
     )
     assert client.account_id() == "123456789012"
-    client.update({"Environment": {"Variables": {"OPENROUTER_API_KEY": KEY}}})
+    client.update(
+        {
+            "FunctionName": "arn:aws:lambda:us-east-1:123456789012:function:grcinsight-python-function",
+            "RevisionId": "12345678-1234-1234-1234-123456789abc",
+            "Environment": {"Variables": {"OPENROUTER_API_KEY": KEY}},
+        }
+    )
     argv, kwargs = calls[1]
     assert calls[0][1]["env"] == kwargs["env"]
     assert (

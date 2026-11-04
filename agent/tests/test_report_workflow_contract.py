@@ -2044,7 +2044,10 @@ def test_lambda_configuration_updates_do_not_dump_openrouter_secret():
     assert "OPENROUTER_API_KEY=${OPENROUTER_API_KEY}" not in script
     assert "aws lambda update-function-configuration" not in script
     assert "--environment" not in script
-    assert script.count("update_lambda_environment.py") == 2
+    assert script.count("update_lambda_environment.py") == 3
+    assert "--preflight-only --manual-cli-auth" in script
+    assert script.count("--function-kind go") == 1
+    assert script.count("--function-kind python") == 2
     script_mutations = (
         script.count("aws lambda update-function-code")
         + script.count("aws lambda update-function-configuration")
