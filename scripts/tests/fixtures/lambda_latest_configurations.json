@@ -1,0 +1,102 @@
+{
+  "go": {
+    "before": {
+      "FunctionArn": "arn:aws:lambda:us-east-1:123456789012:function:grcinsight-go-function",
+      "FunctionName": "grcinsight-go-function",
+      "Version": "$LATEST",
+      "RevisionId": "12345678-1234-1234-1234-123456789abc",
+      "State": "Active",
+      "LastUpdateStatus": "Successful",
+      "PackageType": "Image",
+      "Architectures": [
+        "x86_64"
+      ],
+      "Timeout": 900,
+      "MemorySize": 512,
+      "Role": "arn:aws:iam::123456789012:role/grcinsight-go-function-role",
+      "Environment": {
+        "Variables": {
+          "UNRELATED_SETTING": "preserved",
+          "LOG_LEVEL": "WARNING"
+        }
+      }
+    },
+    "ack": {
+      "FunctionArn": "arn:aws:lambda:us-east-1:123456789012:function:grcinsight-go-function",
+      "FunctionName": "grcinsight-go-function",
+      "Version": "$LATEST",
+      "RevisionId": "22345678-1234-1234-1234-123456789abc"
+    },
+    "after": {
+      "FunctionArn": "arn:aws:lambda:us-east-1:123456789012:function:grcinsight-go-function",
+      "FunctionName": "grcinsight-go-function",
+      "Version": "$LATEST",
+      "RevisionId": "22345678-1234-1234-1234-123456789abc",
+      "State": "Active",
+      "LastUpdateStatus": "Successful",
+      "PackageType": "Image",
+      "Architectures": [
+        "x86_64"
+      ],
+      "Timeout": 900,
+      "MemorySize": 512,
+      "Role": "arn:aws:iam::123456789012:role/grcinsight-go-function-role",
+      "Environment": {
+        "Variables": {
+          "UNRELATED_SETTING": "preserved",
+          "LOG_LEVEL": "INFO"
+        }
+      }
+    }
+  },
+  "python": {
+    "before": {
+      "FunctionArn": "arn:aws:lambda:us-east-1:123456789012:function:grcinsight-python-function",
+      "FunctionName": "grcinsight-python-function",
+      "Version": "$LATEST",
+      "RevisionId": "12345678-1234-1234-1234-123456789abc",
+      "State": "Active",
+      "LastUpdateStatus": "Successful",
+      "PackageType": "Image",
+      "Architectures": [
+        "x86_64"
+      ],
+      "Timeout": 900,
+      "MemorySize": 512,
+      "Role": "arn:aws:iam::123456789012:role/grcinsight-python-function-role",
+      "Environment": {
+        "Variables": {
+          "UNRELATED_SETTING": "preserved",
+          "LOG_LEVEL": "WARNING"
+        }
+      }
+    },
+    "ack": {
+      "FunctionArn": "arn:aws:lambda:us-east-1:123456789012:function:grcinsight-python-function",
+      "FunctionName": "grcinsight-python-function",
+      "Version": "$LATEST",
+      "RevisionId": "22345678-1234-1234-1234-123456789abc"
+    },
+    "after": {
+      "FunctionArn": "arn:aws:lambda:us-east-1:123456789012:function:grcinsight-python-function",
+      "FunctionName": "grcinsight-python-function",
+      "Version": "$LATEST",
+      "RevisionId": "22345678-1234-1234-1234-123456789abc",
+      "State": "Active",
+      "LastUpdateStatus": "Successful",
+      "PackageType": "Image",
+      "Architectures": [
+        "x86_64"
+      ],
+      "Timeout": 900,
+      "MemorySize": 512,
+      "Role": "arn:aws:iam::123456789012:role/grcinsight-python-function-role",
+      "Environment": {
+        "Variables": {
+          "UNRELATED_SETTING": "preserved",
+          "LOG_LEVEL": "INFO"
+        }
+      }
+    }
+  }
+}
