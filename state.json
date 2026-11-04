@@ -149,6 +149,15 @@
       "outcome": "retained",
       "run_id": "41784858642",
       "stage": "completed"
+    },
+    {
+      "admission_key": "digest:4a9c6a547c0d4c796cb31ce255e721140afd6a63",
+      "at": "2026-11-04T09:13:22.499Z",
+      "binding": "none",
+      "event": "repository_dispatch",
+      "run_attempt": "1",
+      "run_id": "41805649367",
+      "stage": "admitted"
     }
   ],
   "schema_version": 1,
