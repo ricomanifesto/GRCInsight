@@ -92,18 +92,13 @@ async def rehearse():
         require(payload["max_tokens"] == MAX_OUTPUT_TOKENS)
         require([row["role"] for row in payload["messages"]] == ["system", "user"])
         require(all(type(row["content"]) is str for row in payload["messages"]))
-        require(
-            json.dumps(case["calibration_plan"])
-            not in payload["messages"][1]["content"]
-        )
+        require(json.dumps(case["calibration_plan"]) not in payload["messages"][1]["content"])
         complete = {
             "messages": payload["messages"],
             "response_format": payload["response_format"],
         }
         message_bytes = len(json.dumps(payload["messages"], ensure_ascii=True).encode())
-        schema_bytes = len(
-            json.dumps(payload["response_format"], ensure_ascii=True).encode()
-        )
+        schema_bytes = len(json.dumps(payload["response_format"], ensure_ascii=True).encode())
         complete_bytes = len(json.dumps(complete, ensure_ascii=True).encode())
         wrapper_bytes = complete_bytes - message_bytes - schema_bytes
         input_bound = message_bytes + schema_bytes + wrapper_bytes + 4096
@@ -161,9 +156,7 @@ async def rehearse():
         stack.enter_context(
             patch.object(httpx.AsyncHTTPTransport, "handle_async_request", deny_network)
         )
-        stack.enter_context(
-            patch.object(httpx.HTTPTransport, "handle_request", deny_network)
-        )
+        stack.enter_context(patch.object(httpx.HTTPTransport, "handle_request", deny_network))
         previous = Path.cwd()
         os.chdir(directory)  # Settings' relative .env path resolves to empty scratch.
         stack.callback(os.chdir, previous)
@@ -183,12 +176,8 @@ async def rehearse():
             activation=RouteActivation.OFFLINE,
             transport=httpx.MockTransport(handler),
         )
-        generation = await service.generate_grc_report(
-            case["analysis_data"], case["feed_info"]
-        )
-        require(
-            len(requests) == 1 and generation.report_plan == case["calibration_plan"]
-        )
+        generation = await service.generate_grc_report(case["analysis_data"], case["feed_info"])
+        require(len(requests) == 1 and generation.report_plan == case["calibration_plan"])
         validate_rendered_report(
             generation.content,
             generation.report_plan,

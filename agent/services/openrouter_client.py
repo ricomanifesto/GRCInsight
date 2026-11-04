@@ -105,7 +105,7 @@ class OpenRouterClient:
             route.require_offline(self.activation, self.transport, self.api_key, self.base_url)
         if not isinstance(mode, GenerationMode):
             raise ValueError("Unsupported generation mode")
-        payload = {
+        payload: dict[str, Any] = {
             "model": model.model_id,
             "max_tokens": self.max_tokens,
             "stream": False,

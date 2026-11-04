@@ -18,6 +18,10 @@ from services.openrouter_client import (
 MODEL = parse_openrouter_model("openrouter/" + ARGON_ROUTE.model_id)
 
 
+def unexpected_post(_request: httpx.Request) -> httpx.Response:
+    raise AssertionError("Unexpected POST")
+
+
 def completion():
     return {
         "model": ARGON_ROUTE.model_id,
@@ -53,10 +57,15 @@ def offline(handler, **kwargs):
 
 def test_selected_default_is_disabled_even_with_a_key_and_mock():
     requests = []
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        requests.append(request)
+        return unexpected_post(request)
+
     client = OpenRouterClient(
         api_key=OFFLINE_KEY,
         max_tokens=16000,
-        transport=httpx.MockTransport(lambda r: requests.append(r)),
+        transport=httpx.MockTransport(handler),
     )
     with pytest.raises(ModelRouteError, match="disabled"):
         invoke(client)
@@ -182,7 +191,7 @@ def test_offline_route_requires_exact_mock_and_synthetic_key():
         api_key="not-the-offline-key",
         max_tokens=16000,
         activation=RouteActivation.OFFLINE,
-        transport=httpx.MockTransport(lambda _: None),
+        transport=httpx.MockTransport(unexpected_post),
     )
     with pytest.raises(ModelRouteError):
         invoke(client)
@@ -236,7 +245,7 @@ def test_selected_top_level_error_cannot_log_untrusted_error_code():
     ],
 )
 def test_selected_identity_ownership_cannot_escape_into_legacy_transport(owner, identifier):
-    client = offline(lambda _: pytest.fail("POST"))
+    client = offline(unexpected_post)
     with pytest.raises(ModelRouteError):
         asyncio.run(
             client.generate(

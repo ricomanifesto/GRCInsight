@@ -19,6 +19,10 @@ from core.report_plan import validate_rendered_report
 CASE = json.loads((Path(__file__).parent / "fixtures/selected_model_case.json").read_text())
 
 
+def unexpected_post(_request: httpx.Request) -> httpx.Response:
+    raise AssertionError("Unexpected POST")
+
+
 @pytest.mark.parametrize(
     "model_id",
     [
@@ -46,7 +50,7 @@ def test_selected_service_rejects_raw_cap_before_falsey_default_or_coercion(raw_
             model_name="openrouter/" + ARGON_ROUTE.model_id,
             max_tokens=raw_cap,
             activation=RouteActivation.OFFLINE,
-            transport=httpx.MockTransport(lambda _: None),
+            transport=httpx.MockTransport(unexpected_post),
         )
 
 
@@ -101,6 +105,7 @@ def test_real_selected_service_uses_one_plan_post_and_host_grounded_rendering(va
     assert payload["response_format"]["type"] == "json_schema"
     assert service.relevance_client is None
     if valid:
+        assert generation.report_plan is not None
         assert generation.report_plan == CASE["calibration_plan"]
         assert generation.report_plan["regulatory_changes"] == []
         assert generation.report_plan["control_implications"][0]["source_ids"] == [2]
@@ -135,7 +140,7 @@ def test_real_legacy_article_analysis_remains_text_without_report_schema(monkeyp
         title="Fictional compliance notice",
         url="https://example.test/notice",
         content="A fictional consultation proposes access reviews.",
-        published="2026-11-04T00:00:00Z",
+        published=datetime(2026, 11, 4, tzinfo=timezone.utc),
     )
     result = asyncio.run(service.analyze_articles_for_grc([article]))
     assert result["summary"]["total_articles"] == 1
