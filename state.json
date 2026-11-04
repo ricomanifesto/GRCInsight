@@ -201,6 +201,14 @@
       "handle": "report_20261104_121702_371",
       "run_id": "41827880845",
       "stage": "invoked"
+    },
+    {
+      "admission_key": "digest:3a04128221ec9f710bd06484ceee0721d94171a4",
+      "at": "2026-11-04T12:17:40.501Z",
+      "binding": "none",
+      "outcome": "retained",
+      "run_id": "41827880845",
+      "stage": "completed"
     }
   ],
   "schema_version": 1,
