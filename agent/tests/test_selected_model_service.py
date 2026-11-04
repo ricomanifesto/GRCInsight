@@ -102,6 +102,7 @@ def test_real_selected_service_uses_one_plan_post_and_host_grounded_rendering(va
     assert len(requests) == 1
     payload = json.loads(requests[0].content)
     assert payload["max_tokens"] == 8000
+    assert payload["provider"]["only"] == ["google-vertex/global"]
     assert payload["response_format"]["type"] == "json_schema"
     assert service.relevance_client is None
     if valid:
@@ -167,6 +168,15 @@ def test_fixed_report_rehearsal_request_is_independent_of_ambient_date():
     assert first["request_sha256"] == second["request_sha256"]
     assert first["wire_request_sha256"] == second["wire_request_sha256"]
     assert first["prompt_date"] == second["prompt_date"] == "2026-11-04"
+    assert (
+        first["request_sha256"]
+        == "a392d628f3a09a0ad2a272c80a9f155dadb53b8388b928be877fc1f1b38b4c96"
+    )
+    assert (
+        first["wire_request_sha256"]
+        == "655631707443f06f4e4efdc0266950a506b48ce8be2a8340a7f3f30adff39870"
+    )
+    assert first["wire_request_bytes"] == 17236
     assert first["conservative_input_bound"] == sum(
         first[key]
         for key in (

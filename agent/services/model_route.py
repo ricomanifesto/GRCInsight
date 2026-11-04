@@ -71,7 +71,7 @@ class ModelRoutePolicy:
 
 ARGON_ROUTE = ModelRoutePolicy(
     model_id="google/gemini-4-argon",
-    endpoint="google-ai-studio",
+    endpoint="google-vertex/global",
     context_tokens=1048576,
     max_output_tokens=16000,
 )

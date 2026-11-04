@@ -66,6 +66,16 @@ export OPENROUTER_API_KEY=...
 export LLM_MODEL=openrouter/nvidia/nemotron-3-ultra-550b-a55b:free
 ```
 
+The prepared `openrouter/google/gemini-4-argon` profile pins `google-vertex/global`
+(provider Google), with the default service tier, no fallback, collection denied,
+ZDR filtering and text price ceilings of $2/M input and $10/M combined output.
+It remains disabled for live execution; only the explicit offline mock path is
+available. The free model default is unchanged. ZDR eligibility does not mean
+zero retention: Vertex can retain flagged prompts for safety for up to 90 days,
+without training. Review effective provider/account policy and obtain separate
+data, retention and budget approval before any future live activation. A policy
+refusal must stop without relaxing filters or changing account settings.
+
 Start the Python service:
 
 ```bash

@@ -93,7 +93,7 @@ def test_selected_payload_is_fixed_and_json_is_only_for_report_plan(mode):
         {"response_format"} if mode is GenerationMode.REPORT_PLAN else set()
     )
     assert payload["provider"] == {
-        "only": ["google-ai-studio"],
+        "only": ["google-vertex/global"],
         "allow_fallbacks": False,
         "require_parameters": True,
         "data_collection": "deny",
