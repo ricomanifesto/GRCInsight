@@ -114,7 +114,7 @@ class GRCModelService:
         """Initialize model service."""
         configured_model = model_name or settings.llm_model
         self.model = parse_openrouter_model(configured_model)
-        route = selected_route(self.model.model_id)
+        route = selected_route(self.model.model_id, self.model.provider_id)
         if route is not None:
             # Settings() has already loaded the environment at module import.
             # Refuse before key-attribute access or creation of either client.
@@ -375,7 +375,7 @@ class GRCModelService:
             sources = analysis_data.get("source_evidence", [])
             last_validation_error = ""
             model = getattr(self, "model", None)
-            attempts = 1 if model and selected_route(model.model_id) else 2
+            attempts = 1 if model and selected_route(model.model_id, model.provider_id) else 2
             for attempt in range(attempts):
                 prompt = report_prompt
                 if attempt:

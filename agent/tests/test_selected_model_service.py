@@ -50,6 +50,27 @@ def test_selected_service_rejects_raw_cap_before_falsey_default_or_coercion(raw_
         )
 
 
+@pytest.mark.parametrize(
+    "configured",
+    [
+        "google/gemini-4-argon",
+        "anthropic/google/gemini-4-argon",
+        "openrouter/ google/gemini-4-argon",
+        "openrouter/google / gemini-4-argon",
+        "openrouter/google/gemini-4-argon ",
+    ],
+)
+def test_selected_noncanonical_configuration_cannot_access_key_attribute(monkeypatch, configured):
+    class NoCredentialSettings:
+        @property
+        def openrouter_api_key(self):
+            raise AssertionError("key accessed")
+
+    monkeypatch.setattr("services.model_service.settings", NoCredentialSettings())
+    with pytest.raises(ValueError):
+        GRCModelService(model_name=configured, max_tokens=8000)
+
+
 @pytest.mark.parametrize("valid", [True, False])
 def test_real_selected_service_uses_one_plan_post_and_host_grounded_rendering(valid):
     requests = []

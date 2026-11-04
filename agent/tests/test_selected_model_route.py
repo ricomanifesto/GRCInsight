@@ -8,7 +8,12 @@ import httpx
 import pytest
 
 from services.model_route import ARGON_ROUTE, OFFLINE_KEY, ModelRouteError, RouteActivation
-from services.openrouter_client import GenerationMode, OpenRouterClient, parse_openrouter_model
+from services.openrouter_client import (
+    GenerationMode,
+    OpenRouterClient,
+    OpenRouterModel,
+    parse_openrouter_model,
+)
 
 MODEL = parse_openrouter_model("openrouter/" + ARGON_ROUTE.model_id)
 
@@ -215,6 +220,32 @@ def test_selected_top_level_error_cannot_log_untrusted_error_code():
     with pytest.raises(ModelRouteError) as error:
         invoke(offline(lambda _: httpx.Response(200, json=value)))
     assert "provider secret" not in str(error.value)
+
+
+@pytest.mark.parametrize(
+    "owner,identifier",
+    [
+        ("google", "gemini-4-argon"),
+        ("anthropic", "google/gemini-4-argon"),
+        ("anthropic", "gemini-4-argon"),
+        (" openrouter ", "google/gemini-4-argon"),
+        ("openrouter", " google/gemini-4-argon"),
+        ("openrouter", "google/gemini-4-argon "),
+        ("openrouter", "google / gemini-4-argon"),
+        ("openrouter", "openrouter/google/gemini-4-argon"),
+    ],
+)
+def test_selected_identity_ownership_cannot_escape_into_legacy_transport(owner, identifier):
+    client = offline(lambda _: pytest.fail("POST"))
+    with pytest.raises(ModelRouteError):
+        asyncio.run(
+            client.generate(
+                system_prompt="system",
+                user_prompt="user",
+                model=OpenRouterModel(model_id=identifier, provider_id=owner),
+                title="test",
+            )
+        )
 
 
 @pytest.mark.parametrize(

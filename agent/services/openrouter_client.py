@@ -100,7 +100,7 @@ class OpenRouterClient:
         mode: GenerationMode = GenerationMode.TEXT,
     ) -> OpenRouterGeneration:
         """Generate text and retain OpenRouter's resolved upstream model."""
-        route = selected_route(model.model_id)
+        route = selected_route(model.model_id, model.provider_id)
         if route is not None:
             route.require_offline(self.activation, self.transport, self.api_key, self.base_url)
         if not isinstance(mode, GenerationMode):
