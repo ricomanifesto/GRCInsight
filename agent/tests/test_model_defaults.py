@@ -1,4 +1,5 @@
 from pathlib import Path
+import pytest
 
 from config.settings import Settings
 import lambda_main
@@ -11,6 +12,29 @@ from services.openrouter_client import OpenRouterClient, parse_openrouter_model
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_LLM_MODEL = "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free"
+
+
+@pytest.mark.parametrize("model", [DEFAULT_LLM_MODEL, ""])
+def test_go_default_config_shape_is_accepted_by_strict_python_event_boundary(monkeypatch, model):
+    observed = []
+
+    async def workflow(_feed_url, config, model_deadline=None):
+        observed.append(config)
+        return WorkflowResponse(status="completed")
+
+    monkeypatch.setattr("core.workflow.run_grc_analysis_endpoint", workflow)
+    # Go's zero-value slice serializes as null; the direct-event adapter owns
+    # its existing focus-area default, while max_tokens must already be valid.
+    response = lambda_main.handler(
+        {
+            "feed_url": "https://feed.example.test/rss",
+            "config": {"model": model, "max_tokens": 16000, "focus_areas": None},
+        },
+        object(),
+    )
+    assert response["statusCode"] == 200 and len(observed) == 1
+    assert observed[0].max_tokens == 16000
+    assert observed[0].focus_areas == ["governance", "compliance"]
 
 
 def test_env_example_uses_openrouter_runtime_configuration():

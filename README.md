@@ -198,4 +198,11 @@ The store and the receipts directory must be outside the repository. Route accep
 
 `.github/workflows/lambda-report-generation.yml` runs after a SentryDigest dispatch, daily at 13:00 UTC, or by manual trigger. Every unowned OpenRouter chat route disables provider fallbacks and enforces zero prompt, completion, request, and image price ceilings, including caller-selected aliases or IDs without a `:free` suffix. The documented `:online` modifier and standalone/combined `@preset/` references are refused because they can add separately billed server search/tools outside those token ceilings. Output is bounded to a positive integer of at most 16,000 tokens at the API and transport boundaries. The default route is `openrouter/nvidia/nemotron-3-ultra-550b-a55b:free`; selected paid profiles remain disabled outside synthetic offline rehearsal. This transport fence does not provide caller authentication or an aggregate budget. AWS credentials and `OPENROUTER_API_KEY` are required repository secrets.
 
+An omitted Go request output cap defaults to 16,000 before any processing record
+is created or Python payload is serialized. Explicit invalid caps are rejected at
+JSON binding; Python retains its strict positive 16,000-token cap. Manual deployment
+preserves configured AWS CLI/profile authentication through an explicit filtered
+mode and performs its matching read-only identity preflight before mutations; see
+the [deployment guide](docs/README-Lambda-Deployment.md).
+
 `.github/workflows/deploy-site.yml` is the only Pages deployment workflow. It validates the committed `site/` directory, captures light and dark screenshots, and deploys that same artifact.

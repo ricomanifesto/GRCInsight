@@ -3,14 +3,15 @@
 # AWS Lambda Deployment Script for GRCInsight
 set +x
 set -e
+# Protect every direct/helper AWS descendant, including full configuration
+# responses observed internally by existence checks and waiters.
+export AWS_CLI_HISTORY_FILE=/dev
 
 echo "Deploying GRCInsight to AWS Lambda..."
 
 # Configuration
 export DOCKER_BUILDKIT=0
 AWS_REGION=${AWS_REGION:-us-east-1}
-AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
-ECR_REGISTRY=${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com
 GO_REPO_NAME=grcinsight-go
 PYTHON_REPO_NAME=grcinsight-python
 GO_FUNCTION_NAME=grcinsight-go-function
@@ -34,11 +35,11 @@ print_error() {
     echo -e "${RED}[ERROR]${NC} $1"
 }
 
-# Check if AWS CLI is configured
-if ! aws sts get-caller-identity > /dev/null 2>&1; then
-    print_error "AWS CLI not configured. Please run 'aws configure' first."
-    exit 1
-fi
+# Reuse the existing read-only STS check through the same filtered AWS CLI auth
+# context as later environment writes, before any ECR/image/Lambda mutation.
+AWS_ACCOUNT_ID=$(python3 -I -B scripts/update_lambda_environment.py \
+    --function-kind python --preflight-only --manual-cli-auth --region "$AWS_REGION")
+ECR_REGISTRY=${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com
 
 print_status "AWS Account ID: $AWS_ACCOUNT_ID"
 print_status "AWS Region: $AWS_REGION"
@@ -201,7 +202,7 @@ fi
 aws lambda wait function-active-v2 --function-name "$GO_FUNCTION_NAME" --region "$AWS_REGION"
 aws lambda wait function-updated-v2 --function-name "$GO_FUNCTION_NAME" --region "$AWS_REGION"
 python3 -I -B scripts/update_lambda_environment.py \
-    --function-kind go --account-id "$AWS_ACCOUNT_ID" --region "$AWS_REGION"
+    --function-kind go --account-id "$AWS_ACCOUNT_ID" --region "$AWS_REGION" --manual-cli-auth
 
 # Create/update Python Lambda function
 print_status "Deploying Python Lambda function..."
@@ -230,7 +231,7 @@ fi
 aws lambda wait function-active-v2 --function-name "$PYTHON_FUNCTION_NAME" --region "$AWS_REGION"
 aws lambda wait function-updated-v2 --function-name "$PYTHON_FUNCTION_NAME" --region "$AWS_REGION"
 python3 -I -B scripts/update_lambda_environment.py \
-    --function-kind python --account-id "$AWS_ACCOUNT_ID" --region "$AWS_REGION"
+    --function-kind python --account-id "$AWS_ACCOUNT_ID" --region "$AWS_REGION" --manual-cli-auth
 
 # Ensure IAM policy for DynamoDB and Lambda invoke is attached to the role
 print_status "Ensuring IAM policies for DynamoDB and Lambda invoke..."

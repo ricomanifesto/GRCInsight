@@ -11,6 +11,7 @@ import os
 import re
 import shutil
 import subprocess
+import sys
 import time
 import uuid
 
@@ -126,20 +127,31 @@ def configure(client, arn, owned, *, pause=time.sleep, now=time.monotonic):
 class AwsCli:
     """Existing CLI only; secret-bearing JSON travels through a private stdin pipe."""
 
-    def __init__(self, executable, region, environment):
+    def __init__(self, executable, region, environment, *, manual_cli_auth=False):
+        pair = (environment.get("AWS_ACCESS_KEY_ID"), environment.get("AWS_SECRET_ACCESS_KEY"))
         if (
             region != "us-east-1"
             or not executable
-            or not all(
-                environment.get(name) for name in ("AWS_ACCESS_KEY_ID", "AWS_SECRET_ACCESS_KEY")
+            or (not manual_cli_auth and not all(pair))
+            or (any(pair) and not all(pair))
+            or (environment.get("AWS_SESSION_TOKEN") and not all(pair))
+            or (
+                manual_cli_auth
+                and any(
+                    environment.get(name)
+                    for name in (
+                        "AWS_ROLE_ARN",
+                        "AWS_WEB_IDENTITY_TOKEN_FILE",
+                        "AWS_CONTAINER_CREDENTIALS_FULL_URI",
+                        "AWS_CONTAINER_CREDENTIALS_RELATIVE_URI",
+                    )
+                )
             )
         ):
             raise EnvironmentUpdateError()
         self.executable, self.region = executable, region
         self.environment = {
             "PATH": os.defpath,
-            "AWS_ACCESS_KEY_ID": environment["AWS_ACCESS_KEY_ID"],
-            "AWS_SECRET_ACCESS_KEY": environment["AWS_SECRET_ACCESS_KEY"],
             "AWS_MAX_ATTEMPTS": "1",
             "AWS_RETRY_MODE": "standard",
             "AWS_CONFIG_FILE": "/dev/null",
@@ -147,17 +159,44 @@ class AwsCli:
             "AWS_EC2_METADATA_DISABLED": "true",
             "AWS_PAGER": "",
             "AWS_CLI_AUTO_PROMPT": "off",
+            # A directory cannot become an SQLite history database. Even an
+            # operator profile enabling CLI history cannot persist API inputs.
+            "AWS_CLI_HISTORY_FILE": "/dev",
         }
+        if all(pair):
+            self.environment["AWS_ACCESS_KEY_ID"] = pair[0]
+            self.environment["AWS_SECRET_ACCESS_KEY"] = pair[1]
+        if manual_cli_auth:
+            for name in (
+                "HOME",
+                "AWS_PROFILE",
+                "AWS_DEFAULT_PROFILE",
+                "AWS_CONFIG_FILE",
+                "AWS_SHARED_CREDENTIALS_FILE",
+            ):
+                if name in environment:
+                    self.environment[name] = environment[name]
+                elif name in {"AWS_CONFIG_FILE", "AWS_SHARED_CREDENTIALS_FILE"}:
+                    self.environment.pop(name)
         if environment.get("AWS_SESSION_TOKEN"):
             self.environment["AWS_SESSION_TOKEN"] = environment["AWS_SESSION_TOKEN"]
 
     def _call(self, operation, payload, timeout=10):
+        if operation not in {
+            "get-function-configuration",
+            "update-function-configuration",
+            "get-caller-identity",
+        }:
+            raise EnvironmentUpdateError()
+        service = "sts" if operation == "get-caller-identity" else "lambda"
         argv = [
             self.executable,
-            "lambda",
+            service,
             operation,
             "--region",
             self.region,
+            "--endpoint-url",
+            f"https://{service}.us-east-1.amazonaws.com",
             "--cli-connect-timeout",
             "2",
             "--cli-read-timeout",
@@ -173,6 +212,8 @@ class AwsCli:
                 "--query",
                 "{FunctionArn:FunctionArn,FunctionName:FunctionName,Version:Version,RevisionId:RevisionId}",
             ]
+        elif operation == "get-caller-identity":
+            argv += ["--query", "{Account:Account}"]
         try:
             result = subprocess.run(
                 argv,
@@ -199,6 +240,17 @@ class AwsCli:
 
     def update(self, payload):
         return self._call("update-function-configuration", payload)
+
+    def account_id(self):
+        value = self._call("get-caller-identity", {})
+        account = value.get("Account")
+        if (
+            set(value) != {"Account"}
+            or type(account) is not str
+            or not re.fullmatch(r"\d{12}", account)
+        ):
+            raise EnvironmentUpdateError()
+        return account
 
 
 def owned_environment(kind, env):
@@ -247,15 +299,24 @@ def owned_environment(kind, env):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--function-kind", choices=FUNCTIONS, required=True)
-    parser.add_argument("--account-id", required=True)
+    parser.add_argument("--account-id")
     parser.add_argument("--region", default="us-east-1")
+    parser.add_argument("--preflight-only", action="store_true")
+    parser.add_argument("--manual-cli-auth", action="store_true")
     args = parser.parse_args()
     try:
-        if not re.fullmatch(r"\d{12}", args.account_id):
+        owned = owned_environment(args.function_kind, os.environ)
+        client = AwsCli(
+            shutil.which("aws"), args.region, os.environ, manual_cli_auth=args.manual_cli_auth
+        )
+        if args.preflight_only:
+            # Same filtered authentication/endpoint context as later writes.
+            # Reuses the script's existing read-only STS check; no Lambda required.
+            print(client.account_id())
+            return 0
+        if args.account_id is None or not re.fullmatch(r"\d{12}", args.account_id):
             raise EnvironmentUpdateError()
         arn = f"arn:aws:lambda:{args.region}:{args.account_id}:function:{FUNCTIONS[args.function_kind]}"
-        owned = owned_environment(args.function_kind, os.environ)
-        client = AwsCli(shutil.which("aws"), args.region, os.environ)
         print(
             "Lambda environment update starting; inspect any uncertain result before rerunning",
             flush=True,
@@ -264,6 +325,13 @@ def main():
         print("Lambda environment " + result)
         return 0
     except (Exception, KeyboardInterrupt):
+        if args.preflight_only:
+            print(
+                "Deployment configuration/authentication preflight failed; no resources were changed",
+                file=sys.stderr,
+                flush=True,
+            )
+            return 1
         print("Lambda environment update unavailable or uncertain; no automatic retry", flush=True)
         return 1
 
