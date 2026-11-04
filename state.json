@@ -224,6 +224,13 @@
       "at": "2026-11-04T13:01:35.342Z",
       "run_id": "41834300139",
       "stage": "invoked"
+    },
+    {
+      "admission_key": "run:41834300139",
+      "at": "2026-11-04T13:01:38.138Z",
+      "handle": "report_20261104_130137_567",
+      "run_id": "41834300139",
+      "stage": "invoked"
     }
   ],
   "schema_version": 1,
