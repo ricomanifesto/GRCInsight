@@ -20,7 +20,6 @@ from services import model_service
         "openrouter/auto",
         "openrouter/free",
         "vendor/model:free",
-        "vendor/model:online",
         "~vendor/alias",
     ],
 )
@@ -108,6 +107,42 @@ def test_api_output_default_is_preserved_and_strictly_server_bounded():
 def test_direct_constructor_refuses_unbounded_allowances(value):
     with pytest.raises(ValueError):
         OpenRouterClient(api_key="synthetic", max_tokens=value)
+
+
+@pytest.mark.parametrize(
+    "identifier",
+    [
+        "vendor/model:online",
+        "vendor/model:free:online",
+        "vendor/model:ONLINE",
+        " vendor/model : online ",
+        "vendor/model:free: Online :floor",
+        "@preset/example",
+        "vendor/model@preset/example",
+        "@PRESET/example",
+        "vendor/model@ preset / example",
+    ],
+)
+def test_implicit_billable_search_and_presets_refuse_before_transport(identifier):
+    calls = []
+
+    def forbidden(request):
+        calls.append(request)
+        raise AssertionError("Unexpected POST")
+
+    client = OpenRouterClient(
+        api_key="synthetic", max_tokens=8000, transport=httpx.MockTransport(forbidden)
+    )
+    with pytest.raises(ValueError, match="indirect"):
+        asyncio.run(
+            client.generate(
+                system_prompt="system",
+                user_prompt="user",
+                model=parse_openrouter_model("openrouter/" + identifier),
+                title="synthetic",
+            )
+        )
+    assert not calls
 
 
 def test_direct_service_rejects_oversize_before_key_attribute(monkeypatch):

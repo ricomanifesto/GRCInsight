@@ -109,7 +109,7 @@ def configure(client, arn, owned, *, pause=time.sleep, now=time.monotonic):
             raise EnvironmentUpdateError()
         if after.get("LastUpdateStatus") == "InProgress":
             if attempt < 2:
-                pause(min(1, max(0, end - now())))
+                pause(min(10, max(0, end - now())))
             continue
         if (
             after.get("State") != "Active"

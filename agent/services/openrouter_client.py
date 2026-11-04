@@ -112,6 +112,12 @@ class OpenRouterClient:
             route.require_offline(self.activation, self.transport, self.api_key, self.base_url)
         else:
             validate_output_limit(self.max_tokens)
+            # These documented model forms can add separately billed server
+            # search/tools, outside provider token price ceilings.
+            if any(
+                part.strip().casefold() == "online" for part in model.model_id.split(":")[1:]
+            ) or re.search(r"@\s*preset\s*/", model.model_id, re.IGNORECASE):
+                raise ValueError("Unowned indirect model configuration is disabled")
         if not isinstance(mode, GenerationMode):
             raise ValueError("Unsupported generation mode")
         payload: dict[str, Any] = {

@@ -2061,3 +2061,17 @@ def test_regular_lambda_release_verifies_existing_repositories_without_permissio
     assert "aws ecr create-repository" not in workflow
     assert "aws ecr set-repository-policy" not in workflow
     assert "aws iam " not in workflow
+
+
+def test_paused_go_health_is_deferred_without_concurrency_mutation():
+    workflow = DEPLOY_WORKFLOW.read_text()
+    assert "Verify deployed image references" in workflow
+    assert "Code.ImageUri" in workflow
+    assert "aws lambda get-function-concurrency" in workflow
+    assert "check_lambda_maintenance.py" in workflow
+    assert 'if [ "$GO_HEALTH_MODE" = "paused" ]; then' in workflow
+    assert "Go API health deferred" in workflow
+    assert "'{\"health_check\":true}'" in workflow
+    assert "put-function-concurrency" not in workflow
+    assert "delete-function-concurrency" not in workflow
+    assert "deep=True" not in workflow
