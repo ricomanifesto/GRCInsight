@@ -219,12 +219,7 @@ class AwsCli:
             ]
             private_input = json.dumps(payload["Environment"], allow_nan=False).encode()
         elif operation == "get-function-configuration":
-            argv += [
-                "--function-name",
-                payload["FunctionName"],
-                "--qualifier",
-                payload["Qualifier"],
-            ]
+            argv += ["--function-name", payload["FunctionName"]]
         elif operation == "get-caller-identity":
             argv += ["--query", "{Account:Account}"]
         try:
@@ -248,9 +243,9 @@ class AwsCli:
             raise EnvironmentUpdateError() from None
 
     def get(self, arn, *, timeout=10):
-        return self._call(
-            "get-function-configuration", {"FunctionName": arn, "Qualifier": "$LATEST"}, timeout
-        )
+        # An unqualified base ARN selects unpublished $LATEST and preserves the
+        # same exact ARN identity used by the update and its verification polls.
+        return self._call("get-function-configuration", {"FunctionName": arn}, timeout)
 
     def update(self, payload):
         return self._call("update-function-configuration", payload)
