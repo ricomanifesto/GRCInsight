@@ -1,0 +1,68 @@
+{
+  "analysis_data": {
+    "summary": {
+      "total_articles": 2,
+      "grc_relevant_count": 2
+    },
+    "analysis": {
+      "regulations_mentioned": [],
+      "industries_affected": [],
+      "risk_categories": []
+    },
+    "source_evidence": [
+      {
+        "title": "Fictional compliance notice",
+        "url": "https://regulator.example.test/notices/control-review",
+        "snippet": "The Fictional Standards Board opened a consultation on annual access reviews. The notice does not set a binding duty or an effective date.",
+        "cves": [],
+        "article_evidence": [
+          {
+            "origin": "summary",
+            "text": "The Fictional Standards Board opened a consultation on annual access reviews. The notice does not set a binding duty or an effective date.",
+            "raw_text": "The Fictional Standards Board opened a consultation on annual access reviews. The notice does not set a binding duty or an effective date.",
+            "extraction_version": 1
+          }
+        ]
+      },
+      {
+        "title": "Fictional supplier access incident",
+        "url": "https://security.example.test/advisories/supplier-access",
+        "snippet": "Example Supplier revoked an unattended service account after detecting unauthorized access. The notice asks customers to review delegated permissions and retain access logs.",
+        "cves": [],
+        "article_evidence": [
+          {
+            "origin": "summary",
+            "text": "Example Supplier revoked an unattended service account after detecting unauthorized access. The notice asks customers to review delegated permissions and retain access logs.",
+            "raw_text": "Example Supplier revoked an unattended service account after detecting unauthorized access. The notice asks customers to review delegated permissions and retain access logs.",
+            "extraction_version": 1
+          }
+        ]
+      }
+    ]
+  },
+  "feed_info": {
+    "title": "Fictional GRC test feed"
+  },
+  "calibration_plan": {
+    "regulatory_changes": [],
+    "control_implications": [
+      {
+        "control_id": "third_party_risk",
+        "priority": "medium",
+        "source_ids": [
+          2
+        ],
+        "focus": "Example Supplier",
+        "evidence_origin": "summary",
+        "evidence_excerpt": "Example Supplier revoked an unattended service account after detecting unauthorized access. The notice asks customers to review delegated permissions and retain access logs."
+      }
+    ],
+    "industry_impacts": [],
+    "executive_brief": {
+      "decision_frame": "supplier",
+      "source_ids": [
+        2
+      ]
+    }
+  }
+}
