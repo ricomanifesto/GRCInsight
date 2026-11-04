@@ -161,3 +161,29 @@ def test_cli_failure_discards_raw_diagnostics_and_does_not_retry(monkeypatch):
     with pytest.raises(deploy.EnvironmentUpdateError) as error:
         client.update({"Environment": {"Variables": OWNED}})
     assert len(calls) == 1 and KEY not in str(error.value)
+
+
+@pytest.mark.parametrize(
+    "overrides",
+    [
+        {},
+        {
+            "GRC_RELEVANCE_MODE": "enabled",
+            "GRC_RELEVANCE_MIN_PROBABILITY": "0.8",
+            "GRC_RELEVANCE_TIMEOUT_SECONDS": "3",
+        },
+    ],
+)
+def test_relevance_defaults_and_overrides_reach_merged_environment(overrides):
+    environment = {"LLM_MODEL": "openrouter/test/model", "OPENROUTER_API_KEY": KEY, **overrides}
+    owned = deploy.owned_environment("python", environment)
+    client = Client()
+    assert deploy.configure(client, ARN, owned, pause=lambda _seconds: None) == "verified"
+    merged = client.value["Environment"]["Variables"]
+    for name, default in (
+        ("GRC_RELEVANCE_MODE", "off"),
+        ("GRC_RELEVANCE_MIN_PROBABILITY", "0.95"),
+        ("GRC_RELEVANCE_TIMEOUT_SECONDS", "4"),
+    ):
+        assert merged[name] == overrides.get(name, default)
+    assert merged["UNRELATED"] == "private-other" and merged["OPENROUTER_API_KEY"] == KEY

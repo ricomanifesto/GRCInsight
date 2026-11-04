@@ -1,5 +1,6 @@
 from pathlib import Path
 import os
+import runpy
 import subprocess
 import textwrap
 import tomllib
@@ -64,13 +65,25 @@ def test_lambda_deploy_forwards_relevance_pilot_configuration():
         encoding="utf-8"
     )
 
+    helper = runpy.run_path(str(REPO_ROOT / "scripts/update_lambda_environment.py"))
+    environment = {"LLM_MODEL": "openrouter/test/model", "OPENROUTER_API_KEY": "synthetic"}
+    defaults = helper["owned_environment"]("python", environment)
+    overrides = {
+        "GRC_RELEVANCE_MODE": "shadow",
+        "GRC_RELEVANCE_MIN_PROBABILITY": "0.75",
+        "GRC_RELEVANCE_TIMEOUT_SECONDS": "2",
+    }
+    configured = helper["owned_environment"]("python", {**environment, **overrides})
+    assert "python3 -I -B scripts/update_lambda_environment.py" in workflow_source
+    assert '--function-kind python --account-id "$AWS_ACCOUNT_ID"' in workflow_source
     for name, default in (
         ("GRC_RELEVANCE_MODE", "off"),
         ("GRC_RELEVANCE_MIN_PROBABILITY", "0.95"),
         ("GRC_RELEVANCE_TIMEOUT_SECONDS", "4"),
     ):
         assert f"{name}: ${{{{ vars.{name} || '{default}' }}}}" in workflow_source
-        assert f"{name}=${name}" in workflow_source
+        assert defaults[name] == default
+        assert configured[name] == overrides[name]
 
 
 @pytest.mark.parametrize(
