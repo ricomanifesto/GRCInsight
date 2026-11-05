@@ -321,20 +321,8 @@ def _repeats_excerpt(text: str, excerpts: list[str]) -> bool:
     return False
 
 
-def _narrative_problem(
-    text: str, corpus: str, excerpts: list[str], *, sentence_start: bool = True
-) -> str | None:
-    """Return why narrative text is not grounded in its cited sources, or None.
-
-    A capitalized word that opens a sentence is usually an ordinary word, so it is
-    exempt from the name check unless it is an acronym or carries a figure. Text
-    that continues a sentence, such as a headline after its focus, has no such
-    opening word and is checked in full.
-    """
-    if any(character in NARRATIVE_MARKUP for character in text) or re.search(
-        r"https?:|www\.", text, re.I
-    ):
-        return "narrative must be plain text without markup or links"
+def _content_problem(text: str, corpus: str) -> str | None:
+    """Rules that hold for every narrative word, including verified source phrases."""
     if re.search(r"\bCVE-\d{4}-\d+\b", text, re.I) or re.search(r"\bCVSS\b", text, re.I):
         return "narrative names a vulnerability identifier or severity score; keep those in the quoted evidence"
     if re.search(r"\b(?:you|your|yours|yourself)\b", text, re.I):
@@ -344,11 +332,32 @@ def _narrative_problem(
     for pattern in NARRATIVE_OBLIGATIONS:
         if pattern.search(text) and not pattern.search(corpus):
             return "narrative uses obligation or penalty language that its cited sources do not use"
+    return None
+
+
+def _narrative_problem(
+    text: str, corpus: str, excerpts: list[str], *, verified_prefix: str = ""
+) -> str | None:
+    """Return why narrative text is not grounded in its cited sources, or None.
+
+    A capitalized word that opens a sentence is usually an ordinary word, so it is
+    exempt from the name check unless it is an acronym or carries a figure. A
+    verified prefix, such as a headline's focus already matched verbatim against its
+    excerpt, is exempt only from markup and grounding checks; content rules still
+    apply to it, and the text after it continues the sentence and is checked in full.
+    """
+    problem = _content_problem(verified_prefix + text, corpus)
+    if problem:
+        return problem
+    if any(character in NARRATIVE_MARKUP for character in text) or re.search(
+        r"https?:|www\.", text, re.I
+    ):
+        return "narrative must be plain text without markup or links"
     for initial, token in _narrative_tokens(text):
         figure = any(character.isdigit() for character in token)
         acronym = sum(character.isupper() for character in token) >= 2
         name = token[0].isupper()
-        exempt = initial and sentence_start and not (figure or acronym)
+        exempt = initial and not verified_prefix and not (figure or acronym)
         if not (figure or acronym or name) or exempt:
             continue
         if token in APPLICATION_VOCABULARY or _contains_complete_phrase(corpus, token):
@@ -428,7 +437,7 @@ def _validate_narrative(plan: dict[str, Any], sources: list[dict[str, Any]]) -> 
         if problem is None:
             # The focus is already verified verbatim against its excerpt.
             problem = _narrative_problem(
-                headline[len(row["focus"]) :], corpus, [], sentence_start=False
+                headline[len(row["focus"]) :], corpus, [], verified_prefix=row["focus"]
             )
         if problem:
             raise ReportQualityError(f"{field}: {problem}")

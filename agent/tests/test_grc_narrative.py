@@ -352,6 +352,13 @@ def headline_of(plan, index=0):
                 significance="The firewall update bundles 41 changes, so owners should confirm patch status and record any accepted exception."
             ),
         ),
+        (
+            "control_implications[3].headline",
+            lambda p: headline_of(p, 3).update(
+                focus="CVE-2026-76418",
+                headline="CVE-2026-76418 exposes perimeter firewall assurance gaps",
+            ),
+        ),
     ],
 )
 def test_ungrounded_narrative_fails_closed_without_echoing_model_text(field, mutate):
