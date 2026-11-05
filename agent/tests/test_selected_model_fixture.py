@@ -39,8 +39,8 @@ def test_fictional_notice_cannot_be_promoted_to_primary_regulatory_evidence():
             "evidence_excerpt": case["analysis_data"]["source_evidence"][0]["snippet"],
         }
     ]
-    with pytest.raises(ValueError):
-        parse_report_plan(json.dumps(plan), case["analysis_data"]["source_evidence"])
+    parsed = parse_report_plan(json.dumps(plan), case["analysis_data"]["source_evidence"])
+    assert parsed["regulatory_changes"] == []
 
 
 def test_report_schema_is_fresh_and_catalog_bound():

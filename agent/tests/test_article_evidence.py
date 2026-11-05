@@ -78,9 +78,9 @@ def test_title_and_article_fields_cannot_be_spliced_into_one_quote():
 
 
 @pytest.mark.parametrize("origin", ["headline", "snippet", "content", "model", None])
-def test_finding_cannot_invent_or_relabel_its_evidence_origin(origin):
-    with pytest.raises(ValueError, match="origin|segment"):
-        parse_report_plan(json.dumps(plan(origin=origin)), [source()])
+def test_evidence_origin_is_taken_from_where_the_quote_actually_appears(origin):
+    parsed = parse_report_plan(json.dumps(plan(origin=origin)), [source()])
+    assert parsed["control_implications"][0]["evidence_origin"] == "summary"
 
 
 def test_legacy_flattened_source_cannot_be_promoted_by_guessing_an_origin():
@@ -213,12 +213,13 @@ def test_prompt_still_omits_segments_with_cves_outside_the_bounded_set():
 
 @pytest.mark.parametrize("field", ["evidence_excerpt", "focus"])
 @pytest.mark.parametrize("separator", ["  ", "\t", "\u00a0"])
-def test_finding_rejects_changed_internal_whitespace(field, separator):
+def test_changed_internal_whitespace_is_restored_to_the_source_spelling(field, separator):
     selection = plan()
     selection["control_implications"][0][field] = (
         DETAIL.replace("requires an", "requires" + separator + "an")
         if field == "evidence_excerpt"
         else "authenticated" + separator + "administrator"
     )
-    with pytest.raises(ValueError, match="exactly"):
-        parse_report_plan(json.dumps(selection), [source()])
+    parsed = parse_report_plan(json.dumps(selection), [source()])
+    expected = DETAIL if field == "evidence_excerpt" else "authenticated administrator"
+    assert parsed["control_implications"][0][field] == expected

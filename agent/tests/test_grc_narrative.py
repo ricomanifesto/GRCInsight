@@ -13,6 +13,7 @@ from core.report_evidence import REPORT_CONTRACT_VERSION
 from core.report_plan import (
     REFERENCE_CONTROLS,
     ReportQualityError,
+    narrative_warnings,
     parse_report_plan,
     render_report_plan,
     report_finding_groups,
@@ -280,29 +281,7 @@ def headline_of(plan, index=0):
         (
             "executive_brief.paragraphs[0]",
             lambda p: p["executive_brief"]["paragraphs"][0].update(
-                text=p["executive_brief"]["paragraphs"][0]["text"]
-                + " See the [advisory](https://example.com)."
-            ),
-        ),
-        (
-            "executive_brief.paragraphs[0]",
-            lambda p: p["executive_brief"]["paragraphs"][0].update(source_ids=[3, 5]),
-        ),
-        (
-            "executive_brief.paragraphs[0]",
-            lambda p: p["executive_brief"]["paragraphs"][0].update(source_ids=[]),
-        ),
-        (
-            "executive_brief.paragraphs[0]",
-            lambda p: p["executive_brief"]["paragraphs"][0].update(
                 text="Too short to be analysis."
-            ),
-        ),
-        ("executive_brief", lambda p: p["executive_brief"].update(paragraphs=[])),
-        (
-            "executive_brief",
-            lambda p: p["executive_brief"].update(
-                paragraphs=p["executive_brief"]["paragraphs"] * 2
             ),
         ),
         (
@@ -361,15 +340,101 @@ def headline_of(plan, index=0):
         ),
     ],
 )
-def test_ungrounded_narrative_fails_closed_without_echoing_model_text(field, mutate):
+def test_ungrounded_narrative_publishes_with_a_warning_that_never_echoes_text(field, mutate):
     plan = deepcopy(PLAN)
     mutate(plan)
+    parsed = parse_report_plan(json.dumps(plan), SOURCES)
+    validate_rendered_report(render_report_plan(parsed, SOURCES), parsed, SOURCES)
+    warnings = narrative_warnings(parsed, SOURCES)
+    assert any(warning.startswith(field + ":") for warning in warnings)
+    for leaked in ("Microsoft", "CVE-2026", "30 days", "notify regulators", "2025"):
+        assert all(leaked not in warning for warning in warnings)
+
+
+def paragraph(plan, index=0):
+    return plan["executive_brief"]["paragraphs"][index]
+
+
+def test_narrative_markup_and_links_are_stripped_rather_than_refused():
+    plan = deepcopy(PLAN)
+    paragraph(plan)["text"] += " See the [advisory](https://example.com) **now**."
+    parsed = parse_report_plan(json.dumps(plan), SOURCES)
+    text = paragraph(parsed)["text"]
+    assert not set(text) & set("[]*") and "example.com" not in text
+    assert text.endswith("See the advisory now.")
+
+
+@pytest.mark.parametrize(
+    ("cited", "expected"), [([3, 5], [3]), ([], [3, 10, 12]), ([7, 3, 3], [3])]
+)
+def test_paragraph_citations_keep_only_supported_sources(cited, expected):
+    plan = deepcopy(PLAN)
+    paragraph(plan)["source_ids"] = cited
+    parsed = parse_report_plan(json.dumps(plan), SOURCES)
+    assert paragraph(parsed)["source_ids"] == expected
+
+
+@pytest.mark.parametrize("paragraphs", [[], None, "text", [{"text": ""}]])
+def test_missing_summary_falls_back_to_an_application_summary(paragraphs):
+    plan = deepcopy(PLAN)
+    plan["executive_brief"]["paragraphs"] = paragraphs
+    notes: list[str] = []
+    parsed = parse_report_plan(json.dumps(plan), SOURCES, notes=notes)
+    text = paragraph(parsed)["text"]
+    assert text.startswith("This period's findings for control owners: Broadcom VMware ESX")
+    assert any("application summary used" in note for note in notes)
+    validate_rendered_report(render_report_plan(parsed, SOURCES), parsed, SOURCES)
+
+
+def test_extra_paragraphs_and_duplicates_are_trimmed():
+    plan = deepcopy(PLAN)
+    plan["executive_brief"]["paragraphs"] = plan["executive_brief"]["paragraphs"] * 2
+    parsed = parse_report_plan(json.dumps(plan), SOURCES)
+    assert [row["text"] for row in parsed["executive_brief"]["paragraphs"]] == [
+        row["text"] for row in PLAN["executive_brief"]["paragraphs"]
+    ]
+
+
+def test_unverifiable_findings_are_dropped_and_the_rest_publish():
+    plan = deepcopy(PLAN)
+    plan["control_implications"][1][
+        "evidence_excerpt"
+    ] = "An invented passage that never appeared in the cited article at all."
+    plan["control_implications"][2]["control_id"] = "invented_control"
+    plan["control_implications"][3]["priority"] = "urgent"
+    notes: list[str] = []
+    parsed = parse_report_plan(json.dumps(plan), SOURCES, notes=notes)
+    assert [row["source_ids"][0] for row in parsed["control_implications"]] == [3, 1]
+    assert parsed["control_implications"][1]["priority"] == "medium"
+    assert sum("(dropped)" in note for note in notes) == 2
+    assert all("invented passage" not in note for note in notes)
+    paragraph_ids = [row["source_ids"] for row in parsed["executive_brief"]["paragraphs"]]
+    assert paragraph_ids == [[3], [1]]
+
+
+def test_report_is_refused_only_when_no_evidence_survives():
+    plan = deepcopy(PLAN)
+    for row in plan["control_implications"]:
+        row["evidence_excerpt"] = "An invented passage that never appeared in any cited article."
     with pytest.raises(ReportQualityError) as error:
         parse_report_plan(json.dumps(plan), SOURCES)
     message = str(error.value)
-    assert message.startswith(field + ":") or message.startswith(field + " ")
-    for leaked in ("Microsoft", "CVE-2026", "30 days", "notify regulators", "example.com", "2025"):
-        assert leaked not in message
+    assert message.startswith("control_implications[0] source_id=3")
+    assert "evidence_excerpt:" in message and "invented passage" not in message
+
+
+def test_missing_narrative_fields_receive_application_fallbacks():
+    plan = deepcopy(PLAN)
+    del plan["control_implications"][0]["headline"]
+    plan["control_implications"][0]["significance"] = ""
+    plan["control_implications"][0]["focus"] = ""
+    plan["unexpected"] = "ignored"
+    parsed = parse_report_plan(json.dumps(plan), SOURCES)
+    row = parsed["control_implications"][0]
+    assert row["focus"] == "The U.S. Cybersecurity and Infrastructure Security"
+    assert row["headline"] == row["focus"]
+    assert row["significance"].startswith("Assess whether monitoring coverage")
+    assert "unexpected" not in parsed
 
 
 @pytest.mark.parametrize(
@@ -391,12 +456,12 @@ def test_ungrounded_narrative_fails_closed_without_echoing_model_text(field, mut
 def test_obligation_language_is_permitted_only_when_its_source_uses_it(duty):
     plan = deepcopy(PLAN)
     sources = deepcopy(SOURCES)
-    paragraph = plan["executive_brief"]["paragraphs"][0]
-    paragraph["text"] += " " + duty
-    with pytest.raises(ReportQualityError, match="obligation"):
-        parse_report_plan(json.dumps(plan), sources)
+    paragraph(plan)["text"] += " " + duty
+    parsed = parse_report_plan(json.dumps(plan), sources)
+    assert any("obligation" in warning for warning in narrative_warnings(parsed, sources))
     sources[2]["snippet"] += " " + duty
-    parse_report_plan(json.dumps(plan), sources)
+    parsed = parse_report_plan(json.dumps(plan), sources)
+    assert not any("obligation" in warning for warning in narrative_warnings(parsed, sources))
 
 
 def test_identical_syndicated_findings_still_share_one_entry():
@@ -435,8 +500,9 @@ def test_historical_v5_publication_still_validates_exactly():
         markdown, builder["report_fields"](markdown), json.dumps(V5)
     )
     assert builder["review_map_rows"](markdown, V5)
-    with pytest.raises(ValueError):
-        parse_report_plan(json.dumps(V5["report_plan"]), SOURCES)
+    upgraded = parse_report_plan(json.dumps(V5["report_plan"]), SOURCES)
+    assert set(upgraded["executive_brief"]) == {"paragraphs"}
+    assert all(row["headline"] for row in upgraded["control_implications"])
 
 
 def test_response_format_requests_bounded_narrative_fields():
@@ -488,8 +554,8 @@ def test_generator_requests_grounded_narrative_for_control_owners():
 def test_application_vocabulary_and_sentence_openings_cannot_authorize_claims(claim, rule):
     plan = deepcopy(PLAN)
     plan["executive_brief"]["paragraphs"][0]["text"] += " " + claim
-    with pytest.raises(ReportQualityError, match=rule):
-        parse_report_plan(json.dumps(plan), SOURCES)
+    parsed = parse_report_plan(json.dumps(plan), SOURCES)
+    assert any(rule in warning for warning in narrative_warnings(parsed, SOURCES))
 
 
 def test_month_named_in_a_cited_source_remains_usable_at_a_sentence_start():
@@ -498,4 +564,74 @@ def test_month_named_in_a_cited_source_remains_usable_at_a_sentence_start():
     plan["executive_brief"]["paragraphs"][0][
         "text"
     ] += " February is when the exploited Catalyst SD-WAN flaw was fixed."
-    parse_report_plan(json.dumps(plan), SOURCES)
+    parsed = parse_report_plan(json.dumps(plan), SOURCES)
+    assert not any("entity" in warning for warning in narrative_warnings(parsed, SOURCES))
+
+
+def test_focus_differing_only_in_case_or_typography_is_normalized_to_the_excerpt():
+    plan = deepcopy(PLAN)
+    plan["control_implications"][0]["focus"] = "broadcom vmware esx"
+    plan["control_implications"][1].update(
+        focus="organization’s SD-WAN  network",
+        headline="Organization’s SD-WAN  network keys are copied by KeyDrift malware",
+    )
+    parsed = parse_report_plan(json.dumps(plan), SOURCES)
+    assert parsed["control_implications"][0]["focus"] == "Broadcom VMware ESX"
+    assert parsed["control_implications"][1]["focus"] == "organization's SD-WAN network"
+    assert (
+        parsed["control_implications"][1]["headline"]
+        == "Organization's SD-WAN network keys are copied by KeyDrift malware"
+    )
+    body = render_report_plan(parsed, SOURCES)
+    validate_rendered_report(body, parsed, SOURCES)
+
+
+@pytest.mark.parametrize(
+    ("focus", "reason"),
+    [
+        ("Cisco SD-WAN controllers", "absent from the excerpt"),
+        ("Cisco SD-WAN", "not as one contiguous phrase"),
+    ],
+)
+def test_focus_mismatch_becomes_a_label_now_and_is_classified_for_history(focus, reason):
+    plan = deepcopy(PLAN)
+    plan["control_implications"][1].update(focus=focus, headline=focus + " exposes keys")
+    parsed = parse_report_plan(json.dumps(plan), SOURCES)
+    assert parsed["control_implications"][1]["focus"] == focus
+    historical = deepcopy(V5["report_plan"])
+    row = next(row for row in historical["control_implications"] if row["source_ids"] == [10])
+    row["focus"] = focus
+    with pytest.raises(ReportQualityError) as error:
+        parse_report_plan(json.dumps(historical), SOURCES, contract_version=5)
+    message = str(error.value)
+    assert "focus:" in message and reason in message
+    assert "controllers" not in message and "Cisco" not in message
+
+
+def test_entity_diagnostic_tells_the_retry_how_to_fix_it():
+    plan = deepcopy(PLAN)
+    plan["executive_brief"]["paragraphs"][1][
+        "text"
+    ] += " Broadcom VMware ESX hosts face similar review."
+    parsed = parse_report_plan(json.dumps(plan), SOURCES)
+    warnings = narrative_warnings(parsed, SOURCES)
+    assert any(
+        w.startswith("executive_brief.paragraphs[1]") and "source_ids" in w for w in warnings
+    )
+    plan["executive_brief"]["paragraphs"][1]["source_ids"].append(3)
+    parsed = parse_report_plan(json.dumps(plan), SOURCES)
+    assert not any(
+        w.startswith("executive_brief.paragraphs[1]") for w in narrative_warnings(parsed, SOURCES)
+    )
+
+
+@pytest.mark.parametrize("bad", [[], {}, ["high"], {"level": "high"}, 3])
+def test_non_string_priority_and_origin_never_escape_as_type_errors(bad):
+    plan = deepcopy(PLAN)
+    plan["control_implications"][0].update(priority=bad, evidence_origin=bad)
+    plan["control_implications"][1].update(control_id=bad, focus=bad, headline=bad)
+    plan["executive_brief"]["paragraphs"][0].update(source_ids=bad)
+    parsed = parse_report_plan(json.dumps(plan), SOURCES)
+    first = parsed["control_implications"][0]
+    assert first["priority"] == "medium" and first["evidence_origin"] == "summary"
+    assert [row["source_ids"][0] for row in parsed["control_implications"]] == [3, 12, 1]

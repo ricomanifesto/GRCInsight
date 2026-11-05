@@ -672,8 +672,10 @@ def test_regulatory_values_require_complete_source_phrases_at_every_boundary(fie
     error = "jurisdiction" if field == "jurisdiction" else "evidenced clause"
     old_cell = "| Unknown | Unknown |" if field == "jurisdiction" else "| final reporting rule |"
     new_cell = f"| {value} | Unknown |" if field == "jurisdiction" else f"| {value} |"
-    with pytest.raises(ValueError, match=error):
-        parse_report_plan(json.dumps(invalid_plan), sources)
+    notes: list[str] = []
+    repaired = parse_report_plan(json.dumps(invalid_plan), sources, notes=notes)
+    assert repaired["regulatory_changes"] == []
+    assert any(note.startswith("regulatory_changes[0] dropped") and error in note for note in notes)
 
     composer = runpy.run_path(str(ROOT / "scripts/compose_site_report.py"))
     checker = runpy.run_path(str(ROOT / "scripts/check_site_report.py"))

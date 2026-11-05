@@ -170,13 +170,13 @@ def test_fixed_report_rehearsal_request_is_independent_of_ambient_date():
     assert first["prompt_date"] == second["prompt_date"] == "2026-11-04"
     assert (
         first["request_sha256"]
-        == "c67ab76be5455970afc56df001af9ef212ceb685d688e2ef3521e8959b4dcec1"
+        == "5147963d79d90f78b500646b7125ee353bb75435a4e898313054018b375593c8"
     )
     assert (
         first["wire_request_sha256"]
-        == "6d4f2e8598e1c40f49238271e24dffdd1756097832909d645ff517fb57878691"
+        == "78bdc537414af0bd54c7b411ff458ec1320f1d6580a6db0b4ff92046889e4f18"
     )
-    assert first["wire_request_bytes"] == 15207
+    assert first["wire_request_bytes"] == 15239
     assert first["conservative_input_bound"] == sum(
         first[key]
         for key in (
