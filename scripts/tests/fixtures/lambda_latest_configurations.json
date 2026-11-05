@@ -5,6 +5,7 @@
       "FunctionName": "grcinsight-go-function",
       "Version": "$LATEST",
       "RevisionId": "12345678-1234-1234-1234-123456789abc",
+      "LastModified": "2026-11-04T18:21:17.000+0000",
       "State": "Active",
       "LastUpdateStatus": "Successful",
       "PackageType": "Image",
@@ -25,13 +26,15 @@
       "FunctionArn": "arn:aws:lambda:us-east-1:123456789012:function:grcinsight-go-function",
       "FunctionName": "grcinsight-go-function",
       "Version": "$LATEST",
-      "RevisionId": "22345678-1234-1234-1234-123456789abc"
+      "RevisionId": "22345678-1234-1234-1234-123456789abc",
+      "LastModified": "2026-11-05T20:01:07.000+0000"
     },
     "after": {
       "FunctionArn": "arn:aws:lambda:us-east-1:123456789012:function:grcinsight-go-function",
       "FunctionName": "grcinsight-go-function",
       "Version": "$LATEST",
-      "RevisionId": "22345678-1234-1234-1234-123456789abc",
+      "RevisionId": "32345678-1234-1234-1234-123456789abc",
+      "LastModified": "2026-11-05T20:01:07.000+0000",
       "State": "Active",
       "LastUpdateStatus": "Successful",
       "PackageType": "Image",
@@ -55,6 +58,7 @@
       "FunctionName": "grcinsight-python-function",
       "Version": "$LATEST",
       "RevisionId": "12345678-1234-1234-1234-123456789abc",
+      "LastModified": "2026-11-04T18:21:17.000+0000",
       "State": "Active",
       "LastUpdateStatus": "Successful",
       "PackageType": "Image",
@@ -75,13 +79,15 @@
       "FunctionArn": "arn:aws:lambda:us-east-1:123456789012:function:grcinsight-python-function",
       "FunctionName": "grcinsight-python-function",
       "Version": "$LATEST",
-      "RevisionId": "22345678-1234-1234-1234-123456789abc"
+      "RevisionId": "22345678-1234-1234-1234-123456789abc",
+      "LastModified": "2026-11-05T20:01:07.000+0000"
     },
     "after": {
       "FunctionArn": "arn:aws:lambda:us-east-1:123456789012:function:grcinsight-python-function",
       "FunctionName": "grcinsight-python-function",
       "Version": "$LATEST",
-      "RevisionId": "22345678-1234-1234-1234-123456789abc",
+      "RevisionId": "32345678-1234-1234-1234-123456789abc",
+      "LastModified": "2026-11-05T20:01:07.000+0000",
       "State": "Active",
       "LastUpdateStatus": "Successful",
       "PackageType": "Image",

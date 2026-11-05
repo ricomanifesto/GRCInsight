@@ -22,6 +22,7 @@ def snapshot():
         "FunctionName": "grcinsight-python-function",
         "Version": "$LATEST",
         "RevisionId": REVISION,
+        "LastModified": "2026-11-04T18:21:17.000+0000",
         "State": "Active",
         "LastUpdateStatus": "Successful",
         "Timeout": 900,
@@ -44,14 +45,18 @@ class Client:
         self.calls.append(("update", deepcopy(payload)))
         if self.failure == "unknown":
             raise RuntimeError("private response " + KEY)
-        self.value.update(RevisionId=NEW_REVISION, Environment=payload["Environment"])
+        self.value.update(
+            RevisionId=NEW_REVISION,
+            Environment=payload["Environment"],
+            LastModified="2026-11-05T20:01:07.000+0000",
+        )
         if self.failure == "unrelated":
             self.value["Timeout"] = 1
         if self.failure == "pending":
             self.value["LastUpdateStatus"] = "InProgress"
         return {
             name: self.value[name]
-            for name in ("FunctionArn", "FunctionName", "Version", "RevisionId")
+            for name in ("FunctionArn", "FunctionName", "Version", "RevisionId", "LastModified")
         }
 
 
@@ -192,3 +197,71 @@ def test_relevance_defaults_and_overrides_reach_merged_environment(overrides):
     ):
         assert merged[name] == overrides.get(name, default)
     assert merged["UNRELATED"] == "private-other" and merged["OPENROUTER_API_KEY"] == KEY
+
+
+COMPLETED_REVISION = "32345678-1234-1234-1234-123456789abc"
+WRITE_TIME = "2026-11-05T20:01:07.000+0000"
+
+
+class LambdaLikeClient(Client):
+    """Lambda assigns a new RevisionId when an in-progress update completes."""
+
+    def __init__(self, concurrent=False):
+        super().__init__()
+        self.value["LastModified"] = "2026-11-04T18:21:17.000+0000"
+        self.concurrent = concurrent
+        self.polls = 0
+
+    def get(self, arn, **kwargs):
+        if any(name == "update" for name, _value in self.calls):
+            self.polls += 1
+            if self.polls >= 2:
+                self.value.update(LastUpdateStatus="Successful", RevisionId=COMPLETED_REVISION)
+                if self.concurrent:
+                    self.value["LastModified"] = "2026-11-05T20:01:30.000+0000"
+        return super().get(arn, **kwargs)
+
+    def update(self, payload):
+        self.calls.append(("update", deepcopy(payload)))
+        self.value.update(
+            RevisionId=NEW_REVISION,
+            Environment=payload["Environment"],
+            LastUpdateStatus="InProgress",
+            LastModified=WRITE_TIME,
+        )
+        return {
+            name: self.value[name]
+            for name in ("FunctionArn", "FunctionName", "Version", "RevisionId", "LastModified")
+        }
+
+
+def test_completion_revision_change_is_verified_by_write_time():
+    client = LambdaLikeClient()
+    assert execute(client) == "verified"
+    assert len([name for name, _value in client.calls if name == "update"]) == 1
+
+
+def test_another_write_during_completion_is_still_refused():
+    client = LambdaLikeClient(concurrent=True)
+    with pytest.raises(deploy.EnvironmentUpdateError):
+        execute(client)
+    assert len([name for name, _value in client.calls if name == "update"]) == 1
+
+
+def test_update_acknowledgement_requests_the_write_time(monkeypatch):
+    seen = {}
+
+    def run(argv, **_kwargs):
+        seen["argv"] = argv
+        raise subprocess.TimeoutExpired(argv, 1)
+
+    monkeypatch.setattr(deploy.subprocess, "run", run)
+    client = deploy.AwsCli(
+        "/usr/bin/aws",
+        "us-east-1",
+        {"AWS_ACCESS_KEY_ID": "synthetic", "AWS_SECRET_ACCESS_KEY": "synthetic"},
+    )
+    with pytest.raises(deploy.EnvironmentUpdateError):
+        client.update({"FunctionName": ARN, "RevisionId": REVISION, "Environment": {}})
+    query = seen["argv"][seen["argv"].index("--query") + 1]
+    assert "LastModified:LastModified" in query
