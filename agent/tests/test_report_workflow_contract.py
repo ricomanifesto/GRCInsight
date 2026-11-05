@@ -2079,7 +2079,11 @@ def test_paused_go_health_is_deferred_without_concurrency_mutation():
     workflow = DEPLOY_WORKFLOW.read_text()
     assert "Verify deployed image references" in workflow
     assert "Code.ImageUri" in workflow
-    assert "aws lambda get-function-concurrency" in workflow
+    # GetFunction already returns reserved concurrency; the deploy identity is not
+    # granted GetFunctionConcurrency, so the maintenance read must not need it.
+    assert "aws lambda get-function-concurrency" not in workflow
+    assert "--query 'Concurrency' --output json)" in workflow
+    assert """if [ "$GO_CONCURRENCY" = "null" ]; then GO_CONCURRENCY='{}'; fi""" in workflow
     assert "check_lambda_maintenance.py" in workflow
     assert 'if [ "$GO_HEALTH_MODE" = "paused" ]; then' in workflow
     assert "Go API health deferred" in workflow

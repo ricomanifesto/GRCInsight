@@ -272,8 +272,13 @@ jobs:
         run: |
           set -euo pipefail
           export AWS_MAX_ATTEMPTS=1
-          GO_HEALTH_MODE=$(aws lambda get-function-concurrency \
-            --function-name "$GO_FUNCTION_NAME" --region "$AWS_REGION" --output json |
+          # GetFunction reports reserved concurrency with the permission this
+          # workflow already uses; an unreserved function returns null here.
+          GO_CONCURRENCY=$(aws lambda get-function \
+            --function-name "$GO_FUNCTION_NAME" --region "$AWS_REGION" \
+            --query 'Concurrency' --output json)
+          if [ "$GO_CONCURRENCY" = "null" ]; then GO_CONCURRENCY='{}'; fi
+          GO_HEALTH_MODE=$(printf '%s' "$GO_CONCURRENCY" |
             python3 -I -B scripts/check_lambda_maintenance.py)
           if [ "$GO_HEALTH_MODE" = "paused" ]; then
             echo "Go API health deferred while reserved concurrency is zero"
