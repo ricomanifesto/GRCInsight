@@ -291,6 +291,14 @@
       "handle": "report_20261105_191038_310",
       "run_id": "42091321024",
       "stage": "invoked"
+    },
+    {
+      "admission_key": "run:42091321024",
+      "at": "2026-11-05T19:15:31.767Z",
+      "binding": "none",
+      "outcome": "retained",
+      "run_id": "42091321024",
+      "stage": "completed"
     }
   ],
   "schema_version": 1,
