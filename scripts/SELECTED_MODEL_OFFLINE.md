@@ -27,8 +27,8 @@ ceilings remain.
 
 The report request uses strict JSON Schema for the current selection object.
 The existing parser independently validates exact source quotations, source IDs,
-regulatory evidence and executive agenda. The host renderer owns report prose
-and citations. Article analysis retains its legacy text contract; strict report
+regulatory evidence and the grounding of every narrative field. The host renderer
+owns citations, owners, evidence requests and reference controls. Article analysis retains its legacy text contract; strict report
 JSON is never imposed on that stage. Paid operations have one transport attempt
 and no report repair retry. A future full workflow would still include separate
 article-analysis and report-plan operations.

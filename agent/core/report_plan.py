@@ -1,9 +1,14 @@
-"""Bounded model selections and application-owned report prose.
+"""Bounded model selections, grounded model narrative and application-owned structure.
 
 Keep this module dependency-free: publication verifies the same rendering offline.
 Model-selected event excerpts and review focuses must match retained source text.
-Regulatory claims remain confined to their separately validated primary-source table.
-Versions 3 and 4 are supported only to verify immutable historical publications.
+From contract version 6 the model also writes the executive narrative and, per finding,
+a headline and a short significance statement. Each narrative field must pass
+deterministic grounding rules against the sources it cites before rendering.
+Citations, links, owners, evidence requests, triggers and reference controls remain
+application-owned. Regulatory claims remain confined to their separately validated
+primary-source table. Versions 3 to 5 are supported only to verify immutable
+historical publications.
 """
 
 from copy import deepcopy
@@ -200,6 +205,295 @@ CONTROL_DECISIONS = {
     ),
 }
 
+# Review aids that locate each control area in two widely used catalogs. They are
+# not a determination that a framework applies or that a control is deficient.
+REFERENCE_CONTROLS = {
+    "access_management": (
+        "ISO/IEC 27001:2022 A.5.15 (access control), A.5.18 (access rights), "
+        "A.8.2 (privileged access rights); NIST CSF 2.0 PR.AA (identity management, "
+        "authentication and access control)"
+    ),
+    "vulnerability_management": (
+        "ISO/IEC 27001:2022 A.8.8 (management of technical vulnerabilities); "
+        "NIST CSF 2.0 ID.RA (risk assessment), PR.PS (platform security)"
+    ),
+    "incident_response": (
+        "ISO/IEC 27001:2022 A.5.24 (incident management planning and preparation), "
+        "A.5.26 (response to information security incidents); NIST CSF 2.0 RS.MA "
+        "(incident management), RS.MI (incident mitigation)"
+    ),
+    "third_party_risk": (
+        "ISO/IEC 27001:2022 A.5.19 (supplier relationships), A.5.21 (ICT supply chain), "
+        "A.5.22 (monitoring and review of supplier services); NIST CSF 2.0 GV.SC "
+        "(cybersecurity supply chain risk management)"
+    ),
+    "data_protection": (
+        "ISO/IEC 27001:2022 A.5.34 (privacy and protection of PII), A.8.12 (data leakage "
+        "prevention), A.8.24 (use of cryptography); NIST CSF 2.0 PR.DS (data security)"
+    ),
+    "change_management": (
+        "ISO/IEC 27001:2022 A.8.32 (change management); NIST CSF 2.0 PR.PS (platform security)"
+    ),
+    "monitoring": (
+        "ISO/IEC 27001:2022 A.8.15 (logging), A.8.16 (monitoring activities); "
+        "NIST CSF 2.0 DE.CM (continuous monitoring), DE.AE (adverse event analysis)"
+    ),
+    "governance": (
+        "ISO/IEC 27001:2022 A.5.1 (policies for information security), A.5.2 (roles and "
+        "responsibilities); NIST CSF 2.0 GV.RR (roles, responsibilities and authorities), "
+        "GV.OV (oversight)"
+    ),
+}
+
+# Grounding rules for model-written narrative. Each rule returns an application-owned
+# reason; diagnostics never echo the untrusted text that failed.
+NARRATIVE_MARKUP = set("[]|*_`#<>\\{}~")
+NARRATIVE_OBLIGATIONS = tuple(
+    re.compile(pattern, re.I)
+    for pattern in (
+        r"\bmust\b",
+        r"\bmandat\w*",
+        r"\bobligat\w*",
+        r"\bviolat\w*",
+        r"\bnon-?complian\w*",
+        r"\bpenalt\w*",
+        r"\bfine[sd]?\b",
+        r"\bsanction\w*",
+        r"\bdeadlines?\b",
+        r"\bliab(?:le|ility|ilities)\b",
+        r"\bshall\b",
+        r"\blegal(?:ly)?\s+(?:required|bound|duty|duties|requirements?)\b",
+        r"\brequired\s+(?:to|by)\b",
+        r"\b(?:has|have|had)\s+to\b",
+        r"\bobliged\b",
+        r"\b(?:is|are|was|were|be|been|being)\s+required\b",
+        r"\bcompl(?:y|ies|ied|ying)\b",
+        r"\b(?:need|needs|needed)\s+to\s+(?:notify|report|disclose|file|inform)\b",
+        r"\b(?:notif|report|disclos|inform)\w*\s+(?:\w+\s+){0,3}regulat(?:ors?|ory\s+authorit\w*)\b",
+    )
+)
+# Magnitudes state a figure in words; like digits they must come from a cited source.
+NARRATIVE_MAGNITUDES = re.compile(
+    r"\b(?:hundreds?|thousands?|millions?|billions?|trillions?|percent(?:age)?s?)\b", re.I
+)
+# Calendar names are proper nouns even when they open a sentence.
+CALENDAR_NAMES = {
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+    "Sunday",
+}
+EXCERPT_RUN_WORDS = 10
+
+
+def _source_corpus(sources: list[dict[str, Any]], ids: list[int]) -> str:
+    parts = []
+    for index in ids:
+        source = sources[index - 1]
+        parts.extend([str(source.get("title", "")), str(source.get("snippet", ""))])
+        parts.extend(str(item.get("text", "")) for item in source.get("article_evidence") or [])
+    return " ".join(parts)
+
+
+def _narrative_tokens(text: str) -> list[tuple[bool, str]]:
+    """Yield (sentence_initial, token) for words that carry a figure or a name."""
+    tokens = []
+    for sentence in re.split(r"(?<=[.!?])\s+", text):
+        for position, word in enumerate(sentence.split()):
+            for part in re.split(r"[-/–—]", word):
+                part = part.strip("\"“”‘’'()[],;:.!?")
+                part = re.sub(r"(?:'s|’s|'|’)$", "", part)
+                if part:
+                    tokens.append((position == 0, part))
+    return tokens
+
+
+def _application_vocabulary() -> set[str]:
+    owned = [label for label, *_ in CONTROLS.values()]
+    owned += [owner for owner, *_ in CONTROL_REVIEWS.values()]
+    owned += list(REFERENCE_CONTROLS.values())
+    return {token for text in owned for _initial, token in _narrative_tokens(text)}
+
+
+APPLICATION_VOCABULARY = _application_vocabulary()
+
+
+def _words(text: str) -> list[str]:
+    return re.findall(r"[a-z0-9]+", text.lower())
+
+
+def _repeats_excerpt(text: str, excerpts: list[str]) -> bool:
+    words = _words(text)
+    runs = {
+        tuple(words[index : index + EXCERPT_RUN_WORDS])
+        for index in range(len(words) - EXCERPT_RUN_WORDS + 1)
+    }
+    for excerpt in excerpts:
+        quoted = _words(excerpt)
+        for index in range(len(quoted) - EXCERPT_RUN_WORDS + 1):
+            if tuple(quoted[index : index + EXCERPT_RUN_WORDS]) in runs:
+                return True
+    return False
+
+
+def _content_problem(text: str, corpus: str) -> str | None:
+    """Rules that hold for every narrative word, including verified source phrases."""
+    if re.search(r"\bCVE-\d{4}-\d+\b", text, re.I) or re.search(r"\bCVSS\b", text, re.I):
+        return "narrative names a vulnerability identifier or severity score; keep those in the quoted evidence"
+    if re.search(r"\b(?:you|your|yours|yourself)\b", text, re.I):
+        return (
+            "narrative addresses the reader; describe owners and organizations in the third person"
+        )
+    for pattern in NARRATIVE_OBLIGATIONS:
+        if pattern.search(text) and not pattern.search(corpus):
+            return "narrative uses obligation or penalty language that its cited sources do not use"
+    return None
+
+
+def _narrative_problem(
+    text: str, corpus: str, excerpts: list[str], *, verified_prefix: str = ""
+) -> str | None:
+    """Return why narrative text is not grounded in its cited sources, or None.
+
+    A capitalized word that opens a sentence is usually an ordinary word, so it is
+    exempt from the name check unless it is an acronym or carries a figure. A
+    verified prefix, such as a headline's focus already matched verbatim against its
+    excerpt, is exempt only from markup and grounding checks; content rules still
+    apply to it, and the text after it continues the sentence and is checked in full.
+    """
+    problem = _content_problem(verified_prefix + text, corpus)
+    if problem:
+        return problem
+    if any(character in NARRATIVE_MARKUP for character in text) or re.search(
+        r"https?:|www\.", text, re.I
+    ):
+        return "narrative must be plain text without markup or links"
+    for match in NARRATIVE_MAGNITUDES.finditer(text):
+        if not re.search(rf"\b{re.escape(match.group(0))}\b", corpus, re.I):
+            return "narrative contains a figure absent from its cited sources"
+    for initial, token in _narrative_tokens(text):
+        figure = any(character.isdigit() for character in token)
+        acronym = sum(character.isupper() for character in token) >= 2
+        name = token[0].isupper()
+        exempt = (
+            initial
+            and not verified_prefix
+            and not (figure or acronym)
+            and token not in CALENDAR_NAMES
+        )
+        if not (figure or acronym or name) or exempt:
+            continue
+        if _contains_complete_phrase(corpus, token):
+            continue
+        # Application vocabulary may supply names, never figures.
+        if not figure and token in APPLICATION_VOCABULARY:
+            continue
+        if figure:
+            return "narrative contains a figure absent from its cited sources"
+        return "narrative names an entity absent from its cited sources"
+    if _repeats_excerpt(text, excerpts):
+        return "narrative repeats quoted evidence; analysis must add interpretation, not restate the excerpt"
+    return None
+
+
+def _bounded_text(value: Any, words: tuple[int, int], characters: int) -> str | None:
+    if (
+        not isinstance(value, str)
+        or value != value.strip()
+        or any(character in value for character in "\r\n")
+        or len(value) > characters
+        or not words[0] <= len(value.split()) <= words[1]
+    ):
+        return f"must be one line of {words[0]} to {words[1]} words and at most {characters} characters"
+    return None
+
+
+def _validate_narrative(plan: dict[str, Any], sources: list[dict[str, Any]]) -> None:
+    """Hold model-written narrative to the evidence it cites (contract version 6)."""
+    findings = plan["control_implications"]
+    covered = {row["source_ids"][0] for row in findings}
+    covered.update(row["source_id"] for row in plan["regulatory_changes"])
+    excerpts = [row["evidence_excerpt"] for row in findings]
+    excerpts += [row["evidence_excerpt"] for row in plan["regulatory_changes"]]
+    brief = plan["executive_brief"]
+    try:
+        _object(brief, {"paragraphs"})
+        paragraphs = _list(brief["paragraphs"], 2)
+        if not paragraphs:
+            raise ValueError
+    except ValueError as error:
+        raise ReportQualityError(
+            "executive_brief: requires one or two narrative paragraphs"
+        ) from error
+    seen_text = set()
+    for index, paragraph in enumerate(paragraphs):
+        field = f"executive_brief.paragraphs[{index}]"
+        try:
+            paragraph = _object(paragraph, {"text", "source_ids"})
+            _source_ids(paragraph["source_ids"], sources)
+        except ValueError as error:
+            raise ReportQualityError(
+                f"{field}: requires text and one or more unique listed source IDs"
+            ) from error
+        if not set(paragraph["source_ids"]) <= covered:
+            raise ReportQualityError(
+                f"{field}: cites a source without a supported finding or regulatory change"
+            )
+        problem = _bounded_text(paragraph["text"], (25, 120), 900)
+        if problem is None and not paragraph["text"].endswith("."):
+            problem = "must end as a complete sentence"
+        if problem is None and paragraph["text"] in seen_text:
+            problem = "repeats another paragraph"
+        if problem is None:
+            problem = _narrative_problem(
+                paragraph["text"], _source_corpus(sources, paragraph["source_ids"]), excerpts
+            )
+        if problem:
+            raise ReportQualityError(f"{field}: {problem}")
+        seen_text.add(paragraph["text"])
+    for index, row in enumerate(findings):
+        corpus = _source_corpus(sources, row["source_ids"])
+        headline = row["headline"]
+        field = f"control_implications[{index}].headline"
+        problem = _bounded_text(headline, (4, 16), 110)
+        if problem is None and not headline.startswith(row["focus"] + " "):
+            problem = "must begin with its finding focus followed by what happened"
+        if problem is None and headline[-1] in ".!?;:,":
+            problem = "must not end with punctuation"
+        if problem is None:
+            # The focus is already verified verbatim against its excerpt.
+            problem = _narrative_problem(
+                headline[len(row["focus"]) :], corpus, [], verified_prefix=row["focus"]
+            )
+        if problem:
+            raise ReportQualityError(f"{field}: {problem}")
+        field = f"control_implications[{index}].significance"
+        significance = row["significance"]
+        problem = _bounded_text(significance, (15, 70), 480)
+        if problem is None and (
+            not significance.endswith(".") or len(re.split(r"(?<=[.!?])\s+", significance)) > 3
+        ):
+            problem = "must be one to three complete sentences"
+        if problem is None:
+            problem = _narrative_problem(significance, corpus, excerpts)
+        if problem:
+            raise ReportQualityError(f"{field}: {problem}")
+
 
 class ReportQualityError(ValueError):
     """An actionable editorial-contract refusal, distinct from provider failure."""
@@ -248,6 +542,8 @@ def report_plan_response_format() -> dict[str, Any]:
                         "focus": text,
                         "evidence_excerpt": text,
                         "evidence_origin": {"type": "string", "enum": ["summary", "content"]},
+                        "headline": text,
+                        "significance": text,
                     }
                 ),
             },
@@ -263,12 +559,21 @@ def report_plan_response_format() -> dict[str, Any]:
             },
             "executive_brief": obj(
                 {
-                    "decision_frame": {"type": "string", "enum": list(DECISION_FRAMES)},
-                    "source_ids": {
+                    "paragraphs": {
                         "type": "array",
                         "minItems": 1,
-                        "maxItems": 3,
-                        "items": source_id,
+                        "maxItems": 2,
+                        "items": obj(
+                            {
+                                "text": text,
+                                "source_ids": {
+                                    "type": "array",
+                                    "minItems": 1,
+                                    "maxItems": 6,
+                                    "items": source_id,
+                                },
+                            }
+                        ),
                     },
                 }
             ),
@@ -463,11 +768,7 @@ def _validate_plan(
     sources: list[dict[str, Any]],
     contract_version: int = REPORT_CONTRACT_VERSION,
 ) -> dict[str, Any]:
-    if type(contract_version) is not int or contract_version not in {
-        3,
-        4,
-        REPORT_CONTRACT_VERSION,
-    }:
+    if type(contract_version) is not int or contract_version not in {3, 4, 5, 6}:
         raise ValueError("unsupported report plan contract version")
     keys = {"regulatory_changes", "control_implications", "industry_impacts"}
     if contract_version >= 5:
@@ -515,6 +816,8 @@ def _validate_plan(
         findings = collection == "control_implications" and contract_version >= 4
         if findings:
             keys = keys | {"focus", "evidence_excerpt", "evidence_origin"}
+            if contract_version >= 6:
+                keys = keys | {"headline", "significance"}
         for index, row in enumerate(_list(plan[collection], 6 if findings else len(catalog))):
             row = _object(row, keys)
             _choice(row[identity], catalog)
@@ -559,8 +862,14 @@ def _validate_plan(
                 raise ValueError(
                     "industry implications require a supported finding or regulatory change"
                 )
-    if contract_version >= 5:
+    if contract_version == 5:
         _validate_executive_brief(plan, sources)
+    elif contract_version >= 6:
+        if plan["industry_impacts"]:
+            raise ReportQualityError(
+                "sector labels do not establish sector-specific consequences; omit industry mappings"
+            )
+        _validate_narrative(plan, sources)
     return plan
 
 
@@ -573,11 +882,18 @@ def _unique_fields(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
     return result
 
 
-def parse_report_plan(text: str, sources: list[dict[str, Any]]) -> dict[str, Any]:
+def parse_report_plan(
+    text: str,
+    sources: list[dict[str, Any]],
+    *,
+    contract_version: int = REPORT_CONTRACT_VERSION,
+) -> dict[str, Any]:
     if not isinstance(text, str) or len(text) > 65536:
         raise ValueError("report plan must be a bounded JSON object")
-    plan = _validate_plan(json.loads(text, object_pairs_hook=_unique_fields), sources)
-    render_report_plan(plan, sources)
+    plan = _validate_plan(
+        json.loads(text, object_pairs_hook=_unique_fields), sources, contract_version
+    )
+    render_report_plan(plan, sources, contract_version=contract_version)
     return deepcopy(plan)
 
 
@@ -591,7 +907,14 @@ def _link(source: dict[str, Any]) -> str:
 
 def report_finding_groups(plan: dict[str, Any]) -> list[list[dict[str, Any]]]:
     """Return validated findings in publication order, preserving grouped source identities."""
-    lead_order = plan["executive_brief"]["source_ids"]
+    brief = plan["executive_brief"]
+    if "paragraphs" in brief:
+        # Findings follow the order the narrative introduces them, then priority.
+        lead_order = list(
+            dict.fromkeys(index for row in brief["paragraphs"] for index in row["source_ids"])
+        )
+    else:
+        lead_order = brief["source_ids"]
     ordered = sorted(
         plan["control_implications"],
         key=lambda row: (
@@ -759,7 +1082,7 @@ def render_report_plan(
         ),
         ("Source Highlights", "\n".join(highlights)),
     )
-    if contract_version >= 5:
+    if contract_version == 5:
         executive = _executive_narrative(plan, sources, citations)
         decisions = []
         shown_excerpts = {row["evidence_excerpt"] for row in plan["regulatory_changes"]}
@@ -799,11 +1122,84 @@ def render_report_plan(
             ),
             ("Source Highlights", "\n".join(highlights)),
         )
+    if contract_version >= 6:
+        sections = _narrative_sections(plan, sources, citations, regulatory, highlights)
     body = "\n\n".join(f"## {heading}\n\n{text}" for heading, text in sections)
     if contract_version >= 5:
         validate_editorial_quality(body, plan, sources)
     validate_regulatory_evidence(body, sources, contract_version=contract_version)
     return body
+
+
+FINDING_LABELS = (
+    "Review priority",
+    "Why it matters",
+    "Source evidence",
+    "Evidence to request",
+    "Decision trigger",
+    "Reference controls",
+)
+EVIDENCE_NOTE = (
+    "Each finding is analysis of the quoted evidence: why it matters for control assurance, "
+    "who owns the review and what evidence settles it. Reference controls are review aids, "
+    "not a compliance determination."
+)
+
+
+def _count(value: int, noun: str) -> str:
+    return f"{value} {noun}" if value == 1 else f"{value} {noun}s"
+
+
+def _narrative_sections(plan, sources, citations, regulatory, highlights):
+    """Render contract version 6: model narrative inside one fixed finding template."""
+    groups = report_finding_groups(plan)
+    paragraphs = [
+        f"{_quoted_text(row['text'])} {citations(row['source_ids'])}"
+        for row in plan["executive_brief"]["paragraphs"]
+    ]
+    changes = len(plan["regulatory_changes"])
+    paragraphs.append(
+        f"Scope: {_count(len(groups), 'finding')} and "
+        f"{_count(changes, 'sourced regulatory change')} from "
+        f"{_count(len(sources), 'retained source')}. Review priorities rank what to check first; "
+        "confirm whether each finding applies to your organization before assigning work."
+    )
+    decisions = []
+    shown_excerpts = {row["evidence_excerpt"] for row in plan["regulatory_changes"]}
+    for group in groups:
+        row = group[0]
+        ids = [item["source_ids"][0] for item in group]
+        control = row["control_id"]
+        owner, _question, evidence = CONTROL_REVIEWS[control]
+        _step, _implication, trigger = CONTROL_DECISIONS[control]
+        if row["evidence_excerpt"] in shown_excerpts:
+            quoted = "See the sourced regulatory evidence above. " + citations(ids)
+        else:
+            quoted = f"“{_quoted_text(row['evidence_excerpt'])}” {citations(ids)}"
+            shown_excerpts.add(row["evidence_excerpt"])
+        values = (
+            f"{PRIORITIES[row['priority']]} · {CONTROLS[control][0]} · Owner: {owner}",
+            _quoted_text(row["significance"]),
+            quoted,
+            f"{evidence[0].upper()}{evidence[1:]}.",
+            trigger,
+            REFERENCE_CONTROLS[control],
+        )
+        decisions.append(
+            f"### {_quoted_text(row['headline'])}\n\n"
+            + "\n\n".join(f"**{label}:** {value}" for label, value in zip(FINDING_LABELS, values))
+        )
+    evidence_section = (
+        "\n\n".join([EVIDENCE_NOTE, *decisions])
+        if decisions
+        else "The sourced regulatory table is the evidence for the applicability decision above; no additional control findings were selected."
+    )
+    return (
+        ("Executive Summary", "\n\n".join(paragraphs)),
+        ("Sourced Regulatory Changes", regulatory),
+        ("Evidence and Decisions", evidence_section),
+        ("Source Highlights", "\n".join(highlights)),
+    )
 
 
 def _editorial_content_roles(body: str, sources: list[dict]) -> tuple[list[str], str]:
@@ -863,8 +1259,10 @@ def validate_editorial_quality(body: str, plan: dict, sources: list[dict]) -> No
         raise ReportQualityError(
             "editorial: executive summary requires a connected narrative, not an excerpt list"
         )
+    narrative = "paragraphs" in plan["executive_brief"]
     visible = re.sub(r"\[[^\]]+\]\([^\n]+?\)", "", summary)
-    if not 60 <= len(visible.split()) <= 260:
+    minimum, maximum = (40, 300) if narrative else (60, 260)
+    if not minimum <= len(visible.split()) <= maximum:
         raise ReportQualityError(
             "editorial: executive summary must be concise without padding or an empty introduction"
         )
@@ -872,11 +1270,29 @@ def validate_editorial_quality(body: str, plan: dict, sources: list[dict]) -> No
         raise ReportQualityError(
             "editorial: executive summary must state conditional applicability"
         )
-    for index in plan["executive_brief"]["source_ids"]:
-        if _link(sources[index - 1]) not in summary:
-            raise ReportQualityError(
-                "editorial: executive decision must retain its supporting source citation"
-            )
+    if narrative:
+        written = summary.split("\n\n")
+        for paragraph, row in zip(written, plan["executive_brief"]["paragraphs"]):
+            if not all(_link(sources[index - 1]) in paragraph for index in row["source_ids"]):
+                raise ReportQualityError(
+                    "editorial: each narrative paragraph must retain its supporting source citations"
+                )
+        evidence = re.search(r"(?ms)^## Evidence and Decisions\s*\n(.*?)(?=^## |\Z)", body)
+        blocks = re.split(r"(?m)^### ", evidence.group(1) if evidence else "")[1:]
+        for block in blocks:
+            lines = block.strip().split("\n\n")[1:]
+            matches = [re.match(r"\*\*([^*]+):\*\* ", line) for line in lines]
+            labels = tuple(match.group(1) if match else "" for match in matches)
+            if labels != FINDING_LABELS:
+                raise ReportQualityError(
+                    "editorial: every finding must use the same fields in the same order"
+                )
+    else:
+        for index in plan["executive_brief"]["source_ids"]:
+            if _link(sources[index - 1]) not in summary:
+                raise ReportQualityError(
+                    "editorial: executive decision must retain its supporting source citation"
+                )
     evidence_blocks, analysis_prose = _editorial_content_roles(body, sources)
     regulatory_excerpts = {row["evidence_excerpt"] for row in plan["regulatory_changes"]}
     for row in plan["control_implications"]:

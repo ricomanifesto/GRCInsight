@@ -11,6 +11,7 @@ import httpx
 import pytest
 
 from core.report_evidence import validate_regulatory_evidence
+from narrative_fixture import narrated
 
 ROOT = Path(__file__).resolve().parents[2]
 URL = "https://www.federalregister.gov/documents/2026/10/05/2026-20374/reporting-rule"
@@ -216,28 +217,30 @@ def test_date_provenance_survives_workflow_prompt_composer_and_manifest(monkeypa
             "analysis": {},
         }
 
-    plan = {
-        "executive_brief": {"decision_frame": "governance", "source_ids": [1]},
-        "regulatory_changes": [
-            {
-                "source_id": 1,
-                "change": "final reporting rule",
-                "jurisdiction": "United States",
-                "evidence_excerpt": SOURCE["snippet"],
-            }
-        ],
-        "control_implications": [
-            {
-                "control_id": "governance",
-                "priority": "medium",
-                "source_ids": [1],
-                "focus": "final reporting rule",
-                "evidence_excerpt": SOURCE["snippet"],
-                "evidence_origin": "content",
-            }
-        ],
-        "industry_impacts": [],
-    }
+    plan = narrated(
+        {
+            "executive_brief": {"decision_frame": "governance", "source_ids": [1]},
+            "regulatory_changes": [
+                {
+                    "source_id": 1,
+                    "change": "final reporting rule",
+                    "jurisdiction": "United States",
+                    "evidence_excerpt": SOURCE["snippet"],
+                }
+            ],
+            "control_implications": [
+                {
+                    "control_id": "governance",
+                    "priority": "medium",
+                    "source_ids": [1],
+                    "focus": "final reporting rule",
+                    "evidence_excerpt": SOURCE["snippet"],
+                    "evidence_origin": "content",
+                }
+            ],
+            "industry_impacts": [],
+        }
+    )
 
     async def invoke(**kwargs):
         prompts.append(kwargs["user_prompt"])
@@ -282,7 +285,7 @@ def test_date_provenance_survives_workflow_prompt_composer_and_manifest(monkeypa
     manifest = composer["evidence_manifest"](data, composer["source_articles"](data["metadata"]))
     assert manifest["sources"][0]["effective_date_evidence"] == record
     assert manifest["report_plan"] == plan
-    assert manifest["report_contract_version"] == 5
+    assert manifest["report_contract_version"] == 6
     checker["validate_evidence_manifest"](
         markdown, builder["report_fields"](markdown), json.dumps(manifest)
     )

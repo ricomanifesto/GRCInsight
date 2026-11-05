@@ -8,6 +8,7 @@ import pytest
 
 from core.workflow import _build_source_evidence
 from core.report_plan import parse_report_plan
+from narrative_fixture import narrated
 from models.api import ArticleInput
 
 TITLE = "Critical vulnerability: enterprise gateway permits remote code execution"
@@ -29,21 +30,23 @@ def source(summary=DETAIL, content="", title=TITLE):
 
 
 def plan(excerpt=DETAIL, origin="summary"):
-    return {
-        "executive_brief": {"decision_frame": "exposure", "source_ids": [1]},
-        "regulatory_changes": [],
-        "industry_impacts": [],
-        "control_implications": [
-            {
-                "control_id": "vulnerability_management",
-                "priority": "medium",
-                "source_ids": [1],
-                "focus": "gateway",
-                "evidence_origin": origin,
-                "evidence_excerpt": excerpt,
-            }
-        ],
-    }
+    return narrated(
+        {
+            "executive_brief": {"decision_frame": "exposure", "source_ids": [1]},
+            "regulatory_changes": [],
+            "industry_impacts": [],
+            "control_implications": [
+                {
+                    "control_id": "vulnerability_management",
+                    "priority": "medium",
+                    "source_ids": [1],
+                    "focus": "gateway",
+                    "evidence_origin": origin,
+                    "evidence_excerpt": excerpt,
+                }
+            ],
+        }
+    )
 
 
 def test_builder_keeps_article_fields_separate_from_the_headline():

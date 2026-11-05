@@ -1,6 +1,7 @@
-"""An executive decision agenda must add structure above the source evidence."""
+"""The v5 executive decision agenda, retained to verify historical publications."""
 
 from copy import deepcopy
+from functools import partial
 import json
 from pathlib import Path
 import re
@@ -8,8 +9,13 @@ import runpy
 
 import pytest
 
-from core.report_plan import parse_report_plan, render_report_plan, validate_rendered_report
-from test_report_substance import PLAN as FINDING_PLAN, SOURCE
+from core import report_plan as report_plan_module
+from test_report_substance import V5_PLAN as FINDING_PLAN, SOURCE
+
+# Contract version 5 is immutable history; pin these checks to it explicitly.
+parse_report_plan = partial(report_plan_module.parse_report_plan, contract_version=5)
+render_report_plan = partial(report_plan_module.render_report_plan, contract_version=5)
+validate_rendered_report = partial(report_plan_module.validate_rendered_report, contract_version=5)
 
 
 def narrative_plan():
@@ -161,7 +167,7 @@ def test_generic_three_paragraph_substitution_is_rejected_even_with_valid_citati
 
 
 def test_regulatory_evidence_is_not_repeated_in_the_control_decision():
-    from test_report_evidence import SOURCE as primary, selection_plan
+    from test_report_evidence import SOURCE as primary, v5_selection_plan as selection_plan
 
     plan = selection_plan()
     body = render_report_plan(plan, [primary])
@@ -171,7 +177,7 @@ def test_regulatory_evidence_is_not_repeated_in_the_control_decision():
 
 
 def test_shared_regulatory_quote_keeps_literal_ampersands_without_a_false_duplicate():
-    from test_report_evidence import SOURCE as primary, selection_plan
+    from test_report_evidence import SOURCE as primary, v5_selection_plan as selection_plan
 
     excerpt = "The United States final reporting rule covers risk & compliance disclosures."
     source = {
@@ -214,7 +220,7 @@ def test_mixed_topics_require_separate_decisions_instead_of_an_invented_shared_f
 
 
 def test_regulatory_frame_uses_applicability_agenda_even_with_a_control_mapping():
-    from test_report_evidence import SOURCE as primary, selection_plan
+    from test_report_evidence import SOURCE as primary, v5_selection_plan as selection_plan
 
     plan = selection_plan()
     plan["executive_brief"]["decision_frame"] = "regulatory"
@@ -256,23 +262,6 @@ def test_report_quality_failure_has_its_own_retention_category():
     assert (
         classify("Report quality validation failed: executive brief is missing") == "report_quality"
     )
-
-
-def test_generator_requires_supported_brief_and_distinct_section_roles():
-    from services.model_service import GRCModelService
-
-    service = GRCModelService.__new__(GRCModelService)
-    prompt = service._create_report_prompt({"source_evidence": [SOURCE]}, {})
-    for requirement in (
-        "executive_brief",
-        "decision_frame",
-        "one to three",
-        "separate decisions",
-        "industry_impacts must be empty",
-        "Do not default every finding to high",
-        "Evidence and Decisions",
-    ):
-        assert requirement in prompt
 
 
 def test_quality_retry_uses_actionable_diagnostic_and_does_not_attest_failure():
@@ -400,7 +389,7 @@ def test_same_control_leads_share_one_agenda_step_and_keep_both_citations():
 
 
 def test_multiple_regulatory_leads_share_one_applicability_step_and_keep_subjects():
-    from test_report_evidence import SOURCE as primary, selection_plan
+    from test_report_evidence import SOURCE as primary, v5_selection_plan as selection_plan
 
     second_excerpt = "The United States final disclosure rule takes effect on 2027-02-01."
     second = {
@@ -464,7 +453,7 @@ def test_overlapping_source_excerpts_validate_as_independent_evidence_blocks():
 
 
 def test_control_excerpt_inside_longer_regulatory_quote_is_not_duplicate_analysis():
-    from test_report_evidence import SOURCE as primary, selection_plan
+    from test_report_evidence import SOURCE as primary, v5_selection_plan as selection_plan
 
     longer = primary["snippet"] + " " + SOURCE["snippet"]
     primary = {

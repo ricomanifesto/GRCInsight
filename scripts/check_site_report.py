@@ -767,6 +767,7 @@ def validate_evidence_manifest(
         if url in source_urls and manifest.get("report_contract_version", 1) not in {
             3,
             4,
+            5,
             REPORT_CONTRACT_VERSION,
         }:
             fail(f"evidence manifest repeats source URL: {url}")
@@ -848,6 +849,7 @@ def validate_evidence_manifest(
         1,
         3,
         4,
+        5,
         REPORT_CONTRACT_VERSION,
     }:
         fail("unsupported report evidence contract version")
@@ -856,10 +858,11 @@ def validate_evidence_manifest(
     if "## Sourced Regulatory Changes" in body and contract_version not in {
         3,
         4,
+        5,
         REPORT_CONTRACT_VERSION,
     }:
         fail("structured reports require the current report contract and retained plan")
-    if contract_version in {3, 4, REPORT_CONTRACT_VERSION}:
+    if contract_version in {3, 4, 5, REPORT_CONTRACT_VERSION}:
         try:
             validate_regulatory_evidence(body, raw_sources, contract_version=contract_version)
             validate_rendered_report(

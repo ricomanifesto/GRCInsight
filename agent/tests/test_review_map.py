@@ -5,7 +5,8 @@ import runpy
 import subprocess
 
 from core.report_plan import render_report_plan
-from test_report_substance import PLAN, SOURCE
+from narrative_fixture import narrated
+from test_report_substance import V5_PLAN as PLAN, SOURCE
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -36,7 +37,8 @@ def fixture():
                 "evidence_excerpt": source["snippet"],
             }
         )
-    manifest = {"report_contract_version": 5, "report_plan": plan, "sources": sources}
+    plan = narrated(plan)
+    manifest = {"report_contract_version": 6, "report_plan": plan, "sources": sources}
     markdown = render_report_plan(plan, sources, include_digest=True)
     return markdown, manifest
 
@@ -110,8 +112,9 @@ def test_regulatory_only_report_has_no_empty_map():
     plan["control_implications"] = []
     plan["industry_impacts"] = []
     plan["executive_brief"] = {"decision_frame": "regulatory", "source_ids": [1]}
+    plan = narrated(plan)
     markdown = render_report_plan(plan, [primary], include_digest=True)
-    manifest = {"report_contract_version": 5, "report_plan": plan, "sources": [primary]}
+    manifest = {"report_contract_version": 6, "report_plan": plan, "sources": [primary]}
     html = builder()["render_report"](markdown, manifest)
     assert 'class="review-map"' not in html
     assert "Sourced Regulatory Changes" in html
