@@ -1005,7 +1005,7 @@ def _repair_excerpt(row: dict[str, Any], source: dict[str, Any]) -> tuple[str, s
     excerpt = excerpt.strip()
     segments = article_segments(source)
     origin = row.get("evidence_origin")
-    order = [origin] if origin in segments else []
+    order = [origin] if isinstance(origin, str) and origin in segments else []
     order += [name for name in segments if name not in order]
     for name in order:
         segment = segments[name]
@@ -1071,7 +1071,7 @@ def repair_report_plan(
             problem = _regulatory_row_problem(clean, sources)
             if problem:
                 raise ValueError(problem)
-        except ValueError as error:
+        except (ValueError, TypeError, KeyError, AttributeError) as error:
             notes.append(f"regulatory_changes[{index}] dropped: {error}")
             continue
         regulatory.append(clean)
@@ -1103,7 +1103,9 @@ def repair_report_plan(
             priority = row.get("priority")
             candidate = {
                 "control_id": control,
-                "priority": priority if priority in PRIORITIES else "medium",
+                "priority": (
+                    priority if isinstance(priority, str) and priority in PRIORITIES else "medium"
+                ),
                 "source_ids": [source_id],
                 "focus": focus,
                 "evidence_origin": origin,
@@ -1114,7 +1116,7 @@ def repair_report_plan(
                 or CONTROLS[control][1],
             }
             _validate_finding(candidate, sources, require_focus=False)
-        except ValueError as error:
+        except (ValueError, TypeError, KeyError, AttributeError) as error:
             raw_ids = row.get("source_ids") if isinstance(row, dict) else None
             first = (
                 raw_ids[0]

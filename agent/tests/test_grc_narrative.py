@@ -623,3 +623,15 @@ def test_entity_diagnostic_tells_the_retry_how_to_fix_it():
     assert not any(
         w.startswith("executive_brief.paragraphs[1]") for w in narrative_warnings(parsed, SOURCES)
     )
+
+
+@pytest.mark.parametrize("bad", [[], {}, ["high"], {"level": "high"}, 3])
+def test_non_string_priority_and_origin_never_escape_as_type_errors(bad):
+    plan = deepcopy(PLAN)
+    plan["control_implications"][0].update(priority=bad, evidence_origin=bad)
+    plan["control_implications"][1].update(control_id=bad, focus=bad, headline=bad)
+    plan["executive_brief"]["paragraphs"][0].update(source_ids=bad)
+    parsed = parse_report_plan(json.dumps(plan), SOURCES)
+    first = parsed["control_implications"][0]
+    assert first["priority"] == "medium" and first["evidence_origin"] == "summary"
+    assert [row["source_ids"][0] for row in parsed["control_implications"]] == [3, 12, 1]
