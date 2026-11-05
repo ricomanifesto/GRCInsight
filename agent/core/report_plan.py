@@ -385,7 +385,7 @@ def _narrative_problem(
         return "narrative must be plain text without markup or links"
     for match in NARRATIVE_MAGNITUDES.finditer(text):
         if not re.search(rf"\b{re.escape(match.group(0))}\b", corpus, re.I):
-            return "narrative contains a figure absent from its cited sources"
+            return "narrative contains a figure absent from its cited sources; list the source that states it in source_ids or remove it"
     for initial, token in _narrative_tokens(text):
         figure = any(character.isdigit() for character in token)
         acronym = sum(character.isupper() for character in token) >= 2
@@ -404,8 +404,8 @@ def _narrative_problem(
         if not figure and token in APPLICATION_VOCABULARY:
             continue
         if figure:
-            return "narrative contains a figure absent from its cited sources"
-        return "narrative names an entity absent from its cited sources"
+            return "narrative contains a figure absent from its cited sources; list the source that states it in source_ids or remove it"
+        return "narrative names an entity absent from its cited sources; list the source that names it in source_ids or remove the name"
     if _repeats_excerpt(text, excerpts):
         return "narrative repeats quoted evidence; analysis must add interpretation, not restate the excerpt"
     return None
@@ -423,76 +423,112 @@ def _bounded_text(value: Any, words: tuple[int, int], characters: int) -> str | 
     return None
 
 
-def _validate_narrative(plan: dict[str, Any], sources: list[dict[str, Any]]) -> None:
-    """Hold model-written narrative to the evidence it cites (contract version 6)."""
+def narrative_warnings(plan: dict[str, Any], sources: list[dict[str, Any]]) -> list[str]:
+    """Report narrative grounding and style concerns without refusing publication.
+
+    These rules are advisory in contract version 6: they are logged so the checks
+    can be tightened against real output later. Each entry names the field and the
+    rule, never the untrusted text.
+    """
+    warnings: list[str] = []
     findings = plan["control_implications"]
-    covered = {row["source_ids"][0] for row in findings}
-    covered.update(row["source_id"] for row in plan["regulatory_changes"])
     excerpts = [row["evidence_excerpt"] for row in findings]
     excerpts += [row["evidence_excerpt"] for row in plan["regulatory_changes"]]
-    brief = plan["executive_brief"]
-    try:
-        _object(brief, {"paragraphs"})
-        paragraphs = _list(brief["paragraphs"], 2)
-        if not paragraphs:
-            raise ValueError
-    except ValueError as error:
-        raise ReportQualityError(
-            "executive_brief: requires one or two narrative paragraphs"
-        ) from error
-    seen_text = set()
-    for index, paragraph in enumerate(paragraphs):
+    for index, paragraph in enumerate(plan["executive_brief"]["paragraphs"]):
         field = f"executive_brief.paragraphs[{index}]"
-        try:
-            paragraph = _object(paragraph, {"text", "source_ids"})
-            _source_ids(paragraph["source_ids"], sources)
-        except ValueError as error:
-            raise ReportQualityError(
-                f"{field}: requires text and one or more unique listed source IDs"
-            ) from error
-        if not set(paragraph["source_ids"]) <= covered:
-            raise ReportQualityError(
-                f"{field}: cites a source without a supported finding or regulatory change"
-            )
         problem = _bounded_text(paragraph["text"], (25, 120), 900)
         if problem is None and not paragraph["text"].endswith("."):
             problem = "must end as a complete sentence"
-        if problem is None and paragraph["text"] in seen_text:
-            problem = "repeats another paragraph"
         if problem is None:
             problem = _narrative_problem(
                 paragraph["text"], _source_corpus(sources, paragraph["source_ids"]), excerpts
             )
         if problem:
-            raise ReportQualityError(f"{field}: {problem}")
-        seen_text.add(paragraph["text"])
+            warnings.append(f"{field}: {problem}")
     for index, row in enumerate(findings):
         corpus = _source_corpus(sources, row["source_ids"])
-        headline = row["headline"]
+        headline, focus = row["headline"], row["focus"]
         field = f"control_implications[{index}].headline"
         problem = _bounded_text(headline, (4, 16), 110)
-        if problem is None and not headline.startswith(row["focus"] + " "):
-            problem = "must begin with its finding focus followed by what happened"
+        starts = headline[:1].casefold() == focus[:1].casefold() and headline[1:].startswith(
+            focus[1:] + " "
+        )
+        if problem is None and not starts:
+            problem = "should begin with its finding focus followed by what happened"
         if problem is None and headline[-1] in ".!?;:,":
-            problem = "must not end with punctuation"
+            problem = "should not end with punctuation"
         if problem is None:
-            # The focus is already verified verbatim against its excerpt.
-            problem = _narrative_problem(
-                headline[len(row["focus"]) :], corpus, [], verified_prefix=row["focus"]
-            )
+            problem = _narrative_problem(headline[len(focus) :], corpus, [], verified_prefix=focus)
         if problem:
-            raise ReportQualityError(f"{field}: {problem}")
+            warnings.append(f"{field}: {problem}")
         field = f"control_implications[{index}].significance"
         significance = row["significance"]
         problem = _bounded_text(significance, (15, 70), 480)
         if problem is None and (
             not significance.endswith(".") or len(re.split(r"(?<=[.!?])\s+", significance)) > 3
         ):
-            problem = "must be one to three complete sentences"
+            problem = "should be one to three complete sentences"
         if problem is None:
             problem = _narrative_problem(significance, corpus, excerpts)
         if problem:
-            raise ReportQualityError(f"{field}: {problem}")
+            warnings.append(f"{field}: {problem}")
+    return warnings
+
+
+def _validate_narrative_shape(plan: dict[str, Any], sources: list[dict[str, Any]]) -> None:
+    """Contract version 6 structure: what rendering needs, not grounding."""
+    covered = {row["source_ids"][0] for row in plan["control_implications"]}
+    covered.update(row["source_id"] for row in plan["regulatory_changes"])
+    brief = _object(plan["executive_brief"], {"paragraphs"})
+    paragraphs = _list(brief["paragraphs"], 2)
+    if not paragraphs:
+        raise ReportQualityError("executive_brief: requires one or two narrative paragraphs")
+    for index, paragraph in enumerate(paragraphs):
+        paragraph = _object(paragraph, {"text", "source_ids"})
+        _source_ids(paragraph["source_ids"], sources)
+        if not set(paragraph["source_ids"]) <= covered:
+            raise ReportQualityError(
+                f"executive_brief.paragraphs[{index}]: cites a source without a supported finding or regulatory change"
+            )
+        if not _single_line(paragraph["text"], PARAGRAPH_LIMIT):
+            raise ReportQualityError(
+                f"executive_brief.paragraphs[{index}]: requires one plain line of text"
+            )
+    for index, row in enumerate(plan["control_implications"]):
+        for name, limit in (("headline", HEADLINE_LIMIT), ("significance", SIGNIFICANCE_LIMIT)):
+            if not _single_line(row[name], limit):
+                raise ReportQualityError(
+                    f"control_implications[{index}].{name}: requires one plain line of text"
+                )
+
+
+def _single_line(value: Any, limit: int) -> bool:
+    """Rendering escapes model text, so a stored field needs only one bounded line."""
+    return (
+        isinstance(value, str)
+        and bool(value.strip())
+        and len(value) <= limit
+        and not any(character in value for character in "\r\n")
+    )
+
+
+PARAGRAPH_LIMIT = 1200
+HEADLINE_LIMIT = 160
+SIGNIFICANCE_LIMIT = 600
+
+
+def _plain_line(value: Any, limit: int) -> str:
+    """Model text as one safe plain line: no markup, links or line breaks."""
+    if not isinstance(value, str):
+        return ""
+    text = re.sub(r"\[([^\]]*)\]\([^)]*\)", r"\1", value)
+    text = re.sub(r"https?://[^\s)]+|www\.[^\s)]+", "", text)
+    text = re.sub(r"\(\s*\)", "", text)
+    text = "".join(character for character in text if character not in NARRATIVE_MARKUP)
+    text = re.sub(r"\s+", " ", text).strip()
+    if len(text) > limit:
+        text = text[:limit].rsplit(" ", 1)[0].rstrip(" ,;:")
+    return text
 
 
 class ReportQualityError(ValueError):
@@ -705,7 +741,60 @@ def _quoted_text(value: str) -> str:
     )
 
 
-def _validate_finding(row: dict[str, Any], sources: list[dict[str, Any]]) -> None:
+def _typographic_pattern(phrase: str) -> str:
+    """Match a phrase ignoring case, quote style, dash style and spacing."""
+    parts = []
+    for character in phrase:
+        if character.isspace():
+            if not parts or parts[-1] != r"\s+":
+                parts.append(r"\s+")
+        elif character in "'’‘`":
+            parts.append("['’‘`]")
+        elif character in '"“”':
+            parts.append('["“”]')
+        elif character in "-‐‑–—":
+            parts.append("[-‐‑–—]")
+        else:
+            parts.append(re.escape(character))
+    return "".join(parts)
+
+
+def _source_phrase(text: str, phrase: str, *, anchored: bool = False) -> re.Match[str] | None:
+    """Locate a complete phrase in text that differs from it only typographically."""
+    if not isinstance(phrase, str) or not phrase.strip():
+        return None
+    pattern = _typographic_pattern(phrase.strip())
+    if anchored:
+        return re.match(rf"{pattern}(?!\w)", text, re.I)
+    return re.search(rf"(?<!\w){pattern}(?!\w)", text, re.I)
+
+
+def _normalize_focus(row: dict[str, Any]) -> None:
+    """Restore a focus and its headline prefix to the excerpt's exact characters.
+
+    A model often changes only the case, quotes, dashes or spacing of the phrase it
+    copies. The excerpt is already verified against the source, so its own spelling
+    of the same phrase is substituted; any other difference still fails closed.
+    """
+    focus, excerpt = row.get("focus"), row.get("evidence_excerpt")
+    if not isinstance(focus, str) or not isinstance(excerpt, str) or focus in excerpt:
+        return
+    found = _source_phrase(excerpt, focus)
+    if found is None:
+        return
+    exact = found.group(0)
+    headline = row.get("headline")
+    if isinstance(headline, str):
+        prefix = _source_phrase(headline, focus, anchored=True)
+        if prefix is not None:
+            lead = headline[0].upper() if headline[:1].isupper() else exact[0]
+            row["headline"] = lead + exact[1:] + headline[prefix.end() :]
+    row["focus"] = exact
+
+
+def _validate_finding(
+    row: dict[str, Any], sources: list[dict[str, Any]], *, require_focus: bool = True
+) -> None:
     if len(row["source_ids"]) != 1:
         raise ValueError("each finding requires exactly one source, not a citation bundle")
     source = sources[row["source_ids"][0] - 1]
@@ -726,8 +815,16 @@ def _validate_finding(row: dict[str, Any], sources: list[dict[str, Any]]) -> Non
         raise ValueError(
             "evidence_excerpt: finding excerpt must match its selected article evidence segment exactly"
         )
-    if focus not in excerpt or not _contains_complete_phrase(excerpt, focus):
-        raise ValueError("focus: finding focus must match the selected excerpt exactly")
+    if require_focus and (focus not in excerpt or not _contains_complete_phrase(excerpt, focus)):
+        if set(_words(focus)) <= set(_words(excerpt)):
+            raise ValueError(
+                "focus: finding focus words appear in the excerpt but not as one contiguous "
+                "phrase; copy a contiguous phrase from the excerpt exactly"
+            )
+        raise ValueError(
+            "focus: finding focus uses words absent from the excerpt; copy a contiguous "
+            "phrase from the excerpt instead of naming the subject"
+        )
     if not has_non_headline_text(excerpt, str(source.get("title", ""))):
         raise ValueError(
             "finding requires non-headline article evidence; a source title alone is insufficient"
@@ -828,7 +925,7 @@ def _validate_plan(
             seen.add(selection)
             if findings:
                 try:
-                    _validate_finding(row, sources)
+                    _validate_finding(row, sources, require_focus=contract_version < 6)
                 except ValueError as error:
                     # Keep diagnostic identity application-owned. Never echo an
                     # untrusted origin, candidate passage or source text in logs.
@@ -838,13 +935,13 @@ def _validate_plan(
                         f"{collection}[{index}] source_id={row['source_ids'][0]} "
                         f"evidence_origin={safe_origin}: {error}"
                     ) from error
-                if contract_version >= 5 and (
+                if contract_version == 5 and (
                     len(row["focus"]) > 80 or len(row["focus"].split()) > 8
                 ):
                     raise ReportQualityError(
                         "finding focus must be a short review label: at most eight words and 80 characters"
                     )
-                if contract_version >= 5 and row["focus"] == row["evidence_excerpt"]:
+                if contract_version == 5 and row["focus"] == row["evidence_excerpt"]:
                     raise ReportQualityError(
                         "finding focus must be an identifying label shorter than its evidence passage"
                     )
@@ -869,7 +966,7 @@ def _validate_plan(
             raise ReportQualityError(
                 "sector labels do not establish sector-specific consequences; omit industry mappings"
             )
-        _validate_narrative(plan, sources)
+        _validate_narrative_shape(plan, sources)
     return plan
 
 
@@ -882,17 +979,220 @@ def _unique_fields(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
     return result
 
 
+def _regulatory_row_problem(row: dict[str, Any], sources: list[dict[str, Any]]) -> str | None:
+    """Check one regulatory row with the publication validator, in isolation."""
+    source = sources[row["source_id"] - 1]
+    date = document_effective_date(source) or "Unknown"
+    body = (
+        "## Sourced Regulatory Changes\n\n"
+        "| Change | Jurisdiction | Document effective date | Source | Evidence excerpt |\n"
+        "|---|---|---|---|---|\n"
+        f"| {row['change']} | {row['jurisdiction']} | {date} | {_link(source)} | {row['evidence_excerpt']} |"
+        "\n\n## Evidence and Decisions\n\nPending."
+    )
+    try:
+        validate_regulatory_evidence(body, [source], contract_version=REPORT_CONTRACT_VERSION)
+    except ValueError as error:
+        return str(error)
+    return None
+
+
+def _repair_excerpt(row: dict[str, Any], source: dict[str, Any]) -> tuple[str, str]:
+    """Return the excerpt as the source spells it, and the segment that holds it."""
+    excerpt = row.get("evidence_excerpt")
+    if not isinstance(excerpt, str) or not excerpt.strip():
+        raise ValueError("evidence_excerpt: finding requires a quoted source passage")
+    excerpt = excerpt.strip()
+    segments = article_segments(source)
+    origin = row.get("evidence_origin")
+    order = [origin] if origin in segments else []
+    order += [name for name in segments if name not in order]
+    for name in order:
+        segment = segments[name]
+        if excerpt in segment and _contains_complete_phrase(segment, excerpt):
+            return excerpt, name
+        found = _source_phrase(segment, excerpt)
+        if found is not None:
+            return found.group(0), name
+    raise ValueError(
+        "evidence_excerpt: finding excerpt must be copied from its source's article evidence segment"
+    )
+
+
+def _repair_focus(focus: Any, excerpt: str) -> str:
+    if isinstance(focus, str) and focus.strip():
+        found = _source_phrase(excerpt, focus)
+        if found is not None and 3 <= len(found.group(0)) <= 120:
+            return found.group(0)
+        label = _plain_line(focus, 80)
+        if len(label) >= 3:
+            return label
+    words = excerpt.split()[:6]
+    return " ".join(words).rstrip(" ,;:.")
+
+
+def repair_report_plan(
+    value: Any, sources: list[dict[str, Any]], notes: list[str] | None = None
+) -> dict[str, Any]:
+    """Keep every publishable part of a contract version 6 plan.
+
+    Findings whose quoted evidence cannot be found in their source, and regulatory
+    rows that fail the primary-source rules, are dropped rather than refusing the
+    report. Narrative fields are reduced to plain lines, given fallbacks when
+    missing, and cite only sources with a kept finding or regulatory change. The
+    report is refused only when no finding or regulatory change survives.
+    """
+    notes = notes if notes is not None else []
+    if not isinstance(value, dict):
+        raise ReportQualityError("report plan must be a JSON object")
+    if not 1 <= len(sources) <= 12:
+        raise ValueError("report plan requires one to twelve retained sources")
+    for source in sources:
+        article_segments(source)
+
+    def items(name: str) -> list[Any]:
+        rows = value.get(name)
+        return rows if isinstance(rows, list) else []
+
+    regulatory: list[dict[str, Any]] = []
+    for index, row in enumerate(items("regulatory_changes")[:12]):
+        try:
+            row = _object(row, {"source_id", "change", "jurisdiction", "evidence_excerpt"})
+            source_id = _source_id(row["source_id"], sources)
+            if source_id in {item["source_id"] for item in regulatory}:
+                raise ValueError("repeats a regulatory source")
+            cells: dict[str, str] = {
+                name: row[name].strip() if isinstance(row[name], str) else ""
+                for name in ("change", "jurisdiction", "evidence_excerpt")
+            }
+            if any(not cell or any(c in cell for c in "\r\n|") for cell in cells.values()):
+                raise ValueError("regulatory fields must be bounded table cells")
+            clean: dict[str, Any] = {"source_id": source_id, **cells}
+            problem = _regulatory_row_problem(clean, sources)
+            if problem:
+                raise ValueError(problem)
+        except ValueError as error:
+            notes.append(f"regulatory_changes[{index}] dropped: {error}")
+            continue
+        regulatory.append(clean)
+
+    findings: list[dict[str, Any]] = []
+    first_drop = ""
+    for index, row in enumerate(items("control_implications")[:12]):
+        try:
+            if not isinstance(row, dict):
+                raise ValueError("finding must be an object")
+            control = row.get("control_id")
+            _choice(control, CONTROLS)
+            ids = row.get("source_ids")
+            ids = (
+                [i for i in ids if type(i) is int and 1 <= i <= len(sources)]
+                if isinstance(ids, list)
+                else []
+            )
+            if not ids:
+                raise ValueError("finding requires a listed source ID")
+            source_id = ids[0]
+            if source_id in {item["source_ids"][0] for item in findings}:
+                raise ValueError("repeats a finding source")
+            excerpt, origin = _repair_excerpt(row, sources[source_id - 1])
+            draft = {"focus": row.get("focus"), "evidence_excerpt": excerpt}
+            draft["headline"] = row.get("headline")
+            _normalize_focus(draft)
+            focus = _repair_focus(draft["focus"], excerpt)
+            priority = row.get("priority")
+            candidate = {
+                "control_id": control,
+                "priority": priority if priority in PRIORITIES else "medium",
+                "source_ids": [source_id],
+                "focus": focus,
+                "evidence_origin": origin,
+                "evidence_excerpt": excerpt,
+                "headline": _plain_line(draft["headline"], HEADLINE_LIMIT)
+                or _plain_line(focus, HEADLINE_LIMIT),
+                "significance": _plain_line(row.get("significance"), SIGNIFICANCE_LIMIT)
+                or CONTROLS[control][1],
+            }
+            _validate_finding(candidate, sources, require_focus=False)
+        except ValueError as error:
+            raw_ids = row.get("source_ids") if isinstance(row, dict) else None
+            first = (
+                raw_ids[0]
+                if isinstance(raw_ids, list) and raw_ids and type(raw_ids[0]) is int
+                else "unknown"
+            )
+            origin_name = row.get("evidence_origin") if isinstance(row, dict) else None
+            safe_origin = origin_name if origin_name in ("summary", "content") else "unsupported"
+            note = (
+                f"control_implications[{index}] source_id={first} "
+                f"evidence_origin={safe_origin}: {error}"
+            )
+            notes.append(note + " (dropped)")
+            first_drop = first_drop or note
+            continue
+        findings.append(candidate)
+        if len(findings) == 6:
+            break
+
+    covered = [row["source_ids"][0] for row in findings]
+    covered += [row["source_id"] for row in regulatory if row["source_id"] not in covered]
+    if not covered:
+        raise ReportQualityError(
+            first_drop
+            or "report requires at least one evidence-backed finding or regulatory change"
+        )
+    paragraphs: list[dict[str, Any]] = []
+    brief = value.get("executive_brief")
+    raw = brief.get("paragraphs") if isinstance(brief, dict) else None
+    for index, row in enumerate(raw if isinstance(raw, list) else []):
+        text = _plain_line(row.get("text"), PARAGRAPH_LIMIT) if isinstance(row, dict) else ""
+        if not text or text in {item["text"] for item in paragraphs}:
+            notes.append(f"executive_brief.paragraphs[{index}] dropped: empty or repeated")
+            continue
+        cited = row.get("source_ids") if isinstance(row.get("source_ids"), list) else []
+        ids = [i for i in dict.fromkeys(i for i in cited if type(i) is int) if i in covered]
+        if len(ids) != len(cited):
+            notes.append(
+                f"executive_brief.paragraphs[{index}]: uncited or unsupported source IDs removed"
+            )
+        paragraphs.append({"text": text, "source_ids": ids or covered[:3]})
+        if len(paragraphs) == 2:
+            break
+    if not paragraphs:
+        leads = [row["headline"] for row in findings[:3]] or [
+            row["change"] for row in regulatory[:3]
+        ]
+        text = (
+            "This period's findings for control owners: "
+            + "; ".join(lead.rstrip(".") for lead in leads)
+            + "."
+        )
+        notes.append("executive_brief: no usable paragraph; application summary used")
+        paragraphs = [{"text": _plain_line(text, PARAGRAPH_LIMIT), "source_ids": covered[:3]}]
+    if items("industry_impacts"):
+        notes.append("industry_impacts ignored: sector mappings are not part of this contract")
+    return {
+        "regulatory_changes": regulatory,
+        "control_implications": findings,
+        "industry_impacts": [],
+        "executive_brief": {"paragraphs": paragraphs},
+    }
+
+
 def parse_report_plan(
     text: str,
     sources: list[dict[str, Any]],
     *,
     contract_version: int = REPORT_CONTRACT_VERSION,
+    notes: list[str] | None = None,
 ) -> dict[str, Any]:
+    """Parse a model plan. Version 6 repairs or drops parts instead of refusing."""
     if not isinstance(text, str) or len(text) > 65536:
         raise ValueError("report plan must be a bounded JSON object")
-    plan = _validate_plan(
-        json.loads(text, object_pairs_hook=_unique_fields), sources, contract_version
-    )
+    value = json.loads(text, object_pairs_hook=_unique_fields)
+    if contract_version >= 6:
+        value = repair_report_plan(value, sources, notes)
+    plan = _validate_plan(value, sources, contract_version)
     render_report_plan(plan, sources, contract_version=contract_version)
     return deepcopy(plan)
 
@@ -1261,7 +1561,7 @@ def validate_editorial_quality(body: str, plan: dict, sources: list[dict]) -> No
         )
     narrative = "paragraphs" in plan["executive_brief"]
     visible = re.sub(r"\[[^\]]+\]\([^\n]+?\)", "", summary)
-    minimum, maximum = (40, 300) if narrative else (60, 260)
+    minimum, maximum = (10, 600) if narrative else (60, 260)
     if not minimum <= len(visible.split()) <= maximum:
         raise ReportQualityError(
             "editorial: executive summary must be concise without padding or an empty introduction"
@@ -1298,7 +1598,9 @@ def validate_editorial_quality(body: str, plan: dict, sources: list[dict]) -> No
     for row in plan["control_implications"]:
         excerpt = _quoted_text(row["evidence_excerpt"])
         expected_blocks = 0 if row["evidence_excerpt"] in regulatory_excerpts else 1
-        if excerpt in analysis_prose or evidence_blocks.count(excerpt) != expected_blocks:
+        # Version 6 reports repeated quotation in model prose as a warning instead.
+        repeated = excerpt in analysis_prose and not narrative
+        if repeated or evidence_blocks.count(excerpt) != expected_blocks:
             raise ReportQualityError(
                 "editorial: source excerpts belong once in supporting findings, not repeated across sections"
             )

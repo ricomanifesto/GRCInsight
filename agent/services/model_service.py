@@ -24,6 +24,7 @@ from core.report_plan import (
     CONTROLS,
     CONTROL_REVIEWS,
     ReportQualityError,
+    narrative_warnings,
     parse_report_plan,
     render_report_plan,
 )
@@ -397,8 +398,11 @@ class GRCModelService:
                     mode=GenerationMode.REPORT_PLAN,
                 )
                 try:
-                    plan = parse_report_plan(generation.text, sources)
+                    notes: list[str] = []
+                    plan = parse_report_plan(generation.text, sources, notes=notes)
                     content = render_report_plan(plan, sources)
+                    for note in notes + narrative_warnings(plan, sources):
+                        logger.warning("Report plan note: {}", note)
                 except ValueError as error:
                     last_validation_error = str(error)[:240]
                     if attempt + 1 >= attempts:
@@ -560,7 +564,7 @@ Return only a JSON object with exactly these four fields:
 {{"regulatory_changes": [], "control_implications": [], "industry_impacts": [], "executive_brief": {{"paragraphs": []}}}}
 Do not emit Markdown, code fences, reasoning, headings or additional keys. The application adds every citation, link, scope note and Source Highlights entry.
 
-Narrative rules apply to executive_brief paragraphs and to each finding's headline and significance. The application checks each rule and refuses the report if one fails:
+Narrative rules apply to executive_brief paragraphs and to each finding's headline and significance. The application checks each rule against the sources a field cites and flags every breach for review:
 - Write for compliance, risk, audit and control owners. Explain what each development changes for control assurance, accountability, oversight, supplier assurance or audit evidence. Leave exploitation mechanics to the quoted evidence.
 - Use only facts present in the sources a field cites. Every figure, acronym and capitalized name you write must appear in those sources. Do not add dates, counts, time frames, regulators, frameworks or organizations from outside them.
 - Do not write CVE identifiers or CVSS scores; they remain in the quoted evidence.

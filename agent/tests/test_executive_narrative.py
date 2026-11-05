@@ -272,7 +272,7 @@ def test_quality_retry_uses_actionable_diagnostic_and_does_not_attest_failure():
     service = GRCModelService.__new__(GRCModelService)
     calls = []
     invalid = narrative_plan()
-    del invalid["executive_brief"]
+    invalid["control_implications"][0]["evidence_excerpt"] = "An invented passage, not source text."
 
     async def invoke(**kwargs):
         calls.append(kwargs)
@@ -281,9 +281,9 @@ def test_quality_retry_uses_actionable_diagnostic_and_does_not_attest_failure():
     service._invoke = invoke
     result = asyncio.run(service.generate_grc_report({"source_evidence": [SOURCE]}, {}))
     assert len(calls) == 2
-    assert "executive brief is required" in calls[1]["user_prompt"]
+    assert "evidence_excerpt:" in calls[1]["user_prompt"]
     assert result.failure_reason.startswith("Report quality validation failed:")
-    assert "executive brief is required" in result.failure_reason
+    assert "evidence_excerpt:" in result.failure_reason
     assert result.resolved_model == "" and result.report_plan is None
 
 

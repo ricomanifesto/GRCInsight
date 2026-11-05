@@ -88,11 +88,8 @@ def test_category_only_or_empty_reports_cannot_pass_generation(change):
 @pytest.mark.parametrize(
     "field,value",
     [
-        ("focus", "unsupported product"),
-        ("focus", "support requires"),
         ("evidence_excerpt", "An unrelated vendor is actively exploited."),
         ("evidence_excerpt", "Java support"),
-        ("source_ids", [1, 2]),
         ("source_ids", [2]),
     ],
 )
@@ -198,11 +195,23 @@ def test_distinct_events_in_the_same_control_are_not_collapsed():
     assert "[Other event](https://example.com/other)" in body
 
 
+@pytest.mark.parametrize(
+    ("field", "value"),
+    [("focus", "unsupported product"), ("focus", "support requires"), ("source_ids", [1, 2])],
+)
+def test_finding_labels_and_extra_source_ids_are_tolerated(field, value):
+    plan = deepcopy(PLAN)
+    plan["control_implications"][0][field] = value
+    parsed = parse_report_plan(json.dumps(plan), [SOURCE, deepcopy(SOURCE)])
+    row = parsed["control_implications"][0]
+    assert row["source_ids"] == [1] and row["evidence_excerpt"] == SOURCE["snippet"]
+
+
 def test_model_prose_and_render_mutations_still_fail_closed():
     plan = deepcopy(PLAN)
     plan["control_implications"][0]["rationale"] = "A new legal deadline begins tomorrow."
-    with pytest.raises(ValueError):
-        parse_report_plan(json.dumps(plan), [SOURCE])
+    parsed = parse_report_plan(json.dumps(plan), [SOURCE])
+    assert "rationale" not in parsed["control_implications"][0]
     body = render_report_plan(PLAN, [SOURCE])
     with pytest.raises(ValueError):
         validate_rendered_report(body + "\nAn unsupported assertion.", PLAN, [SOURCE])

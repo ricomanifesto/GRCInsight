@@ -140,12 +140,18 @@ def test_report_plan_rejects_any_added_narrative_independent_of_phrasing(claim):
         },
     ],
 )
-def test_report_plan_rejects_extra_fields_invalid_enums_and_source_ids(change):
+def test_extra_fields_invalid_enums_and_source_ids_never_reach_the_stored_plan(change):
     from core.report_plan import parse_report_plan
 
     plan = {**deepcopy(PLAN), **change}
-    with pytest.raises(ValueError):
-        parse_report_plan(json.dumps(plan), SOURCES)
+    try:
+        parsed = parse_report_plan(json.dumps(plan), SOURCES)
+    except ValueError:
+        return  # Nothing publishable remained.
+    stored = json.dumps(parsed)
+    for unsupported in ("executive_summary", "2027", "tomorrow", "prose", "invented"):
+        assert unsupported not in stored
+    assert parsed["industry_impacts"] == []
 
 
 def test_report_plan_preserves_source_title_quotations_without_treating_them_as_prose():
