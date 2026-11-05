@@ -269,6 +269,15 @@
       "outcome": "retained",
       "run_id": "42089768731",
       "stage": "completed"
+    },
+    {
+      "admission_key": "run:42091321024",
+      "at": "2026-11-05T19:10:30.748Z",
+      "binding": "none",
+      "event": "workflow_dispatch",
+      "run_attempt": "1",
+      "run_id": "42091321024",
+      "stage": "admitted"
     }
   ],
   "schema_version": 1,
