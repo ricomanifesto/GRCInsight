@@ -35,7 +35,7 @@ The workflow:
 3. Builds and pushes amd64 images tagged with the commit SHA and `latest`.
 4. Updates the existing Lambda functions and their environment variables.
 5. Waits for both functions to become active.
-6. Verifies image references and checks Go health. If Go reserved concurrency is zero, it explicitly defers Go API health and checks only Python's non-inference health path; it never restores concurrency.
+6. Verifies image references and checks Go health. It reads Go reserved concurrency from `GetFunction`, which needs no separate `GetFunctionConcurrency` permission. If that concurrency is zero, it explicitly defers Go API health and checks only Python's non-inference health path; it never restores concurrency.
 
 The workflow updates Lambda functions; it does not create missing functions or their execution role.
 
