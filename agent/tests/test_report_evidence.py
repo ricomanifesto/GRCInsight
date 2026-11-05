@@ -6,6 +6,7 @@ from typing import Any
 import runpy
 
 import pytest
+from narrative_fixture import narrated
 
 ROOT = Path(__file__).resolve().parents[2]
 SOURCE: dict[str, Any] = {
@@ -451,7 +452,7 @@ def test_regulatory_change_description_and_date_role_must_match_evidence():
         )
 
 
-def selection_plan():
+def v5_selection_plan():
     return {
         "executive_brief": {"decision_frame": "governance", "source_ids": [1]},
         "regulatory_changes": [
@@ -474,6 +475,10 @@ def selection_plan():
         ],
         "industry_impacts": [],
     }
+
+
+def selection_plan():
+    return narrated(v5_selection_plan())
 
 
 def stored_report(content, plan=None):
@@ -526,7 +531,7 @@ def test_regulatory_contract_survives_composition_manifest_and_publication_valid
     )
     sources = composer["source_articles"](data["metadata"])
     manifest = composer["evidence_manifest"](data, sources)
-    assert manifest["report_contract_version"] == 5
+    assert manifest["report_contract_version"] == 6
     assert manifest["sources"][0]["snippet"] == SOURCE["snippet"]
     validate_manifest = checker["validate_evidence_manifest"]
     validate_manifest(

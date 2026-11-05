@@ -158,8 +158,8 @@ def archive_slug(value: datetime) -> str:
 
 
 def review_map_rows(markdown: str, manifest: object) -> list[dict[str, str]]:
-    """Project only a v5 plan that exactly reproduces this report's body."""
-    if not isinstance(manifest, dict) or manifest.get("report_contract_version") != 5:
+    """Project only a v5 or v6 plan that exactly reproduces this report's body."""
+    if not isinstance(manifest, dict) or manifest.get("report_contract_version") not in {5, 6}:
         return []
     body_start = re.search(r"^## ", markdown, re.MULTILINE)
     if body_start is None:
@@ -171,7 +171,7 @@ def review_map_rows(markdown: str, manifest: object) -> list[dict[str, str]]:
             plan,
             manifest["sources"],
             include_digest=True,
-            contract_version=5,
+            contract_version=manifest["report_contract_version"],
         )
         return [
             {

@@ -54,14 +54,20 @@
         ],
         "focus": "Example Supplier",
         "evidence_origin": "summary",
-        "evidence_excerpt": "Example Supplier revoked an unattended service account after detecting unauthorized access. The notice asks customers to review delegated permissions and retain access logs."
+        "evidence_excerpt": "Example Supplier revoked an unattended service account after detecting unauthorized access. The notice asks customers to review delegated permissions and retain access logs.",
+        "headline": "Example Supplier revokes an unattended service account after unauthorized access",
+        "significance": "Delegated supplier access sits outside direct control, so assurance depends on the supplier detecting and revoking misuse. The supplier risk owner should confirm which delegated permissions exist and whether access logs are retained."
       }
     ],
     "industry_impacts": [],
     "executive_brief": {
-      "decision_frame": "supplier",
-      "source_ids": [
-        2
+      "paragraphs": [
+        {
+          "text": "Supplier access is the main assurance question this period. Example Supplier withdrew an unattended service account once it found unauthorized access, which tests whether delegated permissions are reviewed and whether access logs are kept for investigation.",
+          "source_ids": [
+            2
+          ]
+        }
       ]
     }
   }

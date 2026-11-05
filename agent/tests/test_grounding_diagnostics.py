@@ -9,8 +9,13 @@ import pytest
 from core.report_plan import parse_report_plan
 from services.model_service import GRCModelService
 from services.openrouter_client import OpenRouterGeneration
-from test_executive_narrative import narrative_plan
+from narrative_fixture import narrated
+from test_executive_narrative import narrative_plan as v5_narrative_plan
 from test_report_substance import SOURCE
+
+
+def narrative_plan():
+    return narrated(v5_narrative_plan())
 
 
 @pytest.mark.parametrize("field", ["focus", "evidence_excerpt"])

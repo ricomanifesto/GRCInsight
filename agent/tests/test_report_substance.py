@@ -13,6 +13,7 @@ from core.report_plan import (
     render_report_plan,
     validate_rendered_report,
 )
+from narrative_fixture import narrated
 
 SOURCE: dict[str, Any] = {
     "title": "Spreadsheet code execution advisory",
@@ -29,7 +30,7 @@ SOURCE: dict[str, Any] = {
         }
     ],
 }
-PLAN: dict[str, Any] = {
+V5_PLAN: dict[str, Any] = {
     "executive_brief": {"decision_frame": "exposure", "source_ids": [1]},
     "regulatory_changes": [],
     "control_implications": [
@@ -44,6 +45,7 @@ PLAN: dict[str, Any] = {
     ],
     "industry_impacts": [],
 }
+PLAN: dict[str, Any] = narrated(V5_PLAN)
 
 
 def test_reader_sees_event_limit_and_decision_without_opening_a_citation():
@@ -56,7 +58,7 @@ def test_reader_sees_event_limit_and_decision_without_opening_a_citation():
     assert "proof of concept" in body and "no exploitation" in body
     assert "Evidence to request" in body
     assert "Owner" in body
-    assert "confirm local applicability" in summary
+    assert "confirm whether each finding applies" in summary
     assert "Decision trigger:" in body
     assert "This report separates" not in summary
     assert "No sourced regulatory changes" in body
@@ -179,8 +181,9 @@ def test_excerpt_with_exposure_conditions_beyond_title_is_accepted():
             {"origin": "summary", "text": excerpt, "extraction_version": 1, "raw_text": excerpt}
         ],
     }
-    plan = deepcopy(PLAN)
+    plan = deepcopy(V5_PLAN)
     plan["control_implications"][0].update(focus="enterprise gateway", evidence_excerpt=excerpt)
+    plan = narrated(plan)
     assert parse_report_plan(json.dumps(plan), [source]) == plan
 
 
@@ -258,7 +261,7 @@ def test_finding_reaches_composition_manifest_and_compact_html():
         data, "https://digest.example/feed.xml", "openrouter/example/model"
     )
     manifest = composer["evidence_manifest"](data, composer["source_articles"](data["metadata"]))
-    assert manifest["report_contract_version"] == 5
+    assert manifest["report_contract_version"] == 6
     checker["validate_evidence_manifest"](
         markdown,
         builder["report_fields"](markdown),
@@ -270,7 +273,7 @@ def test_finding_reaches_composition_manifest_and_compact_html():
     assert "Java support" in html and "proof of concept" in html
     assert 'class="report-citation"' in html
     assert "View in SentryDigest" in html
-    for version in (1, 3, 4, 6, True):
+    for version in (1, 3, 4, 5, True):
         with pytest.raises(SystemExit):
             checker["validate_evidence_manifest"](
                 markdown,
@@ -388,8 +391,9 @@ def test_quoted_evidence_is_literal_text_in_the_reader():
         "url": "https://example.com/evidence?literal=&#38;",
         "article_evidence": receipts,
     }
-    plan = deepcopy(PLAN)
+    plan = deepcopy(V5_PLAN)
     plan["control_implications"][0].update(focus="Java [support]", evidence_excerpt=excerpt)
+    plan = narrated(plan)
     body = render_report_plan(plan, [source])
     _, _, builder = publication_tools()
     html = builder["render_report"](body)
@@ -405,7 +409,8 @@ def test_primary_regulatory_only_report_remains_publishable():
 
     plan = selection_plan()
     plan["control_implications"] = []
-    plan["executive_brief"]["decision_frame"] = "regulatory"
+    plan["executive_brief"] = {"source_ids": [1]}
+    plan = narrated(plan)
     body = render_report_plan(plan, [PRIMARY_SOURCE])
     assert "final reporting rule" in body.split("## Sourced Regulatory Changes")[0]
     assert "| Unknown |" in body

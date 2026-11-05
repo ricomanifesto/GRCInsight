@@ -17,7 +17,7 @@ from unittest.mock import patch
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "agent"))
 CASE = ROOT / "agent/tests/fixtures/selected_model_case.json"
-CASE_SHA256 = "f21bbf7ad30e72e485ecfb6ae6ce078fcd98959d4f0d3c5a28eab0f2b3955b08"
+CASE_SHA256 = "8a6d35b429ef1b24b800b4cdddfb8a48ac8ff0cf4c529624e2015677ed2b5ada"
 MAX_OUTPUT_TOKENS = 8000
 SYNTHETIC_INPUT_RESERVE = 22000
 

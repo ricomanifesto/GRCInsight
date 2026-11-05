@@ -10,6 +10,7 @@ from core import workflow as workflow_mod
 from models.api import ArticleInput
 from services.model_service import GRCModelService
 from services.openrouter_client import OpenRouterGeneration
+from narrative_fixture import narrated
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 AGENT_PYPROJECT = REPO_ROOT / "agent" / "pyproject.toml"
@@ -188,7 +189,7 @@ def test_report_prompt_requires_current_source_entities_and_readable_summary():
     assert "Return only a JSON object" in prompt
     assert "control_implications" in prompt
     assert "industry_impacts" in prompt
-    assert "No narrative text or date fields" in prompt
+    assert "Narrative rules apply" in prompt
     assert "source_id" in prompt
     assert "application renders" in prompt
 
@@ -279,21 +280,23 @@ def test_report_generation_retries_scratch_work_and_returns_complete_report():
     service = GRCModelService.__new__(GRCModelService)
     from core.report_plan import render_report_plan
 
-    plan = {
-        "executive_brief": {"decision_frame": "exposure", "source_ids": [1]},
-        "regulatory_changes": [],
-        "control_implications": [
-            {
-                "control_id": "vulnerability_management",
-                "priority": "medium",
-                "source_ids": [1],
-                "focus": "security advisory",
-                "evidence_excerpt": "A security advisory describes exposure in deployed gateways.",
-                "evidence_origin": "summary",
-            }
-        ],
-        "industry_impacts": [],
-    }
+    plan = narrated(
+        {
+            "executive_brief": {"decision_frame": "exposure", "source_ids": [1]},
+            "regulatory_changes": [],
+            "control_implications": [
+                {
+                    "control_id": "vulnerability_management",
+                    "priority": "medium",
+                    "source_ids": [1],
+                    "focus": "security advisory",
+                    "evidence_excerpt": "A security advisory describes exposure in deployed gateways.",
+                    "evidence_origin": "summary",
+                }
+            ],
+            "industry_impacts": [],
+        }
+    )
     sources = [
         {
             "title": "Evidence",
@@ -822,21 +825,23 @@ def test_report_generation_workflow_validates_generated_site_before_publish():
 def test_site_report_composer_owns_public_provenance_and_body_shape():
     from core.report_plan import render_report_plan
 
-    plan = {
-        "executive_brief": {"decision_frame": "exposure", "source_ids": [1]},
-        "regulatory_changes": [],
-        "control_implications": [
-            {
-                "control_id": "vulnerability_management",
-                "priority": "medium",
-                "source_ids": [1],
-                "focus": "security advisory",
-                "evidence_excerpt": "A security advisory describes exposure in deployed gateways.",
-                "evidence_origin": "summary",
-            }
-        ],
-        "industry_impacts": [],
-    }
+    plan = narrated(
+        {
+            "executive_brief": {"decision_frame": "exposure", "source_ids": [1]},
+            "regulatory_changes": [],
+            "control_implications": [
+                {
+                    "control_id": "vulnerability_management",
+                    "priority": "medium",
+                    "source_ids": [1],
+                    "focus": "security advisory",
+                    "evidence_excerpt": "A security advisory describes exposure in deployed gateways.",
+                    "evidence_origin": "summary",
+                }
+            ],
+            "industry_impacts": [],
+        }
+    )
     sources = [
         {
             "title": "Evidence",
@@ -1180,21 +1185,23 @@ def test_site_report_composer_rejects_provenance_mismatch():
 def test_site_report_composer_normalizes_numbered_markdown_headings_and_feed_url():
     from core.report_plan import render_report_plan
 
-    plan = {
-        "executive_brief": {"decision_frame": "exposure", "source_ids": [1]},
-        "regulatory_changes": [],
-        "control_implications": [
-            {
-                "control_id": "vulnerability_management",
-                "priority": "medium",
-                "source_ids": [1],
-                "focus": "security advisory",
-                "evidence_excerpt": "A security advisory describes exposure in deployed gateways.",
-                "evidence_origin": "summary",
-            }
-        ],
-        "industry_impacts": [],
-    }
+    plan = narrated(
+        {
+            "executive_brief": {"decision_frame": "exposure", "source_ids": [1]},
+            "regulatory_changes": [],
+            "control_implications": [
+                {
+                    "control_id": "vulnerability_management",
+                    "priority": "medium",
+                    "source_ids": [1],
+                    "focus": "security advisory",
+                    "evidence_excerpt": "A security advisory describes exposure in deployed gateways.",
+                    "evidence_origin": "summary",
+                }
+            ],
+            "industry_impacts": [],
+        }
+    )
     sources = [
         {
             "title": "Evidence",
@@ -1337,21 +1344,23 @@ def test_site_report_composer_accepts_serialized_source_link_identity():
             ],
         }
     ]
-    plan = {
-        "executive_brief": {"decision_frame": "exposure", "source_ids": [1]},
-        "regulatory_changes": [],
-        "control_implications": [
-            {
-                "control_id": "vulnerability_management",
-                "priority": "medium",
-                "source_ids": [1],
-                "focus": "security advisory",
-                "evidence_excerpt": "A security advisory describes exposure in deployed gateways.",
-                "evidence_origin": "summary",
-            }
-        ],
-        "industry_impacts": [],
-    }
+    plan = narrated(
+        {
+            "executive_brief": {"decision_frame": "exposure", "source_ids": [1]},
+            "regulatory_changes": [],
+            "control_implications": [
+                {
+                    "control_id": "vulnerability_management",
+                    "priority": "medium",
+                    "source_ids": [1],
+                    "focus": "security advisory",
+                    "evidence_excerpt": "A security advisory describes exposure in deployed gateways.",
+                    "evidence_origin": "summary",
+                }
+            ],
+            "industry_impacts": [],
+        }
+    )
     body = render_report_plan(plan, sources)
     normalized_sources = [{"title": title, "url": namespace["http_url"](source_url, "source URL")}]
     canonical = namespace["canonicalize_evidence_links"](body, normalized_sources)

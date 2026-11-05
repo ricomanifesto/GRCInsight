@@ -9,6 +9,8 @@ import runpy
 
 import pytest
 
+from narrative_fixture import narrated
+
 SOURCES: list[dict[str, Any]] = [
     {
         "title": "Security advisory",
@@ -26,7 +28,7 @@ SOURCES: list[dict[str, Any]] = [
         ],
     }
 ]
-PLAN: dict[str, Any] = {
+SELECTIONS: dict[str, Any] = {
     "executive_brief": {"decision_frame": "exposure", "source_ids": [1]},
     "regulatory_changes": [],
     "control_implications": [
@@ -41,6 +43,7 @@ PLAN: dict[str, Any] = {
     ],
     "industry_impacts": [],
 }
+PLAN: dict[str, Any] = narrated(SELECTIONS)
 
 
 def test_report_plan_renders_only_owned_text_and_retained_source_identity():
@@ -54,7 +57,7 @@ def test_report_plan_renders_only_owned_text_and_retained_source_identity():
     body = render_report_plan(plan, SOURCES)
     assert "## Executive Summary" in body
     assert "## Sourced Regulatory Changes" in body
-    assert "Inferred review priority:** High" in body
+    assert "**Review priority:** High" in body
     assert "[Security advisory](https://example.com/advisory)" in body
     assert "No sourced regulatory changes identified" in body
     validate_rendered_report(body, plan, SOURCES)
@@ -174,7 +177,7 @@ def test_report_plan_escapes_source_title_pipes_in_regulatory_table(title):
         ],
     }
     plan = {
-        **deepcopy(PLAN),
+        **deepcopy(SELECTIONS),
         "regulatory_changes": [
             {
                 "source_id": 1,
@@ -188,6 +191,7 @@ def test_report_plan_escapes_source_title_pipes_in_regulatory_table(title):
     plan["control_implications"][0].update(
         focus="final reporting rule", evidence_excerpt=source["snippet"]
     )
+    plan = narrated(plan)
     body = render_report_plan(plan, [source])
 
     assert r"\| Final Rule]" in body
@@ -255,6 +259,7 @@ def test_composer_preserves_source_ids_for_duplicate_urls():
         ],
         "industry_impacts": [],
     }
+    plan = narrated(plan)
     data = stored_report(render_report_plan(plan, sources), plan)
     data["metadata"]["source_articles"] = sources
 
@@ -278,6 +283,7 @@ def publish_plan(plan, sources):
     composer = runpy.run_path(str(root / "scripts/compose_site_report.py"))
     checker = runpy.run_path(str(root / "scripts/check_site_report.py"))
     builder = runpy.run_path(str(root / "scripts/build_site.py"))
+    plan = narrated(plan)
     data = stored_report(render_report_plan(plan, sources), plan)
     data["metadata"]["source_articles"] = sources
     report = composer["compose_report"](
@@ -298,7 +304,7 @@ def test_indexed_duplicate_sources_survive_full_publication(same_title):
     sources = [{k: v for k, v in SOURCES[0].items() if k != "digest_url"}]
     sources.append({**sources[0], "title": sources[0]["title"] if same_title else "Second entry"})
     sources.append({**sources[0], "title": "Later source", "url": "https://example.com/later"})
-    plan = deepcopy(PLAN)
+    plan = deepcopy(SELECTIONS)
     plan["control_implications"] = [
         {**PLAN["control_implications"][0], "source_ids": [i]} for i in [2, 3]
     ]
@@ -314,7 +320,7 @@ def test_markdown_url_serialization_preserves_distinct_digest_identities():
         {**{k: v for k, v in SOURCES[0].items() if k != "digest_url"}, "url": url}
         for url in ("https://example.com/a_(b)", "https://example.com/a_%28b%29")
     ]
-    plan = deepcopy(PLAN)
+    plan = deepcopy(SELECTIONS)
     plan["control_implications"] = [
         {**PLAN["control_implications"][0], "source_ids": [i]} for i in [1, 2]
     ]
