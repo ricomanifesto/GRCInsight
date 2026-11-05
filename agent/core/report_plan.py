@@ -266,8 +266,38 @@ NARRATIVE_OBLIGATIONS = tuple(
         r"\brequired\s+(?:to|by)\b",
         r"\b(?:has|have|had)\s+to\b",
         r"\bobliged\b",
+        r"\b(?:is|are|was|were|be|been|being)\s+required\b",
+        r"\bcompl(?:y|ies|ied|ying)\b",
+        r"\b(?:need|needs|needed)\s+to\s+(?:notify|report|disclose|file|inform)\b",
+        r"\b(?:notif|report|disclos|inform)\w*\s+(?:\w+\s+){0,3}regulat(?:ors?|ory\s+authorit\w*)\b",
     )
 )
+# Magnitudes state a figure in words; like digits they must come from a cited source.
+NARRATIVE_MAGNITUDES = re.compile(
+    r"\b(?:hundreds?|thousands?|millions?|billions?|trillions?|percent(?:age)?s?)\b", re.I
+)
+# Calendar names are proper nouns even when they open a sentence.
+CALENDAR_NAMES = {
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+    "Sunday",
+}
 EXCERPT_RUN_WORDS = 10
 
 
@@ -353,14 +383,25 @@ def _narrative_problem(
         r"https?:|www\.", text, re.I
     ):
         return "narrative must be plain text without markup or links"
+    for match in NARRATIVE_MAGNITUDES.finditer(text):
+        if not re.search(rf"\b{re.escape(match.group(0))}\b", corpus, re.I):
+            return "narrative contains a figure absent from its cited sources"
     for initial, token in _narrative_tokens(text):
         figure = any(character.isdigit() for character in token)
         acronym = sum(character.isupper() for character in token) >= 2
         name = token[0].isupper()
-        exempt = initial and not verified_prefix and not (figure or acronym)
+        exempt = (
+            initial
+            and not verified_prefix
+            and not (figure or acronym)
+            and token not in CALENDAR_NAMES
+        )
         if not (figure or acronym or name) or exempt:
             continue
-        if token in APPLICATION_VOCABULARY or _contains_complete_phrase(corpus, token):
+        if _contains_complete_phrase(corpus, token):
+            continue
+        # Application vocabulary may supply names, never figures.
+        if not figure and token in APPLICATION_VOCABULARY:
             continue
         if figure:
             return "narrative contains a figure absent from its cited sources"

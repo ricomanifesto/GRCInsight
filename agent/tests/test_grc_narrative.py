@@ -382,6 +382,10 @@ def test_ungrounded_narrative_fails_closed_without_echoing_model_text(field, mut
         "Operators have to notify regulators of the intrusion.",
         "Notification is required by law for affected operators.",
         "Operators are obliged to notify regulators.",
+        "Affected firms need to notify regulators within the week.",
+        "Reporting to regulators follows for affected operators.",
+        "Operators should comply with the updated guidance.",
+        "Logging coverage is required for affected operators.",
     ],
 )
 def test_obligation_language_is_permitted_only_when_its_source_uses_it(duty):
@@ -469,3 +473,29 @@ def test_generator_requests_grounded_narrative_for_control_owners():
     ):
         assert requirement in prompt
     assert "decision_frame" not in prompt
+
+
+@pytest.mark.parametrize(
+    ("claim", "rule"),
+    [
+        ("The intrusions exposed 2.0 million customer records.", "figure"),
+        ("The intrusions exposed two million customer records.", "figure"),
+        ("Losses reached several percent of revenue for affected operators.", "figure"),
+        ("January brings a new review cycle for affected owners.", "entity"),
+        ("Thursday marked the start of a broader campaign against operators.", "entity"),
+    ],
+)
+def test_application_vocabulary_and_sentence_openings_cannot_authorize_claims(claim, rule):
+    plan = deepcopy(PLAN)
+    plan["executive_brief"]["paragraphs"][0]["text"] += " " + claim
+    with pytest.raises(ReportQualityError, match=rule):
+        parse_report_plan(json.dumps(plan), SOURCES)
+
+
+def test_month_named_in_a_cited_source_remains_usable_at_a_sentence_start():
+    plan = deepcopy(PLAN)
+    plan["executive_brief"]["paragraphs"][0]["source_ids"] = [3, 10]
+    plan["executive_brief"]["paragraphs"][0][
+        "text"
+    ] += " February is when the exploited Catalyst SD-WAN flaw was fixed."
+    parse_report_plan(json.dumps(plan), SOURCES)
