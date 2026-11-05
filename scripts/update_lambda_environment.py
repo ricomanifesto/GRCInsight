@@ -94,7 +94,15 @@ def configure(client, arn, owned, *, pause=time.sleep, now=time.monotonic):
         ack = client.update(payload)
         identity(ack, arn)
         revision = ack["RevisionId"]
-        if revision == before["RevisionId"]:
+        # Lambda assigns another RevisionId when the update completes, so the
+        # write is identified by its LastModified time, which a later write changes.
+        written_at = ack.get("LastModified")
+        if (
+            revision == before["RevisionId"]
+            or type(written_at) is not str
+            or not written_at
+            or written_at == before.get("LastModified")
+        ):
             raise EnvironmentUpdateError()
     except BaseException:
         # No application retry, rollback, or second mutation after an unknown write.
@@ -106,9 +114,11 @@ def configure(client, arn, owned, *, pause=time.sleep, now=time.monotonic):
             raise EnvironmentUpdateError()
         after = client.get(arn, timeout=min(10, remaining))
         identity(after, arn)
-        if after["RevisionId"] != revision or after.get("LastUpdateStatus") == "Failed":
+        if after.get("LastModified") != written_at or after.get("LastUpdateStatus") == "Failed":
             raise EnvironmentUpdateError()
         if after.get("LastUpdateStatus") == "InProgress":
+            if after["RevisionId"] != revision:
+                raise EnvironmentUpdateError()
             if attempt < 2:
                 pause(min(10, max(0, end - now())))
             continue
@@ -215,7 +225,8 @@ class AwsCli:
                 "--environment",
                 "file:///dev/stdin",
                 "--query",
-                "{FunctionArn:FunctionArn,FunctionName:FunctionName,Version:Version,RevisionId:RevisionId}",
+                "{FunctionArn:FunctionArn,FunctionName:FunctionName,Version:Version,"
+                "RevisionId:RevisionId,LastModified:LastModified}",
             ]
             private_input = json.dumps(payload["Environment"], allow_nan=False).encode()
         elif operation == "get-function-configuration":
