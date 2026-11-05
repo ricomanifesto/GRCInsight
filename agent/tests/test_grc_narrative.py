@@ -365,14 +365,26 @@ def test_ungrounded_narrative_fails_closed_without_echoing_model_text(field, mut
         assert leaked not in message
 
 
-def test_obligation_language_is_permitted_only_when_its_source_uses_it():
+@pytest.mark.parametrize(
+    "duty",
+    [
+        "Operators must review logging coverage.",
+        "Affected organizations are legally required to notify regulators.",
+        "Affected organizations are required to notify regulators.",
+        "Operators shall notify regulators of the intrusion.",
+        "Operators have to notify regulators of the intrusion.",
+        "Notification is required by law for affected operators.",
+        "Operators are obliged to notify regulators.",
+    ],
+)
+def test_obligation_language_is_permitted_only_when_its_source_uses_it(duty):
     plan = deepcopy(PLAN)
     sources = deepcopy(SOURCES)
     paragraph = plan["executive_brief"]["paragraphs"][0]
-    paragraph["text"] += " Operators must review logging coverage."
+    paragraph["text"] += " " + duty
     with pytest.raises(ReportQualityError, match="obligation"):
         parse_report_plan(json.dumps(plan), sources)
-    sources[2]["snippet"] += " Operators must review logging coverage."
+    sources[2]["snippet"] += " " + duty
     parse_report_plan(json.dumps(plan), sources)
 
 

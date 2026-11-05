@@ -261,6 +261,11 @@ NARRATIVE_OBLIGATIONS = tuple(
         r"\bsanction\w*",
         r"\bdeadlines?\b",
         r"\bliab(?:le|ility|ilities)\b",
+        r"\bshall\b",
+        r"\blegal(?:ly)?\s+(?:required|bound|duty|duties|requirements?)\b",
+        r"\brequired\s+(?:to|by)\b",
+        r"\b(?:has|have|had)\s+to\b",
+        r"\bobliged\b",
     )
 )
 EXCERPT_RUN_WORDS = 10
