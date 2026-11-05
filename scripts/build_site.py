@@ -17,6 +17,7 @@ sys.path.insert(0, str(REPO_ROOT / "scripts"))
 sys.path.insert(0, str(REPO_ROOT / "agent"))
 
 from core.report_plan import (  # noqa: E402
+    CONTROL_REVIEWS,
     CONTROLS,
     PRIORITIES,
     report_finding_groups,
@@ -176,7 +177,9 @@ def review_map_rows(markdown: str, manifest: object) -> list[dict[str, str]]:
         return [
             {
                 "focus": group[0]["focus"],
+                "headline": group[0].get("headline") or group[0]["focus"],
                 "control": CONTROLS[group[0]["control_id"]][0],
+                "owner": CONTROL_REVIEWS[group[0]["control_id"]][0],
                 "priority": PRIORITIES[group[0]["priority"]],
             }
             for group in report_finding_groups(plan)

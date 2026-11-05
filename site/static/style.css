@@ -133,18 +133,91 @@ body {
 .report-citation { white-space: nowrap; font-variant-numeric: tabular-nums; font-weight: 600; padding: 0.15em 0.1em; }
 .source-number { color: var(--muted); font-variant-numeric: tabular-nums; }
 
-/* A navigation map of existing findings, not a quantitative risk assessment. */
-.review-map { margin-top: 30px; padding-top: 24px; border-top: 2px solid var(--accent); }
-.review-map h2 { margin-bottom: 8px; font-size: 25px; }
-.review-map > p { margin: 0 0 22px; color: var(--muted); font-size: 14px; line-height: 1.5; }
-.review-map-groups { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px; }
-.review-map-group h3 { margin: 0 0 12px; font-size: 18px; line-height: 1.25; }
-.review-map-count { display: block; margin-top: 5px; color: var(--muted); font: 14px/1.4 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
-.review-map-group ul { margin: 0; list-style: none; }
-.review-map-group li { margin: 0; border-top: 1px solid var(--rule); }
-.review-map-group a { display: flex; flex-direction: column; align-items: flex-start; gap: 5px; padding: 12px 0; font-size: 15px; line-height: 1.4; overflow-wrap: anywhere; }
-.review-priority { color: var(--muted); font-size: 13px; text-decoration: none; }
-.review-priority::before { content: "↳ "; }
+/* Executive briefing. Section numbers, figures and exhibits are presentation
+   only; every value comes from the validated report and its evidence plan. */
+.report, .archive-report { counter-reset: briefing-section; }
+.report > .card > h2::before, .archive-report > .card > h2::before {
+  counter-increment: briefing-section;
+  content: counter(briefing-section, decimal-leading-zero);
+  display: block;
+  margin-bottom: 10px;
+  color: var(--accent);
+  font: 700 13px/1 -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  letter-spacing: 0.14em;
+}
+.small-caps-label, .key-messages-title, .exhibit-label, .glance-label, .finding-evidence figcaption, .finding-actions dt, .findings-table th, .coverage-table thead th {
+  color: var(--muted);
+  font: 700 13px/1.3 -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.glance { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); margin: 0 0 34px; border-top: 2px solid var(--ink); border-bottom: 1px solid var(--rule-strong); }
+.glance-item { display: flex; flex-direction: column-reverse; justify-content: flex-end; gap: 6px; min-width: 0; padding: 16px 18px 18px 0; }
+.glance-item + .glance-item { padding-left: 18px; border-left: 1px solid var(--rule); }
+.glance-value { margin: 0; color: var(--ink); font-family: Georgia, "Times New Roman", serif; font-size: 40px; font-variant-numeric: lining-nums tabular-nums; line-height: 1; }
+.glance-label { margin: 0; }
+
+.card h3.key-messages-title { margin: 0 0 4px; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; font-size: 13px; font-weight: 700; }
+.key-messages { max-width: 82ch; margin: 0; padding: 0; list-style: none; counter-reset: key-message; }
+.key-message { display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 14px; margin: 0; padding: 18px 0; border-top: 1px solid var(--rule); counter-increment: key-message; }
+.key-message + .key-message { margin-top: 0; }
+.key-message::before { content: counter(key-message); color: var(--accent); font-family: Georgia, "Times New Roman", serif; font-size: 30px; line-height: 1; }
+.key-message p { margin: 0; }
+.key-lead { display: block; margin-bottom: 6px; color: var(--ink); font-family: Georgia, "Times New Roman", serif; font-size: 19px; font-weight: 500; line-height: 1.35; }
+.summary-scope { max-width: 82ch; margin: 6px 0 0; padding: 12px 0 0 58px; border-top: 1px solid var(--rule); color: var(--muted); font-size: 14px; line-height: 1.55; }
+
+/* Exhibits keep the report's rule-led tables; only meaning-bearing cells take tone. */
+.review-map { display: grid; gap: 46px; }
+.exhibit { margin: 0; }
+.exhibit-label { margin: 0 0 6px; color: var(--accent); }
+.card h3.exhibit-title { max-width: 60ch; margin: 0 0 16px; font-size: 23px; line-height: 1.25; text-wrap: balance; }
+.exhibit-table { overflow-x: auto; border-top: 2px solid var(--ink); border-bottom: 1px solid var(--rule-strong); }
+.exhibit-table table { min-width: 0; }
+.exhibit-note { max-width: 86ch; margin: 10px 0 0; color: var(--muted); font-size: 13px; line-height: 1.5; }
+.findings-table td { vertical-align: baseline; }
+.findings-table th:first-child, .findings-table td:first-child { width: 54px; }
+.finding-index { color: var(--accent); font-family: Georgia, "Times New Roman", serif; font-size: 20px; font-variant-numeric: lining-nums tabular-nums; }
+.finding-cell a { color: var(--ink); font-weight: 650; text-decoration-color: var(--rule-strong); }
+.finding-cell a:hover { color: var(--accent); }
+.findings-table td:nth-child(3), .findings-table td:nth-child(5) { color: var(--muted); font-size: 14px; }
+
+.priority-pill { display: inline-block; padding: 1px 9px; border: 1px solid var(--accent); color: var(--accent); font: 650 13px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 0.02em; white-space: nowrap; }
+.priority-high .priority-pill { border-color: var(--accent); background: var(--accent); color: var(--paper-raised); }
+.priority-medium .priority-pill { background: var(--accent-soft); }
+.priority-low .priority-pill { border-color: var(--rule-strong); color: var(--muted); }
+
+.coverage-table th, .coverage-table td { text-align: center; }
+.coverage-table th:first-child, .coverage-table tbody th { width: 46%; text-align: left; }
+.coverage-table tbody th { padding: 12px 16px 12px 0; border-bottom: 0; color: var(--ink); font-weight: 600; }
+.coverage-table tbody tr + tr th { border-top: 1px solid var(--rule); }
+.coverage-table td { padding: 12px 8px; font-variant-numeric: tabular-nums; }
+.coverage-cell { font-weight: 700; }
+.coverage-cell.level-1 { background: var(--accent-soft); color: var(--accent); }
+.coverage-cell.level-2 { background: color-mix(in srgb, var(--accent) 55%, var(--paper-raised)); color: var(--paper-raised); }
+.coverage-cell.level-3 { background: var(--accent); color: var(--paper-raised); }
+.coverage-cell.is-empty::before { content: "–"; color: var(--rule-strong); font-weight: 400; }
+.coverage-total { color: var(--ink); font-weight: 650; }
+.coverage-table tr.is-quiet th, .coverage-table tr.is-quiet .coverage-total { color: var(--muted); font-weight: 400; }
+
+/* Findings read as numbered briefing blocks: takeaway, evidence, then the owner's decision. */
+.section-dek { max-width: 78ch; margin: 0 0 8px; color: var(--muted); font-size: 15px; }
+.finding { margin: 30px 0 0; padding: 26px 0 6px; border-top: 2px solid var(--ink); }
+.finding-header { display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: 18px; align-items: start; }
+.finding-number { color: var(--accent); font-family: Georgia, "Times New Roman", serif; font-size: 46px; font-variant-numeric: lining-nums tabular-nums; line-height: 0.9; }
+.finding-kicker { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; margin: 0 0 8px; color: var(--muted); font-size: 13px; }
+.finding-area { font-weight: 600; letter-spacing: 0.02em; }
+.card .finding h3 { max-width: 34ch; margin: 0; font-size: 25px; line-height: 1.2; text-wrap: balance; }
+.finding-body { display: grid; grid-template-columns: minmax(0, 1.65fr) minmax(220px, 1fr); gap: 34px; margin: 20px 0 0 82px; }
+.finding-lead { margin: 0 0 18px; font-size: 17px; line-height: 1.6; }
+.finding-evidence { margin: 0; padding: 14px 18px 16px; border-left: 3px solid var(--accent); background: var(--note); }
+.finding-evidence blockquote { margin: 6px 0 0; padding: 0; border: 0; color: var(--ink); font-family: Georgia, "Times New Roman", serif; font-size: 15.5px; font-style: italic; line-height: 1.55; }
+.finding-actions { padding-left: 24px; border-left: 1px solid var(--rule); }
+.finding-actions dl { margin: 0; }
+.finding-actions dt { margin: 0 0 3px; }
+.finding-actions dd { margin: 0 0 16px; font-size: 14.5px; line-height: 1.5; }
+.finding-actions dd:last-child { margin-bottom: 0; }
+
 .report h3[id^="finding-"], .archive-report h3[id^="finding-"] { scroll-margin-top: 90px; }
 .report h3[id^="finding-"]:target, .archive-report h3[id^="finding-"]:target { outline: 2px solid var(--accent); outline-offset: 6px; }
 
@@ -222,9 +295,31 @@ a:focus-visible, button:focus-visible, select:focus-visible { outline: 3px solid
 }
 
 @media (max-width: 760px) {
-  .review-map-groups { grid-template-columns: 1fr; gap: 20px; }
-  .review-map-group a { flex-direction: row; justify-content: space-between; gap: 16px; }
-  .review-priority { flex-shrink: 0; }
+  .glance { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .glance-item, .glance-item + .glance-item { padding: 14px 12px 14px 0; border-left: 0; border-top: 1px solid var(--rule); }
+  .glance-item:nth-child(-n + 2) { border-top: 0; }
+  .glance-item:nth-child(even) { padding-left: 14px; border-left: 1px solid var(--rule); }
+  .glance-value { font-size: 34px; }
+  .glance-item:last-child:nth-child(odd) { grid-column: 1 / -1; }
+  .key-message { grid-template-columns: 30px minmax(0, 1fr); gap: 10px; }
+  .key-message::before { font-size: 24px; }
+  .key-lead { font-size: 18px; }
+  .summary-scope { padding-left: 0; }
+  .card h3.exhibit-title { font-size: 20px; }
+  .findings-table thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0, 0, 0, 0); }
+  .findings-table, .findings-table tbody, .findings-table tr, .findings-table td { display: block; }
+  .findings-table tr { display: grid; grid-template-columns: 38px minmax(0, 1fr); gap: 4px 10px; padding: 14px 0; }
+  .findings-table tbody tr + tr { border-top: 1px solid var(--rule); }
+  .findings-table td, .findings-table tbody tr + tr td { padding: 0; border-top: 0; }
+  .findings-table td:first-child { grid-row: span 4; width: auto; }
+  .findings-table td:nth-child(n + 3) { grid-column: 2; }
+  .coverage-table th:first-child, .coverage-table tbody th { width: auto; }
+  .coverage-table td { padding: 10px 4px; }
+  .finding-header { grid-template-columns: 40px minmax(0, 1fr); gap: 12px; }
+  .finding-number { font-size: 32px; }
+  .card .finding h3 { font-size: 21px; }
+  .finding-body { grid-template-columns: 1fr; gap: 20px; margin-left: 0; }
+  .finding-actions { padding: 16px 0 0; border-top: 1px solid var(--rule); border-left: 0; }
   .container { padding-inline: 18px; }
   .app-header { padding: 26px 0 22px; }
   .brand-line { display: grid; gap: 2px; margin-bottom: 14px; }
@@ -244,8 +339,9 @@ a:focus-visible, button:focus-visible, select:focus-visible { outline: 3px solid
 
 /* Print: report only */
 @media print {
-  .review-map-group { break-inside: avoid; }
-  .review-map { break-inside: avoid; --ink: #000; --muted: #444; --accent: #000; --rule: #aaa; }
+  .exhibit, .finding, .key-message { break-inside: avoid; }
+  .glance { break-inside: avoid; }
+  .priority-high .priority-pill, .coverage-cell.level-2, .coverage-cell.level-3 { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   :root { --paper: #fff; --ink: #000; --muted: #444; --rule: #aaa; --rule-strong: #555; --accent: #000; }
   body { background: #fff; color: #000; font-size: 10pt; }
   .app-header, .topbar, .sidebar, .app-footer, .theme-toggle { display: none !important; }
