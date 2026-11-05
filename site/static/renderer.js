@@ -457,18 +457,178 @@
     };
   }
 
-  function renderReviewMap(rows) {
-    const groups = new Map();
-    rows.forEach((row, index) => {
-      if (!groups.has(row.control)) groups.set(row.control, []);
-      groups.get(row.control).push({ ...row, target: `finding-${index + 1}` });
+  // Application-owned control catalog, in report order. Coverage shows every
+  // area, including the ones without a finding this period.
+  const CONTROL_AREAS = [
+    'Access management',
+    'Vulnerability management',
+    'Incident response',
+    'Third-party risk',
+    'Data protection',
+    'Change management',
+    'Monitoring and detection',
+    'Governance and accountability',
+  ];
+  const PRIORITY_LEVELS = ['High', 'Medium', 'Low'];
+  const FINDING_FIELDS = [
+    'Review priority',
+    'Why it matters',
+    'Source evidence',
+    'Evidence to request',
+    'Decision trigger',
+    'Reference controls',
+  ];
+
+  function pad(number) {
+    return String(number).padStart(2, '0');
+  }
+
+  function markdownSection(markdown, name) {
+    const match = new RegExp(`^## ${name}\\s*$([\\s\\S]*?)(?=^## |(?![\\s\\S]))`, 'm').exec(markdown);
+    return match ? match[1] : '';
+  }
+
+  function reportStatistics(markdown, rows) {
+    const regulatory = markdownSection(markdown, 'Sourced Regulatory Changes')
+      .split('\n').filter(line => /^\|/.test(line.trim())).slice(2).length;
+    const sources = markdownSection(markdown, 'Source Highlights')
+      .split('\n').filter(line => /^\s*-\s+\[/.test(line)).length;
+    return {
+      findings: rows.length,
+      high: rows.filter(row => row.priority === 'High').length,
+      areas: new Set(rows.map(row => row.control)).size,
+      regulatory,
+      sources,
+    };
+  }
+
+  function renderGlance(stats) {
+    const items = [
+      ['Findings', stats.findings],
+      ['High priority', stats.high],
+      ['Control areas', stats.areas],
+      ['Regulatory changes', stats.regulatory],
+      ['Sources reviewed', stats.sources],
+    ];
+    return `<dl class="glance" aria-label="Report at a glance">${items.map(([label, value]) =>
+      `<div class="glance-item"><dt class="glance-label">${label}</dt><dd class="glance-value">${value}</dd></div>`
+    ).join('')}</dl>`;
+  }
+
+  // Split rendered paragraph HTML after its first sentence, skipping initials
+  // and common abbreviations so "U.S." does not end a lead early.
+  function splitLead(html) {
+    const boundary = /[.!?](?=\s+(?:[A-Z0-9“"(]|<a\b))/g;
+    let match;
+    while ((match = boundary.exec(html))) {
+      const before = html.slice(0, match.index);
+      if (before.lastIndexOf('<') > before.lastIndexOf('>')) continue;
+      const token = before.slice(before.search(/\S+$/));
+      if (/^(?:[A-Za-z]\.)+[A-Za-z]$|^[A-Z]$|^(?:e\.g|i\.e|etc|vs|Inc|Corp|Ltd|Co|No|St)$/.test(token)) continue;
+      return { lead: html.slice(0, match.index + 1), rest: html.slice(match.index + 1) };
+    }
+    return { lead: html, rest: '' };
+  }
+
+  function renderSummary(part, stats) {
+    const heading = '<h2>Executive Summary</h2>';
+    const body = part.slice(heading.length).trim();
+    const paragraphs = body.match(/<p>[\s\S]*?<\/p>/g) || [];
+    if (!paragraphs.length || body.replace(/<p>[\s\S]*?<\/p>/g, '').trim()) return part;
+    const inner = paragraphs.map(paragraph => paragraph.slice(3, -4));
+    const scopeIndex = inner.length > 1 && /^Scope:/.test(inner[inner.length - 1]) ? inner.length - 1 : -1;
+    const messages = inner
+      .filter((_text, index) => index !== scopeIndex)
+      .map(text => {
+        const { lead, rest } = splitLead(text);
+        return `<li class="key-message"><p><strong class="key-lead">${lead}</strong>${rest}</p></li>`;
+      });
+    const scope = scopeIndex >= 0 ? `<p class="summary-scope">${inner[scopeIndex]}</p>` : '';
+    return `${heading}${renderGlance(stats)}<h3 class="key-messages-title">Key messages</h3><ol class="key-messages">${messages.join('')}</ol>${scope}`;
+  }
+
+  function priorityTitle(stats) {
+    if (stats.findings === 1) {
+      return stats.high ? 'The one finding carries high review priority' : 'The one finding carries no high review priority';
+    }
+    if (stats.high === 0) return `None of the ${stats.findings} findings carries high review priority`;
+    if (stats.high === stats.findings) return `All ${stats.findings} findings carry high review priority`;
+    return `${stats.high} of ${stats.findings} findings carry high review priority`;
+  }
+
+  function coverageTitle(rows, stats) {
+    const counts = new Map();
+    rows.forEach(row => counts.set(row.control, (counts.get(row.control) || 0) + 1));
+    const ranked = Array.from(counts).sort((a, b) => b[1] - a[1]);
+    let title = `Findings span ${stats.areas} of ${CONTROL_AREAS.length} control areas`;
+    if (ranked.length && ranked[0][1] > 1 && (ranked.length === 1 || ranked[0][1] > ranked[1][1])) {
+      title += `; ${ranked[0][0].toLowerCase()} has the most, with ${ranked[0][1]}`;
+    }
+    return title;
+  }
+
+  function renderOverview(rows, stats) {
+    const findingRows = rows.map((row, index) => {
+      const level = row.priority.toLowerCase();
+      const title = escapeHtml(row.headline || row.focus);
+      return `<tr class="priority-${level}"><td><span class="finding-index">${pad(index + 1)}</span></td>` +
+        `<td class="finding-cell"><a href="#finding-${index + 1}">${title}</a></td>` +
+        `<td>${escapeHtml(row.control)}</td>` +
+        `<td><span class="priority-pill"><span class="sr-only">Review priority: </span>${escapeHtml(row.priority)}</span></td>` +
+        `<td>${row.owner ? escapeHtml(row.owner) : ''}</td></tr>`;
+    }).join('');
+    const findingsExhibit = `<figure class="exhibit"><p class="exhibit-label">Exhibit 1</p>` +
+      `<h3 class="exhibit-title">${escapeHtml(priorityTitle(stats))}</h3>` +
+      `<div class="exhibit-table"><table class="findings-table"><thead><tr><th scope="col">No.</th><th scope="col">Finding</th><th scope="col">Control area</th><th scope="col">Priority</th><th scope="col">Owner</th></tr></thead><tbody>${findingRows}</tbody></table></div>` +
+      `<figcaption class="exhibit-note">Inferred review priorities rank what to check first; they come from the quoted evidence and are not measured risk. Select a finding to read its evidence and decision.</figcaption></figure>`;
+
+    const cells = new Map();
+    rows.forEach(row => {
+      const key = `${row.control}|${row.priority}`;
+      cells.set(key, (cells.get(key) || 0) + 1);
     });
-    const content = Array.from(groups, ([control, findings]) =>
-      `<div class="review-map-group"><h3>${escapeHtml(control)}<span class="review-map-count">${findings.length} ${findings.length === 1 ? 'finding' : 'findings'}</span></h3><ul>${findings.map(row =>
-        `<li><a href="#${row.target}"><span>${escapeHtml(row.focus)}</span><span class="review-priority"><span class="sr-only">Inferred review priority: </span>${escapeHtml(row.priority)}</span></a></li>`
-      ).join('')}</ul></div>`
-    ).join('');
-    return `<nav class="review-map" aria-label="Review map"><h2>Review map</h2><p>Inferred review priorities, not measured risk. Choose a finding to read its evidence and decision.</p><div class="review-map-groups">${content}</div></nav>`;
+    const coverageRows = CONTROL_AREAS.map(area => {
+      const counts = PRIORITY_LEVELS.map(level => cells.get(`${area}|${level}`) || 0);
+      const total = counts.reduce((sum, count) => sum + count, 0);
+      const tds = counts.map(count => count
+        ? `<td class="coverage-cell level-${Math.min(count, 3)}">${count}</td>`
+        : '<td class="coverage-cell is-empty"><span class="sr-only">None</span></td>').join('');
+      return `<tr class="${total ? 'review-map-group' : 'is-quiet'}"><th scope="row">${escapeHtml(area)}</th>${tds}<td class="coverage-total">${total || '–'}</td></tr>`;
+    }).join('');
+    const coverageExhibit = `<figure class="exhibit exhibit-coverage"><p class="exhibit-label">Exhibit 2</p>` +
+      `<h3 class="exhibit-title">${escapeHtml(coverageTitle(rows, stats))}</h3>` +
+      `<div class="exhibit-table"><table class="coverage-table"><thead><tr><th scope="col">Control area</th>${PRIORITY_LEVELS.map(level => `<th scope="col">${level}</th>`).join('')}<th scope="col">Total</th></tr></thead><tbody>${coverageRows}</tbody></table></div>` +
+      `<figcaption class="exhibit-note">Counts are findings in this report, grouped by the report's control catalog. An empty row means no finding this period, not an absence of risk.</figcaption></figure>`;
+    return `<section class="card briefing-overview"><h2>Findings at a glance</h2><nav class="review-map" aria-label="Review map">${findingsExhibit}${coverageExhibit}</nav></section>`;
+  }
+
+  function renderFindingBlocks(part) {
+    part = part.replace(/^(<h2>Evidence and Decisions<\/h2>\s*)<p>((?:(?!<\/p>)[\s\S])*)<\/p>/, '$1<p class="section-dek">$2</p>');
+    return part.replace(
+      /<h3 id="finding-(\d+)" tabindex="-1">([\s\S]*?)<\/h3>((?:\s*<p>[\s\S]*?<\/p>)*)/g,
+      (match, number, title, body) => {
+        const fields = (body.match(/<p>[\s\S]*?<\/p>/g) || [])
+          .map(paragraph => /^<p><strong>([^<]+):<\/strong>\s*([\s\S]*)<\/p>$/.exec(paragraph));
+        if (fields.length !== FINDING_FIELDS.length ||
+          fields.some((field, index) => !field || field[1] !== FINDING_FIELDS[index])) return match;
+        const value = Object.fromEntries(fields.map(field => [field[1], field[2].trim()]));
+        const [priority = '', area = '', ownerPart = ''] = value['Review priority'].split(' · ');
+        const level = priority.trim().toLowerCase();
+        if (!['high', 'medium', 'low'].includes(level) || !ownerPart.startsWith('Owner: ')) return match;
+        return `<article class="finding priority-${level}">` +
+          `<header class="finding-header"><span class="finding-number">${pad(number)}</span><div class="finding-heading">` +
+          `<p class="finding-kicker"><span class="priority-pill">${priority.trim()} priority</span><span class="finding-area">${area.trim()}</span></p>` +
+          `<h3 id="finding-${number}" tabindex="-1">${title}</h3></div></header>` +
+          `<div class="finding-body"><div class="finding-main"><p class="finding-lead">${value['Why it matters']}</p>` +
+          `<figure class="finding-evidence"><figcaption>Source evidence</figcaption><blockquote>${value['Source evidence']}</blockquote></figure></div>` +
+          `<aside class="finding-actions" aria-label="Review actions"><dl>` +
+          `<dt>Accountable owner</dt><dd>${ownerPart.slice('Owner: '.length)}</dd>` +
+          `<dt>Evidence to request</dt><dd>${value['Evidence to request']}</dd>` +
+          `<dt>Decision trigger</dt><dd>${value['Decision trigger']}</dd>` +
+          `<dt>Reference controls</dt><dd>${value['Reference controls']}</dd>` +
+          `</dl></aside></div></article>`;
+      },
+    );
   }
 
   function renderReportSections(markdown, reviewMap = []) {
@@ -495,7 +655,9 @@
     const hasMap = Array.isArray(reviewMap) && reviewMap.length > 0 && reviewMap.length <= 6 &&
       reviewMap.length === findingCount && html.includes('<h2>Executive Summary</h2>') &&
       reviewMap.every(row => row && typeof row.focus === 'string' && row.focus.length > 0 &&
-        typeof row.control === 'string' && row.control.length > 0 && ['High', 'Medium', 'Low'].includes(row.priority));
+        typeof row.control === 'string' && row.control.length > 0 && ['High', 'Medium', 'Low'].includes(row.priority) &&
+        ['undefined', 'string'].includes(typeof row.headline) && ['undefined', 'string'].includes(typeof row.owner));
+    const stats = hasMap ? reportStatistics(markdown, reviewMap) : null;
     return html
       .split(/(?=<h2>)/)
       .map(part => part.replace(/^\s*(?:<hr>\s*)+/, '').replace(/(?:\s*<hr>)+\s*$/, '').trim())
@@ -504,9 +666,12 @@
         if (hasMap && part.startsWith('<h2>Evidence and Decisions</h2>')) {
           let index = 0;
           part = part.replace(/<h3>/g, () => `<h3 id="finding-${++index}" tabindex="-1">`);
+          return `<section class="card evidence-section">${renderFindingBlocks(part)}</section>`;
         }
-        const map = hasMap && part.startsWith('<h2>Executive Summary</h2>') ? renderReviewMap(reviewMap) : '';
-        return `<section class="card">${part}${map}</section>`;
+        if (hasMap && part.startsWith('<h2>Executive Summary</h2>')) {
+          return `<section class="card executive-summary">${renderSummary(part, stats)}</section>${renderOverview(reviewMap, stats)}`;
+        }
+        return `<section class="card">${part}</section>`;
       })
       .join('');
   }
