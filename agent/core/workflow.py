@@ -21,7 +21,7 @@ from services.rss_service import RSSService
 from services.model_service import GRCModelService
 from services.regulatory_sources import enrich_regulatory_sources
 from core.article_evidence import capture_article_evidence
-from core.article_selection import selected_article_mask
+from core.article_selection import article_text, selected_article_mask, workflow_selected
 from core.entities import analyze_article_grc_content, detect_risk_categories
 from core.reporting_identity import (
     ReportingIdentityError,
@@ -180,10 +180,11 @@ def _build_local_analysis(enriched_articles: List[ArticleInput]):
 
     for article in enriched_articles:
         local = analyze_article_grc_content(article.model_dump())
-        text = "\n".join(filter(None, [article.title, article.summary, article.content]))
-        risk_categories = detect_risk_categories(text)
-        has_grc = local.get("has_grc_content", False) or bool(risk_categories)
+        risk_categories = detect_risk_categories(article_text(article))
+        entity_signal = bool(local.get("has_grc_content", False))
+        has_grc = workflow_selected(entity=entity_signal, risk=bool(risk_categories), model=False)
 
+        local["entity_signal"] = entity_signal
         local["has_grc_content"] = has_grc
         local["risk_categories"] = risk_categories
         local_signals.append(local)
@@ -522,7 +523,11 @@ async def run_grc_analysis_endpoint(
 
         articles_out: List[ArticleRecord] = []
         for art, local, model_selected in zip(enriched_articles, local_signals, selected):
-            has_grc = local.get("has_grc_content", False) or model_selected
+            has_grc = workflow_selected(
+                entity=local["entity_signal"],
+                risk=bool(local["risk_categories"]),
+                model=model_selected,
+            )
             articles_out.append(
                 ArticleRecord(
                     title=art.title,
