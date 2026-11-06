@@ -676,9 +676,17 @@
       .join('');
   }
 
-  function renderReportDocument(markdown, reviewMap = []) {
+  function renderReportDocument(markdown, reviewMap = [], origins = {}) {
     const report = parseReportDocument(markdown);
-    return renderReportSections(report.bodyMarkdown, reviewMap) + renderReportMetadata(report.metadata);
+    const html = renderReportSections(report.bodyMarkdown, reviewMap) + renderReportMetadata(report.metadata);
+    // Only reader link targets change. Stored markdown, evidence, labels and
+    // timestamps remain publication-era records, including their original URLs.
+    return html.replace(/href="([^"]*)"/g, (attribute, url) => {
+      for (const [origin, emitted] of Object.entries(origins)) {
+        if (url.startsWith(origin)) return `href="${escapeAttribute(emitted)}${url.slice(origin.length)}"`;
+      }
+      return attribute;
+    });
   }
 
   window.GRCInsightRenderer = {
