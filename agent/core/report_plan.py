@@ -1637,13 +1637,14 @@ def finding_evidence_context(
     *,
     include_digest: bool = False,
     contract_version: int = REPORT_CONTRACT_VERSION,
-) -> dict[int, list[str]]:
-    """Source URLs for v6 finding prose, keyed by zero-based body line.
+) -> dict[int, list[int]]:
+    """Exact source IDs for v6 finding prose, keyed by zero-based body line.
 
     The template places each finding's citation on its source-evidence line.
     Only an exact, validated rendering may inherit that context. Arbitrary or
     historical bodies keep the existing same-line citation requirement. This
-    projection never changes stored Markdown or certifies a CVE itself.
+    projection never changes stored Markdown or certifies a CVE itself. Source
+    IDs must not be collapsed to URLs: distinct records may share a URL.
     """
     if contract_version != 6:
         return {}
@@ -1654,15 +1655,15 @@ def finding_evidence_context(
     except ValueError:
         return {}
     groups = iter(report_finding_groups(plan))
-    context: dict[int, list[str]] = {}
+    context: dict[int, list[int]] = {}
     in_findings = False
-    urls: list[str] = []
+    source_ids: list[int] = []
     for index, line in enumerate(body.splitlines()):
         if line.startswith("## "):
             in_findings = line == "## Evidence and Decisions"
         elif in_findings and line.startswith("### "):
-            urls = [str(sources[row["source_ids"][0] - 1]["url"]) for row in next(groups)]
-            context[index] = urls
+            source_ids = [row["source_ids"][0] for row in next(groups)]
+            context[index] = source_ids
         elif in_findings and line.startswith("**Why it matters:** "):
-            context[index] = urls
+            context[index] = source_ids
     return context

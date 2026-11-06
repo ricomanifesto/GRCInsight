@@ -814,8 +814,8 @@ def validate_evidence_manifest(
         }
         supported_cves = set().union(
             *(source_cves.get(url, set()) for url in linked_urls),
-            *(source_cves.get(canonical_http_url(url), set())
-              for url in finding_context.get(line_number, [])),
+            *({str(cve).upper() for cve in raw_sources[source_id - 1].get("cves", [])}
+              for source_id in finding_context.get(line_number, [])),
         )
         unsupported = sorted(cited_cves - supported_cves)
         if unsupported:

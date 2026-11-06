@@ -499,7 +499,7 @@ def add_sentrydigest_handoffs(body: str, sources: list[dict[str, object]]) -> st
 
 def validate_evidence_links(
     body: str, sources: list[dict[str, object]], *, include_digest: bool = True,
-    finding_context: dict[int, list[str]] | None = None,
+    finding_context: dict[int, list[int]] | None = None,
 ) -> None:
     allowed_pairs = {(str(source["title"]), str(source["url"])) for source in sources}
     source_links = [
@@ -564,12 +564,10 @@ def validate_evidence_links(
             for _label, url in markdown_links(line)
             if has_http_scheme(url)
         }
-        linked_urls.update(
-            http_url(url, "finding evidence URL")
-            for url in (finding_context or {}).get(line_number, [])
-        )
         supported_cves = set().union(
-            *(cves_by_url.get(url, set()) for url in linked_urls)
+            *(cves_by_url.get(url, set()) for url in linked_urls),
+            *(sources[source_id - 1]["cves"]
+              for source_id in (finding_context or {}).get(line_number, [])),
         )
         unsupported = sorted(cited_cves - supported_cves)
         if unsupported:

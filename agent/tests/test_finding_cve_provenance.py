@@ -43,7 +43,7 @@ def test_cve_in_finding_prose_uses_that_findings_exact_source():
     assert "### CVE-2026-12345" in markdown
 
 
-@pytest.mark.parametrize("elsewhere", [False, True])
+@pytest.mark.parametrize("elsewhere", [False, "other-url", "same-url"])
 def test_unsupported_finding_cve_is_rejected_even_if_another_source_has_it(elsewhere):
     composer, _, _ = publication_tools()
     data, source = candidate("CVE-2026-99999")
@@ -52,6 +52,8 @@ def test_unsupported_finding_cve_is_rejected_even_if_another_source_has_it(elsew
         other.update(
             title="Other advisory", url="https://example.com/other", cves=["CVE-2026-99999"]
         )
+        if elsewhere == "same-url":
+            other["url"] = source["url"]
         data["metadata"]["source_articles"].append(other)
         data["content"] = render_report_plan(data["metadata"]["report_plan"], [source, other])
     with pytest.raises(SystemExit, match="CVE-2026-99999"):
@@ -70,13 +72,18 @@ def test_edited_finding_cannot_borrow_context_from_retained_plan():
         )
 
 
-def test_publication_check_independently_rejects_an_unsupported_finding_cve():
+@pytest.mark.parametrize("duplicate_url", [False, True])
+def test_publication_check_independently_rejects_an_unsupported_finding_cve(duplicate_url):
     composer, checker, builder = publication_tools()
     data, _ = candidate()
     markdown = composer["compose_report"](
         data, "https://digest.example/feed.xml", "openrouter/example/model"
     )
     manifest = composer["evidence_manifest"](data, composer["source_articles"](data["metadata"]))
+    if duplicate_url:
+        other = deepcopy(manifest["sources"][0])
+        other.update(title="Other advisory", cves=["CVE-2026-99999"])
+        manifest["sources"].append(other)
     manifest["report_plan"]["control_implications"][0][
         "headline"
     ] = "CVE-2026-99999 requires Java support for exploitation"
