@@ -14,9 +14,9 @@
     "mode": "prepare",
     "proof": "on"
   },
-  "release_key": "59f2616414e95a813e40146cc74077f17481d21b3419ec94a2925834951aefbe",
+  "release_key": "512d0cc01c3b437adffef3296ed0fc3050f14ebb921c12b2c1de52278bb6a710",
   "schema_version": 1,
   "site": "GRCInsight",
-  "source_committed_at": "2026-11-06T22:15:39.000Z",
-  "source_revision": "83b2779979e06d873e27e2393adc9c41af286efc"
+  "source_committed_at": "2026-11-06T22:34:21.000Z",
+  "source_revision": "e382628900758c3fab221023e449788dbe821b5c"
 }
