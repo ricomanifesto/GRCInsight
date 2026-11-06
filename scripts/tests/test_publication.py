@@ -220,3 +220,31 @@ def test_lambda_deploys_only_for_backend_inputs():
     ).stdout.splitlines()
     changed = [line[3:] for line in candidate]
     assert not [path for path in changed if triggers(path)]
+
+
+def test_reader_links_use_emitted_origins_without_rewriting_evidence():
+    import build_site
+    from public_site import emitted_origin
+
+    markdown = '## Sources\n' + '\n'.join(
+        f'[Source {site}](https://ricomanifesto.github.io/{site}/archive/2026-11-06/?view=full#item-1)'
+        for site in PRODUCTION
+    )
+    original = markdown
+    html = build_site.render_report(markdown)
+    for site in PRODUCTION:
+        assert f'href="{emitted_origin(site)}archive/2026-11-06/?view=full#item-1"' in html
+    assert markdown == original
+
+
+def test_reader_links_do_not_rewrite_unrelated_hosts_or_prefixes():
+    import build_site
+
+    urls = [
+        'https://ricomanifesto.github.io/SentryDigest-other/archive/',
+        'https://example.com/SentryDigest/#source',
+        'https://ricomanifesto.github.io.evil.example/SentryDigest/',
+    ]
+    html = build_site.render_report('## Sources\n' + '\n'.join(f'[Source]({url})' for url in urls))
+    for url in urls:
+        assert f'href="{url}"' in html

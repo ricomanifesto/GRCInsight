@@ -10,7 +10,7 @@ on:
       feed_url:
         description: 'RSS Feed URL'
         required: false
-        default: 'https://ricomanifesto.github.io/SentryDigest/feed.xml'
+        default: 'https://sentrydigest.ricomanifesto.com/feed.xml'
       readmit:
         description: 'Re-admit after an uncertain earlier generation (true/false)'
         required: false
@@ -147,7 +147,7 @@ jobs:
           FEED_URL="$WORKFLOW_FEED_URL"
         fi
         if [ -z "$FEED_URL" ] || [ "$FEED_URL" = "null" ]; then
-          FEED_URL="https://ricomanifesto.github.io/SentryDigest/feed.xml"
+          FEED_URL="https://sentrydigest.ricomanifesto.com/feed.xml"
         fi
         case "$FEED_URL" in
           http://*|https://*) ;;

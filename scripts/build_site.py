@@ -24,7 +24,7 @@ from core.report_plan import (  # noqa: E402
     validate_rendered_report,
 )
 
-from public_site import emitted_origin  # noqa: E402
+from public_site import emitted_origin, presentation_origins  # noqa: E402
 from publication_state import (  # noqa: E402
     PublicationStateError,
     category_label,
@@ -201,15 +201,19 @@ def render_report(markdown: str, manifest: object = None) -> str:
 const fs = require('fs');
 const vm = require('vm');
 const rendererSource = fs.readFileSync(process.argv[1], 'utf8');
-const {markdown, reviewMap} = JSON.parse(fs.readFileSync(0, 'utf8'));
+const {markdown, reviewMap, origins} = JSON.parse(fs.readFileSync(0, 'utf8'));
 const context = { window: {} };
 vm.createContext(context);
 vm.runInContext(rendererSource, context, { filename: 'renderer.js' });
-process.stdout.write(context.window.GRCInsightRenderer.renderReportDocument(markdown, reviewMap));
+process.stdout.write(context.window.GRCInsightRenderer.renderReportDocument(markdown, reviewMap, origins));
 """
     result = subprocess.run(
         ["node", "-e", node_script, str(RENDERER_JS)],
-        input=json.dumps({"markdown": markdown, "reviewMap": review_map_rows(markdown, manifest)}),
+        input=json.dumps({
+            "markdown": markdown,
+            "reviewMap": review_map_rows(markdown, manifest),
+            "origins": presentation_origins(),
+        }),
         capture_output=True,
         text=True,
     )
@@ -232,6 +236,7 @@ def current_index_html(
     report_node = (
         f"{REPORT_START}\n"
         f'          <div id="report" class="report" data-prerendered="true" '
+        f'data-public-origins="{escape(json.dumps(presentation_origins()), quote=True)}" '
         f'data-generated-at="{escape(generated_raw, quote=True)}">{report_html}</div>\n'
         f"          {REPORT_END}"
     )

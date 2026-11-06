@@ -27,7 +27,9 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from build_static_artifact import CurrentBuild, read_current_build  # noqa: E402
 from serve_static_artifact import create_artifact_server  # noqa: E402
 
-PUBLIC_ROOT = "https://ricomanifesto.github.io/GRCInsight/"
+from public_site import emitted_origin  # noqa: E402
+
+PUBLIC_ROOT = emitted_origin("GRCInsight")
 STORE = os.environ.get("STATIC_ARTIFACT_STORE")
 SOURCE = os.environ.get("STATIC_ARTIFACT_SOURCE")
 CONTENT_TYPES = {

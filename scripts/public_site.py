@@ -39,3 +39,12 @@ def emitted_origin(site: str) -> str:
 def accepted_origins(site: str) -> tuple[str, ...]:
     entry = _origins()[site]
     return (entry["legacy"], entry["production"])
+
+
+def presentation_origins() -> dict[str, str]:
+    """Map known roots for reader links, without changing stored evidence."""
+    return {
+        origin: emitted_origin(site)
+        for site in SITES
+        for origin in accepted_origins(site)
+    }

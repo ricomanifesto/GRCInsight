@@ -85,7 +85,7 @@
 
   function renderReport(markdown) {
     setGeneratedLabel(markdown);
-    reportEl.innerHTML = renderer.renderReportDocument(markdown);
+    reportEl.innerHTML = renderer.renderReportDocument(markdown, [], JSON.parse(reportEl.dataset.publicOrigins || "{}"));
     prepareSections();
     buildNavigation();
   }

@@ -11,7 +11,7 @@ AWS_REGION=${AWS_REGION:-us-east-1}
 GO_FUNCTION_NAME=${GO_FUNCTION_NAME:-grcinsight-go-function}
 PYTHON_FUNCTION_NAME=${PYTHON_FUNCTION_NAME:-grcinsight-python-function}
 ROLE_NAME=${ROLE_NAME:-grcinsight-lambda-role}
-FEED_URL=${FEED_URL:-https://ricomanifesto.github.io/SentryDigest/feed.xml}
+FEED_URL=${FEED_URL:-https://sentrydigest.ricomanifesto.com/feed.xml}
 
 # API URL: provide API_URL env var to override. Otherwise uses the known ID from notes.
 API_URL=${API_URL:-https://nwerrmsza0.execute-api.${AWS_REGION}.amazonaws.com/dev}
