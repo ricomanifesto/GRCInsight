@@ -473,17 +473,6 @@ def find_reader_surface_defect(markdown: str, *, manifest: dict | None = None) -
     if bare_reference:
         return f"unresolved bracketed reference [{bare_reference.group(1)}]"
 
-    camel_case = SUSPICIOUS_CAMEL_CASE.search(prose)
-    if camel_case:
-        return f"suspicious camelCase token {camel_case.group(0)}"
-
-    dangling_source = DANGLING_SOURCE_REFERENCE_PATTERN.search(prose)
-    if dangling_source:
-        return f"unresolved source reference {dangling_source.group(0)}"
-
-    if re.search(r"(?m)^\s*(?:-{3,}|_{3,}|\*{3,})\s*$", markdown):
-        return "standalone section separator"
-
     # Finding headings and significance share their rendered evidence line.
     # Recompute context from the exact plan/body, including for archived reports.
     sources = (manifest or {}).get("sources", [])
@@ -496,6 +485,36 @@ def find_reader_surface_defect(markdown: str, *, manifest: dict | None = None) -
         contract_version=(manifest or {}).get("report_contract_version", 1),
     )
     body_offset = markdown[: body_start + 1].count("\n") if body_start >= 0 else 0
+    # Exact v6 rendering verifies every Source evidence line against retained
+    # article text. Preserve its spelling (for example watchTowr), but keep
+    # generated prose and metadata subject to the identifier-leak heuristic.
+    verified_quote_lines = set()
+    in_findings = False
+    if context:
+        for index, line in enumerate(markdown.splitlines()):
+            if index < body_offset:
+                continue
+            if line.startswith("## "):
+                in_findings = line == "## Evidence and Decisions"
+            elif in_findings and line.startswith("**Source evidence:** "):
+                verified_quote_lines.add(index)
+    camel_case_prose = prose_without_destinations(
+        "\n".join(
+            line for index, line in enumerate(markdown.splitlines())
+            if index not in verified_quote_lines
+        )
+    )
+    camel_case = SUSPICIOUS_CAMEL_CASE.search(camel_case_prose)
+    if camel_case:
+        return f"suspicious camelCase token {camel_case.group(0)}"
+
+    dangling_source = DANGLING_SOURCE_REFERENCE_PATTERN.search(prose)
+    if dangling_source:
+        return f"unresolved source reference {dangling_source.group(0)}"
+
+    if re.search(r"(?m)^\s*(?:-{3,}|_{3,}|\*{3,})\s*$", markdown):
+        return "standalone section separator"
+
     for line_number, line in enumerate(markdown.splitlines()):
         normalized = line.replace("‑", "-").replace("–", "-").replace("—", "-")
         cited_cves = {

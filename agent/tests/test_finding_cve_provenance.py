@@ -14,11 +14,13 @@ from test_report_evidence import stored_report
 from test_report_substance import PLAN, SOURCE, publication_tools
 
 
-def candidate(cve="CVE-2026-12345"):
+def candidate(cve="CVE-2026-12345", *, quoted_brand=False):
     source = deepcopy(SOURCE)
     source.pop("digest_url")
     source["cves"] = ["CVE-2026-12345"]
     source["snippet"] += " The vendor tracks this flaw as CVE-2026-12345."
+    if quoted_brand:
+        source["snippet"] += " Researchers at watchTowr reported it."
     segment = source["article_evidence"][0]
     segment["text"] = segment["raw_text"] = source["snippet"]
     plan = deepcopy(PLAN)
@@ -31,9 +33,10 @@ def candidate(cve="CVE-2026-12345"):
     return data, source
 
 
-def test_cve_in_finding_prose_uses_that_findings_exact_source():
+@pytest.mark.parametrize("quoted_brand", [False, True])
+def test_cve_in_finding_prose_uses_that_findings_exact_source(quoted_brand):
     composer, checker, builder = publication_tools()
-    data, _ = candidate()
+    data, _ = candidate(quoted_brand=quoted_brand)
     markdown = composer["compose_report"](
         data, "https://digest.example/feed.xml", "openrouter/example/model"
     )
@@ -52,7 +55,7 @@ def test_finding_cve_passes_complete_generated_site_gate(tmp_path):
     root = Path(__file__).resolve().parents[2]
     for relative in ("site", "scripts", "agent/core", "contracts", "publication"):
         shutil.copytree(root / relative, tmp_path / relative)
-    data, _ = candidate()
+    data, _ = candidate(quoted_brand=True)
     data["generated_at"] = "2030-01-01T00:00:00Z"
     report = tmp_path / "report.json"
     report.write_text(json.dumps(data))
@@ -124,6 +127,57 @@ def test_reader_surface_only_accepts_exact_supported_finding_prose(mutation):
     assert (
         checker["find_reader_surface_defect"](markdown, manifest=manifest)
         == "CVE claim without an inline source link"
+    )
+
+
+@pytest.mark.parametrize(
+    "mutation", ["no-manifest", "old-contract", "edited-quote", "narrative", "headline", "metadata"]
+)
+def test_reader_does_not_exempt_unverified_or_authored_camel_case(mutation):
+    composer, checker, _ = publication_tools()
+    data, _ = candidate(quoted_brand=True)
+    if mutation in {"narrative", "headline"}:
+        data["metadata"]["report_plan"]["control_implications"][0][
+            "significance" if mutation == "narrative" else "headline"
+        ] += " Ask watchTowr."
+        data["content"] = render_report_plan(
+            data["metadata"]["report_plan"], data["metadata"]["source_articles"]
+        )
+    markdown = composer["compose_report"](
+        data, data["metadata"]["source_url"], data["metadata"]["requested_model"]
+    )
+    manifest = composer["evidence_manifest"](data, composer["source_articles"](data["metadata"]))
+    if mutation == "no-manifest":
+        manifest = None
+    elif mutation == "old-contract":
+        manifest["report_contract_version"] = 5
+    elif mutation == "edited-quote":
+        markdown = markdown.replace("at watchTowr", "at inventedBrand")
+    elif mutation == "metadata":
+        markdown = markdown.replace("# GRC", "# watchTowr GRC", 1)
+    assert checker["find_reader_surface_defect"](markdown, manifest=manifest).startswith(
+        "suspicious camelCase token"
+    )
+
+
+def test_verified_quotation_keeps_other_reader_checks():
+    composer, checker, _ = publication_tools()
+    data, source = candidate(quoted_brand=True)
+    source["snippet"] += " Marker ¹ remains."
+    source["article_evidence"][0]["text"] = source["article_evidence"][0]["raw_text"] = source[
+        "snippet"
+    ]
+    data["metadata"]["report_plan"]["control_implications"][0]["evidence_excerpt"] = source[
+        "snippet"
+    ]
+    data["content"] = render_report_plan(data["metadata"]["report_plan"], [source])
+    markdown = composer["compose_report"](
+        data, data["metadata"]["source_url"], data["metadata"]["requested_model"]
+    )
+    manifest = composer["evidence_manifest"](data, composer["source_articles"](data["metadata"]))
+    assert (
+        checker["find_reader_surface_defect"](markdown, manifest=manifest)
+        == "unresolved superscript citation marker"
     )
 
 
