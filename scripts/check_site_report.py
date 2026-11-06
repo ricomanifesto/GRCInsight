@@ -20,7 +20,7 @@ from core.report_evidence import (  # noqa: E402
     REPORT_CONTRACT_VERSION,
     validate_regulatory_evidence,
 )
-from core.report_plan import validate_rendered_report  # noqa: E402
+from core.report_plan import finding_evidence_context, validate_rendered_report  # noqa: E402
 from core.reporting_identity import (  # noqa: E402
     ReportingIdentityError,
     legacy_sentrydigest_item_url as build_legacy_sentrydigest_item_url,
@@ -793,7 +793,11 @@ def validate_evidence_manifest(
         label, url = unknown_pairs[0]
         fail("report links evidence absent from source manifest: " f"{label} ({url})")
 
-    for line in body.splitlines():
+    finding_context = finding_evidence_context(
+        body, manifest.get("report_plan"), raw_sources, include_digest=True,
+        contract_version=manifest.get("report_contract_version", 1),
+    )
+    for line_number, line in enumerate(body.splitlines()):
         normalized_line = line.replace("‑", "-").replace("–", "-").replace("—", "-")
         cited_cves = {
             match.group(0).upper()
@@ -809,7 +813,9 @@ def validate_evidence_manifest(
             if has_http_scheme(destination)
         }
         supported_cves = set().union(
-            *(source_cves.get(url, set()) for url in linked_urls)
+            *(source_cves.get(url, set()) for url in linked_urls),
+            *(source_cves.get(canonical_http_url(url), set())
+              for url in finding_context.get(line_number, [])),
         )
         unsupported = sorted(cited_cves - supported_cves)
         if unsupported:

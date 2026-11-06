@@ -20,7 +20,9 @@ from core.report_evidence import (  # noqa: E402
     REPORT_CONTRACT_VERSION,
     validate_regulatory_evidence,
 )
-from core.report_plan import render_report_plan, validate_rendered_report  # noqa: E402
+from core.report_plan import (  # noqa: E402
+    finding_evidence_context, render_report_plan, validate_rendered_report,
+)
 from core.reporting_identity import (  # noqa: E402
     ReportingIdentityError,
     normalize_reporting_url,
@@ -496,7 +498,8 @@ def add_sentrydigest_handoffs(body: str, sources: list[dict[str, object]]) -> st
 
 
 def validate_evidence_links(
-    body: str, sources: list[dict[str, object]], *, include_digest: bool = True
+    body: str, sources: list[dict[str, object]], *, include_digest: bool = True,
+    finding_context: dict[int, list[str]] | None = None,
 ) -> None:
     allowed_pairs = {(str(source["title"]), str(source["url"])) for source in sources}
     source_links = [
@@ -546,7 +549,7 @@ def validate_evidence_links(
     cves_by_url: dict[str, set[object]] = {}
     for source in sources:
         cves_by_url.setdefault(str(source["url"]), set()).update(source["cves"])
-    for line in body.splitlines():
+    for line_number, line in enumerate(body.splitlines()):
         normalized_line = line.replace("‑", "-").replace("–", "-").replace("—", "-")
         cited_cves = {
             match.group(0).upper()
@@ -561,6 +564,10 @@ def validate_evidence_links(
             for _label, url in markdown_links(line)
             if has_http_scheme(url)
         }
+        linked_urls.update(
+            http_url(url, "finding evidence URL")
+            for url in (finding_context or {}).get(line_number, [])
+        )
         supported_cves = set().union(
             *(cves_by_url.get(url, set()) for url in linked_urls)
         )
@@ -663,14 +670,22 @@ def compose_report(data: dict, expected_feed_url: str, expected_model: str) -> s
     serialized_sources = [
         {**source, "url": http_url(source["url"], "source URL")} for source in sources
     ]
-    validate_evidence_links(body, serialized_sources, include_digest=False)
+    validate_evidence_links(
+        body, serialized_sources, include_digest=False,
+        finding_context=finding_evidence_context(body, metadata.get("report_plan"), sources),
+    )
     try:
         # Validate the stored body before adding handoffs. Source positions and raw
         # URL identities are immutable; escaping belongs only at the link boundary.
         validate_regulatory_evidence(body, sources, contract_version=REPORT_CONTRACT_VERSION)
         validate_rendered_report(body, metadata.get("report_plan"), sources)
         body = render_report_plan(metadata.get("report_plan"), sources, include_digest=True)
-        validate_evidence_links(body, serialized_sources)
+        validate_evidence_links(
+            body, serialized_sources,
+            finding_context=finding_evidence_context(
+                body, metadata.get("report_plan"), sources, include_digest=True,
+            ),
+        )
     except ValueError as error:
         fail(str(error))
     return "\n".join(

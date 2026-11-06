@@ -1628,3 +1628,41 @@ def validate_rendered_report(
             ) from error
     if body.strip() != expected:
         raise ValueError("report content does not match the retained report plan")
+
+
+def finding_evidence_context(
+    body: str,
+    plan: Any,
+    sources: list[dict[str, Any]],
+    *,
+    include_digest: bool = False,
+    contract_version: int = REPORT_CONTRACT_VERSION,
+) -> dict[int, list[str]]:
+    """Source URLs for v6 finding prose, keyed by zero-based body line.
+
+    The template places each finding's citation on its source-evidence line.
+    Only an exact, validated rendering may inherit that context. Arbitrary or
+    historical bodies keep the existing same-line citation requirement. This
+    projection never changes stored Markdown or certifies a CVE itself.
+    """
+    if contract_version != 6:
+        return {}
+    try:
+        validate_rendered_report(
+            body, plan, sources, include_digest=include_digest, contract_version=contract_version
+        )
+    except ValueError:
+        return {}
+    groups = iter(report_finding_groups(plan))
+    context: dict[int, list[str]] = {}
+    in_findings = False
+    urls: list[str] = []
+    for index, line in enumerate(body.splitlines()):
+        if line.startswith("## "):
+            in_findings = line == "## Evidence and Decisions"
+        elif in_findings and line.startswith("### "):
+            urls = [str(sources[row["source_ids"][0] - 1]["url"]) for row in next(groups)]
+            context[index] = urls
+        elif in_findings and line.startswith("**Why it matters:** "):
+            context[index] = urls
+    return context

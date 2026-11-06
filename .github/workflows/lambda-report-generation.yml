@@ -260,7 +260,18 @@ jobs:
           # Parse body; handle both raw object or JSON string body
           jq -r '.body | (try fromjson catch .)' report-response.json > report-data.json
 
+          # A transport success is not proof that this report has finished.
+          # Bind the observation to the requested handle before settling it.
+          if ! jq -e '.statusCode == 200 and (.FunctionError == null)' report-response.json >/dev/null ||
+             ! jq -e --arg id "$REPORT_ID" 'type == "object" and .id == $id' report-data.json >/dev/null; then
+            echo "Report response is unavailable or does not identify the requested report; preserving admission." >&2
+            exit 1
+          fi
+
           STATUS=$(jq -r '.status // empty' report-data.json)
+          case "$STATUS" in
+            completed|failed) echo "terminal=true" >> "$GITHUB_OUTPUT" ;;
+          esac
           CONTENT=$(jq -r '.content // empty' report-data.json)
           ANALYSIS_MODE=$(jq -r '.metadata.analysis_mode // empty' report-data.json)
           REQUESTED_MODEL=$(jq -r '.metadata.requested_model // empty' report-data.json)
@@ -574,10 +585,11 @@ jobs:
         GH_TOKEN: ${{ github.token }}
       run: gh workflow run deploy-site.yml --ref "$GITHUB_REF_NAME"
 
-    # Recorded only once the report's fate is known; a failed or interrupted
-    # retrieval stays uncertain so the next run re-attaches by report ID.
+    # Completion and publication are separate: a known terminal report settles
+    # admission even if validation refuses it. Transport failures, timeouts and
+    # interruptions before that observation still re-attach by report ID.
     - name: Record generation outcome
-      if: always() && steps.handle.outputs.REPORT_ID && (steps.get-report.outcome == 'success' || steps.retain.outputs.retained == 'true')
+      if: always() && steps.handle.outputs.REPORT_ID && steps.get-report.outputs.terminal == 'true'
       env:
         ADMISSION_KEY: ${{ steps.admission.outputs.admission_key }}
         BINDING: ${{ steps.admission.outputs.binding }}

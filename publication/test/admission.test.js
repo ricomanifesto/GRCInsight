@@ -470,6 +470,25 @@ test('GRC: an uncertain invocation with a report handle is re-attached, without 
   assert.equal((await world.admission().admit(scheduled(5, { readmit: true }))).decision, 'admitted');
 });
 
+test('GRC: terminal refusal settles the handle and preserves input deduplication', async (t) => {
+  const world = consumerWorld(t, 'GRCInsight');
+  const first = await world.admission().admit(dispatch(world.release.event, 1));
+  await world.admission().invoked({ admissionKey: first.admission_key, runId: '1', handle: 'report-refused' });
+  const retry = await world.admission().admit(scheduled(2));
+  assert.equal(retry.decision, 'reattach');
+  assert.equal(await world.admission().complete({ admissionKey: retry.admission_key, runId: '2', outcome: 'not-published', binding: retry.binding }), 'completed');
+  assert.equal((await world.admission().admit(dispatch(world.release.event, 3))).decision, 'skipped-duplicate');
+  const sameContent = digestRelease({ sourceRevision: 'a'.repeat(40) });
+  assert.equal((await world.admission().admit(dispatch(sameContent.event, 4))).decision, 'skipped-duplicate-content');
+  const next = digestRelease({ sourceRevision: 'b'.repeat(40), releaseRef: 'c'.repeat(40), news: '[{"id":"new"}]\n' });
+  world.serving = next;
+  world.snapshot(next);
+  assert.equal((await world.admission().admit(dispatch(next.event, 5))).decision, 'admitted');
+  const records = await world.records();
+  assert.ok(records.some((r) => r.stage === 'invoked' && r.handle === 'report-refused'));
+  assert.ok(records.some((r) => r.stage === 'completed' && r.outcome === 'not-published' && r.admission_key === first.admission_key));
+});
+
 test('GRC: explicit readmission releases a saved handle that can no longer be retrieved', async (t) => {
   const world = consumerWorld(t, 'GRCInsight');
   const claim = await world.admission().admit(scheduled(1));
