@@ -464,7 +464,7 @@ def prose_without_destinations(markdown: str) -> str:
     return prose
 
 
-def find_reader_surface_defect(markdown: str) -> str | None:
+def find_reader_surface_defect(markdown: str, *, manifest: dict | None = None) -> str | None:
     prose = prose_without_destinations(markdown)
     if re.search(rf"[{SUPERSCRIPT_DIGITS}]", prose):
         return "unresolved superscript citation marker"
@@ -484,14 +484,37 @@ def find_reader_surface_defect(markdown: str) -> str | None:
     if re.search(r"(?m)^\s*(?:-{3,}|_{3,}|\*{3,})\s*$", markdown):
         return "standalone section separator"
 
-    for line in markdown.splitlines():
+    # Finding headings and significance share their rendered evidence line.
+    # Recompute context from the exact plan/body, including for archived reports.
+    sources = (manifest or {}).get("sources", [])
+    body_start = markdown.find("\n## ")
+    context = finding_evidence_context(
+        markdown[body_start + 1 :] if body_start >= 0 else "",
+        (manifest or {}).get("report_plan"),
+        sources,
+        include_digest=True,
+        contract_version=(manifest or {}).get("report_contract_version", 1),
+    )
+    body_offset = markdown[: body_start + 1].count("\n") if body_start >= 0 else 0
+    for line_number, line in enumerate(markdown.splitlines()):
         normalized = line.replace("‑", "-").replace("–", "-").replace("—", "-")
-        if re.search(r"\bCVE-\d{4}-\d{4,}\b", normalized, re.IGNORECASE):
+        cited_cves = {
+            match.group(0).upper()
+            for match in re.finditer(r"\bCVE-\d{4}-\d{4,}\b", normalized, re.IGNORECASE)
+        }
+        if cited_cves:
             if not any(
                 has_http_scheme(destination)
                 for _, _, _, destination in markdown_links(normalized)
             ):
-                return "CVE claim without an inline source link"
+                supported_cves = set().union(
+                    *(
+                        {str(cve).upper() for cve in sources[source_id - 1].get("cves", [])}
+                        for source_id in context.get(line_number - body_offset, [])
+                    )
+                )
+                if not cited_cves.issubset(supported_cves):
+                    return "CVE claim without an inline source link"
 
     source_section = re.search(
         r"(?ms)^##\s+Source Highlights\s*$([\s\S]*?)(?=^##\s+|\Z)", markdown
@@ -959,8 +982,12 @@ def validate_archive_history(archive_dir: Path, archive_html: str) -> None:
         validate_required_report_sections(
             archived_markdown, f"archive {snapshot.name}/report.md"
         )
-        validate_evidence_manifest(archived_markdown, metadata, archived_manifest)
-        if defect := find_reader_surface_defect(archived_markdown):
+        validated_manifest = validate_evidence_manifest(
+            archived_markdown, metadata, archived_manifest
+        )
+        if defect := find_reader_surface_defect(
+            archived_markdown, manifest=validated_manifest
+        ):
             fail(f"archive {snapshot.name} contains reader-surface defect: {defect}")
         if integrity := find_public_report_integrity_failure(archived_markdown):
             fail(
@@ -1160,7 +1187,7 @@ def main() -> None:
         for _, _, _, destination in markdown_links(metadata["source"])
     ):
         fail("index.md Source metadata must be a linked feed")
-    validate_evidence_manifest(
+    validated_manifest = validate_evidence_manifest(
         markdown,
         metadata,
         evidence_manifest_text,
@@ -1177,7 +1204,7 @@ def main() -> None:
     forbidden_label = find_public_report_forbidden_label(markdown)
     if forbidden_label:
         fail(f"index.md contains public report forbidden label: {forbidden_label}")
-    reader_defect = find_reader_surface_defect(markdown)
+    reader_defect = find_reader_surface_defect(markdown, manifest=validated_manifest)
     if reader_defect:
         fail(f"index.md contains reader-surface defect: {reader_defect}")
     integrity_failure = find_public_report_integrity_failure(markdown)

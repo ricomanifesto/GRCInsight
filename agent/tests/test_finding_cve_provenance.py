@@ -2,6 +2,10 @@
 
 from copy import deepcopy
 import json
+from pathlib import Path
+import shutil
+import subprocess
+import sys
 
 import pytest
 
@@ -41,6 +45,86 @@ def test_cve_in_finding_prose_uses_that_findings_exact_source():
         require_current_contract=True,
     )
     assert "### CVE-2026-12345" in markdown
+    assert checker["find_reader_surface_defect"](markdown, manifest=manifest) is None
+
+
+def test_finding_cve_passes_complete_generated_site_gate(tmp_path):
+    root = Path(__file__).resolve().parents[2]
+    for relative in ("site", "scripts", "agent/core", "contracts", "publication"):
+        shutil.copytree(root / relative, tmp_path / relative)
+    data, _ = candidate()
+    data["generated_at"] = "2030-01-01T00:00:00Z"
+    report = tmp_path / "report.json"
+    report.write_text(json.dumps(data))
+
+    def run(script, *args):
+        result = subprocess.run(
+            [sys.executable, str(tmp_path / "scripts" / script), *args],
+            cwd=tmp_path,
+            capture_output=True,
+            text=True,
+        )
+        assert result.returncode == 0, result.stdout + result.stderr
+
+    run(
+        "compose_site_report.py",
+        "--input",
+        str(report),
+        "--feed-url",
+        data["metadata"]["source_url"],
+        "--model",
+        data["metadata"]["requested_model"],
+    )
+    run(
+        "publication_state.py",
+        "record-published",
+        "--manifest",
+        "site/evidence-manifest.json",
+        "--output",
+        "site/publication-state.json",
+        "--history",
+        "site/publication-history.json",
+        "--event-at",
+        data["generated_at"],
+    )
+    run("build_site.py", "--archive-current")
+    run("build_site.py", "--check")
+    run("check_site_report.py", "--require-current-contract")
+    run("check_site_renderer.py")
+
+
+@pytest.mark.parametrize(
+    "mutation",
+    ["missing-manifest", "edited-body", "unsupported", "duplicate-url", "outside-finding"],
+)
+def test_reader_surface_only_accepts_exact_supported_finding_prose(mutation):
+    composer, checker, _ = publication_tools()
+    data, _ = candidate()
+    markdown = composer["compose_report"](
+        data, "https://digest.example/feed.xml", "openrouter/example/model"
+    )
+    manifest = composer["evidence_manifest"](data, composer["source_articles"](data["metadata"]))
+    if mutation == "missing-manifest":
+        manifest = None
+    elif mutation == "edited-body":
+        markdown = markdown.replace("### CVE-2026-12345", "### Altered CVE-2026-12345")
+    elif mutation == "outside-finding":
+        markdown = markdown.replace("# GRC", "# CVE-2026-12345 GRC", 1)
+    else:
+        if mutation == "duplicate-url":
+            other = deepcopy(manifest["sources"][0])
+            other["cves"] = ["CVE-2026-99999"]
+            manifest["sources"].append(other)
+        manifest["report_plan"]["control_implications"][0][
+            "headline"
+        ] = "CVE-2026-99999 requires Java support for exploitation"
+        markdown = markdown.split("## Executive Summary", 1)[0] + render_report_plan(
+            manifest["report_plan"], manifest["sources"], include_digest=True
+        )
+    assert (
+        checker["find_reader_surface_defect"](markdown, manifest=manifest)
+        == "CVE claim without an inline source link"
+    )
 
 
 @pytest.mark.parametrize("elsewhere", [False, "other-url", "same-url"])
