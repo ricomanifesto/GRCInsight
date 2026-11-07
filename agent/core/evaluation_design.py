@@ -99,8 +99,7 @@ def required_sample_size(
                 low = middle + 1
         serfling_n = low
     census = population is not None and (
-        hoeffding_n >= population
-        or (serfling_n is not None and serfling_n >= population)
+        hoeffding_n >= population or (serfling_n is not None and serfling_n >= population)
     )
     return SampleSizeDesign(
         epsilon=epsilon,
@@ -113,9 +112,7 @@ def required_sample_size(
     )
 
 
-def census_cost_decision(
-    population: int, unit_cost: float, ceiling: float
-) -> CensusCostDecision:
+def census_cost_decision(population: int, unit_cost: float, ceiling: float) -> CensusCostDecision:
     """Estimate census cost against an explicit ceiling; nothing is spent."""
     _check_population(population)
     if unit_cost < 0 or ceiling < 0:
