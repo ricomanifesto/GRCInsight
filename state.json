@@ -500,6 +500,13 @@
       "at": "2026-11-07T09:13:58.297Z",
       "run_id": "42358827695",
       "stage": "invoked"
+    },
+    {
+      "admission_key": "digest:2fa9d0a9bf87ff94e5ab1d33103f363f8ed09ab9",
+      "at": "2026-11-07T09:14:00.920Z",
+      "handle": "report_20261107_091400_872",
+      "run_id": "42358827695",
+      "stage": "invoked"
     }
   ],
   "schema_version": 1,
