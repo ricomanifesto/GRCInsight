@@ -1,0 +1,275 @@
+{
+  "contract_version": 6,
+  "priorities": {
+    "high": "High",
+    "medium": "Medium",
+    "low": "Low"
+  },
+  "sectors": {
+    "financial_services": "Financial services",
+    "healthcare": "Healthcare",
+    "public_sector": "Public sector",
+    "technology": "Technology",
+    "critical_infrastructure": "Critical infrastructure",
+    "cross_sector": "Cross-sector organizations"
+  },
+  "controls": {
+    "access_management": {
+      "label": "Access management",
+      "implication": "Assess whether access reviews and privileged-session controls address the reported exposure.",
+      "action": "Review privileged access, authentication coverage and account revocation evidence.",
+      "review": {
+        "owner": "Identity and access owner",
+        "question": "Could the reported access path bypass your account or privilege boundaries?",
+        "evidence": "access scope, authentication coverage, session revocation and a permission-test result"
+      },
+      "decision": {
+        "step": "test the relevant account and permission boundaries",
+        "implication": "An access-control decision depends on whether the reported path crosses a permission boundary in your environment.",
+        "trigger": "If a permission gap is reproduced, assign a control correction and verify it; otherwise retain the test evidence."
+      },
+      "reference_controls": "ISO/IEC 27001:2022 A.5.15 (access control), A.5.18 (access rights), A.8.2 (privileged access rights); NIST CSF 2.0 PR.AA (identity management, authentication and access control)"
+    },
+    "vulnerability_management": {
+      "label": "Vulnerability management",
+      "implication": "Assess whether asset visibility and remediation controls address the reported exposure.",
+      "action": "Identify affected assets and verify remediation or compensating controls with their owners.",
+      "review": {
+        "owner": "Vulnerability and asset owners",
+        "question": "Do your deployed products and configurations meet the reported exposure conditions?",
+        "evidence": "affected-asset inventory, installed versions, remediation status and an exception owner"
+      },
+      "decision": {
+        "step": "establish affected-asset and configuration scope",
+        "implication": "A remediation decision depends on matching deployed assets to the source's exposure conditions.",
+        "trigger": "If applicability is confirmed, decide on remediation or a documented exception; otherwise record why the finding does not apply."
+      },
+      "reference_controls": "ISO/IEC 27001:2022 A.8.8 (management of technical vulnerabilities); NIST CSF 2.0 ID.RA (risk assessment), PR.PS (platform security)"
+    },
+    "incident_response": {
+      "label": "Incident response",
+      "implication": "Assess whether incident procedures support containment and evidence preservation.",
+      "action": "Review response ownership, containment procedures and incident evidence retention.",
+      "review": {
+        "owner": "Incident response lead",
+        "question": "Could your response team contain this activity and establish what was accessed?",
+        "evidence": "containment responsibilities, retained logs and the most recent response exercise"
+      },
+      "decision": {
+        "step": "test containment ownership and evidence availability",
+        "implication": "A containment decision depends on whether responders can identify the affected scope and preserve evidence.",
+        "trigger": "If an exercise exposes an ownership or evidence gap, assign a response-plan correction and retest it."
+      },
+      "reference_controls": "ISO/IEC 27001:2022 A.5.24 (incident management planning and preparation), A.5.26 (response to information security incidents); NIST CSF 2.0 RS.MA (incident management), RS.MI (incident mitigation)"
+    },
+    "third_party_risk": {
+      "label": "Third-party risk",
+      "implication": "Assess dependencies on suppliers and the assurance available for their controls.",
+      "action": "Review relevant supplier dependencies, assurance evidence and escalation contacts.",
+      "review": {
+        "owner": "Supplier risk owner",
+        "question": "Does a supplier have the access or operating responsibility described in this event?",
+        "evidence": "supplier access scope, control responsibilities and evidence of remediation assurance"
+      },
+      "decision": {
+        "step": "establish which supplier access and responsibilities are delegated",
+        "implication": "A supplier-assurance decision depends on the access and control responsibilities you actually delegate.",
+        "trigger": "If the supplier dependency exists and assurance is insufficient, request evidence or escalate the assurance gap to its owner."
+      },
+      "reference_controls": "ISO/IEC 27001:2022 A.5.19 (supplier relationships), A.5.21 (ICT supply chain), A.5.22 (monitoring and review of supplier services); NIST CSF 2.0 GV.SC (cybersecurity supply chain risk management)"
+    },
+    "data_protection": {
+      "label": "Data protection",
+      "implication": "Assess whether data handling and protection controls address the reported exposure.",
+      "action": "Review sensitive-data access, retention and protection controls with accountable owners.",
+      "review": {
+        "owner": "Data and privacy owners",
+        "question": "Could the reported access path expose personal or sensitive data you hold?",
+        "evidence": "data inventory, access restrictions, audit logs and a documented exposure assessment"
+      },
+      "decision": {
+        "step": "establish the relevant data and access scope",
+        "implication": "A data-protection decision depends on the data involved and the controls governing access to it.",
+        "trigger": "If relevant data is exposed to the reported access path, decide which protection or access change is needed."
+      },
+      "reference_controls": "ISO/IEC 27001:2022 A.5.34 (privacy and protection of PII), A.8.12 (data leakage prevention), A.8.24 (use of cryptography); NIST CSF 2.0 PR.DS (data security)"
+    },
+    "change_management": {
+      "label": "Change management",
+      "implication": "Assess whether change approval and validation controls address the reported exposure.",
+      "action": "Review change approvals, validation evidence and recovery procedures.",
+      "review": {
+        "owner": "Change and service owners",
+        "question": "Would your change process detect an incomplete or ineffective remediation?",
+        "evidence": "change approval, rollout coverage, post-change validation and rollback ownership"
+      },
+      "decision": {
+        "step": "test the proposed change and recovery assumptions",
+        "implication": "A change decision depends on evidence that the proposed remedy works and that recovery remains possible.",
+        "trigger": "If validation or recovery evidence is missing, resolve that gap before relying on the change."
+      },
+      "reference_controls": "ISO/IEC 27001:2022 A.8.32 (change management); NIST CSF 2.0 PR.PS (platform security)"
+    },
+    "monitoring": {
+      "label": "Monitoring and detection",
+      "implication": "Assess whether monitoring coverage can identify the reported activity.",
+      "action": "Review relevant telemetry, detection coverage and alert ownership.",
+      "review": {
+        "owner": "Detection and monitoring owner",
+        "question": "Would your telemetry distinguish the reported activity from expected use?",
+        "evidence": "log coverage, a detection test, alert routing and investigation ownership"
+      },
+      "decision": {
+        "step": "test whether the reported behavior is observable",
+        "implication": "A monitoring decision depends on distinguishing the reported behavior from authorized activity in your telemetry.",
+        "trigger": "If a detection test fails, assign the coverage or routing correction and repeat the test."
+      },
+      "reference_controls": "ISO/IEC 27001:2022 A.8.15 (logging), A.8.16 (monitoring activities); NIST CSF 2.0 DE.CM (continuous monitoring), DE.AE (adverse event analysis)"
+    },
+    "governance": {
+      "label": "Governance and accountability",
+      "implication": "Assess whether ownership and assurance practices support the relevant risk decisions.",
+      "action": "Confirm control ownership and collect evidence for the relevant risk decisions.",
+      "review": {
+        "owner": "Risk and control owners",
+        "question": "Does this development change an assumption in your control or assurance process?",
+        "evidence": "the affected assumption, accountable owner and a recorded decision to act or accept risk"
+      },
+      "decision": {
+        "step": "check whether the development changes a control assumption",
+        "implication": "An assurance decision depends on whether the development changes an assumption used by your control owners.",
+        "trigger": "If an assumption no longer holds, record an accountable decision to change the control or accept the resulting uncertainty."
+      },
+      "reference_controls": "ISO/IEC 27001:2022 A.5.1 (policies for information security), A.5.2 (roles and responsibilities); NIST CSF 2.0 GV.RR (roles, responsibilities and authorities), GV.OV (oversight)"
+    }
+  },
+  "decision_frames": {
+    "exposure": {
+      "controls": [
+        "access_management",
+        "vulnerability_management",
+        "data_protection"
+      ],
+      "judgment": "Make confirmed exposure the basis for remediation and access-control decisions.",
+      "purpose": "Start by checking which reported conditions apply to"
+    },
+    "supplier": {
+      "controls": [
+        "third_party_risk"
+      ],
+      "judgment": "Decide where supplier access requires stronger assurance before relying on delegated controls.",
+      "purpose": "Start by checking delegated responsibilities and available assurance for"
+    },
+    "response": {
+      "controls": [
+        "incident_response",
+        "monitoring"
+      ],
+      "judgment": "Decide whether detection and response evidence is sufficient for the reported activity before relying on response readiness.",
+      "purpose": "Start by testing visibility, containment and response ownership for"
+    },
+    "governance": {
+      "controls": [
+        "change_management",
+        "governance"
+      ],
+      "judgment": "Decide which control assumptions need renewed evidence before continuing to rely on them.",
+      "purpose": "Start by checking the assumptions that connect existing controls to"
+    },
+    "regulatory": {
+      "controls": [],
+      "judgment": "Decide whether the sourced regulatory changes apply to your organization before assigning compliance work.",
+      "purpose": "Begin the applicability assessment with"
+    },
+    "separate": {
+      "controls": "all",
+      "judgment": "Assess the leading findings as separate decisions, each with its own applicability and evidence requirements.",
+      "purpose": "Begin with"
+    }
+  },
+  "finding_labels": [
+    "Review priority",
+    "Why it matters",
+    "Source evidence",
+    "Evidence to request",
+    "Decision trigger",
+    "Reference controls"
+  ],
+  "evidence_note": "Each finding is analysis of the quoted evidence: why it matters for control assurance, who owns the review and what evidence settles it. Reference controls are review aids, not a compliance determination.",
+  "risk_category_keywords": {
+    "Regulatory and enforcement activity": [
+      "regulator",
+      "regulatory",
+      "compliance",
+      "cisa",
+      "fbi",
+      "ofac",
+      "sanction",
+      "privacy",
+      "enforcement",
+      "directive"
+    ],
+    "Identity and access security": [
+      "identity",
+      "credential",
+      "access",
+      "mfa",
+      "password",
+      "privilege",
+      "account takeover",
+      "intune"
+    ],
+    "Third-party and supply chain exposure": [
+      "third-party",
+      "third party",
+      "vendor",
+      "supplier",
+      "supply chain",
+      "msp"
+    ],
+    "Vulnerability and patch management": [
+      "vulnerability",
+      "zero-day",
+      "zero day",
+      "patch",
+      "cve",
+      "exploit",
+      "rce",
+      "flaw",
+      "unauthenticated"
+    ],
+    "Ransomware and malware operations": [
+      "ransomware",
+      "malware",
+      "botnet",
+      "ddos",
+      "extortion",
+      "phishing",
+      "trojan",
+      "implant"
+    ],
+    "Cloud and data protection": [
+      "cloud",
+      "sharepoint",
+      "data breach",
+      "data exposure",
+      "data leak",
+      "data theft",
+      "storage",
+      "saas"
+    ]
+  },
+  "regulatory_publishers": [
+    "sec.gov",
+    "ftc.gov",
+    "federalregister.gov",
+    "congress.gov",
+    "eur-lex.europa.eu",
+    "commission.europa.eu",
+    "edpb.europa.eu",
+    "ico.org.uk",
+    "legislation.gov.uk",
+    "fca.org.uk",
+    "cppa.ca.gov"
+  ]
+}

@@ -20,6 +20,7 @@ from typing import Any, Sequence
 from urllib.parse import quote
 
 from core.article_evidence import article_segments, has_non_headline_text
+from core.report_catalog import CATALOG, report_plan_schema
 from core.regulatory_dates import document_effective_date
 from core.report_evidence import (
     NO_REGULATORY_CHANGES,
@@ -28,223 +29,40 @@ from core.report_evidence import (
     validate_regulatory_evidence,
 )
 
-# Labels, implications and actions are authored here, never supplied by a model.
+# Labels, implications, actions, review questions, decisions and reference controls
+# are application-owned catalog entries, never supplied by a model. Owners and
+# evidence requests do not assert local exposure, measured severity or legal
+# applicability. Decision frames are conditional management judgments, never claims
+# about a common cause or the reader's actual exposure; unsupported grouping must
+# use separate decisions. Reference controls are review aids, not a determination
+# that a framework applies or that a control is deficient.
+_CONTROL_ENTRIES: dict[str, dict[str, Any]] = CATALOG["controls"]
 CONTROLS = {
-    "access_management": (
-        "Access management",
-        "Assess whether access reviews and privileged-session controls address the reported exposure.",
-        "Review privileged access, authentication coverage and account revocation evidence.",
-    ),
-    "vulnerability_management": (
-        "Vulnerability management",
-        "Assess whether asset visibility and remediation controls address the reported exposure.",
-        "Identify affected assets and verify remediation or compensating controls with their owners.",
-    ),
-    "incident_response": (
-        "Incident response",
-        "Assess whether incident procedures support containment and evidence preservation.",
-        "Review response ownership, containment procedures and incident evidence retention.",
-    ),
-    "third_party_risk": (
-        "Third-party risk",
-        "Assess dependencies on suppliers and the assurance available for their controls.",
-        "Review relevant supplier dependencies, assurance evidence and escalation contacts.",
-    ),
-    "data_protection": (
-        "Data protection",
-        "Assess whether data handling and protection controls address the reported exposure.",
-        "Review sensitive-data access, retention and protection controls with accountable owners.",
-    ),
-    "change_management": (
-        "Change management",
-        "Assess whether change approval and validation controls address the reported exposure.",
-        "Review change approvals, validation evidence and recovery procedures.",
-    ),
-    "monitoring": (
-        "Monitoring and detection",
-        "Assess whether monitoring coverage can identify the reported activity.",
-        "Review relevant telemetry, detection coverage and alert ownership.",
-    ),
-    "governance": (
-        "Governance and accountability",
-        "Assess whether ownership and assurance practices support the relevant risk decisions.",
-        "Confirm control ownership and collect evidence for the relevant risk decisions.",
-    ),
+    key: (entry["label"], entry["implication"], entry["action"])
+    for key, entry in _CONTROL_ENTRIES.items()
 }
-SECTORS = {
-    "financial_services": "Financial services",
-    "healthcare": "Healthcare",
-    "public_sector": "Public sector",
-    "technology": "Technology",
-    "critical_infrastructure": "Critical infrastructure",
-    "cross_sector": "Cross-sector organizations",
-}
-PRIORITIES = {"high": "High", "medium": "Medium", "low": "Low"}
-
-
-# Conditional review questions, owners and evidence requests are application-owned.
-# They do not assert local exposure, measured severity or legal applicability.
+SECTORS: dict[str, str] = dict(CATALOG["sectors"])
+PRIORITIES: dict[str, str] = dict(CATALOG["priorities"])
 CONTROL_REVIEWS = {
-    "access_management": (
-        "Identity and access owner",
-        "Could the reported access path bypass your account or privilege boundaries?",
-        "access scope, authentication coverage, session revocation and a permission-test result",
-    ),
-    "vulnerability_management": (
-        "Vulnerability and asset owners",
-        "Do your deployed products and configurations meet the reported exposure conditions?",
-        "affected-asset inventory, installed versions, remediation status and an exception owner",
-    ),
-    "incident_response": (
-        "Incident response lead",
-        "Could your response team contain this activity and establish what was accessed?",
-        "containment responsibilities, retained logs and the most recent response exercise",
-    ),
-    "third_party_risk": (
-        "Supplier risk owner",
-        "Does a supplier have the access or operating responsibility described in this event?",
-        "supplier access scope, control responsibilities and evidence of remediation assurance",
-    ),
-    "data_protection": (
-        "Data and privacy owners",
-        "Could the reported access path expose personal or sensitive data you hold?",
-        "data inventory, access restrictions, audit logs and a documented exposure assessment",
-    ),
-    "change_management": (
-        "Change and service owners",
-        "Would your change process detect an incomplete or ineffective remediation?",
-        "change approval, rollout coverage, post-change validation and rollback ownership",
-    ),
-    "monitoring": (
-        "Detection and monitoring owner",
-        "Would your telemetry distinguish the reported activity from expected use?",
-        "log coverage, a detection test, alert routing and investigation ownership",
-    ),
-    "governance": (
-        "Risk and control owners",
-        "Does this development change an assumption in your control or assurance process?",
-        "the affected assumption, accountable owner and a recorded decision to act or accept risk",
-    ),
+    key: (entry["review"]["owner"], entry["review"]["question"], entry["review"]["evidence"])
+    for key, entry in _CONTROL_ENTRIES.items()
 }
-
-# Frames are conditional management judgments, never claims about a common cause
-# or the reader's actual exposure. Unsupported grouping must use separate decisions.
 DECISION_FRAMES: dict[str, dict[str, Any]] = {
-    "exposure": {
-        "controls": {"vulnerability_management", "access_management", "data_protection"},
-        "judgment": "Make confirmed exposure the basis for remediation and access-control decisions.",
-        "purpose": "Start by checking which reported conditions apply to",
-    },
-    "supplier": {
-        "controls": {"third_party_risk"},
-        "judgment": "Decide where supplier access requires stronger assurance before relying on delegated controls.",
-        "purpose": "Start by checking delegated responsibilities and available assurance for",
-    },
-    "response": {
-        "controls": {"incident_response", "monitoring"},
-        "judgment": "Decide whether detection and response evidence is sufficient for the reported activity before relying on response readiness.",
-        "purpose": "Start by testing visibility, containment and response ownership for",
-    },
-    "governance": {
-        "controls": {"governance", "change_management"},
-        "judgment": "Decide which control assumptions need renewed evidence before continuing to rely on them.",
-        "purpose": "Start by checking the assumptions that connect existing controls to",
-    },
-    "regulatory": {
-        "controls": set(),
-        "judgment": "Decide whether the sourced regulatory changes apply to your organization before assigning compliance work.",
-        "purpose": "Begin the applicability assessment with",
-    },
-    "separate": {
-        "controls": set(CONTROLS),
-        "judgment": "Assess the leading findings as separate decisions, each with its own applicability and evidence requirements.",
-        "purpose": "Begin with",
-    },
+    name: {
+        "controls": set(CONTROLS) if spec["controls"] == "all" else set(spec["controls"]),
+        "judgment": spec["judgment"],
+        "purpose": spec["purpose"],
+    }
+    for name, spec in CATALOG["decision_frames"].items()
 }
-
 # A summary step sets the agenda; the detail adds evidence, ownership and a trigger.
 # Neither is a factual assertion that the cited event affects the reader.
 CONTROL_DECISIONS = {
-    "vulnerability_management": (
-        "establish affected-asset and configuration scope",
-        "A remediation decision depends on matching deployed assets to the source's exposure conditions.",
-        "If applicability is confirmed, decide on remediation or a documented exception; otherwise record why the finding does not apply.",
-    ),
-    "access_management": (
-        "test the relevant account and permission boundaries",
-        "An access-control decision depends on whether the reported path crosses a permission boundary in your environment.",
-        "If a permission gap is reproduced, assign a control correction and verify it; otherwise retain the test evidence.",
-    ),
-    "third_party_risk": (
-        "establish which supplier access and responsibilities are delegated",
-        "A supplier-assurance decision depends on the access and control responsibilities you actually delegate.",
-        "If the supplier dependency exists and assurance is insufficient, request evidence or escalate the assurance gap to its owner.",
-    ),
-    "incident_response": (
-        "test containment ownership and evidence availability",
-        "A containment decision depends on whether responders can identify the affected scope and preserve evidence.",
-        "If an exercise exposes an ownership or evidence gap, assign a response-plan correction and retest it.",
-    ),
-    "data_protection": (
-        "establish the relevant data and access scope",
-        "A data-protection decision depends on the data involved and the controls governing access to it.",
-        "If relevant data is exposed to the reported access path, decide which protection or access change is needed.",
-    ),
-    "change_management": (
-        "test the proposed change and recovery assumptions",
-        "A change decision depends on evidence that the proposed remedy works and that recovery remains possible.",
-        "If validation or recovery evidence is missing, resolve that gap before relying on the change.",
-    ),
-    "monitoring": (
-        "test whether the reported behavior is observable",
-        "A monitoring decision depends on distinguishing the reported behavior from authorized activity in your telemetry.",
-        "If a detection test fails, assign the coverage or routing correction and repeat the test.",
-    ),
-    "governance": (
-        "check whether the development changes a control assumption",
-        "An assurance decision depends on whether the development changes an assumption used by your control owners.",
-        "If an assumption no longer holds, record an accountable decision to change the control or accept the resulting uncertainty.",
-    ),
+    key: (entry["decision"]["step"], entry["decision"]["implication"], entry["decision"]["trigger"])
+    for key, entry in _CONTROL_ENTRIES.items()
 }
-
-# Review aids that locate each control area in two widely used catalogs. They are
-# not a determination that a framework applies or that a control is deficient.
-REFERENCE_CONTROLS = {
-    "access_management": (
-        "ISO/IEC 27001:2022 A.5.15 (access control), A.5.18 (access rights), "
-        "A.8.2 (privileged access rights); NIST CSF 2.0 PR.AA (identity management, "
-        "authentication and access control)"
-    ),
-    "vulnerability_management": (
-        "ISO/IEC 27001:2022 A.8.8 (management of technical vulnerabilities); "
-        "NIST CSF 2.0 ID.RA (risk assessment), PR.PS (platform security)"
-    ),
-    "incident_response": (
-        "ISO/IEC 27001:2022 A.5.24 (incident management planning and preparation), "
-        "A.5.26 (response to information security incidents); NIST CSF 2.0 RS.MA "
-        "(incident management), RS.MI (incident mitigation)"
-    ),
-    "third_party_risk": (
-        "ISO/IEC 27001:2022 A.5.19 (supplier relationships), A.5.21 (ICT supply chain), "
-        "A.5.22 (monitoring and review of supplier services); NIST CSF 2.0 GV.SC "
-        "(cybersecurity supply chain risk management)"
-    ),
-    "data_protection": (
-        "ISO/IEC 27001:2022 A.5.34 (privacy and protection of PII), A.8.12 (data leakage "
-        "prevention), A.8.24 (use of cryptography); NIST CSF 2.0 PR.DS (data security)"
-    ),
-    "change_management": (
-        "ISO/IEC 27001:2022 A.8.32 (change management); NIST CSF 2.0 PR.PS (platform security)"
-    ),
-    "monitoring": (
-        "ISO/IEC 27001:2022 A.8.15 (logging), A.8.16 (monitoring activities); "
-        "NIST CSF 2.0 DE.CM (continuous monitoring), DE.AE (adverse event analysis)"
-    ),
-    "governance": (
-        "ISO/IEC 27001:2022 A.5.1 (policies for information security), A.5.2 (roles and "
-        "responsibilities); NIST CSF 2.0 GV.RR (roles, responsibilities and authorities), "
-        "GV.OV (oversight)"
-    ),
+REFERENCE_CONTROLS: dict[str, str] = {
+    key: entry["reference_controls"] for key, entry in _CONTROL_ENTRIES.items()
 }
 
 # Grounding rules for model-written narrative. Each rule returns an application-owned
@@ -659,90 +477,12 @@ def _brief(plan: ReportPlan) -> ExecutiveBrief:
 
 def report_plan_response_format() -> dict[str, Any]:
     """Provider schema for current selections; host grounding remains mandatory."""
-
-    def obj(properties):
-        return {
-            "type": "object",
-            "properties": properties,
-            "required": list(properties),
-            "additionalProperties": False,
-        }
-
-    source_id = {"type": "integer", "minimum": 1, "maximum": 12}
-    text = {"type": "string"}
-    schema = obj(
-        {
-            "regulatory_changes": {
-                "type": "array",
-                "maxItems": 12,
-                "items": obj(
-                    {
-                        "source_id": source_id,
-                        "change": text,
-                        "jurisdiction": text,
-                        "evidence_excerpt": text,
-                    }
-                ),
-            },
-            "control_implications": {
-                "type": "array",
-                "maxItems": 6,
-                "items": obj(
-                    {
-                        "control_id": {"type": "string", "enum": list(CONTROLS)},
-                        "priority": {"type": "string", "enum": list(PRIORITIES)},
-                        "source_ids": {
-                            "type": "array",
-                            "minItems": 1,
-                            "maxItems": 1,
-                            "items": source_id,
-                        },
-                        "focus": text,
-                        "evidence_excerpt": text,
-                        "evidence_origin": {"type": "string", "enum": ["summary", "content"]},
-                        "headline": text,
-                        "significance": text,
-                    }
-                ),
-            },
-            "industry_impacts": {
-                "type": "array",
-                "maxItems": 0,
-                "items": obj(
-                    {
-                        "sector_id": {"type": "string", "enum": list(SECTORS)},
-                        "source_ids": {"type": "array", "items": source_id},
-                    }
-                ),
-            },
-            "executive_brief": obj(
-                {
-                    "paragraphs": {
-                        "type": "array",
-                        "minItems": 1,
-                        "maxItems": 2,
-                        "items": obj(
-                            {
-                                "text": text,
-                                "source_ids": {
-                                    "type": "array",
-                                    "minItems": 1,
-                                    "maxItems": 6,
-                                    "items": source_id,
-                                },
-                            }
-                        ),
-                    },
-                }
-            ),
-        }
-    )
     return {
         "type": "json_schema",
         "json_schema": {
             "name": "grc_report_plan",
             "strict": True,
-            "schema": schema,
+            "schema": report_plan_schema(),
         },
     }
 
@@ -1572,19 +1312,8 @@ def render_report_plan(
     return body
 
 
-FINDING_LABELS = (
-    "Review priority",
-    "Why it matters",
-    "Source evidence",
-    "Evidence to request",
-    "Decision trigger",
-    "Reference controls",
-)
-EVIDENCE_NOTE = (
-    "Each finding is analysis of the quoted evidence: why it matters for control assurance, "
-    "who owns the review and what evidence settles it. Reference controls are review aids, "
-    "not a compliance determination."
-)
+FINDING_LABELS: tuple[str, ...] = tuple(CATALOG["finding_labels"])
+EVIDENCE_NOTE: str = CATALOG["evidence_note"]
 
 
 def _count(value: int, noun: str) -> str:

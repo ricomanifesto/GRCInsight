@@ -10,6 +10,7 @@ from typing import Any
 from urllib.parse import quote, urlsplit
 
 from core.regulatory_dates import document_effective_date
+from core.report_catalog import CATALOG
 
 REPORT_CONTRACT_VERSION = 6
 REGULATORY_SECTION = "Sourced Regulatory Changes"
@@ -32,19 +33,7 @@ REPORT_SECTION_TITLES = (
 )
 # Bounded primary-publisher policy. A publisher's presence permits an evidenced
 # row, never automatically classifies an article as a regulatory development.
-REGULATORY_PUBLISHERS = (
-    "sec.gov",
-    "ftc.gov",
-    "federalregister.gov",
-    "congress.gov",
-    "eur-lex.europa.eu",
-    "commission.europa.eu",
-    "edpb.europa.eu",
-    "ico.org.uk",
-    "legislation.gov.uk",
-    "fca.org.uk",
-    "cppa.ca.gov",
-)
+REGULATORY_PUBLISHERS: tuple[str, ...] = tuple(CATALOG["regulatory_publishers"])
 
 
 @dataclass(frozen=True)

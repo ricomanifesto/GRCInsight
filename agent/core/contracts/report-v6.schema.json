@@ -1,0 +1,182 @@
+{
+  "type": "object",
+  "properties": {
+    "regulatory_changes": {
+      "type": "array",
+      "maxItems": 12,
+      "items": {
+        "type": "object",
+        "properties": {
+          "source_id": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 12
+          },
+          "change": {
+            "type": "string"
+          },
+          "jurisdiction": {
+            "type": "string"
+          },
+          "evidence_excerpt": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "source_id",
+          "change",
+          "jurisdiction",
+          "evidence_excerpt"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "control_implications": {
+      "type": "array",
+      "maxItems": 6,
+      "items": {
+        "type": "object",
+        "properties": {
+          "control_id": {
+            "type": "string",
+            "enum": [
+              "access_management",
+              "vulnerability_management",
+              "incident_response",
+              "third_party_risk",
+              "data_protection",
+              "change_management",
+              "monitoring",
+              "governance"
+            ]
+          },
+          "priority": {
+            "type": "string",
+            "enum": [
+              "high",
+              "medium",
+              "low"
+            ]
+          },
+          "source_ids": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 1,
+            "items": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 12
+            }
+          },
+          "focus": {
+            "type": "string"
+          },
+          "evidence_excerpt": {
+            "type": "string"
+          },
+          "evidence_origin": {
+            "type": "string",
+            "enum": [
+              "summary",
+              "content"
+            ]
+          },
+          "headline": {
+            "type": "string"
+          },
+          "significance": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "control_id",
+          "priority",
+          "source_ids",
+          "focus",
+          "evidence_excerpt",
+          "evidence_origin",
+          "headline",
+          "significance"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "industry_impacts": {
+      "type": "array",
+      "maxItems": 0,
+      "items": {
+        "type": "object",
+        "properties": {
+          "sector_id": {
+            "type": "string",
+            "enum": [
+              "financial_services",
+              "healthcare",
+              "public_sector",
+              "technology",
+              "critical_infrastructure",
+              "cross_sector"
+            ]
+          },
+          "source_ids": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 12
+            }
+          }
+        },
+        "required": [
+          "sector_id",
+          "source_ids"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "executive_brief": {
+      "type": "object",
+      "properties": {
+        "paragraphs": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 2,
+          "items": {
+            "type": "object",
+            "properties": {
+              "text": {
+                "type": "string"
+              },
+              "source_ids": {
+                "type": "array",
+                "minItems": 1,
+                "maxItems": 6,
+                "items": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 12
+                }
+              }
+            },
+            "required": [
+              "text",
+              "source_ids"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "paragraphs"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "regulatory_changes",
+    "control_implications",
+    "industry_impacts",
+    "executive_brief"
+  ],
+  "additionalProperties": false
+}
