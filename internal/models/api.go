@@ -19,7 +19,7 @@ type WorkflowResponse struct {
 	ReportID string          `json:"report_id,omitempty"`
 	Report   *Report         `json:"report,omitempty"`
 	Error    *APIError       `json:"error,omitempty"`
-	Metadata *Metadata       `json:"metadata,omitempty"`
+	Metadata map[string]any  `json:"metadata,omitempty"`
 	Articles []ArticleRecord `json:"articles,omitempty"`
 }
 
@@ -108,32 +108,10 @@ type ListArticlesResponse struct {
 
 // Report represents the generated GRC report
 type Report struct {
-	Title       string    `json:"title"`
-	Content     string    `json:"content"`
-	GeneratedAt time.Time `json:"generated_at"`
-	Metadata    *Metadata `json:"metadata,omitempty"`
-}
-
-// Metadata holds additional information about the report
-type Metadata struct {
-	ArticleCount         int              `json:"article_count"`
-	GRCArticleCount      int              `json:"grc_article_count"`
-	AnalysisMode         string           `json:"analysis_mode,omitempty"`
-	FallbackReason       string           `json:"fallback_reason,omitempty"`
-	SourceName           string           `json:"source_name,omitempty"`
-	SourceURL            string           `json:"source_url,omitempty"`
-	SourceHomeURL        string           `json:"source_home_url,omitempty"`
-	SourceIssueDate      string           `json:"source_issue_date,omitempty"`
-	SourceIssueURL       string           `json:"source_issue_url,omitempty"`
-	AnalysisPeriod       string           `json:"analysis_period,omitempty"`
-	RequestedModel       string           `json:"requested_model,omitempty"`
-	ResolvedModel        string           `json:"resolved_model,omitempty"`
-	SourceArticles       []map[string]any `json:"source_articles,omitempty"`
-	ReportPlan           map[string]any   `json:"report_plan,omitempty"`
-	RegulationsMentioned []string         `json:"regulations_mentioned"`
-	FrameworksReferenced []string         `json:"frameworks_referenced"`
-	IndustriesAffected   []string         `json:"industries_affected"`
-	RegulatoryBodies     []string         `json:"regulatory_bodies"`
+	Title       string         `json:"title"`
+	Content     string         `json:"content"`
+	GeneratedAt time.Time      `json:"generated_at"`
+	Metadata    map[string]any `json:"metadata,omitempty"`
 }
 
 // APIError represents an error response

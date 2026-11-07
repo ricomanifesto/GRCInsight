@@ -113,26 +113,7 @@ func reportToDynamo(report *models.Report) *dynamodb.Report {
 		Status:      report.Status,
 		SourceURL:   report.SourceURL,
 		GeneratedAt: report.GeneratedAt,
-		Metadata: dynamodb.ReportMetadata{
-			ArticleCount:         report.Metadata.ArticleCount,
-			GRCArticleCount:      report.Metadata.GRCArticleCount,
-			AnalysisMode:         report.Metadata.AnalysisMode,
-			FallbackReason:       report.Metadata.FallbackReason,
-			SourceName:           report.Metadata.SourceName,
-			SourceURL:            report.Metadata.SourceURL,
-			SourceHomeURL:        report.Metadata.SourceHomeURL,
-			SourceIssueDate:      report.Metadata.SourceIssueDate,
-			SourceIssueURL:       report.Metadata.SourceIssueURL,
-			AnalysisPeriod:       report.Metadata.AnalysisPeriod,
-			RequestedModel:       report.Metadata.RequestedModel,
-			ResolvedModel:        report.Metadata.ResolvedModel,
-			SourceArticles:       report.Metadata.SourceArticles,
-			ReportPlan:           report.Metadata.ReportPlan,
-			RegulationsMentioned: report.Metadata.RegulationsMentioned,
-			FrameworksReferenced: report.Metadata.FrameworksReferenced,
-			IndustriesAffected:   report.Metadata.IndustriesAffected,
-			RegulatoryBodies:     report.Metadata.RegulatoryBodies,
-		},
+		Metadata:    storedMetadata(report.Metadata),
 	}
 }
 
@@ -146,27 +127,16 @@ func reportFromDynamo(report *dynamodb.Report) *models.Report {
 		GeneratedAt: report.GeneratedAt,
 		CreatedAt:   parseDynamoTime(report.CreatedAt),
 		UpdatedAt:   parseDynamoTime(report.UpdatedAt),
-		Metadata: models.ReportMetadata{
-			ArticleCount:         report.Metadata.ArticleCount,
-			GRCArticleCount:      report.Metadata.GRCArticleCount,
-			AnalysisMode:         report.Metadata.AnalysisMode,
-			FallbackReason:       report.Metadata.FallbackReason,
-			SourceName:           report.Metadata.SourceName,
-			SourceURL:            report.Metadata.SourceURL,
-			SourceHomeURL:        report.Metadata.SourceHomeURL,
-			SourceIssueDate:      report.Metadata.SourceIssueDate,
-			SourceIssueURL:       report.Metadata.SourceIssueURL,
-			AnalysisPeriod:       report.Metadata.AnalysisPeriod,
-			RequestedModel:       report.Metadata.RequestedModel,
-			ResolvedModel:        report.Metadata.ResolvedModel,
-			SourceArticles:       report.Metadata.SourceArticles,
-			ReportPlan:           report.Metadata.ReportPlan,
-			RegulationsMentioned: report.Metadata.RegulationsMentioned,
-			FrameworksReferenced: report.Metadata.FrameworksReferenced,
-			IndustriesAffected:   report.Metadata.IndustriesAffected,
-			RegulatoryBodies:     report.Metadata.RegulatoryBodies,
-		},
+		Metadata:    models.ReportMetadata(report.Metadata),
 	}
+}
+
+// storedMetadata keeps metadata a map in DynamoDB even before the workflow writes it.
+func storedMetadata(metadata models.ReportMetadata) map[string]any {
+	if metadata == nil {
+		return map[string]any{}
+	}
+	return metadata
 }
 
 func parseDynamoTime(timeStr string) time.Time {

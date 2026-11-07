@@ -95,26 +95,7 @@ func (s *ReportService) GenerateReport(req *apiModels.GenerateReportRequest) (*m
 
 			// Update metadata if available
 			if workflowResp.Metadata != nil {
-				report.Metadata = models.ReportMetadata{
-					ArticleCount:         workflowResp.Metadata.ArticleCount,
-					GRCArticleCount:      workflowResp.Metadata.GRCArticleCount,
-					AnalysisMode:         workflowResp.Metadata.AnalysisMode,
-					FallbackReason:       workflowResp.Metadata.FallbackReason,
-					SourceName:           workflowResp.Metadata.SourceName,
-					SourceURL:            workflowResp.Metadata.SourceURL,
-					SourceHomeURL:        workflowResp.Metadata.SourceHomeURL,
-					SourceIssueDate:      workflowResp.Metadata.SourceIssueDate,
-					SourceIssueURL:       workflowResp.Metadata.SourceIssueURL,
-					AnalysisPeriod:       workflowResp.Metadata.AnalysisPeriod,
-					RequestedModel:       workflowResp.Metadata.RequestedModel,
-					ResolvedModel:        workflowResp.Metadata.ResolvedModel,
-					SourceArticles:       workflowResp.Metadata.SourceArticles,
-					ReportPlan:           workflowResp.Metadata.ReportPlan,
-					RegulationsMentioned: ensureNonNilSlice(workflowResp.Metadata.RegulationsMentioned),
-					FrameworksReferenced: ensureNonNilSlice(workflowResp.Metadata.FrameworksReferenced),
-					IndustriesAffected:   ensureNonNilSlice(workflowResp.Metadata.IndustriesAffected),
-					RegulatoryBodies:     ensureNonNilSlice(workflowResp.Metadata.RegulatoryBodies),
-				}
+				report.Metadata = models.ReportMetadata(workflowResp.Metadata)
 			}
 		} else {
 			report.Status = models.StatusFailed
@@ -186,7 +167,7 @@ func (s *ReportService) ListReports(page, perPage int) (*apiModels.ListReportsRe
 			Status:       report.Status,
 			GeneratedAt:  report.GeneratedAt,
 			CreatedAt:    report.CreatedAt,
-			ArticleCount: report.Metadata.ArticleCount,
+			ArticleCount: report.Metadata.Int("article_count"),
 		}
 	}
 

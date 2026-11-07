@@ -76,41 +76,30 @@ func TestGenerateReport_PersistsReportAndArticles(t *testing.T) {
 	fa := &fakeArticleRepo2{}
 	logger := logrus.New()
 	logger.SetOutput(io.Discard)
-	pc := &fakePythonClient{resp: &apimodels.WorkflowResponse{
-		Status: "completed",
-		Report: &apimodels.Report{Title: "GRC Report", Content: "Hello", GeneratedAt: time.Now()},
-		Metadata: &apimodels.Metadata{
-			ArticleCount:    1,
-			GRCArticleCount: 1,
-			AnalysisMode:    "fallback",
-			FallbackReason:  "model quota exceeded",
-			SourceName:      "SentryDigest",
-			SourceURL:       "https://example.com/feed.xml",
-			SourceHomeURL:   "https://digest.example/",
-			SourceIssueDate: "2026-08-13",
-			SourceIssueURL:  "https://digest.example/archive/2026-08-13/",
-			AnalysisPeriod:  "August 2026",
-			RequestedModel:  "openrouter/example/model",
-			ResolvedModel:   "google/example-model",
-			SourceArticles: []map[string]any{
-				{
-					"title":            "A1",
-					"url":              "https://ex.com/1",
-					"cves":             []string{"CVE-2026-12345"},
-					"article_evidence": []any{map[string]any{"origin": "content", "extraction_version": float64(1), "raw_text": "<p>A retained article passage describes supplier access to customer systems.</p>", "text": "A retained article passage describes supplier access to customer systems."}},
-				},
-			},
-		},
-		Articles: []apimodels.ArticleRecord{{
-			Title: "A1", URL: "https://ex.com/1", Source: "Feed", Summary: "S",
-			Published: time.Now(), HasGRCContent: true,
-			Regulations: []string{"GDPR"}, Frameworks: []string{"ISO 27001"}, Industries: []string{"Tech"}, RegulatoryBodies: []string{"ICO"},
-		}},
-	}}
-
-	if err := json.Unmarshal([]byte(`{"report_plan":{"executive_brief":{"decision_frame":"governance","source_ids":[1]},"regulatory_changes":[],"control_implications":[{"control_id":"governance","priority":"medium","source_ids":[1],"focus":"supplier access","evidence_origin":"content","evidence_excerpt":"A retained article passage describes supplier access to customer systems."}],"industry_impacts":[]}}`), pc.resp.Metadata); err != nil {
+	const metadataJSON = `{
+		"article_count": 1, "grc_article_count": 1,
+		"analysis_mode": "fallback", "fallback_reason": "model quota exceeded",
+		"source_name": "SentryDigest", "source_url": "https://example.com/feed.xml",
+		"source_home_url": "https://digest.example/", "source_issue_date": "2026-08-13",
+		"source_issue_url": "https://digest.example/archive/2026-08-13/",
+		"analysis_period": "August 2026", "requested_model": "openrouter/example/model",
+		"resolved_model": "google/example-model",
+		"source_articles": [{"title": "A1", "url": "https://ex.com/1", "cves": ["CVE-2026-12345"],
+			"article_evidence": [{"origin": "content", "extraction_version": 1, "raw_text": "<p>A retained article passage describes supplier access to customer systems.</p>", "text": "A retained article passage describes supplier access to customer systems."}]}],
+		"report_plan": {"executive_brief": {"decision_frame": "governance", "source_ids": [1]}, "regulatory_changes": [], "control_implications": [{"control_id": "governance", "priority": "medium", "source_ids": [1], "focus": "supplier access", "evidence_origin": "content", "evidence_excerpt": "A retained article passage describes supplier access to customer systems."}], "industry_impacts": []},
+		"regulations_mentioned": [], "frameworks_referenced": [], "industries_affected": [], "regulatory_bodies": []
+	}`
+	var resp apimodels.WorkflowResponse
+	if err := json.Unmarshal([]byte(`{"status": "completed", "metadata": `+metadataJSON+`}`), &resp); err != nil {
 		t.Fatal(err)
 	}
+	resp.Report = &apimodels.Report{Title: "GRC Report", Content: "Hello", GeneratedAt: time.Now()}
+	resp.Articles = []apimodels.ArticleRecord{{
+		Title: "A1", URL: "https://ex.com/1", Source: "Feed", Summary: "S",
+		Published: time.Now(), HasGRCContent: true,
+		Regulations: []string{"GDPR"}, Frameworks: []string{"ISO 27001"}, Industries: []string{"Tech"}, RegulatoryBodies: []string{"ICO"},
+	}}
+	pc := &fakePythonClient{resp: &resp}
 	svc := &ReportService{
 		reportRepo:   fr,
 		articleRepo:  fa,
@@ -130,37 +119,20 @@ func TestGenerateReport_PersistsReportAndArticles(t *testing.T) {
 	if fr.updated == nil || fr.updated.Content == "" {
 		t.Fatalf("report not updated or content missing")
 	}
-	if fr.updated.Metadata.AnalysisMode != "fallback" {
-		t.Fatalf("expected analysis mode to persist, got %q", fr.updated.Metadata.AnalysisMode)
-	}
-	if fr.updated.Metadata.FallbackReason != "model quota exceeded" {
-		t.Fatalf("expected fallback reason to persist, got %q", fr.updated.Metadata.FallbackReason)
-	}
-	if fr.updated.Metadata.SourceName != "SentryDigest" || fr.updated.Metadata.ResolvedModel != "google/example-model" {
-		t.Fatalf("expected report provenance to persist, got %#v", fr.updated.Metadata)
-	}
-	if fr.updated.Metadata.SourceIssueDate != "2026-08-13" || fr.updated.Metadata.SourceIssueURL != "https://digest.example/archive/2026-08-13/" {
-		t.Fatalf("expected digest issue provenance to persist, got %#v", fr.updated.Metadata)
-	}
-	if len(fr.updated.Metadata.SourceArticles) != 1 || fr.updated.Metadata.SourceArticles[0]["url"] != "https://ex.com/1" {
-		t.Fatalf("expected source evidence to persist, got %#v", fr.updated.Metadata.SourceArticles)
-	}
-	if got := fr.updated.Metadata.SourceArticles[0]["cves"]; !reflect.DeepEqual(got, []string{"CVE-2026-12345"}) {
-		t.Fatalf("expected per-source CVEs to persist, got %#v", got)
-	}
-	if !reflect.DeepEqual(fr.updated.Metadata.SourceArticles[0]["article_evidence"], pc.resp.Metadata.SourceArticles[0]["article_evidence"]) {
-		t.Fatal("article evidence origin or text lost from Python response")
-	}
+	// Go stores the workflow's metadata as written, without mapping fields.
 	encoded, err := json.Marshal(fr.updated.Metadata)
 	if err != nil {
 		t.Fatal(err)
 	}
-	var metadata map[string]any
-	if err := json.Unmarshal(encoded, &metadata); err != nil {
+	var stored, written map[string]any
+	if err := json.Unmarshal(encoded, &stored); err != nil {
 		t.Fatal(err)
 	}
-	if metadata["report_plan"] == nil {
-		t.Fatal("report plan lost from Python response")
+	if err := json.Unmarshal([]byte(metadataJSON), &written); err != nil {
+		t.Fatal(err)
+	}
+	if !reflect.DeepEqual(stored, written) {
+		t.Fatalf("stored metadata changed:\n got: %#v\nwant: %#v", stored, written)
 	}
 	if fa.calls == 0 {
 		t.Fatalf("expected articles to be persisted")

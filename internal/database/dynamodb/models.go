@@ -15,29 +15,7 @@ type Report struct {
 	GeneratedAt *time.Time     `dynamodbav:"generated_at,omitempty" json:"generated_at,omitempty"`
 	CreatedAt   string         `dynamodbav:"created_at" json:"created_at"`
 	UpdatedAt   string         `dynamodbav:"updated_at" json:"updated_at"`
-	Metadata    ReportMetadata `dynamodbav:"metadata" json:"metadata"`
-}
-
-// ReportMetadata holds additional information about the report
-type ReportMetadata struct {
-	ArticleCount         int              `dynamodbav:"article_count" json:"article_count"`
-	GRCArticleCount      int              `dynamodbav:"grc_article_count" json:"grc_article_count"`
-	AnalysisMode         string           `dynamodbav:"analysis_mode,omitempty" json:"analysis_mode,omitempty"`
-	FallbackReason       string           `dynamodbav:"fallback_reason,omitempty" json:"fallback_reason,omitempty"`
-	SourceName           string           `dynamodbav:"source_name,omitempty" json:"source_name,omitempty"`
-	SourceURL            string           `dynamodbav:"source_url,omitempty" json:"source_url,omitempty"`
-	SourceHomeURL        string           `dynamodbav:"source_home_url,omitempty" json:"source_home_url,omitempty"`
-	SourceIssueDate      string           `dynamodbav:"source_issue_date,omitempty" json:"source_issue_date,omitempty"`
-	SourceIssueURL       string           `dynamodbav:"source_issue_url,omitempty" json:"source_issue_url,omitempty"`
-	AnalysisPeriod       string           `dynamodbav:"analysis_period,omitempty" json:"analysis_period,omitempty"`
-	RequestedModel       string           `dynamodbav:"requested_model,omitempty" json:"requested_model,omitempty"`
-	ResolvedModel        string           `dynamodbav:"resolved_model,omitempty" json:"resolved_model,omitempty"`
-	SourceArticles       []map[string]any `dynamodbav:"source_articles,omitempty" json:"source_articles,omitempty"`
-	ReportPlan           map[string]any   `dynamodbav:"report_plan,omitempty" json:"report_plan,omitempty"`
-	RegulationsMentioned []string         `dynamodbav:"regulations_mentioned" json:"regulations_mentioned"`
-	FrameworksReferenced []string         `dynamodbav:"frameworks_referenced" json:"frameworks_referenced"`
-	IndustriesAffected   []string         `dynamodbav:"industries_affected" json:"industries_affected"`
-	RegulatoryBodies     []string         `dynamodbav:"regulatory_bodies" json:"regulatory_bodies"`
+	Metadata    map[string]any `dynamodbav:"metadata" json:"metadata"`
 }
 
 // ReportStatus constants

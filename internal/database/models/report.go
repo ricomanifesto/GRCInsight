@@ -22,26 +22,21 @@ type Report struct {
 	Articles []Article `json:"articles,omitempty"`
 }
 
-// ReportMetadata holds additional information about the report
-type ReportMetadata struct {
-	ArticleCount         int              `json:"article_count"`
-	GRCArticleCount      int              `json:"grc_article_count"`
-	AnalysisMode         string           `json:"analysis_mode,omitempty"`
-	FallbackReason       string           `json:"fallback_reason,omitempty"`
-	SourceName           string           `json:"source_name,omitempty"`
-	SourceURL            string           `json:"source_url,omitempty"`
-	SourceHomeURL        string           `json:"source_home_url,omitempty"`
-	SourceIssueDate      string           `json:"source_issue_date,omitempty"`
-	SourceIssueURL       string           `json:"source_issue_url,omitempty"`
-	AnalysisPeriod       string           `json:"analysis_period,omitempty"`
-	RequestedModel       string           `json:"requested_model,omitempty"`
-	ResolvedModel        string           `json:"resolved_model,omitempty"`
-	SourceArticles       []map[string]any `json:"source_articles,omitempty"`
-	ReportPlan           map[string]any   `json:"report_plan,omitempty"`
-	RegulationsMentioned []string         `json:"regulations_mentioned"`
-	FrameworksReferenced []string         `json:"frameworks_referenced"`
-	IndustriesAffected   []string         `json:"industries_affected"`
-	RegulatoryBodies     []string         `json:"regulatory_bodies"`
+// ReportMetadata is report metadata exactly as the report workflow wrote it.
+// Go stores and returns it without mapping individual fields.
+type ReportMetadata map[string]any
+
+// Int returns a numeric metadata field, or zero when it is absent or not a number.
+func (m ReportMetadata) Int(key string) int {
+	switch value := m[key].(type) {
+	case float64:
+		return int(value)
+	case int:
+		return value
+	case int64:
+		return int(value)
+	}
+	return 0
 }
 
 // Article represents a source article used in report generation
