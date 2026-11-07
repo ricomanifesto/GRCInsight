@@ -23,7 +23,8 @@ The Go function invokes the Python function for report generation.
 - Repository variable: `LLM_MODEL`, using `openrouter/provider-model` format. If unset, the workflow uses `openrouter/nvidia/nemotron-3-ultra-550b-a55b:free`.
 - Optional repository variables: `GRC_RELEVANCE_MODE`, `GRC_RELEVANCE_MIN_PROBABILITY`,
   and `GRC_RELEVANCE_TIMEOUT_SECONDS`. The workflow forwards them to the Python
-  Lambda and otherwise uses the application's `off`, `0.95`, and `4` defaults.
+  Lambda and otherwise deploy mode `shadow` (decisions recorded, legacy result
+  returned unchanged) with `0.95` and `4`. Set `GRC_RELEVANCE_MODE=off` to roll back.
   Mode must be `off`, `shadow`, or `enabled`; minimum probability must be between
   0.5 and 1, and timeout must be greater than 0 and at most 10 seconds. Invalid
   values stop the workflow before image builds or Lambda updates.

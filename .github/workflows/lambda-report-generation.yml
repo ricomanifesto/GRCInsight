@@ -501,6 +501,37 @@ jobs:
           echo
         done
 
+    # Shadow and enabled modes log bounded relevance diagnostics (counts,
+    # labels, probabilities, URL hashes; never article text) in the Python
+    # Lambda. Surface them in the run so shadow evidence is reviewable.
+    - name: Report article relevance diagnostics
+      if: always() && steps.lambda-invoke.outcome == 'success'
+      continue-on-error: true
+      env:
+        SINCE_MINUTES: 30
+      run: |
+        set -euo pipefail
+        START_TS=$(( ( $(date +%s) - SINCE_MINUTES*60 ) * 1000 ))
+        aws logs filter-log-events \
+          --log-group-name "/aws/lambda/${PYTHON_FUNCTION_NAME}" \
+          --start-time "$START_TS" \
+          --filter-pattern '"Article relevance"' \
+          --max-items 50 --output json > relevance.json
+        jq -r '.events[].message' relevance.json \
+          | grep -o 'Article relevance [a-z ]*{.*' > relevance.txt || true
+        if [ -s relevance.txt ]; then
+          cat relevance.txt
+          {
+            echo "## Article relevance diagnostics"
+            echo
+            echo '```'
+            cut -c1-4000 relevance.txt
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+        else
+          echo "No article relevance diagnostics in the last ${SINCE_MINUTES} minutes (mode off or not reached)."
+        fi
+
     - name: Validate generated site report
       if: steps.get-report.outputs.publishable == 'true'
       run: |

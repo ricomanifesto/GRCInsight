@@ -110,7 +110,10 @@ The Go service listens on port 8080 and calls the Python service at `http://loca
 ### Optional article relevance pilot
 
 Article analysis can use `typesafe/jev-1.13` through OpenRouter's Decisions API.
-The pilot is server-configured and **off by default**. It uses the existing
+The pilot is server-configured and **off by default** in the application. The
+production Lambda deploy defaults to `shadow` unless the `GRC_RELEVANCE_MODE`
+repository variable says otherwise, and each report run copies the bounded
+relevance log lines into its job summary. It uses the existing
 `OPENROUTER_API_KEY`; shadow and enabled modes can incur paid inference charges,
 even when the report model uses a free route.
 
