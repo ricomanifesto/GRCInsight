@@ -23,6 +23,12 @@ The site keeps dated reports and a [publication history](https://grcinsight.rico
 
 ## How It Works
 
+Article analysis retains its [TEXT row contract](docs/analysis-text-contract.md):
+canonical rows bind the supplied article number and exact title, with any brief
+reason on a separate commentary line. Legacy free-form parsing and fallback
+limits remain documented; the strict report-plan schema and grounding checks
+are unchanged.
+
 1. The Go service accepts report requests, stores report state in DynamoDB, and invokes the Python service.
 2. The Python service fetches RSS articles, filters for GRC relevance, and asks the configured OpenRouter model to compose a report.
 3. The report workflow retrieves the result and checks its model identity, source issue, citations, and analysis mode.
