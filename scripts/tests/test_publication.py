@@ -179,7 +179,8 @@ def test_retained_and_published_commits_reach_the_publisher():
         r"      source_sha: \$\{\{ needs\.generate-report\.outputs\.head_sha \|\| github\.sha \}\}",
         workflow,
     )
-    assert "gh workflow run deploy-site.yml" in workflow
+    assert "deploy-site.yml" not in workflow
+    assert "Dispatch Pages deployment" not in workflow
     assert "cancel-in-progress: true" in workflow
 
 

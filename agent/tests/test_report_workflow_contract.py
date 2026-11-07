@@ -721,10 +721,8 @@ def test_report_generation_workflow_publishes_bound_retained_state():
         "site/publication-history site/index.html site/archive" in workflow
     )
     assert 'echo "retained=true" >> "$GITHUB_OUTPUT"' in workflow
-    assert (
-        "steps.publish.outputs.published == 'true' || "
-        "steps.retain.outputs.retained == 'true'" in workflow
-    )
+    assert 'elif [ "$RETAINED" = "true" ]; then OUTCOME=retained' in workflow
+    assert "uses: ./.github/workflows/publish-production.yml" in workflow
 
 
 def test_report_generation_workflow_summarizes_published_provenance():
@@ -798,8 +796,9 @@ def test_report_generation_workflow_builds_prerender_and_archive():
     assert workflow.count("scripts/publication_state.py record-published") >= 2
     assert "[skip ci]" not in workflow
     assert "actions: write" in workflow
-    assert "gh workflow run deploy-site.yml" in workflow
-    assert "steps.publish.outputs.published == 'true'" in workflow
+    assert "deploy-site.yml" not in workflow
+    assert "Dispatch Pages deployment" not in workflow
+    assert "uses: ./.github/workflows/publish-production.yml" in workflow
 
 
 def test_report_generation_workflow_validates_generated_site_before_publish():

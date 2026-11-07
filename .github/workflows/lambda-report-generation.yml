@@ -579,12 +579,6 @@ jobs:
         echo "Failed to push the generated report after $max_attempts attempts" >&2
         exit 1
 
-    - name: Dispatch Pages deployment
-      if: always() && (steps.publish.outputs.published == 'true' || steps.retain.outputs.retained == 'true')
-      env:
-        GH_TOKEN: ${{ github.token }}
-      run: gh workflow run deploy-site.yml --ref "$GITHUB_REF_NAME"
-
     # Completion and publication are separate: a known terminal report settles
     # admission even if validation refuses it. Transport failures, timeouts and
     # interruptions before that observation still re-attach by report ID.
