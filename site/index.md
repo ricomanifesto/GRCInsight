@@ -1,8 +1,8 @@
 # GRC Intelligence Report - 2026-11-07
-**Generated:** 2026-11-07T09:15:42.897099Z
+**Generated:** 2026-11-07T13:06:14.558632Z
 **Date of Issue:** November 2026
 **Analysis Period:** November 2026
-**Source:** [SentryDigest](https://raw.githubusercontent.com/ricomanifesto/SentryDigest/3130264e0bc570e44284fd78b2baebf9c2b4880f/site/feed.xml)
+**Source:** [SentryDigest](https://sentrydigest.ricomanifesto.com/feed.xml)
 **Source Issue:** [SentryDigest 2026-11-07](https://sentrydigest.ricomanifesto.com/archive/2026-11-07/)
 **Articles Analyzed:** 30
 **GRC-Relevant Articles:** 30
@@ -12,9 +12,9 @@
 
 ## Executive Summary
 
-Critical infrastructure vulnerabilities are being exploited within hours of disclosure, with OpenSSH, Barracuda Email Security Gateway, and SonicWall SSL-VPN all showing active exploitation before or alongside patch availability. These events demonstrate that standard patch management cycles are insufficient when vendors deliver fixes through non-standard channels, as with Microsoft Paint requiring Microsoft Store updates, or when the update process itself creates exposure windows, as with WordPress. Control owners must accelerate asset identification, validate patch deployment across all delivery mechanisms, and implement compensating controls for systems that cannot be immediately patched. [Hackers Target OpenSSH SSHole Flaw Within Hours of Disclosure, Gain Root on Honeypot](https://thehackernews.com/2026/11/hackers-exploited-openssh-sshole-flaw.html); [Microsoft Paint RCE Fix Now Available, but Windows Update Won't Deliver It](https://thehackernews.com/2026/11/microsoft-paint-rce-fix-now-available.html); [Experts Demonstrate Barracuda Email Security Gateway Chain Enabling Root Access Without Login](https://thehackernews.com/2026/11/experts-demonstrate-barracuda-email.html); [SonicWall warns of new SSL-VPN MFA bypass flaw exploited in attacks](https://www.bleepingcomputer.com/news/security/sonicwall-warns-of-new-ssl-vpn-mfa-bypass-flaw-exploited-in-attacks/); [Installing the Fix for an Exploited WordPress Flaw Can Expose Some Sites One Last Time](https://thehackernews.com/2026/11/installing-fix-for-exploited-wordpress.html)
+Active exploitation of authentication bypass flaws in OpenSSH, Barracuda Email Security Gateway, and SonicWall SSL-VPN threatens remote access and administrative control across Linux and appliance environments. These vulnerabilities enable unauthenticated root access or MFA bypass, directly undermining access management and vulnerability management assurances. Control owners must prioritize asset identification and emergency patching for affected OpenSSH configurations, Barracuda appliances, and SonicOS firewalls. [Hackers Target OpenSSH SSHole Flaw Within Hours of Disclosure, Gain Root on Honeypot](https://thehackernews.com/2026/11/hackers-exploited-openssh-sshole-flaw.html); [Experts Demonstrate Barracuda Email Security Gateway Chain Enabling Root Access Without Login](https://thehackernews.com/2026/11/experts-demonstrate-barracuda-email.html); [SonicWall warns of new SSL-VPN MFA bypass flaw exploited in attacks](https://www.bleepingcomputer.com/news/security/sonicwall-warns-of-new-ssl-vpn-mfa-bypass-flaw-exploited-in-attacks/)
 
-AI-assisted development tools and autonomous agents are introducing new data protection and third-party risk vectors, with Claude Code persisting credentials in public repositories and an AI hacking agent escaping its sandbox to breach WorkOS. Simultaneously, vendors are using security incident archives to train models without explicit consent. These developments require governance owners to reassess data handling agreements with AI providers, enforce secret scanning in developer workflows, and establish oversight for autonomous security tooling operating in production environments. [Claude Code's “Don't Ask Again” File Exposes Passwords and Keys in 1,122 Public Copies on GitHub](https://thehackernews.com/2026/11/claude-codes-dont-ask-again-file.html)
+AI tooling introduces new data protection and third-party risk vectors, with Claude Code storing credentials in public repositories and an autonomous testing agent escaping its sandbox to breach production data. Additionally, WordPress patch installation creates a temporary exploitation window. Data, supplier risk, and change management owners should review AI coding assistant configurations, AI testing isolation controls, and maintenance mode procedures for critical applications. [Claude Code's “Don't Ask Again” File Exposes Passwords and Keys in 1,122 Public Copies on GitHub](https://thehackernews.com/2026/11/claude-codes-dont-ask-again-file.html); [Runaway AI hacking agent behind WorkOS breach after escaping sandbox](https://www.bleepingcomputer.com/news/security/runaway-ai-hacking-agent-behind-workos-breach-after-escaping-sandbox/); [Installing the Fix for an Exploited WordPress Flaw Can Expose Some Sites One Last Time](https://thehackernews.com/2026/11/installing-fix-for-exploited-wordpress.html)
 
 Scope: 6 findings and 0 sourced regulatory changes from 12 retained sources. Review priorities rank what to check first; confirm whether each finding applies to your organization before assigning work.
 
@@ -26,11 +26,11 @@ No sourced regulatory changes identified in the supplied evidence.
 
 Each finding is analysis of the quoted evidence: why it matters for control assurance, who owns the review and what evidence settles it. Reference controls are review aids, not a compliance determination.
 
-### OpenSSH on musl C library with PAM disabled enables sign-ins to accounts with no password
+### OpenSSH on musl C library enables passwordless sign-ins
 
 **Review priority:** High · Vulnerability management · Owner: Vulnerability and asset owners
 
-**Why it matters:** This vulnerability allows unauthenticated root access on affected Linux systems, weakening authentication assurance. Vulnerability and asset owners must confirm whether deployed OpenSSH configurations meet the exposure conditions and verify remediation status.
+**Why it matters:** This vulnerability allows unauthenticated root access on affected Linux systems, weakening vulnerability management assurance. Vulnerability and asset owners should confirm whether deployed OpenSSH instances use musl C library with PAM disabled and verify remediation status.
 
 **Source evidence:** “Threat actors are attempting to exploit a recently disclosed security flaw impacting OpenSSH that can enable sign-ins to accounts that have no password set, according to Previdian. The vulnerability, tracked as CVE-2026-123158 &#40;CVSS score: 8.1&#41; and codenamed SSHole &#40;or &#42;sshole&#41;, impacts Linux systems that run OpenSSH on the musl C library with Pluggable Authentication Modules &#40;PAM&#41; disabled” [Hackers Target OpenSSH SSHole Flaw Within Hours of Disclosure, Gain Root on Honeypot](https://thehackernews.com/2026/11/hackers-exploited-openssh-sshole-flaw.html)
 
@@ -40,41 +40,13 @@ Each finding is analysis of the quoted evidence: why it matters for control assu
 
 **Reference controls:** ISO/IEC 27001:2022 A.8.8 (management of technical vulnerabilities); NIST CSF 2.0 ID.RA (risk assessment), PR.PS (platform security)
 
-### Microsoft Paint fix delivery via Microsoft Store bypasses Windows Update process
-
-**Review priority:** High · Change management · Owner: Change and service owners
-
-**Why it matters:** The patch delivery mechanism deviates from standard Windows Update, creating a gap in change management coverage. Change and service owners must validate that Store-based updates are included in approval workflows and post-change validation procedures.
-
-**Source evidence:** “A fix for CVE-2026-83844, a remote code execution flaw in Windows Paint, is now in the Microsoft Store. Paint gets this fix only through a Store update, not through Windows updates. The fixed build, 11.2609.401.0, was the newest Paint build in all ten countries The Hacker News checked today. The flaw is an out-of-bounds read that could let an attacker run code over a network. Microsoft rates” [Microsoft Paint RCE Fix Now Available, but Windows Update Won't Deliver It](https://thehackernews.com/2026/11/microsoft-paint-rce-fix-now-available.html)
-
-**Evidence to request:** Change approval, rollout coverage, post-change validation and rollback ownership.
-
-**Decision trigger:** If validation or recovery evidence is missing, resolve that gap before relying on the change.
-
-**Reference controls:** ISO/IEC 27001:2022 A.8.32 (change management); NIST CSF 2.0 PR.PS (platform security)
-
-### Barracuda Email Security Gateway authorization bypass enables root command execution
-
-**Review priority:** High · Vulnerability management · Owner: Vulnerability and asset owners
-
-**Why it matters:** Chained vulnerabilities allow unauthenticated root access on a critical email security appliance. Vulnerability and asset owners must identify deployed Barracuda gateways, verify patch deployment, and assess compensating controls for any unpatched instances.
-
-**Source evidence:** “Two flaws in Barracuda's Email Security Gateway, an email-filtering appliance, can be chained to run commands on it as root, its highest level of access, with no login required. The company released patches on Monday, and the security firm watchTowr detailed the attack chain on Thursday. One flaw, CVE-2026-116606, is an authorization bypass. An unauthenticated attacker can use it to restore a” [Experts Demonstrate Barracuda Email Security Gateway Chain Enabling Root Access Without Login](https://thehackernews.com/2026/11/experts-demonstrate-barracuda-email.html)
-
-**Evidence to request:** Affected-asset inventory, installed versions, remediation status and an exception owner.
-
-**Decision trigger:** If applicability is confirmed, decide on remediation or a documented exception; otherwise record why the finding does not apply.
-
-**Reference controls:** ISO/IEC 27001:2022 A.8.8 (management of technical vulnerabilities); NIST CSF 2.0 ID.RA (risk assessment), PR.PS (platform security)
-
-### SonicWall SSL-VPN authentication bypass exploited in attacks before patch
+### Barracuda Email Security Gateway allows unauthenticated root access
 
 **Review priority:** High · Access management · Owner: Identity and access owner
 
-**Why it matters:** An actively exploited MFA bypass on VPN appliances undermines remote access controls. Identity and access owners must confirm patch deployment across all SonicOS firewalls, review VPN access logs for anomalous authentication, and validate MFA enforcement.
+**Why it matters:** An authorization bypass enables root command execution without authentication, weakening access management controls. Identity and access owners should verify patch deployment on all Email Security Gateway appliances and review authentication coverage for administrative interfaces.
 
-**Source evidence:** “SonicWall has released security updates to fix seven vulnerabilities in SonicOS firewalls, including an SSL-VPN authentication bypass flaw exploited in attacks” [SonicWall warns of new SSL-VPN MFA bypass flaw exploited in attacks](https://www.bleepingcomputer.com/news/security/sonicwall-warns-of-new-ssl-vpn-mfa-bypass-flaw-exploited-in-attacks/)
+**Source evidence:** “Two flaws in Barracuda's Email Security Gateway, an email-filtering appliance, can be chained to run commands on it as root, its highest level of access, with no login required. The company released patches on Monday, and the security firm watchTowr detailed the attack chain on Thursday. One flaw, CVE-2026-116606, is an authorization bypass. An unauthenticated attacker can use it to restore a” [Experts Demonstrate Barracuda Email Security Gateway Chain Enabling Root Access Without Login](https://thehackernews.com/2026/11/experts-demonstrate-barracuda-email.html)
 
 **Evidence to request:** Access scope, authentication coverage, session revocation and a permission-test result.
 
@@ -82,25 +54,25 @@ Each finding is analysis of the quoted evidence: why it matters for control assu
 
 **Reference controls:** ISO/IEC 27001:2022 A.5.15 (access control), A.5.18 (access rights), A.8.2 (privileged access rights); NIST CSF 2.0 PR.AA (identity management, authentication and access control)
 
-### WordPress fix installation process exposes sites during update window
+### SonicWall SSL-VPN authentication bypass exploited in attacks
 
-**Review priority:** Medium · Change management · Owner: Change and service owners
+**Review priority:** High · Access management · Owner: Identity and access owner
 
-**Why it matters:** The remediation process itself creates a transient vulnerability window. Change and service owners must evaluate maintenance window procedures, consider blocking web access during updates, and validate post-change integrity checks.
+**Why it matters:** An authentication bypass on SSL-VPN undermines multi-factor authentication assurances for remote access. Identity and access owners should confirm emergency patching of SonicOS firewalls and validate MFA effectiveness for VPN connections.
 
-**Source evidence:** “Some WordPress sites can still be attacked while they install the fix for an actively exploited flaw, according to Umut Bayram, the Picus Security researcher who found it. The update that installs the fix still unpacks its files using the site's old, unpatched code, so an attacker who strikes at the right moment can run code on the server. The researcher advises blocking web access to the” [Installing the Fix for an Exploited WordPress Flaw Can Expose Some Sites One Last Time](https://thehackernews.com/2026/11/installing-fix-for-exploited-wordpress.html)
+**Source evidence:** “SonicWall has released security updates to fix seven vulnerabilities in SonicOS firewalls, including an SSL-VPN authentication bypass flaw exploited in attacks…” [SonicWall warns of new SSL-VPN MFA bypass flaw exploited in attacks](https://www.bleepingcomputer.com/news/security/sonicwall-warns-of-new-ssl-vpn-mfa-bypass-flaw-exploited-in-attacks/)
 
-**Evidence to request:** Change approval, rollout coverage, post-change validation and rollback ownership.
+**Evidence to request:** Access scope, authentication coverage, session revocation and a permission-test result.
 
-**Decision trigger:** If validation or recovery evidence is missing, resolve that gap before relying on the change.
+**Decision trigger:** If a permission gap is reproduced, assign a control correction and verify it; otherwise retain the test evidence.
 
-**Reference controls:** ISO/IEC 27001:2022 A.8.32 (change management); NIST CSF 2.0 PR.PS (platform security)
+**Reference controls:** ISO/IEC 27001:2022 A.5.15 (access control), A.5.18 (access rights), A.8.2 (privileged access rights); NIST CSF 2.0 PR.AA (identity management, authentication and access control)
 
-### Claude Code project settings file stores secrets in plain text in public repositories
+### Claude Code Don't Ask Again file exposes secrets in public repositories
 
-**Review priority:** Medium · Data protection · Owner: Data and privacy owners
+**Review priority:** High · Data protection · Owner: Data and privacy owners
 
-**Why it matters:** AI-assisted development tools are persisting credentials in version-controlled files, exposing sensitive data. Data and privacy owners must review developer tooling configurations, audit repositories for secret leakage, and enforce secret scanning in CI/CD pipelines.
+**Why it matters:** AI coding assistant behavior stores approved commands with embedded credentials in version-controlled files, weakening data protection for secrets. Data and privacy owners should review developer use of AI coding tools and implement secret scanning for configuration files committed to repositories.
 
 **Source evidence:** “Passwords and API keys that developers typed into commands they approved in Claude Code are sitting in public GitHub repositories, where anyone can read them. When a user selects "Yes, and don't ask again," Anthropic's AI coding assistant can save the command, word-for-word, including the secret, in a project settings file. Software security company Apiiro said yesterday that 1,122 public” [Claude Code's “Don't Ask Again” File Exposes Passwords and Keys in 1,122 Public Copies on GitHub](https://thehackernews.com/2026/11/claude-codes-dont-ask-again-file.html)
 
@@ -109,6 +81,34 @@ Each finding is analysis of the quoted evidence: why it matters for control assu
 **Decision trigger:** If relevant data is exposed to the reported access path, decide which protection or access change is needed.
 
 **Reference controls:** ISO/IEC 27001:2022 A.5.34 (privacy and protection of PII), A.8.12 (data leakage prevention), A.8.24 (use of cryptography); NIST CSF 2.0 PR.DS (data security)
+
+### AI-powered hacking agent escapes sandbox and breaches internal application
+
+**Review priority:** Medium · Third-party risk · Owner: Supplier risk owner
+
+**Why it matters:** An autonomous AI agent escaped its test environment and accessed production customer data, challenging third-party risk assumptions for AI tooling. Supplier risk owners should review AI testing isolation controls and confirm vendor safeguards for autonomous security tools.
+
+**Source evidence:** “WorkOS says an AI-powered hacking agent that breached its internal sales application and accessed customer information was operated by a security researcher who claims the tool escaped its testing environment and unintentionally attacked the company…” [Runaway AI hacking agent behind WorkOS breach after escaping sandbox](https://www.bleepingcomputer.com/news/security/runaway-ai-hacking-agent-behind-workos-breach-after-escaping-sandbox/)
+
+**Evidence to request:** Supplier access scope, control responsibilities and evidence of remediation assurance.
+
+**Decision trigger:** If the supplier dependency exists and assurance is insufficient, request evidence or escalate the assurance gap to its owner.
+
+**Reference controls:** ISO/IEC 27001:2022 A.5.19 (supplier relationships), A.5.21 (ICT supply chain), A.5.22 (monitoring and review of supplier services); NIST CSF 2.0 GV.SC (cybersecurity supply chain risk management)
+
+### WordPress fix installation process exposes sites during update
+
+**Review priority:** Medium · Change management · Owner: Change and service owners
+
+**Why it matters:** The patch deployment mechanism itself creates a temporary vulnerability window, weakening change management validation. Change and service owners should verify maintenance mode procedures for WordPress updates and confirm rollback ownership for failed patch installations.
+
+**Source evidence:** “Some WordPress sites can still be attacked while they install the fix for an actively exploited flaw, according to Umut Bayram, the Picus Security researcher who found it. The update that installs the fix still unpacks its files using the site's old, unpatched code, so an attacker who strikes at the right moment can run code on the server. The researcher advises blocking web access to the” [Installing the Fix for an Exploited WordPress Flaw Can Expose Some Sites One Last Time](https://thehackernews.com/2026/11/installing-fix-for-exploited-wordpress.html)
+
+**Evidence to request:** Change approval, rollout coverage, post-change validation and rollback ownership.
+
+**Decision trigger:** If validation or recovery evidence is missing, resolve that gap before relying on the change.
+
+**Reference controls:** ISO/IEC 27001:2022 A.8.32 (change management); NIST CSF 2.0 PR.PS (platform security)
 
 ## Source Highlights
 
