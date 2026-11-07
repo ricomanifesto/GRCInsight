@@ -390,6 +390,34 @@ def report_metadata(markdown: str) -> dict[str, str]:
     return metadata
 
 
+_LINK_SYNTAX = re.compile(r"[\\\[\]()]")
+
+
+def _closing_index(text: str, start: int, opener: str, closer: str) -> int:
+    """Index of the closer that balances an already-open opener, or -1.
+
+    Only brackets, parentheses and backslashes affect the scan, so jump between
+    them instead of visiting every character. A backslash escapes whatever
+    character follows it.
+    """
+    depth = 1
+    escaped_index = -1
+    for match in _LINK_SYNTAX.finditer(text, start):
+        index = match.start()
+        if index == escaped_index:
+            continue
+        character = match.group()
+        if character == "\\":
+            escaped_index = index + 1
+        elif character == opener:
+            depth += 1
+        elif character == closer:
+            depth -= 1
+            if depth == 0:
+                return index
+    return -1
+
+
 def markdown_links(markdown: str) -> list[tuple[int, int, str, str]]:
     links: list[tuple[int, int, str, str]] = []
     cursor = 0
@@ -397,48 +425,14 @@ def markdown_links(markdown: str) -> list[tuple[int, int, str, str]]:
         label_start = markdown.find("[", cursor)
         if label_start < 0:
             break
-        label_depth = 1
-        label_escaped = False
-        label_end = -1
-        for index in range(label_start + 1, len(markdown)):
-            character = markdown[index]
-            if label_escaped:
-                label_escaped = False
-                continue
-            if character == "\\":
-                label_escaped = True
-                continue
-            if character == "[":
-                label_depth += 1
-            elif character == "]":
-                label_depth -= 1
-                if label_depth == 0:
-                    label_end = index
-                    break
+        label_end = _closing_index(markdown, label_start + 1, "[", "]")
         if label_end < 0:
             break
         if label_end + 1 >= len(markdown) or markdown[label_end + 1] != "(":
             cursor = label_start + 1
             continue
         destination_marker = label_end
-        depth = 1
-        escaped = False
-        destination_end = -1
-        for index in range(destination_marker + 2, len(markdown)):
-            character = markdown[index]
-            if escaped:
-                escaped = False
-                continue
-            if character == "\\":
-                escaped = True
-                continue
-            if character == "(":
-                depth += 1
-            elif character == ")":
-                depth -= 1
-                if depth == 0:
-                    destination_end = index
-                    break
+        destination_end = _closing_index(markdown, destination_marker + 2, "(", ")")
         if destination_end < 0:
             cursor = destination_marker + 2
             continue

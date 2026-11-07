@@ -268,3 +268,14 @@ def test_reader_shell_is_light_and_fully_expanded_without_javascript():
     assert "body.light" not in style
     assert ".card.collapsed" not in style
     assert "prefers-color-scheme" not in app
+
+
+def test_batch_rendering_matches_isolated_rendering():
+    namespace = builder_namespace()
+    first = "# Report\n\n## Summary\n\nSee [one](https://example.com/a?x=$&y=1).\n"
+    second = "# Report\n\n## Summary\n\n- [two](/b) and [three](#c)\n"
+    batched = namespace["render_reports"]([(first, None), (second, None)])
+    assert batched == [namespace["render_report"](first), namespace["render_report"](second)]
+    assert namespace["render_reports"]([]) == []
+    # Link destinations are inserted literally, never as replacement patterns.
+    assert 'href="https://example.com/a?x=$&amp;y=1"' in batched[0]
