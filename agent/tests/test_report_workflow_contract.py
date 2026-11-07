@@ -2032,3 +2032,19 @@ def test_paused_go_health_is_deferred_without_concurrency_mutation():
     assert "put-function-concurrency" not in workflow
     assert "delete-function-concurrency" not in workflow
     assert "deep=True" not in workflow
+
+
+def test_relevance_diagnostics_step_is_bounded_and_never_blocks_publication():
+    workflow = REPORT_WORKFLOW.read_text()
+    step = workflow.split("- name: Report article relevance diagnostics", maxsplit=1)[1]
+    step = step.split("\n    - name: ", maxsplit=1)[0]
+    # Reviewable shadow evidence must never decide whether a report publishes.
+    assert "continue-on-error: true" in step
+    assert "exit 1" not in step
+    # Only the application's bounded relevance lines, capped, reach the summary.
+    assert "--filter-pattern '\"Article relevance\"'" in step
+    assert "--max-items 50" in step
+    assert "cut -c1-4000 relevance.txt" in step
+    assert workflow.index("Report article relevance diagnostics") < workflow.index(
+        "- name: Validate generated site report"
+    )
