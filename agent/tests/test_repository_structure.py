@@ -76,12 +76,13 @@ def test_lambda_deploy_forwards_relevance_pilot_configuration():
     configured = helper["owned_environment"]("python", {**environment, **overrides})
     assert "python3 -I -B scripts/update_lambda_environment.py" in workflow_source
     assert '--function-kind python --account-id "$AWS_ACCOUNT_ID"' in workflow_source
-    for name, default in (
-        ("GRC_RELEVANCE_MODE", "off"),
-        ("GRC_RELEVANCE_MIN_PROBABILITY", "0.95"),
-        ("GRC_RELEVANCE_TIMEOUT_SECONDS", "4"),
+    # The application default stays off; the production deploy defaults to shadow.
+    for name, default, deployed in (
+        ("GRC_RELEVANCE_MODE", "off", "shadow"),
+        ("GRC_RELEVANCE_MIN_PROBABILITY", "0.95", "0.95"),
+        ("GRC_RELEVANCE_TIMEOUT_SECONDS", "4", "4"),
     ):
-        assert f"{name}: ${{{{ vars.{name} || '{default}' }}}}" in workflow_source
+        assert f"{name}: ${{{{ vars.{name} || '{deployed}' }}}}" in workflow_source
         assert defaults[name] == default
         assert configured[name] == overrides[name]
 

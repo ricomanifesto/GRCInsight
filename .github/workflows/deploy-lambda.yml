@@ -24,7 +24,9 @@ env:
   GO_FUNCTION_NAME: grcinsight-go-function
   PYTHON_FUNCTION_NAME: grcinsight-python-function
   LLM_MODEL: ${{ vars.LLM_MODEL || 'openrouter/nvidia/nemotron-3-ultra-550b-a55b:free' }}
-  GRC_RELEVANCE_MODE: ${{ vars.GRC_RELEVANCE_MODE || 'off' }}
+  # Production runs the relevance pilot in shadow: decisions are recorded and the
+  # legacy result is returned unchanged. Set the variable to off to roll back.
+  GRC_RELEVANCE_MODE: ${{ vars.GRC_RELEVANCE_MODE || 'shadow' }}
   GRC_RELEVANCE_MIN_PROBABILITY: ${{ vars.GRC_RELEVANCE_MIN_PROBABILITY || '0.95' }}
   GRC_RELEVANCE_TIMEOUT_SECONDS: ${{ vars.GRC_RELEVANCE_TIMEOUT_SECONDS || '4' }}
 
