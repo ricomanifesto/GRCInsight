@@ -223,157 +223,19 @@ def _build_local_analysis(enriched_articles: List[ArticleInput]):
     return local_signals, analysis
 
 
-def _build_fallback_report(
-    feed_data: Dict[str, Any],
-    enriched_articles: List[ArticleInput],
-    local_signals: List[Dict[str, Any]],
-    analysis_results: Dict[str, Any],
-    fallback_reason: str,
-) -> str:
-    """Create a deterministic Markdown report when model output is unavailable."""
-    total_count = analysis_results.get("summary", {}).get("total_articles", len(enriched_articles))
-    grc_count = analysis_results.get("summary", {}).get("grc_relevant_count", 0)
-    analysis = analysis_results.get("analysis", {})
-    regulations = analysis.get("regulations_mentioned", []) or []
-    frameworks = analysis.get("frameworks_referenced", []) or []
-    industries = analysis.get("industries_affected", []) or []
-    bodies = analysis.get("regulatory_bodies", []) or []
-    risk_categories = analysis.get("risk_categories", []) or []
+def _unavailable_report_content(title: str, generated_at: datetime) -> str:
+    """Body stored for a refused run.
 
-    relevant_pairs = [
-        (article, signal)
-        for article, signal in zip(enriched_articles, local_signals)
-        if signal.get("has_grc_content")
-    ]
-    if not relevant_pairs:
-        relevant_pairs = list(zip(enriched_articles[:8], local_signals[:8]))
-
-    highlights = []
-    for article, signal in relevant_pairs[:6]:
-        detail = _build_article_reason(signal, signal.get("risk_categories", []))
-        highlights.append(f"- [{article.title}]({article.url}) - {detail}.")
-
-    risk_lines = []
-    for category in risk_categories[:5]:
-        examples = [
-            article.title
-            for article, signal in relevant_pairs
-            if category in signal.get("risk_categories", [])
-        ][:2]
-        if examples:
-            risk_lines.append(f"- {category}: Example signals include {', '.join(examples)}.")
-        else:
-            risk_lines.append(f"- {category}: Present across the current monitoring set.")
-    if not risk_lines:
-        risk_lines.append(
-            "- Current source articles emphasize operational cyber risk and compliance monitoring."
-        )
-
-    recommendation_lines = [
-        "- Maintain incident response, disclosure, and evidence-retention readiness for high-severity cyber events.",
-        "- Prioritize vulnerability remediation, privileged access hygiene, and external attack-surface review for internet-facing services.",
-        "- Review third-party and supplier oversight for notification duties, monitoring coverage, and access restrictions.",
-        "- Track regulator and enforcement updates from bodies such as CISA, the FBI, OFAC, and relevant privacy authorities.",
-    ]
-
-    regulatory_lines = []
-
-    def source_links(field: str) -> str:
-        links = []
-        seen = set()
-        for article, signal in relevant_pairs:
-            if not signal.get(field):
-                continue
-            link = f"[{article.title}]({article.url})" if article.url else article.title
-            if link not in seen:
-                seen.add(link)
-                links.append(link)
-        return "; ".join(links[:3])
-
-    if regulations or frameworks or bodies:
-        if regulations:
-            sources = source_links("regulations")
-            regulatory_lines.append(
-                f"- Explicit regulation references detected: {', '.join(regulations[:6])}."
-                + (f" Sources: {sources}." if sources else "")
-            )
-        if frameworks:
-            sources = source_links("frameworks")
-            regulatory_lines.append(
-                f"- Framework references detected: {', '.join(frameworks[:6])}."
-                + (f" Sources: {sources}." if sources else "")
-            )
-        if bodies:
-            sources = source_links("regulatory_bodies")
-            regulatory_lines.append(
-                f"- Regulatory or government bodies mentioned: {', '.join(bodies[:6])}."
-                + (f" Sources: {sources}." if sources else "")
-            )
-    else:
-        regulatory_lines.append(
-            "- No explicit regulation codes or named frameworks were detected in the current source set."
-        )
-        regulatory_lines.append(
-            "- Governance and compliance significance is inferred from enforcement, breach, and risk-management reporting patterns."
-        )
-
-    industry_lines = []
-    if industries:
-        industry_lines.append(f"- Industries with explicit mentions: {', '.join(industries[:6])}.")
-    else:
-        industry_lines.append(
-            "- The current feed is broad-based cybersecurity reporting with cross-sector relevance for governance, risk, and compliance teams."
-        )
-
-    limitation = fallback_reason or "AI analysis temporarily unavailable"
-
-    now = _utc_now()
+    Publication refuses every report whose analysis mode is not ``model``, so a
+    refused run carries no report sections. The reason stays in metadata.
+    """
     return "\n".join(
         [
-            f"# GRC Intelligence Report - {now.strftime('%Y-%m-%d')}",
-            f"**Generated:** {now.isoformat().replace('+00:00', 'Z')}",
+            f"# {title} - Unavailable",
+            f"**Generated:** {generated_at.isoformat().replace('+00:00', 'Z')}",
             "",
-            f"**Analysis Period:** Current Quarter ({now.strftime('%B %Y')})",
-            f"**Date of Issue:** {now.strftime('%B %Y')}",
-            f"**Source:** {feed_data.get('title', 'Unknown Feed')}",
-            f"**Total Articles Analyzed:** {total_count} (Locally flagged as GRC-relevant: {grc_count})",
+            "Model-backed analysis was unavailable, so this run produced no publishable report.",
             "",
-            "---",
-            "",
-            "1) Executive Summary",
-            f"This report was generated using deterministic local analysis because AI generation was temporarily unavailable: {limitation}. The monitored feed continues to surface material GRC monitoring signals across {total_count} current articles.",
-            "",
-            f"Dominant themes in the current batch include {', '.join(risk_categories[:3]) if risk_categories else 'operational cyber risk, third-party exposure, and regulatory monitoring'}. Business impact remains concentrated in incident response readiness, disclosure obligations, control effectiveness, and board-level risk oversight.",
-            "",
-            "2) Sourced Regulatory Changes",
-            "",
-            "No sourced regulatory changes identified in the supplied evidence.",
-            "",
-            "3) Inferred Control and Governance Implications",
-            "",
-            "These are inferred mappings and source mentions, not verified regulatory changes.",
-            "Observations",
-            *regulatory_lines,
-            "Implications for Business",
-            "- Teams should treat major cyber incidents, sanctions activity, and regulator advisories as compliance-relevant events even when source articles are operational in nature.",
-            "- Evidence capture, executive escalation, and breach-notification decision support remain priority governance controls.",
-            "",
-            "4) Industry Impact Analysis",
-            *industry_lines,
-            "- Organizations in regulated or data-intensive sectors should expect the same cyber events to trigger legal, contractual, and supervisory scrutiny.",
-            "",
-            "5) Risk Assessment",
-            *risk_lines,
-            "",
-            "6) Recommendations for Action",
-            *recommendation_lines,
-            "",
-            "7) Source Highlights",
-            *highlights,
-            "",
-            "Notes and limitations",
-            "- This fallback keeps the report current using feed content plus local entity extraction while AI generation is unavailable.",
-            "- Once the AI backend is restored, the richer narrative report will resume automatically.",
         ]
     )
 
@@ -580,23 +442,18 @@ async def run_grc_analysis_endpoint(
                 report_content = ""
                 resolved_model = ""
 
-        if not report_content:
-            report_content = _build_fallback_report(
-                feed_data,
-                enriched_articles,
-                local_signals,
-                analysis_results,
-                fallback_reason,
-            )
-            used_fallback_report = True
-            logger.warning("Generated fallback report because model output was unavailable")
-
         # Step 7: Create response
         logger.info("Step 7: Creating workflow response")
 
         generated_at = _utc_now()
+        title = f"GRC Intelligence Report - {generated_at.strftime('%Y-%m-%d')}"
+        if not report_content:
+            report_content = _unavailable_report_content(title, generated_at)
+            used_fallback_report = True
+            logger.warning("Model output was unavailable; recording a refused run")
+
         report = Report(
-            title=f"GRC Intelligence Report - {generated_at.strftime('%Y-%m-%d')}",
+            title=title,
             content=report_content,
             generated_at=generated_at,
         )

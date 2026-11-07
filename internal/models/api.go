@@ -23,20 +23,6 @@ type WorkflowResponse struct {
 	Articles []ArticleRecord `json:"articles,omitempty"`
 }
 
-// AnalysisRequest represents a request for GRC analysis
-type AnalysisRequest struct {
-	Articles []ArticleInput    `json:"articles" binding:"required"`
-	Config   GRCAnalysisConfig `json:"config" binding:"required"`
-}
-
-// AnalysisResponse represents the response from GRC analysis
-type AnalysisResponse struct {
-	Status  string           `json:"status"`
-	Results []AnalysisResult `json:"results"`
-	Summary AnalysisSummary  `json:"summary"`
-	Error   *APIError        `json:"error,omitempty"`
-}
-
 // GRCAnalysisConfig holds configuration for the analysis
 type GRCAnalysisConfig struct {
 	Model      string   `json:"model"`
@@ -95,17 +81,6 @@ func (c GRCAnalysisConfig) MarshalJSON() ([]byte, error) {
 	return json.Marshal(wireConfig(normalized))
 }
 
-// ArticleInput represents an article for analysis
-type ArticleInput struct {
-	Title     string    `json:"title"`
-	URL       string    `json:"url"`
-	Content   string    `json:"content"`
-	Summary   string    `json:"summary"`
-	Source    string    `json:"source"`
-	DigestURL string    `json:"digest_url,omitempty"`
-	Published time.Time `json:"published"`
-}
-
 // ArticleRecord represents an article with GRC analysis fields
 type ArticleRecord struct {
 	Title            string    `json:"title"`
@@ -129,26 +104,6 @@ type ListArticlesResponse struct {
 	Page       int             `json:"page"`
 	PerPage    int             `json:"per_page"`
 	TotalPages int             `json:"total_pages"`
-}
-
-// AnalysisResult represents the analysis result for a single article
-type AnalysisResult struct {
-	ArticleURL       string   `json:"article_url"`
-	HasGRCContent    bool     `json:"has_grc_content"`
-	Regulations      []string `json:"regulations"`
-	Frameworks       []string `json:"frameworks"`
-	Industries       []string `json:"industries"`
-	RegulatoryBodies []string `json:"regulatory_bodies"`
-	RiskLevels       []string `json:"risk_levels"`
-}
-
-// AnalysisSummary provides an overall summary of the analysis
-type AnalysisSummary struct {
-	TotalArticles      int      `json:"total_articles"`
-	GRCArticles        int      `json:"grc_articles"`
-	TopRegulations     []string `json:"top_regulations"`
-	TopFrameworks      []string `json:"top_frameworks"`
-	AffectedIndustries []string `json:"affected_industries"`
 }
 
 // Report represents the generated GRC report

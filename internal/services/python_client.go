@@ -256,42 +256,6 @@ func (c *PythonServiceClient) invokeLambdaWorkflow(req *models.WorkflowRequest) 
 	return lambdaResponse.Body, nil
 }
 
-// AnalyzeArticles sends articles to Python service for GRC analysis
-func (c *PythonServiceClient) AnalyzeArticles(req *models.AnalysisRequest) (*models.AnalysisResponse, error) {
-	if c.isLambdaMode {
-		// Not implemented for Lambda path
-		return nil, fmt.Errorf("AnalyzeArticles not implemented for Lambda mode - use RunWorkflow instead")
-	}
-
-	// HTTP mode: POST to Python service
-	url := c.baseURL + "/api/v1/analyze"
-	bodyBytes, err := json.Marshal(req)
-	if err != nil {
-		return nil, fmt.Errorf("failed to marshal analysis request: %w", err)
-	}
-
-	httpReq, cancel, err := c.newCallerBoundRequest(http.MethodPost, url, bodyBytes)
-	if err != nil {
-		return nil, fmt.Errorf("failed to create request: %w", err)
-	}
-	defer cancel()
-
-	resp, err := c.httpClient.Do(httpReq)
-	if err != nil {
-		return nil, fmt.Errorf("python service request failed: %w", err)
-	}
-	defer func() { _ = resp.Body.Close() }()
-	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
-		return nil, fmt.Errorf("python service returned %d", resp.StatusCode)
-	}
-
-	var ar models.AnalysisResponse
-	if err := json.NewDecoder(resp.Body).Decode(&ar); err != nil {
-		return nil, fmt.Errorf("failed to decode analysis response: %w", err)
-	}
-	return &ar, nil
-}
-
 // HealthCheck checks if the Python service is healthy
 func (c *PythonServiceClient) HealthCheck() error {
 	if c.isLambdaMode {

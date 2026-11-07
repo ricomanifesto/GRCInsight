@@ -86,12 +86,20 @@ def test_run_grc_analysis_endpoint_falls_back_when_model_is_unavailable(monkeypa
 
     assert response.status == "completed"
     assert response.report is not None
-    assert "deterministic local analysis" in response.report.content.lower()
+    # Publication refuses every non-model report, so a refused run stores only
+    # a short notice; the reason stays in metadata, never in the report body.
+    content = response.report.content
+    assert "no publishable report" in content
+    assert "https://example.com/article" not in content
+    assert "insufficient_quota" not in content
+    assert "## " not in content
+    assert content.startswith(f"# {response.report.title} - Unavailable\n")
     assert response.metadata is not None
     assert response.metadata.article_count == 1
     assert response.metadata.grc_article_count >= 1
     assert response.metadata.analysis_mode == "fallback"
     assert response.metadata.fallback_reason == "Error code: 429 - insufficient_quota"
+    assert response.metadata.report_plan is None
 
 
 def test_run_grc_analysis_endpoint_marks_model_backed_reports(monkeypatch):

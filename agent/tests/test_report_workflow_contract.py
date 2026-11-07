@@ -576,65 +576,6 @@ def test_source_evidence_preserves_cves_in_exact_title_or_url_identity():
     assert "CVE-2026-30010" in identity_source["cves"]
 
 
-def test_fallback_report_excludes_dedicated_threat_actor_section():
-    articles = [
-        ArticleInput(
-            title="Volt Typhoon targets agencies",
-            url="https://example.com/named-actor",
-            content="The threat actor Volt Typhoon targeted government agencies.",
-            summary="",
-            published=PUBLISHED_AT,
-        )
-    ]
-    local_signals, analysis = workflow_mod._build_local_analysis(articles)
-
-    report = workflow_mod._build_fallback_report(
-        {"title": "Test Feed"},
-        articles,
-        local_signals,
-        analysis,
-        "model unavailable",
-    )
-
-    assert "Threat Actor Activities" not in report
-    assert "CVE and Vulnerability Highlights" not in report
-    assert "5) Risk Assessment" in report
-    assert "2) Sourced Regulatory Changes" in report
-    assert "3) Inferred Control and Governance Implications" in report
-    assert "6) Recommendations for Action" in report
-
-
-def test_fallback_report_links_regulatory_claims_without_a_cve_section():
-    articles = [
-        ArticleInput(
-            title="GDPR Article 32 advisory covers CVE-2026-54321",
-            url="https://example.com/gdpr-cve",
-            content="GDPR Article 32 guidance addresses remediation evidence for CVE-2026-54321.",
-            summary="",
-            published=PUBLISHED_AT,
-        )
-    ]
-    local_signals, analysis = workflow_mod._build_local_analysis(articles)
-
-    report = workflow_mod._build_fallback_report(
-        {"title": "Test Feed"},
-        articles,
-        local_signals,
-        analysis,
-        "model unavailable",
-    )
-
-    source = "[GDPR Article 32 advisory covers CVE-2026-54321](https://example.com/gdpr-cve)"
-    regulatory_line = next(
-        line
-        for line in report.splitlines()
-        if line.startswith("- Explicit regulation references detected:")
-    )
-    assert f"Sources: {source}." in regulatory_line
-    assert "CVE and Vulnerability Highlights" not in report
-    assert "Review business impact, exposure, and remediation ownership" not in report
-
-
 def test_renderer_and_site_check_enforce_the_current_report_sections():
     check_script = SITE_REPORT_CHECK.read_text()
     renderer = RENDERER_JS.read_text()
