@@ -196,30 +196,55 @@ def read_manifest(path: Path) -> object:
         return None
 
 
-def render_report(markdown: str, manifest: object = None) -> str:
-    node_script = r"""
+RENDER_BATCH_SCRIPT = r"""
 const fs = require('fs');
 const vm = require('vm');
-const rendererSource = fs.readFileSync(process.argv[1], 'utf8');
-const {markdown, reviewMap, origins} = JSON.parse(fs.readFileSync(0, 'utf8'));
-const context = { window: {} };
-vm.createContext(context);
-vm.runInContext(rendererSource, context, { filename: 'renderer.js' });
-process.stdout.write(context.window.GRCInsightRenderer.renderReportDocument(markdown, reviewMap, origins));
+const rendererPath = process.argv[1];
+const renderer = new vm.Script(fs.readFileSync(rendererPath, 'utf8'), { filename: 'renderer.js' });
+const {origins, reports} = JSON.parse(fs.readFileSync(0, 'utf8'));
+const rendered = reports.map(({markdown, reviewMap}, index) => {
+  // A fresh context per report keeps each rendering isolated, exactly as if
+  // it ran in its own process; only the compiled script is shared.
+  const context = { window: {} };
+  vm.createContext(context);
+  try {
+    renderer.runInContext(context);
+    return context.window.GRCInsightRenderer.renderReportDocument(markdown, reviewMap, origins);
+  } catch (error) {
+    error.message = `report ${index}: ${error.message}`;
+    throw error;
+  }
+});
+process.stdout.write(JSON.stringify(rendered));
 """
+
+
+def render_reports(reports: list[tuple[str, object]]) -> list[str]:
+    """Render (markdown, manifest) pairs with one Node process for the batch."""
+    if not reports:
+        return []
     result = subprocess.run(
-        ["node", "-e", node_script, str(RENDERER_JS)],
+        ["node", "-e", RENDER_BATCH_SCRIPT, str(RENDERER_JS)],
         input=json.dumps({
-            "markdown": markdown,
-            "reviewMap": review_map_rows(markdown, manifest),
             "origins": presentation_origins(),
+            "reports": [
+                {"markdown": markdown, "reviewMap": review_map_rows(markdown, manifest)}
+                for markdown, manifest in reports
+            ],
         }),
         capture_output=True,
         text=True,
     )
     if result.returncode != 0:
         fail((result.stderr or result.stdout).strip() or "renderer failed")
-    return result.stdout
+    rendered = json.loads(result.stdout)
+    if not isinstance(rendered, list) or len(rendered) != len(reports):
+        fail("renderer returned an unexpected number of reports")
+    return rendered
+
+
+def render_report(markdown: str, manifest: object = None) -> str:
+    return render_reports([(markdown, manifest)])[0]
 
 
 def current_index_html(
@@ -228,11 +253,13 @@ def current_index_html(
     publication_state: dict[str, object] | None = None,
     publication_history: dict[str, object] | None = None,
     manifest: object = None,
+    report_html: str | None = None,
 ) -> str:
     fields = report_fields(markdown)
     generated_raw = fields.get("generated", "")
     generated = parse_generated(generated_raw)
-    report_html = render_report(markdown, manifest)
+    if report_html is None:
+        report_html = render_report(markdown, manifest)
     report_node = (
         f"{REPORT_START}\n"
         f'          <div id="report" class="report" data-prerendered="true" '
@@ -298,6 +325,10 @@ def with_site_icons(html: str, static_prefix: str) -> str:
         f"{static_prefix}/apple-touch-icon.png",
     )
     for href in icon_hrefs:
+        # The pattern needs this literal attribute; skip the whole-page scan
+        # when it is absent (archive pages never carry these links).
+        if f'href="{href}"' not in html:
+            continue
         html = re.sub(
             rf'[ \t]*<link\b[^>]*\bhref="{re.escape(href)}"[^>]*>[ \t]*\n?',
             "",
@@ -340,11 +371,15 @@ def with_archive_detail_chrome(html: str, generated: datetime) -> str:
     return html.replace(main_node, f"{context_node}\n    {main_node}", 1)
 
 
-def archive_detail_html(markdown: str, manifest: object = None) -> str:
+def archive_detail_html(
+    markdown: str, manifest: object = None, report_html: str | None = None
+) -> str:
     fields = report_fields(markdown)
     title = fields.get("title", "GRC Intelligence Report")
     generated_raw = fields.get("generated", "")
     generated = parse_generated(generated_raw)
+    if report_html is None:
+        report_html = render_report(markdown, manifest)
     html = f"""<!DOCTYPE html>
 <html lang="en">
   <head>
@@ -362,7 +397,7 @@ def archive_detail_html(markdown: str, manifest: object = None) -> str:
         <nav class="header-links" aria-label="Report resources"><a href="../../">Latest report</a><a href="../">Archive</a><a href="report.md">Markdown</a></nav>
       </div>
     </header>
-    <main class="container archive-report">{render_report(markdown, manifest)}</main>
+    <main class="container archive-report">{report_html}</main>
     <footer class="app-footer"><div class="container"><span>GRCInsight report archive</span></div></footer>
   </body>
 </html>
@@ -468,43 +503,62 @@ def expected_outputs(
 ) -> dict[Path, str]:
     if publication_history is None:
         fail("publication history is required")
+    current_manifest = read_manifest(EVIDENCE_MANIFEST)
+    archived: list[tuple[Path, str, object, dict[str, str], datetime]] = []
+    if ARCHIVE_DIR.exists():
+        for report_md in sorted(ARCHIVE_DIR.glob("????-??-??T??-??-??Z/report.md"), reverse=True):
+            archived_markdown = read_text(report_md)
+            fields = report_fields(archived_markdown)
+            generated = parse_generated(fields.get("generated", ""))
+            if archive_slug(generated) != report_md.parent.name:
+                fail(
+                    "archive timestamp does not match Generated metadata: "
+                    f"{report_md.relative_to(REPO_ROOT)}"
+                )
+            archived.append(
+                (
+                    report_md,
+                    archived_markdown,
+                    read_manifest(report_md.parent / "evidence-manifest.json"),
+                    fields,
+                    generated,
+                )
+            )
+
+    # Starting Node once per report dominated build time; render the current
+    # report and every archive in a single batch instead.
+    current_html, *archived_html = render_reports(
+        [(markdown, current_manifest)]
+        + [(archived_markdown, manifest) for _, archived_markdown, manifest, _, _ in archived]
+    )
     outputs = {
         INDEX_HTML: current_index_html(
             template,
             markdown,
             publication_state,
             publication_history,
-            read_manifest(EVIDENCE_MANIFEST),
+            current_manifest,
+            report_html=current_html,
         ),
         PUBLICATION_HISTORY_INDEX: publication_history_html(publication_history),
     }
     reports: list[tuple[str, str, str, str]] = []
-    if ARCHIVE_DIR.exists():
-        for report_md in sorted(ARCHIVE_DIR.glob("????-??-??T??-??-??Z/report.md"), reverse=True):
-            archived_markdown = read_text(report_md)
-            fields = report_fields(archived_markdown)
-            generated = parse_generated(fields.get("generated", ""))
-            report_key = report_md.parent.name
-            if archive_slug(generated) != report_key:
-                fail(
-                    "archive timestamp does not match Generated metadata: "
-                    f"{report_md.relative_to(REPO_ROOT)}"
-                )
-            # Markdown and manifests retain publication-era evidence; HTML is a
-            # deterministic reader projection shared with the current report.
-            archive_page = report_md.parent / "index.html"
-            outputs[archive_page] = archive_detail_html(
-                archived_markdown,
-                read_manifest(report_md.parent / "evidence-manifest.json"),
+    for (report_md, archived_markdown, manifest, fields, generated), report_html in zip(
+        archived, archived_html
+    ):
+        # Markdown and manifests retain publication-era evidence; HTML is a
+        # deterministic reader projection shared with the current report.
+        outputs[report_md.parent / "index.html"] = archive_detail_html(
+            archived_markdown, manifest, report_html=report_html
+        )
+        reports.append(
+            (
+                report_md.parent.name,
+                fields.get("title", "GRC Intelligence Report"),
+                generated.isoformat().replace("+00:00", "Z"),
+                display_timestamp(generated),
             )
-            reports.append(
-                (
-                    report_key,
-                    fields.get("title", "GRC Intelligence Report"),
-                    generated.isoformat().replace("+00:00", "Z"),
-                    display_timestamp(generated),
-                )
-            )
+        )
     outputs[ARCHIVE_DIR / "index.html"] = archive_index_html(reports)
     return outputs
 

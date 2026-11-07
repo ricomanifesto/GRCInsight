@@ -128,13 +128,18 @@
       markdown,
       links,
       restore(html, renderLink = link => renderMarkdownLink(renderLinkLabel(link.text), link.url)) {
-        links.forEach(link => {
-          html = html.replace(
-            link.token,
-            renderLink(link),
-          );
+        if (!links.length) return html;
+        // Render in link order (citation numbering follows call order), then
+        // substitute every token in one pass instead of rescanning the whole
+        // document once per link. Each token is replaced at most once, and the
+        // rendered link is inserted literally.
+        const rendered = links.map(link => renderLink(link));
+        const pending = new Set(rendered.keys());
+        return html.replace(/@@GRCINSIGHT_LINK_(\d+)@@/g, (token, index) => {
+          const position = Number(index);
+          if (!pending.delete(position)) return token;
+          return rendered[position];
         });
-        return html;
       },
     };
   }
