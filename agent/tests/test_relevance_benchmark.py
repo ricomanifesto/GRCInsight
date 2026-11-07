@@ -3,12 +3,15 @@ import json
 from pathlib import Path
 import subprocess
 import sys
+from types import SimpleNamespace
 from unittest.mock import AsyncMock
 
 import pytest
 import httpx
 
 from config.settings import settings
+from core import relevance_benchmark
+from core.evaluation_design import half_width
 from core.relevance_benchmark import classification_metrics, run_comparison
 from services.model_service import GRCModelService
 from tests.test_relevance_policy import articles, result, service
@@ -152,3 +155,85 @@ def test_replay_defaults_to_validation_without_credentials_or_network(tmp_path):
     )
     report = json.loads(process.stdout)
     assert report == {"cases": 2, "status": "validated_only", "network_calls": 0}
+
+
+def scripted_clock(monkeypatch, model, durations):
+    """Advance a fake benchmark clock by a scripted duration per generative call."""
+    clock = [0.0]
+    outcomes = iter(durations)
+
+    async def analyze(batch):
+        seconds, analysis = next(outcomes)
+        clock[0] += seconds
+        return analysis
+
+    monkeypatch.setattr(relevance_benchmark, "time", SimpleNamespace(perf_counter=lambda: clock[0]))
+    model._analyze_articles_with_model = AsyncMock(side_effect=analyze)
+
+
+def test_replay_reports_paired_win_rate_uncertainty(monkeypatch):
+    model = service(monkeypatch, "enabled")
+    model.relevance_client.classify = AsyncMock(
+        return_value=result(labels=("relevant", "insufficient_evidence"))
+    )
+    ok = {"grc_articles": [], "summary": {"grc_relevant_count": 0}}
+    # Calls alternate legacy/enabled, then enabled/legacy.
+    scripted_clock(monkeypatch, model, [(2, ok), (1, ok), (3, ok), (1, ok)])
+    summary = asyncio.run(
+        run_comparison(articles(), ["relevant", "irrelevant"], lambda: model, repeats=2)
+    )
+    uncertainty = summary["uncertainty"]
+    assert uncertainty["pairs"] == 2
+    assert uncertainty["pairs_with_error"] == 0
+    # Repeat 0: enabled 1s < legacy 2s. Repeat 1: enabled 3s > legacy 1s.
+    assert uncertainty["enabled_faster_rate"] == 0.5
+    assert uncertainty["win_rate_half_width_95_two_sided"] == pytest.approx(half_width(2, 0.05))
+    assert uncertainty["win_rate_half_width_95_one_sided"] == pytest.approx(
+        half_width(2, 0.05, sided="one")
+    )
+    assert summary["limits"][-1] == (
+        "The enabled-faster rate over 2 completed pairs has a distribution-free "
+        "two-sided 95% half-width of 0.960; 0 pairs with errors are excluded."
+    )
+    assert "Small replay samples do not establish production p95." in summary["limits"]
+
+
+def test_replay_excludes_pairs_with_errors_from_win_rate(monkeypatch):
+    model = service(monkeypatch, "enabled")
+    model.relevance_client.classify = AsyncMock(
+        return_value=result(labels=("relevant", "insufficient_evidence"))
+    )
+    ok = {"grc_articles": [], "summary": {"grc_relevant_count": 0}}
+    failed = {"error": "unavailable"}
+    scripted_clock(monkeypatch, model, [(2, ok), (1, ok), (1, failed), (5, ok)])
+    summary = asyncio.run(
+        run_comparison(articles(), ["relevant", "irrelevant"], lambda: model, repeats=2)
+    )
+    uncertainty = summary["uncertainty"]
+    assert uncertainty["pairs"] == 1
+    assert uncertainty["pairs_with_error"] == 1
+    assert uncertainty["enabled_faster_rate"] == 1.0
+    assert uncertainty["win_rate_half_width_95_two_sided"] == pytest.approx(half_width(1, 0.05))
+    assert summary["enabled"]["missing_predictions"] == 2
+
+
+def test_replay_reports_no_win_rate_when_every_pair_fails(monkeypatch):
+    model = service(monkeypatch, "enabled")
+    model.relevance_client.classify = AsyncMock(
+        return_value=result(labels=("relevant", "insufficient_evidence"))
+    )
+    model._analyze_articles_with_model.return_value = {"error": "unavailable"}
+    summary = asyncio.run(
+        run_comparison(articles(), ["relevant", "irrelevant"], lambda: model, repeats=1)
+    )
+    assert summary["uncertainty"] == {
+        "pairs": 0,
+        "pairs_with_error": 1,
+        "enabled_faster_rate": None,
+        "win_rate_half_width_95_two_sided": None,
+        "win_rate_half_width_95_one_sided": None,
+    }
+    assert summary["limits"][-1] == (
+        "No pair completed without errors, so the enabled-faster rate is not bounded; "
+        "1 pairs with errors are excluded."
+    )

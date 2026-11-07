@@ -11,6 +11,7 @@ from typing import Any
 
 from core.article_selection import selected_article_mask
 from core.entities import analyze_article_grc_content
+from core.evaluation_design import half_width
 from models.api import ArticleInput
 from services.model_service import GRCModelService
 from services.relevance_decisions import LABELS
@@ -56,6 +57,34 @@ def _latencies(values: list[float]) -> dict[str, float]:
     }
 
 
+def _paired_uncertainty(enabled_wins: list[bool], pairs_with_error: int) -> dict[str, Any]:
+    """Bound the enabled-faster rate over pairs where neither arm errored."""
+    pairs = len(enabled_wins)
+    return {
+        "pairs": pairs,
+        "pairs_with_error": pairs_with_error,
+        "enabled_faster_rate": sum(enabled_wins) / pairs if pairs else None,
+        "win_rate_half_width_95_two_sided": half_width(pairs, 0.05) if pairs else None,
+        "win_rate_half_width_95_one_sided": (
+            half_width(pairs, 0.05, sided="one") if pairs else None
+        ),
+    }
+
+
+def _uncertainty_limit(uncertainty: dict[str, Any]) -> str:
+    excluded = f"{uncertainty['pairs_with_error']} pairs with errors are excluded."
+    if not uncertainty["pairs"]:
+        return (
+            "No pair completed without errors, so the enabled-faster rate is not bounded; "
+            f"{excluded}"
+        )
+    return (
+        f"The enabled-faster rate over {uncertainty['pairs']} completed pairs has a "
+        "distribution-free two-sided 95% half-width of "
+        f"{uncertainty['win_rate_half_width_95_two_sided']:.3f}; {excluded}"
+    )
+
+
 async def run_comparison(
     articles: list[ArticleInput],
     expected: list[str],
@@ -78,10 +107,14 @@ async def run_comparison(
     times: dict[str, list[float]] = {"legacy": [], "enabled": []}
     runs = []
     diagnostics = []
+    # Paired timing outcomes count only repeats where neither arm errored.
+    pairs_with_error = 0
+    enabled_wins: list[bool] = []
     for repeat in range(repeats):
         # Alternate paired order. Expected labels never enter either request.
         order = ["legacy", "enabled"] if repeat % 2 == 0 else ["enabled", "legacy"]
         run: dict[str, Any] = {"order": order}
+        errored: dict[str, bool] = {}
         for path in order:
             # Each path is an independent workflow. Never share its cumulative
             # model deadline with another baseline, candidate or repetition.
@@ -96,6 +129,7 @@ async def run_comparison(
             )
             elapsed = time.perf_counter() - started
             times[path].append(elapsed)
+            errored[path] = "error" in analysis
             selected = selected_article_mask(articles, analysis)
             predicted: list[str | None] = (
                 [
@@ -120,7 +154,14 @@ async def run_comparison(
                 decision_predictions.extend(raw_predictions)
                 run["decision_predictions"] = raw_predictions
         runs.append(run)
+        if any(errored.values()):
+            pairs_with_error += 1
+        else:
+            enabled_wins.append(
+                run["enabled"]["elapsed_seconds"] < run["legacy"]["elapsed_seconds"]
+            )
     labels = expected * repeats
+    uncertainty = _paired_uncertainty(enabled_wins, pairs_with_error)
     costs = [item.get("cost") for item in diagnostics]
     fallback_sizes = [item.get("uncertain_count", len(articles)) for item in diagnostics]
     return {
@@ -165,5 +206,7 @@ async def run_comparison(
             "Legacy and total enabled cost are unavailable from the client, not zero.",
             "Failed multi-batch calls may incur cost not included in completed-call usage.",
             "Quality depends on independent review of expected labels and representative inputs.",
+            _uncertainty_limit(uncertainty),
         ],
+        "uncertainty": uncertainty,
     }
