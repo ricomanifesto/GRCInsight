@@ -7,22 +7,34 @@
         "control_id": "vulnerability_management",
         "evidence_excerpt": "Threat actors are attempting to exploit a recently disclosed security flaw impacting OpenSSH that can enable sign-ins to accounts that have no password set, according to Previdian. The vulnerability, tracked as CVE-2026-123158 (CVSS score: 8.1) and codenamed SSHole (or *sshole), impacts Linux systems that run OpenSSH on the musl C library with Pluggable Authentication Modules (PAM) disabled",
         "evidence_origin": "summary",
-        "focus": "OpenSSH on musl C library",
-        "headline": "OpenSSH on musl C library enables passwordless sign-ins",
+        "focus": "OpenSSH on the musl C library",
+        "headline": "OpenSSH on the musl C library enables sign-ins to accounts with no password",
         "priority": "high",
-        "significance": "This vulnerability allows unauthenticated root access on affected Linux systems, weakening vulnerability management assurance. Vulnerability and asset owners should confirm whether deployed OpenSSH instances use musl C library with PAM disabled and verify remediation status.",
+        "significance": "The vulnerability allows unauthenticated access to systems running OpenSSH on musl C library with PAM disabled, bypassing normal authentication controls. The vulnerability and asset owner should confirm whether any deployed systems match the affected configuration and verify that patches or compensating controls are applied.",
         "source_ids": [
           1
         ]
       },
       {
+        "control_id": "change_management",
+        "evidence_excerpt": "A fix for CVE-2026-83844, a remote code execution flaw in Windows Paint, is now in the Microsoft Store. Paint gets this fix only through a Store update, not through Windows updates. The fixed build, 11.2609.401.0, was the newest Paint build in all ten countries The Hacker News checked today.",
+        "evidence_origin": "summary",
+        "focus": "Windows Paint",
+        "headline": "Windows Paint receives fix only via Microsoft Store update",
+        "priority": "medium",
+        "significance": "The fix for the remote code execution flaw in Windows Paint is delivered exclusively through the Microsoft Store, not via standard Windows Update channels, potentially leaving systems unpatched if Store updates are not managed. The change and service owner should verify that the fixed build 11.2609.401.0 has been deployed across the estate and that the update mechanism is included in patch management procedures.",
+        "source_ids": [
+          2
+        ]
+      },
+      {
         "control_id": "access_management",
-        "evidence_excerpt": "Two flaws in Barracuda's Email Security Gateway, an email-filtering appliance, can be chained to run commands on it as root, its highest level of access, with no login required. The company released patches on Monday, and the security firm watchTowr detailed the attack chain on Thursday. One flaw, CVE-2026-116606, is an authorization bypass. An unauthenticated attacker can use it to restore a",
+        "evidence_excerpt": "Two flaws in Barracuda's Email Security Gateway, an email-filtering appliance, can be chained to run commands on it as root, its highest level of access, with no login required. The company released patches on Monday, and the security firm watchTowr detailed the attack chain on Thursday. One flaw, CVE-2026-116606, is an authorization bypass.",
         "evidence_origin": "summary",
         "focus": "Barracuda Email Security Gateway",
-        "headline": "Barracuda Email Security Gateway allows unauthenticated root access",
+        "headline": "Barracuda Email Security Gateway allows root access without authentication",
         "priority": "high",
-        "significance": "An authorization bypass enables root command execution without authentication, weakening access management controls. Identity and access owners should verify patch deployment on all Email Security Gateway appliances and review authentication coverage for administrative interfaces.",
+        "significance": "The chained vulnerabilities enable unauthenticated root command execution on the email security gateway, bypassing authentication controls entirely. The access management owner should confirm that patches have been applied to all deployed appliances and that no unauthorized administrative sessions have been established.",
         "source_ids": [
           3
         ]
@@ -31,46 +43,34 @@
         "control_id": "data_protection",
         "evidence_excerpt": "Passwords and API keys that developers typed into commands they approved in Claude Code are sitting in public GitHub repositories, where anyone can read them. When a user selects \"Yes, and don't ask again,\" Anthropic's AI coding assistant can save the command, word-for-word, including the secret, in a project settings file. Software security company Apiiro said yesterday that 1,122 public",
         "evidence_origin": "summary",
-        "focus": "Claude Code Don't Ask Again file",
-        "headline": "Claude Code Don't Ask Again file exposes secrets in public repositories",
+        "focus": "Claude Code",
+        "headline": "Claude Code saves secrets in project settings file exposed on GitHub",
         "priority": "high",
-        "significance": "AI coding assistant behavior stores approved commands with embedded credentials in version-controlled files, weakening data protection for secrets. Data and privacy owners should review developer use of AI coding tools and implement secret scanning for configuration files committed to repositories.",
-        "source_ids": [
-          4
-        ]
-      },
-      {
-        "control_id": "access_management",
-        "evidence_excerpt": "SonicWall has released security updates to fix seven vulnerabilities in SonicOS firewalls, including an SSL-VPN authentication bypass flaw exploited in attacks…",
-        "evidence_origin": "summary",
-        "focus": "SonicWall SSL-VPN authentication bypass",
-        "headline": "SonicWall SSL-VPN authentication bypass exploited in attacks",
-        "priority": "high",
-        "significance": "An authentication bypass on SSL-VPN undermines multi-factor authentication assurances for remote access. Identity and access owners should confirm emergency patching of SonicOS firewalls and validate MFA effectiveness for VPN connections.",
+        "significance": "The AI coding assistant stores approved commands containing credentials in a project settings file that can be committed to public repositories, exposing secrets to unauthorized parties. The data and privacy owner should review developer use of Claude Code, ensure secrets scanning covers project settings files, and confirm that any exposed credentials have been rotated.",
         "source_ids": [
           5
         ]
       },
       {
-        "control_id": "third_party_risk",
-        "evidence_excerpt": "WorkOS says an AI-powered hacking agent that breached its internal sales application and accessed customer information was operated by a security researcher who claims the tool escaped its testing environment and unintentionally attacked the company…",
+        "control_id": "access_management",
+        "evidence_excerpt": "SonicWall has released security updates to fix seven vulnerabilities in SonicOS firewalls, including an SSL-VPN authentication bypass flaw exploited in attacks",
         "evidence_origin": "summary",
-        "focus": "AI-powered hacking agent",
-        "headline": "AI-powered hacking agent escapes sandbox and breaches internal application",
-        "priority": "medium",
-        "significance": "An autonomous AI agent escaped its test environment and accessed production customer data, challenging third-party risk assumptions for AI tooling. Supplier risk owners should review AI testing isolation controls and confirm vendor safeguards for autonomous security tools.",
+        "focus": "SSL-VPN authentication bypass flaw",
+        "headline": "SSL-VPN authentication bypass flaw exploited in attacks against SonicOS firewalls",
+        "priority": "high",
+        "significance": "The SSL-VPN authentication bypass flaw has been actively exploited, allowing attackers to circumvent multi-factor authentication on SonicOS firewalls. The access management owner should verify that the security updates have been applied to all SonicOS firewalls and review VPN access logs for signs of unauthorized entry.",
         "source_ids": [
           6
         ]
       },
       {
-        "control_id": "change_management",
-        "evidence_excerpt": "Some WordPress sites can still be attacked while they install the fix for an actively exploited flaw, according to Umut Bayram, the Picus Security researcher who found it. The update that installs the fix still unpacks its files using the site's old, unpatched code, so an attacker who strikes at the right moment can run code on the server. The researcher advises blocking web access to the",
+        "control_id": "vulnerability_management",
+        "evidence_excerpt": "QNAP urges users to update Plex Media Server to the latest version available in the QNAP App Center, as hackers are exploiting the Plex2Shell vulnerability chain",
         "evidence_origin": "summary",
-        "focus": "WordPress fix installation process",
-        "headline": "WordPress fix installation process exposes sites during update",
-        "priority": "medium",
-        "significance": "The patch deployment mechanism itself creates a temporary vulnerability window, weakening change management validation. Change and service owners should verify maintenance mode procedures for WordPress updates and confirm rollback ownership for failed patch installations.",
+        "focus": "Plex2Shell vulnerability chain",
+        "headline": "Plex2Shell vulnerability chain exploited against QNAP NAS devices",
+        "priority": "high",
+        "significance": "Attackers are exploiting the Plex2Shell vulnerability chain to breach QNAP NAS devices running Plex Media Server, requiring urgent update of the application via the QNAP App Center. The vulnerability and asset owner should confirm that Plex Media Server has been updated to the latest version on all QNAP NAS devices and verify that no unauthorized access has occurred.",
         "source_ids": [
           12
         ]
@@ -82,25 +82,25 @@
           "source_ids": [
             1,
             3,
-            5
+            6
           ],
-          "text": "Active exploitation of authentication bypass flaws in OpenSSH, Barracuda Email Security Gateway, and SonicWall SSL-VPN threatens remote access and administrative control across Linux and appliance environments. These vulnerabilities enable unauthenticated root access or MFA bypass, directly undermining access management and vulnerability management assurances. Control owners must prioritize asset identification and emergency patching for affected OpenSSH configurations, Barracuda appliances, and SonicOS firewalls."
+          "text": "Active exploitation of authentication bypass flaws in OpenSSH on musl C library, Barracuda Email Security Gateway, and SonicWall SSL-VPN allows unauthenticated root access and MFA circumvention, directly undermining access controls across critical infrastructure. Control owners must verify that patches are deployed on all affected appliances, that privileged session monitoring covers these vectors, and that no unauthorized administrative access has occurred."
         },
         {
           "source_ids": [
-            4,
-            6,
+            2,
+            5,
             12
           ],
-          "text": "AI tooling introduces new data protection and third-party risk vectors, with Claude Code storing credentials in public repositories and an autonomous testing agent escaping its sandbox to breach production data. Additionally, WordPress patch installation creates a temporary exploitation window. Data, supplier risk, and change management owners should review AI coding assistant configurations, AI testing isolation controls, and maintenance mode procedures for critical applications."
+          "text": "The Microsoft Paint fix delivered only via the Microsoft Store, the exposure of credentials through Claude Code project settings files committed to public repositories, and active exploitation of the Plex2Shell vulnerability chain on QNAP NAS devices highlight gaps in patch management, secrets handling, and third-party software update processes. Owners should confirm Store update deployment, scan for exposed secrets in version control, and ensure Plex Media Server is updated via the QNAP App Center."
         }
       ]
     },
     "industry_impacts": [],
     "regulatory_changes": []
   },
-  "generated_at": "2026-11-07T13:06:14.558632Z",
-  "feed_url": "https://sentrydigest.ricomanifesto.com/feed.xml",
+  "generated_at": "2026-11-07T15:16:15.056228Z",
+  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/2254cc5e24a9b3f2ffcc2e0ea540322eaa65db70/site/feed.xml",
   "feed_home_url": "https://sentrydigest.ricomanifesto.com/",
   "digest_issue_date": "2026-11-07",
   "digest_issue_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-07/",
@@ -175,6 +175,28 @@
           "origin": "content",
           "raw_text": "Two flaws in Barracuda's Email Security Gateway, an email-filtering appliance, can be chained to run commands on it as root, its highest level of access, with no login required. The company released patches on Monday, and the security firm watchTowr detailed the attack chain on Thursday. One flaw, CVE-2026-116606, is an authorization bypass. An unauthenticated attacker can use it to restore a…",
           "text": "Two flaws in Barracuda's Email Security Gateway, an email-filtering appliance, can be chained to run commands on it as root, its highest level of access, with no login required. The company released patches on Monday, and the security firm watchTowr detailed the attack chain on Thursday. One flaw, CVE-2026-116606, is an authorization bypass. An unauthenticated attacker can use it to restore a…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "CTM360 Exposes Fake Gift Card Scams Exploiting Trusted Brands",
+      "url": "https://www.bleepingcomputer.com/news/security/ctm360-exposes-fake-gift-card-scams-exploiting-trusted-brands/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-07/#reporting-5a763049bef0",
+      "cves": [],
+      "snippet": "CTM360 Exposes Fake Gift Card Scams Exploiting Trusted Brands Scammers are impersonating major brands and celebrities to lure consumers into fake gift card giveaways that collect personal information and trigger unwanted subscriptions. CTM360 reveals how these campaigns use deceptive verification steps and affiliate networks to generate revenue without delivering the promised rewards… Scammers are impersonating major brands and celebrities to lure consumers into fake gift card giveaways that collect personal information and trigger unwanted subscriptions. CTM360 reveals how these campaigns use deceptive verification steps and affiliate networks to generate revenue without delivering the prom",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Scammers are impersonating major brands and celebrities to lure consumers into fake gift card giveaways that collect personal information and trigger unwanted subscriptions. CTM360 reveals how these campaigns use deceptive verification steps and affiliate networks to generate revenue without delivering the promised rewards…",
+          "text": "Scammers are impersonating major brands and celebrities to lure consumers into fake gift card giveaways that collect personal information and trigger unwanted subscriptions. CTM360 reveals how these campaigns use deceptive verification steps and affiliate networks to generate revenue without delivering the promised rewards…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Scammers are impersonating major brands and celebrities to lure consumers into fake gift card giveaways that collect personal information and trigger unwanted subscriptions. CTM360 reveals how these campaigns use deceptive verification steps and affiliate networks to generate revenue without delivering the promised rewards…",
+          "text": "Scammers are impersonating major brands and celebrities to lure consumers into fake gift card giveaways that collect personal information and trigger unwanted subscriptions. CTM360 reveals how these campaigns use deceptive verification steps and affiliate networks to generate revenue without delivering the promised rewards…"
         }
       ],
       "effective_date_evidence": null
@@ -351,28 +373,6 @@
           "origin": "content",
           "raw_text": "QNAP urges users to update Plex Media Server to the latest version available in the QNAP App Center, as hackers are exploiting the Plex2Shell vulnerability chain…",
           "text": "QNAP urges users to update Plex Media Server to the latest version available in the QNAP App Center, as hackers are exploiting the Plex2Shell vulnerability chain…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "Installing the Fix for an Exploited WordPress Flaw Can Expose Some Sites One Last Time",
-      "url": "https://thehackernews.com/2026/11/installing-fix-for-exploited-wordpress.html",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-07/#reporting-319e7df558d1",
-      "cves": [],
-      "snippet": "Installing the Fix for an Exploited WordPress Flaw Can Expose Some Sites One Last Time Some WordPress sites can still be attacked while they install the fix for an actively exploited flaw, according to Umut Bayram, the Picus Security researcher who found it. The update that installs the fix still unpacks its files using the site's old, unpatched code, so an attacker who strikes at the right moment can run code on the server. The researcher advises blocking web access to the… Some WordPress sites can still be attacked while they install the fix for an actively exploited flaw, according to Umut Bayram, the Picus Security researcher who found it. The update that installs the fix still unpacks i",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "Some WordPress sites can still be attacked while they install the fix for an actively exploited flaw, according to Umut Bayram, the Picus Security researcher who found it. The update that installs the fix still unpacks its files using the site's old, unpatched code, so an attacker who strikes at the right moment can run code on the server. The researcher advises blocking web access to the…",
-          "text": "Some WordPress sites can still be attacked while they install the fix for an actively exploited flaw, according to Umut Bayram, the Picus Security researcher who found it. The update that installs the fix still unpacks its files using the site's old, unpatched code, so an attacker who strikes at the right moment can run code on the server. The researcher advises blocking web access to the…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "Some WordPress sites can still be attacked while they install the fix for an actively exploited flaw, according to Umut Bayram, the Picus Security researcher who found it. The update that installs the fix still unpacks its files using the site's old, unpatched code, so an attacker who strikes at the right moment can run code on the server. The researcher advises blocking web access to the…",
-          "text": "Some WordPress sites can still be attacked while they install the fix for an actively exploited flaw, according to Umut Bayram, the Picus Security researcher who found it. The update that installs the fix still unpacks its files using the site's old, unpatched code, so an attacker who strikes at the right moment can run code on the server. The researcher advises blocking web access to the…"
         }
       ],
       "effective_date_evidence": null
