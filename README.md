@@ -202,6 +202,25 @@ Logs contain aggregate diagnostics, never article bodies or credentials. Live
 benchmark results and deployment configuration are required before claiming
 production speed or quality improvements.
 
+Paid replays also report an `uncertainty` block: completed pairs, pairs with
+errors, the fraction of completed pairs where the enabled path was faster, and
+its distribution-free 95% half-width, which is restated in `limits`. Choose
+sample sizes before collecting cases with `core/evaluation_design.py` or its
+offline CLI:
+
+```bash
+# Hoeffding size for a +/-0.10 one-sided bound at 95%, and label budgets:
+python3 scripts/evaluation_design.py --epsilon 0.10 --delta 0.05 --sided one \
+  --population 71 --counts 20 50 150
+```
+
+Outcomes are scaled to [0, 1]. When cases are archived feed issues sampled
+without replacement, pass `--population` to apply Serfling's finite-population
+factor; the helper recommends a census when the required sample reaches the
+pool size, and a census has no sampling error. These bounds pre-register sample
+sizes; Wilson or exact intervals remain the reported estimator for observed
+rates, especially near zero.
+
 ### Repository validation
 
 ```bash
