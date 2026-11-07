@@ -18,7 +18,9 @@ from core.runtime import (
     deadline_from_unix_ms,
     earliest_deadline,
     reset_model_deadline,
+    reset_report_id,
     set_model_deadline,
+    set_report_id,
 )
 
 LAMBDA_WRITEBACK_RESERVE_SECONDS = 120.0
@@ -157,18 +159,22 @@ def handler(event, context):
                     focus_areas=focus_areas,
                 )
 
-                # Run the workflow
+                # Run the workflow. Diagnostics name the report they belong to.
                 logger.info(f"Starting GRC workflow for {feed_url}")
-                result = asyncio.run(
-                    run_grc_analysis_endpoint(
-                        feed_url,
-                        config,
-                        model_deadline=_lambda_model_deadline(
-                            context,
-                            event.get("caller_deadline_unix_ms"),
-                        ),
+                report_token = set_report_id(event.get("report_id"))
+                try:
+                    result = asyncio.run(
+                        run_grc_analysis_endpoint(
+                            feed_url,
+                            config,
+                            model_deadline=_lambda_model_deadline(
+                                context,
+                                event.get("caller_deadline_unix_ms"),
+                            ),
+                        )
                     )
-                )
+                finally:
+                    reset_report_id(report_token)
 
                 # If invoked with report_id, perform DynamoDB writeback (async pattern)
                 report_id = event.get("report_id")

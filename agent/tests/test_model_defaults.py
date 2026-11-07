@@ -285,3 +285,38 @@ def test_local_runtime_configuration_is_openrouter_only():
     assert "OPENROUTER_API_KEY" in readme
     assert f"LLM_MODEL=${{LLM_MODEL:-{DEFAULT_LLM_MODEL}}}" in compose
     assert f"export LLM_MODEL={DEFAULT_LLM_MODEL}" in readme
+
+
+@pytest.mark.parametrize(
+    ("report_id", "expected"),
+    [
+        ("report_20261107_181614_123", "report_20261107_181614_123"),
+        (None, None),
+        ("report with spaces", None),
+    ],
+)
+def test_direct_lambda_scopes_the_report_identity_to_its_invocation(
+    monkeypatch, report_id, expected
+):
+    from core.runtime import get_report_id
+
+    seen = []
+
+    async def fake_workflow(_feed_url, _config, model_deadline=None):
+        seen.append(get_report_id())
+        # Fail before writeback so no storage is touched.
+        return WorkflowResponse(status="failed")
+
+    monkeypatch.setattr("core.workflow.run_grc_analysis_endpoint", fake_workflow)
+    monkeypatch.setattr(lambda_main, "_lambda_model_deadline", lambda _context, _deadline: 370.0)
+    monkeypatch.setattr(
+        lambda_main.boto3,
+        "resource",
+        lambda _service: (_ for _ in ()).throw(RuntimeError("offline")),
+    )
+    event = {"feed_url": "https://example.com/feed.xml"}
+    if report_id is not None:
+        event["report_id"] = report_id
+    lambda_main.handler(event, object())
+    assert seen == [expected]
+    assert get_report_id() is None

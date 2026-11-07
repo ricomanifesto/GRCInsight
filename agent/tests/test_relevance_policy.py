@@ -799,3 +799,38 @@ def test_source_evidence_is_identical_between_off_and_enabled(monkeypatch):
             )
     assert evidence["off"] == evidence["enabled"]
     assert {item["url"] for item in evidence["enabled"]} == {item.url for item in inputs}
+
+
+def relevance_log_payloads(model, report_id=None):
+    from core.runtime import reset_report_id, set_report_id
+
+    model.relevance_client.classify = AsyncMock(return_value=result())
+    messages = []
+    handler = logger.add(lambda message: messages.append(message.record["message"]), level="INFO")
+    token = set_report_id(report_id)
+    try:
+        asyncio.run(model.analyze_articles_for_grc(articles()))
+    finally:
+        reset_report_id(token)
+        logger.remove(handler)
+    payloads = {}
+    for message in messages:
+        for kind in ("pilot", "selection"):
+            prefix = f"Article relevance {kind} "
+            if message.startswith(prefix):
+                payloads[kind] = json.loads(message[len(prefix) :])
+    return payloads
+
+
+def test_relevance_log_lines_name_the_report_they_belong_to(monkeypatch):
+    model = service(monkeypatch, "enabled")
+    payloads = relevance_log_payloads(model, "report_20261107_181614_123")
+    assert set(payloads) == {"pilot", "selection"}
+    assert {payload["report_id"] for payload in payloads.values()} == {"report_20261107_181614_123"}
+    # Correlation is a log field only; recorded diagnostics stay unchanged.
+    assert "report_id" not in model.last_relevance_diagnostics
+
+
+def test_relevance_log_lines_omit_report_identity_outside_a_report_invocation(monkeypatch):
+    payloads = relevance_log_payloads(service(monkeypatch, "enabled"))
+    assert payloads and all("report_id" not in payload for payload in payloads.values())

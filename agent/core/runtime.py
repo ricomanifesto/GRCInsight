@@ -3,12 +3,16 @@
 from contextvars import ContextVar, Token
 from collections.abc import Callable
 import math
+import re
 import time
 
 CALLER_DEADLINE_HEADER = "x-grc-caller-deadline-unix-ms"
 CALLER_COMPLETION_RESERVE_SECONDS = 30.0
 
 _model_deadline: ContextVar[float | None] = ContextVar("model_deadline", default=None)
+_report_id: ContextVar[str | None] = ContextVar("report_id", default=None)
+# Report handles issued by the Go service: report_YYYYMMDD_HHMMSS_NNN.
+REPORT_ID_PATTERN = re.compile(r"report_[0-9]{8}_[0-9]{6}_[0-9]{3}")
 
 
 def deadline_from_unix_ms(
@@ -50,3 +54,19 @@ def set_model_deadline(deadline: float | None) -> Token:
 def reset_model_deadline(token: Token) -> None:
     """Restore the previous invocation context."""
     _model_deadline.reset(token)
+
+
+def get_report_id() -> str | None:
+    """Return the report handle the current invocation writes back, if any."""
+    return _report_id.get()
+
+
+def set_report_id(report_id: object) -> Token:
+    """Scope a well-formed report handle to the current invocation; ignore others."""
+    valid = isinstance(report_id, str) and REPORT_ID_PATTERN.fullmatch(report_id)
+    return _report_id.set(report_id if valid else None)
+
+
+def reset_report_id(token: Token) -> None:
+    """Restore the previous invocation context."""
+    _report_id.reset(token)

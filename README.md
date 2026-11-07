@@ -110,7 +110,14 @@ The Go service listens on port 8080 and calls the Python service at `http://loca
 ### Optional article relevance pilot
 
 Article analysis can use `typesafe/jev-1.13` through OpenRouter's Decisions API.
-The pilot is server-configured and **off by default**. It uses the existing
+The pilot is server-configured and **off by default**. In shadow or enabled
+mode, the Python Lambda logs bounded relevance diagnostics (counts, labels,
+probabilities and URL hashes, never article text) and names the report each line
+belongs to. Every report run, including a run that reattaches to an existing
+report, queries CloudWatch Logs for that report's lines only and copies at most
+20 lines and 8,000 bytes into its job summary. It reports no diagnostics, or an
+unavailable query by its error code, without affecting publication; the workflow
+principal needs `logs:FilterLogEvents` on the Python function's log group. It uses the existing
 `OPENROUTER_API_KEY`; shadow and enabled modes can incur paid inference charges,
 even when the report model uses a free route.
 

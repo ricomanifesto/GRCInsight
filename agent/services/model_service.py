@@ -15,6 +15,7 @@ from loguru import logger
 from config.settings import settings
 from core.regulatory_dates import document_effective_date
 from core.report_evidence import REGULATORY_PUBLISHERS
+from core.runtime import get_report_id
 from core.article_evidence import eligible_article_segments
 from core.article_selection import selected_article_mask
 from core.entities import analyze_article_grc_content, detect_risk_categories
@@ -52,6 +53,12 @@ CVE_PATTERN = re.compile(r"\bCVE-\d{4}-\d{4,}\b", re.IGNORECASE)
 CVE_OMISSION_MARKER = "[additional CVE omitted]"
 OPENROUTER_ATTEMPT_TIMEOUT_SECONDS = 360.0
 OPENROUTER_TOTAL_TIMEOUT_SECONDS = 780.0
+
+
+def _with_report_id(payload: dict[str, Any]) -> dict[str, Any]:
+    """Name the report a relevance log line belongs to, when one is being written."""
+    report_id = get_report_id()
+    return {**payload, "report_id": report_id} if report_id else payload
 
 
 @dataclass(frozen=True)
@@ -317,17 +324,19 @@ class GRCModelService:
         logger.info(
             "Article relevance selection {}",
             json.dumps(
-                {
-                    "mode": self.relevance_mode,
-                    "policy": SELECTION_POLICY,
-                    "route": plan.route,
-                    "reason": plan.reason,
-                    "fallback_status": fallback_status,
-                    "fallback_size": size,
-                    "selection_basis": basis,
-                    "keep_violations": len(violations),
-                    "records": [record.as_dict() for record in records],
-                }
+                _with_report_id(
+                    {
+                        "mode": self.relevance_mode,
+                        "policy": SELECTION_POLICY,
+                        "route": plan.route,
+                        "reason": plan.reason,
+                        "fallback_status": fallback_status,
+                        "fallback_size": size,
+                        "selection_basis": basis,
+                        "keep_violations": len(violations),
+                        "records": [record.as_dict() for record in records],
+                    }
+                )
             ),
         )
 
@@ -374,7 +383,7 @@ class GRCModelService:
             failure = "internal_error"
             diagnostics["status"] = failure
         self.last_relevance_diagnostics = diagnostics
-        logger.info("Article relevance pilot {}", json.dumps(diagnostics))
+        logger.info("Article relevance pilot {}", json.dumps(_with_report_id(diagnostics)))
         return result, failure
 
     def _analysis_from_selection(
