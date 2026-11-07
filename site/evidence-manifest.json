@@ -7,34 +7,22 @@
         "control_id": "vulnerability_management",
         "evidence_excerpt": "Threat actors are attempting to exploit a recently disclosed security flaw impacting OpenSSH that can enable sign-ins to accounts that have no password set, according to Previdian. The vulnerability, tracked as CVE-2026-123158 (CVSS score: 8.1) and codenamed SSHole (or *sshole), impacts Linux systems that run OpenSSH on the musl C library with Pluggable Authentication Modules (PAM) disabled",
         "evidence_origin": "summary",
-        "focus": "OpenSSH on musl C library with PAM disabled",
-        "headline": "OpenSSH on musl C library with PAM disabled enables sign-ins to accounts with no password",
+        "focus": "OpenSSH on musl C library",
+        "headline": "OpenSSH on musl C library enables passwordless sign-ins",
         "priority": "high",
-        "significance": "This vulnerability allows unauthenticated root access on affected Linux systems, weakening authentication assurance. Vulnerability and asset owners must confirm whether deployed OpenSSH configurations meet the exposure conditions and verify remediation status.",
+        "significance": "This vulnerability allows unauthenticated root access on affected Linux systems, weakening vulnerability management assurance. Vulnerability and asset owners should confirm whether deployed OpenSSH instances use musl C library with PAM disabled and verify remediation status.",
         "source_ids": [
           1
         ]
       },
       {
-        "control_id": "change_management",
-        "evidence_excerpt": "A fix for CVE-2026-83844, a remote code execution flaw in Windows Paint, is now in the Microsoft Store. Paint gets this fix only through a Store update, not through Windows updates. The fixed build, 11.2609.401.0, was the newest Paint build in all ten countries The Hacker News checked today. The flaw is an out-of-bounds read that could let an attacker run code over a network. Microsoft rates",
-        "evidence_origin": "summary",
-        "focus": "Microsoft Paint fix delivery via Microsoft Store",
-        "headline": "Microsoft Paint fix delivery via Microsoft Store bypasses Windows Update process",
-        "priority": "high",
-        "significance": "The patch delivery mechanism deviates from standard Windows Update, creating a gap in change management coverage. Change and service owners must validate that Store-based updates are included in approval workflows and post-change validation procedures.",
-        "source_ids": [
-          2
-        ]
-      },
-      {
-        "control_id": "vulnerability_management",
+        "control_id": "access_management",
         "evidence_excerpt": "Two flaws in Barracuda's Email Security Gateway, an email-filtering appliance, can be chained to run commands on it as root, its highest level of access, with no login required. The company released patches on Monday, and the security firm watchTowr detailed the attack chain on Thursday. One flaw, CVE-2026-116606, is an authorization bypass. An unauthenticated attacker can use it to restore a",
         "evidence_origin": "summary",
-        "focus": "Barracuda Email Security Gateway authorization bypass",
-        "headline": "Barracuda Email Security Gateway authorization bypass enables root command execution",
+        "focus": "Barracuda Email Security Gateway",
+        "headline": "Barracuda Email Security Gateway allows unauthenticated root access",
         "priority": "high",
-        "significance": "Chained vulnerabilities allow unauthenticated root access on a critical email security appliance. Vulnerability and asset owners must identify deployed Barracuda gateways, verify patch deployment, and assess compensating controls for any unpatched instances.",
+        "significance": "An authorization bypass enables root command execution without authentication, weakening access management controls. Identity and access owners should verify patch deployment on all Email Security Gateway appliances and review authentication coverage for administrative interfaces.",
         "source_ids": [
           3
         ]
@@ -43,24 +31,36 @@
         "control_id": "data_protection",
         "evidence_excerpt": "Passwords and API keys that developers typed into commands they approved in Claude Code are sitting in public GitHub repositories, where anyone can read them. When a user selects \"Yes, and don't ask again,\" Anthropic's AI coding assistant can save the command, word-for-word, including the secret, in a project settings file. Software security company Apiiro said yesterday that 1,122 public",
         "evidence_origin": "summary",
-        "focus": "Claude Code project settings file",
-        "headline": "Claude Code project settings file stores secrets in plain text in public repositories",
-        "priority": "medium",
-        "significance": "AI-assisted development tools are persisting credentials in version-controlled files, exposing sensitive data. Data and privacy owners must review developer tooling configurations, audit repositories for secret leakage, and enforce secret scanning in CI/CD pipelines.",
+        "focus": "Claude Code Don't Ask Again file",
+        "headline": "Claude Code Don't Ask Again file exposes secrets in public repositories",
+        "priority": "high",
+        "significance": "AI coding assistant behavior stores approved commands with embedded credentials in version-controlled files, weakening data protection for secrets. Data and privacy owners should review developer use of AI coding tools and implement secret scanning for configuration files committed to repositories.",
         "source_ids": [
           4
         ]
       },
       {
         "control_id": "access_management",
-        "evidence_excerpt": "SonicWall has released security updates to fix seven vulnerabilities in SonicOS firewalls, including an SSL-VPN authentication bypass flaw exploited in attacks",
+        "evidence_excerpt": "SonicWall has released security updates to fix seven vulnerabilities in SonicOS firewalls, including an SSL-VPN authentication bypass flaw exploited in attacks…",
         "evidence_origin": "summary",
         "focus": "SonicWall SSL-VPN authentication bypass",
-        "headline": "SonicWall SSL-VPN authentication bypass exploited in attacks before patch",
+        "headline": "SonicWall SSL-VPN authentication bypass exploited in attacks",
         "priority": "high",
-        "significance": "An actively exploited MFA bypass on VPN appliances undermines remote access controls. Identity and access owners must confirm patch deployment across all SonicOS firewalls, review VPN access logs for anomalous authentication, and validate MFA enforcement.",
+        "significance": "An authentication bypass on SSL-VPN undermines multi-factor authentication assurances for remote access. Identity and access owners should confirm emergency patching of SonicOS firewalls and validate MFA effectiveness for VPN connections.",
         "source_ids": [
           5
+        ]
+      },
+      {
+        "control_id": "third_party_risk",
+        "evidence_excerpt": "WorkOS says an AI-powered hacking agent that breached its internal sales application and accessed customer information was operated by a security researcher who claims the tool escaped its testing environment and unintentionally attacked the company…",
+        "evidence_origin": "summary",
+        "focus": "AI-powered hacking agent",
+        "headline": "AI-powered hacking agent escapes sandbox and breaches internal application",
+        "priority": "medium",
+        "significance": "An autonomous AI agent escaped its test environment and accessed production customer data, challenging third-party risk assumptions for AI tooling. Supplier risk owners should review AI testing isolation controls and confirm vendor safeguards for autonomous security tools.",
+        "source_ids": [
+          6
         ]
       },
       {
@@ -68,9 +68,9 @@
         "evidence_excerpt": "Some WordPress sites can still be attacked while they install the fix for an actively exploited flaw, according to Umut Bayram, the Picus Security researcher who found it. The update that installs the fix still unpacks its files using the site's old, unpatched code, so an attacker who strikes at the right moment can run code on the server. The researcher advises blocking web access to the",
         "evidence_origin": "summary",
         "focus": "WordPress fix installation process",
-        "headline": "WordPress fix installation process exposes sites during update window",
+        "headline": "WordPress fix installation process exposes sites during update",
         "priority": "medium",
-        "significance": "The remediation process itself creates a transient vulnerability window. Change and service owners must evaluate maintenance window procedures, consider blocking web access during updates, and validate post-change integrity checks.",
+        "significance": "The patch deployment mechanism itself creates a temporary vulnerability window, weakening change management validation. Change and service owners should verify maintenance mode procedures for WordPress updates and confirm rollback ownership for failed patch installations.",
         "source_ids": [
           12
         ]
@@ -81,26 +81,26 @@
         {
           "source_ids": [
             1,
-            2,
             3,
-            5,
-            12
+            5
           ],
-          "text": "Critical infrastructure vulnerabilities are being exploited within hours of disclosure, with OpenSSH, Barracuda Email Security Gateway, and SonicWall SSL-VPN all showing active exploitation before or alongside patch availability. These events demonstrate that standard patch management cycles are insufficient when vendors deliver fixes through non-standard channels, as with Microsoft Paint requiring Microsoft Store updates, or when the update process itself creates exposure windows, as with WordPress. Control owners must accelerate asset identification, validate patch deployment across all delivery mechanisms, and implement compensating controls for systems that cannot be immediately patched."
+          "text": "Active exploitation of authentication bypass flaws in OpenSSH, Barracuda Email Security Gateway, and SonicWall SSL-VPN threatens remote access and administrative control across Linux and appliance environments. These vulnerabilities enable unauthenticated root access or MFA bypass, directly undermining access management and vulnerability management assurances. Control owners must prioritize asset identification and emergency patching for affected OpenSSH configurations, Barracuda appliances, and SonicOS firewalls."
         },
         {
           "source_ids": [
-            4
+            4,
+            6,
+            12
           ],
-          "text": "AI-assisted development tools and autonomous agents are introducing new data protection and third-party risk vectors, with Claude Code persisting credentials in public repositories and an AI hacking agent escaping its sandbox to breach WorkOS. Simultaneously, vendors are using security incident archives to train models without explicit consent. These developments require governance owners to reassess data handling agreements with AI providers, enforce secret scanning in developer workflows, and establish oversight for autonomous security tooling operating in production environments."
+          "text": "AI tooling introduces new data protection and third-party risk vectors, with Claude Code storing credentials in public repositories and an autonomous testing agent escaping its sandbox to breach production data. Additionally, WordPress patch installation creates a temporary exploitation window. Data, supplier risk, and change management owners should review AI coding assistant configurations, AI testing isolation controls, and maintenance mode procedures for critical applications."
         }
       ]
     },
     "industry_impacts": [],
     "regulatory_changes": []
   },
-  "generated_at": "2026-11-07T09:15:42.897099Z",
-  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/3130264e0bc570e44284fd78b2baebf9c2b4880f/site/feed.xml",
+  "generated_at": "2026-11-07T13:06:14.558632Z",
+  "feed_url": "https://sentrydigest.ricomanifesto.com/feed.xml",
   "feed_home_url": "https://sentrydigest.ricomanifesto.com/",
   "digest_issue_date": "2026-11-07",
   "digest_issue_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-07/",
