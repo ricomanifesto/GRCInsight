@@ -115,15 +115,45 @@ The pilot is server-configured and **off by default**. It uses the existing
 even when the report model uses a free route.
 
 - `GRC_RELEVANCE_MODE=off`: the existing generative analysis, with no decision calls.
-- `GRC_RELEVANCE_MODE=shadow`: run both analyses, retain the original result, and
-  log aggregate decision timing, resolved models, usage and uncertainty counts.
-- `GRC_RELEVANCE_MODE=enabled`: accept each valid relevant/irrelevant decision
-  whose selected-label probability meets `GRC_RELEVANCE_MIN_PROBABILITY`
-  (default `0.95`). Analyze the uncertain or insufficient-evidence subset with
-  one generative call and map its selections back to the original positions.
-  Unavailable or invalid decisions still fall back for the entire batch. A
-  failed subset remains an analysis error for the existing caller to handle.
-  This threshold is a starting value, not a measured guarantee.
+- `GRC_RELEVANCE_MODE=shadow`: run both analyses and retain the original result.
+  Log aggregate decision timing, resolved models, usage and uncertainty counts,
+  plus per-article selection records. Shadow does not run the enrichment call,
+  so when decisions are usable its records are a conditional counterfactual
+  (`selection_basis: conditional_on_enrichment`): what enabled mode would select
+  for the same decisions if enrichment succeeded. They do not show completion,
+  the output after a failed call, or timing. Records for a full fallback come
+  from the legacy result shadow returned (`selection_basis: observed`).
+- `GRC_RELEVANCE_MODE=enabled`: apply selection policy `keep-uncertain-v2`.
+  - A relevant or irrelevant decision whose selected-label probability meets
+    `GRC_RELEVANCE_MIN_PROBABILITY` (default `0.95`) is accepted.
+  - When the decisions are complete and valid, every uncertain or
+    insufficient-evidence article stays selected, including when every
+    article is uncertain.
+  - Those articles still go to one generative call, the whole batch when all
+    are uncertain, which only enriches report aggregates; its prose selections
+    never change article selection. A failed call remains an analysis error
+    for the existing caller to handle, and its selections stay unknown.
+  - All articles accepted as irrelevant is a valid zero selection, with no
+    generative call.
+  - Unavailable or invalid decisions fall back to the existing analysis for the
+    entire batch.
+  - The threshold is a starting value, not a measured guarantee.
+  - `keep-uncertain-v1` sent an all-uncertain batch to the existing analysis,
+    whose prose selections could drop every article. Version 2 corrects that.
+
+Each enabled or shadow call records one entry per article position, with no
+article text. An entry holds:
+
+- the SHA256 of the URL, the raw label, probabilities and confidence;
+- the route, its disposition and the reason for any full fallback;
+- the model selection, with the entity and risk-category overrides kept separate;
+- the effective selections of the report workflow (entity OR risk category OR
+  model) and of `/analyze` (entity OR model).
+
+An unknown model selection is never recorded as a drop. Cost unavailable from the
+provider stays null. Each call also checks the keep contract against the raw
+labels and probabilities, so an uncertain result cannot pass by being relabeled
+a full fallback; the count of violating positions is logged as `keep_violations`.
 
 The decision rubric includes concrete security and operational events, control
 or audit findings, enforcement and regulatory obligations. Abstract commentary,

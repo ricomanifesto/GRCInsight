@@ -39,7 +39,8 @@ def test_replay_measures_actual_subset_fallback_and_alternates_order(monkeypatch
     assert summary["decisions"]["fallback_batch_rate"] == 1
     assert summary["decisions"]["fallback_article_rate"] == 0.5
     assert summary["enabled"]["p50_seconds"] > 0
-    assert summary["enabled"]["accuracy"] == 1
+    # The insufficient-evidence position is kept, so the irrelevant case is selected.
+    assert summary["enabled"]["accuracy"] == 0.5
     assert summary["decisions"]["accuracy"] == 0.5
     assert summary["decisions"]["predicted_insufficient_evidence"] == 2
     assert summary["runs"][0]["decision_predictions"] == [
