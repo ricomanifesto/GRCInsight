@@ -11,6 +11,7 @@ from models.api import ArticleInput
 from services.model_service import GRCModelService
 from services.openrouter_client import OpenRouterGeneration
 from narrative_fixture import narrated
+from core.report_plan import load_report_plan
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 AGENT_PYPROJECT = REPO_ROOT / "agent" / "pyproject.toml"
@@ -312,7 +313,7 @@ def test_report_generation_retries_scratch_work_and_returns_complete_report():
             ],
         }
     ]
-    valid_report = render_report_plan(plan, sources)
+    valid_report = render_report_plan(load_report_plan(plan, sources), sources)
     responses = iter(
         (
             OpenRouterGeneration(
@@ -340,7 +341,7 @@ def test_report_generation_retries_scratch_work_and_returns_complete_report():
     )
 
     assert result.content == valid_report
-    assert result.report_plan == plan
+    assert result.report_plan.as_json() == plan
     assert result.resolved_model == "google/final-report-model"
     assert len(prompts) == 2
     assert prompts[1]["title"] == "GRC intelligence report retry"
@@ -797,7 +798,7 @@ def test_site_report_composer_owns_public_provenance_and_body_shape():
             ],
         }
     ]
-    canonical = render_report_plan(plan, sources)
+    canonical = render_report_plan(load_report_plan(plan, sources), sources)
     namespace = runpy.run_path(str(SITE_REPORT_COMPOSER))
     compose_report = namespace["compose_report"]
     report = compose_report(
@@ -1157,7 +1158,7 @@ def test_site_report_composer_normalizes_numbered_markdown_headings_and_feed_url
             ],
         }
     ]
-    canonical = render_report_plan(plan, sources)
+    canonical = render_report_plan(load_report_plan(plan, sources), sources)
     namespace = runpy.run_path(str(SITE_REPORT_COMPOSER))
     compose_report = namespace["compose_report"]
     feed_url = "https://example.com/feed(1).xml?edition=(daily)"
@@ -1301,7 +1302,7 @@ def test_site_report_composer_accepts_serialized_source_link_identity():
             "industry_impacts": [],
         }
     )
-    body = render_report_plan(plan, sources)
+    body = render_report_plan(load_report_plan(plan, sources), sources)
     normalized_sources = [{"title": title, "url": namespace["http_url"](source_url, "source URL")}]
     canonical = namespace["canonicalize_evidence_links"](body, normalized_sources)
     assert canonical == body

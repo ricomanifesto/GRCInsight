@@ -9,6 +9,7 @@ import pytest
 from core.article_evidence import article_segments, eligible_article_segments
 from core.report_plan import parse_report_plan
 from test_article_evidence import TITLE, DETAIL, plan, source
+from core.report_plan import load_report_plan
 
 
 @pytest.mark.parametrize(
@@ -79,7 +80,7 @@ def test_receipt_retains_raw_origin_and_deterministic_extraction_version():
         "text": expected,
     }
     assert article_segments(item) == {"summary": expected}
-    assert parse_report_plan(json.dumps(plan(expected)), [item]) == plan(expected)
+    assert parse_report_plan(json.dumps(plan(expected)), [item]).as_json() == plan(expected)
 
 
 @pytest.mark.parametrize(
@@ -112,7 +113,7 @@ def test_hidden_subtree_never_contributes_to_a_valid_quote():
     raw = f"<p>{DETAIL}</p><div hidden><b>invented assertions</b></div>"
     item = source(summary=raw)
     assert article_segments(item) == {"summary": DETAIL}
-    assert parse_report_plan(json.dumps(plan()), [item]) == plan()
+    assert parse_report_plan(json.dumps(plan()), [item]).as_json() == plan()
 
 
 @pytest.mark.parametrize(
@@ -156,7 +157,9 @@ def test_suppressed_separator_semantics_survive_publication_validation():
     raw = expected.replace("unaffected", "un<span hidden><p>ignored</p></span>affected")
     item = source(summary=raw)
     selection = plan(expected)
-    report = stored_report(render_report_plan(selection, [item]), selection)
+    report = stored_report(
+        render_report_plan(load_report_plan(selection, [item]), [item]), selection
+    )
     report["metadata"]["source_articles"] = [item]
     composer, checker, builder = publication_tools()
     markdown = composer["compose_report"](
@@ -182,7 +185,7 @@ def test_input_byte_bound_fails_closed_and_output_truncation_preserves_words():
     text = article_segments(item)["summary"]
     assert len(text) <= 700
     assert text.split()[-1] in DETAIL.split()
-    assert parse_report_plan(json.dumps(plan(text)), [item]) == plan(text)
+    assert parse_report_plan(json.dumps(plan(text)), [item]).as_json() == plan(text)
 
 
 def test_prompt_and_plan_use_the_same_extracted_text():
@@ -193,7 +196,7 @@ def test_prompt_and_plan_use_the_same_extracted_text():
     prompt = service._create_report_prompt({"source_evidence": [item]}, {})
     line = next(x for x in prompt.splitlines() if "Eligible article evidence segments:" in x)
     assert json.loads(line.split("segments: ")[1]) == {"summary": DETAIL}
-    assert parse_report_plan(json.dumps(plan()), [item]) == plan()
+    assert parse_report_plan(json.dumps(plan()), [item]).as_json() == plan()
     broken = deepcopy(item)
     broken["article_evidence"][0]["raw_text"] = TITLE
     with pytest.raises(ValueError, match="article evidence"):

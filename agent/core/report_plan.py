@@ -11,10 +11,12 @@ primary-source table. Versions 3 to 5 are supported only to verify immutable
 historical publications.
 """
 
-from copy import deepcopy
+from __future__ import annotations
+
+from dataclasses import dataclass, field
 import json
 import re
-from typing import Any
+from typing import Any, Sequence
 from urllib.parse import quote
 
 from core.article_evidence import article_segments, has_non_headline_text
@@ -301,7 +303,7 @@ CALENDAR_NAMES = {
 EXCERPT_RUN_WORDS = 10
 
 
-def _source_corpus(sources: list[dict[str, Any]], ids: list[int]) -> str:
+def _source_corpus(sources: list[dict[str, Any]], ids: Sequence[int]) -> str:
     parts = []
     for index in ids:
         source = sources[index - 1]
@@ -423,7 +425,7 @@ def _bounded_text(value: Any, words: tuple[int, int], characters: int) -> str | 
     return None
 
 
-def narrative_warnings(plan: dict[str, Any], sources: list[dict[str, Any]]) -> list[str]:
+def narrative_warnings(plan: ReportPlan, sources: list[dict[str, Any]]) -> list[str]:
     """Report narrative grounding and style concerns without refusing publication.
 
     These rules are advisory in contract version 6: they are logged so the checks
@@ -431,23 +433,23 @@ def narrative_warnings(plan: dict[str, Any], sources: list[dict[str, Any]]) -> l
     rule, never the untrusted text.
     """
     warnings: list[str] = []
-    findings = plan["control_implications"]
-    excerpts = [row["evidence_excerpt"] for row in findings]
-    excerpts += [row["evidence_excerpt"] for row in plan["regulatory_changes"]]
-    for index, paragraph in enumerate(plan["executive_brief"]["paragraphs"]):
+    findings = plan.control_implications
+    excerpts = [row.evidence_excerpt for row in findings]
+    excerpts += [row.evidence_excerpt for row in plan.regulatory_changes]
+    for index, paragraph in enumerate(_brief(plan).paragraphs):
         field = f"executive_brief.paragraphs[{index}]"
-        problem = _bounded_text(paragraph["text"], (25, 120), 900)
-        if problem is None and not paragraph["text"].endswith("."):
+        problem = _bounded_text(paragraph.text, (25, 120), 900)
+        if problem is None and not paragraph.text.endswith("."):
             problem = "must end as a complete sentence"
         if problem is None:
             problem = _narrative_problem(
-                paragraph["text"], _source_corpus(sources, paragraph["source_ids"]), excerpts
+                paragraph.text, _source_corpus(sources, paragraph.source_ids), excerpts
             )
         if problem:
             warnings.append(f"{field}: {problem}")
     for index, row in enumerate(findings):
-        corpus = _source_corpus(sources, row["source_ids"])
-        headline, focus = row["headline"], row["focus"]
+        corpus = _source_corpus(sources, row.source_ids)
+        headline, focus = row.headline, row.focus
         field = f"control_implications[{index}].headline"
         problem = _bounded_text(headline, (4, 16), 110)
         starts = headline[:1].casefold() == focus[:1].casefold() and headline[1:].startswith(
@@ -462,7 +464,7 @@ def narrative_warnings(plan: dict[str, Any], sources: list[dict[str, Any]]) -> l
         if problem:
             warnings.append(f"{field}: {problem}")
         field = f"control_implications[{index}].significance"
-        significance = row["significance"]
+        significance = row.significance
         problem = _bounded_text(significance, (15, 70), 480)
         if problem is None and (
             not significance.endswith(".") or len(re.split(r"(?<=[.!?])\s+", significance)) > 3
@@ -533,6 +535,126 @@ def _plain_line(value: Any, limit: int) -> str:
 
 class ReportQualityError(ValueError):
     """An actionable editorial-contract refusal, distinct from provider failure."""
+
+
+@dataclass(frozen=True)
+class RegulatoryRow:
+    source_id: int
+    change: str
+    jurisdiction: str
+    evidence_excerpt: str
+
+
+@dataclass(frozen=True)
+class Finding:
+    """One control finding.
+
+    Versions before 4 carry only the catalog selection, and headline and
+    significance arrive in version 6. A field is empty before the contract that
+    introduced it; validation guarantees it is nonempty from then on.
+    """
+
+    control_id: str
+    priority: str
+    source_ids: tuple[int, ...]
+    focus: str = ""
+    evidence_excerpt: str = ""
+    evidence_origin: str = ""
+    headline: str = ""
+    significance: str = ""
+
+
+@dataclass(frozen=True)
+class IndustryImpact:
+    sector_id: str
+    source_ids: tuple[int, ...]
+
+
+@dataclass(frozen=True)
+class Paragraph:
+    text: str
+    source_ids: tuple[int, ...]
+
+
+@dataclass(frozen=True)
+class ExecutiveBrief:
+    """Version 5 names a decision frame and lead sources; version 6 has paragraphs."""
+
+    decision_frame: str = ""
+    source_ids: tuple[int, ...] = ()
+    paragraphs: tuple[Paragraph, ...] = ()
+
+
+@dataclass(frozen=True)
+class ReportPlan:
+    """A report plan validated against its sources.
+
+    Build one only with ``parse_report_plan`` (model output) or ``load_report_plan``
+    (a stored plan). Rendering and verification accept this type and never
+    revalidate it. ``as_json`` returns the stored form unchanged, key order included.
+    """
+
+    contract_version: int
+    regulatory_changes: tuple[RegulatoryRow, ...]
+    control_implications: tuple[Finding, ...]
+    industry_impacts: tuple[IndustryImpact, ...]
+    executive_brief: ExecutiveBrief | None
+    stored: str = field(repr=False, compare=False)
+
+    def as_json(self) -> dict[str, Any]:
+        return json.loads(self.stored)
+
+
+def _typed_plan(plan: dict[str, Any], contract_version: int) -> ReportPlan:
+    brief = plan.get("executive_brief")
+    return ReportPlan(
+        contract_version=contract_version,
+        regulatory_changes=tuple(
+            RegulatoryRow(
+                source_id=row["source_id"],
+                change=row["change"],
+                jurisdiction=row["jurisdiction"],
+                evidence_excerpt=row["evidence_excerpt"],
+            )
+            for row in plan["regulatory_changes"]
+        ),
+        control_implications=tuple(
+            Finding(
+                control_id=row["control_id"],
+                priority=row["priority"],
+                source_ids=tuple(row["source_ids"]),
+                focus=row.get("focus", ""),
+                evidence_excerpt=row.get("evidence_excerpt", ""),
+                evidence_origin=row.get("evidence_origin", ""),
+                headline=row.get("headline", ""),
+                significance=row.get("significance", ""),
+            )
+            for row in plan["control_implications"]
+        ),
+        industry_impacts=tuple(
+            IndustryImpact(sector_id=row["sector_id"], source_ids=tuple(row["source_ids"]))
+            for row in plan["industry_impacts"]
+        ),
+        executive_brief=(
+            None
+            if brief is None
+            else ExecutiveBrief(
+                decision_frame=brief.get("decision_frame", ""),
+                source_ids=tuple(brief.get("source_ids", ())),
+                paragraphs=tuple(
+                    Paragraph(text=row["text"], source_ids=tuple(row["source_ids"]))
+                    for row in brief.get("paragraphs", ())
+                ),
+            )
+        ),
+        stored=json.dumps(plan, ensure_ascii=False),
+    )
+
+
+def _brief(plan: ReportPlan) -> ExecutiveBrief:
+    if plan.executive_brief is None:
+        raise ValueError("report plan has no executive brief")
+    return plan.executive_brief
 
 
 def report_plan_response_format() -> dict[str, Any]:
@@ -673,18 +795,18 @@ def _validate_executive_brief(plan: dict[str, Any], sources: list[dict[str, Any]
         )
 
 
-def _executive_narrative(plan: dict[str, Any], sources: list[dict[str, Any]], citations) -> str:
-    brief = plan["executive_brief"]
-    frame = DECISION_FRAMES[brief["decision_frame"]]
-    findings = {row["source_ids"][0]: row for row in plan["control_implications"]}
-    regulatory = {row["source_id"]: row for row in plan["regulatory_changes"]}
+def _executive_narrative(plan: ReportPlan, sources: list[dict[str, Any]], citations) -> str:
+    brief = _brief(plan)
+    frame = DECISION_FRAMES[brief.decision_frame]
+    findings = {row.source_ids[0]: row for row in plan.control_implications}
+    regulatory = {row.source_id: row for row in plan.regulatory_changes}
     leads, steps = [], []
-    for index in brief["source_ids"]:
-        row = findings.get(index) if brief["decision_frame"] != "regulatory" else None
-        focus = row["focus"] if row else regulatory[index]["change"]
+    for index in brief.source_ids:
+        row = findings.get(index) if brief.decision_frame != "regulatory" else None
+        focus = row.focus if row else regulatory[index].change
         leads.append(f"“{_quoted_text(focus)}” {citations([index])}")
         step = (
-            CONTROL_DECISIONS[row["control_id"]][0]
+            CONTROL_DECISIONS[row.control_id][0]
             if row
             else "verify jurisdiction and organizational applicability with the regulatory owner"
         )
@@ -710,8 +832,8 @@ def _executive_narrative(plan: dict[str, Any], sources: list[dict[str, Any]], ci
         else "Regulatory applicability still requires an assessment of the cited primary material. "
     )
     truncated = any(
-        "…" in row["evidence_excerpt"] or "..." in row["evidence_excerpt"]
-        for row in plan["control_implications"]
+        "…" in row.evidence_excerpt or "..." in row.evidence_excerpt
+        for row in plan.control_implications
     )
     watch = (
         "Some retained passages are truncated; consult the complete source before making a final decision. "
@@ -1187,16 +1309,33 @@ def parse_report_plan(
     *,
     contract_version: int = REPORT_CONTRACT_VERSION,
     notes: list[str] | None = None,
-) -> dict[str, Any]:
+) -> ReportPlan:
     """Parse a model plan. Version 6 repairs or drops parts instead of refusing."""
     if not isinstance(text, str) or len(text) > 65536:
         raise ValueError("report plan must be a bounded JSON object")
     value = json.loads(text, object_pairs_hook=_unique_fields)
     if contract_version >= 6:
         value = repair_report_plan(value, sources, notes)
-    plan = _validate_plan(value, sources, contract_version)
-    render_report_plan(plan, sources, contract_version=contract_version)
-    return deepcopy(plan)
+    plan = _typed_plan(_validate_plan(value, sources, contract_version), contract_version)
+    render_report_plan(plan, sources)
+    return plan
+
+
+def load_report_plan(
+    value: Any,
+    sources: list[dict[str, Any]],
+    *,
+    contract_version: int = REPORT_CONTRACT_VERSION,
+) -> ReportPlan:
+    """Validate a stored plan against its sources; never repairs it.
+
+    An already validated plan is returned unchanged when its contract matches.
+    """
+    if isinstance(value, ReportPlan):
+        if value.contract_version != contract_version:
+            raise ValueError("report plan contract version does not match")
+        return value
+    return _typed_plan(_validate_plan(value, sources, contract_version), contract_version)
 
 
 def _link(source: dict[str, Any]) -> str:
@@ -1207,54 +1346,53 @@ def _link(source: dict[str, Any]) -> str:
     return f"[{label}]({destination})"
 
 
-def report_finding_groups(plan: dict[str, Any]) -> list[list[dict[str, Any]]]:
+def report_finding_groups(plan: ReportPlan) -> list[list[Finding]]:
     """Return validated findings in publication order, preserving grouped source identities."""
-    brief = plan["executive_brief"]
-    if "paragraphs" in brief:
+    brief = _brief(plan)
+    if brief.paragraphs:
         # Findings follow the order the narrative introduces them, then priority.
         lead_order = list(
-            dict.fromkeys(index for row in brief["paragraphs"] for index in row["source_ids"])
+            dict.fromkeys(index for row in brief.paragraphs for index in row.source_ids)
         )
     else:
-        lead_order = brief["source_ids"]
+        lead_order = brief.source_ids
     ordered = sorted(
-        plan["control_implications"],
+        plan.control_implications,
         key=lambda row: (
             (
-                lead_order.index(row["source_ids"][0])
-                if row["source_ids"][0] in lead_order
+                lead_order.index(row.source_ids[0])
+                if row.source_ids[0] in lead_order
                 else len(lead_order)
             ),
-            list(PRIORITIES).index(row["priority"]),
+            list(PRIORITIES).index(row.priority),
         ),
     )
-    groups: dict[tuple, list[dict]] = {}
+    groups: dict[tuple, list[Finding]] = {}
     for row in ordered:
         key = (
-            row["focus"],
-            row["evidence_excerpt"],
-            row["control_id"],
-            row["priority"],
+            row.focus,
+            row.evidence_excerpt,
+            row.control_id,
+            row.priority,
         )
         groups.setdefault(key, []).append(row)
     return list(groups.values())
 
 
 def render_report_plan(
-    value: Any,
+    plan: ReportPlan,
     sources: list[dict[str, Any]],
     *,
     include_digest: bool = False,
-    contract_version: int = REPORT_CONTRACT_VERSION,
 ) -> str:
-    plan = _validate_plan(value, sources, contract_version)
+    contract_version = plan.contract_version
 
-    def citations(ids: list[int]) -> str:
+    def citations(ids: Sequence[int]) -> str:
         return "; ".join(_link(sources[index - 1]) for index in ids)
 
-    controls = plan["control_implications"]
+    controls = plan.control_implications
     priorities = "; ".join(
-        f"{CONTROLS[row['control_id']][0]} ({PRIORITIES[row['priority']]})" for row in controls
+        f"{CONTROLS[row.control_id][0]} ({PRIORITIES[row.priority]})" for row in controls
     )
     executive = (
         "This report separates sourced regulatory changes from inferred control and governance implications. "
@@ -1266,92 +1404,91 @@ def render_report_plan(
         )
     )
     regulatory = NO_REGULATORY_CHANGES
-    if plan["regulatory_changes"]:
+    if plan.regulatory_changes:
         rows = [
             "| Change | Jurisdiction | Document effective date | Source | Evidence excerpt |",
             "|---|---|---|---|---|",
         ]
-        for row in plan["regulatory_changes"]:
-            source = sources[row["source_id"] - 1]
+        for row in plan.regulatory_changes:
+            source = sources[row.source_id - 1]
             date = document_effective_date(source) or "Unknown"
             rows.append(
-                f"| {row['change']} | {row['jurisdiction']} | {date} | {_link(source)} | {row['evidence_excerpt']} |"
+                f"| {row.change} | {row.jurisdiction} | {date} | {_link(source)} | {row.evidence_excerpt} |"
             )
         regulatory = "\n".join(rows)
     implications = [
-        f"- **{CONTROLS[row['control_id']][0]} — Inference:** {CONTROLS[row['control_id']][1]} {citations(row['source_ids'])}"
+        f"- **{CONTROLS[row.control_id][0]} — Inference:** {CONTROLS[row.control_id][1]} {citations(row.source_ids)}"
         for row in controls
     ]
     industries = [
-        f"- **{SECTORS[row['sector_id']]} — Inferred relevance:** Review your exposure to the cited developments before assigning sector-specific impact. {citations(row['source_ids'])}"
-        for row in plan["industry_impacts"]
+        f"- **{SECTORS[row.sector_id]} — Inferred relevance:** Review your exposure to the cited developments before assigning sector-specific impact. {citations(row.source_ids)}"
+        for row in plan.industry_impacts
     ]
     risks = [
-        f"- **{CONTROLS[row['control_id']][0]} — Inferred priority: {PRIORITIES[row['priority']]}.** This is a review priority, not a measured severity or a finding of legal applicability. {citations(row['source_ids'])}"
+        f"- **{CONTROLS[row.control_id][0]} — Inferred priority: {PRIORITIES[row.priority]}.** This is a review priority, not a measured severity or a finding of legal applicability. {citations(row.source_ids)}"
         for row in controls
     ]
     actions = [
-        f"- **{CONTROLS[row['control_id']][0]}:** {CONTROLS[row['control_id']][2]} {citations(row['source_ids'])}"
+        f"- **{CONTROLS[row.control_id][0]}:** {CONTROLS[row.control_id][2]} {citations(row.source_ids)}"
         for row in controls
     ]
     if contract_version >= 4:
         # Present events before control categories; keep each excerpt once in the
         # body so selecting more controls cannot multiply generic paragraphs.
-        ordered = sorted(controls, key=lambda row: list(PRIORITIES).index(row["priority"]))
-        executive_source_ids = {row["source_ids"][0] for row in ordered[:3]}
+        ordered = sorted(controls, key=lambda row: list(PRIORITIES).index(row.priority))
+        executive_source_ids = {row.source_ids[0] for row in ordered[:3]}
         executive_items = [
-            f"- **{_quoted_text(row['focus'])}.** Source excerpt: "
-            f"“{_quoted_text(row['evidence_excerpt'])}” {citations(row['source_ids'])} "
-            f"**Inferred review priority:** {PRIORITIES[row['priority']]} "
-            f"({CONTROLS[row['control_id']][0]})."
+            f"- **{_quoted_text(row.focus)}.** Source excerpt: "
+            f"“{_quoted_text(row.evidence_excerpt)}” {citations(row.source_ids)} "
+            f"**Inferred review priority:** {PRIORITIES[row.priority]} "
+            f"({CONTROLS[row.control_id][0]})."
             for row in ordered[:3]
         ]
         if not executive_items:
             executive_items = [
-                f"- Source reports: “{_quoted_text(row['change'])}”. "
-                f"{citations([row['source_id']])}"
-                for row in plan["regulatory_changes"][:3]
+                f"- Source reports: “{_quoted_text(row.change)}”. " f"{citations([row.source_id])}"
+                for row in plan.regulatory_changes[:3]
             ]
         executive = "\n".join(executive_items) + (
             f"\n\nScope: {len(controls)} selected control findings and "
-            f"{len(plan['regulatory_changes'])} sourced regulatory changes from "
+            f"{len(plan.regulatory_changes)} sourced regulatory changes from "
             f"{len(sources)} retained sources. Review questions and priorities are inferences; "
             "local exposure and legal applicability require verification."
         )
         implications = [
-            f"- **{_quoted_text(row['focus'])} — {CONTROLS[row['control_id']][0]}.** "
+            f"- **{_quoted_text(row.focus)} — {CONTROLS[row.control_id][0]}.** "
             + (
-                f"Source excerpt: “{_quoted_text(row['evidence_excerpt'])}” "
-                if row["source_ids"][0] not in executive_source_ids
+                f"Source excerpt: “{_quoted_text(row.evidence_excerpt)}” "
+                if row.source_ids[0] not in executive_source_ids
                 else ""
             )
-            + f"**Inferred control question:** {CONTROL_REVIEWS[row['control_id']][1]} "
-            + citations(row["source_ids"])
+            + f"**Inferred control question:** {CONTROL_REVIEWS[row.control_id][1]} "
+            + citations(row.source_ids)
             for row in ordered
         ]
         risks = [
-            f"- **{_quoted_text(row['focus'])} — Inferred priority: {PRIORITIES[row['priority']]}.** "
+            f"- **{_quoted_text(row.focus)} — Inferred priority: {PRIORITIES[row.priority]}.** "
             "Validate the exposure conditions in the quoted finding before adopting this priority. "
-            f"{citations(row['source_ids'])}"
+            f"{citations(row.source_ids)}"
             for row in ordered
         ]
         actions = [
-            f"- **{_quoted_text(row['focus'])}. Owner:** {CONTROL_REVIEWS[row['control_id']][0]}. "
-            f"**If applicable — Evidence to request:** {CONTROL_REVIEWS[row['control_id']][2]}. "
+            f"- **{_quoted_text(row.focus)}. Owner:** {CONTROL_REVIEWS[row.control_id][0]}. "
+            f"**If applicable — Evidence to request:** {CONTROL_REVIEWS[row.control_id][2]}. "
             "Record applicability and the follow-up decision against this finding. "
-            f"{citations(row['source_ids'])}"
+            f"{citations(row.source_ids)}"
             for row in ordered
         ]
-        by_source = {row["source_ids"][0]: row["focus"] for row in controls}
-        by_source.update({row["source_id"]: row["change"] for row in plan["regulatory_changes"]})
+        by_source = {row.source_ids[0]: row.focus for row in controls}
+        by_source.update({row.source_id: row.change for row in plan.regulatory_changes})
         industries = [
-            f"- **{SECTORS[row['sector_id']]} — Inferred relevance:** "
+            f"- **{SECTORS[row.sector_id]} — Inferred relevance:** "
             + "; ".join(
                 f"“{_quoted_text(by_source[index])}” {citations([index])}"
-                for index in row["source_ids"]
+                for index in row.source_ids
             )
             + ". Check whether these activities or dependencies exist in your organization."
-            for row in plan["industry_impacts"]
+            for row in plan.industry_impacts
         ]
     highlights = []
     for source in sources:
@@ -1387,30 +1524,32 @@ def render_report_plan(
     if contract_version == 5:
         executive = _executive_narrative(plan, sources, citations)
         decisions = []
-        shown_excerpts = {row["evidence_excerpt"] for row in plan["regulatory_changes"]}
+        shown_excerpts = {row.evidence_excerpt for row in plan.regulatory_changes}
         for group in report_finding_groups(plan):
             row = group[0]
-            ids = [item["source_ids"][0] for item in group]
-            control = row["control_id"]
+            ids = [item.source_ids[0] for item in group]
+            control = row.control_id
             owner, _question, evidence = CONTROL_REVIEWS[control]
             _step, implication, trigger = CONTROL_DECISIONS[control]
-            if row["evidence_excerpt"] in shown_excerpts:
+            if row.evidence_excerpt in shown_excerpts:
                 evidence_line = (
                     "See the sourced regulatory evidence above. "
                     if any(
-                        item["evidence_excerpt"] == row["evidence_excerpt"]
-                        for item in plan["regulatory_changes"]
+                        item.evidence_excerpt == row.evidence_excerpt
+                        for item in plan.regulatory_changes
                     )
                     else "See the source evidence already quoted above. "
                 ) + citations(ids)
             else:
-                evidence_line = f"**Source evidence:** “{_quoted_text(row['evidence_excerpt'])}” {citations(ids)}"
-                shown_excerpts.add(row["evidence_excerpt"])
+                evidence_line = (
+                    f"**Source evidence:** “{_quoted_text(row.evidence_excerpt)}” {citations(ids)}"
+                )
+                shown_excerpts.add(row.evidence_excerpt)
             decisions.append(
-                f"### {_quoted_text(row['focus'])} — {CONTROLS[control][0]}\n\n"
+                f"### {_quoted_text(row.focus)} — {CONTROLS[control][0]}\n\n"
                 f"{evidence_line}\n\n"
                 f"**Control decision (inference):** {implication}\n\n"
-                f"**Inferred review priority:** {PRIORITIES[row['priority']]}. "
+                f"**Inferred review priority:** {PRIORITIES[row.priority]}. "
                 f"**Owner:** {owner}. **Evidence to request:** {evidence}.\n\n"
                 f"**Decision trigger:** {trigger}"
             )
@@ -1452,14 +1591,13 @@ def _count(value: int, noun: str) -> str:
     return f"{value} {noun}" if value == 1 else f"{value} {noun}s"
 
 
-def _narrative_sections(plan, sources, citations, regulatory, highlights):
+def _narrative_sections(plan: ReportPlan, sources, citations, regulatory, highlights):
     """Render contract version 6: model narrative inside one fixed finding template."""
     groups = report_finding_groups(plan)
     paragraphs = [
-        f"{_quoted_text(row['text'])} {citations(row['source_ids'])}"
-        for row in plan["executive_brief"]["paragraphs"]
+        f"{_quoted_text(row.text)} {citations(row.source_ids)}" for row in _brief(plan).paragraphs
     ]
-    changes = len(plan["regulatory_changes"])
+    changes = len(plan.regulatory_changes)
     paragraphs.append(
         f"Scope: {_count(len(groups), 'finding')} and "
         f"{_count(changes, 'sourced regulatory change')} from "
@@ -1467,28 +1605,28 @@ def _narrative_sections(plan, sources, citations, regulatory, highlights):
         "confirm whether each finding applies to your organization before assigning work."
     )
     decisions = []
-    shown_excerpts = {row["evidence_excerpt"] for row in plan["regulatory_changes"]}
+    shown_excerpts = {row.evidence_excerpt for row in plan.regulatory_changes}
     for group in groups:
         row = group[0]
-        ids = [item["source_ids"][0] for item in group]
-        control = row["control_id"]
+        ids = [item.source_ids[0] for item in group]
+        control = row.control_id
         owner, _question, evidence = CONTROL_REVIEWS[control]
         _step, _implication, trigger = CONTROL_DECISIONS[control]
-        if row["evidence_excerpt"] in shown_excerpts:
+        if row.evidence_excerpt in shown_excerpts:
             quoted = "See the sourced regulatory evidence above. " + citations(ids)
         else:
-            quoted = f"“{_quoted_text(row['evidence_excerpt'])}” {citations(ids)}"
-            shown_excerpts.add(row["evidence_excerpt"])
+            quoted = f"“{_quoted_text(row.evidence_excerpt)}” {citations(ids)}"
+            shown_excerpts.add(row.evidence_excerpt)
         values = (
-            f"{PRIORITIES[row['priority']]} · {CONTROLS[control][0]} · Owner: {owner}",
-            _quoted_text(row["significance"]),
+            f"{PRIORITIES[row.priority]} · {CONTROLS[control][0]} · Owner: {owner}",
+            _quoted_text(row.significance),
             quoted,
             f"{evidence[0].upper()}{evidence[1:]}.",
             trigger,
             REFERENCE_CONTROLS[control],
         )
         decisions.append(
-            f"### {_quoted_text(row['headline'])}\n\n"
+            f"### {_quoted_text(row.headline)}\n\n"
             + "\n\n".join(f"**{label}:** {value}" for label, value in zip(FINDING_LABELS, values))
         )
     evidence_section = (
@@ -1534,7 +1672,7 @@ def _editorial_content_roles(body: str, sources: list[dict]) -> tuple[list[str],
     return quotes, "\n".join(analysis)
 
 
-def validate_editorial_quality(body: str, plan: dict, sources: list[dict]) -> None:
+def validate_editorial_quality(body: str, plan: ReportPlan, sources: list[dict]) -> None:
     """Check presentation roles separately from exact source grounding.
 
     This is a structural quality floor, not an oracle for semantic insight.
@@ -1561,7 +1699,7 @@ def validate_editorial_quality(body: str, plan: dict, sources: list[dict]) -> No
         raise ReportQualityError(
             "editorial: executive summary requires a connected narrative, not an excerpt list"
         )
-    narrative = "paragraphs" in plan["executive_brief"]
+    narrative = bool(_brief(plan).paragraphs)
     visible = re.sub(r"\[[^\]]+\]\([^\n]+?\)", "", summary)
     minimum, maximum = (10, 600) if narrative else (60, 260)
     if not minimum <= len(visible.split()) <= maximum:
@@ -1574,8 +1712,8 @@ def validate_editorial_quality(body: str, plan: dict, sources: list[dict]) -> No
         )
     if narrative:
         written = summary.split("\n\n")
-        for paragraph, row in zip(written, plan["executive_brief"]["paragraphs"]):
-            if not all(_link(sources[index - 1]) in paragraph for index in row["source_ids"]):
+        for paragraph, row in zip(written, _brief(plan).paragraphs):
+            if not all(_link(sources[index - 1]) in paragraph for index in row.source_ids):
                 raise ReportQualityError(
                     "editorial: each narrative paragraph must retain its supporting source citations"
                 )
@@ -1590,16 +1728,16 @@ def validate_editorial_quality(body: str, plan: dict, sources: list[dict]) -> No
                     "editorial: every finding must use the same fields in the same order"
                 )
     else:
-        for index in plan["executive_brief"]["source_ids"]:
+        for index in _brief(plan).source_ids:
             if _link(sources[index - 1]) not in summary:
                 raise ReportQualityError(
                     "editorial: executive decision must retain its supporting source citation"
                 )
     evidence_blocks, analysis_prose = _editorial_content_roles(body, sources)
-    regulatory_excerpts = {row["evidence_excerpt"] for row in plan["regulatory_changes"]}
-    for row in plan["control_implications"]:
-        excerpt = _quoted_text(row["evidence_excerpt"])
-        expected_blocks = 0 if row["evidence_excerpt"] in regulatory_excerpts else 1
+    regulatory_excerpts = {row.evidence_excerpt for row in plan.regulatory_changes}
+    for row in plan.control_implications:
+        excerpt = _quoted_text(row.evidence_excerpt)
+        expected_blocks = 0 if row.evidence_excerpt in regulatory_excerpts else 1
         # Version 6 reports repeated quotation in model prose as a warning instead.
         repeated = excerpt in analysis_prose and not narrative
         if repeated or evidence_blocks.count(excerpt) != expected_blocks:
@@ -1610,16 +1748,13 @@ def validate_editorial_quality(body: str, plan: dict, sources: list[dict]) -> No
 
 def validate_rendered_report(
     body: str,
-    plan: Any,
+    plan: ReportPlan,
     sources: list[dict[str, Any]],
     *,
     include_digest: bool = False,
-    contract_version: int = REPORT_CONTRACT_VERSION,
 ) -> None:
-    expected = render_report_plan(
-        plan, sources, include_digest=include_digest, contract_version=contract_version
-    )
-    if contract_version >= 5:
+    expected = render_report_plan(plan, sources, include_digest=include_digest)
+    if plan.contract_version >= 5:
         try:
             validate_editorial_quality(body, plan, sources)
         except ReportQualityError as error:
@@ -1632,11 +1767,10 @@ def validate_rendered_report(
 
 def finding_evidence_context(
     body: str,
-    plan: Any,
+    plan: ReportPlan | None,
     sources: list[dict[str, Any]],
     *,
     include_digest: bool = False,
-    contract_version: int = REPORT_CONTRACT_VERSION,
 ) -> dict[int, list[int]]:
     """Exact source IDs for v6 finding prose, keyed by zero-based body line.
 
@@ -1646,12 +1780,10 @@ def finding_evidence_context(
     projection never changes stored Markdown or certifies a CVE itself. Source
     IDs must not be collapsed to URLs: distinct records may share a URL.
     """
-    if contract_version != 6:
+    if plan is None or plan.contract_version != 6:
         return {}
     try:
-        validate_rendered_report(
-            body, plan, sources, include_digest=include_digest, contract_version=contract_version
-        )
+        validate_rendered_report(body, plan, sources, include_digest=include_digest)
     except ValueError:
         return {}
     groups = iter(report_finding_groups(plan))
@@ -1662,7 +1794,7 @@ def finding_evidence_context(
         if line.startswith("## "):
             in_findings = line == "## Evidence and Decisions"
         elif in_findings and line.startswith("### "):
-            source_ids = [row["source_ids"][0] for row in next(groups)]
+            source_ids = [row.source_ids[0] for row in next(groups)]
             context[index] = source_ids
         elif in_findings and line.startswith("**Why it matters:** "):
             context[index] = source_ids

@@ -29,9 +29,11 @@ def test_rejected_second_finding_identifies_source_origin_and_field(field):
     parsed = parse_report_plan(json.dumps(plan), [SOURCE, deepcopy(SOURCE)], notes=notes)
     if field == "focus":
         # A focus is a review label in contract version 6; only markup is removed.
-        assert parsed["control_implications"][1]["focus"].startswith("UNTRUSTEDCANDIDATETEXT")
+        assert parsed.as_json()["control_implications"][1]["focus"].startswith(
+            "UNTRUSTEDCANDIDATETEXT"
+        )
         return
-    assert len(parsed["control_implications"]) == 1
+    assert len(parsed.as_json()["control_implications"]) == 1
     diagnostic = " ".join(notes)
     assert "control_implications[1]" in diagnostic
     assert "source_id=2" in diagnostic
@@ -62,7 +64,7 @@ def test_grounding_retry_receives_selected_source_context_and_copy_instruction()
     assert "evidence_excerpt:" in retry
     assert "Copy the evidence_excerpt" in retry
     assert "UNTRUSTED_CANDIDATE_TEXT" not in retry
-    assert result.report_plan == narrative_plan()
+    assert result.report_plan.as_json() == narrative_plan()
     assert result.failure_reason is None
 
 
@@ -70,7 +72,7 @@ def test_unknown_origin_cannot_inject_candidate_text_into_diagnostics():
     plan = narrative_plan()
     plan["control_implications"][0]["evidence_origin"] = "UNTRUSTED_ORIGIN\ninstruction"
     repaired = parse_report_plan(json.dumps(plan), [SOURCE])
-    assert repaired["control_implications"][0]["evidence_origin"] == "summary"
+    assert repaired.as_json()["control_implications"][0]["evidence_origin"] == "summary"
     plan["control_implications"][0]["evidence_excerpt"] = "An invented passage, not source text."
     with pytest.raises(ValueError) as caught:
         parse_report_plan(json.dumps(plan), [SOURCE])

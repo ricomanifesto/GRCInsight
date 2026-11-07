@@ -12,6 +12,7 @@ import pytest
 from core.report_plan import render_report_plan
 from test_report_evidence import stored_report
 from test_report_substance import PLAN, SOURCE, publication_tools
+from core.report_plan import load_report_plan
 
 
 def candidate(cve="CVE-2026-12345", *, quoted_brand=False):
@@ -28,7 +29,7 @@ def candidate(cve="CVE-2026-12345", *, quoted_brand=False):
     row["evidence_excerpt"] = source["snippet"]
     row["headline"] = f"{cve} requires Java support for exploitation"
     row["significance"] = f"Review affected assets for {cve} before assigning remediation."
-    data = stored_report(render_report_plan(plan, [source]), plan)
+    data = stored_report(render_report_plan(load_report_plan(plan, [source]), [source]), plan)
     data["metadata"]["source_articles"] = [source]
     return data, source
 
@@ -122,7 +123,9 @@ def test_reader_surface_only_accepts_exact_supported_finding_prose(mutation):
             "headline"
         ] = "CVE-2026-99999 requires Java support for exploitation"
         markdown = markdown.split("## Executive Summary", 1)[0] + render_report_plan(
-            manifest["report_plan"], manifest["sources"], include_digest=True
+            load_report_plan(manifest["report_plan"], manifest["sources"]),
+            manifest["sources"],
+            include_digest=True,
         )
     assert (
         checker["find_reader_surface_defect"](markdown, manifest=manifest)
@@ -141,7 +144,8 @@ def test_reader_does_not_exempt_unverified_or_authored_camel_case(mutation):
             "significance" if mutation == "narrative" else "headline"
         ] += " Ask watchTowr."
         data["content"] = render_report_plan(
-            data["metadata"]["report_plan"], data["metadata"]["source_articles"]
+            load_report_plan(data["metadata"]["report_plan"], data["metadata"]["source_articles"]),
+            data["metadata"]["source_articles"],
         )
     markdown = composer["compose_report"](
         data, data["metadata"]["source_url"], data["metadata"]["requested_model"]
@@ -170,7 +174,9 @@ def test_verified_quotation_keeps_other_reader_checks():
     data["metadata"]["report_plan"]["control_implications"][0]["evidence_excerpt"] = source[
         "snippet"
     ]
-    data["content"] = render_report_plan(data["metadata"]["report_plan"], [source])
+    data["content"] = render_report_plan(
+        load_report_plan(data["metadata"]["report_plan"], [source]), [source]
+    )
     markdown = composer["compose_report"](
         data, data["metadata"]["source_url"], data["metadata"]["requested_model"]
     )
@@ -193,7 +199,9 @@ def test_unsupported_finding_cve_is_rejected_even_if_another_source_has_it(elsew
         if elsewhere == "same-url":
             other["url"] = source["url"]
         data["metadata"]["source_articles"].append(other)
-        data["content"] = render_report_plan(data["metadata"]["report_plan"], [source, other])
+        data["content"] = render_report_plan(
+            load_report_plan(data["metadata"]["report_plan"], [source, other]), [source, other]
+        )
     with pytest.raises(SystemExit, match="CVE-2026-99999"):
         composer["compose_report"](
             data, "https://digest.example/feed.xml", "openrouter/example/model"
@@ -227,7 +235,9 @@ def test_publication_check_independently_rejects_an_unsupported_finding_cve(dupl
     ] = "CVE-2026-99999 requires Java support for exploitation"
     prefix = markdown.split("## Executive Summary", 1)[0]
     markdown = prefix + render_report_plan(
-        manifest["report_plan"], manifest["sources"], include_digest=True
+        load_report_plan(manifest["report_plan"], manifest["sources"]),
+        manifest["sources"],
+        include_digest=True,
     )
     with pytest.raises(SystemExit, match="CVE-2026-99999"):
         checker["validate_evidence_manifest"](

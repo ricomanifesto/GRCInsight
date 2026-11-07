@@ -15,6 +15,7 @@ from models.api import ArticleInput
 from services.model_service import GRCModelService
 from services.model_route import ARGON_ROUTE, ModelRouteError, RouteActivation
 from core.report_plan import validate_rendered_report
+from core.report_plan import load_report_plan
 
 CASE = json.loads((Path(__file__).parent / "fixtures/selected_model_case.json").read_text())
 
@@ -107,11 +108,13 @@ def test_real_selected_service_uses_one_plan_post_and_host_grounded_rendering(va
     assert service.relevance_client is None
     if valid:
         assert generation.report_plan is not None
-        assert generation.report_plan == CASE["calibration_plan"]
-        assert generation.report_plan["regulatory_changes"] == []
-        assert generation.report_plan["control_implications"][0]["source_ids"] == [2]
+        assert generation.report_plan.as_json() == CASE["calibration_plan"]
+        assert generation.report_plan.as_json()["regulatory_changes"] == []
+        assert generation.report_plan.as_json()["control_implications"][0]["source_ids"] == [2]
         validate_rendered_report(
-            generation.content, generation.report_plan, CASE["analysis_data"]["source_evidence"]
+            generation.content,
+            load_report_plan(generation.report_plan, CASE["analysis_data"]["source_evidence"]),
+            CASE["analysis_data"]["source_evidence"],
         )
     else:
         assert generation.report_plan is None

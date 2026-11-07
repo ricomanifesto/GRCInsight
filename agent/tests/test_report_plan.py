@@ -10,6 +10,7 @@ import runpy
 import pytest
 
 from narrative_fixture import narrated
+from core.report_plan import load_report_plan
 
 SOURCES: list[dict[str, Any]] = [
     {
@@ -78,7 +79,7 @@ def test_report_plan_renders_only_owned_text_and_retained_source_identity():
 def test_report_plan_rejects_any_added_narrative_independent_of_phrasing(claim):
     from core.report_plan import render_report_plan, validate_rendered_report
 
-    body = render_report_plan(PLAN, SOURCES)
+    body = render_report_plan(load_report_plan(PLAN, SOURCES), SOURCES)
     for heading in (
         "Executive Summary",
         "Evidence and Decisions",
@@ -87,7 +88,7 @@ def test_report_plan_rejects_any_added_narrative_independent_of_phrasing(claim):
         bad = body.replace(f"## {heading}\n", f"## {heading}\n{claim}\n")
         assert bad != body
         with pytest.raises(ValueError, match="retained report plan"):
-            validate_rendered_report(bad, PLAN, SOURCES)
+            validate_rendered_report(bad, load_report_plan(PLAN, SOURCES), SOURCES)
 
 
 @pytest.mark.parametrize(
@@ -148,18 +149,18 @@ def test_extra_fields_invalid_enums_and_source_ids_never_reach_the_stored_plan(c
         parsed = parse_report_plan(json.dumps(plan), SOURCES)
     except ValueError:
         return  # Nothing publishable remained.
-    stored = json.dumps(parsed)
+    stored = json.dumps(parsed.as_json())
     for unsupported in ("executive_summary", "2027", "tomorrow", "prose", "invented"):
         assert unsupported not in stored
-    assert parsed["industry_impacts"] == []
+    assert parsed.as_json()["industry_impacts"] == []
 
 
 def test_report_plan_preserves_source_title_quotations_without_treating_them_as_prose():
     from core.report_plan import render_report_plan, validate_rendered_report
 
     sources = [{**SOURCES[0], "title": "Rule effective January 1, 2027"}]
-    body = render_report_plan(PLAN, sources)
-    validate_rendered_report(body, PLAN, sources)
+    body = render_report_plan(load_report_plan(PLAN, sources), sources)
+    validate_rendered_report(body, load_report_plan(PLAN, sources), sources)
     assert "[Rule effective January 1, 2027]" in body
 
 
@@ -198,10 +199,10 @@ def test_report_plan_escapes_source_title_pipes_in_regulatory_table(title):
         focus="final reporting rule", evidence_excerpt=source["snippet"]
     )
     plan = narrated(plan)
-    body = render_report_plan(plan, [source])
+    body = render_report_plan(load_report_plan(plan, [source]), [source])
 
     assert r"\| Final Rule]" in body
-    validate_rendered_report(body, plan, [source])
+    validate_rendered_report(body, load_report_plan(plan, [source]), [source])
     root = Path(__file__).resolve().parents[2]
     composer = runpy.run_path(str(root / "scripts/compose_site_report.py"))
     checker = runpy.run_path(str(root / "scripts/check_site_report.py"))
@@ -266,7 +267,7 @@ def test_composer_preserves_source_ids_for_duplicate_urls():
         "industry_impacts": [],
     }
     plan = narrated(plan)
-    data = stored_report(render_report_plan(plan, sources), plan)
+    data = stored_report(render_report_plan(load_report_plan(plan, sources), sources), plan)
     data["metadata"]["source_articles"] = sources
 
     normalized_sources = composer["source_articles"](data["metadata"])
@@ -290,7 +291,7 @@ def publish_plan(plan, sources):
     checker = runpy.run_path(str(root / "scripts/check_site_report.py"))
     builder = runpy.run_path(str(root / "scripts/build_site.py"))
     plan = narrated(plan)
-    data = stored_report(render_report_plan(plan, sources), plan)
+    data = stored_report(render_report_plan(load_report_plan(plan, sources), sources), plan)
     data["metadata"]["source_articles"] = sources
     report = composer["compose_report"](
         data, "https://digest.example/feed.xml", "openrouter/example/model"
@@ -369,3 +370,46 @@ def test_composition_rejects_missing_source_identity_without_shifting_indices(fi
     data["metadata"]["source_articles"] = [{**SOURCES[0], field: ""}, SOURCES[0]]
     with pytest.raises(SystemExit, match="must retain its title and URL"):
         composer["source_articles"](data["metadata"])
+
+
+def test_typed_plan_is_frozen_and_returns_its_stored_form_unchanged():
+    from dataclasses import FrozenInstanceError
+
+    from core.report_plan import ReportPlan, parse_report_plan
+
+    reordered = {key: PLAN[key] for key in reversed(list(PLAN))}
+    stored = parse_report_plan(json.dumps(reordered), SOURCES).as_json()
+    plan = load_report_plan(stored, SOURCES)
+
+    assert isinstance(plan, ReportPlan)
+    assert plan.contract_version == 6
+    assert plan.control_implications[0].source_ids == (1,)
+    # Serialization keeps the stored key order, so a manifest round trip is byte-stable.
+    assert json.dumps(plan.as_json()) == json.dumps(stored)
+    plan.as_json()["control_implications"].clear()
+    assert plan.as_json() == stored
+    with pytest.raises(FrozenInstanceError):
+        setattr(plan, "contract_version", 5)
+
+
+def test_loading_an_already_validated_plan_keeps_it_and_checks_its_contract():
+    from core.report_plan import parse_report_plan
+
+    plan = parse_report_plan(json.dumps(PLAN), SOURCES)
+    assert load_report_plan(plan, SOURCES) is plan
+    with pytest.raises(ValueError, match="contract version does not match"):
+        load_report_plan(plan, SOURCES, contract_version=5)
+
+
+def test_loading_a_stored_plan_validates_without_repair():
+    from core.report_plan import parse_report_plan
+
+    # Parsing a model plan repairs a priority it cannot use; loading a stored
+    # plan never repairs and refuses the same value.
+    damaged = deepcopy(PLAN)
+    damaged["control_implications"][0]["priority"] = "urgent"
+    assert parse_report_plan(json.dumps(damaged), SOURCES).control_implications[0].priority == (
+        "medium"
+    )
+    with pytest.raises(ValueError):
+        load_report_plan(damaged, SOURCES)

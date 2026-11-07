@@ -53,10 +53,10 @@ def validate_case():
     case = load_case()
     sources = case["analysis_data"]["source_evidence"]
     plan = parse_report_plan(json.dumps(case["calibration_plan"]), sources)
-    require(plan["regulatory_changes"] == [])
-    require(len(plan["control_implications"]) == 1)
-    require(plan["control_implications"][0]["source_ids"] == [2])
-    require(plan["control_implications"][0]["control_id"] == "third_party_risk")
+    require(plan.regulatory_changes == ())
+    require(len(plan.control_implications) == 1)
+    require(plan.control_implications[0].source_ids == (2,))
+    require(plan.control_implications[0].control_id == "third_party_risk")
     require(bool(render_report_plan(plan, sources)))
     return case
 
@@ -177,11 +177,13 @@ async def rehearse():
             transport=httpx.MockTransport(handler),
         )
         generation = await service.generate_grc_report(case["analysis_data"], case["feed_info"])
-        require(len(requests) == 1 and generation.report_plan == case["calibration_plan"])
+        require(
+            len(requests) == 1
+            and generation.report_plan is not None
+            and generation.report_plan.as_json() == case["calibration_plan"]
+        )
         validate_rendered_report(
-            generation.content,
-            generation.report_plan,
-            case["analysis_data"]["source_evidence"],
+            generation.content, generation.report_plan, case["analysis_data"]["source_evidence"]
         )
         return {
             "outcome": "offline_rehearsal_passed",

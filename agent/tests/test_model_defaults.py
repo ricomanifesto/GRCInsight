@@ -9,6 +9,7 @@ from models.api import GRCAnalysisConfig, Report, ReportMetadata, WorkflowRespon
 from services import model_service
 from services.model_service import GRCModelService
 from services.openrouter_client import OpenRouterClient, parse_openrouter_model
+from core.report_plan import load_report_plan
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_LLM_MODEL = "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free"
@@ -152,7 +153,10 @@ def test_async_lambda_writeback_persists_the_report_plan(monkeypatch):
 
     report_plan = selection_plan()
     source_articles = [SOURCE]
-    stored = stored_report(render_report_plan(report_plan, source_articles), report_plan)
+    stored = stored_report(
+        render_report_plan(load_report_plan(report_plan, source_articles), source_articles),
+        report_plan,
+    )
 
     async def fake_workflow(_feed_url, _config, model_deadline=None):
         return WorkflowResponse(

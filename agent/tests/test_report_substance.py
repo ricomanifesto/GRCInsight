@@ -14,6 +14,7 @@ from core.report_plan import (
     validate_rendered_report,
 )
 from narrative_fixture import narrated
+from core.report_plan import load_report_plan
 
 SOURCE: dict[str, Any] = {
     "title": "Spreadsheet code execution advisory",
@@ -181,7 +182,7 @@ def test_excerpt_with_exposure_conditions_beyond_title_is_accepted():
     plan = deepcopy(V5_PLAN)
     plan["control_implications"][0].update(focus="enterprise gateway", evidence_excerpt=excerpt)
     plan = narrated(plan)
-    assert parse_report_plan(json.dumps(plan), [source]) == plan
+    assert parse_report_plan(json.dumps(plan), [source]).as_json() == plan
 
 
 def test_distinct_events_in_the_same_control_are_not_collapsed():
@@ -191,7 +192,7 @@ def test_distinct_events_in_the_same_control_are_not_collapsed():
     ]
     plan = deepcopy(PLAN)
     plan["control_implications"].append({**plan["control_implications"][0], "source_ids": [2]})
-    body = render_report_plan(plan, sources)
+    body = render_report_plan(load_report_plan(plan, sources), sources)
     assert "[Other event](https://example.com/other)" in body
 
 
@@ -203,7 +204,7 @@ def test_finding_labels_and_extra_source_ids_are_tolerated(field, value):
     plan = deepcopy(PLAN)
     plan["control_implications"][0][field] = value
     parsed = parse_report_plan(json.dumps(plan), [SOURCE, deepcopy(SOURCE)])
-    row = parsed["control_implications"][0]
+    row = parsed.as_json()["control_implications"][0]
     assert row["source_ids"] == [1] and row["evidence_excerpt"] == SOURCE["snippet"]
 
 
@@ -211,10 +212,12 @@ def test_model_prose_and_render_mutations_still_fail_closed():
     plan = deepcopy(PLAN)
     plan["control_implications"][0]["rationale"] = "A new legal deadline begins tomorrow."
     parsed = parse_report_plan(json.dumps(plan), [SOURCE])
-    assert "rationale" not in parsed["control_implications"][0]
-    body = render_report_plan(PLAN, [SOURCE])
+    assert "rationale" not in parsed.as_json()["control_implications"][0]
+    body = render_report_plan(load_report_plan(PLAN, [SOURCE]), [SOURCE])
     with pytest.raises(ValueError):
-        validate_rendered_report(body + "\nAn unsupported assertion.", PLAN, [SOURCE])
+        validate_rendered_report(
+            body + "\nAn unsupported assertion.", load_report_plan(PLAN, [SOURCE]), [SOURCE]
+        )
 
 
 def publication_tools():
@@ -264,7 +267,9 @@ def test_finding_reaches_composition_manifest_and_compact_html():
     from test_report_evidence import stored_report
 
     composer, checker, builder = publication_tools()
-    data = stored_report(render_report_plan(PLAN, [SOURCE]), deepcopy(PLAN))
+    data = stored_report(
+        render_report_plan(load_report_plan(PLAN, [SOURCE]), [SOURCE]), deepcopy(PLAN)
+    )
     data["metadata"]["source_articles"] = [{k: v for k, v in SOURCE.items() if k != "digest_url"}]
     markdown = composer["compose_report"](
         data, "https://digest.example/feed.xml", "openrouter/example/model"
@@ -328,9 +333,12 @@ def test_invalid_finding_does_not_overwrite_last_published_files(tmp_path, monke
     composer, _, _ = publication_tools()
     plan = {**PLAN, "control_implications": []}
     old_body = render_report_plan(
-        {"regulatory_changes": [], "control_implications": [], "industry_impacts": []},
+        load_report_plan(
+            {"regulatory_changes": [], "control_implications": [], "industry_impacts": []},
+            [SOURCE],
+            contract_version=3,
+        ),
         [SOURCE],
-        contract_version=3,
     )
     data = stored_report(old_body, plan)
     data["metadata"]["source_articles"] = [{k: v for k, v in SOURCE.items() if k != "digest_url"}]
@@ -403,7 +411,7 @@ def test_quoted_evidence_is_literal_text_in_the_reader():
     plan = deepcopy(V5_PLAN)
     plan["control_implications"][0].update(focus="Java [support]", evidence_excerpt=excerpt)
     plan = narrated(plan)
-    body = render_report_plan(plan, [source])
+    body = render_report_plan(load_report_plan(plan, [source]), [source])
     _, _, builder = publication_tools()
     html = builder["render_report"](body)
     reader = Reader()
@@ -420,7 +428,7 @@ def test_primary_regulatory_only_report_remains_publishable():
     plan["control_implications"] = []
     plan["executive_brief"] = {"source_ids": [1]}
     plan = narrated(plan)
-    body = render_report_plan(plan, [PRIMARY_SOURCE])
+    body = render_report_plan(load_report_plan(plan, [PRIMARY_SOURCE]), [PRIMARY_SOURCE])
     assert "final reporting rule" in body.split("## Sourced Regulatory Changes")[0]
     assert "| Unknown |" in body
-    validate_rendered_report(body, plan, [PRIMARY_SOURCE])
+    validate_rendered_report(body, load_report_plan(plan, [PRIMARY_SOURCE]), [PRIMARY_SOURCE])

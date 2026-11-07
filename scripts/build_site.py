@@ -20,6 +20,7 @@ from core.report_plan import (  # noqa: E402
     CONTROL_REVIEWS,
     CONTROLS,
     PRIORITIES,
+    load_report_plan,
     report_finding_groups,
     validate_rendered_report,
 )
@@ -166,21 +167,21 @@ def review_map_rows(markdown: str, manifest: object) -> list[dict[str, str]]:
     if body_start is None:
         return []
     try:
-        plan = manifest["report_plan"]
-        validate_rendered_report(
-            markdown[body_start.start() :],
-            plan,
+        plan = load_report_plan(
+            manifest["report_plan"],
             manifest["sources"],
-            include_digest=True,
             contract_version=manifest["report_contract_version"],
+        )
+        validate_rendered_report(
+            markdown[body_start.start() :], plan, manifest["sources"], include_digest=True
         )
         return [
             {
-                "focus": group[0]["focus"],
-                "headline": group[0].get("headline") or group[0]["focus"],
-                "control": CONTROLS[group[0]["control_id"]][0],
-                "owner": CONTROL_REVIEWS[group[0]["control_id"]][0],
-                "priority": PRIORITIES[group[0]["priority"]],
+                "focus": group[0].focus,
+                "headline": group[0].headline or group[0].focus,
+                "control": CONTROLS[group[0].control_id][0],
+                "owner": CONTROL_REVIEWS[group[0].control_id][0],
+                "priority": PRIORITIES[group[0].priority],
             }
             for group in report_finding_groups(plan)
         ]

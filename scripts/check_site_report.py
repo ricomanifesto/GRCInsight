@@ -20,7 +20,12 @@ from core.report_evidence import (  # noqa: E402
     REPORT_CONTRACT_VERSION,
     validate_regulatory_evidence,
 )
-from core.report_plan import finding_evidence_context, validate_rendered_report  # noqa: E402
+from core.report_plan import (  # noqa: E402
+    ReportPlan,
+    finding_evidence_context,
+    load_report_plan,
+    validate_rendered_report,
+)
 from core.reporting_identity import (  # noqa: E402
     ReportingIdentityError,
     legacy_sentrydigest_item_url as build_legacy_sentrydigest_item_url,
@@ -458,6 +463,20 @@ def prose_without_destinations(markdown: str) -> str:
     return prose
 
 
+def stored_report_plan(manifest: dict | None) -> tuple[ReportPlan | None, ValueError | None]:
+    """Validate a manifest's retained plan once, keeping the refusal for later."""
+    manifest = manifest or {}
+    try:
+        plan = load_report_plan(
+            manifest.get("report_plan"),
+            manifest.get("sources", []),
+            contract_version=manifest.get("report_contract_version", 1),
+        )
+    except ValueError as error:
+        return None, error
+    return plan, None
+
+
 def find_reader_surface_defect(markdown: str, *, manifest: dict | None = None) -> str | None:
     prose = prose_without_destinations(markdown)
     if re.search(rf"[{SUPERSCRIPT_DIGITS}]", prose):
@@ -471,12 +490,16 @@ def find_reader_surface_defect(markdown: str, *, manifest: dict | None = None) -
     # Recompute context from the exact plan/body, including for archived reports.
     sources = (manifest or {}).get("sources", [])
     body_start = markdown.find("\n## ")
+    plan = (
+        stored_report_plan(manifest)[0]
+        if (manifest or {}).get("report_contract_version", 1) == 6
+        else None
+    )
     context = finding_evidence_context(
         markdown[body_start + 1 :] if body_start >= 0 else "",
-        (manifest or {}).get("report_plan"),
+        plan,
         sources,
         include_digest=True,
-        contract_version=(manifest or {}).get("report_contract_version", 1),
     )
     body_offset = markdown[: body_start + 1].count("\n") if body_start >= 0 else 0
     # Exact v6 rendering verifies every Source evidence line against retained
@@ -829,10 +852,8 @@ def validate_evidence_manifest(
         label, url = unknown_pairs[0]
         fail("report links evidence absent from source manifest: " f"{label} ({url})")
 
-    finding_context = finding_evidence_context(
-        body, manifest.get("report_plan"), raw_sources, include_digest=True,
-        contract_version=manifest.get("report_contract_version", 1),
-    )
+    plan, plan_error = stored_report_plan(manifest)
+    finding_context = finding_evidence_context(body, plan, raw_sources, include_digest=True)
     for line_number, line in enumerate(body.splitlines()):
         normalized_line = line.replace("‑", "-").replace("–", "-").replace("—", "-")
         cited_cves = {
@@ -907,13 +928,9 @@ def validate_evidence_manifest(
     if contract_version in {3, 4, 5, REPORT_CONTRACT_VERSION}:
         try:
             validate_regulatory_evidence(body, raw_sources, contract_version=contract_version)
-            validate_rendered_report(
-                body,
-                manifest.get("report_plan"),
-                raw_sources,
-                include_digest=True,
-                contract_version=contract_version,
-            )
+            if plan is None:
+                raise plan_error or ValueError("report plan is unavailable")
+            validate_rendered_report(body, plan, raw_sources, include_digest=True)
         except ValueError as error:
             fail(str(error))
     return manifest

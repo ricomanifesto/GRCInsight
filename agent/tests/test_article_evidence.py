@@ -10,6 +10,7 @@ from core.workflow import _build_source_evidence
 from core.report_plan import parse_report_plan
 from narrative_fixture import narrated
 from models.api import ArticleInput
+from core.report_plan import load_report_plan
 
 TITLE = "Critical vulnerability: enterprise gateway permits remote code execution"
 DETAIL = "The affected gateway requires an authenticated administrator session; no exploitation has been reported."
@@ -60,7 +61,7 @@ def test_builder_keeps_article_fields_separate_from_the_headline():
             "raw_text": "A separate article passage contains additional remediation details.",
         },
     ]
-    assert parse_report_plan(json.dumps(plan()), [item]) == plan()
+    assert parse_report_plan(json.dumps(plan()), [item]).as_json() == plan()
 
 
 @pytest.mark.parametrize("repeats", [1, 2, 3, 12])
@@ -80,7 +81,7 @@ def test_title_and_article_fields_cannot_be_spliced_into_one_quote():
 @pytest.mark.parametrize("origin", ["headline", "snippet", "content", "model", None])
 def test_evidence_origin_is_taken_from_where_the_quote_actually_appears(origin):
     parsed = parse_report_plan(json.dumps(plan(origin=origin)), [source()])
-    assert parsed["control_implications"][0]["evidence_origin"] == "summary"
+    assert parsed.as_json()["control_implications"][0]["evidence_origin"] == "summary"
 
 
 def test_legacy_flattened_source_cannot_be_promoted_by_guessing_an_origin():
@@ -94,7 +95,7 @@ def test_excerpt_cannot_select_only_the_headline_inside_a_real_article_segment()
     item = source(summary=TITLE + ". " + DETAIL)
     with pytest.raises(ValueError, match="non-headline"):
         parse_report_plan(json.dumps(plan(TITLE)), [item])
-    assert parse_report_plan(json.dumps(plan()), [item]) == plan()
+    assert parse_report_plan(json.dumps(plan()), [item]).as_json() == plan()
 
 
 def test_truncation_never_creates_a_new_word_from_a_long_repeated_headline():
@@ -135,7 +136,9 @@ def test_segment_origin_survives_composition_and_manifest_validation():
     ]
     item = source(content="A different retained passage records that the patch is available.")
     selection = plan()
-    report = stored_report(render_report_plan(selection, [item]), selection)
+    report = stored_report(
+        render_report_plan(load_report_plan(selection, [item]), [item]), selection
+    )
     report["metadata"]["source_articles"] = [item]
     markdown = composer["compose_report"](
         report, "https://digest.example/feed.xml", "openrouter/example/model"
@@ -195,7 +198,7 @@ def test_prompt_preserves_original_spelling_of_allowed_cves(cve):
         line for line in prompt.splitlines() if "Eligible article evidence segments:" in line
     )
     assert json.loads(segment_line.split("segments: ")[1]) == {"summary": detail}
-    assert parse_report_plan(json.dumps(plan(detail)), [item]) == plan(detail)
+    assert parse_report_plan(json.dumps(plan(detail)), [item]).as_json() == plan(detail)
 
 
 def test_prompt_still_omits_segments_with_cves_outside_the_bounded_set():
@@ -222,4 +225,4 @@ def test_changed_internal_whitespace_is_restored_to_the_source_spelling(field, s
     )
     parsed = parse_report_plan(json.dumps(selection), [source()])
     expected = DETAIL if field == "evidence_excerpt" else "authenticated administrator"
-    assert parsed["control_implications"][0][field] == expected
+    assert parsed.as_json()["control_implications"][0][field] == expected

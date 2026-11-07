@@ -19,6 +19,7 @@ from core.report_plan import (  # noqa: E402
     parse_report_plan,
     render_report_plan,
 )
+from core.report_plan import load_report_plan  # noqa: E402
 
 
 def briefing():

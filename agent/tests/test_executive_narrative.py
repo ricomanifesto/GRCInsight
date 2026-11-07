@@ -14,8 +14,9 @@ from test_report_substance import V5_PLAN as FINDING_PLAN, SOURCE
 
 # Contract version 5 is immutable history; pin these checks to it explicitly.
 parse_report_plan = partial(report_plan_module.parse_report_plan, contract_version=5)
-render_report_plan = partial(report_plan_module.render_report_plan, contract_version=5)
-validate_rendered_report = partial(report_plan_module.validate_rendered_report, contract_version=5)
+load_report_plan = partial(report_plan_module.load_report_plan, contract_version=5)
+render_report_plan = report_plan_module.render_report_plan
+validate_rendered_report = report_plan_module.validate_rendered_report
 
 
 def narrative_plan():
@@ -98,10 +99,10 @@ def test_sector_labels_do_not_justify_a_sector_consequence():
 )
 def test_publication_rejects_bullet_only_generic_and_paraphrased_repetition(replacement):
     plan = narrative_plan()
-    body = render_report_plan(plan, [SOURCE])
+    body = render_report_plan(load_report_plan(plan, [SOURCE]), [SOURCE])
     bad = body.replace(summary_of(body), replacement)
     with pytest.raises(ValueError, match="retained report plan|editorial"):
-        validate_rendered_report(bad, plan, [SOURCE])
+        validate_rendered_report(bad, load_report_plan(plan, [SOURCE]), [SOURCE])
 
 
 @pytest.mark.parametrize(
@@ -114,45 +115,45 @@ def test_publication_rejects_bullet_only_generic_and_paraphrased_repetition(repl
 )
 def test_rephrased_duplicate_sections_are_not_additional_insight(extra):
     plan = narrative_plan()
-    body = render_report_plan(plan, [SOURCE])
+    body = render_report_plan(load_report_plan(plan, [SOURCE]), [SOURCE])
     with pytest.raises(ValueError, match="retained report plan|editorial"):
-        validate_rendered_report(body + "\n\n" + extra, plan, [SOURCE])
+        validate_rendered_report(body + "\n\n" + extra, load_report_plan(plan, [SOURCE]), [SOURCE])
 
 
 def test_legitimate_overview_to_detail_reuses_identity_and_citations():
     plan = narrative_plan()
-    body = render_report_plan(plan, [SOURCE], include_digest=True)
+    body = render_report_plan(load_report_plan(plan, [SOURCE]), [SOURCE], include_digest=True)
     assert body.count("Java support") >= 2
     assert body.count(SOURCE["url"]) >= 3
     assert body.count(SOURCE["snippet"]) == 1
-    validate_rendered_report(body, plan, [SOURCE], include_digest=True)
+    validate_rendered_report(body, load_report_plan(plan, [SOURCE]), [SOURCE], include_digest=True)
 
 
 def test_identical_control_findings_combine_evidence_without_losing_sources():
     plan = narrative_plan()
     plan["control_implications"].append({**plan["control_implications"][0], "source_ids": [2]})
     sources = [SOURCE, {**SOURCE, "title": "Second source", "url": "https://example.com/second"}]
-    body = render_report_plan(plan, sources)
+    body = render_report_plan(load_report_plan(plan, sources), sources)
     assert body.count("### Java support") == 1
     assert body.count(SOURCE["snippet"]) == 1
     assert "[Second source](https://example.com/second)" in body
-    validate_rendered_report(body, plan, sources)
+    validate_rendered_report(body, load_report_plan(plan, sources), sources)
 
 
 def test_source_identity_text_is_not_misclassified_as_repeated_analysis():
     plan = narrative_plan()
     sources = [SOURCE, {**SOURCE, "title": SOURCE["snippet"], "url": "https://example.com/related"}]
-    body = render_report_plan(plan, sources)
+    body = render_report_plan(load_report_plan(plan, sources), sources)
     assert body.count("**Source evidence:**") == 1
     assert "https://example.com/related" in body
-    validate_rendered_report(body, plan, sources)
+    validate_rendered_report(body, load_report_plan(plan, sources), sources)
 
 
 def test_generic_three_paragraph_substitution_is_rejected_even_with_valid_citations():
     from core.report_plan import validate_editorial_quality
 
     plan = narrative_plan()
-    body = render_report_plan(plan, [SOURCE])
+    body = render_report_plan(load_report_plan(plan, [SOURCE]), [SOURCE])
     link = f"[{SOURCE['title']}]({SOURCE['url']})"
     generic = (
         f"Java support deserves attention. Leaders should consider whether controls remain appropriate and assess the available evidence before deciding how to respond. {link}\n\n"
@@ -161,16 +162,16 @@ def test_generic_three_paragraph_substitution_is_rejected_even_with_valid_citati
     )
     bad = body.replace(summary_of(body), generic)
     # Shape/citation checks alone are deliberately not presented as a semantic oracle.
-    validate_editorial_quality(bad, plan, [SOURCE])
+    validate_editorial_quality(bad, load_report_plan(plan, [SOURCE]), [SOURCE])
     with pytest.raises(ValueError, match="retained report plan"):
-        validate_rendered_report(bad, plan, [SOURCE])
+        validate_rendered_report(bad, load_report_plan(plan, [SOURCE]), [SOURCE])
 
 
 def test_regulatory_evidence_is_not_repeated_in_the_control_decision():
     from test_report_evidence import SOURCE as primary, v5_selection_plan as selection_plan
 
     plan = selection_plan()
-    body = render_report_plan(plan, [primary])
+    body = render_report_plan(load_report_plan(plan, [primary]), [primary])
     assert body.count(primary["snippet"]) == 1
     assert "Control decision (inference):" in body
     assert "See the sourced regulatory evidence above" in body
@@ -195,9 +196,9 @@ def test_shared_regulatory_quote_keeps_literal_ampersands_without_a_false_duplic
     plan = selection_plan()
     plan["regulatory_changes"][0]["evidence_excerpt"] = excerpt
     plan["control_implications"][0]["evidence_excerpt"] = excerpt
-    body = render_report_plan(plan, [source])
+    body = render_report_plan(load_report_plan(plan, [source]), [source])
     assert body.count(excerpt) == 1
-    validate_rendered_report(body, plan, [source])
+    validate_rendered_report(body, load_report_plan(plan, [source]), [source])
 
 
 def test_mixed_topics_require_separate_decisions_instead_of_an_invented_shared_frame():
@@ -213,10 +214,10 @@ def test_mixed_topics_require_separate_decisions_instead_of_an_invented_shared_f
     with pytest.raises(ValueError, match="frame is not supported"):
         parse_report_plan(json.dumps(plan), sources)
     plan["executive_brief"]["decision_frame"] = "separate"
-    body = render_report_plan(plan, sources)
+    body = render_report_plan(load_report_plan(plan, sources), sources)
     assert "separate decisions" in summary_of(body)
     assert "Supplier risk owner" in body
-    validate_rendered_report(body, plan, sources)
+    validate_rendered_report(body, load_report_plan(plan, sources), sources)
 
 
 def test_regulatory_frame_uses_applicability_agenda_even_with_a_control_mapping():
@@ -224,7 +225,7 @@ def test_regulatory_frame_uses_applicability_agenda_even_with_a_control_mapping(
 
     plan = selection_plan()
     plan["executive_brief"]["decision_frame"] = "regulatory"
-    summary = summary_of(render_report_plan(plan, [primary]))
+    summary = summary_of(render_report_plan(load_report_plan(plan, [primary]), [primary]))
     assert "verify jurisdiction and organizational applicability" in summary
     assert "check whether the development changes a control assumption" not in summary
 
@@ -236,7 +237,9 @@ def test_historical_v4_publication_still_validates_exactly():
     body = markdown[markdown.index("## Executive Summary") :].strip()
     assert (
         render_report_plan(
-            manifest["report_plan"], manifest["sources"], include_digest=True, contract_version=4
+            load_report_plan(manifest["report_plan"], manifest["sources"], contract_version=4),
+            manifest["sources"],
+            include_digest=True,
         )
         == body
     )
@@ -364,12 +367,12 @@ def test_sentence_length_review_labels_are_refused_only_for_new_reports(focus):
     with pytest.raises(ValueError, match="short review label"):
         parse_report_plan(json.dumps(plan), [source])
     del plan["executive_brief"]
-    legacy = render_report_plan(plan, [source], contract_version=4)
-    validate_rendered_report(legacy, plan, [source], contract_version=4)
+    legacy = render_report_plan(load_report_plan(plan, [source], contract_version=4), [source])
+    validate_rendered_report(legacy, load_report_plan(plan, [source], contract_version=4), [source])
 
 
 def test_agenda_steps_do_not_repeat_the_selected_source_label():
-    summary = summary_of(render_report_plan(narrative_plan(), [SOURCE]))
+    summary = summary_of(render_report_plan(load_report_plan(narrative_plan(), [SOURCE]), [SOURCE]))
     assert summary.count("Java support") == 1
     assert "“Java support”" in summary
     assert "The next step is to establish affected-asset and configuration scope." in summary
@@ -380,12 +383,12 @@ def test_same_control_leads_share_one_agenda_step_and_keep_both_citations():
     plan["control_implications"].append({**plan["control_implications"][0], "source_ids": [2]})
     plan["executive_brief"]["source_ids"] = [1, 2]
     sources = [SOURCE, {**SOURCE, "title": "Second source", "url": "https://example.com/second"}]
-    body = render_report_plan(plan, sources)
+    body = render_report_plan(load_report_plan(plan, sources), sources)
     summary = summary_of(body)
     assert summary.count("establish affected-asset and configuration scope") == 1
     assert "The next step is to establish affected-asset and configuration scope." in summary
     assert SOURCE["url"] in summary and sources[1]["url"] in summary
-    validate_rendered_report(body, plan, sources)
+    validate_rendered_report(body, load_report_plan(plan, sources), sources)
 
 
 def test_multiple_regulatory_leads_share_one_applicability_step_and_keep_subjects():
@@ -417,7 +420,7 @@ def test_multiple_regulatory_leads_share_one_applicability_step_and_keep_subject
         }
     )
     plan["executive_brief"] = {"decision_frame": "regulatory", "source_ids": [1, 2]}
-    body = render_report_plan(plan, [primary, second])
+    body = render_report_plan(load_report_plan(plan, [primary, second]), [primary, second])
     summary = summary_of(body)
     assert (
         summary.count(
@@ -427,7 +430,7 @@ def test_multiple_regulatory_leads_share_one_applicability_step_and_keep_subject
     )
     assert "final reporting rule" in summary and "final disclosure rule" in summary
     assert primary["url"] in summary and second["url"] in summary
-    validate_rendered_report(body, plan, [primary, second])
+    validate_rendered_report(body, load_report_plan(plan, [primary, second]), [primary, second])
 
 
 def test_overlapping_source_excerpts_validate_as_independent_evidence_blocks():
@@ -446,10 +449,10 @@ def test_overlapping_source_excerpts_validate_as_independent_evidence_blocks():
         {**plan["control_implications"][0], "source_ids": [2], "evidence_excerpt": longer}
     )
     plan["executive_brief"]["source_ids"] = [1, 2]
-    body = render_report_plan(plan, [SOURCE, second])
+    body = render_report_plan(load_report_plan(plan, [SOURCE, second]), [SOURCE, second])
     assert body.count("**Source evidence:**") == 2
     assert SOURCE["url"] in body and second["url"] in body
-    validate_rendered_report(body, plan, [SOURCE, second])
+    validate_rendered_report(body, load_report_plan(plan, [SOURCE, second]), [SOURCE, second])
 
 
 def test_control_excerpt_inside_longer_regulatory_quote_is_not_duplicate_analysis():
@@ -466,20 +469,20 @@ def test_control_excerpt_inside_longer_regulatory_quote_is_not_duplicate_analysi
     plan = narrative_plan()
     regulation = selection_plan()["regulatory_changes"][0]
     plan["regulatory_changes"] = [{**regulation, "source_id": 2, "evidence_excerpt": longer}]
-    body = render_report_plan(plan, [SOURCE, primary])
+    body = render_report_plan(load_report_plan(plan, [SOURCE, primary]), [SOURCE, primary])
     assert body.count("**Source evidence:**") == 1
-    validate_rendered_report(body, plan, [SOURCE, primary])
+    validate_rendered_report(body, load_report_plan(plan, [SOURCE, primary]), [SOURCE, primary])
 
 
 def test_duplicate_explicit_evidence_block_still_fails_editorial_quality():
     from core.report_plan import validate_editorial_quality
 
     plan = narrative_plan()
-    body = render_report_plan(plan, [SOURCE])
+    body = render_report_plan(load_report_plan(plan, [SOURCE]), [SOURCE])
     block = next(line for line in body.splitlines() if line.startswith("**Source evidence:**"))
     bad = body.replace("## Source Highlights", block + "\n\n## Source Highlights")
     with pytest.raises(ValueError, match="source excerpts"):
-        validate_editorial_quality(bad, plan, [SOURCE])
+        validate_editorial_quality(bad, load_report_plan(plan, [SOURCE]), [SOURCE])
 
 
 def test_nonlead_focus_cannot_be_the_entire_source_passage_in_v5():
@@ -505,8 +508,12 @@ def test_nonlead_focus_cannot_be_the_entire_source_passage_in_v5():
     with pytest.raises(ValueError, match="identifying label"):
         parse_report_plan(json.dumps(plan), [SOURCE, second])
     del plan["executive_brief"]
-    legacy = render_report_plan(plan, [SOURCE, second], contract_version=4)
-    validate_rendered_report(legacy, plan, [SOURCE, second], contract_version=4)
+    legacy = render_report_plan(
+        load_report_plan(plan, [SOURCE, second], contract_version=4), [SOURCE, second]
+    )
+    validate_rendered_report(
+        legacy, load_report_plan(plan, [SOURCE, second], contract_version=4), [SOURCE, second]
+    )
 
 
 @pytest.mark.parametrize("placement", ["heading", "decision_prose"])
@@ -514,10 +521,10 @@ def test_exact_passage_reuse_outside_evidence_roles_fails_quality(placement):
     from core.report_plan import validate_editorial_quality
 
     plan = narrative_plan()
-    body = render_report_plan(plan, [SOURCE])
+    body = render_report_plan(load_report_plan(plan, [SOURCE]), [SOURCE])
     if placement == "heading":
         bad = body.replace("### Java support", "### " + SOURCE["snippet"])
     else:
         bad = body.replace("**Decision trigger:**", SOURCE["snippet"] + "\n\n**Decision trigger:**")
     with pytest.raises(ValueError, match="source excerpts"):
-        validate_editorial_quality(bad, plan, [SOURCE])
+        validate_editorial_quality(bad, load_report_plan(plan, [SOURCE]), [SOURCE])

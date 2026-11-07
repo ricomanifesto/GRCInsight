@@ -7,6 +7,7 @@ import runpy
 
 import pytest
 from narrative_fixture import narrated
+from core.report_plan import load_report_plan
 
 ROOT = Path(__file__).resolve().parents[2]
 SOURCE: dict[str, Any] = {
@@ -209,9 +210,9 @@ def test_regulatory_timing_claims_are_rejected_outside_sourced_table(claim):
     from core.report_plan import render_report_plan, validate_rendered_report
 
     plan = selection_plan()
-    report = render_report_plan(plan, [SOURCE]) + "\n" + claim
+    report = render_report_plan(load_report_plan(plan, [SOURCE]), [SOURCE]) + "\n" + claim
     with pytest.raises(ValueError, match="retained report plan"):
-        validate_rendered_report(report, plan, [SOURCE])
+        validate_rendered_report(report, load_report_plan(plan, [SOURCE]), [SOURCE])
 
 
 def test_unrelated_dated_prose_is_allowed_outside_sourced_table():
@@ -241,9 +242,9 @@ def test_timing_guard_does_not_depend_on_a_date_format(claim, empty_table):
     plan = selection_plan()
     if empty_table:
         plan["regulatory_changes"] = []
-    report = render_report_plan(plan, [SOURCE]) + "\n" + claim
+    report = render_report_plan(load_report_plan(plan, [SOURCE]), [SOURCE]) + "\n" + claim
     with pytest.raises(ValueError, match="retained report plan"):
-        validate_rendered_report(report, plan, [SOURCE])
+        validate_rendered_report(report, load_report_plan(plan, [SOURCE]), [SOURCE])
 
 
 def test_timing_guard_preserves_exact_source_titles_and_unrelated_analysis():
@@ -252,11 +253,13 @@ def test_timing_guard_preserves_exact_source_titles_and_unrelated_analysis():
     title = "Final rule takes effect on 2027-01-01"
     sources = [{**SOURCE, "title": title}]
     plan = selection_plan()
-    report = render_report_plan(plan, sources)
-    validate_rendered_report(report, plan, sources)
+    report = render_report_plan(load_report_plan(plan, sources), sources)
+    validate_rendered_report(report, load_report_plan(plan, sources), sources)
     with pytest.raises(ValueError, match="retained report plan"):
         validate_rendered_report(
-            report.replace(title, "Invented deadline: tomorrow"), plan, sources
+            report.replace(title, "Invented deadline: tomorrow"),
+            load_report_plan(plan, sources),
+            sources,
         )
 
 
@@ -525,7 +528,7 @@ def test_regulatory_contract_survives_composition_manifest_and_publication_valid
     from core.report_plan import render_report_plan
 
     plan = selection_plan()
-    data = stored_report(render_report_plan(plan, [SOURCE]), plan)
+    data = stored_report(render_report_plan(load_report_plan(plan, [SOURCE]), [SOURCE]), plan)
     markdown = composer["compose_report"](
         data, "https://digest.example/feed.xml", "openrouter/example/model"
     )
@@ -577,7 +580,7 @@ def test_prose_timing_guard_is_shared_by_model_composer_and_publication_checker(
     from core.report_plan import render_report_plan
 
     plan = selection_plan()
-    good = render_report_plan(plan, [SOURCE])
+    good = render_report_plan(load_report_plan(plan, [SOURCE]), [SOURCE])
     bad = good + "\nThe rule takes effect on January 1, 2027."
     service = GRCModelService.__new__(GRCModelService)
 
@@ -666,7 +669,7 @@ def test_regulatory_values_require_complete_source_phrases_at_every_boundary(fie
     plan = selection_plan()
     plan["regulatory_changes"][0].update(jurisdiction="Unknown", evidence_excerpt=excerpt)
     plan["control_implications"][0]["evidence_excerpt"] = excerpt
-    valid = render_report_plan(plan, sources)
+    valid = render_report_plan(load_report_plan(plan, sources), sources)
     invalid_plan = deepcopy(plan)
     invalid_plan["regulatory_changes"][0][field] = value
     error = "jurisdiction" if field == "jurisdiction" else "evidenced clause"
@@ -674,7 +677,7 @@ def test_regulatory_values_require_complete_source_phrases_at_every_boundary(fie
     new_cell = f"| {value} | Unknown |" if field == "jurisdiction" else f"| {value} |"
     notes: list[str] = []
     repaired = parse_report_plan(json.dumps(invalid_plan), sources, notes=notes)
-    assert repaired["regulatory_changes"] == []
+    assert repaired.as_json()["regulatory_changes"] == []
     assert any(note.startswith("regulatory_changes[0] dropped") and error in note for note in notes)
 
     composer = runpy.run_path(str(ROOT / "scripts/compose_site_report.py"))

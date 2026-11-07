@@ -20,6 +20,7 @@ from core.report_plan import (
     report_plan_response_format,
     validate_rendered_report,
 )
+from core.report_plan import load_report_plan
 
 FIXTURES = Path(__file__).parent / "fixtures"
 V5 = json.loads((FIXTURES / "report-v5-2026-10-29/evidence-manifest.json").read_text())
@@ -150,7 +151,7 @@ def test_executive_summary_carries_the_model_analysis_with_application_citations
         "Evidence and Decisions",
         "Source Highlights",
     ]
-    validate_rendered_report(body, plan, SOURCES)
+    validate_rendered_report(body, load_report_plan(plan, SOURCES), SOURCES)
 
 
 def test_every_finding_leads_with_its_subject_and_shares_one_structure():
@@ -189,7 +190,7 @@ def test_every_finding_leads_with_its_subject_and_shares_one_structure():
 def test_tampered_finding_structure_is_refused_as_an_editorial_failure(tamper):
     plan, body = rendered()
     with pytest.raises(ReportQualityError, match="same fields in the same order"):
-        validate_rendered_report(tamper(body), plan, SOURCES)
+        validate_rendered_report(tamper(body), load_report_plan(plan, SOURCES), SOURCES)
 
 
 def test_findings_drop_repeated_inference_labels_for_one_scope_note():
@@ -225,7 +226,7 @@ def test_reference_controls_are_application_owned_review_aids():
 
 def test_review_map_follows_narrative_order_then_priority():
     plan, _body = rendered()
-    order = [group[0]["source_ids"][0] for group in report_finding_groups(plan)]
+    order = [group[0].source_ids[0] for group in report_finding_groups(plan)]
     assert order == [3, 10, 12, 1]
 
 
@@ -359,7 +360,7 @@ def test_narrative_markup_and_links_are_stripped_rather_than_refused():
     plan = deepcopy(PLAN)
     paragraph(plan)["text"] += " See the [advisory](https://example.com) **now**."
     parsed = parse_report_plan(json.dumps(plan), SOURCES)
-    text = paragraph(parsed)["text"]
+    text = paragraph(parsed.as_json())["text"]
     assert not set(text) & set("[]*") and "example.com" not in text
     assert text.endswith("See the advisory now.")
 
@@ -371,7 +372,7 @@ def test_paragraph_citations_keep_only_supported_sources(cited, expected):
     plan = deepcopy(PLAN)
     paragraph(plan)["source_ids"] = cited
     parsed = parse_report_plan(json.dumps(plan), SOURCES)
-    assert paragraph(parsed)["source_ids"] == expected
+    assert paragraph(parsed.as_json())["source_ids"] == expected
 
 
 @pytest.mark.parametrize("paragraphs", [[], None, "text", [{"text": ""}]])
@@ -380,7 +381,7 @@ def test_missing_summary_falls_back_to_an_application_summary(paragraphs):
     plan["executive_brief"]["paragraphs"] = paragraphs
     notes: list[str] = []
     parsed = parse_report_plan(json.dumps(plan), SOURCES, notes=notes)
-    text = paragraph(parsed)["text"]
+    text = paragraph(parsed.as_json())["text"]
     assert text.startswith("This period's findings for control owners: Broadcom VMware ESX")
     assert any("application summary used" in note for note in notes)
     validate_rendered_report(render_report_plan(parsed, SOURCES), parsed, SOURCES)
@@ -390,7 +391,7 @@ def test_extra_paragraphs_and_duplicates_are_trimmed():
     plan = deepcopy(PLAN)
     plan["executive_brief"]["paragraphs"] = plan["executive_brief"]["paragraphs"] * 2
     parsed = parse_report_plan(json.dumps(plan), SOURCES)
-    assert [row["text"] for row in parsed["executive_brief"]["paragraphs"]] == [
+    assert [row["text"] for row in parsed.as_json()["executive_brief"]["paragraphs"]] == [
         row["text"] for row in PLAN["executive_brief"]["paragraphs"]
     ]
 
@@ -404,11 +405,11 @@ def test_unverifiable_findings_are_dropped_and_the_rest_publish():
     plan["control_implications"][3]["priority"] = "urgent"
     notes: list[str] = []
     parsed = parse_report_plan(json.dumps(plan), SOURCES, notes=notes)
-    assert [row["source_ids"][0] for row in parsed["control_implications"]] == [3, 1]
-    assert parsed["control_implications"][1]["priority"] == "medium"
+    assert [row["source_ids"][0] for row in parsed.as_json()["control_implications"]] == [3, 1]
+    assert parsed.as_json()["control_implications"][1]["priority"] == "medium"
     assert sum("(dropped)" in note for note in notes) == 2
     assert all("invented passage" not in note for note in notes)
-    paragraph_ids = [row["source_ids"] for row in parsed["executive_brief"]["paragraphs"]]
+    paragraph_ids = [row["source_ids"] for row in parsed.as_json()["executive_brief"]["paragraphs"]]
     assert paragraph_ids == [[3], [1]]
 
 
@@ -430,11 +431,11 @@ def test_missing_narrative_fields_receive_application_fallbacks():
     plan["control_implications"][0]["focus"] = ""
     plan["unexpected"] = "ignored"
     parsed = parse_report_plan(json.dumps(plan), SOURCES)
-    row = parsed["control_implications"][0]
+    row = parsed.as_json()["control_implications"][0]
     assert row["focus"] == "The U.S. Cybersecurity and Infrastructure Security"
     assert row["headline"] == row["focus"]
     assert row["significance"].startswith("Assess whether monitoring coverage")
-    assert "unexpected" not in parsed
+    assert "unexpected" not in parsed.as_json()
 
 
 @pytest.mark.parametrize(
@@ -486,11 +487,18 @@ def test_historical_v5_publication_still_validates_exactly():
     markdown = (fixture / "report.md").read_text()
     body = markdown[markdown.index("## Executive Summary") :].strip()
     assert (
-        render_report_plan(V5["report_plan"], SOURCES, include_digest=True, contract_version=5)
+        render_report_plan(
+            load_report_plan(V5["report_plan"], SOURCES, contract_version=5),
+            SOURCES,
+            include_digest=True,
+        )
         == body
     )
     validate_rendered_report(
-        body, V5["report_plan"], SOURCES, include_digest=True, contract_version=5
+        body,
+        load_report_plan(V5["report_plan"], SOURCES, contract_version=5),
+        SOURCES,
+        include_digest=True,
     )
     checker = runpy.run_path(
         str(Path(__file__).resolve().parents[2] / "scripts/check_site_report.py")
@@ -501,8 +509,8 @@ def test_historical_v5_publication_still_validates_exactly():
     )
     assert builder["review_map_rows"](markdown, V5)
     upgraded = parse_report_plan(json.dumps(V5["report_plan"]), SOURCES)
-    assert set(upgraded["executive_brief"]) == {"paragraphs"}
-    assert all(row["headline"] for row in upgraded["control_implications"])
+    assert set(upgraded.as_json()["executive_brief"]) == {"paragraphs"}
+    assert all(row["headline"] for row in upgraded.as_json()["control_implications"])
 
 
 def test_response_format_requests_bounded_narrative_fields():
@@ -576,10 +584,10 @@ def test_focus_differing_only_in_case_or_typography_is_normalized_to_the_excerpt
         headline="Organization’s SD-WAN  network keys are copied by KeyDrift malware",
     )
     parsed = parse_report_plan(json.dumps(plan), SOURCES)
-    assert parsed["control_implications"][0]["focus"] == "Broadcom VMware ESX"
-    assert parsed["control_implications"][1]["focus"] == "organization's SD-WAN network"
+    assert parsed.as_json()["control_implications"][0]["focus"] == "Broadcom VMware ESX"
+    assert parsed.as_json()["control_implications"][1]["focus"] == "organization's SD-WAN network"
     assert (
-        parsed["control_implications"][1]["headline"]
+        parsed.as_json()["control_implications"][1]["headline"]
         == "Organization's SD-WAN network keys are copied by KeyDrift malware"
     )
     body = render_report_plan(parsed, SOURCES)
@@ -597,7 +605,7 @@ def test_focus_mismatch_becomes_a_label_now_and_is_classified_for_history(focus,
     plan = deepcopy(PLAN)
     plan["control_implications"][1].update(focus=focus, headline=focus + " exposes keys")
     parsed = parse_report_plan(json.dumps(plan), SOURCES)
-    assert parsed["control_implications"][1]["focus"] == focus
+    assert parsed.as_json()["control_implications"][1]["focus"] == focus
     historical = deepcopy(V5["report_plan"])
     row = next(row for row in historical["control_implications"] if row["source_ids"] == [10])
     row["focus"] = focus
@@ -632,6 +640,6 @@ def test_non_string_priority_and_origin_never_escape_as_type_errors(bad):
     plan["control_implications"][1].update(control_id=bad, focus=bad, headline=bad)
     plan["executive_brief"]["paragraphs"][0].update(source_ids=bad)
     parsed = parse_report_plan(json.dumps(plan), SOURCES)
-    first = parsed["control_implications"][0]
+    first = parsed.as_json()["control_implications"][0]
     assert first["priority"] == "medium" and first["evidence_origin"] == "summary"
-    assert [row["source_ids"][0] for row in parsed["control_implications"]] == [3, 12, 1]
+    assert [row["source_ids"][0] for row in parsed.as_json()["control_implications"]] == [3, 12, 1]

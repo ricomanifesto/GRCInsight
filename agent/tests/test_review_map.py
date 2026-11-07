@@ -7,6 +7,7 @@ import subprocess
 from core.report_plan import render_report_plan
 from narrative_fixture import narrated
 from test_report_substance import V5_PLAN as PLAN, SOURCE
+from core.report_plan import load_report_plan
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -39,7 +40,7 @@ def fixture():
         )
     plan = narrated(plan)
     manifest = {"report_contract_version": 6, "report_plan": plan, "sources": sources}
-    markdown = render_report_plan(plan, sources, include_digest=True)
+    markdown = render_report_plan(load_report_plan(plan, sources), sources, include_digest=True)
     return markdown, manifest
 
 
@@ -94,7 +95,9 @@ def test_identical_findings_share_one_map_target_with_all_citations():
     plan["control_implications"][1] = duplicate
     manifest["sources"][1] = deepcopy(manifest["sources"][0])
     manifest["sources"][1]["title"] = "Second account of the same finding"
-    markdown = render_report_plan(plan, manifest["sources"], include_digest=True)
+    markdown = render_report_plan(
+        load_report_plan(plan, manifest["sources"]), manifest["sources"], include_digest=True
+    )
     ns = builder()
     rows = ns["review_map_rows"](markdown, manifest)
     assert len(rows) == 5
@@ -113,7 +116,7 @@ def test_regulatory_only_report_has_no_empty_map():
     plan["industry_impacts"] = []
     plan["executive_brief"] = {"decision_frame": "regulatory", "source_ids": [1]}
     plan = narrated(plan)
-    markdown = render_report_plan(plan, [primary], include_digest=True)
+    markdown = render_report_plan(load_report_plan(plan, [primary]), [primary], include_digest=True)
     manifest = {"report_contract_version": 6, "report_plan": plan, "sources": [primary]}
     html = builder()["render_report"](markdown, manifest)
     assert 'class="review-map"' not in html

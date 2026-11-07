@@ -472,7 +472,9 @@ async def run_grc_analysis_endpoint(
             analysis_period=generated_at.strftime("%B %Y"),
             requested_model=config.model,
             resolved_model=resolved_model,
-            report_plan=None if used_fallback_report else report_plan,
+            report_plan=(
+                None if used_fallback_report or report_plan is None else report_plan.as_json()
+            ),
             source_articles=[
                 {
                     "title": source["title"],

@@ -22,6 +22,7 @@ from core.report_plan import (
     CONTROLS,
     CONTROL_REVIEWS,
     ReportQualityError,
+    ReportPlan,
     narrative_warnings,
     parse_report_plan,
     render_report_plan,
@@ -59,7 +60,7 @@ class GRCReportGeneration:
 
     content: str
     resolved_model: str
-    report_plan: dict[str, Any] | None = None
+    report_plan: ReportPlan | None = None
     failure_reason: str | None = None
 
 

@@ -21,7 +21,7 @@ from core.report_evidence import (  # noqa: E402
     validate_regulatory_evidence,
 )
 from core.report_plan import (  # noqa: E402
-    finding_evidence_context, render_report_plan, validate_rendered_report,
+    finding_evidence_context, load_report_plan, render_report_plan, validate_rendered_report,
 )
 from core.reporting_identity import (  # noqa: E402
     ReportingIdentityError,
@@ -668,21 +668,25 @@ def compose_report(data: dict, expected_feed_url: str, expected_model: str) -> s
     serialized_sources = [
         {**source, "url": http_url(source["url"], "source URL")} for source in sources
     ]
+    try:
+        plan, plan_error = load_report_plan(metadata.get("report_plan"), sources), None
+    except ValueError as error:
+        plan, plan_error = None, error
     validate_evidence_links(
         body, serialized_sources, include_digest=False,
-        finding_context=finding_evidence_context(body, metadata.get("report_plan"), sources),
+        finding_context=finding_evidence_context(body, plan, sources),
     )
     try:
         # Validate the stored body before adding handoffs. Source positions and raw
         # URL identities are immutable; escaping belongs only at the link boundary.
         validate_regulatory_evidence(body, sources, contract_version=REPORT_CONTRACT_VERSION)
-        validate_rendered_report(body, metadata.get("report_plan"), sources)
-        body = render_report_plan(metadata.get("report_plan"), sources, include_digest=True)
+        if plan is None:
+            raise plan_error or ValueError("report plan is unavailable")
+        validate_rendered_report(body, plan, sources)
+        body = render_report_plan(plan, sources, include_digest=True)
         validate_evidence_links(
             body, serialized_sources,
-            finding_context=finding_evidence_context(
-                body, metadata.get("report_plan"), sources, include_digest=True,
-            ),
+            finding_context=finding_evidence_context(body, plan, sources, include_digest=True),
         )
     except ValueError as error:
         fail(str(error))
