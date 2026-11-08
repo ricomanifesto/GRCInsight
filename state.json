@@ -3564,6 +3564,17 @@
       "release_key": "a1be52894042becc8cc0331d0fae153700ea854ce705c758b63f504a3c629271",
       "release_ref": "f3b1f72476f53ecc912755189a9d8ae444bd602a",
       "stage": "serving"
+    },
+    {
+      "at": "2026-11-08T17:53:00.813Z",
+      "kind": "release",
+      "payload_digest": "bb426c318f4371644f533c8bd4d9b80df1b224530bec01b47437265633d4039b",
+      "proof": "on",
+      "release_key": "c7ce94db76fdd773392de46e6404e5d8a1e67bd7af6f5a8000e5c1116f2f3531",
+      "release_ref": "97643a8e7137d8561edfc8f00bd8582b3a25c460",
+      "source_revision": "ac7b8e1cf5874e52e6ee81d77abe76c9fd10dc3c",
+      "stage": "released",
+      "tree_digest": "86632cd2b1741767f3fb67d1905d162037187018c86e0510f9e27ba8482c1cb6"
     }
   ],
   "schema_version": 1,
