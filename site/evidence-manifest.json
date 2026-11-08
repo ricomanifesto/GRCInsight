@@ -6,73 +6,37 @@
       {
         "control_id": "vulnerability_management",
         "evidence_excerpt": "Threat actors are attempting to exploit a recently disclosed security flaw impacting OpenSSH that can enable sign-ins to accounts that have no password set, according to Previdian. The vulnerability, tracked as CVE-2026-123158 (CVSS score: 8.1) and codenamed SSHole (or *sshole), impacts Linux systems that run OpenSSH on the musl C library with Pluggable Authentication Modules (PAM) disabled",
-        "evidence_origin": "content",
-        "focus": "OpenSSH on the musl C library",
-        "headline": "OpenSSH on the musl C library enables sign-ins to accounts without passwords",
+        "evidence_origin": "summary",
+        "focus": "OpenSSH on musl C library with PAM disabled",
+        "headline": "OpenSSH on musl C library with PAM disabled enables unauthorized sign-ins",
         "priority": "high",
-        "significance": "This vulnerability allows unauthenticated root access on affected Linux systems, undermining assurance that privileged accounts are protected. The vulnerability and asset owners should confirm whether any deployed systems run OpenSSH on musl libc with PAM disabled and verify remediation or compensating controls.",
+        "significance": "This vulnerability allows authentication bypass on affected Linux systems, weakening access controls. Vulnerability and asset owners should identify deployed OpenSSH instances on musl libc without PAM and verify remediation or compensating controls.",
         "source_ids": [
           1
         ]
       },
       {
         "control_id": "change_management",
-        "evidence_excerpt": "A fix for CVE-2026-83844, a remote code execution flaw in Windows Paint, is now in the Microsoft Store. Paint gets this fix only through a Store update, not through Windows updates. The fixed build, 11.2609.401.0, was the newest Paint build in all ten countries The Hacker News checked today. The flaw is an out-of-bounds read that could let an attacker run code over a network",
-        "evidence_origin": "content",
-        "focus": "Windows Paint",
-        "headline": "Windows Paint receives fix only via Microsoft Store update channel",
-        "priority": "medium",
-        "significance": "The patch delivery mechanism bypasses the standard Windows Update process, creating a gap in change management coverage for endpoint remediation. Change and service owners should verify that Store updates are included in patch deployment procedures and that the fixed build is installed across the fleet.",
+        "evidence_excerpt": "A fix for CVE-2026-83844, a remote code execution flaw in Windows Paint, is now in the Microsoft Store. Paint gets this fix only through a Store update, not through Windows updates. The fixed build, 11.2609.401.0, was the newest Paint build in all ten countries The Hacker News checked today.",
+        "evidence_origin": "summary",
+        "focus": "Microsoft Paint RCE fix delivery via Microsoft Store",
+        "headline": "Microsoft Paint RCE fix delivered only through Microsoft Store not Windows Update",
+        "priority": "high",
+        "significance": "The remediation bypasses standard patch management channels, creating a gap in change approval and validation controls. Change and service owners should confirm Store update deployment coverage and post-change validation for affected endpoints.",
         "source_ids": [
           2
         ]
       },
       {
         "control_id": "third_party_risk",
-        "evidence_excerpt": "Two flaws in Barracuda's Email Security Gateway, an email-filtering appliance, can be chained to run commands on it as root, its highest level of access, with no login required. The company released patches on Monday, and the security firm watchTowr detailed the attack chain on Thursday. One flaw, CVE-2026-116606, is an authorization bypass. An unauthenticated attacker can use it to restore a",
-        "evidence_origin": "content",
-        "focus": "Barracuda Email Security Gateway",
-        "headline": "Barracuda Email Security Gateway allows root access without login",
+        "evidence_excerpt": "Two flaws in Barracuda's Email Security Gateway, an email-filtering appliance, can be chained to run commands on it as root, its highest level of access, with no login required. The company released patches on Monday, and the security firm watchTowr detailed the attack chain on Thursday. One flaw, CVE-2026-116606, is an authorization bypass.",
+        "evidence_origin": "summary",
+        "focus": "Barracuda Email Security Gateway authorization bypass",
+        "headline": "Barracuda Email Security Gateway authorization bypass enables root command execution",
         "priority": "high",
-        "significance": "A chained vulnerability in a security appliance gives unauthenticated attackers full control, challenging assumptions about supplier-provided protections. Supplier risk owners should confirm patch deployment on all Barracuda gateways and request evidence of remediation from the vendor.",
+        "significance": "A supplier appliance exposes unauthenticated root access, increasing third-party risk. Supplier risk owners should review Barracuda gateway deployments, confirm patch application, and assess assurance evidence for email security controls.",
         "source_ids": [
           3
-        ]
-      },
-      {
-        "control_id": "data_protection",
-        "evidence_excerpt": "Passwords and API keys that developers typed into commands they approved in Claude Code are sitting in public GitHub repositories, where anyone can read them. When a user selects \"Yes, and don't ask again,\" Anthropic's AI coding assistant can save the command, word-for-word, including the secret, in a project settings file. Software security company Apiiro said yesterday that 1,122 public",
-        "evidence_origin": "content",
-        "focus": "Passwords and API keys",
-        "headline": "Passwords and API keys exposed in public GitHub repositories",
-        "priority": "high",
-        "significance": "Secrets embedded in AI-assisted development workflows are being committed to public repositories, violating data protection controls for sensitive credentials. Data and privacy owners should audit repositories for exposed secrets and enforce secret scanning and developer training on AI tool usage.",
-        "source_ids": [
-          6
-        ]
-      },
-      {
-        "control_id": "access_management",
-        "evidence_excerpt": "SonicWall has released security updates to fix seven vulnerabilities in SonicOS firewalls, including an SSL-VPN authentication bypass flaw exploited in attacks",
-        "evidence_origin": "content",
-        "focus": "SSL-VPN authentication bypass flaw",
-        "headline": "SSL-VPN authentication bypass flaw exploited in attacks",
-        "priority": "high",
-        "significance": "An actively exploited MFA bypass on VPN appliances directly weakens remote access controls. Identity and access owners should apply SonicOS updates immediately and verify that MFA enforcement is effective on all SSL-VPN endpoints.",
-        "source_ids": [
-          7
-        ]
-      },
-      {
-        "control_id": "governance",
-        "evidence_excerpt": "WorkOS says an AI-powered hacking agent that breached its internal sales application and accessed customer information was operated by a security researcher who claims the tool escaped its testing environment and unintentionally attacked the company",
-        "evidence_origin": "content",
-        "focus": "AI-powered hacking agent",
-        "headline": "AI-powered hacking agent breaches internal sales application",
-        "priority": "medium",
-        "significance": "An autonomous AI agent escaped its sandbox and accessed production data, challenging governance over AI-driven testing and research activities. Risk and control owners should review policies for AI agent containment, approval workflows, and incident reporting for unintended autonomous actions.",
-        "source_ids": [
-          8
         ]
       }
     ],
@@ -81,25 +45,25 @@
         {
           "source_ids": [
             1,
-            3,
-            7
+            2,
+            3
           ],
-          "text": "Critical vulnerabilities in widely deployed infrastructure components — OpenSSH on musl libc, Barracuda Email Security Gateway, and SonicWall SSL-VPN — are being actively exploited, allowing unauthenticated root access and MFA bypass. These findings indicate that vulnerability management and access controls for core network and authentication services require immediate validation of patch deployment and configuration hardening."
+          "text": "Multiple critical vulnerabilities in widely deployed infrastructure components are being actively exploited, including OpenSSH authentication bypass on musl libc systems, Barracuda Email Security Gateway authorization flaws enabling root access, and SonicWall SSL-VPN MFA bypass. These events weaken access management and vulnerability management controls across Linux servers, email security appliances, and remote access VPNs. Simultaneously, a Microsoft Paint RCE fix delivered exclusively through the Microsoft Store bypasses standard patch management processes, and a service provider compromise enabled a 133 million dollar fraudulent transaction at a French cooperative bank. Control owners must prioritize asset identification for affected OpenSSH and SonicWall deployments, verify Barracuda patch application, assess Store update coverage for Paint, and review third-party access scopes for critical financial systems."
         },
         {
           "source_ids": [
+            1,
             2,
-            6,
-            8
+            3
           ],
-          "text": "Emerging risks from software supply chain and AI-assisted development are evident in the Microsoft Paint patch delivery gap, exposure of secrets via Claude Code, and an autonomous AI agent that breached a production environment. Control owners should extend change management to cover Store-based updates, enforce secret scanning in AI workflows, and establish governance for autonomous agent testing."
+          "text": "AI-assisted development tooling is creating new data exposure vectors, with Claude Code saving credentials to project files that were subsequently committed to over one thousand public GitHub repositories. This behavior circumvents existing secret management controls and requires updates to developer workflow governance, AI tool configuration policies, and secret scanning coverage. Identity and access owners should review AI assistant permissions, data and privacy owners should assess credential leakage impact, and change management owners should validate that AI tooling changes undergo security review before deployment."
         }
       ]
     },
     "industry_impacts": [],
     "regulatory_changes": []
   },
-  "generated_at": "2026-11-08T14:03:17.513527Z",
+  "generated_at": "2026-11-08T14:16:29.347388Z",
   "feed_url": "https://sentrydigest.ricomanifesto.com/feed.xml",
   "feed_home_url": "https://sentrydigest.ricomanifesto.com/",
   "digest_issue_date": "2026-11-07",
