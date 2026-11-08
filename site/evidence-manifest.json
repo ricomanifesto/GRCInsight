@@ -6,73 +6,49 @@
       {
         "control_id": "vulnerability_management",
         "evidence_excerpt": "Threat actors are attempting to exploit a recently disclosed security flaw impacting OpenSSH that can enable sign-ins to accounts that have no password set, according to Previdian. The vulnerability, tracked as CVE-2026-123158 (CVSS score: 8.1) and codenamed SSHole (or *sshole), impacts Linux systems that run OpenSSH on the musl C library with Pluggable Authentication Modules (PAM) disabled",
-        "evidence_origin": "content",
-        "focus": "OpenSSH on the musl C library",
-        "headline": "OpenSSH on the musl C library exposes accounts without passwords to remote sign-in",
+        "evidence_origin": "summary",
+        "focus": "OpenSSH on the musl C library with Pluggable Authentication Modules (PAM) disabled",
+        "headline": "OpenSSH on the musl C library with Pluggable Authentication Modules (PAM) disabled exposes passwordless sign-in",
         "priority": "high",
-        "significance": "Active exploitation of this OpenSSH configuration weakness undermines vulnerability management coverage for Linux assets. The vulnerability and asset owners should confirm affected systems are identified and remediated or compensating controls documented.",
+        "significance": "This vulnerability allows unauthenticated root access on affected Linux systems, weakening vulnerability management controls that rely on timely patching. The vulnerability and asset owners should confirm whether any systems run OpenSSH on musl libc with PAM disabled and verify remediation status.",
         "source_ids": [
           1
         ]
       },
       {
         "control_id": "change_management",
-        "evidence_excerpt": "A fix for CVE-2026-83844, a remote code execution flaw in Windows Paint, is now in the Microsoft Store. Paint gets this fix only through a Store update, not through Windows updates. The fixed build, 11.2609.401.0, was the newest Paint build in all ten countries The Hacker News checked today. The flaw is an out-of-bounds read that could let an attacker run code over a network. Microsoft rates",
-        "evidence_origin": "content",
-        "focus": "Windows Paint",
-        "headline": "Windows Paint receives fix only via Microsoft Store not Windows Update",
+        "evidence_excerpt": "A fix for CVE-2026-83844, a remote code execution flaw in Windows Paint, is now in the Microsoft Store. Paint gets this fix only through a Store update, not through Windows updates. The fixed build, 11.2609.401.0, was the newest Paint build in all ten countries The Hacker News checked today.",
+        "evidence_origin": "summary",
+        "focus": "Microsoft Paint RCE fix now available but Windows Update won't deliver it",
+        "headline": "Microsoft Paint RCE fix now available but Windows Update won't deliver it extends patch deployment gap",
         "priority": "medium",
-        "significance": "The exclusive Store delivery channel for this Paint fix bypasses standard change management workflows and may leave endpoints unpatched. Change and service owners should verify Store update deployment coverage and validation evidence.",
+        "significance": "The patch delivery mechanism bypasses standard Windows Update, creating a gap in change management validation. Change and service owners should verify that Store updates are included in patch approval workflows and that the fixed build is deployed across endpoints.",
         "source_ids": [
           2
         ]
       },
       {
         "control_id": "third_party_risk",
-        "evidence_excerpt": "Two flaws in Barracuda's Email Security Gateway, an email-filtering appliance, can be chained to run commands on it as root, its highest level of access, with no login required. The company released patches on Monday, and the security firm watchTowr detailed the attack chain on Thursday. One flaw, CVE-2026-116606, is an authorization bypass. An unauthenticated attacker can use it to restore a",
-        "evidence_origin": "content",
-        "focus": "Barracuda's Email Security Gateway",
-        "headline": "Barracuda's Email Security Gateway allows unauthenticated root command execution via chained flaws",
+        "evidence_excerpt": "Two flaws in Barracuda's Email Security Gateway, an email-filtering appliance, can be chained to run commands on it as root, its highest level of access, with no login required. The company released patches on Monday, and the security firm watchTowr detailed the attack chain on Thursday.",
+        "evidence_origin": "summary",
+        "focus": "Barracuda Email Security Gateway",
+        "headline": "Barracuda Email Security Gateway enables root access without login via chained flaws",
         "priority": "high",
-        "significance": "An unauthenticated root access chain in a perimeter email appliance represents a critical supplier control gap. The supplier risk owner should obtain patch confirmation and test evidence from the vendor.",
+        "significance": "An unauthenticated attacker can achieve root access on the email gateway, compromising a critical third-party security control. Supplier risk owners should confirm patch deployment on all Barracuda appliances and request assurance evidence from the vendor.",
         "source_ids": [
           3
         ]
       },
       {
         "control_id": "data_protection",
-        "evidence_excerpt": "Passwords and API keys that developers typed into commands they approved in Claude Code are sitting in public GitHub repositories, where anyone can read them. When a user selects \"Yes, and don't ask again,\" Anthropic's AI coding assistant can save the command, word-for-word, including the secret, in a project settings file. Software security company Apiiro said yesterday that 1,122 public",
-        "evidence_origin": "content",
-        "focus": "Passwords and API keys",
-        "headline": "Passwords and API keys appear in public GitHub repositories via Claude Code project settings",
+        "evidence_excerpt": "Passwords and API keys that developers typed into commands they approved in Claude Code are sitting in public GitHub repositories, where anyone can read them. When a user selects \"Yes, and don't ask again,\" Anthropic's AI coding assistant can save the command, word-for-word, including the secret, in a project settings file.",
+        "evidence_origin": "summary",
+        "focus": "Claude Code's 'Don't Ask Again' file",
+        "headline": "Claude Code's 'Don't Ask Again' file exposes passwords and keys in public repositories",
         "priority": "high",
-        "significance": "Secrets exposed in public repositories via AI coding assistant settings indicate a data protection control failure. Data and privacy owners should audit repository scanning and secret revocation procedures for affected projects.",
+        "significance": "Developer secrets are being inadvertently committed to public repositories via an AI assistant feature, bypassing data protection controls. Data and privacy owners should audit code repositories for exposed credentials and implement secret scanning with automated revocation.",
         "source_ids": [
           6
-        ]
-      },
-      {
-        "control_id": "access_management",
-        "evidence_excerpt": "SonicWall has released security updates to fix seven vulnerabilities in SonicOS firewalls, including an SSL-VPN authentication bypass flaw exploited in attacks",
-        "evidence_origin": "content",
-        "focus": "SSL-VPN authentication bypass flaw",
-        "headline": "SSL-VPN authentication bypass flaw enables attackers to circumvent MFA on SonicOS firewalls",
-        "priority": "high",
-        "significance": "An exploited MFA bypass on SSL-VPN directly weakens access management assurance for remote access. Identity and access owners should review VPN authentication logs and test MFA effectiveness against this bypass.",
-        "source_ids": [
-          7
-        ]
-      },
-      {
-        "control_id": "governance",
-        "evidence_excerpt": "Security records are increasingly being used by vendors to train their models, creating new risks for enterprises.",
-        "evidence_origin": "content",
-        "focus": "Security records",
-        "headline": "Security records are used by vendors to train models creating enterprise risk",
-        "priority": "medium",
-        "significance": "Vendor use of security incident records for model training introduces governance and accountability risks for sensitive data. Risk and control owners should review vendor contracts and data processing assurances for incident archives.",
-        "source_ids": [
-          12
         ]
       }
     ],
@@ -81,25 +57,24 @@
         {
           "source_ids": [
             1,
-            3,
-            7
+            3
           ],
-          "text": "Active exploitation of critical vulnerabilities in widely deployed infrastructure components demands immediate vulnerability and access management review. OpenSSH configurations on musl libc systems are being targeted within hours of disclosure, a Barracuda email gateway flaw chain permits unauthenticated root access, and a SonicWall SSL-VPN MFA bypass is under active attack. Control owners must verify asset coverage, patch deployment, and authentication monitoring for these exposures."
+          "text": "Multiple critical vulnerabilities in widely used infrastructure components are being actively exploited within hours of disclosure, including an OpenSSH authentication bypass on musl libc systems, a chained root access flaw in Barracuda Email Security Gateway, and an SSL-VPN MFA bypass in SonicWall firewalls. These events weaken vulnerability management and access management controls by demonstrating that patching delays and authentication gaps can be rapidly weaponized. Control owners should prioritize asset identification for affected OpenSSH, Barracuda, and SonicWall deployments and verify that emergency patching procedures are executed."
         },
         {
           "source_ids": [
-            6,
-            12
+            2,
+            6
           ],
-          "text": "Emerging data protection and governance risks from AI-assisted development and vendor data practices require strengthened secrets management and vendor oversight. Passwords and API keys are leaking into public GitHub repositories via Claude Code project settings, while security incident archives are being repurposed by vendors for model training without explicit enterprise consent. Data and risk owners should confirm repository scanning, secret revocation, and vendor contractual controls."
+          "text": "Control assurance gaps also extend to patch delivery mechanisms, third-party service providers, and AI-assisted development workflows. A Microsoft Paint remote code execution fix is only available via the Microsoft Store, bypassing standard Windows Update channels; a French bank lost $133 million through a compromised service provider; and an AI coding assistant feature exposed over a thousand sets of credentials in public repositories. These findings highlight the need for change management to validate alternative patch sources, third-party risk programs to assess supplier access to financial systems, and data protection controls to scan for secrets leaked through AI tools."
         }
       ]
     },
     "industry_impacts": [],
     "regulatory_changes": []
   },
-  "generated_at": "2026-11-07T18:18:37.831762Z",
-  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/42e62601f1a5729d6d6bdc9bfbcafe0a8e8a499c/site/feed.xml",
+  "generated_at": "2026-11-08T13:06:15.293933Z",
+  "feed_url": "https://sentrydigest.ricomanifesto.com/feed.xml",
   "feed_home_url": "https://sentrydigest.ricomanifesto.com/",
   "digest_issue_date": "2026-11-07",
   "digest_issue_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-07/",
