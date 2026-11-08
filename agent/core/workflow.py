@@ -21,6 +21,7 @@ from services.rss_service import RSSService
 from services.model_service import GRCModelService
 from services.regulatory_sources import enrich_regulatory_sources
 from core.article_evidence import capture_article_evidence
+from core.content_policy import contains_virtual_event
 from core.article_selection import article_text, selected_article_mask, workflow_selected
 from core.entities import analyze_article_grc_content, detect_risk_categories
 from core.reporting_identity import (
@@ -312,6 +313,11 @@ async def run_grc_analysis_endpoint(
                     logger.warning(
                         "Skipping duplicate feed entry URL to preserve canonical evidence"
                     )
+                    continue
+                if contains_virtual_event(
+                    {key: entry.get(key) for key in ("title", "description", "content")}
+                ):
+                    logger.info("Skipping a tagged virtual-event promotion")
                     continue
                 seen_article_urls.add(url)
                 published_raw = entry.get("published", "")
