@@ -698,6 +698,13 @@
       "at": "2026-11-08T14:13:47.775Z",
       "run_id": "42488748649",
       "stage": "invoked"
+    },
+    {
+      "admission_key": "run:42488748649",
+      "at": "2026-11-08T14:13:50.044Z",
+      "handle": "report_20261108_141349_898",
+      "run_id": "42488748649",
+      "stage": "invoked"
     }
   ],
   "schema_version": 1,
