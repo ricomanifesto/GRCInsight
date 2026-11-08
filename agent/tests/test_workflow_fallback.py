@@ -100,6 +100,7 @@ def test_run_grc_analysis_endpoint_falls_back_when_model_is_unavailable(monkeypa
     assert response.metadata.analysis_mode == "fallback"
     assert response.metadata.fallback_reason == "Error code: 429 - insufficient_quota"
     assert response.metadata.report_plan is None
+    assert response.metadata.relevance_diagnostics is None
 
 
 def test_run_grc_analysis_endpoint_marks_model_backed_reports(monkeypatch):
@@ -149,6 +150,9 @@ def test_run_grc_analysis_endpoint_marks_model_backed_reports(monkeypatch):
                 resolved_model="google/example-model",
             )
 
+        def relevance_summary(self):
+            return {"mode": "enabled", "route": "decision", "dropped_positions": 0}
+
     monkeypatch.setattr(workflow_mod.rss_service, "fetch_feed", fake_fetch_feed)
     monkeypatch.setattr(workflow_mod.rss_service, "enrich_articles", fake_enrich_articles)
     monkeypatch.setattr(workflow_mod, "GRCModelService", FakeGRCModelService)
@@ -168,6 +172,12 @@ def test_run_grc_analysis_endpoint_marks_model_backed_reports(monkeypatch):
     assert response.metadata.source_url == "https://example.com/feed.xml"
     assert response.metadata.source_issue_date == "2026-03-20"
     assert response.metadata.source_issue_url == ("https://digest.example/archive/2026-03-20/")
+    # Each report carries its own relevance evidence for the run summary.
+    assert response.metadata.relevance_diagnostics == {
+        "mode": "enabled",
+        "route": "decision",
+        "dropped_positions": 0,
+    }
     assert response.metadata.analysis_period
     assert response.metadata.requested_model == "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free"
     assert response.metadata.resolved_model == "google/example-model"
@@ -562,3 +572,13 @@ def test_malformed_feed_with_recoverable_entries_remains_usable(monkeypatch):
     assert result["title"] == "Recovered"
     assert result["entry_count"] == 1
     assert result["entries"][0]["title"] == "One"
+
+
+def test_a_failing_relevance_summary_never_affects_the_report(monkeypatch):
+    class Broken:
+        def relevance_summary(self):
+            raise RuntimeError("diagnostics bug")
+
+    assert workflow_mod._relevance_diagnostics(Broken()) is None
+    assert workflow_mod._relevance_diagnostics(None) is None
+    assert workflow_mod._relevance_diagnostics(object()) is None

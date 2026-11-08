@@ -111,6 +111,8 @@ class ReportMetadata(BaseModel):
     frameworks_referenced: List[str] = Field(default_factory=list)
     industries_affected: List[str] = Field(default_factory=list)
     regulatory_bodies: List[str] = Field(default_factory=list)
+    # Bounded relevance pilot evidence for this report; None when the pilot is off.
+    relevance_diagnostics: Optional[Dict[str, Any]] = None
 
 
 class Report(BaseModel):

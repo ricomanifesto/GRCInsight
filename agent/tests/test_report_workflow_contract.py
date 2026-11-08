@@ -2049,25 +2049,25 @@ def diagnostics_script() -> str:
     return "\n".join(line[8:] for line in lines if line.startswith("        ") or not line.strip())
 
 
-def run_diagnostics_step(tmp_path, aws_body: str, report_id: str = DIAGNOSTICS_REPORT):
-    """Execute the step's own shell with a fake AWS CLI and this interpreter as python3."""
+def run_diagnostics_step(tmp_path, report_data: str | None, report_id: str = DIAGNOSTICS_REPORT):
+    """Execute the step's own shell in a scratch workspace, with this interpreter as python3."""
     import os
     import subprocess
     import sys
 
     bin_dir = tmp_path / "bin"
     bin_dir.mkdir()
-    (bin_dir / "aws").write_text(
-        "#!/bin/bash\n" + f'printf "%s\\n" "$@" > "{tmp_path}/aws-args"\n' + aws_body
-    )
     (bin_dir / "python3").write_text(f'#!/bin/bash\nexec "{sys.executable}" "$@"\n')
-    for tool in ("aws", "python3"):
-        (bin_dir / tool).chmod(0o755)
-    summary = tmp_path / "summary.md"
-    # Run from a scratch workspace: the step writes its query results to the cwd.
+    (bin_dir / "python3").chmod(0o755)
+    # Any AWS call would fail loudly: the step reads only the retrieved report.
+    (bin_dir / "aws").write_text(f'#!/bin/bash\ntouch "{tmp_path}/aws-called"\nexit 99\n')
+    (bin_dir / "aws").chmod(0o755)
     workspace = tmp_path / "workspace"
     workspace.mkdir()
     (workspace / "scripts").symlink_to(REPO_ROOT / "scripts")
+    if report_data is not None:
+        (workspace / "report-data.json").write_text(report_data)
+    summary = tmp_path / "summary.md"
     result = subprocess.run(
         ["bash", "-c", diagnostics_script()],
         cwd=workspace,
@@ -2075,77 +2075,70 @@ def run_diagnostics_step(tmp_path, aws_body: str, report_id: str = DIAGNOSTICS_R
             **os.environ,
             "PATH": f"{bin_dir}:{os.environ['PATH']}",
             "REPORT_ID": report_id,
-            "LOOKBACK_HOURS": "24",
-            "PYTHON_FUNCTION_NAME": "grcinsight-python-function",
             "GITHUB_STEP_SUMMARY": str(summary),
         },
         capture_output=True,
         text=True,
         timeout=60,
     )
-    aws_args = (tmp_path / "aws-args").read_text() if (tmp_path / "aws-args").exists() else ""
-    return result, summary.read_text() if summary.exists() else "", aws_args
+    assert not (tmp_path / "aws-called").exists()
+    return result, summary.read_text() if summary.exists() else ""
 
 
-def relevance_event(report_id, status):
-    payload = json.dumps({"mode": "shadow", "status": status, "report_id": report_id})
-    return {
-        "message": f"2026-11-07 | INFO | services.model_service - Article relevance pilot {payload}"
-    }
+def stored_report(report_id, diagnostics):
+    metadata = {"analysis_mode": "model"}
+    if diagnostics is not None:
+        metadata["relevance_diagnostics"] = diagnostics
+    return json.dumps({"id": report_id, "status": "completed", "metadata": metadata})
 
 
 def test_relevance_diagnostics_never_block_publication_and_cover_reattached_reports():
     step = diagnostics_step()
     workflow = REPORT_WORKFLOW.read_text()
-    # Every run holding a report handle, fresh or reattached, looks up its own report.
+    # Every run holding a report handle, fresh or reattached, reads its own report.
     assert "if: always() && steps.handle.outputs.REPORT_ID" in step
     assert "REPORT_ID: ${{ steps.handle.outputs.REPORT_ID }}" in step
     assert "steps.admission.outputs.reattach_handle" in workflow.split("id: handle", 1)[1][:800]
-    assert "continue-on-error: true" in step and "timeout-minutes: 2" in step
-    assert "exit 1" not in step and "cat " not in step
+    assert "continue-on-error: true" in step and "timeout-minutes: 1" in step
+    assert "aws " not in step and "exit 1" not in step
+    # The retrieved report response is written before this step runs.
+    assert workflow.index("> report-data.json") < workflow.index(DIAGNOSTICS_STEP)
     assert workflow.index(DIAGNOSTICS_STEP) < workflow.index(
         "- name: Validate generated site report"
     )
 
 
-def test_relevance_diagnostics_show_only_this_reports_lines(tmp_path):
-    events = {
-        "events": [
-            relevance_event("report_20261107_150412_987", "used"),
-            relevance_event(DIAGNOSTICS_REPORT, "shadow"),
-        ]
-    }
-    result, summary, aws_args = run_diagnostics_step(
-        tmp_path, f"cat <<'JSON'\n{json.dumps(events)}\nJSON\n"
+def test_relevance_diagnostics_show_this_reports_summary(tmp_path):
+    result, summary = run_diagnostics_step(
+        tmp_path, stored_report(DIAGNOSTICS_REPORT, {"mode": "shadow", "keep_violations": 0})
     )
     assert result.returncode == 0, result.stderr
-    assert f'"Article relevance" "{DIAGNOSTICS_REPORT}"' in aws_args
-    assert "/aws/lambda/grcinsight-python-function" in aws_args
-    assert '"status":"shadow"' in summary and '"status":"used"' not in summary
-    assert "report_20261107_150412_987" not in result.stdout + summary
+    assert '"keep_violations":0' in summary and '"mode":"shadow"' in summary
+
+
+def test_relevance_diagnostics_refuse_another_reports_response(tmp_path):
+    result, summary = run_diagnostics_step(
+        tmp_path, stored_report("report_20261107_150412_987", {"mode": "enabled"})
+    )
+    assert result.returncode == 0, result.stderr
+    assert "response_for_another_report" in summary and '"mode"' not in summary
 
 
 def test_relevance_diagnostics_report_absence_without_failing(tmp_path):
-    result, summary, _ = run_diagnostics_step(tmp_path, "echo '{\"events\": []}'\n")
+    result, summary = run_diagnostics_step(tmp_path, stored_report(DIAGNOSTICS_REPORT, None))
     assert result.returncode == 0, result.stderr
-    assert f"No article relevance diagnostics for {DIAGNOSTICS_REPORT}" in summary
+    assert "relevance mode off" in summary
 
 
-def test_relevance_diagnostics_report_a_denied_query_by_code_only(tmp_path):
-    denied = (
-        "echo 'An error occurred (AccessDeniedException) when calling the FilterLogEvents "
-        "operation: User: arn:aws:iam::123456789012:user/ci is not authorized' >&2\nexit 254\n"
-    )
-    result, summary, _ = run_diagnostics_step(tmp_path, denied)
+def test_relevance_diagnostics_survive_a_missing_report_response(tmp_path):
+    result, summary = run_diagnostics_step(tmp_path, None)
     assert result.returncode == 0, result.stderr
-    assert "unavailable (AccessDeniedException)" in result.stdout + summary
-    assert "123456789012" not in result.stdout + summary
+    assert "unavailable (no_report_data)" in summary
 
 
 def test_relevance_diagnostics_skip_an_unexpected_report_handle(tmp_path):
-    result, summary, aws_args = run_diagnostics_step(
-        tmp_path, "echo '{}'\n", report_id='report_x" OR "y'
+    result, summary = run_diagnostics_step(
+        tmp_path, stored_report(DIAGNOSTICS_REPORT, {}), report_id='report_x" OR "y'
     )
     assert result.returncode == 0, result.stderr
-    assert aws_args == "" and summary == ""
-    assert "unexpected report handle" in result.stdout
+    assert summary == "" and "unexpected report handle" in result.stdout

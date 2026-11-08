@@ -501,38 +501,19 @@ jobs:
           echo
         done
 
-    # In shadow or enabled mode the Python Lambda logs bounded relevance
-    # diagnostics (counts, labels, probabilities, URL hashes; never article
-    # text) and names the report each line belongs to. Surface this report's
-    # lines, fresh or reattached, within a fixed bound. A missing result or a
-    # denied query is reported and never affects publication.
+    # In shadow or enabled mode the Python Lambda stores a bounded relevance
+    # summary (counts, route, labels and cost; never article text) in the
+    # report's own metadata. Surface it for this run's report, fresh or
+    # reattached, within a fixed bound. Absence never affects publication.
     - name: Report article relevance diagnostics
       if: always() && steps.handle.outputs.REPORT_ID
       continue-on-error: true
-      timeout-minutes: 2
+      timeout-minutes: 1
       env:
         REPORT_ID: ${{ steps.handle.outputs.REPORT_ID }}
-        LOOKBACK_HOURS: 24
       run: |
-        set -u
-        PATTERN=$(python3 scripts/relevance_diagnostics.py --report-id "$REPORT_ID" --print-filter-pattern)
-        case "$PATTERN" in
-          '"Article relevance" "report_'*) ;;
-          *) echo "$PATTERN"; exit 0 ;;
-        esac
-        START_TS=$(( ( $(date +%s) - LOOKBACK_HOURS * 3600 ) * 1000 ))
-        if aws logs filter-log-events \
-          --log-group-name "/aws/lambda/${PYTHON_FUNCTION_NAME}" \
-          --start-time "$START_TS" \
-          --filter-pattern "$PATTERN" \
-          --max-items 50 --output json > relevance.json 2> relevance.err; then
-          python3 scripts/relevance_diagnostics.py --report-id "$REPORT_ID" \
-            --events relevance.json --summary "$GITHUB_STEP_SUMMARY"
-        else
-          CODE=$(grep -oE 'An error occurred \([A-Za-z]+\)' relevance.err | head -n 1 | sed -E 's/.*\(([A-Za-z]+)\)/\1/')
-          python3 scripts/relevance_diagnostics.py --report-id "$REPORT_ID" \
-            --unavailable "${CODE:-query_failed}" --summary "$GITHUB_STEP_SUMMARY"
-        fi
+        python3 scripts/relevance_diagnostics.py --report-id "$REPORT_ID" \
+          --report-data report-data.json --summary "$GITHUB_STEP_SUMMARY"
 
     - name: Validate generated site report
       if: steps.get-report.outputs.publishable == 'true'

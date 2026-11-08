@@ -209,6 +209,7 @@ def handler(event, context):
                                 "frameworks_referenced": md.frameworks_referenced or [],
                                 "industries_affected": md.industries_affected or [],
                                 "regulatory_bodies": md.regulatory_bodies or [],
+                                "relevance_diagnostics": md.relevance_diagnostics,
                             }
 
                         update_expr = [

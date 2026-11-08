@@ -223,6 +223,18 @@ def _build_local_analysis(enriched_articles: List[ArticleInput]):
     return local_signals, analysis
 
 
+def _relevance_diagnostics(model_service: Any) -> Dict[str, Any] | None:
+    """The report's relevance evidence; never allowed to affect report generation."""
+    summarize = getattr(model_service, "relevance_summary", None)
+    if not callable(summarize):
+        return None
+    try:
+        return summarize()
+    except Exception:
+        logger.warning("Article relevance summary was unavailable for this report")
+        return None
+
+
 def _unavailable_report_content(title: str, generated_at: datetime) -> str:
     """Body stored for a refused run.
 
@@ -374,6 +386,8 @@ async def run_grc_analysis_endpoint(
                 analysis_results = model_analysis
                 used_model_analysis = True
 
+        relevance_diagnostics = _relevance_diagnostics(model_service)
+
         grc_article_count = analysis_results.get("summary", {}).get("grc_relevant_count", 0)
         source_evidence = await enrich_regulatory_sources(
             _build_source_evidence(enriched_articles), model_deadline=model_deadline
@@ -491,6 +505,7 @@ async def run_grc_analysis_endpoint(
             frameworks_referenced=analysis_data.get("frameworks_referenced", []),
             industries_affected=analysis_data.get("industries_affected", []),
             regulatory_bodies=analysis_data.get("regulatory_bodies", []),
+            relevance_diagnostics=relevance_diagnostics,
         )
 
         logger.info("GRC workflow completed successfully")

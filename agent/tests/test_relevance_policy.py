@@ -834,3 +834,51 @@ def test_relevance_log_lines_name_the_report_they_belong_to(monkeypatch):
 def test_relevance_log_lines_omit_report_identity_outside_a_report_invocation(monkeypatch):
     payloads = relevance_log_payloads(service(monkeypatch, "enabled"))
     assert payloads and all("report_id" not in payload for payload in payloads.values())
+
+
+def assert_storage_safe(value):
+    """DynamoDB-safe without conversion: no floats anywhere."""
+    if isinstance(value, dict):
+        for key, item in value.items():
+            assert isinstance(key, str)
+            assert_storage_safe(item)
+    elif isinstance(value, list):
+        for item in value:
+            assert_storage_safe(item)
+    else:
+        assert value is None or isinstance(value, (str, int, bool)), value
+
+
+def test_relevance_summary_is_absent_when_the_pilot_is_off(monkeypatch):
+    model = service(monkeypatch, "off")
+    asyncio.run(model.analyze_articles_for_grc(articles()))
+    assert model.relevance_summary() is None
+
+
+def test_relevance_summary_counts_drops_and_holds_no_article_text(monkeypatch):
+    model = service(monkeypatch, "enabled")
+    model.relevance_client.classify = AsyncMock(return_value=result())
+    asyncio.run(model.analyze_articles_for_grc(articles()))
+    summary = model.relevance_summary()
+    assert summary["mode"] == "enabled" and summary["policy"] == "keep-uncertain-v2"
+    assert summary["route"] == "decision" and summary["keep_violations"] == 0
+    assert summary["positions"] == 2
+    # Article 1 is confidently irrelevant with no local override: dropped.
+    assert summary["dropped_positions"] == 1 and summary["selected_positions"] == 1
+    assert summary["cost"] == "0.0000042" and summary["threshold"] == "0.95"
+    assert_storage_safe(summary)
+    serialized = json.dumps(summary)
+    for text in ("garden", "Same title", "example.com"):
+        assert text not in serialized
+    assert len(serialized) < 2000
+
+
+def test_shadow_summary_reports_the_counterfactual_without_changing_selection(
+    monkeypatch,
+):
+    model = service(monkeypatch, "shadow")
+    model.relevance_client.classify = AsyncMock(return_value=result())
+    assert asyncio.run(model.analyze_articles_for_grc(articles())) == {"legacy": True}
+    summary = model.relevance_summary()
+    assert summary["mode"] == "shadow" and summary["selection_basis"] == "conditional_on_enrichment"
+    assert_storage_safe(summary)

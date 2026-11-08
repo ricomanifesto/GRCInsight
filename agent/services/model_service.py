@@ -1,6 +1,7 @@
 """OpenRouter model service for GRC analysis."""
 
 import asyncio
+from decimal import Decimal
 from dataclasses import dataclass
 from datetime import datetime, timezone
 import json
@@ -255,6 +256,55 @@ class GRCModelService:
         return self._analysis_from_selection(
             articles, list(plan.model_selected), fallback.get("analysis", {})
         )
+
+    def relevance_summary(self) -> dict[str, Any] | None:
+        """Bounded per-report relevance evidence, or None when the pilot did not run.
+
+        Stored with the report, so it holds counts, labels and route data only, no
+        article text or per-article rows, and no floats (decimal values are strings).
+        """
+        diagnostics = getattr(self, "last_relevance_diagnostics", None)
+        if diagnostics is None:
+            return None
+
+        def text(value: Any) -> str | None:
+            return (
+                None
+                if value is None
+                else format(Decimal(repr(value)), "f") if isinstance(value, float) else str(value)
+            )
+
+        summary: dict[str, Any] = {
+            key: diagnostics[key]
+            for key in (
+                "mode",
+                "status",
+                "policy",
+                "route",
+                "reason",
+                "fallback_status",
+                "fallback_size",
+                "selection_basis",
+                "selection_status",
+                "keep_violations",
+                "article_count",
+                "uncertain_count",
+                "input_tokens",
+                "output_tokens",
+            )
+            if key in diagnostics
+        }
+        summary["models"] = [str(model) for model in diagnostics.get("models") or []]
+        for key in ("cost", "elapsed_seconds", "threshold"):
+            if key in diagnostics:
+                summary[key] = text(diagnostics[key])
+        records = getattr(self, "last_selection_records", None)
+        if records is not None:
+            summary["positions"] = len(records)
+            summary["selected_positions"] = sum(r.workflow_selected is True for r in records)
+            summary["dropped_positions"] = sum(r.workflow_selected is False for r in records)
+            summary["undecided_positions"] = sum(r.workflow_selected is None for r in records)
+        return summary
 
     def _plan(
         self, articles: List[ArticleInput], result: RelevanceResult | None, failure: str | None

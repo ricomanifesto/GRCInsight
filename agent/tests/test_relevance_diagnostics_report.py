@@ -2,7 +2,6 @@
 
 import json
 from pathlib import Path
-import runpy
 import subprocess
 import sys
 
@@ -14,121 +13,89 @@ REPORT = "report_20261107_181614_123"
 OTHER = "report_20261107_150412_987"
 
 
-def event(kind, payload, prefix="2026-11-07 18:16:20.123 | INFO | services.model_service - "):
-    return {"timestamp": 1, "message": f"{prefix}Article relevance {kind} {json.dumps(payload)}\n"}
-
-
-def run(tmp_path, events=None, *args):
+def run(tmp_path, report=None, *args, report_id=REPORT, raw=None):
     summary = tmp_path / "summary.md"
-    command = [sys.executable, str(SCRIPT), "--report-id", REPORT, "--summary", str(summary)]
-    if events is not None:
-        path = tmp_path / "events.json"
-        path.write_text(json.dumps({"events": events}))
-        command += ["--events", str(path)]
-    command += list(args)
+    data = tmp_path / "report-data.json"
+    if raw is not None:
+        data.write_text(raw)
+    elif report is not None:
+        data.write_text(json.dumps(report))
+    command = [
+        sys.executable,
+        str(SCRIPT),
+        "--report-id",
+        report_id,
+        "--report-data",
+        str(data),
+        "--summary",
+        str(summary),
+        *args,
+    ]
     result = subprocess.run(command, capture_output=True, text=True, timeout=30)
     return result, summary.read_text() if summary.exists() else ""
 
 
-def test_only_the_requested_reports_lines_are_surfaced(tmp_path):
-    result, summary = run(
-        tmp_path,
-        [
-            event("pilot", {"mode": "shadow", "status": "shadow", "report_id": REPORT}),
-            event("pilot", {"mode": "shadow", "status": "used", "report_id": OTHER}),
-            event("selection", {"route": "decision", "records": []}),
-            event("selection", {"route": "decision", "keep_violations": 0, "report_id": REPORT}),
-        ],
-    )
-    assert result.returncode == 0
-    assert result.stdout.count("Article relevance ") == 2
-    assert OTHER not in result.stdout + summary
-    assert '"status":"used"' not in result.stdout
-    assert "Article relevance selection" in summary and '"keep_violations":0' in summary
+def stored(report_id=REPORT, diagnostics=None):
+    metadata = {"analysis_mode": "model"}
+    if diagnostics is not None:
+        metadata["relevance_diagnostics"] = diagnostics
+    return {"id": report_id, "status": "completed", "metadata": metadata}
 
 
-def test_malformed_or_foreign_messages_never_reach_the_output(tmp_path):
+def test_the_reports_own_summary_is_surfaced(tmp_path):
     result, summary = run(
         tmp_path,
-        [
-            {"message": f"Article relevance pilot not-json {REPORT}"},
-            {"message": f"Article relevance pilot [1, 2] {REPORT}"},
-            {"message": f"Traceback mentioning {REPORT}: secret article text"},
-            {"no_message": True},
-            event("pilot", {"report_id": REPORT, "status": "shadow", "note": "``` breakout"}),
-        ],
+        stored(diagnostics={"mode": "enabled", "dropped_positions": 2, "cost": "0.001"}),
     )
     assert result.returncode == 0
-    output = result.stdout + summary
-    assert "secret article text" not in output and "not-json" not in output
-    assert output.count("Article relevance ") == 2
-    # Model-free fields are re-serialized; fences in values cannot close the block.
+    assert '"dropped_positions":2' in result.stdout and '"mode":"enabled"' in summary
+    assert f"Report `{REPORT}`" in summary and summary.count("```") == 2
+
+
+def test_a_response_for_another_report_is_never_surfaced(tmp_path):
+    result, summary = run(tmp_path, stored(report_id=OTHER, diagnostics={"mode": "enabled"}))
+    assert result.returncode == 0
+    assert "unavailable (response_for_another_report)" in result.stdout
+    assert '"mode"' not in result.stdout + summary
+
+
+def test_values_cannot_break_out_of_the_summary_block(tmp_path):
+    result, summary = run(tmp_path, stored(diagnostics={"status": "``` breakout\n## heading"}))
+    assert result.returncode == 0
     assert summary.count("```") == 2
+    assert "\n## heading" not in summary
 
 
-def test_total_output_is_bounded_in_lines_and_bytes(tmp_path):
-    records = [{"index": i, "article_key": "a" * 64} for i in range(64)]
-    events = [
-        event("selection", {"report_id": REPORT, "records": records, "n": n}) for n in range(30)
-    ]
-    result, summary = run(tmp_path, events, "--max-bytes", "6000", "--max-lines", "5")
-    assert result.returncode == 0
+def test_output_is_bounded_in_bytes(tmp_path):
+    big = {"models": ["m" * 64] * 400}
+    result, summary = run(tmp_path, stored(diagnostics=big), "--max-bytes", "3000")
     block = summary.split("```")[1]
-    assert len(block.encode()) <= 6000
-    assert len(result.stdout.encode()) <= 6000 + 400
-    assert "omitted" in result.stdout and "omitted" in summary
-    lines = [line for line in block.splitlines() if line.startswith("Article relevance")]
-    assert 1 <= len(lines) <= 5
-
-
-def test_a_single_oversized_line_is_truncated_to_the_bound(tmp_path):
-    records = [{"index": i, "article_key": "b" * 64} for i in range(500)]
-    result, summary = run(tmp_path, [event("selection", {"report_id": REPORT, "records": records})])
-    block = summary.split("```")[1]
-    assert len(block.encode()) <= 8000
+    assert len(block.encode()) <= 3000
     assert "truncated" in summary
+    assert len(result.stdout.encode()) <= 3000 + 200
 
 
-def test_no_matching_diagnostics_is_reported_explicitly(tmp_path):
-    result, summary = run(tmp_path, [event("pilot", {"report_id": OTHER})])
+def test_absent_summary_means_the_pilot_was_off(tmp_path):
+    result, summary = run(tmp_path, stored())
     assert result.returncode == 0
-    assert f"No article relevance diagnostics for {REPORT}" in result.stdout
-    assert "relevance mode off" in result.stdout
-    assert "```" not in summary
+    assert f"No article relevance diagnostics for {REPORT} (relevance mode off)" in summary
 
 
-@pytest.mark.parametrize("contents", ["", "not json", '{"events": "nope"}'])
-def test_missing_or_unreadable_query_results_do_not_fail(tmp_path, contents):
-    path = tmp_path / "events.json"
-    path.write_text(contents)
-    result, _ = run(tmp_path, None, "--events", str(path))
+@pytest.mark.parametrize("raw", ["", "not json", "[]"])
+def test_missing_or_unreadable_report_data_does_not_fail(tmp_path, raw):
+    result, _ = run(tmp_path, raw=raw if raw else None)
     assert result.returncode == 0
     assert "unavailable" in result.stdout
 
 
-def test_query_failure_reports_only_its_error_code(tmp_path):
-    result, summary = run(tmp_path, None, "--unavailable", "AccessDeniedException")
-    assert result.returncode == 0
-    assert "unavailable (AccessDeniedException)" in result.stdout
-    assert "AccessDeniedException" in summary
-    unsafe, _ = run(tmp_path, None, "--unavailable", "arn:aws:iam::123456789012:user/x")
-    assert "123456789012" not in unsafe.stdout
-    assert "unavailable (query_failed)" in unsafe.stdout
+def test_a_malformed_summary_is_reported_not_echoed(tmp_path):
+    result, _ = run(tmp_path, stored(diagnostics=["secret"]))
+    assert "unavailable (malformed_summary)" in result.stdout
+    assert "secret" not in result.stdout
 
 
 def test_an_unexpected_report_handle_is_refused_before_any_output(tmp_path):
-    summary = tmp_path / "summary.md"
-    result = subprocess.run(
-        [sys.executable, str(SCRIPT), "--report-id", "report_x' OR 1", "--summary", str(summary)],
-        capture_output=True,
-        text=True,
-        timeout=30,
-    )
+    result, summary = run(tmp_path, stored(), report_id="report_x' OR 1")
     assert result.returncode == 0
     assert "unexpected report handle" in result.stdout
-    assert not summary.exists()
-
-
-def test_filter_pattern_matches_only_this_report():
-    pattern = runpy.run_path(str(SCRIPT))["filter_pattern"](REPORT)
-    assert pattern == f'"Article relevance" "{REPORT}"'
+    assert summary == ""

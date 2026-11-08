@@ -158,6 +158,17 @@ def test_async_lambda_writeback_persists_the_report_plan(monkeypatch):
         report_plan,
     )
 
+    relevance = {
+        "mode": "enabled",
+        "route": "decision",
+        "keep_violations": 0,
+        "models": ["typesafe/jev-1.13"],
+        "cost": "0.0000042",
+        "positions": 30,
+        "dropped_positions": 2,
+    }
+    stored["metadata"]["relevance_diagnostics"] = relevance
+
     async def fake_workflow(_feed_url, _config, model_deadline=None):
         return WorkflowResponse(
             status="completed",
@@ -201,6 +212,8 @@ def test_async_lambda_writeback_persists_the_report_plan(monkeypatch):
     values = table.update["ExpressionAttributeValues"]
     serialized = TypeSerializer().serialize(values)
     assert serialized["M"][":metadata"]["M"]["report_plan"]["M"]
+    assert persisted_metadata["relevance_diagnostics"] == relevance
+    assert serialized["M"][":metadata"]["M"]["relevance_diagnostics"]["M"]
 
     # The publication path receives exactly the fields saved by async writeback.
     persisted = {key.removeprefix(":"): value for key, value in values.items()}
@@ -220,6 +233,8 @@ def test_async_lambda_writeback_persists_the_report_plan(monkeypatch):
         require_current_schema=True,
     )
     assert manifest["report_plan"] == report_plan
+    # Relevance evidence stays with the stored report, not the public manifest.
+    assert "relevance_diagnostics" not in json.dumps(manifest)
 
 
 def test_api_gateway_lambda_sets_and_resets_the_runtime_deadline(monkeypatch):
