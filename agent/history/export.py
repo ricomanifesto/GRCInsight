@@ -19,6 +19,7 @@ from history.identity import (
     APPEARANCE_KIND,
     REPORT_OUTCOME_SCHEMA,
     REVISION_KIND,
+    appearance_id,
     canonical_json,
     outcome_digest,
     sha256_hex,
@@ -396,3 +397,104 @@ def export_all(table: HistoryTable, *, stream: str, limit: int = 50, **kwargs: A
         cursor = page["next_cursor"]
         if cursor is None:
             return
+
+
+# ----- Keyed export of one report -----
+
+KEYED_MAX_REVISIONS = 60
+KEYED_MAX_REVISIONS_LIMIT = 200
+
+
+class ReportNotFound(LookupError):
+    pass
+
+
+class KeyedReadBoundExceeded(ValueError):
+    pass
+
+
+def export_report(
+    reports: HistoryTable,
+    articles: HistoryTable,
+    report_id: str,
+    *,
+    include_text: bool = False,
+    max_revisions: int = KEYED_MAX_REVISIONS,
+) -> dict[str, Any]:
+    """Export one report and the evidence it binds, reading by key only.
+
+    Reads the report row, then each revision its outcome binds
+    (``article_revision_ids``) and each appearance of its bound set, with one
+    GetItem per key: at most ``1 + 2 * max_revisions`` reads, and never a Scan.
+    Records come from the same functions as the paged export, so identities,
+    digests, integrity and outcome labels are identical. A report that binds
+    more revisions than ``max_revisions`` is refused before any article read;
+    absent keys are listed rather than fatal. Reports without bound evidence
+    (legacy, failed or refused before evidence) export their report record only.
+    """
+    if not 1 <= max_revisions <= KEYED_MAX_REVISIONS_LIMIT:
+        raise ValueError(f"max_revisions must be between 1 and {KEYED_MAX_REVISIONS_LIMIT}")
+    row = reports.get(report_id)
+    if row is None:
+        raise ReportNotFound(report_id)
+    raw_ids = row.get("article_revision_ids")
+    revision_ids = [i for i in raw_ids if isinstance(i, str)] if isinstance(raw_ids, list) else []
+    if len(revision_ids) > max_revisions:
+        raise KeyedReadBoundExceeded(
+            f"report binds {len(revision_ids)} revisions; the bound is {max_revisions}"
+        )
+    set_digest = row.get("appearance_set_sha256")
+    set_digest = set_digest if isinstance(set_digest, str) and set_digest else None
+
+    article_records: list[dict[str, Any]] = []
+    missing: list[str] = []
+    reads = 1
+    for revision_key in revision_ids:
+        reads += 1
+        item = articles.get(revision_key)
+        if item is None:
+            missing.append(revision_key)
+        else:
+            article_records.append(_revision_record(articles.name, item, include_text))
+    if set_digest:
+        for position in range(len(revision_ids)):
+            key = appearance_id(report_id, set_digest, position)
+            reads += 1
+            item = articles.get(key)
+            if item is None:
+                missing.append(key)
+            else:
+                article_records.append(_appearance_record(item))
+
+    keyed = {
+        "report_id": report_id,
+        "get_item_calls": reads,
+        "missing_keys": len(missing),
+        "missing_key_ids": missing,
+    }
+
+    def page(stream: str, records: list[dict[str, Any]]) -> dict[str, Any]:
+        return {
+            "schema_version": EXPORT_SCHEMA,
+            "stream": stream,
+            "cursor": None,
+            "next_cursor": None,
+            "records": records,
+            "coverage": {
+                "scanned_items": 0,
+                "emitted_records": len(records),
+                "filtered_out": 0,
+                "unknown_record_kinds": 0,
+                "integrity_problems": sum(
+                    1 for r in records if (r.get("integrity") or {}).get("status") == "corrupt"
+                ),
+                "updated_since": None,
+                "stream_complete": True,
+                "keyed_read": keyed,
+            },
+        }
+
+    return {
+        "reports": [page("reports", [report_record(row)])],
+        "articles": [page("articles", article_records)],
+    }

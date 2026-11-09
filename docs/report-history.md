@@ -145,6 +145,27 @@ reduces output, not read cost. `grcinsight-reports` uses provisioned capacity
 (1 RCU at the time of writing), so keep report pages small and avoid running
 exports while a report generation is being polled.
 
+### Export one report by id
+
+```bash
+cd agent
+python -m history export-report --report-id report_YYYYMMDD_HHMMSS_NNN --out report.json \
+  [--include-text] [--max-revisions 60] [--region us-east-1]
+```
+
+`export-report` reads the report row and then, by key, each revision its outcome
+binds (`article_revision_ids`) and each appearance of its bound set: GetItem
+calls only, at most `1 + 2 * --max-revisions`, never a Scan, so it is safe on
+the provisioned reports table. It writes the same record shapes as the paged
+export (`{"reports": [page], "articles": [page]}`) and prints a content-free
+summary. Each page's `coverage.keyed_read` records the GetItem count and any
+absent keys (`missing_keys`, `missing_key_ids`); absent keys are reported,
+not fatal. A report binding more revisions than `--max-revisions` is refused
+before any article read (exit 3), and an unknown report id exits 2. Legacy,
+failed and refused reports export their report record with its outcome and
+provenance; legacy reports have no recorded article keys, so their article rows
+are not included.
+
 A synthetic, deterministic fixture of every state (duplicates, a changed
 revision, interrupted completion, refusals, fallback, failure, corruption and
 legacy rows) is produced by:
@@ -152,6 +173,10 @@ legacy rows) is produced by:
 ```bash
 python -m history fixture --out /tmp/grc-history-fixture
 ```
+
+It includes `keyed/<report_id>.json` keyed exports for a model report with a
+corrupt revision, a changed revision, a fallback refusal, a failed run and a
+legacy report.
 
 ## Verifying a deployment
 
