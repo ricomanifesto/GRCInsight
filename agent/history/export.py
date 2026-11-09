@@ -130,7 +130,9 @@ def report_record(item: dict[str, Any]) -> dict[str, Any]:
         basis = "computed_at_export"
         integrity = "unverifiable_legacy"
         mode = metadata.get("analysis_mode")
-        reason = metadata.get("fallback_reason")
+        # A reason the service recorded (for example a failed invocation) is kept, but
+        # without a digest the outcome stays unverifiable.
+        reason = item.get("terminal_reason") or metadata.get("fallback_reason")
         if status in OPEN_STATUSES:
             outcome, conclusion_status = "incomplete", "not_intelligence"
         elif status == "completed" and mode == "model":
@@ -305,11 +307,16 @@ def parse_timestamp(value: str) -> datetime:
 
 def _changed_at(stream: str, item: dict[str, Any]) -> datetime | None:
     """When an item last changed, or None when it carries no readable time."""
-    names = (
-        ("completed_at", "updated_at", "created_at")
-        if stream == "reports"
-        else ("first_captured_at", "created_at", "updated_at")
-    )
+    # Immutable history items change once (capture/creation); legacy rows are mutable,
+    # so their latest update time decides.
+    if stream == "reports":
+        names: tuple[str, ...] = ("completed_at", "updated_at", "created_at")
+    elif item.get("record_kind") == REVISION_KIND:
+        names = ("first_captured_at",)
+    elif item.get("record_kind") == APPEARANCE_KIND:
+        names = ("created_at",)
+    else:
+        names = ("updated_at", "created_at")
     for name in names:
         value = item.get(name)
         if isinstance(value, str) and value:

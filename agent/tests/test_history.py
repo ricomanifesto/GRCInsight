@@ -611,3 +611,35 @@ def test_deployed_policy_grants_what_history_uses_on_both_tables():
     assert needed <= granted[table + "grcinsight-reports"]
     assert needed <= granted[table + "grcinsight-articles"]
     assert "dynamodb:Query" in granted[table + "grcinsight-articles/index/*"]
+
+
+def test_incremental_export_uses_update_time_for_mutable_legacy_articles():
+    _, articles = fx.tables()
+    articles.seed(
+        {
+            "article_id": "a_20261101_00000001",
+            "url": "https://news.example.test/legacy-updated",
+            "created_at": "2026-11-01T00:00:00Z",
+            "updated_at": "2026-11-09T00:00:00Z",
+        }
+    )
+    page = export_page(articles, stream="articles", updated_since="2026-11-08T00:00:00Z")
+    assert [r["article_id"] for r in page["records"]] == ["a_20261101_00000001"]
+
+
+def test_export_keeps_failure_reasons_the_go_service_records():
+    reports, _ = fx.tables()
+    reports.seed(
+        {
+            "report_id": "go_failed",
+            "job_id": "job_x",
+            "status": "failed",
+            "terminal_outcome": "failed",
+            "terminal_reason": "invocation_failed",
+            "updated_at": "2026-11-09T00:00:00Z",
+        }
+    )
+    record = export_page(reports, stream="reports")["records"][0]
+    assert record["outcome"] == "failed" and record["outcome_reason"] == "invocation_failed"
+    assert record["integrity"]["status"] == "unverifiable_legacy"
+    assert record["conclusion_status"] == "not_intelligence"
