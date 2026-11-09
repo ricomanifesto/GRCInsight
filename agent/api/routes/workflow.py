@@ -15,6 +15,7 @@ from core.runtime import (
     earliest_deadline,
     get_model_deadline,
 )
+from config.settings import settings
 from core.workflow import run_grc_analysis_endpoint
 
 boto3: Any | None = None
@@ -66,7 +67,7 @@ def _internal_caller(http_request: Request) -> bool:
 
     The route is disabled when no token is configured.
     """
-    expected = os.getenv("GRC_INTERNAL_TOKEN", "")
+    expected = os.getenv("GRC_INTERNAL_TOKEN") or settings.grc_internal_token
     provided = http_request.headers.get(INTERNAL_TOKEN_HEADER, "")
     return bool(expected) and hmac.compare_digest(provided.encode(), expected.encode())
 

@@ -898,3 +898,26 @@ def test_tampered_publication_date_is_detected():
         if r["record_type"] == "source_article_revision"
     )
     assert record["integrity"]["status"] == "corrupt"
+
+
+def test_internal_token_can_come_from_the_settings_file(monkeypatch):
+    from starlette.requests import Request
+
+    from api.routes import workflow as workflow_route
+    from config.settings import settings
+
+    monkeypatch.delenv("GRC_INTERNAL_TOKEN", raising=False)
+    monkeypatch.setattr(settings, "grc_internal_token", "from-dotenv")
+    scope = {"type": "http", "headers": [(b"x-grc-internal-token", b"from-dotenv")]}
+    assert workflow_route._internal_caller(Request(scope))
+    monkeypatch.setattr(settings, "grc_internal_token", "")
+    assert not workflow_route._internal_caller(Request(scope))
+
+
+def test_compose_passes_the_internal_token_to_both_services():
+    from pathlib import Path
+
+    compose = (Path(__file__).resolve().parents[2] / "docker-compose.yml").read_text()
+    services = compose.split("python-service:\n")
+    assert "GRC_INTERNAL_TOKEN=${GRC_INTERNAL_TOKEN" in services[0]  # go-service block
+    assert "GRC_INTERNAL_TOKEN=${GRC_INTERNAL_TOKEN" in services[1]
