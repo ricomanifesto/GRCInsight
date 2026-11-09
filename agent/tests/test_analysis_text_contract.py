@@ -587,6 +587,10 @@ REGRESSION_MATRIX = [
     # but the response is not a known selection, so it records no drops.
     (f"No articles selected\n{VALID_2}", [1], False),
     (f"{VALID_2}\nNo articles selected", [1], False),
+    (f"{VALID_2}\nNo articles selected.", [1], False),
+    (f"{VALID_2}\n**No articles selected**", [1], False),
+    (f"- {VALID_2}\n- No articles selected", [1], False),
+    (f"{VALID_2}\nNO ARTICLES SELECTED", [1], False),
     # Bold only around the whole row or the Article token.
     ("**Article 2: Title: Supplier access review** score 8 relevant", [], False),
 ]

@@ -21,11 +21,12 @@ notes.
 Only one closed grammar credits an article. A row credits article *n* only when it
 is `Article <n>: Title: <exact title of n> score <s> relevant`, optionally ending
 with a period, optionally preceded by one list marker (`-`, `*`, `•`, `1.` or `1)`),
-and optionally wrapped in bold around the whole row or only the `Article <n>` token.
-Whitespace between the fixed words is flexible. The number must name a supplied
-article without zero padding. The title is matched as a whole, so words such as
-risk, regulation, Title: or score inside it never act as delimiters; a title with
-leading or trailing whitespace therefore cannot be credited. `<s>` is 1 through 10
+and optionally wrapped in bold around the whole row (a terminal period goes inside
+the bold) or only the `Article <n>` token. `Article` and the number are separated
+by one space; whitespace around `Title:`, `score` and `relevant` is flexible. The
+number must name a supplied article without zero padding. The title is matched as
+a whole, so words such as risk, regulation, Title: or score inside it never act as
+delimiters; a supplied title with leading whitespace cannot be credited. `<s>` is 1 through 10
 (`10` or `10.0` at the top, decimals below 10); it is validated, not used. A
 repeated identity credits once.
 
@@ -42,8 +43,9 @@ logged by count, never by content.
 
 ## Known and unknown answers
 
-`selection_known` is true only when at least one row was accepted and no line is
-the sentinel, or the entire response, ignoring surrounding whitespace, is exactly
+`selection_known` is true only when at least one row was accepted and the response
+does not mention the sentinel anywhere (in any case or decoration), or the entire
+response, ignoring surrounding whitespace, is exactly
 `No articles selected`. Every other response is `selection_known: false`:
 unrecognized prose, malformed or decorated attempts, all rows invalid, and the
 sentinel with any other line, punctuation or decoration (for example the sentinel

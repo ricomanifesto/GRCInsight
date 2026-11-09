@@ -803,8 +803,10 @@ All source references must use the supplied source numbers. Use empty arrays ins
         # sentinel next to anything else contradicts it, so that response is never
         # a known selection (its exact rows may still credit their own articles).
         empty_declared = response_content.strip() == EMPTY_ANALYSIS_ANSWER
-        contradicted = not empty_declared and any(
-            line.strip() == EMPTY_ANALYSIS_ANSWER for line in lines
+        # Downgrade only: any other mention of the sentinel, in any form, makes the
+        # response unknown. It never establishes a known empty answer.
+        contradicted = not empty_declared and EMPTY_ANALYSIS_ANSWER.lower() in (
+            response_content.lower()
         )
         current_section = None
         for line in lines:

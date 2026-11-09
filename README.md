@@ -26,11 +26,11 @@ The site keeps dated reports and a [publication history](https://grcinsight.rico
 Article analysis retains its [TEXT row contract](docs/analysis-text-contract.md):
 each row binds the supplied article number and exact title, with any brief reason
 on a separate commentary line. A row that does not bind to exactly one supplied
-article is skipped and counted while valid rows are kept, and selection uses the
-accepted article positions. A response with no accepted row selects no article
-(never every article) and counts as a known empty selection only when the whole
-response is exactly `No articles selected`; otherwise it is recorded as unknown,
-never as the model dropping articles. Local entity and risk signals still apply. The
+article credits nothing while valid rows are kept, and selection uses the accepted
+article positions. A response with no accepted row selects no article (never every
+article) and counts as a known empty selection only when the whole response is
+exactly `No articles selected`; otherwise, or when it also mentions that sentence
+beside rows, it is recorded as unknown, never as the model dropping articles. Local entity and risk signals still apply. The
 strict report-plan schema and grounding checks are unchanged.
 
 1. The Go service accepts report requests, stores report state in DynamoDB, and invokes the Python service.
