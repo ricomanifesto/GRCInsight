@@ -20,9 +20,10 @@ import (
 // fakeAPI keeps items per table and applies DynamoDB's paging, batch and
 // conditional-write behaviour for the request shapes this package issues.
 type fakeAPI struct {
-	tables     map[string]map[string]map[string]types.AttributeValue
-	queryPages int
-	gets       int
+	tables         map[string]map[string]map[string]types.AttributeValue
+	queryPages     int
+	gets           int
+	lastConsistent bool
 }
 
 func newFakeAPI() *fakeAPI {
@@ -52,6 +53,7 @@ func (f *fakeAPI) put(table string, item map[string]types.AttributeValue) {
 
 func (f *fakeAPI) GetItem(_ context.Context, in *dynamodb.GetItemInput, _ ...func(*dynamodb.Options)) (*dynamodb.GetItemOutput, error) {
 	f.gets++
+	f.lastConsistent = aws.ToBool(in.ConsistentRead)
 	table := aws.ToString(in.TableName)
 	return &dynamodb.GetItemOutput{Item: f.tables[table][str(in.Key[keyName(table)])]}, nil
 }
@@ -427,5 +429,16 @@ func TestReportArticlesOfAnUnknownReportIsEmpty(t *testing.T) {
 	arts, total, err := repo.ReportArticles(context.Background(), "no-such-report", 20, 0)
 	if err != nil || total != 0 || len(arts) != 0 {
 		t.Fatalf("unknown report: len=%d total=%d err=%v", len(arts), total, err)
+	}
+}
+
+func TestGetReportConsistentUsesAStronglyConsistentRead(t *testing.T) {
+	api, repo := loadWriterFixture(t)
+	report, err := repo.GetReportConsistent(context.Background(), "report_s1")
+	if err != nil || report.ReportID != "report_s1" || !api.lastConsistent {
+		t.Fatalf("consistent read not requested: %+v consistent=%v err=%v", report, api.lastConsistent, err)
+	}
+	if _, err := repo.GetReport(context.Background(), "report_s1"); err != nil || api.lastConsistent {
+		t.Fatalf("ordinary reads must stay eventually consistent: consistent=%v err=%v", api.lastConsistent, err)
 	}
 }

@@ -25,6 +25,9 @@ type fakeReportRepo struct {
 	stored      *dbmodels.Report
 	failed      []string
 	finalOnFail bool
+	// stale is what an eventually consistent read may still return.
+	stale         *dbmodels.Report
+	eventualReads int
 }
 
 func (f *fakeReportRepo) Create(r *dbmodels.Report) error {
@@ -35,7 +38,13 @@ func (f *fakeReportRepo) Create(r *dbmodels.Report) error {
 	f.created = r
 	return nil
 }
-func (f *fakeReportRepo) GetByID(id string) (*dbmodels.Report, error) { return f.stored, nil }
+func (f *fakeReportRepo) GetByID(id string) (*dbmodels.Report, error) {
+	f.eventualReads++
+	return f.stale, nil
+}
+func (f *fakeReportRepo) GetByIDConsistent(id string) (*dbmodels.Report, error) {
+	return f.stored, nil
+}
 func (f *fakeReportRepo) List(limit, offset int) ([]*dbmodels.Report, int64, error) {
 	return nil, 0, nil
 }
@@ -137,6 +146,9 @@ func TestGenerateReport_SyncDelegatesCompletionToTheReportWriter(t *testing.T) {
 	}
 	if !strings.HasPrefix(fr.created.JobID, "job_") {
 		t.Fatalf("report created without a job id: %q", fr.created.JobID)
+	}
+	if fr.eventualReads != 0 {
+		t.Fatal("completed report read without strong consistency")
 	}
 	if fr.updated != nil || fa.calls != 0 {
 		t.Fatal("Go wrote the outcome or article rows itself")

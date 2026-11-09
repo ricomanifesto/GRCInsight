@@ -135,6 +135,15 @@ func reportFromDynamo(report *dynamodb.Report) *models.Report {
 	}
 }
 
+// GetByIDConsistent reads a report with strong consistency.
+func (r *reportRepository) GetByIDConsistent(id string) (*models.Report, error) {
+	dynamoReport, err := r.repo.GetReportConsistent(context.Background(), id)
+	if err != nil {
+		return nil, err
+	}
+	return reportFromDynamo(dynamoReport), nil
+}
+
 // MarkFailedIfOpen records a Go-observed failure unless the report is already final.
 func (r *reportRepository) MarkFailedIfOpen(id, reason string) error {
 	return r.repo.MarkReportFailedIfOpen(context.Background(), id, reason)

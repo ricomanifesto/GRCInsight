@@ -87,7 +87,8 @@ func (s *ReportService) GenerateReport(req *apiModels.GenerateReportRequest) (*m
 		}
 		return nil, fmt.Errorf("workflow execution failed: %w", err)
 	}
-	stored, err := s.reportRepo.GetByID(report.ID)
+	// The writer just committed; an eventually consistent read could still see processing.
+	stored, err := s.reportRepo.GetByIDConsistent(report.ID)
 	if err != nil {
 		return nil, fmt.Errorf("failed to read completed report: %w", err)
 	}

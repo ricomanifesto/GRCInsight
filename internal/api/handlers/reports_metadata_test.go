@@ -31,6 +31,9 @@ func (r *storedReportRepo) GetByStatus(string) ([]*dbmodels.Report, error) {
 	return nil, nil
 }
 func (r *storedReportRepo) MarkFailedIfOpen(string, string) error { return nil }
+func (r *storedReportRepo) GetByIDConsistent(string) (*dbmodels.Report, error) {
+	return r.report, nil
+}
 
 func TestReportEndpointsReturnStoredMetadataUnchanged(t *testing.T) {
 	gin.SetMode(gin.TestMode)

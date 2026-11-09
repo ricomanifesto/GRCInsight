@@ -8,6 +8,8 @@ import (
 type ReportRepository interface {
 	Create(report *models.Report) error
 	GetByID(id string) (*models.Report, error)
+	// GetByIDConsistent must observe writes that completed before the call.
+	GetByIDConsistent(id string) (*models.Report, error)
 	List(limit, offset int) ([]*models.Report, int64, error)
 	Update(report *models.Report) error
 	Delete(id string) error

@@ -72,11 +72,22 @@ func (r *Repository) CreateReport(ctx context.Context, report *Report) error {
 
 // GetReport retrieves a report by ID from DynamoDB
 func (r *Repository) GetReport(ctx context.Context, reportID string) (*Report, error) {
+	return r.getReport(ctx, reportID, false)
+}
+
+// GetReportConsistent reads a report with a strongly consistent read, for a lookup
+// that must observe a write that just completed.
+func (r *Repository) GetReportConsistent(ctx context.Context, reportID string) (*Report, error) {
+	return r.getReport(ctx, reportID, true)
+}
+
+func (r *Repository) getReport(ctx context.Context, reportID string, consistent bool) (*Report, error) {
 	input := &dynamodb.GetItemInput{
 		TableName: aws.String(TableName),
 		Key: map[string]types.AttributeValue{
 			"report_id": &types.AttributeValueMemberS{Value: reportID},
 		},
+		ConsistentRead: aws.Bool(consistent),
 	}
 
 	result, err := r.client.GetItem(ctx, input)
