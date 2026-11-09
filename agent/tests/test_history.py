@@ -643,3 +643,31 @@ def test_export_keeps_failure_reasons_the_go_service_records():
     assert record["outcome"] == "failed" and record["outcome_reason"] == "invocation_failed"
     assert record["integrity"]["status"] == "unverifiable_legacy"
     assert record["conclusion_status"] == "not_intelligence"
+
+
+def test_writer_uses_the_same_dynamodb_settings_as_the_go_service(monkeypatch):
+    import boto3
+
+    import history.service
+
+    seen = {}
+
+    def fake_client(service, **kwargs):
+        seen.update(service=service, **kwargs)
+        return object()
+
+    monkeypatch.setattr(boto3, "client", fake_client)
+    monkeypatch.setenv("DATABASE_ENDPOINT", "http://localhost:8000")
+    monkeypatch.setenv("DATABASE_REGION", "us-west-2")
+    reports, articles = history.service.history_tables()
+    assert seen == {
+        "service": "dynamodb",
+        "endpoint_url": "http://localhost:8000",
+        "region_name": "us-west-2",
+    }
+    assert (reports.name, articles.name) == ("grcinsight-reports", "grcinsight-articles")
+    monkeypatch.delenv("DATABASE_ENDPOINT")
+    monkeypatch.delenv("DATABASE_REGION")
+    seen.clear()
+    history.service.history_tables()
+    assert seen == {"service": "dynamodb"}

@@ -20,7 +20,14 @@ def history_tables() -> tuple[HistoryTable, HistoryTable]:
     """The existing report and article tables, behind history's conditional-write port."""
     import boto3
 
-    client = boto3.client("dynamodb")
+    # Same settings the Go service reads (database.endpoint / database.region), so a
+    # report admitted into a local DynamoDB is completed in that same store.
+    options: dict[str, str] = {}
+    if endpoint := os.getenv("DATABASE_ENDPOINT"):
+        options["endpoint_url"] = endpoint
+    if region := os.getenv("DATABASE_REGION"):
+        options["region_name"] = region
+    client = boto3.client("dynamodb", **options)
     reports = os.getenv("DDB_TABLE_NAME") or "grcinsight-reports"
     articles = os.getenv("ARTICLES_TABLE_NAME") or "grcinsight-articles"
     return (

@@ -16,6 +16,9 @@ exported, and what each state means.
 3. The report writer (`agent/history/writeback.py`) stores evidence first, then
    completes the row exactly once.
 
+Both services read the same store settings: `DATABASE_ENDPOINT` (for example
+a local DynamoDB) and `DATABASE_REGION`, defaulting to the AWS environment.
+
 Only the report writer completes a report. Go records failures it observes
 (for example a failed invocation) and only while the row is still open.
 Every report update is conditional on
