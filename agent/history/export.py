@@ -214,8 +214,9 @@ def _revision_record(table: str, item: dict[str, Any], include_text: bool) -> di
         {
             "record_type": "source_article_revision",
             "record_id": f"grcinsight:article:{item.get('source_key')}",
-            "source_revision": item.get("content_sha256"),
-            "source_revision_basis": "content_digest",
+            "source_revision": item.get("capture_sha256"),
+            "source_revision_basis": "capture_digest",
+            "content_sha256": item.get("content_sha256"),
             "revision_id": item.get("article_id"),
             "source_key": item.get("source_key"),
             "corroboration_unit": item.get("source_key"),

@@ -734,3 +734,36 @@ def test_any_exported_change_is_a_new_record_revision():
     assert first["record_revision"] != second["record_revision"]
     unchanged = export_page(articles, stream="articles")["records"][0]
     assert unchanged == second
+
+
+def test_capture_completeness_is_part_of_revision_identity():
+    reports, articles = fx.tables()
+    fx.open_report(reports, "r1")
+    fx.open_report(reports, "r2")
+    exact = "z" * MAX_RETAINED_CONTENT
+    commit(reports, articles, "r1", res=fx.result([fx.article("alpha", body=exact)]))
+    longer = fx.article("alpha", body=exact + "appended later")
+    receipt = commit(reports, articles, "r2", res=fx.result([longer]))
+    assert receipt.decision == "committed" and receipt.revisions_written == 1
+    revisions = sorted(
+        kinds(articles, "article_revision"), key=lambda r: r["captured_content_length"]
+    )
+    assert [r["content_truncated"] for r in revisions] == [False, True]
+    assert revisions[0]["content_sha256"] == revisions[1]["content_sha256"]
+    assert revisions[0]["article_id"] != revisions[1]["article_id"]
+    assert reports.items["r2"]["article_revision_ids"] == [revisions[1]["article_id"]]
+    assert revisions[1]["evidence_kind"] == "excerpt"
+
+
+def test_tampered_capture_provenance_is_detected():
+    reports, articles = fx.tables()
+    fx.open_report(reports, "r1")
+    commit(reports, articles, "r1")
+    rev = kinds(articles, "article_revision")[0]
+    articles.items[rev["article_id"]]["content_truncated"] = True
+    record = next(
+        r
+        for r in export_page(articles, stream="articles")["records"]
+        if r["record_type"] == "source_article_revision"
+    )
+    assert record["integrity"]["status"] == "corrupt"

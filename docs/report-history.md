@@ -63,7 +63,10 @@ waits and keeps the last accepted report, and export reports it as `incomplete`.
   `completed_at` and `outcome_sha256`, a SHA-256 over the canonical JSON of the
   outcome fields.
 - **Article revision** (`record_kind = article_revision`): keyed
-  `arev#<url key>#<content digest>`, created only if absent. It holds the
+  `arev#<url key>#<capture digest>`, created only if absent. The capture digest
+  covers the retained-text digest and how it was captured (captured length and
+  digest, origin, truncation), so the same text captured with different
+  completeness is a different revision. It holds the
   retained title, summary and feed content (up to 50,000 characters, with the
   captured length and digest when truncated), the evidence kind (`full_text`
   means the complete feed-item content as captured; `excerpt`;

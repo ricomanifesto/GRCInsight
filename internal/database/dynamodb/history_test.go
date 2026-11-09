@@ -215,6 +215,10 @@ func TestRevisionDigestMatchesTheWriter(t *testing.T) {
 	if !ok || digest != "806716debca899ee6544dca0480c9c05f8c3b60f239e642c0a7bb97e6fd8b68c" {
 		t.Fatalf("digest mismatch: %s", digest)
 	}
+	capture := CaptureDigest(digest, 50010, strings.Repeat("ab", 32), "publisher_page", true)
+	if capture != "68bba1a6a6340d7a4d422f452a8b5deb60f439b180a9adbe571f1f2c4e0e5d3f" {
+		t.Fatalf("capture digest mismatch: %s", capture)
+	}
 	if _, ok := RevisionDigest("\xff", "", "", ""); ok {
 		t.Fatal("invalid UTF-8 must not verify")
 	}
@@ -440,5 +444,18 @@ func TestGetReportConsistentUsesAStronglyConsistentRead(t *testing.T) {
 	}
 	if _, err := repo.GetReport(context.Background(), "report_s1"); err != nil || api.lastConsistent {
 		t.Fatalf("ordinary reads must stay eventually consistent: consistent=%v err=%v", api.lastConsistent, err)
+	}
+}
+
+func TestReportArticlesRejectsTamperedCaptureProvenance(t *testing.T) {
+	api, repo := loadWriterFixture(t)
+	for _, item := range api.tables[ArticlesTable] {
+		if str(item["record_kind"]) == RecordKindRevision && strings.Contains(str(item["url"]), "charlie") {
+			item["content_truncated"] = &types.AttributeValueMemberBOOL{Value: true}
+		}
+	}
+	arts, _, err := repo.ReportArticles(context.Background(), "report_s5", 20, 0)
+	if err != nil || len(arts) != 1 || arts[0].EvidenceStatus != EvidenceCorrupt || arts[0].Content != "" {
+		t.Fatalf("tampered capture provenance served: %+v err=%v", arts, err)
 	}
 }

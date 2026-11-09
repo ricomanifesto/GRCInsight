@@ -33,6 +33,7 @@ from history.identity import (
     appearance_id,
     appearance_set_digest,
     canonical_url,
+    capture_digest,
     evidence_kind,
     json_safe,
     outcome_digest,
@@ -153,7 +154,7 @@ def build_revision(
     digest = revision_digest(payload)
     published_known = bool(article.get("published_known", True)) and bool(article.get("published"))
     item: dict[str, Any] = {
-        "article_id": revision_id(url, digest),
+        "article_id": "",
         "record_kind": REVISION_KIND,
         "history_schema": ARTICLE_REVISION_SCHEMA,
         **payload,
@@ -177,6 +178,8 @@ def build_revision(
     }
     if published_known:
         item["published_at"] = str(article["published"])
+    item["capture_sha256"] = capture_digest(item)
+    item["article_id"] = revision_id(url, item["capture_sha256"])
     return item
 
 
@@ -193,8 +196,11 @@ def revision_problems(item: dict[str, Any]) -> list[str]:
     digest = revision_digest(revision_payload(**fields))
     if item.get("content_sha256") != digest:
         problems.append("content digest does not match retained text")
-    if item.get("article_id") != revision_id(fields["url"], digest):
-        problems.append("revision identity does not match retained text")
+    capture = capture_digest(item)
+    if item.get("capture_sha256") != capture:
+        problems.append("capture digest does not match retained provenance")
+    if item.get("article_id") != revision_id(fields["url"], capture):
+        problems.append("revision identity does not match retained evidence")
     return problems
 
 
@@ -435,7 +441,7 @@ def commit_workflow_result(
                 counts["rw"] += 1
             except ConditionFailed as refused:
                 existing = refused.existing or {}
-                if existing.get("content_sha256") == revision["content_sha256"] and not (
+                if existing.get("capture_sha256") == revision["capture_sha256"] and not (
                     revision_problems(existing)
                 ):
                     counts["rr"] += 1

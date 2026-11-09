@@ -55,10 +55,10 @@
     },
     {
       "appearance_set_sha256": {
-        "S": "ca4d531c5965c7e30ed0aee71370b454f37bb36887119c31dcd7ba67f7564f1d"
+        "S": "ed369817e37d52f0633a7546ae4c58e38f5ef6d5f8628172087a14808c48c58c"
       },
       "article_id": {
-        "S": "aapp#report_s1#ca4d531c5965c7e3#0000"
+        "S": "aapp#report_s1#ed369817e37d52f0#0000"
       },
       "classification_provenance": {
         "S": "generated"
@@ -113,7 +113,7 @@
         "S": "report_s1"
       },
       "revision_id": {
-        "S": "arev#06fca946ba46010b628c7c63d2bdf7f9#a982a38604bb003cd92039a6afa10974"
+        "S": "arev#06fca946ba46010b628c7c63d2bdf7f9#815c0cdc41fad894e35dc939b16831c0"
       },
       "run_id": {
         "S": "job-report_s1"
@@ -136,10 +136,10 @@
     },
     {
       "appearance_set_sha256": {
-        "S": "ca4d531c5965c7e30ed0aee71370b454f37bb36887119c31dcd7ba67f7564f1d"
+        "S": "ed369817e37d52f0633a7546ae4c58e38f5ef6d5f8628172087a14808c48c58c"
       },
       "article_id": {
-        "S": "aapp#report_s1#ca4d531c5965c7e3#0001"
+        "S": "aapp#report_s1#ed369817e37d52f0#0001"
       },
       "classification_provenance": {
         "S": "generated"
@@ -194,7 +194,7 @@
         "S": "report_s1"
       },
       "revision_id": {
-        "S": "arev#822be970cf90437bb365e37bac696c3a#4b5df06957712478aa26b9a7a5f65b05"
+        "S": "arev#822be970cf90437bb365e37bac696c3a#dc18114c4bda0c75ad24e836ce5c87b9"
       },
       "run_id": {
         "S": "job-report_s1"
@@ -217,10 +217,10 @@
     },
     {
       "appearance_set_sha256": {
-        "S": "f36cbdbfb61b6803a75f1620c1249eeeb8de4fbff15bb2e9ecfb064a082b7f5a"
+        "S": "6aaa5d8ca8ea4b335c9ac8a0a88349d9dc1e26349566e3d052e11a7932acc1c1"
       },
       "article_id": {
-        "S": "aapp#report_s2#f36cbdbfb61b6803#0000"
+        "S": "aapp#report_s2#6aaa5d8ca8ea4b33#0000"
       },
       "classification_provenance": {
         "S": "generated"
@@ -275,7 +275,7 @@
         "S": "report_s2"
       },
       "revision_id": {
-        "S": "arev#06fca946ba46010b628c7c63d2bdf7f9#52428a8cfe43b099e63c6ce605812668"
+        "S": "arev#06fca946ba46010b628c7c63d2bdf7f9#9c24c787d1e68c3ee1afa9f1a49fcd9d"
       },
       "run_id": {
         "S": "job-report_s2"
@@ -298,10 +298,10 @@
     },
     {
       "appearance_set_sha256": {
-        "S": "f36cbdbfb61b6803a75f1620c1249eeeb8de4fbff15bb2e9ecfb064a082b7f5a"
+        "S": "6aaa5d8ca8ea4b335c9ac8a0a88349d9dc1e26349566e3d052e11a7932acc1c1"
       },
       "article_id": {
-        "S": "aapp#report_s2#f36cbdbfb61b6803#0001"
+        "S": "aapp#report_s2#6aaa5d8ca8ea4b33#0001"
       },
       "classification_provenance": {
         "S": "generated"
@@ -356,7 +356,7 @@
         "S": "report_s2"
       },
       "revision_id": {
-        "S": "arev#822be970cf90437bb365e37bac696c3a#4b5df06957712478aa26b9a7a5f65b05"
+        "S": "arev#822be970cf90437bb365e37bac696c3a#dc18114c4bda0c75ad24e836ce5c87b9"
       },
       "run_id": {
         "S": "job-report_s2"
@@ -379,10 +379,10 @@
     },
     {
       "appearance_set_sha256": {
-        "S": "928947c0fa420e4281f39485be9f2f8aba811755c8a4e21451260b2ef2b94953"
+        "S": "3093f8f2f450d3e0fb93a7c3d15afdab4a6e0ace90a4d7c783379d3d7c941c32"
       },
       "article_id": {
-        "S": "aapp#report_s3#928947c0fa420e42#0000"
+        "S": "aapp#report_s3#3093f8f2f450d3e0#0000"
       },
       "classification_provenance": {
         "S": "generated"
@@ -437,7 +437,7 @@
         "S": "report_s3"
       },
       "revision_id": {
-        "S": "arev#06fca946ba46010b628c7c63d2bdf7f9#a982a38604bb003cd92039a6afa10974"
+        "S": "arev#06fca946ba46010b628c7c63d2bdf7f9#815c0cdc41fad894e35dc939b16831c0"
       },
       "run_id": {
         "S": "job-report_s3"
@@ -460,10 +460,10 @@
     },
     {
       "appearance_set_sha256": {
-        "S": "928947c0fa420e4281f39485be9f2f8aba811755c8a4e21451260b2ef2b94953"
+        "S": "3093f8f2f450d3e0fb93a7c3d15afdab4a6e0ace90a4d7c783379d3d7c941c32"
       },
       "article_id": {
-        "S": "aapp#report_s3#928947c0fa420e42#0001"
+        "S": "aapp#report_s3#3093f8f2f450d3e0#0001"
       },
       "classification_provenance": {
         "S": "generated"
@@ -518,7 +518,7 @@
         "S": "report_s3"
       },
       "revision_id": {
-        "S": "arev#822be970cf90437bb365e37bac696c3a#4b5df06957712478aa26b9a7a5f65b05"
+        "S": "arev#822be970cf90437bb365e37bac696c3a#dc18114c4bda0c75ad24e836ce5c87b9"
       },
       "run_id": {
         "S": "job-report_s3"
@@ -541,10 +541,10 @@
     },
     {
       "appearance_set_sha256": {
-        "S": "c3075bc867482455b5876fc47c320a24ce9a285d5ecfda10abeb3348a88c1296"
+        "S": "e3cd07ef7a562f76ef2dcfe554d97c32e791f37af459909b20aada3083e87425"
       },
       "article_id": {
-        "S": "aapp#report_s5#c3075bc867482455#0000"
+        "S": "aapp#report_s5#e3cd07ef7a562f76#0000"
       },
       "classification_provenance": {
         "S": "generated"
@@ -599,7 +599,7 @@
         "S": "report_s5"
       },
       "revision_id": {
-        "S": "arev#9bbb41002c1d1f67890fe35faf4e54cb#30f35c36c63b7b6239f5411a73110711"
+        "S": "arev#9bbb41002c1d1f67890fe35faf4e54cb#2582ba24a8ff9d80587b9e260cdbae2b"
       },
       "run_id": {
         "S": "job-report_s5"
@@ -622,81 +622,13 @@
     },
     {
       "article_id": {
-        "S": "arev#06fca946ba46010b628c7c63d2bdf7f9#52428a8cfe43b099e63c6ce605812668"
+        "S": "arev#06fca946ba46010b628c7c63d2bdf7f9#815c0cdc41fad894e35dc939b16831c0"
       },
       "canonical_url": {
         "S": "https://news.example.test/alpha"
       },
-      "captured_content_length": {
-        "N": "59"
-      },
-      "captured_content_sha256": {
-        "S": "45c2afbbcdffb31abfec0b5fcfce6aa312193459a298a5ecf58ec0a113f39f8e"
-      },
-      "content": {
-        "S": "<p>Synthetic body for alpha, revised with a correction.</p>"
-      },
-      "content_origin": {
-        "S": "feed_item"
-      },
-      "content_sha256": {
-        "S": "52428a8cfe43b099e63c6ce6058126683cb8798110fa417fcef39a0191ba6404"
-      },
-      "content_truncated": {
-        "BOOL": false
-      },
-      "digest_url": {
-        "S": ""
-      },
-      "evidence_kind": {
-        "S": "full_text"
-      },
-      "first_captured_at": {
-        "S": "2026-11-09T09:01:00Z"
-      },
-      "first_report_id": {
-        "S": "report_s2"
-      },
-      "first_run_id": {
-        "S": "job-report_s2"
-      },
-      "full_text_scope": {
-        "S": "feed_item_content"
-      },
-      "history_schema": {
-        "S": "grcinsight.article-revision.v1"
-      },
-      "published_at": {
-        "S": "2026-11-01T12:00:00Z"
-      },
-      "published_at_known": {
-        "BOOL": true
-      },
-      "record_kind": {
-        "S": "article_revision"
-      },
-      "source": {
-        "S": "Example Wire"
-      },
-      "source_key": {
-        "S": "06fca946ba46010b628c7c63d2bdf7f9"
-      },
-      "summary": {
-        "S": "Synthetic summary for alpha."
-      },
-      "title": {
-        "S": "Synthetic regulator notice alpha"
-      },
-      "url": {
-        "S": "https://news.example.test/alpha"
-      }
-    },
-    {
-      "article_id": {
-        "S": "arev#06fca946ba46010b628c7c63d2bdf7f9#a982a38604bb003cd92039a6afa10974"
-      },
-      "canonical_url": {
-        "S": "https://news.example.test/alpha"
+      "capture_sha256": {
+        "S": "815c0cdc41fad894e35dc939b16831c0b81b66b8124f6e8ed38a425b963da433"
       },
       "captured_content_length": {
         "N": "72"
@@ -764,10 +696,87 @@
     },
     {
       "article_id": {
-        "S": "arev#822be970cf90437bb365e37bac696c3a#4b5df06957712478aa26b9a7a5f65b05"
+        "S": "arev#06fca946ba46010b628c7c63d2bdf7f9#9c24c787d1e68c3ee1afa9f1a49fcd9d"
+      },
+      "canonical_url": {
+        "S": "https://news.example.test/alpha"
+      },
+      "capture_sha256": {
+        "S": "9c24c787d1e68c3ee1afa9f1a49fcd9d29360c58f5f9aac3fd59f87397fd340c"
+      },
+      "captured_content_length": {
+        "N": "59"
+      },
+      "captured_content_sha256": {
+        "S": "45c2afbbcdffb31abfec0b5fcfce6aa312193459a298a5ecf58ec0a113f39f8e"
+      },
+      "content": {
+        "S": "<p>Synthetic body for alpha, revised with a correction.</p>"
+      },
+      "content_origin": {
+        "S": "feed_item"
+      },
+      "content_sha256": {
+        "S": "52428a8cfe43b099e63c6ce6058126683cb8798110fa417fcef39a0191ba6404"
+      },
+      "content_truncated": {
+        "BOOL": false
+      },
+      "digest_url": {
+        "S": ""
+      },
+      "evidence_kind": {
+        "S": "full_text"
+      },
+      "first_captured_at": {
+        "S": "2026-11-09T09:01:00Z"
+      },
+      "first_report_id": {
+        "S": "report_s2"
+      },
+      "first_run_id": {
+        "S": "job-report_s2"
+      },
+      "full_text_scope": {
+        "S": "feed_item_content"
+      },
+      "history_schema": {
+        "S": "grcinsight.article-revision.v1"
+      },
+      "published_at": {
+        "S": "2026-11-01T12:00:00Z"
+      },
+      "published_at_known": {
+        "BOOL": true
+      },
+      "record_kind": {
+        "S": "article_revision"
+      },
+      "source": {
+        "S": "Example Wire"
+      },
+      "source_key": {
+        "S": "06fca946ba46010b628c7c63d2bdf7f9"
+      },
+      "summary": {
+        "S": "Synthetic summary for alpha."
+      },
+      "title": {
+        "S": "Synthetic regulator notice alpha"
+      },
+      "url": {
+        "S": "https://news.example.test/alpha"
+      }
+    },
+    {
+      "article_id": {
+        "S": "arev#822be970cf90437bb365e37bac696c3a#dc18114c4bda0c75ad24e836ce5c87b9"
       },
       "canonical_url": {
         "S": "https://news.example.test/bravo"
+      },
+      "capture_sha256": {
+        "S": "dc18114c4bda0c75ad24e836ce5c87b96938ed9289ca5d35eff4080d486a6782"
       },
       "captured_content_length": {
         "N": "72"
@@ -832,10 +841,13 @@
     },
     {
       "article_id": {
-        "S": "arev#9bbb41002c1d1f67890fe35faf4e54cb#30f35c36c63b7b6239f5411a73110711"
+        "S": "arev#9bbb41002c1d1f67890fe35faf4e54cb#2582ba24a8ff9d80587b9e260cdbae2b"
       },
       "canonical_url": {
         "S": "https://news.example.test/charlie"
+      },
+      "capture_sha256": {
+        "S": "2582ba24a8ff9d80587b9e260cdbae2bfc7803181c0532d4e159d7038647a5fb"
       },
       "captured_content_length": {
         "N": "74"
@@ -944,15 +956,15 @@
     },
     {
       "appearance_set_sha256": {
-        "S": "ca4d531c5965c7e30ed0aee71370b454f37bb36887119c31dcd7ba67f7564f1d"
+        "S": "ed369817e37d52f0633a7546ae4c58e38f5ef6d5f8628172087a14808c48c58c"
       },
       "article_revision_ids": {
         "L": [
           {
-            "S": "arev#06fca946ba46010b628c7c63d2bdf7f9#a982a38604bb003cd92039a6afa10974"
+            "S": "arev#06fca946ba46010b628c7c63d2bdf7f9#815c0cdc41fad894e35dc939b16831c0"
           },
           {
-            "S": "arev#822be970cf90437bb365e37bac696c3a#4b5df06957712478aa26b9a7a5f65b05"
+            "S": "arev#822be970cf90437bb365e37bac696c3a#dc18114c4bda0c75ad24e836ce5c87b9"
           }
         ]
       },
@@ -1131,7 +1143,7 @@
         }
       },
       "outcome_sha256": {
-        "S": "4d5c5019aa3dff326e4235484171c2ffb5eba7f8d56370753c9950b50ce807b0"
+        "S": "9e75842fa267c47d5581f8c6d7d88885904a7382d0fd4e40166afd7f188d7614"
       },
       "report_id": {
         "S": "report_s1"
@@ -1157,15 +1169,15 @@
     },
     {
       "appearance_set_sha256": {
-        "S": "f36cbdbfb61b6803a75f1620c1249eeeb8de4fbff15bb2e9ecfb064a082b7f5a"
+        "S": "6aaa5d8ca8ea4b335c9ac8a0a88349d9dc1e26349566e3d052e11a7932acc1c1"
       },
       "article_revision_ids": {
         "L": [
           {
-            "S": "arev#06fca946ba46010b628c7c63d2bdf7f9#52428a8cfe43b099e63c6ce605812668"
+            "S": "arev#06fca946ba46010b628c7c63d2bdf7f9#9c24c787d1e68c3ee1afa9f1a49fcd9d"
           },
           {
-            "S": "arev#822be970cf90437bb365e37bac696c3a#4b5df06957712478aa26b9a7a5f65b05"
+            "S": "arev#822be970cf90437bb365e37bac696c3a#dc18114c4bda0c75ad24e836ce5c87b9"
           }
         ]
       },
@@ -1341,7 +1353,7 @@
         }
       },
       "outcome_sha256": {
-        "S": "2c4e651ad9c340b125d53d94919a1d1de3bdd8748b7ab264ba8e22f54d411be4"
+        "S": "8e1201e2f786a9644aefcfd53df333588ab3dbd442d8308e953e8433f94a685d"
       },
       "report_id": {
         "S": "report_s2"
@@ -1367,15 +1379,15 @@
     },
     {
       "appearance_set_sha256": {
-        "S": "928947c0fa420e4281f39485be9f2f8aba811755c8a4e21451260b2ef2b94953"
+        "S": "3093f8f2f450d3e0fb93a7c3d15afdab4a6e0ace90a4d7c783379d3d7c941c32"
       },
       "article_revision_ids": {
         "L": [
           {
-            "S": "arev#06fca946ba46010b628c7c63d2bdf7f9#a982a38604bb003cd92039a6afa10974"
+            "S": "arev#06fca946ba46010b628c7c63d2bdf7f9#815c0cdc41fad894e35dc939b16831c0"
           },
           {
-            "S": "arev#822be970cf90437bb365e37bac696c3a#4b5df06957712478aa26b9a7a5f65b05"
+            "S": "arev#822be970cf90437bb365e37bac696c3a#dc18114c4bda0c75ad24e836ce5c87b9"
           }
         ]
       },
@@ -1551,7 +1563,7 @@
         }
       },
       "outcome_sha256": {
-        "S": "6dee0c63b075e59cd423554aad1f105e018378ce09f6bc50f428df4f4e752240"
+        "S": "7a65fd2da303683dc899e363d521471d354afd6368ff1663dfe38abe102a1dae"
       },
       "report_id": {
         "S": "report_s3"
@@ -1633,12 +1645,12 @@
     },
     {
       "appearance_set_sha256": {
-        "S": "c3075bc867482455b5876fc47c320a24ce9a285d5ecfda10abeb3348a88c1296"
+        "S": "e3cd07ef7a562f76ef2dcfe554d97c32e791f37af459909b20aada3083e87425"
       },
       "article_revision_ids": {
         "L": [
           {
-            "S": "arev#9bbb41002c1d1f67890fe35faf4e54cb#30f35c36c63b7b6239f5411a73110711"
+            "S": "arev#9bbb41002c1d1f67890fe35faf4e54cb#2582ba24a8ff9d80587b9e260cdbae2b"
           }
         ]
       },
@@ -1772,7 +1784,7 @@
         }
       },
       "outcome_sha256": {
-        "S": "f6205cb6d1dd9584c0d7a0bd66643576d1ec6b8f62e1e01a9f9bb2a6b4c5569e"
+        "S": "aa5f2dbb89be455b29bade1af4f758e774025a733f05775bcb53c512735bdd8a"
       },
       "report_id": {
         "S": "report_s5"

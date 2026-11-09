@@ -67,8 +67,26 @@ def revision_digest(payload: dict[str, str]) -> str:
     return sha256_hex(payload)
 
 
-def revision_id(url: str, content_sha256: str) -> str:
-    return f"arev#{source_key(url)}#{content_sha256[:KEY_DIGEST_LENGTH]}"
+CAPTURE_FIELDS = (
+    "content_sha256",
+    "captured_content_length",
+    "captured_content_sha256",
+    "content_origin",
+    "content_truncated",
+)
+
+
+def capture_digest(fields: dict[str, Any]) -> str:
+    """Digest of the retained text plus how it was captured.
+
+    Two captures with the same retained text but different completeness or origin
+    are different revisions, so reusing a revision never discards provenance.
+    """
+    return sha256_hex({name: fields.get(name) for name in CAPTURE_FIELDS})
+
+
+def revision_id(url: str, capture_sha256: str) -> str:
+    return f"arev#{source_key(url)}#{capture_sha256[:KEY_DIGEST_LENGTH]}"
 
 
 def appearance_set_digest(report_id: str, entries: list[dict[str, Any]]) -> str:

@@ -106,16 +106,31 @@ func RevisionDigest(url, title, summary, content string) (string, bool) {
 	return hex.EncodeToString(sum[:]), true
 }
 
-// verifyRevision re-derives a stored revision's identity from its retained text.
+// CaptureDigest is the SHA-256 of a revision's text digest and capture provenance
+// in canonical JSON, matching the report writer.
+func CaptureDigest(contentSHA256 string, capturedLength int, capturedSHA256, origin string, truncated bool) string {
+	var b strings.Builder
+	// Canonical JSON sorts keys.
+	fmt.Fprintf(&b, `{"captured_content_length":%d,"captured_content_sha256":`, capturedLength)
+	pythonJSONString(&b, capturedSHA256)
+	b.WriteString(`,"content_origin":`)
+	pythonJSONString(&b, origin)
+	b.WriteString(`,"content_sha256":`)
+	pythonJSONString(&b, contentSHA256)
+	fmt.Fprintf(&b, `,"content_truncated":%t}`, truncated)
+	sum := sha256.Sum256([]byte(b.String()))
+	return hex.EncodeToString(sum[:])
+}
+
+// verifyRevision re-derives a stored revision's identity from its retained text
+// and capture provenance.
 func verifyRevision(rev *Article, expectedDigest string) bool {
 	digest, ok := RevisionDigest(rev.URL, rev.Title, rev.Summary, rev.Content)
-	if !ok || len(digest) < 32 {
+	if !ok || rev.RecordKind != RecordKindRevision || rev.ContentSHA256 != digest || expectedDigest != digest {
 		return false
 	}
-	return rev.RecordKind == RecordKindRevision &&
-		rev.ContentSHA256 == digest &&
-		expectedDigest == digest &&
-		strings.HasSuffix(rev.ArticleID, "#"+digest[:32])
+	capture := CaptureDigest(digest, rev.CapturedContentLength, rev.CapturedContentSHA256, rev.ContentOrigin, rev.ContentTruncated)
+	return rev.CaptureSHA256 == capture && strings.HasSuffix(rev.ArticleID, "#"+capture[:32])
 }
 
 // queryReportRows reads up to MaxReportArticles article rows for a report.
