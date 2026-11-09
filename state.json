@@ -880,6 +880,13 @@
       "at": "2026-11-09T13:06:22.745Z",
       "run_id": "42622492229",
       "stage": "invoked"
+    },
+    {
+      "admission_key": "run:42622492229",
+      "at": "2026-11-09T13:06:25.692Z",
+      "handle": "report_20261109_130624_474",
+      "run_id": "42622492229",
+      "stage": "invoked"
     }
   ],
   "schema_version": 1,
