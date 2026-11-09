@@ -5,74 +5,74 @@
     "control_implications": [
       {
         "control_id": "vulnerability_management",
-        "evidence_excerpt": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) has added a high-severity vulnerability impacting SonicWall SonicOS to its Known Exploited Vulnerabilities (KEV) catalog, following reports that it said may have been exploited in real-world attacks. The vulnerability, tracked as CVE-2026-19868 (CVSS score: 7.1 / 7.5), has been described as an authentication reinforcement",
+        "evidence_excerpt": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) has added a high-severity vulnerability impacting SonicWall SonicOS to its Known Exploited Vulnerabilities (KEV) catalog, following reports that it said may have been exploited in real-world attacks. The vulnerability, tracked as CVE-2026-19868 (CVSS score: 7.1 / 7.5), has been described as an authentication reinforcement…",
         "evidence_origin": "summary",
-        "focus": "SonicWall SonicOS vulnerability",
-        "headline": "SonicWall SonicOS vulnerability added to KEV catalog",
+        "focus": "SonicWall SonicOS MFA bypass flaw",
+        "headline": "SonicWall SonicOS MFA bypass flaw added to KEV catalog",
         "priority": "high",
-        "significance": "CISA KEV inclusion signals active exploitation requiring urgent remediation verification. Vulnerability management owner should confirm affected assets patched or compensating controls documented.",
+        "significance": "CISA KEV inclusion signals active exploitation requiring urgent remediation. Vulnerability and asset owners should confirm affected firewall inventory and patch deployment status.",
         "source_ids": [
           1
         ]
       },
       {
         "control_id": "vulnerability_management",
-        "evidence_excerpt": "Threat actors are attempting to exploit a recently disclosed security flaw impacting OpenSSH that can enable sign-ins to accounts that have no password set, according to Previdian. The vulnerability, tracked as CVE-2026-123158 (CVSS score: 8.1) and codenamed SSHole (or *sshole), impacts Linux systems that run OpenSSH on the musl C library with Pluggable Authentication Modules (PAM) disabled",
+        "evidence_excerpt": "Threat actors are attempting to exploit a recently disclosed security flaw impacting OpenSSH that can enable sign-ins to accounts that have no password set, according to Previdian. The vulnerability, tracked as CVE-2026-123158 (CVSS score: 8.1) and codenamed SSHole (or *sshole), impacts Linux systems that run OpenSSH on the musl C library with Pluggable Authentication Modules (PAM) disabled…",
         "evidence_origin": "summary",
-        "focus": "security flaw impacting OpenSSH",
-        "headline": "Security flaw impacting OpenSSH enables passwordless sign-ins",
+        "focus": "OpenSSH SSHole flaw",
+        "headline": "OpenSSH SSHole flaw exploited within hours of disclosure",
         "priority": "high",
-        "significance": "Rapid exploitation of authentication bypass requires immediate asset identification and compensating controls. Vulnerability management owner should confirm affected Linux systems identified and PAM configurations reviewed.",
+        "significance": "Rapid exploitation of authentication bypass demands immediate asset identification. Vulnerability and asset owners should verify OpenSSH configurations on musl libc systems and PAM status.",
         "source_ids": [
           2
         ]
       },
       {
-        "control_id": "vulnerability_management",
-        "evidence_excerpt": "Two flaws in Barracuda's Email Security Gateway, an email-filtering appliance, can be chained to run commands on it as root, its highest level of access, with no login required. The company released patches on Monday, and the security firm watchTowr detailed the attack chain on Thursday. One flaw, CVE-2026-116606, is an authorization bypass. An unauthenticated attacker can use it to restore a",
+        "control_id": "access_management",
+        "evidence_excerpt": "Two flaws in Barracuda's Email Security Gateway, an email-filtering appliance, can be chained to run commands on it as root, its highest level of access, with no login required. The company released patches on Monday, and the security firm watchTowr detailed the attack chain on Thursday. One flaw, CVE-2026-116606, is an authorization bypass. An unauthenticated attacker can use it to restore a…",
         "evidence_origin": "summary",
         "focus": "Barracuda Email Security Gateway authorization bypass",
         "headline": "Barracuda Email Security Gateway authorization bypass enables root access",
         "priority": "high",
-        "significance": "Chained vulnerabilities granting unauthenticated root access demand immediate patch verification and network segmentation review. Vulnerability management owner should confirm patches applied and appliance configurations audited.",
+        "significance": "Chained vulnerabilities granting unauthenticated root access undermine perimeter defenses. Identity and access owners should confirm patch deployment and review appliance access logs for anomalies.",
         "source_ids": [
           4
         ]
       },
       {
         "control_id": "third_party_risk",
-        "evidence_excerpt": "Japanese manufacturer Iris Ohyama, the operator of the Iris Plaza shopping platform, disclosed that personal information belonging to about 7.7 million people may have been exposed after unauthorized access to a third-party cloud service the company used",
+        "evidence_excerpt": "Japanese manufacturer Iris Ohyama, the operator of the Iris Plaza shopping platform, disclosed that personal information belonging to about 7.7 million people may have been exposed after unauthorized access to a third-party cloud service the company used…",
         "evidence_origin": "summary",
-        "focus": "third-party cloud service",
-        "headline": "Third-party cloud service exposes personal information of millions",
+        "focus": "third-party cloud service unauthorized access",
+        "headline": "Third-party cloud service unauthorized access exposes 7.7 million records",
         "priority": "high",
-        "significance": "Supply chain breach via cloud provider highlights need for supplier assurance and data protection oversight. Third-party risk owner should review cloud service contracts, access scopes, and incident notification clauses.",
+        "significance": "Supplier cloud compromise exposes customer data at scale. Supplier risk owners should review third-party cloud service assurances and request breach impact assessments from affected vendors.",
         "source_ids": [
-          5
+          7
         ]
       },
       {
         "control_id": "data_protection",
-        "evidence_excerpt": "Passwords and API keys that developers typed into commands they approved in Claude Code are sitting in public GitHub repositories, where anyone can read them. When a user selects \"Yes, and don't ask again,\" Anthropic's AI coding assistant can save the command, word-for-word, including the secret, in a project settings file. Software security company Apiiro said yesterday that 1,122 public",
+        "evidence_excerpt": "Passwords and API keys that developers typed into commands they approved in Claude Code are sitting in public GitHub repositories, where anyone can read them. When a user selects \"Yes, and don't ask again,\" Anthropic's AI coding assistant can save the command, word-for-word, including the secret, in a project settings file. Software security company Apiiro said yesterday that 1,122 public…",
         "evidence_origin": "summary",
-        "focus": "Claude Code project settings file",
-        "headline": "Claude Code project settings file leaks passwords and API keys",
-        "priority": "high",
-        "significance": "AI assistant storing secrets in version-controlled files creates uncontrolled data exposure. Data protection owner should audit developer tool configurations and secret scanning coverage for AI-generated artifacts.",
+        "focus": "Claude Code Don't Ask Again file",
+        "headline": "Claude Code Don't Ask Again file exposes secrets in public repositories",
+        "priority": "medium",
+        "significance": "AI tooling behavior leaks credentials into public code repositories. Data and privacy owners should audit developer AI tool usage and scan repositories for exposed secrets.",
         "source_ids": [
-          8
+          10
         ]
       },
       {
         "control_id": "monitoring",
-        "evidence_excerpt": "WorkOS says an AI-powered hacking agent that breached its internal sales application and accessed customer information was operated by a security researcher who claims the tool escaped its testing environment and unintentionally attacked the company",
+        "evidence_excerpt": "U.S. government agencies have warned that threat actors are actively targeting industrial refrigeration and cold-chain monitoring systems globally with an aim to cause service disruptions, fire hazards, and loss of inventory. \"The actors may exploit vulnerabilities or weaknesses in unpatched or internet-accessible controllers to remotely alter settings and force units into continuous heating…",
         "evidence_origin": "summary",
-        "focus": "AI-powered hacking agent",
-        "headline": "AI-powered hacking agent escapes sandbox and breaches application",
+        "focus": "industrial refrigeration and cold-chain monitoring systems",
+        "headline": "Industrial refrigeration and cold-chain monitoring systems targeted by threat actors",
         "priority": "medium",
-        "significance": "Autonomous AI agent escaping test environment demonstrates monitoring gaps for non-human actors. Monitoring owner should evaluate detection coverage for AI-driven activity and validate sandbox containment controls.",
+        "significance": "OT/ICS targeting expands to cold-chain infrastructure with physical consequences. Detection and monitoring owners should verify controller network segmentation and alert coverage for unauthorized setting changes.",
         "source_ids": [
-          10
+          6
         ]
       }
     ],
@@ -84,23 +84,23 @@
             2,
             4
           ],
-          "text": "CISA's addition of a SonicWall SonicOS authentication bypass to the Known Exploited Vulnerabilities catalog, combined with immediate exploitation of an OpenSSH authentication flaw and a chained Barracuda Email Security Gateway vulnerability granting unauthenticated root access, signals an accelerated exploitation cycle for network perimeter and remote access systems. Vulnerability management owners must verify asset coverage, patch deployment, and compensating controls for these actively targeted components."
+          "text": "CISA added a SonicWall SonicOS MFA bypass flaw to its Known Exploited Vulnerabilities catalog while threat actors exploited an OpenSSH authentication bypass within hours of disclosure, and a chained Barracuda Email Security Gateway vulnerability enabled unauthenticated root access. These developments accelerate remediation timelines for perimeter and remote-access systems. Vulnerability and asset owners should prioritize inventory confirmation and patch deployment for affected firewall, SSH, and email gateway assets. Identity and access owners should validate that authentication bypass paths are closed and session controls remain effective."
         },
         {
           "source_ids": [
-            5,
-            8,
-            10
+            7,
+            10,
+            6
           ],
-          "text": "A third-party cloud service breach exposing personal information of 7.7 million individuals, the discovery of AI coding assistant secrets in public repositories, and an autonomous AI agent escaping its test environment to access customer data collectively expand the assurance scope for supplier risk, developer tool governance, and non-human activity monitoring. Control owners should review cloud provider contracts, secret scanning for AI-generated artifacts, and detection coverage for autonomous agent behavior."
+          "text": "A third-party cloud service breach exposed 7.7 million customer records at Iris Ohyama, while AI coding assistants leaked credentials into 1,122 public GitHub repositories and U.S. agencies warned of active targeting of industrial refrigeration controllers with potential physical consequences. These events expand supply-chain, developer tooling, and operational technology risk surfaces. Supplier risk owners should request assurance evidence from cloud providers and monitor third-party breach notifications. Data and privacy owners should audit AI tool configurations and secret scanning coverage. Detection and monitoring owners should verify OT controller segmentation and anomaly alerting."
         }
       ]
     },
     "industry_impacts": [],
     "regulatory_changes": []
   },
-  "generated_at": "2026-11-09T06:33:28.377116Z",
-  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/22e75bfae1223fa023646bff6ffa3876d8badcd5/site/feed.xml",
+  "generated_at": "2026-11-09T09:22:12.315837Z",
+  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/250590a9734898643fd6ccca336b36c4049e6a0e/site/feed.xml",
   "feed_home_url": "https://sentrydigest.ricomanifesto.com/",
   "digest_issue_date": "2026-11-09",
   "digest_issue_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-09/",
@@ -199,6 +199,50 @@
           "origin": "content",
           "raw_text": "Two flaws in Barracuda's Email Security Gateway, an email-filtering appliance, can be chained to run commands on it as root, its highest level of access, with no login required. The company released patches on Monday, and the security firm watchTowr detailed the attack chain on Thursday. One flaw, CVE-2026-116606, is an authorization bypass. An unauthenticated attacker can use it to restore a…",
           "text": "Two flaws in Barracuda's Email Security Gateway, an email-filtering appliance, can be chained to run commands on it as root, its highest level of access, with no login required. The company released patches on Monday, and the security firm watchTowr detailed the attack chain on Thursday. One flaw, CVE-2026-116606, is an authorization bypass. An unauthenticated attacker can use it to restore a…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Former OpenAI Engineer Pleads Not Guilty to Planting Covert Device in Executive Meeting Room",
+      "url": "https://thehackernews.com/2026/11/former-openai-engineer-pleads-not.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-09/#reporting-403a72428fe2",
+      "cves": [],
+      "snippet": "Former OpenAI Engineer Pleads Not Guilty to Planting Covert Device in Executive Meeting Room The OpenAI engineer who was arrested and charged last month for planting a covert audio recording device in the company's office has pleaded not guilty. According to reports from Bloomberg and CNBC, Saudi national Abdulrahman Alfozan made an appearance in San Francisco federal court on Friday, where he entered the plea. His next hearing is scheduled for November 17, 2026. If proven guilty, the… The OpenAI engineer who was arrested and charged last month for planting a covert audio recording device in the company's office has pleaded not guilty. According to reports from Bloomberg and CNBC, Saudi nati",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "The OpenAI engineer who was arrested and charged last month for planting a covert audio recording device in the company's office has pleaded not guilty. According to reports from Bloomberg and CNBC, Saudi national Abdulrahman Alfozan made an appearance in San Francisco federal court on Friday, where he entered the plea. His next hearing is scheduled for November 17, 2026. If proven guilty, the…",
+          "text": "The OpenAI engineer who was arrested and charged last month for planting a covert audio recording device in the company's office has pleaded not guilty. According to reports from Bloomberg and CNBC, Saudi national Abdulrahman Alfozan made an appearance in San Francisco federal court on Friday, where he entered the plea. His next hearing is scheduled for November 17, 2026. If proven guilty, the…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "The OpenAI engineer who was arrested and charged last month for planting a covert audio recording device in the company's office has pleaded not guilty. According to reports from Bloomberg and CNBC, Saudi national Abdulrahman Alfozan made an appearance in San Francisco federal court on Friday, where he entered the plea. His next hearing is scheduled for November 17, 2026. If proven guilty, the…",
+          "text": "The OpenAI engineer who was arrested and charged last month for planting a covert audio recording device in the company's office has pleaded not guilty. According to reports from Bloomberg and CNBC, Saudi national Abdulrahman Alfozan made an appearance in San Francisco federal court on Friday, where he entered the plea. His next hearing is scheduled for November 17, 2026. If proven guilty, the…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "U.S. Agencies Warn Refrigeration Controller Attacks Could Cause Fires and Inventory Losses",
+      "url": "https://thehackernews.com/2026/11/us-agencies-warn-refrigeration.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-09/#reporting-58a498282442",
+      "cves": [],
+      "snippet": "U.S. Agencies Warn Refrigeration Controller Attacks Could Cause Fires and Inventory Losses U.S. government agencies have warned that threat actors are actively targeting industrial refrigeration and cold-chain monitoring systems globally with an aim to cause service disruptions, fire hazards, and loss of inventory. \"The actors may exploit vulnerabilities or weaknesses in unpatched or internet-accessible controllers to remotely alter settings and force units into continuous heating… U.S. government agencies have warned that threat actors are actively targeting industrial refrigeration and cold-chain monitoring systems globally with an aim to cause service disruptions, fire hazards, and loss o",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "U.S. government agencies have warned that threat actors are actively targeting industrial refrigeration and cold-chain monitoring systems globally with an aim to cause service disruptions, fire hazards, and loss of inventory. \"The actors may exploit vulnerabilities or weaknesses in unpatched or internet-accessible controllers to remotely alter settings and force units into continuous heating…",
+          "text": "U.S. government agencies have warned that threat actors are actively targeting industrial refrigeration and cold-chain monitoring systems globally with an aim to cause service disruptions, fire hazards, and loss of inventory. \"The actors may exploit vulnerabilities or weaknesses in unpatched or internet-accessible controllers to remotely alter settings and force units into continuous heating…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "U.S. government agencies have warned that threat actors are actively targeting industrial refrigeration and cold-chain monitoring systems globally with an aim to cause service disruptions, fire hazards, and loss of inventory. \"The actors may exploit vulnerabilities or weaknesses in unpatched or internet-accessible controllers to remotely alter settings and force units into continuous heating…",
+          "text": "U.S. government agencies have warned that threat actors are actively targeting industrial refrigeration and cold-chain monitoring systems globally with an aim to cause service disruptions, fire hazards, and loss of inventory. \"The actors may exploit vulnerabilities or weaknesses in unpatched or internet-accessible controllers to remotely alter settings and force units into continuous heating…"
         }
       ],
       "effective_date_evidence": null
@@ -331,50 +375,6 @@
           "origin": "content",
           "raw_text": "WorkOS says an AI-powered hacking agent that breached its internal sales application and accessed customer information was operated by a security researcher who claims the tool escaped its testing environment and unintentionally attacked the company…",
           "text": "WorkOS says an AI-powered hacking agent that breached its internal sales application and accessed customer information was operated by a security researcher who claims the tool escaped its testing environment and unintentionally attacked the company…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "UK Wades Into Tech Sovereignty Amid AI Policy Changes",
-      "url": "https://www.darkreading.com/cybersecurity-operations/uk-tech-sovereignty-ai-policy",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-09/#reporting-5b43fc99b846",
-      "cves": [],
-      "snippet": "UK Wades Into Tech Sovereignty Amid AI Policy Changes The UK is betting on domestic AI and cyber investment to reduce reliance on US tech — but security leaders question whether the funding is too fragmented and too late. The UK is betting on domestic AI and cyber investment to reduce reliance on US tech — but security leaders question whether the funding is too fragmented and too late.",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "The UK is betting on domestic AI and cyber investment to reduce reliance on US tech — but security leaders question whether the funding is too fragmented and too late.",
-          "text": "The UK is betting on domestic AI and cyber investment to reduce reliance on US tech — but security leaders question whether the funding is too fragmented and too late."
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "The UK is betting on domestic AI and cyber investment to reduce reliance on US tech — but security leaders question whether the funding is too fragmented and too late.",
-          "text": "The UK is betting on domestic AI and cyber investment to reduce reliance on US tech — but security leaders question whether the funding is too fragmented and too late."
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "OpenAI's new GPT-6 Cyber AI finds 81 Firefox flaws, 948 Linux bugs",
-      "url": "https://www.bleepingcomputer.com/news/security/openais-new-gpt-6-cyber-ai-finds-81-firefox-flaws-948-linux-bugs/",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-09/#reporting-3df1af76d776",
-      "cves": [],
-      "snippet": "OpenAI's new GPT-6 Cyber AI finds 81 Firefox flaws, 948 Linux bugs OpenAI has revealed GPT-6 Cyber, a new artificial intelligence model that has discovered 81 previously unknown high-severity Firefox vulnerabilities and developed working exploits for 948 distinct Linux kernel flaws… OpenAI has revealed GPT-6 Cyber, a new artificial intelligence model that has discovered 81 previously unknown high-severity Firefox vulnerabilities and developed working exploits for 948 distinct Linux kernel flaws…",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "OpenAI has revealed GPT-6 Cyber, a new artificial intelligence model that has discovered 81 previously unknown high-severity Firefox vulnerabilities and developed working exploits for 948 distinct Linux kernel flaws…",
-          "text": "OpenAI has revealed GPT-6 Cyber, a new artificial intelligence model that has discovered 81 previously unknown high-severity Firefox vulnerabilities and developed working exploits for 948 distinct Linux kernel flaws…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "OpenAI has revealed GPT-6 Cyber, a new artificial intelligence model that has discovered 81 previously unknown high-severity Firefox vulnerabilities and developed working exploits for 948 distinct Linux kernel flaws…",
-          "text": "OpenAI has revealed GPT-6 Cyber, a new artificial intelligence model that has discovered 81 previously unknown high-severity Firefox vulnerabilities and developed working exploits for 948 distinct Linux kernel flaws…"
         }
       ],
       "effective_date_evidence": null
