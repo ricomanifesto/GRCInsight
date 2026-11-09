@@ -571,3 +571,43 @@ def test_go_reader_testdata_matches_the_writer():
     assert json.loads(testdata.read_text()) == json.loads(
         json.dumps(fx.dynamodb_items(reports, articles))
     )
+
+
+def test_incremental_export_compares_instants_not_strings():
+    reports, _ = fx.tables()
+    reports.seed(
+        {"report_id": "frac", "status": "failed", "updated_at": "2026-11-09T12:00:00.500000Z"}
+    )
+    reports.seed({"report_id": "old", "status": "failed", "updated_at": "2026-11-09T11:59:59Z"})
+    reports.seed(
+        {"report_id": "offset", "status": "failed", "updated_at": "2026-11-09T07:30:00-05:00"}
+    )
+    reports.seed({"report_id": "unreadable", "status": "failed", "updated_at": "yesterday"})
+    page = export_page(reports, stream="reports", limit=10, updated_since="2026-11-09T12:00:00Z")
+    ids = {r["report_id"] for r in page["records"]}
+    assert ids == {"frac", "offset", "unreadable"}
+    assert page["coverage"]["filtered_out"] == 1
+    with pytest.raises(ValueError):
+        export_page(reports, stream="reports", updated_since="not a time")
+
+
+def test_deployed_policy_grants_what_history_uses_on_both_tables():
+    """A role created from the repository policy can write and read history."""
+    from pathlib import Path
+
+    policy = json.loads(
+        (
+            Path(__file__).resolve().parents[2] / "deployments/lambda-permissions-policy.json"
+        ).read_text()
+    )
+    table = "arn:aws:dynamodb:us-east-1:076542168556:table/"
+    granted: dict[str, set[str]] = {}
+    for statement in policy["Statement"]:
+        if statement.get("Effect") != "Allow":
+            continue
+        for resource in statement["Resource"]:
+            granted.setdefault(resource, set()).update(statement["Action"])
+    needed = {"dynamodb:GetItem", "dynamodb:PutItem", "dynamodb:UpdateItem", "dynamodb:Scan"}
+    assert needed <= granted[table + "grcinsight-reports"]
+    assert needed <= granted[table + "grcinsight-articles"]
+    assert "dynamodb:Query" in granted[table + "grcinsight-articles/index/*"]

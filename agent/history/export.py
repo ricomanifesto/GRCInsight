@@ -12,6 +12,7 @@ from __future__ import annotations
 import base64
 import binascii
 import json
+from datetime import datetime, timezone
 from typing import Any
 
 from history.identity import (
@@ -296,16 +297,27 @@ def _legacy_article_record(table: str, item: dict[str, Any]) -> dict[str, Any]:
     )
 
 
-def _changed_at(stream: str, item: dict[str, Any]) -> str:
+def parse_timestamp(value: str) -> datetime:
+    """Parse an ISO 8601 timestamp; naive values are UTC."""
+    parsed = datetime.fromisoformat(value.strip().replace("Z", "+00:00"))
+    return parsed if parsed.tzinfo else parsed.replace(tzinfo=timezone.utc)
+
+
+def _changed_at(stream: str, item: dict[str, Any]) -> datetime | None:
+    """When an item last changed, or None when it carries no readable time."""
     names = (
         ("completed_at", "updated_at", "created_at")
         if stream == "reports"
         else ("first_captured_at", "created_at", "updated_at")
     )
     for name in names:
-        if isinstance(item.get(name), str):
-            return item[name]
-    return ""
+        value = item.get(name)
+        if isinstance(value, str) and value:
+            try:
+                return parse_timestamp(value)
+            except ValueError:
+                return None
+    return None
 
 
 def export_page(
@@ -321,14 +333,19 @@ def export_page(
         raise ValueError(f"stream must be one of {STREAMS}")
     if not 1 <= limit <= MAX_PAGE:
         raise ValueError(f"limit must be between 1 and {MAX_PAGE}")
+    since = parse_timestamp(updated_since) if updated_since is not None else None
     start_key = decode_cursor(stream, cursor)
     items, last = table.scan_page(limit, start_key)
     records: list[dict[str, Any]] = []
     unknown = filtered = 0
     for item in items:
-        if updated_since is not None and _changed_at(stream, item) < updated_since:
-            filtered += 1
-            continue
+        if since is not None:
+            # Compare instants, not strings; an item without a readable time is kept,
+            # because it cannot be shown to be older than the cutoff.
+            changed = _changed_at(stream, item)
+            if changed is not None and changed < since:
+                filtered += 1
+                continue
         if stream == "reports":
             records.append(report_record(item))
         elif item.get("record_kind") == REVISION_KIND:
