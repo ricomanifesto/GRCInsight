@@ -115,6 +115,13 @@ def _markdown_link_destination(value: Any) -> str:
     return quote(str(value), safe=":/?#[]@!$&*+,;=%")
 
 
+def _named_regulations(line: str) -> list[str]:
+    """Regulation names a category-note line mentions."""
+    if not any(reg in line for reg in ["GDPR", "SOX", "PCI", "ISO", "NIST", "CCPA"]):
+        return []
+    return [reg for reg in ["GDPR", "SOX", "PCI-DSS", "ISO 27001", "NIST", "CCPA"] if reg in line]
+
+
 class GRCModelService:
     """Service for model-powered GRC analysis."""
 
@@ -295,6 +302,8 @@ class GRCModelService:
             if key in diagnostics
         }
         summary["models"] = [str(model) for model in diagnostics.get("models") or []]
+        if isinstance(diagnostics.get("analysis_rows"), dict):
+            summary["analysis_rows"] = dict(diagnostics["analysis_rows"])
         for key in ("cost", "elapsed_seconds", "threshold"):
             if key in diagnostics:
                 summary[key] = text(diagnostics[key])
@@ -336,8 +345,12 @@ class GRCModelService:
     ) -> None:
         """Record every position's selection; never log article text."""
         failed = analysis is not None and "error" in analysis
+        rows = (analysis or {}).get("analysis_rows") or {}
+        # Every claim invalid is not the model deciding that nothing is relevant:
+        # its selection is unknown, like a failed analysis, never a drop.
+        unusable = rows.get("accepted") == 0 and (rows.get("skipped") or 0) > 0
         legacy_selected = None
-        if plan.route == LEGACY_FULL and analysis is not None and not failed:
+        if plan.route == LEGACY_FULL and analysis is not None and not failed and not unusable:
             legacy_selected = selected_article_mask(articles, analysis)
         records = selection_records(
             articles, plan, legacy_selected=legacy_selected, analysis_failed=failed
@@ -360,6 +373,11 @@ class GRCModelService:
             )
         diagnostics = self.last_relevance_diagnostics
         assert diagnostics is not None
+        if rows:
+            diagnostics["analysis_rows"] = {
+                "accepted": int(rows.get("accepted") or 0),
+                "skipped": int(rows.get("skipped") or 0),
+            }
         diagnostics.update(
             policy=SELECTION_POLICY,
             threshold=self.relevance_min_probability,
@@ -785,7 +803,9 @@ All source references must use the supplied source numbers. Use empty arrays ins
             # Decoration does not change identity: allow a list marker and
             # emphasis around the row, then require the exact row.
             claim = re.sub(r"^(?:[-*\u2022]|[0-9]+[.)])\s+", "", line)
-            claim = re.sub(r"\*\*|__", "", claim).strip()
+            wrapped = re.fullmatch(r"\*\*(.+)\*\*", claim)
+            claim = wrapped.group(1) if wrapped else claim
+            claim = re.sub(r"^\*\*(Article\s+[^*]+?)\*\*", r"\1", claim).strip()
             # "Article <token>:" is a selection claim; "Article 5 of GDPR" is not.
             if re.match(r"article\s+\S+?:", claim, re.IGNORECASE):
                 # Identity first: the number selects one supplied article, whose
@@ -799,7 +819,10 @@ All source references must use the supplied source numbers. Use empty arrays ins
                 title = original_articles[index].title if known else ""
                 rest = claim[head.end() :] if head else ""
                 tail = (
-                    re.fullmatch(r"\s+score\s+(\S+)\s+relevant\b.*", rest[len(title) :])
+                    re.fullmatch(
+                        r"\s+score\s+(\S+)\s+relevant[.]?(?:\s*\([^()]*\)[.]?)?",
+                        rest[len(title) :],
+                    )
                     if known and title and rest.startswith(title)
                     else None
                 )
@@ -813,6 +836,8 @@ All source references must use the supplied source numbers. Use empty arrays ins
                     # A claim that does not bind exactly to one supplied article,
                     # or repeats one, credits no article. Other rows stay usable.
                     skipped_rows += 1
+                    if current_section == "regulations":
+                        regulations.extend(_named_regulations(line))
                     continue
                 accepted.append(index)
                 grc_articles.append(
@@ -824,7 +849,7 @@ All source references must use the supplied source numbers. Use empty arrays ins
                     }
                 )
                 continue
-            if line.startswith("Reason:"):
+            if claim.startswith("Reason:"):
                 continue
 
             if "regulation" in line.lower() or "framework" in line.lower():
@@ -834,12 +859,8 @@ All source references must use the supplied source numbers. Use empty arrays ins
             elif "risk" in line.lower():
                 current_section = "risks"
 
-            if current_section == "regulations" and any(
-                reg in line for reg in ["GDPR", "SOX", "PCI", "ISO", "NIST", "CCPA"]
-            ):
-                for reg in ["GDPR", "SOX", "PCI-DSS", "ISO 27001", "NIST", "CCPA"]:
-                    if reg in line:
-                        regulations.append(reg)
+            if current_section == "regulations":
+                regulations.extend(_named_regulations(line))
 
         if skipped_rows:
             logger.warning(

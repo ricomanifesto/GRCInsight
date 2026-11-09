@@ -147,13 +147,15 @@ def test_finite_compatible_scores_preserve_existing_result_shape(score):
     ]
 
 
-def test_trailing_commentary_keeps_identity_and_unrecognized_text_selects_nothing():
+def test_inline_commentary_is_skipped_and_unrecognized_text_selects_nothing():
     items = articles()
+    # Reasons belong on a separate Reason: line; inline commentary is not a row.
     inline = service()._process_analysis_response(
         "Article 2: Title: Supplier access review score 8 relevant because review is warranted.",
         items,
     )
-    assert inline["grc_article_indices"] == [1]
+    assert inline["grc_article_indices"] == []
+    assert inline["analysis_rows"] == {"accepted": 0, "skipped": 1}
     # Prose with no row selects no article instead of every article.
     prose = service()._process_analysis_response("Unrecognized narrative", items)
     assert prose["grc_articles"] == [] and prose["grc_article_indices"] == []
@@ -327,3 +329,120 @@ def test_unusable_fallback_rows_never_refuse_an_enabled_relevance_selection(monk
     assert analysis["grc_article_indices"] == [0, 1]
     diagnostics = model.last_relevance_diagnostics
     assert diagnostics is not None and diagnostics["fallback_status"] == "ok"
+
+
+@pytest.mark.parametrize(
+    "line",
+    [
+        # Two rows on one line: neither is a single exact row.
+        "Article 1: Title: Consultation notice score 8 relevant. "
+        "Article 2: Title: Supplier access review score 9 relevant",
+        "Article 2: Title: Supplier access review score 8 relevant? No - not relevant",
+    ],
+)
+def test_text_after_relevant_cannot_hide_a_row_or_reverse_the_claim(line):
+    parsed = service()._process_analysis_response(line, articles())
+    assert parsed["grc_article_indices"] == []
+    assert parsed["analysis_rows"] == {"accepted": 0, "skipped": 1}
+
+
+def test_emphasis_inside_a_title_is_part_of_the_title():
+    items = articles("Python __init__ **flaw** review")
+    parsed = service()._process_analysis_response(
+        f"**Article 2: Title: {items[1].title} score 8 relevant**", items
+    )
+    assert parsed["grc_article_indices"] == [1]
+
+
+def test_decorated_reason_lines_stay_commentary():
+    items = articles()
+    text = (
+        f"Article 2: Title: {items[1].title} score 8 relevant\n"
+        "- Reason: regulation and risk wording mentions GDPR."
+    )
+    parsed = service()._process_analysis_response(text, items)
+    assert parsed["analysis"]["regulations_mentioned"] == []
+
+
+def test_skipped_claims_keep_their_regulation_notes():
+    text = "Regulations:\nArticle 33: GDPR breach notification applies to the notice."
+    parsed = service()._process_analysis_response(text, articles())
+    assert parsed["analysis_rows"] == {"accepted": 0, "skipped": 1}
+    assert parsed["analysis"]["regulations_mentioned"] == ["GDPR"]
+
+
+def enabled_model(monkeypatch, decisions, response):
+    from types import SimpleNamespace
+    from unittest.mock import AsyncMock
+
+    from config.settings import settings
+
+    monkeypatch.setattr(settings, "openrouter_api_key", "test-key")
+    monkeypatch.setattr(settings, "grc_relevance_mode", "enabled")
+    model = GRCModelService()
+    monkeypatch.setattr(model.relevance_client, "classify", AsyncMock(return_value=decisions))
+
+    async def invoke(**_kwargs):
+        return SimpleNamespace(text=response)
+
+    monkeypatch.setattr(model, "_invoke", invoke)
+    return model
+
+
+def three_articles():
+    return articles() + [
+        ArticleInput(
+            title="Payments regulator fine",
+            url="https://payments.example.test/fine",
+            content="A regulator fined a payments firm.",
+            published=datetime(2026, 11, 4, tzinfo=timezone.utc),
+        )
+    ]
+
+
+def test_enrichment_row_positions_are_subset_relative_and_never_change_selection(monkeypatch):
+    import asyncio
+
+    from services.relevance_decisions import ArticleDecision, RelevanceResult
+
+    items = three_articles()
+    decisions = RelevanceResult(
+        (
+            ArticleDecision(0, "irrelevant", {"irrelevant": 0.99}, 0.95),
+            ArticleDecision(1, "relevant", {"relevant": 0.99}, 0.95),
+            ArticleDecision(2, "insufficient_evidence", {"insufficient_evidence": 0.6}, 0.95),
+        ),
+        ("typesafe/jev-1.13",),
+        10,
+        0,
+        0.0,
+        0.01,
+    )
+    # The enrichment call sees only the uncertain article, as its article 1.
+    model = enabled_model(
+        monkeypatch, decisions, f"Article 1: Title: {items[2].title} score 8 relevant"
+    )
+    analysis = asyncio.run(model.analyze_articles_for_grc(items))
+    assert analysis["grc_article_indices"] == [1, 2]
+
+
+def test_all_invalid_rows_on_the_full_legacy_route_are_unknown_not_rejections(monkeypatch):
+    import asyncio
+
+    from services.relevance_decisions import DecisionError
+
+    items = three_articles()
+    model = enabled_model(monkeypatch, None, "Article 1: Title: Garbled title score 8 relevant")
+    from unittest.mock import AsyncMock
+
+    monkeypatch.setattr(
+        model.relevance_client, "classify", AsyncMock(side_effect=DecisionError("timeout"))
+    )
+    analysis = asyncio.run(model.analyze_articles_for_grc(items))
+    assert "error" not in analysis
+    records = model.last_selection_records
+    assert records is not None and [r.model_selected for r in records] == [None, None, None]
+    summary = model.relevance_summary()
+    assert summary is not None
+    assert summary["route"] == "legacy_full" and summary["dropped_positions"] == 0
+    assert summary["analysis_rows"] == {"accepted": 0, "skipped": 1}

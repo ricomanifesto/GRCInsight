@@ -17,11 +17,13 @@ The prompt contains a format template, not a preselected positive answer.
 Every line of the form `Article <token>:` is a selection claim, checked
 identity first. The number must name a supplied article (no zero padding), that
 article's exact title must follow `Title:`, and a valid score must follow the
-title; trailing commentary after `relevant` is ignored. Because the title is
-matched as a whole, words such as risk, regulation, framework, industries,
-score and Title: inside it never act as delimiters or category headers. A list
-marker (`-`, `*`, `1.`) or bold emphasis around a row does not change its
-identity. Accepted scores are 1 through 10, with `10` or `10.0` as the upper
+title. Only a terminal period or one parenthetical note may follow `relevant`;
+reasons belong on a separate `Reason:` line, so a second row or a reversal on the
+same line is never read as part of a row. Because the title is matched as a whole,
+words such as risk, regulation, framework, industries, score and Title: inside it
+never act as delimiters or category headers. A list marker (`-`, `*`, `1.`) or
+bold emphasis around the whole row or the `Article N` token does not change its
+identity; emphasis inside a title is part of the title. Accepted scores are 1 through 10, with `10` or `10.0` as the upper
 endpoint and decimals below 10; the score is validated, not used.
 
 A claim that fails any check credits no article: an unknown or zero-padded
@@ -32,7 +34,8 @@ title-based fallback for claims that fail. Accepted rows carry the article's
 position in `grc_article_indices`, which selection uses before titles, so
 duplicate supplied titles cannot select the wrong article. The result reports
 `analysis_rows: {"accepted": n, "skipped": k}`; skipped rows are logged by count,
-never by content.
+never by content. A skipped claim inside a regulations section still contributes
+the regulation names it mentions.
 
 When no claim is usable (all invalid, or a response that selects nothing) the
 model selects no article: `grc_articles` and `grc_article_indices` are empty and
@@ -40,6 +43,14 @@ the confidence is 0. This is neither an error nor a selection of every article.
 The workflow's local entity and risk signals still select articles, and report
 evidence is still built from every retained source. The earlier fallback that
 treated unrecognized prose as selecting every supplied article is removed.
+
+When every claim was invalid, the relevance pilot's full legacy route records the
+model's selection for each article as unknown, as for a failed analysis, never as
+a decision that the article is irrelevant. Its stored relevance summary includes
+`analysis_rows`. Because the analysis now always carries positions, the workflow
+and the analysis route report the GRC-relevant count as articles selected by the
+model or by local entity and risk signals, the same count the relevance pilot
+already reported.
 
 The existing analysis result keys are kept, including the legacy fixed relevance
 score of 7.0 and the summary fields; accepted rows add the article `url`, and the
