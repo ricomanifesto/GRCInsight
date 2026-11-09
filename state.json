@@ -917,6 +917,14 @@
       "handle": "report_20261109_144402_013",
       "run_id": "42637508030",
       "stage": "invoked"
+    },
+    {
+      "admission_key": "run:42637508030",
+      "at": "2026-11-09T14:46:55.182Z",
+      "binding": "none",
+      "outcome": "published",
+      "run_id": "42637508030",
+      "stage": "completed"
     }
   ],
   "schema_version": 1,
