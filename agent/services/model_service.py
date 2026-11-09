@@ -799,8 +799,13 @@ All source references must use the supplied source numbers. Use empty arrays ins
         risks = []
         accepted: list[int] = []
         skipped_rows = 0
-        # A known empty answer is the whole response being the owned sentinel.
+        # A known empty answer is the whole response being the owned sentinel. The
+        # sentinel next to anything else contradicts it, so that response is never
+        # a known selection (its exact rows may still credit their own articles).
         empty_declared = response_content.strip() == EMPTY_ANALYSIS_ANSWER
+        contradicted = not empty_declared and any(
+            line.strip() == EMPTY_ANALYSIS_ANSWER for line in lines
+        )
         current_section = None
         for line in lines:
             line = line.strip()
@@ -812,7 +817,7 @@ All source references must use the supplied source numbers. Use empty arrays ins
             claim = re.sub(r"^(?:[-*\u2022]|[0-9]+[.)])\s+", "", line)
             wrapped = re.fullmatch(r"\*\*(.+)\*\*", claim)
             claim = wrapped.group(1) if wrapped else claim
-            claim = re.sub(r"^\*\*(Article\s+[^*]+?)\*\*", r"\1", claim).strip()
+            claim = re.sub(r"^\*\*(Article\s+[0-9]+)\*\*", r"\1", claim).strip()
             # "Article <token>:" is a selection claim; "Article 5 of GDPR" is not.
             if re.match(r"article\s+\S+?:", claim, re.IGNORECASE):
                 # Identity first: the number selects one supplied article, whose
@@ -880,9 +885,9 @@ All source references must use the supplied source numbers. Use empty arrays ins
             # Positions are authoritative for selection; titles may repeat.
             "grc_article_indices": sorted(accepted),
             "analysis_rows": {"accepted": len(accepted), "skipped": skipped_rows},
-            # Known only with an accepted row, or the declared empty answer and no
-            # attempted row. Anything else is unknown, never evidence of a drop.
-            "selection_known": bool(accepted) or empty_declared,
+            # Known only with an accepted row (and no contradicting sentinel), or the
+            # exact empty answer. Anything else is unknown, never evidence of a drop.
+            "selection_known": (bool(accepted) and not contradicted) or empty_declared,
             "summary": {
                 "total_articles": len(original_articles),
                 "grc_relevant_count": len(grc_articles),

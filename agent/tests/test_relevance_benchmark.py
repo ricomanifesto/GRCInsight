@@ -112,7 +112,8 @@ def test_replay_uses_independent_workflow_deadlines(monkeypatch):
             200,
             json={
                 "model": "test/model",
-                "choices": [{"message": {"content": "Analysis complete"}}],
+                # A known answer, so this test measures deadlines, not parsing.
+                "choices": [{"message": {"content": "No articles selected"}}],
             },
         )
 
@@ -237,3 +238,22 @@ def test_replay_reports_no_win_rate_when_every_pair_fails(monkeypatch):
         "No pair completed without errors, so the enabled-faster rate is not bounded; "
         "1 pairs with errors are excluded."
     )
+
+
+def test_replay_counts_an_unknown_legacy_answer_as_missing_predictions(monkeypatch):
+    model = service(monkeypatch, "enabled")
+    model.relevance_client.classify = AsyncMock(
+        return_value=result(labels=("relevant", "insufficient_evidence"))
+    )
+    model._analyze_articles_with_model.return_value = {
+        "grc_articles": [],
+        "grc_article_indices": [],
+        "selection_known": False,
+        "summary": {"grc_relevant_count": 0},
+        "analysis": {},
+    }
+    summary = asyncio.run(
+        run_comparison(articles(), ["relevant", "irrelevant"], lambda: model, repeats=1)
+    )
+    # An unknown answer is not a prediction that either article is irrelevant.
+    assert summary["legacy"]["missing_predictions"] == 2

@@ -583,7 +583,12 @@ REGRESSION_MATRIX = [
     ("No articles selected\nArticle 3: Title: Supplier access review score 8 relevant", [], False),
     ("No articles selected\n> Article 9: Title: Nothing supplied score 8 relevant", [], False),
     ("No articles selected\nRegulations: none", [], False),
-    (f"No articles selected\n{VALID_2}", [1], True),
+    # The sentinel contradicting a row: the exact row still credits its own article,
+    # but the response is not a known selection, so it records no drops.
+    (f"No articles selected\n{VALID_2}", [1], False),
+    (f"{VALID_2}\nNo articles selected", [1], False),
+    # Bold only around the whole row or the Article token.
+    ("**Article 2: Title: Supplier access review** score 8 relevant", [], False),
 ]
 
 
@@ -617,3 +622,18 @@ def test_the_evidence_layer_records_only_declared_empty_answers_as_drops(
     asyncio.run(model.analyze_articles_for_grc(three_articles()))
     records = model.last_selection_records
     assert records is not None and [r.model_selected for r in records] == expected
+
+
+def test_a_sentinel_contradicting_a_row_records_no_model_drops(monkeypatch):
+    import asyncio
+
+    items = three_articles()
+    model = legacy_full_model(
+        monkeypatch,
+        "enabled",
+        f"Article 3: Title: {items[2].title} score 8 relevant\nNo articles selected",
+    )
+    analysis = asyncio.run(model.analyze_articles_for_grc(items))
+    assert analysis["grc_article_indices"] == [2]
+    records = model.last_selection_records
+    assert records is not None and [r.model_selected for r in records] == [None, None, None]

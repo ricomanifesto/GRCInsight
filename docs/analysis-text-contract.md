@@ -20,12 +20,14 @@ notes.
 
 Only one closed grammar credits an article. A row credits article *n* only when it
 is `Article <n>: Title: <exact title of n> score <s> relevant`, optionally ending
-with a period, optionally preceded by one list marker (`-`, `*`, `1.`), and
-optionally wrapped in bold around the whole row or the `Article <n>` token. The
-number must name a supplied article without zero padding. The title is matched as
-a whole, so words such as risk, regulation, Title: or score inside it never act as
-delimiters. `<s>` is 1 through 10 (`10` or `10.0` at the top, decimals below 10);
-it is validated, not used. A repeated identity credits once.
+with a period, optionally preceded by one list marker (`-`, `*`, `•`, `1.` or `1)`),
+and optionally wrapped in bold around the whole row or only the `Article <n>` token.
+Whitespace between the fixed words is flexible. The number must name a supplied
+article without zero padding. The title is matched as a whole, so words such as
+risk, regulation, Title: or score inside it never act as delimiters; a title with
+leading or trailing whitespace therefore cannot be credited. `<s>` is 1 through 10
+(`10` or `10.0` at the top, decimals below 10); it is validated, not used. A
+repeated identity credits once.
 
 Anything else credits nothing. A line beginning `Article <token>:` that does not
 fit the grammar (unknown number, another article's title, invalid score, text
@@ -40,12 +42,16 @@ logged by count, never by content.
 
 ## Known and unknown answers
 
-`selection_known` is true only when at least one row was accepted, or the entire
-response, ignoring surrounding whitespace, is exactly `No articles selected`.
-Every other response is `selection_known: false`: unrecognized prose, malformed or
-decorated attempts, all rows invalid, and the sentinel with any other line,
-punctuation or decoration (for example the sentinel followed by a blockquoted
-row).
+`selection_known` is true only when at least one row was accepted and no line is
+the sentinel, or the entire response, ignoring surrounding whitespace, is exactly
+`No articles selected`. Every other response is `selection_known: false`:
+unrecognized prose, malformed or decorated attempts, all rows invalid, and the
+sentinel with any other line, punctuation or decoration (for example the sentinel
+followed by a blockquoted row). When the sentinel appears beside valid rows, those
+exact rows still credit their own articles, but the contradictory response is not a
+known selection and records no drops. Skip counts are diagnostic: a decorated
+attempt that does not begin `Article <token>:` is ignored rather than counted, and
+known/unknown never depends on recognizing it.
 
 - **Selection.** An unknown answer selects no article. There is no fallback that
   selects every supplied article. The workflow's local entity and risk signals
@@ -57,6 +63,8 @@ row).
   empty answer is recorded as model drops. The stored relevance summary's
   `analysis_rows` includes `selection_known`. Unknown records count no model drops,
   although the workflow still publishes only articles that local signals select.
+- **Offline benchmark.** The relevance benchmark scores an unknown legacy answer
+  as missing predictions, like a failed call, never as `irrelevant`.
 - **Enabled pilot.** For the decision route's uncertain subset, the pilot's
   decisions stay authoritative. The enrichment call's rows use positions within
   that subset and never change selection; its `analysis_rows` describes that call.
