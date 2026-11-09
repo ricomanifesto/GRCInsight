@@ -2,6 +2,7 @@ package services
 
 import (
 	"encoding/json"
+	"errors"
 	"io"
 	"net/http"
 	"strconv"
@@ -55,7 +56,7 @@ func TestWorkflowPayloadIncludesDeadlineOnlyForSynchronousCalls(t *testing.T) {
 	req := &models.WorkflowRequest{FeedURL: "https://example.com/feed.xml"}
 	deadline := time.UnixMilli(1_800_000)
 
-	syncPayload, err := marshalWorkflowPayload(req, "", deadline)
+	syncPayload, err := marshalWorkflowPayload(req, WorkflowJob{}, deadline)
 	if err != nil {
 		t.Fatalf("marshal synchronous payload: %v", err)
 	}
@@ -67,7 +68,7 @@ func TestWorkflowPayloadIncludesDeadlineOnlyForSynchronousCalls(t *testing.T) {
 		t.Fatalf("expected caller deadline %d, got %d", deadline.UnixMilli(), got)
 	}
 
-	asyncPayload, err := marshalWorkflowPayload(req, "report-1", time.Time{})
+	asyncPayload, err := marshalWorkflowPayload(req, WorkflowJob{ReportID: "report-1", JobID: "job-1"}, time.Time{})
 	if err != nil {
 		t.Fatalf("marshal asynchronous payload: %v", err)
 	}
@@ -77,6 +78,9 @@ func TestWorkflowPayloadIncludesDeadlineOnlyForSynchronousCalls(t *testing.T) {
 	}
 	if _, ok := asyncEvent[callerDeadlineField]; ok {
 		t.Fatal("asynchronous payload must not inherit the submission caller deadline")
+	}
+	if asyncEvent["report_id"] != "report-1" || asyncEvent["job_id"] != "job-1" {
+		t.Fatalf("payload does not bind the admitted job: %v", asyncEvent)
 	}
 }
 
@@ -114,5 +118,73 @@ func TestHTTPWorkflowPropagatesItsCallerDeadline(t *testing.T) {
 	maximum := time.Now().Add(timeout + time.Second).UnixMilli()
 	if propagatedDeadline < minimum || propagatedDeadline > maximum {
 		t.Fatalf("propagated deadline %d outside expected range [%d, %d]", propagatedDeadline, minimum, maximum)
+	}
+}
+
+func reportWriterClient(status int, body string, seen *http.Request, sent *map[string]any) *PythonServiceClient {
+	return &PythonServiceClient{
+		httpClient: &http.Client{
+			Timeout: time.Second,
+			Transport: roundTripFunc(func(req *http.Request) (*http.Response, error) {
+				*seen = *req
+				raw, _ := io.ReadAll(req.Body)
+				_ = json.Unmarshal(raw, sent)
+				return &http.Response{
+					StatusCode: status,
+					Body:       io.NopCloser(strings.NewReader(body)),
+					Header:     make(http.Header),
+					Request:    req,
+				}, nil
+			}),
+		},
+		baseURL: "http://python-service.test",
+		logger:  logrus.New(),
+	}
+}
+
+func TestRunWorkflowForReportPostsTheAdmittedJob(t *testing.T) {
+	var seen http.Request
+	var sent map[string]any
+	client := reportWriterClient(http.StatusOK, `{"decision":"committed"}`, &seen, &sent)
+	job := WorkflowJob{ReportID: "report 1/x", JobID: "job-1"}
+	if err := client.RunWorkflowForReport(&models.WorkflowRequest{FeedURL: "https://example.com/feed.xml"}, job); err != nil {
+		t.Fatal(err)
+	}
+	if seen.URL.EscapedPath() != "/api/v1/workflow/reports/report%201%2Fx/run" {
+		t.Fatalf("unexpected path %q", seen.URL.EscapedPath())
+	}
+	if sent["job_id"] != "job-1" || sent["feed_url"] != "https://example.com/feed.xml" {
+		t.Fatalf("job not sent: %v", sent)
+	}
+	if seen.Header.Get(callerDeadlineHeader) == "" {
+		t.Fatal("synchronous report run must carry the caller deadline")
+	}
+}
+
+func TestReportCompletionDecisions(t *testing.T) {
+	cases := []struct {
+		status  int
+		body    string
+		ok      bool
+		refused bool
+	}{
+		{http.StatusOK, `{"decision":"committed"}`, true, false},
+		{http.StatusOK, `{"decision":"reused"}`, true, false},
+		{http.StatusConflict, `{"decision":"foreign_completion_refused"}`, false, true},
+		{http.StatusInternalServerError, `{"decision":"evidence_failure_recorded"}`, false, false},
+		{http.StatusOK, `{"decision":"something_else"}`, false, false},
+		{http.StatusBadGateway, `secret upstream payload`, false, false},
+	}
+	for _, c := range cases {
+		err := decodeReportCompletion(c.status, []byte(c.body))
+		if (err == nil) != c.ok {
+			t.Fatalf("%d %s: unexpected result %v", c.status, c.body, err)
+		}
+		if c.refused != errors.Is(err, ErrCompletionRefused) {
+			t.Fatalf("%d %s: refusal classification wrong: %v", c.status, c.body, err)
+		}
+		if err != nil && strings.Contains(err.Error(), "secret") {
+			t.Fatalf("error leaked the response body: %v", err)
+		}
 	}
 }

@@ -341,6 +341,7 @@ async def run_grc_analysis_endpoint(
                     source=feed_data.get("title", "Unknown Source"),
                     digest_url=_sentrydigest_item_url(feed_home_url, source_issue_date, url),
                     published=published_dt or datetime.now(),
+                    published_known=published_dt is not None,
                 )
                 articles.append(article)
             except Exception as e:
@@ -419,6 +420,7 @@ async def run_grc_analysis_endpoint(
                     source=art.source,
                     digest_url=art.digest_url,
                     published=art.published,
+                    published_known=art.published_known,
                     has_grc_content=has_grc,
                     regulations=local.get("regulations", []),
                     frameworks=local.get("frameworks", []),

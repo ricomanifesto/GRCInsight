@@ -21,12 +21,12 @@ const (
 
 // Repository provides DynamoDB operations for reports
 type Repository struct {
-	client *dynamodb.Client
+	client API
 	logger *logrus.Logger
 }
 
 // NewRepository creates a new DynamoDB repository
-func NewRepository(client *dynamodb.Client, logger *logrus.Logger) *Repository {
+func NewRepository(client API, logger *logrus.Logger) *Repository {
 	return &Repository{
 		client: client,
 		logger: logger,
@@ -53,11 +53,15 @@ func (r *Repository) CreateReport(ctx context.Context, report *Report) error {
 	}
 
 	input := &dynamodb.PutItemInput{
-		TableName: aws.String(TableName),
-		Item:      item,
+		TableName:           aws.String(TableName),
+		Item:                item,
+		ConditionExpression: aws.String("attribute_not_exists(report_id)"),
 	}
 
 	_, err = r.client.PutItem(ctx, input)
+	if isConditionFailure(err) {
+		return fmt.Errorf("report id already exists: %s", report.ReportID)
+	}
 	if err != nil {
 		return fmt.Errorf("failed to create report: %w", err)
 	}
@@ -126,17 +130,23 @@ func (r *Repository) UpdateReport(ctx context.Context, report *Report) error {
 		updateExpr += ", generated_at = :generated_at"
 	}
 
+	// Never rewrite a report that already has a final outcome.
+	condition := openReportCondition(exprValues, exprNames)
 	input := &dynamodb.UpdateItemInput{
 		TableName:                 aws.String(TableName),
 		Key:                       map[string]types.AttributeValue{"report_id": &types.AttributeValueMemberS{Value: report.ReportID}},
 		UpdateExpression:          aws.String(updateExpr),
 		ExpressionAttributeValues: exprValues,
 		ExpressionAttributeNames:  exprNames,
-		ConditionExpression:       aws.String("attribute_exists(report_id)"),
+		ConditionExpression:       aws.String(condition),
 		ReturnValues:              types.ReturnValueNone,
 	}
 
-	if _, err := r.client.UpdateItem(ctx, input); err != nil {
+	_, err = r.client.UpdateItem(ctx, input)
+	if isConditionFailure(err) {
+		return ErrReportFinal
+	}
+	if err != nil {
 		return fmt.Errorf("failed to update report: %w", err)
 	}
 
@@ -191,23 +201,27 @@ func (r *Repository) DeleteReport(ctx context.Context, reportID string) error {
 
 // UpdateReportStatus updates only the status field of a report
 func (r *Repository) UpdateReportStatus(ctx context.Context, reportID, status string) error {
+	values := map[string]types.AttributeValue{
+		":status":     &types.AttributeValueMemberS{Value: status},
+		":updated_at": &types.AttributeValueMemberS{Value: ToISO8601(time.Now())},
+	}
+	names := map[string]string{}
+	condition := openReportCondition(values, names)
 	input := &dynamodb.UpdateItemInput{
 		TableName: aws.String(TableName),
 		Key: map[string]types.AttributeValue{
 			"report_id": &types.AttributeValueMemberS{Value: reportID},
 		},
-		UpdateExpression: aws.String("SET #status = :status, updated_at = :updated_at"),
-		ExpressionAttributeNames: map[string]string{
-			"#status": "status",
-		},
-		ExpressionAttributeValues: map[string]types.AttributeValue{
-			":status":     &types.AttributeValueMemberS{Value: status},
-			":updated_at": &types.AttributeValueMemberS{Value: ToISO8601(time.Now())},
-		},
-		ConditionExpression: aws.String("attribute_exists(report_id)"),
+		UpdateExpression:          aws.String("SET #status = :status, updated_at = :updated_at"),
+		ExpressionAttributeNames:  names,
+		ExpressionAttributeValues: values,
+		ConditionExpression:       aws.String(condition),
 	}
 
 	_, err := r.client.UpdateItem(ctx, input)
+	if isConditionFailure(err) {
+		return ErrReportFinal
+	}
 	if err != nil {
 		return fmt.Errorf("failed to update report status: %w", err)
 	}
@@ -329,57 +343,6 @@ func (r *Repository) GetArticleByURL(ctx context.Context, url string) (*Article,
 		return nil, fmt.Errorf("failed to unmarshal article: %w", err)
 	}
 	return &art, nil
-}
-
-// GetArticlesByReportID queries articles by report_id, using GSI if available, else scans
-func (r *Repository) GetArticlesByReportID(ctx context.Context, reportID string, limit, offset int32) ([]Article, error) {
-	// Try query on GSI first
-	input := &dynamodb.QueryInput{
-		TableName:              aws.String(ArticlesTable),
-		IndexName:              aws.String(ArticlesByReport),
-		KeyConditionExpression: aws.String("report_id = :rid"),
-		ExpressionAttributeValues: map[string]types.AttributeValue{
-			":rid": &types.AttributeValueMemberS{Value: reportID},
-		},
-		Limit: aws.Int32(limit + offset),
-	}
-	var items []map[string]types.AttributeValue
-	if out, err := r.client.Query(ctx, input); err == nil {
-		items = out.Items
-	} else {
-		// Fallback to scan
-		scanIn := &dynamodb.ScanInput{
-			TableName:        aws.String(ArticlesTable),
-			FilterExpression: aws.String("report_id = :rid"),
-			ExpressionAttributeValues: map[string]types.AttributeValue{
-				":rid": &types.AttributeValueMemberS{Value: reportID},
-			},
-			Limit: aws.Int32(limit + offset),
-		}
-		out2, err2 := r.client.Scan(ctx, scanIn)
-		if err2 != nil {
-			return nil, fmt.Errorf("failed to get articles by report id: %w", err2)
-		}
-		items = out2.Items
-	}
-
-	if int32(len(items)) > offset {
-		items = items[offset:]
-	} else {
-		items = []map[string]types.AttributeValue{}
-	}
-	if int32(len(items)) > limit {
-		items = items[:limit]
-	}
-
-	var arts []Article
-	for _, it := range items {
-		var a Article
-		if err := attributevalue.UnmarshalMap(it, &a); err == nil {
-			arts = append(arts, a)
-		}
-	}
-	return arts, nil
 }
 
 // ListArticles returns up to limit articles; ignores offset (naive skip)

@@ -4,9 +4,10 @@ import os
 from typing import Any
 
 from fastapi import APIRouter, HTTPException, Request
+from fastapi.responses import JSONResponse
 from loguru import logger
 
-from models.api import WorkflowRequest, WorkflowResponse, APIError
+from models.api import APIError, ReportWorkflowRequest, WorkflowRequest, WorkflowResponse
 from core.runtime import (
     CALLER_DEADLINE_HEADER,
     deadline_from_unix_ms,
@@ -54,6 +55,29 @@ async def run_workflow(request: WorkflowRequest, http_request: Request):
                 code="WORKFLOW_ERROR", message="Workflow execution error", details=str(e)
             ),
         )
+
+
+@router.post("/workflow/reports/{report_id}/run")
+async def run_report_workflow(
+    report_id: str, request: ReportWorkflowRequest, http_request: Request
+):
+    """Run the workflow for an admitted report and commit it through the history contract."""
+    from history.service import commit_report, history_tables
+
+    model_deadline = earliest_deadline(
+        get_model_deadline(),
+        deadline_from_unix_ms(http_request.headers.get(CALLER_DEADLINE_HEADER)),
+    )
+    result = await run_grc_analysis_endpoint(
+        request.feed_url, request.config, model_deadline=model_deadline
+    )
+    status, body = commit_report(
+        report_id=report_id,
+        result=result,
+        tables=history_tables(),
+        job_id=request.job_id,
+    )
+    return JSONResponse(status_code=status, content=body)
 
 
 @router.get("/workflow/status/{report_id}")

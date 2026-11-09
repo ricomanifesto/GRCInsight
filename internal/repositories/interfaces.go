@@ -12,6 +12,8 @@ type ReportRepository interface {
 	Update(report *models.Report) error
 	Delete(id string) error
 	GetByStatus(status string) ([]*models.Report, error)
+	// MarkFailedIfOpen records a failure only while the report has no final outcome.
+	MarkFailedIfOpen(id, reason string) error
 }
 
 // ArticleRepository defines the interface for article data access

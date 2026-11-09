@@ -1,9 +1,11 @@
 package services
 
 import (
+	"errors"
 	"fmt"
 	"time"
 
+	"grcinsight/internal/database/dynamodb"
 	"grcinsight/internal/database/models"
 	apiModels "grcinsight/internal/models"
 	"grcinsight/internal/repositories"
@@ -14,8 +16,8 @@ import (
 // ReportService handles report business logic
 type PythonWorkflowClient interface {
 	IsAsync() bool
-	RunWorkflow(req *apiModels.WorkflowRequest) (*apiModels.WorkflowResponse, error)
-	RunWorkflowAsync(req *apiModels.WorkflowRequest, reportID string) error
+	RunWorkflowAsync(req *apiModels.WorkflowRequest, job WorkflowJob) error
+	RunWorkflowForReport(req *apiModels.WorkflowRequest, job WorkflowJob) error
 }
 
 var _ PythonWorkflowClient = (*PythonServiceClient)(nil)
@@ -50,11 +52,12 @@ func (s *ReportService) GenerateReport(req *apiModels.GenerateReportRequest) (*m
 	}
 	s.logger.Info("Starting report generation")
 
-	// Create report record
+	// Create report record for one admitted generation job.
 	report := &models.Report{
 		Title:     fmt.Sprintf("GRC Intelligence Report - %s", time.Now().Format("2006-01-02")),
 		Status:    models.StatusProcessing,
 		SourceURL: req.FeedURL,
+		JobID:     dynamodb.NewJobID(),
 	}
 
 	if err := s.reportRepo.Create(report); err != nil {
@@ -62,83 +65,44 @@ func (s *ReportService) GenerateReport(req *apiModels.GenerateReportRequest) (*m
 		return nil, fmt.Errorf("failed to create report record: %w", err)
 	}
 
-	// Build workflow request
 	workflowReq := &apiModels.WorkflowRequest{FeedURL: req.FeedURL, Config: config}
+	job := WorkflowJob{ReportID: report.ID, JobID: report.JobID}
 
+	// The Python report writer is the only component that completes a report, in
+	// both modes. Go only records failures it observes, and never over a final outcome.
 	if s.pythonClient.IsAsync() {
-		// Async mode: fire-and-forget, return processing status
-		if err := s.pythonClient.RunWorkflowAsync(workflowReq, report.ID); err != nil {
+		if err := s.pythonClient.RunWorkflowAsync(workflowReq, job); err != nil {
 			s.logger.WithError(err).Error("Async Python workflow invocation failed")
-			report.Status = models.StatusFailed
-			_ = s.reportRepo.Update(report)
+			s.markFailed(report.ID, "invocation_failed")
 			return nil, fmt.Errorf("async workflow invocation failed: %w", err)
 		}
-		// Do not update content here; Python Lambda will update DynamoDB
 		s.logger.WithFields(logrus.Fields{"report_id": report.ID}).Info("Report queued for async processing")
-	} else {
-		// Sync mode: wait for Python result
-		workflowResp, err := s.pythonClient.RunWorkflow(workflowReq)
-		if err != nil {
-			s.logger.WithError(err).Error("Python workflow failed")
-			report.Status = models.StatusFailed
-			_ = s.reportRepo.Update(report)
-			return nil, fmt.Errorf("workflow execution failed: %w", err)
-		}
-
-		// Update report with results
-		if workflowResp.Report != nil {
-			now := time.Now()
-			report.Title = workflowResp.Report.Title
-			report.Content = workflowResp.Report.Content
-			report.GeneratedAt = &now
-			report.Status = models.StatusCompleted
-
-			// Update metadata if available
-			if workflowResp.Metadata != nil {
-				report.Metadata = models.ReportMetadata(workflowResp.Metadata)
-			}
-		} else {
-			report.Status = models.StatusFailed
-			s.logger.Error("No report content received from Python service")
-		}
-
-		if err := s.reportRepo.Update(report); err != nil {
-			s.logger.WithError(err).Error("Failed to update report")
-			return nil, fmt.Errorf("failed to update report: %w", err)
-		}
-
-		// Persist enriched/analyzed articles if provided by Python workflow
-		if len(workflowResp.Articles) > 0 {
-			s.logger.WithField("count", len(workflowResp.Articles)).Info("Persisting analyzed articles")
-			for _, ar := range workflowResp.Articles {
-				art := &models.Article{
-					Title:            ar.Title,
-					URL:              ar.URL,
-					Content:          ar.Content,
-					Summary:          ar.Summary,
-					Source:           ar.Source,
-					DigestURL:        ar.DigestURL,
-					Published:        ar.Published,
-					HasGRCContent:    ar.HasGRCContent,
-					Regulations:      ensureNonNilSlice(ar.Regulations),
-					Frameworks:       ensureNonNilSlice(ar.Frameworks),
-					Industries:       ensureNonNilSlice(ar.Industries),
-					RegulatoryBodies: ensureNonNilSlice(ar.RegulatoryBodies),
-				}
-				if err := s.articleRepo.CreateForReport(report.ID, art); err != nil {
-					s.logger.WithError(err).WithField("url", ar.URL).Warn("Failed to persist article")
-					continue
-				}
-			}
-		}
+		return report, nil
 	}
 
-	s.logger.WithFields(logrus.Fields{
-		"report_id": report.ID,
-		"status":    report.Status,
-	}).Info("Report generation completed")
+	if err := s.pythonClient.RunWorkflowForReport(workflowReq, job); err != nil {
+		s.logger.WithError(err).Error("Python workflow did not complete the report")
+		if !errors.Is(err, ErrCompletionRefused) {
+			s.markFailed(report.ID, "workflow_failed")
+		}
+		return nil, fmt.Errorf("workflow execution failed: %w", err)
+	}
+	stored, err := s.reportRepo.GetByID(report.ID)
+	if err != nil {
+		return nil, fmt.Errorf("failed to read completed report: %w", err)
+	}
+	return stored, nil
+}
 
-	return report, nil
+// markFailed records a Go-observed failure; a final outcome is left untouched.
+func (s *ReportService) markFailed(reportID, reason string) {
+	err := s.reportRepo.MarkFailedIfOpen(reportID, reason)
+	switch {
+	case errors.Is(err, dynamodb.ErrReportFinal):
+		s.logger.WithField("report_id", reportID).Info("Report already final; failure not recorded")
+	case err != nil:
+		s.logger.WithError(err).WithField("report_id", reportID).Warn("Failed to record report failure")
+	}
 }
 
 // GetReport retrieves a report by ID
@@ -210,6 +174,9 @@ func (s *ReportService) ListReportArticles(reportID string, page, perPage int) (
 			Frameworks:       ensureNonNilSlice(a.Frameworks),
 			Industries:       ensureNonNilSlice(a.Industries),
 			RegulatoryBodies: ensureNonNilSlice(a.RegulatoryBodies),
+			RevisionID:       a.RevisionID,
+			EvidenceStatus:   a.EvidenceStatus,
+			PublishedKnown:   a.PublishedKnown,
 		}
 	}
 

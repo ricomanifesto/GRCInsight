@@ -81,6 +81,9 @@ The script:
 - Poll GET `/api/v1/reports/{id}/status`
 - GET `/api/v1/reports/{id}/articles`
 
+Report outcomes, article revisions and the history export are described in
+[report-history.md](report-history.md).
+
 ## Notes
 - Default model is `openrouter/nvidia/nemotron-3-ultra-550b-a55b:free`.
 - Articles table benefits from GSIs (`by-report-id`, `by-url`); the Terraform module creates these.

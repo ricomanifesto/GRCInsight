@@ -114,21 +114,30 @@ func reportToDynamo(report *models.Report) *dynamodb.Report {
 		SourceURL:   report.SourceURL,
 		GeneratedAt: report.GeneratedAt,
 		Metadata:    storedMetadata(report.Metadata),
+		JobID:       report.JobID,
 	}
 }
 
 func reportFromDynamo(report *dynamodb.Report) *models.Report {
 	return &models.Report{
-		ID:          report.ReportID,
-		Title:       report.Title,
-		Content:     report.Content,
-		Status:      report.Status,
-		SourceURL:   report.SourceURL,
-		GeneratedAt: report.GeneratedAt,
-		CreatedAt:   parseDynamoTime(report.CreatedAt),
-		UpdatedAt:   parseDynamoTime(report.UpdatedAt),
-		Metadata:    models.ReportMetadata(report.Metadata),
+		ID:              report.ReportID,
+		Title:           report.Title,
+		Content:         report.Content,
+		Status:          report.Status,
+		SourceURL:       report.SourceURL,
+		GeneratedAt:     report.GeneratedAt,
+		CreatedAt:       parseDynamoTime(report.CreatedAt),
+		UpdatedAt:       parseDynamoTime(report.UpdatedAt),
+		Metadata:        models.ReportMetadata(report.Metadata),
+		JobID:           report.JobID,
+		TerminalOutcome: report.TerminalOutcome,
+		TerminalReason:  report.TerminalReason,
 	}
+}
+
+// MarkFailedIfOpen records a Go-observed failure unless the report is already final.
+func (r *reportRepository) MarkFailedIfOpen(id, reason string) error {
+	return r.repo.MarkReportFailedIfOpen(context.Background(), id, reason)
 }
 
 // storedMetadata keeps metadata a map in DynamoDB even before the workflow writes it.

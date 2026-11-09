@@ -4,8 +4,11 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
+	"io"
 	"net/http"
+	"net/url"
 	"os"
 	"strconv"
 	"strings"
@@ -139,17 +142,30 @@ func (c *PythonServiceClient) newCallerBoundRequest(
 	return httpReq, cancel, nil
 }
 
+// WorkflowJob identifies one admitted generation job for an existing report row.
+type WorkflowJob struct {
+	ReportID string
+	JobID    string
+}
+
+// ErrCompletionRefused means the report writer refused this completion because the
+// report already has a final outcome or belongs to another job.
+var ErrCompletionRefused = errors.New("report completion refused")
+
 func marshalWorkflowPayload(
 	req *models.WorkflowRequest,
-	reportID string,
+	job WorkflowJob,
 	callerDeadline time.Time,
 ) ([]byte, error) {
 	payload := map[string]interface{}{
 		"feed_url": req.FeedURL,
 		"config":   req.Config,
 	}
-	if reportID != "" {
-		payload["report_id"] = reportID
+	if job.ReportID != "" {
+		payload["report_id"] = job.ReportID
+	}
+	if job.JobID != "" {
+		payload["job_id"] = job.JobID
 	}
 	if !callerDeadline.IsZero() {
 		payload[callerDeadlineField] = callerDeadline.UnixMilli()
@@ -158,7 +174,7 @@ func marshalWorkflowPayload(
 }
 
 // RunWorkflowAsync triggers the Python Lambda asynchronously (no response expected)
-func (c *PythonServiceClient) RunWorkflowAsync(req *models.WorkflowRequest, reportID string) error {
+func (c *PythonServiceClient) RunWorkflowAsync(req *models.WorkflowRequest, job WorkflowJob) error {
 	if !c.isLambdaMode {
 		// For HTTP mode, we don't support async fire-and-forget yet
 		return fmt.Errorf("async invocation not supported in HTTP mode")
@@ -169,10 +185,10 @@ func (c *PythonServiceClient) RunWorkflowAsync(req *models.WorkflowRequest, repo
 
 	c.logger.WithFields(logrus.Fields{
 		"function_name": c.functionName,
-		"report_id":     reportID,
+		"report_id":     job.ReportID,
 	}).Info("Invoking Python Lambda function asynchronously")
 
-	payloadBytes, err := marshalWorkflowPayload(req, reportID, time.Time{})
+	payloadBytes, err := marshalWorkflowPayload(req, job, time.Time{})
 	if err != nil {
 		return fmt.Errorf("failed to marshal Lambda payload: %w", err)
 	}
@@ -205,7 +221,7 @@ func (c *PythonServiceClient) invokeLambdaWorkflow(req *models.WorkflowRequest) 
 	defer cancel()
 	callerDeadline, _ := ctx.Deadline()
 
-	payloadBytes, err := marshalWorkflowPayload(req, "", callerDeadline)
+	payloadBytes, err := marshalWorkflowPayload(req, WorkflowJob{}, callerDeadline)
 	if err != nil {
 		return nil, fmt.Errorf("failed to marshal Lambda payload: %w", err)
 	}
@@ -336,4 +352,84 @@ func (c *PythonServiceClient) invokeHTTPWorkflow(req *models.WorkflowRequest) (*
 		return nil, fmt.Errorf("failed to decode workflow response: %w", err)
 	}
 	return &wr, nil
+}
+
+// RunWorkflowForReport runs the workflow synchronously for an admitted report and
+// lets the Python report writer commit it, so synchronous and asynchronous
+// generation share one completion contract. Go never writes the outcome itself.
+func (c *PythonServiceClient) RunWorkflowForReport(req *models.WorkflowRequest, job WorkflowJob) error {
+	if job.ReportID == "" {
+		return fmt.Errorf("report id is required")
+	}
+	if c.isLambdaMode {
+		ctx, cancel := context.WithTimeout(context.Background(), c.workflowTimeout())
+		defer cancel()
+		callerDeadline, _ := ctx.Deadline()
+		payload, err := marshalWorkflowPayload(req, job, callerDeadline)
+		if err != nil {
+			return fmt.Errorf("failed to marshal Lambda payload: %w", err)
+		}
+		result, err := c.lambdaClient.Invoke(ctx, &lambda.InvokeInput{
+			FunctionName: aws.String(c.functionName),
+			Payload:      payload,
+		})
+		if err != nil {
+			return fmt.Errorf("failed to invoke Python Lambda function: %w", err)
+		}
+		if result.FunctionError != nil {
+			return fmt.Errorf("python Lambda function error")
+		}
+		var envelope struct {
+			StatusCode int             `json:"statusCode"`
+			Body       json.RawMessage `json:"body"`
+		}
+		if err := json.Unmarshal(result.Payload, &envelope); err != nil {
+			return fmt.Errorf("failed to decode Lambda response: %w", err)
+		}
+		return decodeReportCompletion(envelope.StatusCode, envelope.Body)
+	}
+
+	body, err := json.Marshal(map[string]any{
+		"feed_url": req.FeedURL,
+		"config":   req.Config,
+		"job_id":   job.JobID,
+	})
+	if err != nil {
+		return fmt.Errorf("failed to marshal workflow request: %w", err)
+	}
+	endpoint := c.baseURL + "/api/v1/workflow/reports/" + url.PathEscape(job.ReportID) + "/run"
+	httpReq, cancel, err := c.newCallerBoundRequest(http.MethodPost, endpoint, body)
+	if err != nil {
+		return fmt.Errorf("failed to create request: %w", err)
+	}
+	defer cancel()
+	resp, err := c.httpClient.Do(httpReq)
+	if err != nil {
+		return fmt.Errorf("python service request failed: %w", err)
+	}
+	defer func() { _ = resp.Body.Close() }()
+	raw, err := io.ReadAll(io.LimitReader(resp.Body, 64<<10))
+	if err != nil {
+		return fmt.Errorf("failed to read workflow response: %w", err)
+	}
+	return decodeReportCompletion(resp.StatusCode, raw)
+}
+
+// decodeReportCompletion maps the report writer's decision to an error, without
+// echoing response bodies into logs or errors.
+func decodeReportCompletion(status int, body []byte) error {
+	var decision struct {
+		Decision string `json:"decision"`
+	}
+	_ = json.Unmarshal(body, &decision)
+	switch {
+	case status == http.StatusOK && (decision.Decision == "committed" || decision.Decision == "reused"):
+		return nil
+	case status == http.StatusConflict:
+		return fmt.Errorf("%w: %s", ErrCompletionRefused, decision.Decision)
+	case decision.Decision != "":
+		return fmt.Errorf("report writer returned %d: %s", status, decision.Decision)
+	default:
+		return fmt.Errorf("report writer returned %d", status)
+	}
 }

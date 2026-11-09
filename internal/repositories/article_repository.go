@@ -2,6 +2,7 @@ package repositories
 
 import (
 	"context"
+	"fmt"
 	"hash/fnv"
 	"time"
 
@@ -167,7 +168,7 @@ func (r *articleRepository) GetGRCArticles(limit, offset int) ([]*models.Article
 // GetByReportID retrieves articles by associated report id
 func (r *articleRepository) GetByReportID(reportID string, limit, offset int) ([]*models.Article, int64, error) {
 	ctx := context.Background()
-	dArts, err := r.repo.GetArticlesByReportID(ctx, reportID, int32(limit), int32(offset))
+	dArts, total, err := r.repo.ReportArticles(ctx, reportID, int32(limit), int32(offset))
 	if err != nil {
 		return nil, 0, err
 	}
@@ -176,7 +177,6 @@ func (r *articleRepository) GetByReportID(reportID string, limit, offset int) ([
 		aa := a
 		out = append(out, convertDynamoArticle(&aa))
 	}
-	total := int64(len(out))
 	return out, total, nil
 }
 
@@ -202,9 +202,20 @@ func toHex8(n uint32) string {
 }
 
 func convertDynamoArticle(a *dynamodb.Article) *models.Article {
-	// Parse times
+	// Parse times. History rows carry an explicit known/unknown publication time;
+	// an unknown time stays the zero value instead of becoming "now".
 	pub := time.Now()
-	if t, err := time.Parse(time.RFC3339, a.Published); err == nil {
+	var publishedKnown *bool
+	if a.RecordKind == dynamodb.RecordKindAppearance {
+		known := a.PublishedAtKnown != nil && *a.PublishedAtKnown && a.PublishedAt != ""
+		publishedKnown = &known
+		pub = time.Time{}
+		if known {
+			if t, err := parsePublished(a.PublishedAt); err == nil {
+				pub = t
+			}
+		}
+	} else if t, err := time.Parse(time.RFC3339, a.Published); err == nil {
 		pub = t
 	}
 	created := time.Now()
@@ -231,5 +242,18 @@ func convertDynamoArticle(a *dynamodb.Article) *models.Article {
 		Frameworks:       a.Frameworks,
 		Industries:       a.Industries,
 		RegulatoryBodies: a.RegulatoryBodies,
+		RevisionID:       a.RevisionID,
+		EvidenceStatus:   a.EvidenceStatus,
+		PublishedKnown:   publishedKnown,
 	}
+}
+
+// parsePublished accepts the ISO 8601 forms the report writer stores.
+func parsePublished(value string) (time.Time, error) {
+	for _, layout := range []string{time.RFC3339Nano, "2006-01-02T15:04:05.999999", "2006-01-02T15:04:05"} {
+		if t, err := time.Parse(layout, value); err == nil {
+			return t, nil
+		}
+	}
+	return time.Time{}, fmt.Errorf("unrecognized publication time")
 }
