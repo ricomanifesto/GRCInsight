@@ -895,6 +895,15 @@
       "outcome": "published",
       "run_id": "42622492229",
       "stage": "completed"
+    },
+    {
+      "admission_key": "run:42637508030",
+      "at": "2026-11-09T14:43:55.181Z",
+      "binding": "none",
+      "event": "workflow_dispatch",
+      "run_attempt": "1",
+      "run_id": "42637508030",
+      "stage": "admitted"
     }
   ],
   "schema_version": 1,
