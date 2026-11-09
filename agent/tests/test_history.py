@@ -6,6 +6,7 @@ import copy
 import json
 from decimal import Decimal
 from types import SimpleNamespace
+from typing import Any
 
 import pytest
 from botocore.exceptions import ClientError
@@ -21,12 +22,18 @@ from history.writeback import commit_workflow_result
 NOW = "2026-11-02T09:01:00Z"
 
 
-def commit(reports, articles, report_id="r1", job_id=None, res=None, now=NOW, invocation=None):
+_ADMITTED = object()
+
+
+def commit(
+    reports, articles, report_id="r1", job_id: Any = _ADMITTED, res=None, now=NOW, invocation=None
+):
+    """Complete as the admitted job (the job id the Go service stored) unless told otherwise."""
     return commit_workflow_result(
         reports=reports,
         articles=articles,
         report_id=report_id,
-        job_id=job_id,
+        job_id=f"job-{report_id}" if job_id is _ADMITTED else job_id,
         invocation_id=invocation,
         result=res if res is not None else fx.result([fx.article("alpha")]),
         now=now,
@@ -456,7 +463,7 @@ def test_to_dynamo_keeps_floats_exact():
 
 
 def _run_lambda(
-    monkeypatch, reports, articles, res, *, report_id="r1", request_id="req-1", job_id=None
+    monkeypatch, reports, articles, res, *, report_id="r1", request_id="req-1", job_id="job-r1"
 ):
     import core.workflow
     import lambda_main
@@ -519,17 +526,55 @@ def test_lambda_writeback_survives_an_unreachable_report_store(monkeypatch, stor
     assert reports.items["r1"]["status"] == "processing"  # exported as incomplete
 
 
-def test_event_without_job_id_uses_the_admitted_job_on_the_row(store):
+def test_redelivery_with_a_new_invocation_id_is_the_same_job(store):
     reports, articles = store
     first = commit(reports, articles, invocation="lambda-a")
     again = commit(reports, articles, invocation="lambda-b")
     assert first.run_id == again.run_id == "job-r1" and again.decision == "reused"
 
 
-def test_rows_without_a_job_id_bind_to_the_report(store):
+def test_omitted_job_id_cannot_adopt_an_admitted_job(store):
+    reports, articles = store
+    receipt = commit(reports, articles, job_id=None)
+    assert receipt.decision == "foreign_completion_refused" and not receipt.accepted
+    assert articles.items == {} and reports.items["r1"]["status"] == "processing"
+
+
+def test_job_identity_is_required_on_untrusted_channels():
     reports, articles = fx.tables()
     fx.open_report(reports, "r1", job_id=None)
-    assert commit(reports, articles).run_id == "r1"
+    receipt = commit_workflow_result(
+        reports=reports,
+        articles=articles,
+        report_id="r1",
+        result=fx.result([fx.article("alpha")]),
+        now=NOW,
+        job_id=None,
+        require_job=True,
+    )
+    assert receipt.decision == "foreign_completion_refused" and articles.items == {}
+
+
+def test_feed_must_match_the_admitted_report(store):
+    reports, articles = store
+    receipt = commit_workflow_result(
+        reports=reports,
+        articles=articles,
+        report_id="r1",
+        result=fx.result([fx.article("alpha")]),
+        now=NOW,
+        job_id="job-r1",
+        feed_url="https://attacker.example.test/feed.xml",
+    )
+    assert receipt.decision == "foreign_completion_refused" and articles.items == {}
+    assert reports.items["r1"]["status"] == "processing"
+
+
+def test_rows_without_a_job_id_bind_to_the_report_on_the_trusted_channel(store):
+    # Rows admitted before job ids existed, completed through the IAM-authorized Lambda.
+    reports, articles = fx.tables()
+    fx.open_report(reports, "r1", job_id=None)
+    assert commit(reports, articles, job_id=None).run_id == "r1"
 
 
 def test_http_report_route_commits_through_the_same_contract(monkeypatch, store):
@@ -549,15 +594,55 @@ def test_http_report_route_commits_through_the_same_contract(monkeypatch, store)
     monkeypatch.setattr(workflow_route, "run_grc_analysis_endpoint", fake_run)
     monkeypatch.setattr(core.workflow, "run_grc_analysis_endpoint", fake_run)
     monkeypatch.setattr(history.service, "history_tables", lambda: (reports, articles))
+    monkeypatch.setenv("GRC_INTERNAL_TOKEN", "synthetic-internal-token")
     client = TestClient(app)
+    auth = {"X-GRC-Internal-Token": "synthetic-internal-token"}
     body = {"feed_url": fx.FEED, "config": {}, "job_id": "job-r1"}
-    first = client.post("/api/v1/workflow/reports/r1/run", json=body)
+    first = client.post("/api/v1/workflow/reports/r1/run", json=body, headers=auth)
     assert first.status_code == 200 and first.json()["decision"] == "committed"
-    again = client.post("/api/v1/workflow/reports/r1/run", json=body)
-    assert again.status_code == 200 and again.json()["decision"] == "reused"
-    foreign = client.post("/api/v1/workflow/reports/r1/run", json={**body, "job_id": "x"})
+    # A final report is refused before the workflow (and its model calls) run again.
+    again = client.post("/api/v1/workflow/reports/r1/run", json=body, headers=auth)
+    assert again.status_code == 409 and again.json()["decision"] == "already_terminal_refused"
+    foreign = client.post(
+        "/api/v1/workflow/reports/r1/run", json={**body, "job_id": "x"}, headers=auth
+    )
     assert foreign.status_code == 409
     assert "content" not in first.json()
+
+
+def test_http_report_route_refuses_before_running_the_workflow(monkeypatch, store):
+    from fastapi.testclient import TestClient
+
+    import history.service
+    from api.routes import workflow as workflow_route
+    from main import app
+
+    reports, articles = store
+    runs = []
+
+    async def fake_run(*_args, **_kwargs):
+        runs.append(1)
+        return fx.result([fx.article("alpha")])
+
+    monkeypatch.setattr(workflow_route, "run_grc_analysis_endpoint", fake_run)
+    monkeypatch.setattr(history.service, "history_tables", lambda: (reports, articles))
+    client = TestClient(app)
+    url = "/api/v1/workflow/reports/r1/run"
+    body = {"feed_url": fx.FEED, "config": {}, "job_id": "job-r1"}
+    good = {"X-GRC-Internal-Token": "synthetic-internal-token"}
+
+    monkeypatch.delenv("GRC_INTERNAL_TOKEN", raising=False)
+    assert client.post(url, json=body, headers=good).status_code == 403  # disabled
+    monkeypatch.setenv("GRC_INTERNAL_TOKEN", "synthetic-internal-token")
+    assert client.post(url, json=body).status_code == 403
+    assert client.post(url, json=body, headers={"X-GRC-Internal-Token": "x"}).status_code == 403
+    no_job = {k: v for k, v in body.items() if k != "job_id"}
+    assert client.post(url, json=no_job, headers=good).status_code == 422
+    other_feed = {**body, "feed_url": "https://attacker.example.test/feed.xml"}
+    assert client.post(url, json=other_feed, headers=good).status_code == 409
+    assert client.post(url, json={**body, "job_id": "x"}, headers=good).status_code == 409
+    assert runs == [] and articles.items == {}
+    assert reports.items["r1"]["status"] == "processing"
 
 
 def test_go_reader_testdata_matches_the_writer():

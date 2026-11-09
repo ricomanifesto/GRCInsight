@@ -146,6 +146,7 @@ func TestRunWorkflowForReportPostsTheAdmittedJob(t *testing.T) {
 	var seen http.Request
 	var sent map[string]any
 	client := reportWriterClient(http.StatusOK, `{"decision":"committed"}`, &seen, &sent)
+	client.internalToken = "synthetic-internal-token"
 	job := WorkflowJob{ReportID: "report 1/x", JobID: "job-1"}
 	if err := client.RunWorkflowForReport(&models.WorkflowRequest{FeedURL: "https://example.com/feed.xml"}, job); err != nil {
 		t.Fatal(err)
@@ -158,6 +159,9 @@ func TestRunWorkflowForReportPostsTheAdmittedJob(t *testing.T) {
 	}
 	if seen.Header.Get(callerDeadlineHeader) == "" {
 		t.Fatal("synchronous report run must carry the caller deadline")
+	}
+	if seen.Header.Get(internalTokenHeader) != "synthetic-internal-token" {
+		t.Fatal("synchronous report run must authenticate to the report writer")
 	}
 }
 

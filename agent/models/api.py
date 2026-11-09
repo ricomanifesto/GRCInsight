@@ -51,7 +51,7 @@ class WorkflowRequest(BaseModel):
 class ReportWorkflowRequest(WorkflowRequest):
     """Run the workflow for a report row the Go service already admitted."""
 
-    job_id: Optional[str] = None
+    job_id: str = Field(min_length=1)
 
 
 class AnalysisRequest(BaseModel):

@@ -1,5 +1,6 @@
 """Workflow execution endpoints."""
 
+import hmac
 import os
 from typing import Any
 
@@ -57,13 +58,37 @@ async def run_workflow(request: WorkflowRequest, http_request: Request):
         )
 
 
+INTERNAL_TOKEN_HEADER = "X-GRC-Internal-Token"
+
+
+def _internal_caller(http_request: Request) -> bool:
+    """Only the Go service, holding the configured internal token, may complete reports.
+
+    The route is disabled when no token is configured.
+    """
+    expected = os.getenv("GRC_INTERNAL_TOKEN", "")
+    provided = http_request.headers.get(INTERNAL_TOKEN_HEADER, "")
+    return bool(expected) and hmac.compare_digest(provided.encode(), expected.encode())
+
+
 @router.post("/workflow/reports/{report_id}/run")
 async def run_report_workflow(
     report_id: str, request: ReportWorkflowRequest, http_request: Request
 ):
     """Run the workflow for an admitted report and commit it through the history contract."""
-    from history.service import commit_report, history_tables
+    from history.service import commit_report, history_tables, precheck_admission
 
+    if not _internal_caller(http_request):
+        return JSONResponse(
+            status_code=403, content={"status": "refused", "decision": "unauthorized"}
+        )
+    tables = history_tables()
+    refusal = precheck_admission(
+        report_id=report_id, job_id=request.job_id, feed_url=request.feed_url, tables=tables
+    )
+    if refusal is not None:
+        status, body = refusal
+        return JSONResponse(status_code=status, content=body)
     model_deadline = earliest_deadline(
         get_model_deadline(),
         deadline_from_unix_ms(http_request.headers.get(CALLER_DEADLINE_HEADER)),
@@ -74,8 +99,10 @@ async def run_report_workflow(
     status, body = commit_report(
         report_id=report_id,
         result=result,
-        tables=history_tables(),
+        tables=tables,
         job_id=request.job_id,
+        feed_url=request.feed_url,
+        require_job=True,
     )
     return JSONResponse(status_code=status, content=body)
 

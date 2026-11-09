@@ -11,7 +11,12 @@ from datetime import datetime, timezone
 from typing import Any
 
 from history.table import DynamoDBTable, HistoryTable
-from history.writeback import commit_workflow_result
+from history.writeback import (
+    OPEN_STATUSES,
+    OUTCOME_GUARD,
+    admission_problem,
+    commit_workflow_result,
+)
 
 REFUSED = 409
 
@@ -43,6 +48,8 @@ def commit_report(
     tables: tuple[HistoryTable, HistoryTable],
     job_id: str | None = None,
     invocation_id: str | None = None,
+    feed_url: str | None = None,
+    require_job: bool = False,
 ) -> tuple[int, dict[str, Any]]:
     """Commit and describe the decision as an HTTP-style status and a content-free body."""
     reports, articles = tables
@@ -55,6 +62,8 @@ def commit_report(
         now=now,
         job_id=job_id,
         invocation_id=invocation_id,
+        feed_url=feed_url,
+        require_job=require_job,
     )
     body: dict[str, Any] = {
         "report_id": report_id,
@@ -72,3 +81,30 @@ def commit_report(
     if receipt.decision == "integrity_failure":
         return 500, {**body, "status": "failed"}
     return REFUSED, {**body, "status": "refused"}
+
+
+def precheck_admission(
+    *,
+    report_id: str,
+    job_id: str | None,
+    feed_url: str | None,
+    tables: tuple[HistoryTable, HistoryTable],
+) -> tuple[int, dict[str, Any]] | None:
+    """Refuse an untrusted completion request before any workflow runs."""
+    reports, _ = tables
+    current = reports.get(report_id)
+    if current is None:
+        problem, decision = "no such report", "report_missing"
+    elif current.get("status") not in OPEN_STATUSES or current.get(OUTCOME_GUARD):
+        problem, decision = "report is already final", "already_terminal_refused"
+    else:
+        found = admission_problem(current, job_id=job_id, feed_url=feed_url, require_job=True)
+        if found is None:
+            return None
+        problem, decision = found, "foreign_completion_refused"
+    return REFUSED, {
+        "report_id": report_id,
+        "decision": decision,
+        "status": "refused",
+        "problems": [problem],
+    }

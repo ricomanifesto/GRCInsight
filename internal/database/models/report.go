@@ -19,7 +19,8 @@ type Report struct {
 	Metadata ReportMetadata `json:"metadata"`
 
 	// JobID identifies the admitted generation job this report belongs to.
-	JobID string `json:"job_id,omitempty"`
+	// It authorizes completion, so it is never returned by the API.
+	JobID string `json:"-"`
 	// TerminalOutcome distinguishes model_completed, refused_fallback and failed
 	// while Status keeps its existing completed/failed meaning.
 	TerminalOutcome string `json:"terminal_outcome,omitempty"`

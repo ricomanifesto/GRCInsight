@@ -214,3 +214,13 @@ func TestGenerateReport_AsyncPassesTheJobAndRecordsInvokeFailure(t *testing.T) {
 		t.Fatalf("invoke failure not recorded: %v", failing.failed)
 	}
 }
+
+func TestReportJSONNeverExposesTheJobID(t *testing.T) {
+	encoded, err := json.Marshal(&dbmodels.Report{ID: "r", JobID: "job_secret", TerminalOutcome: "failed"})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if strings.Contains(string(encoded), "job_secret") || strings.Contains(string(encoded), "job_id") {
+		t.Fatalf("job id exposed: %s", encoded)
+	}
+}

@@ -130,6 +130,10 @@ def _commit_report(report_id: str, event: dict, context, result) -> dict:
             tables=_history_tables(),
             job_id=event.get("job_id") or None,
             invocation_id=getattr(context, "aws_request_id", None),
+            feed_url=event.get("feed_url"),
+            # Direct invocation requires IAM permission, so legacy rows without a
+            # job id may still be completed here.
+            require_job=False,
         )
     except Exception as ddb_err:
         logger.error(f"Failed to update DynamoDB for report {report_id}: {ddb_err}")

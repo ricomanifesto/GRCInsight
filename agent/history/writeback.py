@@ -310,6 +310,35 @@ def completion_identity(current: dict[str, Any], report_id: str, job_id: str | N
     return job_id or report_id
 
 
+def admission_problem(
+    current: dict[str, Any] | None,
+    *,
+    job_id: str | None,
+    feed_url: str | None,
+    require_job: bool,
+) -> str | None:
+    """Why a completion request may not complete this admitted report, if it may not.
+
+    A row the Go service admitted with a job id accepts only that exact job id; an
+    omitted id never adopts it. Rows without a job id (admitted before job ids
+    existed) are completed only from a trusted channel (``require_job=False``,
+    the IAM-authorized Lambda invocation). The requested feed must be the one the
+    report was admitted for.
+    """
+    if current is None:
+        return None
+    stored_job = current.get("job_id") or None
+    if stored_job:
+        if job_id != stored_job:
+            return "completion job does not match the admitted job"
+    elif require_job:
+        return "report has no admitted job identity for this channel"
+    stored_feed = current.get("source_url") or None
+    if feed_url is not None and stored_feed and feed_url != stored_feed:
+        return "requested feed does not match the admitted report"
+    return None
+
+
 def failure_fields(*, result: Any, reason: str, now: str) -> dict[str, Any]:
     """A recorded, explained terminal failure; publication treats ``failed`` as not current."""
     report = getattr(result, "report", None)
@@ -338,6 +367,8 @@ def commit_workflow_result(
     now: str,
     job_id: str | None = None,
     invocation_id: str | None = None,
+    feed_url: str | None = None,
+    require_job: bool = False,
 ) -> CompletionReceipt:
     """Commit one result for an admitted report job.
 
@@ -353,8 +384,6 @@ def commit_workflow_result(
 
     current = reports.get(report_id)
     run_id = completion_identity(current or {}, report_id, job_id)
-    stored_job = (current or {}).get("job_id")
-    foreign_job = bool(job_id and stored_job and job_id != stored_job)
 
     pairs = []
     for article in _article_dicts(result):
@@ -407,8 +436,9 @@ def commit_workflow_result(
             return receipt("foreign_completion_refused")
         return receipt("already_terminal_refused")
 
-    if foreign_job:
-        problems.append("completion job does not match the admitted job")
+    problem = admission_problem(current, job_id=job_id, feed_url=feed_url, require_job=require_job)
+    if problem:
+        problems.append(problem)
         return receipt("foreign_completion_refused")
     # A row that is already terminal gets no new evidence; the conditional completion
     # below stays authoritative for rows that change between this read and the write.

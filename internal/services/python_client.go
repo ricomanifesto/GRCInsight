@@ -25,8 +25,10 @@ import (
 )
 
 const (
-	callerDeadlineField    = "caller_deadline_unix_ms"
-	callerDeadlineHeader   = "X-GRC-Caller-Deadline-Unix-Ms"
+	callerDeadlineField  = "caller_deadline_unix_ms"
+	callerDeadlineHeader = "X-GRC-Caller-Deadline-Unix-Ms"
+	// internalTokenHeader authenticates the Go service to the Python report route.
+	internalTokenHeader    = "X-GRC-Internal-Token"
 	defaultWorkflowTimeout = 5 * time.Minute
 )
 
@@ -36,9 +38,11 @@ type PythonServiceClient struct {
 	functionName string
 	isLambdaMode bool
 	invokeAsync  bool
-	httpClient   *http.Client
-	baseURL      string
-	logger       *logrus.Logger
+	// internalToken authenticates synchronous report runs to the Python HTTP service.
+	internalToken string
+	httpClient    *http.Client
+	baseURL       string
+	logger        *logrus.Logger
 }
 
 // NewPythonServiceClient creates a new Python service client
@@ -85,13 +89,14 @@ func NewPythonServiceClient(cfg config.PythonServiceConfig, logger *logrus.Logge
 	baseURL = strings.TrimRight(baseURL, "/")
 
 	client := &PythonServiceClient{
-		lambdaClient: lambdaClient,
-		functionName: functionName,
-		isLambdaMode: isLambdaMode,
-		invokeAsync:  invokeAsync,
-		httpClient:   httpClient,
-		baseURL:      baseURL,
-		logger:       logger,
+		lambdaClient:  lambdaClient,
+		functionName:  functionName,
+		isLambdaMode:  isLambdaMode,
+		invokeAsync:   invokeAsync,
+		internalToken: os.Getenv("GRC_INTERNAL_TOKEN"),
+		httpClient:    httpClient,
+		baseURL:       baseURL,
+		logger:        logger,
 	}
 
 	logger.WithFields(logrus.Fields{
@@ -403,6 +408,9 @@ func (c *PythonServiceClient) RunWorkflowForReport(req *models.WorkflowRequest, 
 		return fmt.Errorf("failed to create request: %w", err)
 	}
 	defer cancel()
+	if c.internalToken != "" {
+		httpReq.Header.Set(internalTokenHeader, c.internalToken)
+	}
 	resp, err := c.httpClient.Do(httpReq)
 	if err != nil {
 		return fmt.Errorf("python service request failed: %w", err)

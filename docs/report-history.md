@@ -28,11 +28,22 @@ worker or the Go service.
 
 ### Completion identity
 
-Completion is bound to the admitted job (`job_id` on the row; rows created
-before job ids exist bind to the report id). Lambda request ids are recorded as
-`completion_invocation_id` for diagnosis only, because retries and duplicate
-deliveries are not guaranteed to reuse them. A request for a different job is
-refused before anything is written.
+Completion is bound to the admitted job. A row with a `job_id` accepts only a
+request carrying that exact job id; an omitted id never adopts the stored one.
+The requested feed must equal the report's admitted `source_url`. Rows created
+before job ids existed bind to the report id, and only through the direct
+Lambda invocation, which requires IAM permission. Lambda request ids are
+recorded as `completion_invocation_id` for diagnosis only, because retries and
+duplicate deliveries are not guaranteed to reuse them. A mismatched request is
+refused before anything is written. The job id authorizes completion, so the
+API never returns it.
+
+`POST /api/v1/workflow/reports/{report_id}/run` is an internal route for the Go
+service. It requires the `X-GRC-Internal-Token` header to equal
+`GRC_INTERNAL_TOKEN` (set the same value for both services) and a non-empty
+`job_id`, and is disabled when no token is configured. Job, feed and report
+state are checked before the workflow runs, so a refused request never runs a
+model.
 
 ### Decisions
 
@@ -41,7 +52,7 @@ refused before anything is written.
 | `committed` | This job's outcome is now final | 200 |
 | `reused` | The identical outcome was already final (duplicate delivery) | 200 |
 | `stale_completion_refused` | Same job, different result; the first outcome stays | 409 |
-| `foreign_completion_refused` | Another job owns this report | 409 |
+| `foreign_completion_refused` | Another (or no) job id, or a different feed, than the report was admitted for | 409 |
 | `already_terminal_refused` | The row was already terminal (cancelled or legacy) | 409 |
 | `report_missing` | No such report row | 409 |
 | `evidence_failure_recorded` | Evidence could not be stored or verified; the report was finalized as `failed` with a reason | 500 |
@@ -146,7 +157,7 @@ python -m history fixture --out /tmp/grc-history-fixture
 
 After a report completes:
 
-1. `GET /api/v1/reports/{id}` shows `status`, `terminal_outcome` and `job_id`.
+1. `GET /api/v1/reports/{id}` shows `status` and `terminal_outcome`.
 2. `GET /api/v1/reports/{id}/articles` lists articles with
    `evidence_status = intact`.
 3. An export page containing the report shows `integrity.status = intact`
