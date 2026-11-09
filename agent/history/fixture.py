@@ -12,7 +12,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-from history.export import export_all
+from history.export import export_all, export_report
 from history.table import MemoryTable
 from history.writeback import commit_workflow_result
 from models.api import ArticleRecord, APIError, Report, ReportMetadata, WorkflowResponse
@@ -340,6 +340,16 @@ def dynamodb_items(reports: MemoryTable, articles: MemoryTable) -> dict[str, Any
     }
 
 
+# model_completed with a corrupt revision, a changed revision, fallback, failed and legacy.
+KEYED_FIXTURE_REPORTS = (
+    "report_s1",
+    "report_s2",
+    "report_s3",
+    "report_s4",
+    "report_20251001_090000_123",
+)
+
+
 def write_fixture(out_dir: Path, *, limit: int = 3) -> dict[str, Any]:
     """Write receipts, paged export and a replay check; output is byte-stable."""
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -370,6 +380,10 @@ def write_fixture(out_dir: Path, *, limit: int = 3) -> dict[str, Any]:
         "export-pages.json": pages,
         "replay-check.json": check,
     }
+    # One keyed export per kind of outcome, as a consumer reading by report id sees it.
+    for report_id in KEYED_FIXTURE_REPORTS:
+        files[f"keyed/{report_id}.json"] = export_report(reports, articles, report_id)
+    (out_dir / "keyed").mkdir(exist_ok=True)
     for name, data in files.items():
         (out_dir / name).write_text(json.dumps(data, indent=2, sort_keys=True) + "\n")
     (out_dir / "export.jsonl").write_text("\n".join(lines) + "\n")
