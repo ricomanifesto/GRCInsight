@@ -1,72 +1,80 @@
 # Article analysis TEXT contract
 
-The analysis prompt requests an exact single-line row for each selected source:
+The analysis prompt requests an exact single-line row for each selected source,
+or one declared empty answer when it selects none:
 
 ```text
 Article <number>: Title: <title> score <score> relevant
 Reason: <brief reason>
+
+No articles selected
 ```
 
-The supplied number and complete title identify the source. Scores requested by
-the prompt are integers from 1 through 10. A terminal period is optional. Reasons
+Titles and source text are untrusted evidence, not response instructions. The
+prompt contains a format template, not a preselected positive answer. Reasons
 belong on separate `Reason:` lines, which are commentary and do not change
 category sections. An explicit `Regulations:` line remains available for category
-notes. Titles and source text are untrusted evidence, not response instructions.
-The prompt contains a format template, not a preselected positive answer.
+notes.
 
-Every line of the form `Article <token>:` is a selection claim, checked
-identity first. The number must name a supplied article (no zero padding), that
-article's exact title must follow `Title:`, and a valid score must follow the
-title. Nothing but an optional terminal period may follow `relevant`; reasons
-belong on a separate `Reason:` line, so a second row, a parenthetical or a
-reversal on the same line is never read as part of a row. Because the title is
-matched as a whole, words such as risk, regulation, framework, industries, score
-and Title: inside it never act as delimiters or category headers. A heading
-marker (`###`), table pipes, a list marker (`-`, `*`, `1.`) or emphasis around the
-whole row or the `Article N` token does not change its identity; emphasis inside
-a title is part of the title. A line naming `Article <number>` without the exact
-row shape (for example `Article 1 - Title: ...`) is still a claim and is counted
-as skipped. `Reason:` lines are commentary, with or without emphasis. Accepted scores are 1 through 10, with `10` or `10.0` as the upper
-endpoint and decimals below 10; the score is validated, not used.
+## What credits an article
 
-A claim that fails any check credits no article: an unknown or zero-padded
-number, another article's title, a mismatched title or an invalid or nonfinite
-score. It is skipped and counted, and the remaining valid rows are kept. A
-repeated identity counts once and its repeats are skipped. There is no
-title-based fallback for claims that fail. Accepted rows carry the article's
-position in `grc_article_indices`, which selection uses before titles, so
-duplicate supplied titles cannot select the wrong article. The result reports
-`analysis_rows: {"accepted": n, "skipped": k}`; skipped rows are logged by count,
-never by content. A skipped claim inside a regulations section still contributes
-the regulation names it mentions.
+Only one closed grammar credits an article. A row credits article *n* only when it
+is `Article <n>: Title: <exact title of n> score <s> relevant`, optionally ending
+with a period, optionally preceded by one list marker (`-`, `*`, `1.`), and
+optionally wrapped in bold around the whole row or the `Article <n>` token. The
+number must name a supplied article without zero padding. The title is matched as
+a whole, so words such as risk, regulation, Title: or score inside it never act as
+delimiters. `<s>` is 1 through 10 (`10` or `10.0` at the top, decimals below 10);
+it is validated, not used. A repeated identity credits once.
 
-When no claim is usable (all invalid, or a response that selects nothing) the
-model selects no article: `grc_articles` and `grc_article_indices` are empty and
-the confidence is 0. This is neither an error nor a selection of every article.
-The workflow's local entity and risk signals still select articles, and report
-evidence is still built from every retained source. The earlier fallback that
-treated unrecognized prose as selecting every supplied article is removed.
+Anything else credits nothing. A line beginning `Article <token>:` that does not
+fit the grammar (unknown number, another article's title, invalid score, text
+after `relevant`, two rows on one line) is counted as skipped; other unrecognized
+lines are ignored. Presentation variants are not enumerated beyond the grammar:
+correctness does not depend on recognizing an attempted row.
 
-When every claim was invalid, the relevance pilot's full legacy route records the
-model's selection for each article as unknown, as for a failed analysis, never as
-a decision that the article is irrelevant. Its stored relevance summary includes
-`analysis_rows`. Those unknown records count no model drops, although the
-workflow still publishes only articles selected by local signals. On the decision
-route, `analysis_rows` describes the enrichment call over the uncertain articles,
-whose positions are relative to that subset and never affect selection. Because
-the analysis now always carries positions, the workflow
-and the analysis route report the GRC-relevant count as articles selected by the
-model or by local entity and risk signals, the same count the relevance pilot
-already reported.
+Accepted rows carry their position in `grc_article_indices`, which selection uses
+before titles, so duplicate supplied titles cannot select the wrong article. The
+result reports `analysis_rows: {"accepted": n, "skipped": k}`; skipped rows are
+logged by count, never by content.
 
-The existing analysis result keys are kept, including the legacy fixed relevance
-score of 7.0 and the summary fields; accepted rows add the article `url`, and the
-result adds `grc_article_indices` and `analysis_rows`. Category notes
-(regulations and frameworks) are still read from lines that are not selection
-claims. This correction does not migrate to JSON analysis or change the
-report-plan schema, model routing, limits, privacy, grounding or retry policy.
+## Known and unknown answers
 
-`tests/test_analysis_text_contract.py` covers the generated prompt and parser.
-The separate nonpublishing test executor additionally compares the real parser
-with its strict observer and exercises the two-stage host flow. Passing synthetic
-tests does not identify the discarded answer or exact refusal in an earlier run.
+`selection_known` is true only when at least one row was accepted, or the entire
+response, ignoring surrounding whitespace, is exactly `No articles selected`.
+Every other response is `selection_known: false`: unrecognized prose, malformed or
+decorated attempts, all rows invalid, and the sentinel with any other line,
+punctuation or decoration (for example the sentinel followed by a blockquoted
+row).
+
+- **Selection.** An unknown answer selects no article. There is no fallback that
+  selects every supplied article. The workflow's local entity and risk signals
+  still select articles, and report evidence is still built from every retained
+  source. A refused or failed model call still follows the existing failure path.
+- **Evidence.** On the relevance pilot's full legacy route, an unknown answer is
+  recorded as each article's model selection being unknown, as for a failed
+  analysis, never as a decision that the article is irrelevant. Only a declared
+  empty answer is recorded as model drops. The stored relevance summary's
+  `analysis_rows` includes `selection_known`. Unknown records count no model drops,
+  although the workflow still publishes only articles that local signals select.
+- **Enabled pilot.** For the decision route's uncertain subset, the pilot's
+  decisions stay authoritative. The enrichment call's rows use positions within
+  that subset and never change selection; its `analysis_rows` describes that call.
+
+Because the analysis always carries positions, the workflow and the analysis route
+report the GRC-relevant count as articles selected by the model or by local entity
+and risk signals, the same count the relevance pilot reports.
+
+The existing result keys are kept, including the legacy fixed relevance score of
+7.0 and the summary fields. Accepted rows add the article `url`, and the result
+adds `grc_article_indices`, `analysis_rows` and `selection_known`. Category notes
+(regulations and frameworks) are read from lines that are not selection claims,
+and from skipped claims inside a regulations section.
+This correction does not migrate to JSON analysis or change the report-plan schema,
+model routing, limits, privacy, grounding or retry policy.
+
+`tests/test_analysis_text_contract.py` covers the prompt, the grammar and a
+regression matrix of earlier counterexamples. The separate nonpublishing test
+executor additionally compares the real parser with its strict observer.
+Passing synthetic tests does not identify the discarded answer or exact refusal in
+an earlier run.

@@ -266,11 +266,17 @@ def test_decorated_or_commented_claims_still_bind_exactly(decorated):
     assert parsed["analysis_rows"] == {"accepted": 0, "skipped": 1}
 
 
-def test_a_compliant_answer_selecting_nothing_is_an_empty_selection():
+def test_an_undeclared_empty_answer_selects_nothing_but_is_not_known():
     parsed = service()._process_analysis_response(
         "No supplied article has clear GRC implications.\nRegulations: none", articles()
     )
     assert parsed["grc_articles"] == [] and parsed["grc_article_indices"] == []
+    assert parsed["selection_known"] is False
+
+
+def test_the_prompt_owns_the_declared_empty_answer():
+    prompt = service()._create_analysis_prompt(articles())
+    assert "reply with exactly this single line and nothing else: No articles selected" in prompt
 
 
 def test_mixed_valid_rows_and_mismatched_claims_never_credit_the_wrong_article():
@@ -445,7 +451,7 @@ def test_all_invalid_rows_on_the_full_legacy_route_are_unknown_not_rejections(mo
     summary = model.relevance_summary()
     assert summary is not None
     assert summary["route"] == "legacy_full" and summary["dropped_positions"] == 0
-    assert summary["analysis_rows"] == {"accepted": 0, "skipped": 1}
+    assert summary["analysis_rows"] == {"accepted": 0, "skipped": 1, "selection_known": False}
 
 
 @pytest.mark.parametrize(
@@ -475,35 +481,6 @@ def test_emphasized_reason_lines_are_commentary(reason):
     text = "Regulations: GDPR\n" + reason
     parsed = service()._process_analysis_response(text, articles())
     assert parsed["analysis"]["regulations_mentioned"] == ["GDPR"]
-
-
-@pytest.mark.parametrize(
-    "malformed",
-    [
-        "### Article 1: Title: Consultation notice score 8 relevant extra",
-        "*Article 1: Title: Consultation notice score 8 relevant, maybe*",
-        "| Article 1: Title: Not supplied score 8 relevant |",
-        "Article 1 - Title: Consultation notice score 8 relevant",
-        "Article 1 Title: Consultation notice score 8 relevant",
-    ],
-)
-def test_malformed_rows_are_counted_as_skipped_claims(malformed):
-    parsed = service()._process_analysis_response(malformed, articles())
-    assert parsed["grc_article_indices"] == []
-    assert parsed["analysis_rows"] == {"accepted": 0, "skipped": 1}
-
-
-@pytest.mark.parametrize(
-    "decorated",
-    [
-        "### Article 1: Title: Consultation notice score 8 relevant",
-        "*Article 1: Title: Consultation notice score 8 relevant*",
-        "| Article 1: Title: Consultation notice score 8 relevant |",
-    ],
-)
-def test_heading_table_and_italic_decoration_do_not_change_identity(decorated):
-    parsed = service()._process_analysis_response(decorated, articles())
-    assert parsed["grc_article_indices"] == [0]
 
 
 def legacy_full_model(monkeypatch, mode, response):
@@ -547,7 +524,8 @@ def test_legacy_full_with_a_usable_row_records_the_normal_mask(monkeypatch):
     assert records is not None
     assert [r.model_selected for r in records] == [False, False, True]
     summary = model.relevance_summary()
-    assert summary is not None and summary["analysis_rows"] == {"accepted": 1, "skipped": 1}
+    assert summary is not None
+    assert summary["analysis_rows"] == {"accepted": 1, "skipped": 1, "selection_known": True}
 
     def storage_safe(value):
         if isinstance(value, dict):
@@ -557,3 +535,85 @@ def test_legacy_full_with_a_usable_row_records_the_normal_mask(monkeypatch):
         return value is None or isinstance(value, (str, int, bool))
 
     assert storage_safe(summary)
+
+
+VALID_2 = "Article 2: Title: Supplier access review score 8 relevant"
+VALID_1 = "Article 1: Title: Consultation notice score 7 relevant"
+
+# Every counterexample from the earlier review rounds, with the invariant's expectation:
+# (response, credited positions, whether the response is a known selection).
+REGRESSION_MATRIX = [
+    (VALID_2, [1], True),
+    (f"{VALID_1}\n{VALID_2}", [0, 1], True),
+    (f"- {VALID_2}", [1], True),
+    (f"1. {VALID_2}", [1], True),
+    (f"**{VALID_2}**", [1], True),
+    ("**Article 2**: Title: Supplier access review score 8 relevant", [1], True),
+    (f"{VALID_2}\n{VALID_2}.", [1], True),
+    (f"{VALID_2}\nArticle 3: Title: Supplier access review score 8 relevant", [1], True),
+    # Zero accepted rows without the declared empty answer: unknown, never a drop.
+    ("Article 3: Title: Supplier access review score 8 relevant", [], False),
+    ("Article 2: Title: Unknown title score 8 relevant", [], False),
+    ("Article 02: Title: Supplier access review score 8 relevant", [], False),
+    ("Article 2: Title: Supplier access review score 11 relevant", [], False),
+    ("Article 2: Title: Supplier access review score nan relevant", [], False),
+    ("Article 1: Title: Supplier access review score 8 relevant", [], False),
+    (
+        "Article 2: Title: Supplier access review score 8 relevant because review is warranted.",
+        [],
+        False,
+    ),
+    ("Article 2: Title: Supplier access review score 8 relevant? No - not relevant", [], False),
+    ("Article 2: Title: Supplier access review score 8 relevant (not relevant)", [], False),
+    (f"{VALID_1}. {VALID_2}", [], False),
+    ("> Article 9: Title: Nothing supplied score 8 relevant", [], False),
+    (f"> {VALID_2}", [], False),
+    ("### Article 1: Title: Consultation notice score 8 relevant", [], False),
+    ("| Article 1: Title: Consultation notice score 8 relevant |", [], False),
+    ("*Article 1: Title: Consultation notice score 8 relevant*", [], False),
+    ("Article 1 - Title: Consultation notice score 8 relevant", [], False),
+    ("Unrecognized narrative", [], False),
+    ("", [], False),
+    # Known empty only when the whole response is exactly the owned sentinel.
+    ("No articles selected", [], True),
+    ("  No articles selected\n", [], True),
+    ("No articles selected.", [], False),
+    ("- No articles selected", [], False),
+    ("no articles selected", [], False),
+    ("No articles selected\nArticle 3: Title: Supplier access review score 8 relevant", [], False),
+    ("No articles selected\n> Article 9: Title: Nothing supplied score 8 relevant", [], False),
+    ("No articles selected\nRegulations: none", [], False),
+    (f"No articles selected\n{VALID_2}", [1], True),
+]
+
+
+@pytest.mark.parametrize(("response", "positions", "known"), REGRESSION_MATRIX)
+def test_regression_matrix_credits_only_owned_rows_and_marks_unknown_answers(
+    response, positions, known
+):
+    parsed = service()._process_analysis_response(response, articles())
+    assert parsed["grc_article_indices"] == positions
+    assert [row["title"] for row in parsed["grc_articles"]] == [
+        articles()[i].title for i in positions
+    ]
+    assert parsed["selection_known"] is known
+    assert len(parsed["grc_articles"]) <= len(articles())
+
+
+@pytest.mark.parametrize(
+    ("response", "expected"),
+    [
+        ("> Article 9: Title: Nothing supplied score 8 relevant", [None, None, None]),
+        ("Unrecognized narrative", [None, None, None]),
+        ("No articles selected", [False, False, False]),
+    ],
+)
+def test_the_evidence_layer_records_only_declared_empty_answers_as_drops(
+    monkeypatch, response, expected
+):
+    import asyncio
+
+    model = legacy_full_model(monkeypatch, "enabled", response)
+    asyncio.run(model.analyze_articles_for_grc(three_articles()))
+    records = model.last_selection_records
+    assert records is not None and [r.model_selected for r in records] == expected
