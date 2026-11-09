@@ -5,62 +5,26 @@
     "control_implications": [
       {
         "control_id": "vulnerability_management",
-        "evidence_excerpt": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) has added a high-severity vulnerability impacting SonicWall SonicOS to its Known Exploited Vulnerabilities (KEV) catalog, following reports that it said may have been exploited in real-world attacks. The vulnerability, tracked as CVE-2026-19868 (CVSS score: 7.1 / 7.5), has been described as an authentication reinforcement",
-        "evidence_origin": "content",
+        "evidence_excerpt": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) has added a high-severity vulnerability impacting SonicWall SonicOS to its Known Exploited Vulnerabilities (KEV) catalog, following reports that it said may have been exploited in real-world attacks.",
+        "evidence_origin": "summary",
         "focus": "SonicWall SonicOS",
-        "headline": "SonicWall SonicOS weakens authentication reinforcement controls",
+        "headline": "SonicWall SonicOS added to CISA Known Exploited Vulnerabilities catalog",
         "priority": "high",
-        "significance": "CISA KEV inclusion signals active exploitation of an MFA bypass, requiring immediate asset identification and remediation verification. The vulnerability owner must confirm affected SonicOS versions are patched or compensating controls are documented.",
+        "significance": "CISA KEV inclusion confirms active exploitation, requiring immediate asset identification and remediation verification. Vulnerability and asset owners must confirm affected deployments and validate patch deployment or compensating controls.",
         "source_ids": [
           1
         ]
       },
       {
-        "control_id": "access_management",
-        "evidence_excerpt": "Threat actors are attempting to exploit a recently disclosed security flaw impacting OpenSSH that can enable sign-ins to accounts that have no password set, according to Previdian. The vulnerability, tracked as CVE-2026-123158 (CVSS score: 8.1) and codenamed SSHole (or *sshole), impacts Linux systems that run OpenSSH on the musl C library with Pluggable Authentication Modules (PAM) disabled",
-        "evidence_origin": "content",
-        "focus": "OpenSSH",
-        "headline": "OpenSSH enables passwordless sign-ins on misconfigured systems",
-        "priority": "high",
-        "significance": "Rapid exploitation of an authentication bypass demands verification that PAM is enabled and all accounts enforce password policies. The access owner must audit OpenSSH deployments on musl libc and confirm password requirements are enforced.",
-        "source_ids": [
-          2
-        ]
-      },
-      {
         "control_id": "change_management",
-        "evidence_excerpt": "A fix for CVE-2026-83844, a remote code execution flaw in Windows Paint, is now in the Microsoft Store. Paint gets this fix only through a Store update, not through Windows updates. The fixed build, 11.2609.401.0, was the newest Paint build in all ten countries The Hacker News checked today. The flaw is an out-of-bounds read that could let an attacker run code over a network",
-        "evidence_origin": "content",
-        "focus": "Windows Paint",
-        "headline": "Windows Paint receives fix only via Microsoft Store",
+        "evidence_excerpt": "A fix for CVE-2026-83844, a remote code execution flaw in Windows Paint, is now in the Microsoft Store. Paint gets this fix only through a Store update, not through Windows updates. The fixed build, 11.2609.401.0, was the newest Paint build in all ten countries The Hacker News checked today.",
+        "evidence_origin": "summary",
+        "focus": "Microsoft Paint",
+        "headline": "Microsoft Paint RCE fix delivered exclusively via Microsoft Store",
         "priority": "medium",
-        "significance": "Patch delivery outside standard Windows Update creates a coverage gap for managed endpoints. The change owner must verify Store update deployment policies and confirm the fixed build is installed across the fleet.",
+        "significance": "Remediation bypasses standard Windows Update channels, creating a coverage gap in standard patch management. Change and service owners must verify Store update deployment across endpoints and validate version compliance.",
         "source_ids": [
           3
-        ]
-      },
-      {
-        "control_id": "third_party_risk",
-        "evidence_excerpt": "The login systems behind two car brands' mobile apps could be taken over completely, two security researchers found, allowing them to access any customer's account and, for an owner with a connected car, unlock the doors and start the engine. Both apps signed customers in through ForgeRock, an identity platform now part of Ping Identity, and on those servers the researchers reached an",
-        "evidence_origin": "content",
-        "focus": "ForgeRock identity platform",
-        "headline": "ForgeRock identity platform exposes default admin credentials",
-        "priority": "high",
-        "significance": "Default credentials on a critical identity provider undermine authentication assurance for connected vehicle services. The supplier risk owner must obtain evidence that ForgeRock instances enforce credential rotation and privileged access reviews.",
-        "source_ids": [
-          5
-        ]
-      },
-      {
-        "control_id": "data_protection",
-        "evidence_excerpt": "Japanese manufacturer Iris Ohyama, the operator of the Iris Plaza shopping platform, disclosed that personal information belonging to about 7.7 million people may have been exposed after unauthorized access to a third-party cloud service the company used",
-        "evidence_origin": "content",
-        "focus": "third-party cloud service",
-        "headline": "Third-party cloud service exposes 7.7 million customer records",
-        "priority": "high",
-        "significance": "A cloud provider breach affecting millions of records requires validation of data processor agreements and encryption controls. The data owner must confirm the cloud service's access scope, breach notification timelines, and residual risk acceptance.",
-        "source_ids": [
-          11
         ]
       }
     ],
@@ -68,25 +32,23 @@
       "paragraphs": [
         {
           "source_ids": [
-            1,
-            2,
-            11
+            1
           ],
-          "text": "Active exploitation of authentication bypass vulnerabilities in SonicWall SonicOS and OpenSSH, combined with a third-party cloud breach exposing 7.7 million records, elevates the urgency for vulnerability remediation and supplier assurance reviews. Control owners must prioritize asset inventories for affected SonicOS and OpenSSH deployments, verify PAM enforcement, and obtain cloud processor breach notifications."
+          "text": "CISA added a SonicWall SonicOS authentication bypass to its Known Exploited Vulnerabilities catalog amid reports of real-world exploitation, while OpenSSH SSHole flaw saw active exploitation within hours of disclosure. These developments confirm that high-severity vulnerabilities in widely deployed network and system software are being weaponized immediately, demanding accelerated asset identification, configuration validation, and remediation verification across vulnerability management programs."
         },
         {
           "source_ids": [
-            3,
-            5
+            1,
+            3
           ],
-          "text": "Patch delivery gaps for Windows Paint via Microsoft Store only, default credentials on the ForgeRock identity platform, and U.S. agency warnings targeting industrial refrigeration controllers highlight systemic weaknesses in change management, third-party identity controls, and OT monitoring. Owners should validate Store update deployment, demand credential rotation evidence from identity providers, and segment internet-exposed controllers."
+          "text": "Multiple supply chain and identity provider failures emerged: default administrative credentials on the ForgeRock identity platform enabled vehicle account takeover, a Web3Auth flaw compromised cryptocurrency wallets, a third-party cloud service breach exposed 7.7 million personal records, and a service provider compromise facilitated a $133 million bank heist. Concurrently, AI agents were used to extract government emergency dispatch records. These events collectively elevate third-party risk, access management, and incident response priorities for control owners."
         }
       ]
     },
     "industry_impacts": [],
     "regulatory_changes": []
   },
-  "generated_at": "2026-11-09T13:10:06.910193Z",
+  "generated_at": "2026-11-09T14:46:29.778489Z",
   "feed_url": "https://sentrydigest.ricomanifesto.com/feed.xml",
   "feed_home_url": "https://sentrydigest.ricomanifesto.com/",
   "digest_issue_date": "2026-11-09",
