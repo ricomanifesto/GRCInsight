@@ -64,9 +64,11 @@ waits and keeps the last accepted report, and export reports it as `incomplete`.
   outcome fields.
 - **Article revision** (`record_kind = article_revision`): keyed
   `arev#<url key>#<capture digest>`, created only if absent. The capture digest
-  covers the retained-text digest and how it was captured (captured length and
-  digest, origin, truncation), so the same text captured with different
-  completeness is a different revision. It holds the
+  covers every source-observed field the revision stores (text and its digest,
+  captured length and digest, completeness, origin, publisher, publication date
+  and whether it is known); only write-time fields (first capture time, job and
+  report) are excluded. Any difference in what was observed is a different
+  revision, so reusing a revision never discards an observation. It holds the
   retained title, summary and feed content (up to 50,000 characters, with the
   captured length and digest when truncated), the evidence kind (`full_text`
   means the complete feed-item content as captured; `excerpt`;

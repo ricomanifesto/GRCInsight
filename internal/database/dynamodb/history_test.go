@@ -215,10 +215,6 @@ func TestRevisionDigestMatchesTheWriter(t *testing.T) {
 	if !ok || digest != "806716debca899ee6544dca0480c9c05f8c3b60f239e642c0a7bb97e6fd8b68c" {
 		t.Fatalf("digest mismatch: %s", digest)
 	}
-	capture := CaptureDigest(digest, 50010, strings.Repeat("ab", 32), "publisher_page", true)
-	if capture != "68bba1a6a6340d7a4d422f452a8b5deb60f439b180a9adbe571f1f2c4e0e5d3f" {
-		t.Fatalf("capture digest mismatch: %s", capture)
-	}
 	if _, ok := RevisionDigest("\xff", "", "", ""); ok {
 		t.Fatal("invalid UTF-8 must not verify")
 	}
@@ -457,5 +453,31 @@ func TestReportArticlesRejectsTamperedCaptureProvenance(t *testing.T) {
 	arts, _, err := repo.ReportArticles(context.Background(), "report_s5", 20, 0)
 	if err != nil || len(arts) != 1 || arts[0].EvidenceStatus != EvidenceCorrupt || arts[0].Content != "" {
 		t.Fatalf("tampered capture provenance served: %+v err=%v", arts, err)
+	}
+}
+
+func TestReportArticlesRejectsATamperedPublicationDate(t *testing.T) {
+	api, repo := loadWriterFixture(t)
+	for _, item := range api.tables[ArticlesTable] {
+		if str(item["record_kind"]) == RecordKindRevision && strings.Contains(str(item["url"]), "charlie") {
+			item["published_at"] = &types.AttributeValueMemberS{Value: "1999-01-01T00:00:00+00:00"}
+		}
+	}
+	arts, _, err := repo.ReportArticles(context.Background(), "report_s5", 20, 0)
+	if err != nil || len(arts) != 1 || arts[0].EvidenceStatus != EvidenceCorrupt {
+		t.Fatalf("tampered publication date served: %+v err=%v", arts, err)
+	}
+}
+
+func TestObservationDigestRefusesUnsupportedValues(t *testing.T) {
+	if _, ok := ObservationDigest(map[string]types.AttributeValue{
+		"captured_content_length": &types.AttributeValueMemberN{Value: "1.5"},
+	}); ok {
+		t.Fatal("non-integer number accepted")
+	}
+	if _, ok := ObservationDigest(map[string]types.AttributeValue{
+		"title": &types.AttributeValueMemberL{},
+	}); ok {
+		t.Fatal("list value accepted")
 	}
 }

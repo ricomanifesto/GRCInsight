@@ -69,12 +69,8 @@ type Article struct {
 	Position         int    `dynamodbav:"position,omitempty" json:"position,omitempty"`
 	PublishedAt      string `dynamodbav:"published_at,omitempty" json:"published_at,omitempty"`
 	PublishedAtKnown *bool  `dynamodbav:"published_at_known,omitempty" json:"published_at_known,omitempty"`
-	// Capture provenance of a revision; part of its identity.
-	CaptureSHA256         string `dynamodbav:"capture_sha256,omitempty" json:"capture_sha256,omitempty"`
-	CapturedContentLength int    `dynamodbav:"captured_content_length,omitempty" json:"captured_content_length,omitempty"`
-	CapturedContentSHA256 string `dynamodbav:"captured_content_sha256,omitempty" json:"captured_content_sha256,omitempty"`
-	ContentOrigin         string `dynamodbav:"content_origin,omitempty" json:"content_origin,omitempty"`
-	ContentTruncated      bool   `dynamodbav:"content_truncated,omitempty" json:"content_truncated,omitempty"`
+	// CaptureSHA256 is a revision's identity digest over every observed field.
+	CaptureSHA256 string `dynamodbav:"capture_sha256,omitempty" json:"capture_sha256,omitempty"`
 	// EvidenceStatus is computed when reading; it is never stored.
 	EvidenceStatus string `dynamodbav:"-" json:"evidence_status,omitempty"`
 }

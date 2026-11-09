@@ -767,3 +767,49 @@ def test_tampered_capture_provenance_is_detected():
         if r["record_type"] == "source_article_revision"
     )
     assert record["integrity"]["status"] == "corrupt"
+
+
+def test_every_stored_revision_field_is_classified():
+    """A new revision field must join the identity or be declared write-time."""
+    from history.identity import OBSERVATION_FIELDS, WRITE_TIME_FIELDS
+    from history.writeback import build_revision
+
+    dated = build_revision(
+        fx.article("alpha").model_dump(mode="json"), report_id="r", run_id="j", now=NOW
+    )
+    undated = build_revision(
+        fx.article("alpha", published=None).model_dump(mode="json"),
+        report_id="r",
+        run_id="j",
+        now=NOW,
+    )
+    classified = set(OBSERVATION_FIELDS) | set(WRITE_TIME_FIELDS)
+    assert set(dated) <= classified and set(undated) <= classified
+    assert not set(OBSERVATION_FIELDS) & set(WRITE_TIME_FIELDS)
+
+
+def test_a_newly_supplied_publication_date_is_a_new_revision():
+    reports, articles = fx.tables()
+    fx.open_report(reports, "r1")
+    fx.open_report(reports, "r2")
+    commit(reports, articles, "r1", res=fx.result([fx.article("alpha", published=None)]))
+    receipt = commit(reports, articles, "r2", res=fx.result([fx.article("alpha")]))
+    assert receipt.revisions_written == 1
+    bound = articles.items[reports.items["r2"]["article_revision_ids"][0]]
+    assert bound["published_at_known"] is True and bound["published_at"]
+    first = articles.items[reports.items["r1"]["article_revision_ids"][0]]
+    assert first["published_at_known"] is False  # the earlier observation is kept
+
+
+def test_tampered_publication_date_is_detected():
+    reports, articles = fx.tables()
+    fx.open_report(reports, "r1")
+    commit(reports, articles, "r1")
+    rev = kinds(articles, "article_revision")[0]
+    articles.items[rev["article_id"]]["published_at"] = "1999-01-01T00:00:00+00:00"
+    record = next(
+        r
+        for r in export_page(articles, stream="articles")["records"]
+        if r["record_type"] == "source_article_revision"
+    )
+    assert record["integrity"]["status"] == "corrupt"

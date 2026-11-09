@@ -6,6 +6,7 @@ import (
 	"encoding/hex"
 	"errors"
 	"fmt"
+	"regexp"
 	"sort"
 	"strings"
 	"unicode/utf8"
@@ -106,31 +107,69 @@ func RevisionDigest(url, title, summary, content string) (string, bool) {
 	return hex.EncodeToString(sum[:]), true
 }
 
-// CaptureDigest is the SHA-256 of a revision's text digest and capture provenance
-// in canonical JSON, matching the report writer.
-func CaptureDigest(contentSHA256 string, capturedLength int, capturedSHA256, origin string, truncated bool) string {
+// observationFields are the source-observed revision fields the report writer
+// includes in revision identity (agent/history/identity.py OBSERVATION_FIELDS).
+var observationFields = []string{
+	"url", "title", "summary", "content", "canonical_url", "source_key",
+	"content_sha256", "content_truncated", "captured_content_length",
+	"captured_content_sha256", "evidence_kind", "full_text_scope",
+	"content_origin", "source", "digest_url", "published_at_known", "published_at",
+}
+
+var integerText = regexp.MustCompile(`^-?[0-9]+$`)
+
+// ObservationDigest is the SHA-256 of a stored revision's observed fields in the
+// writer's canonical JSON (sorted keys; absent fields are null).
+func ObservationDigest(item map[string]types.AttributeValue) (string, bool) {
+	keys := append([]string(nil), observationFields...)
+	sort.Strings(keys)
 	var b strings.Builder
-	// Canonical JSON sorts keys.
-	fmt.Fprintf(&b, `{"captured_content_length":%d,"captured_content_sha256":`, capturedLength)
-	pythonJSONString(&b, capturedSHA256)
-	b.WriteString(`,"content_origin":`)
-	pythonJSONString(&b, origin)
-	b.WriteString(`,"content_sha256":`)
-	pythonJSONString(&b, contentSHA256)
-	fmt.Fprintf(&b, `,"content_truncated":%t}`, truncated)
+	b.WriteByte('{')
+	for i, key := range keys {
+		if i > 0 {
+			b.WriteByte(',')
+		}
+		pythonJSONString(&b, key)
+		b.WriteByte(':')
+		switch v := item[key].(type) {
+		case nil, *types.AttributeValueMemberNULL:
+			b.WriteString("null")
+		case *types.AttributeValueMemberS:
+			if !utf8.ValidString(v.Value) {
+				return "", false
+			}
+			pythonJSONString(&b, v.Value)
+		case *types.AttributeValueMemberBOOL:
+			fmt.Fprintf(&b, "%t", v.Value)
+		case *types.AttributeValueMemberN:
+			if !integerText.MatchString(v.Value) {
+				return "", false
+			}
+			b.WriteString(v.Value)
+		default:
+			return "", false
+		}
+	}
+	b.WriteByte('}')
 	sum := sha256.Sum256([]byte(b.String()))
-	return hex.EncodeToString(sum[:])
+	return hex.EncodeToString(sum[:]), true
 }
 
 // verifyRevision re-derives a stored revision's identity from its retained text
-// and capture provenance.
-func verifyRevision(rev *Article, expectedDigest string) bool {
+// and every observed field.
+func verifyRevision(rev *Article, raw map[string]types.AttributeValue, expectedDigest string) bool {
 	digest, ok := RevisionDigest(rev.URL, rev.Title, rev.Summary, rev.Content)
 	if !ok || rev.RecordKind != RecordKindRevision || rev.ContentSHA256 != digest || expectedDigest != digest {
 		return false
 	}
-	capture := CaptureDigest(digest, rev.CapturedContentLength, rev.CapturedContentSHA256, rev.ContentOrigin, rev.ContentTruncated)
-	return rev.CaptureSHA256 == capture && strings.HasSuffix(rev.ArticleID, "#"+capture[:32])
+	observed, ok := ObservationDigest(raw)
+	return ok && rev.CaptureSHA256 == observed && strings.HasSuffix(rev.ArticleID, "#"+observed[:32])
+}
+
+// storedRevision is a revision as read, with its raw attributes for verification.
+type storedRevision struct {
+	article *Article
+	raw     map[string]types.AttributeValue
 }
 
 // queryReportRows reads up to MaxReportArticles article rows for a report.
@@ -170,8 +209,8 @@ func (r *Repository) queryReportRows(ctx context.Context, reportID string) ([]Ar
 // fetchRevisions reads the revisions one page references with strongly consistent
 // GetItem calls (the deployed role grants GetItem, not BatchGetItem). The caller's
 // page size bounds the number of reads; absent ids are omitted.
-func (r *Repository) fetchRevisions(ctx context.Context, ids []string) (map[string]*Article, error) {
-	found := make(map[string]*Article, len(ids))
+func (r *Repository) fetchRevisions(ctx context.Context, ids []string) (map[string]storedRevision, error) {
+	found := make(map[string]storedRevision, len(ids))
 	for _, id := range ids {
 		if _, seen := found[id]; seen {
 			continue
@@ -189,7 +228,7 @@ func (r *Repository) fetchRevisions(ctx context.Context, ids []string) (map[stri
 		}
 		var rev Article
 		if err := attributevalue.UnmarshalMap(out.Item, &rev); err == nil {
-			found[id] = &rev
+			found[id] = storedRevision{article: &rev, raw: out.Item}
 		}
 	}
 	return found, nil
@@ -270,12 +309,13 @@ func (r *Repository) ReportArticles(ctx context.Context, reportID string, limit,
 		if a.RecordKind != RecordKindAppearance {
 			continue
 		}
-		rev, ok := revisions[a.RevisionID]
+		stored, ok := revisions[a.RevisionID]
+		rev := stored.article
 		switch {
 		case !ok:
 			// Integrity states take precedence over "unbound": no text is served.
 			a.EvidenceStatus = EvidenceMissing
-		case !verifyRevision(rev, a.ContentSHA256):
+		case !verifyRevision(rev, stored.raw, a.ContentSHA256):
 			a.EvidenceStatus = EvidenceCorrupt
 		default:
 			if a.EvidenceStatus == "" {

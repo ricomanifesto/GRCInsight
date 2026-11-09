@@ -67,22 +67,44 @@ def revision_digest(payload: dict[str, str]) -> str:
     return sha256_hex(payload)
 
 
-CAPTURE_FIELDS = (
+# Every source-observed field a revision stores. Revision identity covers all of
+# them, so two captures that differ in anything observed (text, completeness,
+# origin, publisher, publication date) are different revisions and reuse never
+# discards an observation. ``WRITE_TIME_FIELDS`` are the only stored fields left
+# out: they describe when and by whom the revision was first written.
+OBSERVATION_FIELDS = (
+    "url",
+    "title",
+    "summary",
+    "content",
+    "canonical_url",
+    "source_key",
     "content_sha256",
+    "content_truncated",
     "captured_content_length",
     "captured_content_sha256",
+    "evidence_kind",
+    "full_text_scope",
     "content_origin",
-    "content_truncated",
+    "source",
+    "digest_url",
+    "published_at_known",
+    "published_at",
+)
+WRITE_TIME_FIELDS = (
+    "article_id",
+    "record_kind",
+    "history_schema",
+    "capture_sha256",
+    "first_captured_at",
+    "first_run_id",
+    "first_report_id",
 )
 
 
 def capture_digest(fields: dict[str, Any]) -> str:
-    """Digest of the retained text plus how it was captured.
-
-    Two captures with the same retained text but different completeness or origin
-    are different revisions, so reusing a revision never discards provenance.
-    """
-    return sha256_hex({name: fields.get(name) for name in CAPTURE_FIELDS})
+    """Digest of everything a capture observed; absent fields count as null."""
+    return sha256_hex({name: fields.get(name) for name in OBSERVATION_FIELDS})
 
 
 def revision_id(url: str, capture_sha256: str) -> str:
