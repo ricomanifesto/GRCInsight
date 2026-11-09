@@ -3,7 +3,6 @@
 import os
 from contextlib import asynccontextmanager
 import time
-from typing import Any
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -11,8 +10,6 @@ from loguru import logger
 from mangum import Mangum
 
 from api.routes import workflow, analysis, health, rss
-import boto3
-from datetime import datetime, timezone
 from config.settings import settings
 from core.runtime import (
     deadline_from_unix_ms,
@@ -112,6 +109,42 @@ async def root():
     }
 
 
+def _history_tables():
+    from history.service import history_tables
+
+    return history_tables()
+
+
+def _commit_report(report_id: str, event: dict, context, result) -> dict:
+    """Write immutable evidence, then complete the admitted report job once.
+
+    The job identity comes from the report row (or the event's ``job_id``),
+    never from the Lambda request id, which is recorded for diagnosis only.
+    """
+    from history.service import commit_report
+
+    try:
+        status, body = commit_report(
+            report_id=report_id,
+            result=result,
+            tables=_history_tables(),
+            job_id=event.get("job_id") or None,
+            invocation_id=getattr(context, "aws_request_id", None),
+            feed_url=event.get("feed_url"),
+            # Direct invocation requires IAM permission, so legacy rows without a
+            # job id may still be completed here.
+            require_job=False,
+        )
+    except Exception as ddb_err:
+        logger.error(f"Failed to update DynamoDB for report {report_id}: {ddb_err}")
+        return {
+            "statusCode": 500,
+            "body": {"status": "failed", "report_id": report_id, "error": str(ddb_err)},
+        }
+    logger.info(f"Report {report_id} history decision: {body['decision']}")
+    return {"statusCode": status, "body": body}
+
+
 # Create Mangum handler for AWS Lambda
 mangum_handler = Mangum(app, lifespan="off")
 
@@ -176,161 +209,10 @@ def handler(event, context):
                 finally:
                     reset_report_id(report_token)
 
-                # If invoked with report_id, perform DynamoDB writeback (async pattern)
+                # If invoked with report_id, commit the outcome to DynamoDB (async pattern).
                 report_id = event.get("report_id")
                 if report_id:
-                    try:
-                        table_name = os.getenv("DDB_TABLE_NAME", "grcinsight-reports")
-                        ddb = boto3.resource("dynamodb")
-                        table = ddb.Table(table_name)
-
-                        now_iso = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
-
-                        # Build metadata map from result.metadata if present
-                        metadata = None
-                        if result.metadata is not None:
-                            md = result.metadata
-                            metadata = {
-                                "article_count": md.article_count,
-                                "grc_article_count": md.grc_article_count,
-                                "analysis_mode": md.analysis_mode,
-                                "fallback_reason": md.fallback_reason,
-                                "source_name": md.source_name,
-                                "source_url": md.source_url,
-                                "source_home_url": md.source_home_url,
-                                "source_issue_date": md.source_issue_date,
-                                "source_issue_url": md.source_issue_url,
-                                "analysis_period": md.analysis_period,
-                                "requested_model": md.requested_model,
-                                "resolved_model": md.resolved_model,
-                                "source_articles": md.source_articles or [],
-                                "report_plan": md.report_plan,
-                                "regulations_mentioned": md.regulations_mentioned or [],
-                                "frameworks_referenced": md.frameworks_referenced or [],
-                                "industries_affected": md.industries_affected or [],
-                                "regulatory_bodies": md.regulatory_bodies or [],
-                                "relevance_diagnostics": md.relevance_diagnostics,
-                            }
-
-                        update_expr = [
-                            "SET #title = :title",
-                            "#content = :content",
-                            "#status = :status",
-                            "updated_at = :updated_at",
-                            "generated_at = :generated_at",
-                        ]
-                        expr_attr_names = {
-                            "#title": "title",
-                            "#content": "content",
-                            "#status": "status",
-                        }
-                        expr_attr_values: dict[str, Any] = {
-                            ":title": (
-                                result.report.title
-                                if result.report
-                                else f"GRC Intelligence Report - {now_iso[:10]}"
-                            ),
-                            ":content": result.report.content if result.report else "# No content",
-                            ":status": "completed" if result.status == "completed" else "failed",
-                            ":updated_at": now_iso,
-                            ":generated_at": now_iso,
-                        }
-                        if metadata is not None:
-                            update_expr.append("metadata = :metadata")
-                            expr_attr_values[":metadata"] = metadata
-
-                        table.update_item(
-                            Key={"report_id": report_id},
-                            UpdateExpression=", ".join(update_expr),
-                            ExpressionAttributeNames=expr_attr_names,
-                            ExpressionAttributeValues=expr_attr_values,
-                            ConditionExpression="attribute_exists(report_id)",
-                        )
-                        logger.info(f"DynamoDB updated for report {report_id}")
-
-                        # Optionally persist analyzed articles to the articles table
-                        try:
-                            articles = []
-                            if result.articles is not None:
-                                # Pydantic model to dict list
-                                articles = [
-                                    a if isinstance(a, dict) else a.model_dump()
-                                    for a in result.articles
-                                ]
-                            articles_table_name = os.getenv(
-                                "ARTICLES_TABLE_NAME", "grcinsight-articles"
-                            )
-                            if articles and articles_table_name:
-                                atable = ddb.Table(articles_table_name)
-
-                                def fnv1a_32(data: str) -> int:
-                                    h = 2166136261
-                                    for ch in data.encode("utf-8"):
-                                        h ^= ch
-                                        h = (h * 16777619) & 0xFFFFFFFF
-                                    return h
-
-                                now_iso = (
-                                    datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
-                                )
-                                date_prefix = now_iso[:10].replace("-", "")
-                                with atable.batch_writer() as batch:
-                                    for a in articles:
-                                        url = a.get("url", "")
-                                        nid = fnv1a_32(url) if url else 0
-                                        art_id = f"a_{date_prefix}_{nid:08x}"
-                                        item = {
-                                            "article_id": art_id,
-                                            "numeric_id": nid,
-                                            "report_id": report_id,
-                                            "title": a.get("title", ""),
-                                            "url": url,
-                                            "content": a.get("content", "")[:50000],
-                                            "summary": a.get("summary", ""),
-                                            "source": a.get("source", ""),
-                                            "digest_url": a.get("digest_url", ""),
-                                            "published": (
-                                                a.get("published")
-                                                if isinstance(a.get("published"), str)
-                                                else now_iso
-                                            ),
-                                            "created_at": now_iso,
-                                            "updated_at": now_iso,
-                                            "has_grc_content": bool(
-                                                a.get("has_grc_content", False)
-                                            ),
-                                            "regulations": a.get("regulations", []) or [],
-                                            "frameworks": a.get("frameworks", []) or [],
-                                            "industries": a.get("industries", []) or [],
-                                            "regulatory_bodies": a.get("regulatory_bodies", [])
-                                            or [],
-                                        }
-                                        batch.put_item(Item=item)
-                                logger.info(
-                                    f"Persisted {len(articles)} articles to {articles_table_name}"
-                                )
-                        except Exception as art_err:
-                            logger.warning(f"Failed to persist articles: {art_err}")
-
-                        # For async invocations, return simple success response
-                        return {
-                            "statusCode": 200,
-                            "body": {
-                                "status": "completed",
-                                "report_id": report_id,
-                                "message": "Report generated and saved to DynamoDB",
-                            },
-                        }
-                    except Exception as ddb_err:
-                        logger.error(f"Failed to update DynamoDB for report {report_id}: {ddb_err}")
-                        return {
-                            "statusCode": 500,
-                            "body": {
-                                "status": "failed",
-                                "report_id": report_id,
-                                "error": str(ddb_err),
-                            },
-                        }
+                    return _commit_report(report_id, event, context, result)
 
                 # For sync invocations (no report_id), return full result
                 return {"statusCode": 200, "body": json.loads(result.model_dump_json())}

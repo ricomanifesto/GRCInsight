@@ -16,13 +16,13 @@ type configCapturingPython struct {
 }
 
 func (f *configCapturingPython) IsAsync() bool { return true }
-func (f *configCapturingPython) RunWorkflow(_ *apimodels.WorkflowRequest) (*apimodels.WorkflowResponse, error) {
+func (f *configCapturingPython) RunWorkflowForReport(_ *apimodels.WorkflowRequest, _ WorkflowJob) error {
 	panic("synchronous workflow unexpected")
 }
-func (f *configCapturingPython) RunWorkflowAsync(req *apimodels.WorkflowRequest, reportID string) error {
+func (f *configCapturingPython) RunWorkflowAsync(req *apimodels.WorkflowRequest, job WorkflowJob) error {
 	f.calls++
 	var err error
-	f.payload, err = marshalWorkflowPayload(req, reportID, time.Time{})
+	f.payload, err = marshalWorkflowPayload(req, job, time.Time{})
 	return err
 }
 

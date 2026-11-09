@@ -10,11 +10,14 @@
         "dynamodb:DeleteItem",
         "dynamodb:Scan",
         "dynamodb:Query",
-        "dynamodb:DescribeTable"
+        "dynamodb:DescribeTable",
+        "dynamodb:BatchWriteItem"
       ],
       "Resource": [
         "arn:aws:dynamodb:us-east-1:076542168556:table/grcinsight-reports",
-        "arn:aws:dynamodb:us-east-1:076542168556:table/grcinsight-reports/index/*"
+        "arn:aws:dynamodb:us-east-1:076542168556:table/grcinsight-reports/index/*",
+        "arn:aws:dynamodb:us-east-1:076542168556:table/grcinsight-articles",
+        "arn:aws:dynamodb:us-east-1:076542168556:table/grcinsight-articles/index/*"
       ]
     },
     {

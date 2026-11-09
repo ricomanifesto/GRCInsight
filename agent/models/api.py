@@ -24,6 +24,11 @@ class ArticleInput(BaseModel):
     source: str = ""
     digest_url: str = ""
     published: datetime
+    # False when the feed gave no usable date and ``published`` is a capture-time placeholder.
+    published_known: bool = True
+    # Where ``content`` came from, and whether it was cut when captured.
+    content_origin: Literal["feed_item", "publisher_page"] = "feed_item"
+    content_truncated: bool = False
 
 
 class ArticleRecord(ArticleInput):
@@ -41,6 +46,12 @@ class WorkflowRequest(BaseModel):
 
     feed_url: str = Field(..., description="URL of the RSS feed to analyze")
     config: GRCAnalysisConfig = Field(default_factory=GRCAnalysisConfig)
+
+
+class ReportWorkflowRequest(WorkflowRequest):
+    """Run the workflow for a report row the Go service already admitted."""
+
+    job_id: str = Field(min_length=1)
 
 
 class AnalysisRequest(BaseModel):

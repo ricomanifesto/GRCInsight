@@ -18,6 +18,14 @@ type Report struct {
 	// Metadata stored as JSON
 	Metadata ReportMetadata `json:"metadata"`
 
+	// JobID identifies the admitted generation job this report belongs to.
+	// It authorizes completion, so it is never returned by the API.
+	JobID string `json:"-"`
+	// TerminalOutcome distinguishes model_completed, refused_fallback and failed
+	// while Status keeps its existing completed/failed meaning.
+	TerminalOutcome string `json:"terminal_outcome,omitempty"`
+	TerminalReason  string `json:"terminal_reason,omitempty"`
+
 	// Relationships
 	Articles []Article `json:"articles,omitempty"`
 }
@@ -58,6 +66,11 @@ type Article struct {
 	Frameworks       []string `json:"frameworks"`
 	Industries       []string `json:"industries"`
 	RegulatoryBodies []string `json:"regulatory_bodies"`
+
+	// History provenance; empty for legacy rows.
+	RevisionID     string `json:"revision_id,omitempty"`
+	EvidenceStatus string `json:"evidence_status,omitempty"`
+	PublishedKnown *bool  `json:"published_known,omitempty"`
 }
 
 // ReportStatus constants
