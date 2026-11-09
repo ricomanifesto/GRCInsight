@@ -43,4 +43,4 @@ target-version = ["py311"]
 python-version = "3.11"
 
 [tool.ty.src]
-include = ["*.py", "api", "config", "core", "models", "services", "tests"]
+include = ["*.py", "api", "config", "core", "models", "runtime_adapter", "services", "tests"]

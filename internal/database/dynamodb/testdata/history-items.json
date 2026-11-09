@@ -1,0 +1,2002 @@
+{
+  "grcinsight-articles": [
+    {
+      "article_id": {
+        "S": "a_20251001_0badc0de"
+      },
+      "content": {
+        "S": "Legacy synthetic body."
+      },
+      "created_at": {
+        "S": "2025-10-01T09:20:00Z"
+      },
+      "digest_url": {
+        "S": ""
+      },
+      "frameworks": {
+        "L": []
+      },
+      "has_grc_content": {
+        "BOOL": true
+      },
+      "industries": {
+        "L": []
+      },
+      "numeric_id": {
+        "N": "195936478"
+      },
+      "published": {
+        "S": "2025-10-01T09:20:00Z"
+      },
+      "regulations": {
+        "L": []
+      },
+      "regulatory_bodies": {
+        "L": []
+      },
+      "report_id": {
+        "S": "report_20251001_090000_123"
+      },
+      "source": {
+        "S": "Example Wire"
+      },
+      "summary": {
+        "S": ""
+      },
+      "title": {
+        "S": "Legacy synthetic article"
+      },
+      "updated_at": {
+        "S": "2025-10-01T09:20:00Z"
+      },
+      "url": {
+        "S": "https://news.example.test/legacy"
+      }
+    },
+    {
+      "appearance_set_sha256": {
+        "S": "fd38a389903976922329f783592a203d8c3b62fc83a5840cdea1bef8b88e8a26"
+      },
+      "article_id": {
+        "S": "aapp#report_s1#fd38a38990397692#0000"
+      },
+      "classification_provenance": {
+        "S": "generated"
+      },
+      "content": {
+        "S": ""
+      },
+      "content_sha256": {
+        "S": "a982a38604bb003cd92039a6afa1097446093b0cb66fd8010be3783c0c0cd9ac"
+      },
+      "created_at": {
+        "S": "2026-11-02T09:01:00Z"
+      },
+      "digest_url": {
+        "S": ""
+      },
+      "frameworks": {
+        "L": []
+      },
+      "has_grc_content": {
+        "BOOL": true
+      },
+      "history_schema": {
+        "S": "grcinsight.report-article-appearance.v1"
+      },
+      "industries": {
+        "L": []
+      },
+      "numeric_id": {
+        "N": "3190445590"
+      },
+      "position": {
+        "N": "0"
+      },
+      "published": {
+        "S": "2026-11-01T12:00:00Z"
+      },
+      "record_kind": {
+        "S": "report_article_appearance"
+      },
+      "regulations": {
+        "L": [
+          {
+            "S": "Example Rule 1"
+          }
+        ]
+      },
+      "regulatory_bodies": {
+        "L": []
+      },
+      "report_id": {
+        "S": "report_s1"
+      },
+      "revision_id": {
+        "S": "arev#06fca946ba46010b628c7c63d2bdf7f9#bb603f543aa3df25cc9bcf7b069825ba"
+      },
+      "run_id": {
+        "S": "job-report_s1"
+      },
+      "source": {
+        "S": "Example Wire"
+      },
+      "summary": {
+        "S": ""
+      },
+      "title": {
+        "S": "Synthetic regulator notice alpha"
+      },
+      "updated_at": {
+        "S": "2026-11-02T09:01:00Z"
+      },
+      "url": {
+        "S": "https://news.example.test/alpha"
+      }
+    },
+    {
+      "appearance_set_sha256": {
+        "S": "fd38a389903976922329f783592a203d8c3b62fc83a5840cdea1bef8b88e8a26"
+      },
+      "article_id": {
+        "S": "aapp#report_s1#fd38a38990397692#0001"
+      },
+      "classification_provenance": {
+        "S": "generated"
+      },
+      "content": {
+        "S": ""
+      },
+      "content_sha256": {
+        "S": "4b5df06957712478aa26b9a7a5f65b05df6604f5801bfffd4170f64ab708ae65"
+      },
+      "created_at": {
+        "S": "2026-11-02T09:01:00Z"
+      },
+      "digest_url": {
+        "S": ""
+      },
+      "frameworks": {
+        "L": []
+      },
+      "has_grc_content": {
+        "BOOL": true
+      },
+      "history_schema": {
+        "S": "grcinsight.report-article-appearance.v1"
+      },
+      "industries": {
+        "L": []
+      },
+      "numeric_id": {
+        "N": "3784342422"
+      },
+      "position": {
+        "N": "1"
+      },
+      "published": {
+        "S": ""
+      },
+      "record_kind": {
+        "S": "report_article_appearance"
+      },
+      "regulations": {
+        "L": [
+          {
+            "S": "Example Rule 1"
+          }
+        ]
+      },
+      "regulatory_bodies": {
+        "L": []
+      },
+      "report_id": {
+        "S": "report_s1"
+      },
+      "revision_id": {
+        "S": "arev#822be970cf90437bb365e37bac696c3a#ec8fc08a3216b6cfb23c7f6a3094b0f0"
+      },
+      "run_id": {
+        "S": "job-report_s1"
+      },
+      "source": {
+        "S": "Example Wire"
+      },
+      "summary": {
+        "S": ""
+      },
+      "title": {
+        "S": "Synthetic regulator notice bravo"
+      },
+      "updated_at": {
+        "S": "2026-11-02T09:01:00Z"
+      },
+      "url": {
+        "S": "https://news.example.test/bravo"
+      }
+    },
+    {
+      "appearance_set_sha256": {
+        "S": "a639ce5d6a7e9d0743633640a8dd65288acb8c558acba73214d169cf3ff751b3"
+      },
+      "article_id": {
+        "S": "aapp#report_s2#a639ce5d6a7e9d07#0000"
+      },
+      "classification_provenance": {
+        "S": "generated"
+      },
+      "content": {
+        "S": ""
+      },
+      "content_sha256": {
+        "S": "52428a8cfe43b099e63c6ce6058126683cb8798110fa417fcef39a0191ba6404"
+      },
+      "created_at": {
+        "S": "2026-11-09T09:01:00Z"
+      },
+      "digest_url": {
+        "S": ""
+      },
+      "frameworks": {
+        "L": []
+      },
+      "has_grc_content": {
+        "BOOL": true
+      },
+      "history_schema": {
+        "S": "grcinsight.report-article-appearance.v1"
+      },
+      "industries": {
+        "L": []
+      },
+      "numeric_id": {
+        "N": "3190445590"
+      },
+      "position": {
+        "N": "0"
+      },
+      "published": {
+        "S": "2026-11-01T12:00:00Z"
+      },
+      "record_kind": {
+        "S": "report_article_appearance"
+      },
+      "regulations": {
+        "L": [
+          {
+            "S": "Example Rule 1"
+          }
+        ]
+      },
+      "regulatory_bodies": {
+        "L": []
+      },
+      "report_id": {
+        "S": "report_s2"
+      },
+      "revision_id": {
+        "S": "arev#06fca946ba46010b628c7c63d2bdf7f9#ffaad4ce353dbeb2c6b76f752e9b749e"
+      },
+      "run_id": {
+        "S": "job-report_s2"
+      },
+      "source": {
+        "S": "Example Wire"
+      },
+      "summary": {
+        "S": ""
+      },
+      "title": {
+        "S": "Synthetic regulator notice alpha"
+      },
+      "updated_at": {
+        "S": "2026-11-09T09:01:00Z"
+      },
+      "url": {
+        "S": "https://news.example.test/alpha"
+      }
+    },
+    {
+      "appearance_set_sha256": {
+        "S": "a639ce5d6a7e9d0743633640a8dd65288acb8c558acba73214d169cf3ff751b3"
+      },
+      "article_id": {
+        "S": "aapp#report_s2#a639ce5d6a7e9d07#0001"
+      },
+      "classification_provenance": {
+        "S": "generated"
+      },
+      "content": {
+        "S": ""
+      },
+      "content_sha256": {
+        "S": "4b5df06957712478aa26b9a7a5f65b05df6604f5801bfffd4170f64ab708ae65"
+      },
+      "created_at": {
+        "S": "2026-11-09T09:01:00Z"
+      },
+      "digest_url": {
+        "S": ""
+      },
+      "frameworks": {
+        "L": []
+      },
+      "has_grc_content": {
+        "BOOL": true
+      },
+      "history_schema": {
+        "S": "grcinsight.report-article-appearance.v1"
+      },
+      "industries": {
+        "L": []
+      },
+      "numeric_id": {
+        "N": "3784342422"
+      },
+      "position": {
+        "N": "1"
+      },
+      "published": {
+        "S": ""
+      },
+      "record_kind": {
+        "S": "report_article_appearance"
+      },
+      "regulations": {
+        "L": [
+          {
+            "S": "Example Rule 1"
+          }
+        ]
+      },
+      "regulatory_bodies": {
+        "L": []
+      },
+      "report_id": {
+        "S": "report_s2"
+      },
+      "revision_id": {
+        "S": "arev#822be970cf90437bb365e37bac696c3a#ec8fc08a3216b6cfb23c7f6a3094b0f0"
+      },
+      "run_id": {
+        "S": "job-report_s2"
+      },
+      "source": {
+        "S": "Example Wire"
+      },
+      "summary": {
+        "S": ""
+      },
+      "title": {
+        "S": "Synthetic regulator notice bravo"
+      },
+      "updated_at": {
+        "S": "2026-11-09T09:01:00Z"
+      },
+      "url": {
+        "S": "https://news.example.test/bravo"
+      }
+    },
+    {
+      "appearance_set_sha256": {
+        "S": "735b8d8ff1019847355d6e5ab092d7a2a5a778b7f137914d87c9a28cd85a12dc"
+      },
+      "article_id": {
+        "S": "aapp#report_s3#735b8d8ff1019847#0000"
+      },
+      "classification_provenance": {
+        "S": "generated"
+      },
+      "content": {
+        "S": ""
+      },
+      "content_sha256": {
+        "S": "a982a38604bb003cd92039a6afa1097446093b0cb66fd8010be3783c0c0cd9ac"
+      },
+      "created_at": {
+        "S": "2026-11-09T10:00:00Z"
+      },
+      "digest_url": {
+        "S": ""
+      },
+      "frameworks": {
+        "L": []
+      },
+      "has_grc_content": {
+        "BOOL": true
+      },
+      "history_schema": {
+        "S": "grcinsight.report-article-appearance.v1"
+      },
+      "industries": {
+        "L": []
+      },
+      "numeric_id": {
+        "N": "3190445590"
+      },
+      "position": {
+        "N": "0"
+      },
+      "published": {
+        "S": "2026-11-01T12:00:00Z"
+      },
+      "record_kind": {
+        "S": "report_article_appearance"
+      },
+      "regulations": {
+        "L": [
+          {
+            "S": "Example Rule 1"
+          }
+        ]
+      },
+      "regulatory_bodies": {
+        "L": []
+      },
+      "report_id": {
+        "S": "report_s3"
+      },
+      "revision_id": {
+        "S": "arev#06fca946ba46010b628c7c63d2bdf7f9#bb603f543aa3df25cc9bcf7b069825ba"
+      },
+      "run_id": {
+        "S": "job-report_s3"
+      },
+      "source": {
+        "S": "Example Wire"
+      },
+      "summary": {
+        "S": ""
+      },
+      "title": {
+        "S": "Synthetic regulator notice alpha"
+      },
+      "updated_at": {
+        "S": "2026-11-09T10:00:00Z"
+      },
+      "url": {
+        "S": "https://news.example.test/alpha"
+      }
+    },
+    {
+      "appearance_set_sha256": {
+        "S": "735b8d8ff1019847355d6e5ab092d7a2a5a778b7f137914d87c9a28cd85a12dc"
+      },
+      "article_id": {
+        "S": "aapp#report_s3#735b8d8ff1019847#0001"
+      },
+      "classification_provenance": {
+        "S": "generated"
+      },
+      "content": {
+        "S": ""
+      },
+      "content_sha256": {
+        "S": "4b5df06957712478aa26b9a7a5f65b05df6604f5801bfffd4170f64ab708ae65"
+      },
+      "created_at": {
+        "S": "2026-11-09T10:00:00Z"
+      },
+      "digest_url": {
+        "S": ""
+      },
+      "frameworks": {
+        "L": []
+      },
+      "has_grc_content": {
+        "BOOL": true
+      },
+      "history_schema": {
+        "S": "grcinsight.report-article-appearance.v1"
+      },
+      "industries": {
+        "L": []
+      },
+      "numeric_id": {
+        "N": "3784342422"
+      },
+      "position": {
+        "N": "1"
+      },
+      "published": {
+        "S": ""
+      },
+      "record_kind": {
+        "S": "report_article_appearance"
+      },
+      "regulations": {
+        "L": [
+          {
+            "S": "Example Rule 1"
+          }
+        ]
+      },
+      "regulatory_bodies": {
+        "L": []
+      },
+      "report_id": {
+        "S": "report_s3"
+      },
+      "revision_id": {
+        "S": "arev#822be970cf90437bb365e37bac696c3a#ec8fc08a3216b6cfb23c7f6a3094b0f0"
+      },
+      "run_id": {
+        "S": "job-report_s3"
+      },
+      "source": {
+        "S": "Example Wire"
+      },
+      "summary": {
+        "S": ""
+      },
+      "title": {
+        "S": "Synthetic regulator notice bravo"
+      },
+      "updated_at": {
+        "S": "2026-11-09T10:00:00Z"
+      },
+      "url": {
+        "S": "https://news.example.test/bravo"
+      }
+    },
+    {
+      "appearance_set_sha256": {
+        "S": "baf297e1dffe490df0008543a25f2a8be928941ecec857b1661ca15b68bcf373"
+      },
+      "article_id": {
+        "S": "aapp#report_s5#baf297e1dffe490d#0000"
+      },
+      "classification_provenance": {
+        "S": "generated"
+      },
+      "content": {
+        "S": ""
+      },
+      "content_sha256": {
+        "S": "30f35c36c63b7b6239f5411a7311071142c5fbd57e09013884a41f2780d80f65"
+      },
+      "created_at": {
+        "S": "2026-11-09T12:00:00Z"
+      },
+      "digest_url": {
+        "S": ""
+      },
+      "frameworks": {
+        "L": []
+      },
+      "has_grc_content": {
+        "BOOL": true
+      },
+      "history_schema": {
+        "S": "grcinsight.report-article-appearance.v1"
+      },
+      "industries": {
+        "L": []
+      },
+      "numeric_id": {
+        "N": "2670658612"
+      },
+      "position": {
+        "N": "0"
+      },
+      "published": {
+        "S": "2026-11-01T12:00:00Z"
+      },
+      "record_kind": {
+        "S": "report_article_appearance"
+      },
+      "regulations": {
+        "L": [
+          {
+            "S": "Example Rule 1"
+          }
+        ]
+      },
+      "regulatory_bodies": {
+        "L": []
+      },
+      "report_id": {
+        "S": "report_s5"
+      },
+      "revision_id": {
+        "S": "arev#9bbb41002c1d1f67890fe35faf4e54cb#8c88ed52edd40d158f94333c355aff0b"
+      },
+      "run_id": {
+        "S": "job-report_s5"
+      },
+      "source": {
+        "S": "Example Wire"
+      },
+      "summary": {
+        "S": ""
+      },
+      "title": {
+        "S": "Synthetic regulator notice charlie"
+      },
+      "updated_at": {
+        "S": "2026-11-09T12:00:00Z"
+      },
+      "url": {
+        "S": "https://news.example.test/charlie"
+      }
+    },
+    {
+      "article_id": {
+        "S": "arev#06fca946ba46010b628c7c63d2bdf7f9#bb603f543aa3df25cc9bcf7b069825ba"
+      },
+      "canonical_url": {
+        "S": "https://news.example.test/alpha"
+      },
+      "capture_sha256": {
+        "S": "bb603f543aa3df25cc9bcf7b069825ba8c99ef80f2f6bff7832ca0c82e331c97"
+      },
+      "captured_content_length": {
+        "N": "72"
+      },
+      "captured_content_sha256": {
+        "S": "44a977ed715593286190e1a4a1f6363895abb2b4cb5ce2323cb7e8ef049e871d"
+      },
+      "content": {
+        "S": "<p>Synthetic body for alpha: the example regulator updated its rule.</p>"
+      },
+      "content_origin": {
+        "S": "feed_item"
+      },
+      "content_sha256": {
+        "S": "a982a38604bb003cd92039a6afa1097446093b0cb66fd8010be3783c0c0cd9ac"
+      },
+      "content_truncated": {
+        "BOOL": false
+      },
+      "digest_url": {
+        "S": ""
+      },
+      "evidence_kind": {
+        "S": "full_text"
+      },
+      "first_captured_at": {
+        "S": "2026-11-02T09:01:00Z"
+      },
+      "first_report_id": {
+        "S": "report_s1"
+      },
+      "first_run_id": {
+        "S": "job-report_s1"
+      },
+      "full_text_scope": {
+        "S": "feed_item_content"
+      },
+      "history_schema": {
+        "S": "grcinsight.article-revision.v1"
+      },
+      "published_at": {
+        "S": "2026-11-01T12:00:00Z"
+      },
+      "published_at_known": {
+        "BOOL": true
+      },
+      "record_kind": {
+        "S": "article_revision"
+      },
+      "source": {
+        "S": "Example Wire"
+      },
+      "source_key": {
+        "S": "06fca946ba46010b628c7c63d2bdf7f9"
+      },
+      "summary": {
+        "S": "Synthetic summary for alpha."
+      },
+      "title": {
+        "S": "Synthetic regulator notice alpha"
+      },
+      "url": {
+        "S": "https://news.example.test/alpha"
+      }
+    },
+    {
+      "article_id": {
+        "S": "arev#06fca946ba46010b628c7c63d2bdf7f9#ffaad4ce353dbeb2c6b76f752e9b749e"
+      },
+      "canonical_url": {
+        "S": "https://news.example.test/alpha"
+      },
+      "capture_sha256": {
+        "S": "ffaad4ce353dbeb2c6b76f752e9b749ef8b06c41aacf0abd41c6615f95235298"
+      },
+      "captured_content_length": {
+        "N": "59"
+      },
+      "captured_content_sha256": {
+        "S": "45c2afbbcdffb31abfec0b5fcfce6aa312193459a298a5ecf58ec0a113f39f8e"
+      },
+      "content": {
+        "S": "<p>Synthetic body for alpha, revised with a correction.</p>"
+      },
+      "content_origin": {
+        "S": "feed_item"
+      },
+      "content_sha256": {
+        "S": "52428a8cfe43b099e63c6ce6058126683cb8798110fa417fcef39a0191ba6404"
+      },
+      "content_truncated": {
+        "BOOL": false
+      },
+      "digest_url": {
+        "S": ""
+      },
+      "evidence_kind": {
+        "S": "full_text"
+      },
+      "first_captured_at": {
+        "S": "2026-11-09T09:01:00Z"
+      },
+      "first_report_id": {
+        "S": "report_s2"
+      },
+      "first_run_id": {
+        "S": "job-report_s2"
+      },
+      "full_text_scope": {
+        "S": "feed_item_content"
+      },
+      "history_schema": {
+        "S": "grcinsight.article-revision.v1"
+      },
+      "published_at": {
+        "S": "2026-11-01T12:00:00Z"
+      },
+      "published_at_known": {
+        "BOOL": true
+      },
+      "record_kind": {
+        "S": "article_revision"
+      },
+      "source": {
+        "S": "Example Wire"
+      },
+      "source_key": {
+        "S": "06fca946ba46010b628c7c63d2bdf7f9"
+      },
+      "summary": {
+        "S": "Synthetic summary for alpha."
+      },
+      "title": {
+        "S": "Synthetic regulator notice alpha"
+      },
+      "url": {
+        "S": "https://news.example.test/alpha"
+      }
+    },
+    {
+      "article_id": {
+        "S": "arev#822be970cf90437bb365e37bac696c3a#ec8fc08a3216b6cfb23c7f6a3094b0f0"
+      },
+      "canonical_url": {
+        "S": "https://news.example.test/bravo"
+      },
+      "capture_sha256": {
+        "S": "ec8fc08a3216b6cfb23c7f6a3094b0f0cf7b891fa3ecaaca981c5ccb3e4b07d4"
+      },
+      "captured_content_length": {
+        "N": "72"
+      },
+      "captured_content_sha256": {
+        "S": "585161eb550c98e720b89a34f4f81b5e6fb134cf77f5da1465f7818606ee8b98"
+      },
+      "content": {
+        "S": "<p>Tampered text.</p>"
+      },
+      "content_origin": {
+        "S": "feed_item"
+      },
+      "content_sha256": {
+        "S": "4b5df06957712478aa26b9a7a5f65b05df6604f5801bfffd4170f64ab708ae65"
+      },
+      "content_truncated": {
+        "BOOL": false
+      },
+      "digest_url": {
+        "S": ""
+      },
+      "evidence_kind": {
+        "S": "full_text"
+      },
+      "first_captured_at": {
+        "S": "2026-11-02T09:01:00Z"
+      },
+      "first_report_id": {
+        "S": "report_s1"
+      },
+      "first_run_id": {
+        "S": "job-report_s1"
+      },
+      "full_text_scope": {
+        "S": "feed_item_content"
+      },
+      "history_schema": {
+        "S": "grcinsight.article-revision.v1"
+      },
+      "published_at_known": {
+        "BOOL": false
+      },
+      "record_kind": {
+        "S": "article_revision"
+      },
+      "source": {
+        "S": "Example Wire"
+      },
+      "source_key": {
+        "S": "822be970cf90437bb365e37bac696c3a"
+      },
+      "summary": {
+        "S": "Synthetic summary for bravo."
+      },
+      "title": {
+        "S": "Synthetic regulator notice bravo"
+      },
+      "url": {
+        "S": "https://news.example.test/bravo"
+      }
+    },
+    {
+      "article_id": {
+        "S": "arev#9bbb41002c1d1f67890fe35faf4e54cb#8c88ed52edd40d158f94333c355aff0b"
+      },
+      "canonical_url": {
+        "S": "https://news.example.test/charlie"
+      },
+      "capture_sha256": {
+        "S": "8c88ed52edd40d158f94333c355aff0bbe13fa47ab51d73fd0f20f02f5049b3c"
+      },
+      "captured_content_length": {
+        "N": "74"
+      },
+      "captured_content_sha256": {
+        "S": "8c90e9a749d57af86ace6a79da579709411028f15343592b548c06a2b4fcabf6"
+      },
+      "content": {
+        "S": "<p>Synthetic body for charlie: the example regulator updated its rule.</p>"
+      },
+      "content_origin": {
+        "S": "feed_item"
+      },
+      "content_sha256": {
+        "S": "30f35c36c63b7b6239f5411a7311071142c5fbd57e09013884a41f2780d80f65"
+      },
+      "content_truncated": {
+        "BOOL": false
+      },
+      "digest_url": {
+        "S": ""
+      },
+      "evidence_kind": {
+        "S": "full_text"
+      },
+      "first_captured_at": {
+        "S": "2026-11-09T12:00:00Z"
+      },
+      "first_report_id": {
+        "S": "report_s5"
+      },
+      "first_run_id": {
+        "S": "job-report_s5"
+      },
+      "full_text_scope": {
+        "S": "feed_item_content"
+      },
+      "history_schema": {
+        "S": "grcinsight.article-revision.v1"
+      },
+      "published_at": {
+        "S": "2026-11-01T12:00:00Z"
+      },
+      "published_at_known": {
+        "BOOL": true
+      },
+      "record_kind": {
+        "S": "article_revision"
+      },
+      "source": {
+        "S": "Example Wire"
+      },
+      "source_key": {
+        "S": "9bbb41002c1d1f67890fe35faf4e54cb"
+      },
+      "summary": {
+        "S": "Synthetic summary for charlie."
+      },
+      "title": {
+        "S": "Synthetic regulator notice charlie"
+      },
+      "url": {
+        "S": "https://news.example.test/charlie"
+      }
+    }
+  ],
+  "grcinsight-reports": [
+    {
+      "content": {
+        "S": "# Legacy report"
+      },
+      "created_at": {
+        "S": "2025-10-01T09:00:00Z"
+      },
+      "generated_at": {
+        "S": "2025-10-01T09:20:00Z"
+      },
+      "metadata": {
+        "M": {
+          "analysis_mode": {
+            "S": "model"
+          },
+          "source_articles": {
+            "L": []
+          },
+          "source_url": {
+            "S": "https://feeds.example.test/grc-weekly.xml"
+          }
+        }
+      },
+      "report_id": {
+        "S": "report_20251001_090000_123"
+      },
+      "source_url": {
+        "S": "https://feeds.example.test/grc-weekly.xml"
+      },
+      "status": {
+        "S": "completed"
+      },
+      "title": {
+        "S": "GRC Intelligence Report - 2025-10-01"
+      },
+      "updated_at": {
+        "S": "2025-10-01T09:20:00Z"
+      }
+    },
+    {
+      "appearance_set_sha256": {
+        "S": "fd38a389903976922329f783592a203d8c3b62fc83a5840cdea1bef8b88e8a26"
+      },
+      "article_revision_ids": {
+        "L": [
+          {
+            "S": "arev#06fca946ba46010b628c7c63d2bdf7f9#bb603f543aa3df25cc9bcf7b069825ba"
+          },
+          {
+            "S": "arev#822be970cf90437bb365e37bac696c3a#ec8fc08a3216b6cfb23c7f6a3094b0f0"
+          }
+        ]
+      },
+      "completed_at": {
+        "S": "2026-11-02T09:01:00Z"
+      },
+      "completion_invocation_id": {
+        "S": "invocation-a"
+      },
+      "completion_run_id": {
+        "S": "job-report_s1"
+      },
+      "content": {
+        "S": "# GRC Intelligence Report\n\nSynthetic generated conclusion."
+      },
+      "created_at": {
+        "S": "2026-11-02T08:59:00Z"
+      },
+      "generated_at": {
+        "S": "2026-11-02T09:00:00+00:00"
+      },
+      "history_schema": {
+        "S": "grcinsight.report-outcome.v1"
+      },
+      "job_id": {
+        "S": "job-report_s1"
+      },
+      "metadata": {
+        "M": {
+          "analysis_mode": {
+            "S": "model"
+          },
+          "analysis_period": {
+            "S": "November 2026"
+          },
+          "article_count": {
+            "N": "2"
+          },
+          "fallback_reason": {
+            "NULL": true
+          },
+          "frameworks_referenced": {
+            "L": []
+          },
+          "grc_article_count": {
+            "N": "2"
+          },
+          "industries_affected": {
+            "L": []
+          },
+          "regulations_mentioned": {
+            "L": []
+          },
+          "regulatory_bodies": {
+            "L": []
+          },
+          "relevance_diagnostics": {
+            "M": {
+              "uncertain_share": {
+                "N": "0.25"
+              }
+            }
+          },
+          "report_plan": {
+            "NULL": true
+          },
+          "requested_model": {
+            "S": "example/requested-model"
+          },
+          "resolved_model": {
+            "S": "example/resolved-model"
+          },
+          "source_articles": {
+            "L": [
+              {
+                "M": {
+                  "article_evidence": {
+                    "L": [
+                      {
+                        "M": {
+                          "extraction_version": {
+                            "N": "1"
+                          },
+                          "origin": {
+                            "S": "summary"
+                          },
+                          "raw_text": {
+                            "S": "Synthetic summary for alpha."
+                          },
+                          "text": {
+                            "S": "Synthetic summary for alpha."
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  "cves": {
+                    "L": []
+                  },
+                  "digest_url": {
+                    "S": ""
+                  },
+                  "effective_date_evidence": {
+                    "L": []
+                  },
+                  "snippet": {
+                    "S": "Synthetic summary for alpha."
+                  },
+                  "title": {
+                    "S": "Synthetic regulator notice alpha"
+                  },
+                  "url": {
+                    "S": "https://news.example.test/alpha"
+                  }
+                }
+              },
+              {
+                "M": {
+                  "article_evidence": {
+                    "L": [
+                      {
+                        "M": {
+                          "extraction_version": {
+                            "N": "1"
+                          },
+                          "origin": {
+                            "S": "summary"
+                          },
+                          "raw_text": {
+                            "S": "Synthetic summary for bravo."
+                          },
+                          "text": {
+                            "S": "Synthetic summary for bravo."
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  "cves": {
+                    "L": []
+                  },
+                  "digest_url": {
+                    "S": ""
+                  },
+                  "effective_date_evidence": {
+                    "L": []
+                  },
+                  "snippet": {
+                    "S": "Synthetic summary for bravo."
+                  },
+                  "title": {
+                    "S": "Synthetic regulator notice bravo"
+                  },
+                  "url": {
+                    "S": "https://news.example.test/bravo"
+                  }
+                }
+              }
+            ]
+          },
+          "source_home_url": {
+            "S": ""
+          },
+          "source_issue_date": {
+            "S": ""
+          },
+          "source_issue_url": {
+            "S": ""
+          },
+          "source_name": {
+            "S": "Synthetic GRC Weekly"
+          },
+          "source_url": {
+            "S": "https://feeds.example.test/grc-weekly.xml"
+          }
+        }
+      },
+      "outcome_sha256": {
+        "S": "550baad205e44f2b2d0858c46dd00c3ab5f58ad2d7918f24c2f36e901200c7ad"
+      },
+      "report_id": {
+        "S": "report_s1"
+      },
+      "source_url": {
+        "S": "https://feeds.example.test/grc-weekly.xml"
+      },
+      "status": {
+        "S": "completed"
+      },
+      "terminal_outcome": {
+        "S": "model_completed"
+      },
+      "terminal_reason": {
+        "NULL": true
+      },
+      "title": {
+        "S": "GRC Intelligence Report - 2026-11-02"
+      },
+      "updated_at": {
+        "S": "2026-11-02T09:01:00Z"
+      }
+    },
+    {
+      "appearance_set_sha256": {
+        "S": "a639ce5d6a7e9d0743633640a8dd65288acb8c558acba73214d169cf3ff751b3"
+      },
+      "article_revision_ids": {
+        "L": [
+          {
+            "S": "arev#06fca946ba46010b628c7c63d2bdf7f9#ffaad4ce353dbeb2c6b76f752e9b749e"
+          },
+          {
+            "S": "arev#822be970cf90437bb365e37bac696c3a#ec8fc08a3216b6cfb23c7f6a3094b0f0"
+          }
+        ]
+      },
+      "completed_at": {
+        "S": "2026-11-09T09:01:00Z"
+      },
+      "completion_run_id": {
+        "S": "job-report_s2"
+      },
+      "content": {
+        "S": "# GRC Intelligence Report\n\nSynthetic generated conclusion."
+      },
+      "created_at": {
+        "S": "2026-11-02T08:59:00Z"
+      },
+      "generated_at": {
+        "S": "2026-11-02T09:00:00+00:00"
+      },
+      "history_schema": {
+        "S": "grcinsight.report-outcome.v1"
+      },
+      "job_id": {
+        "S": "job-report_s2"
+      },
+      "metadata": {
+        "M": {
+          "analysis_mode": {
+            "S": "model"
+          },
+          "analysis_period": {
+            "S": "November 2026"
+          },
+          "article_count": {
+            "N": "2"
+          },
+          "fallback_reason": {
+            "NULL": true
+          },
+          "frameworks_referenced": {
+            "L": []
+          },
+          "grc_article_count": {
+            "N": "2"
+          },
+          "industries_affected": {
+            "L": []
+          },
+          "regulations_mentioned": {
+            "L": []
+          },
+          "regulatory_bodies": {
+            "L": []
+          },
+          "relevance_diagnostics": {
+            "M": {
+              "uncertain_share": {
+                "N": "0.25"
+              }
+            }
+          },
+          "report_plan": {
+            "NULL": true
+          },
+          "requested_model": {
+            "S": "example/requested-model"
+          },
+          "resolved_model": {
+            "S": "example/resolved-model"
+          },
+          "source_articles": {
+            "L": [
+              {
+                "M": {
+                  "article_evidence": {
+                    "L": [
+                      {
+                        "M": {
+                          "extraction_version": {
+                            "N": "1"
+                          },
+                          "origin": {
+                            "S": "summary"
+                          },
+                          "raw_text": {
+                            "S": "Synthetic summary for alpha."
+                          },
+                          "text": {
+                            "S": "Synthetic summary for alpha."
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  "cves": {
+                    "L": []
+                  },
+                  "digest_url": {
+                    "S": ""
+                  },
+                  "effective_date_evidence": {
+                    "L": []
+                  },
+                  "snippet": {
+                    "S": "Synthetic summary for alpha."
+                  },
+                  "title": {
+                    "S": "Synthetic regulator notice alpha"
+                  },
+                  "url": {
+                    "S": "https://news.example.test/alpha"
+                  }
+                }
+              },
+              {
+                "M": {
+                  "article_evidence": {
+                    "L": [
+                      {
+                        "M": {
+                          "extraction_version": {
+                            "N": "1"
+                          },
+                          "origin": {
+                            "S": "summary"
+                          },
+                          "raw_text": {
+                            "S": "Synthetic summary for bravo."
+                          },
+                          "text": {
+                            "S": "Synthetic summary for bravo."
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  "cves": {
+                    "L": []
+                  },
+                  "digest_url": {
+                    "S": ""
+                  },
+                  "effective_date_evidence": {
+                    "L": []
+                  },
+                  "snippet": {
+                    "S": "Synthetic summary for bravo."
+                  },
+                  "title": {
+                    "S": "Synthetic regulator notice bravo"
+                  },
+                  "url": {
+                    "S": "https://news.example.test/bravo"
+                  }
+                }
+              }
+            ]
+          },
+          "source_home_url": {
+            "S": ""
+          },
+          "source_issue_date": {
+            "S": ""
+          },
+          "source_issue_url": {
+            "S": ""
+          },
+          "source_name": {
+            "S": "Synthetic GRC Weekly"
+          },
+          "source_url": {
+            "S": "https://feeds.example.test/grc-weekly.xml"
+          }
+        }
+      },
+      "outcome_sha256": {
+        "S": "4211c116f5fdcf7aeb39272c240a8010e8bffc8cba1252bf01dfdd04ea86fbab"
+      },
+      "report_id": {
+        "S": "report_s2"
+      },
+      "source_url": {
+        "S": "https://feeds.example.test/grc-weekly.xml"
+      },
+      "status": {
+        "S": "completed"
+      },
+      "terminal_outcome": {
+        "S": "model_completed"
+      },
+      "terminal_reason": {
+        "NULL": true
+      },
+      "title": {
+        "S": "GRC Intelligence Report - 2026-11-02"
+      },
+      "updated_at": {
+        "S": "2026-11-09T09:01:00Z"
+      }
+    },
+    {
+      "appearance_set_sha256": {
+        "S": "735b8d8ff1019847355d6e5ab092d7a2a5a778b7f137914d87c9a28cd85a12dc"
+      },
+      "article_revision_ids": {
+        "L": [
+          {
+            "S": "arev#06fca946ba46010b628c7c63d2bdf7f9#bb603f543aa3df25cc9bcf7b069825ba"
+          },
+          {
+            "S": "arev#822be970cf90437bb365e37bac696c3a#ec8fc08a3216b6cfb23c7f6a3094b0f0"
+          }
+        ]
+      },
+      "completed_at": {
+        "S": "2026-11-09T10:00:00Z"
+      },
+      "completion_run_id": {
+        "S": "job-report_s3"
+      },
+      "content": {
+        "S": "# GRC Intelligence Report\n\nModel output unavailable."
+      },
+      "created_at": {
+        "S": "2026-11-02T08:59:00Z"
+      },
+      "generated_at": {
+        "S": "2026-11-02T09:00:00+00:00"
+      },
+      "history_schema": {
+        "S": "grcinsight.report-outcome.v1"
+      },
+      "job_id": {
+        "S": "job-report_s3"
+      },
+      "metadata": {
+        "M": {
+          "analysis_mode": {
+            "S": "fallback"
+          },
+          "analysis_period": {
+            "S": "November 2026"
+          },
+          "article_count": {
+            "N": "2"
+          },
+          "fallback_reason": {
+            "S": "synthetic model refusal"
+          },
+          "frameworks_referenced": {
+            "L": []
+          },
+          "grc_article_count": {
+            "N": "2"
+          },
+          "industries_affected": {
+            "L": []
+          },
+          "regulations_mentioned": {
+            "L": []
+          },
+          "regulatory_bodies": {
+            "L": []
+          },
+          "relevance_diagnostics": {
+            "M": {
+              "uncertain_share": {
+                "N": "0.25"
+              }
+            }
+          },
+          "report_plan": {
+            "NULL": true
+          },
+          "requested_model": {
+            "S": "example/requested-model"
+          },
+          "resolved_model": {
+            "S": ""
+          },
+          "source_articles": {
+            "L": [
+              {
+                "M": {
+                  "article_evidence": {
+                    "L": [
+                      {
+                        "M": {
+                          "extraction_version": {
+                            "N": "1"
+                          },
+                          "origin": {
+                            "S": "summary"
+                          },
+                          "raw_text": {
+                            "S": "Synthetic summary for alpha."
+                          },
+                          "text": {
+                            "S": "Synthetic summary for alpha."
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  "cves": {
+                    "L": []
+                  },
+                  "digest_url": {
+                    "S": ""
+                  },
+                  "effective_date_evidence": {
+                    "L": []
+                  },
+                  "snippet": {
+                    "S": "Synthetic summary for alpha."
+                  },
+                  "title": {
+                    "S": "Synthetic regulator notice alpha"
+                  },
+                  "url": {
+                    "S": "https://news.example.test/alpha"
+                  }
+                }
+              },
+              {
+                "M": {
+                  "article_evidence": {
+                    "L": [
+                      {
+                        "M": {
+                          "extraction_version": {
+                            "N": "1"
+                          },
+                          "origin": {
+                            "S": "summary"
+                          },
+                          "raw_text": {
+                            "S": "Synthetic summary for bravo."
+                          },
+                          "text": {
+                            "S": "Synthetic summary for bravo."
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  "cves": {
+                    "L": []
+                  },
+                  "digest_url": {
+                    "S": ""
+                  },
+                  "effective_date_evidence": {
+                    "L": []
+                  },
+                  "snippet": {
+                    "S": "Synthetic summary for bravo."
+                  },
+                  "title": {
+                    "S": "Synthetic regulator notice bravo"
+                  },
+                  "url": {
+                    "S": "https://news.example.test/bravo"
+                  }
+                }
+              }
+            ]
+          },
+          "source_home_url": {
+            "S": ""
+          },
+          "source_issue_date": {
+            "S": ""
+          },
+          "source_issue_url": {
+            "S": ""
+          },
+          "source_name": {
+            "S": "Synthetic GRC Weekly"
+          },
+          "source_url": {
+            "S": "https://feeds.example.test/grc-weekly.xml"
+          }
+        }
+      },
+      "outcome_sha256": {
+        "S": "9c81fed1c6a9bc22c278459bde3caac9b17b7d975019d49ea8be064a509d36c9"
+      },
+      "report_id": {
+        "S": "report_s3"
+      },
+      "source_url": {
+        "S": "https://feeds.example.test/grc-weekly.xml"
+      },
+      "status": {
+        "S": "completed"
+      },
+      "terminal_outcome": {
+        "S": "refused_fallback"
+      },
+      "terminal_reason": {
+        "S": "synthetic model refusal"
+      },
+      "title": {
+        "S": "GRC Intelligence Report - 2026-11-02"
+      },
+      "updated_at": {
+        "S": "2026-11-09T10:00:00Z"
+      }
+    },
+    {
+      "appearance_set_sha256": {
+        "S": "e073b79731bccfb180d5ee8ad48d884370fe0b330e48644d4ea62b81af279328"
+      },
+      "article_revision_ids": {
+        "L": []
+      },
+      "completed_at": {
+        "S": "2026-11-09T11:00:00Z"
+      },
+      "completion_run_id": {
+        "S": "job-report_s4"
+      },
+      "content": {
+        "S": "# No content"
+      },
+      "created_at": {
+        "S": "2026-11-02T08:59:00Z"
+      },
+      "generated_at": {
+        "S": "2026-11-09T11:00:00Z"
+      },
+      "history_schema": {
+        "S": "grcinsight.report-outcome.v1"
+      },
+      "job_id": {
+        "S": "job-report_s4"
+      },
+      "metadata": {
+        "NULL": true
+      },
+      "outcome_sha256": {
+        "S": "7ad8a991c2bce1fac42cf46c705e058f47532a593bcb8d73d3d8116940c6f56e"
+      },
+      "report_id": {
+        "S": "report_s4"
+      },
+      "source_url": {
+        "S": "https://feeds.example.test/grc-weekly.xml"
+      },
+      "status": {
+        "S": "failed"
+      },
+      "terminal_outcome": {
+        "S": "failed"
+      },
+      "terminal_reason": {
+        "S": "synthetic feed timeout"
+      },
+      "title": {
+        "S": "GRC Intelligence Report - 2026-11-09"
+      },
+      "updated_at": {
+        "S": "2026-11-09T11:00:00Z"
+      }
+    },
+    {
+      "appearance_set_sha256": {
+        "S": "baf297e1dffe490df0008543a25f2a8be928941ecec857b1661ca15b68bcf373"
+      },
+      "article_revision_ids": {
+        "L": [
+          {
+            "S": "arev#9bbb41002c1d1f67890fe35faf4e54cb#8c88ed52edd40d158f94333c355aff0b"
+          }
+        ]
+      },
+      "completed_at": {
+        "S": "2026-11-09T12:10:00Z"
+      },
+      "completion_run_id": {
+        "S": "job-report_s5"
+      },
+      "content": {
+        "S": "# GRC Intelligence Report\n\nSynthetic generated conclusion."
+      },
+      "created_at": {
+        "S": "2026-11-02T08:59:00Z"
+      },
+      "generated_at": {
+        "S": "2026-11-02T09:00:00+00:00"
+      },
+      "history_schema": {
+        "S": "grcinsight.report-outcome.v1"
+      },
+      "job_id": {
+        "S": "job-report_s5"
+      },
+      "metadata": {
+        "M": {
+          "analysis_mode": {
+            "S": "model"
+          },
+          "analysis_period": {
+            "S": "November 2026"
+          },
+          "article_count": {
+            "N": "1"
+          },
+          "fallback_reason": {
+            "NULL": true
+          },
+          "frameworks_referenced": {
+            "L": []
+          },
+          "grc_article_count": {
+            "N": "1"
+          },
+          "industries_affected": {
+            "L": []
+          },
+          "regulations_mentioned": {
+            "L": []
+          },
+          "regulatory_bodies": {
+            "L": []
+          },
+          "relevance_diagnostics": {
+            "M": {
+              "uncertain_share": {
+                "N": "0.25"
+              }
+            }
+          },
+          "report_plan": {
+            "NULL": true
+          },
+          "requested_model": {
+            "S": "example/requested-model"
+          },
+          "resolved_model": {
+            "S": "example/resolved-model"
+          },
+          "source_articles": {
+            "L": [
+              {
+                "M": {
+                  "article_evidence": {
+                    "L": [
+                      {
+                        "M": {
+                          "extraction_version": {
+                            "N": "1"
+                          },
+                          "origin": {
+                            "S": "summary"
+                          },
+                          "raw_text": {
+                            "S": "Synthetic summary for charlie."
+                          },
+                          "text": {
+                            "S": "Synthetic summary for charlie."
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  "cves": {
+                    "L": []
+                  },
+                  "digest_url": {
+                    "S": ""
+                  },
+                  "effective_date_evidence": {
+                    "L": []
+                  },
+                  "snippet": {
+                    "S": "Synthetic summary for charlie."
+                  },
+                  "title": {
+                    "S": "Synthetic regulator notice charlie"
+                  },
+                  "url": {
+                    "S": "https://news.example.test/charlie"
+                  }
+                }
+              }
+            ]
+          },
+          "source_home_url": {
+            "S": ""
+          },
+          "source_issue_date": {
+            "S": ""
+          },
+          "source_issue_url": {
+            "S": ""
+          },
+          "source_name": {
+            "S": "Synthetic GRC Weekly"
+          },
+          "source_url": {
+            "S": "https://feeds.example.test/grc-weekly.xml"
+          }
+        }
+      },
+      "outcome_sha256": {
+        "S": "a4e89a2c5a1ab20ce98b151fce11d396ac68163e0a7fcdf88f1f89628bacf01f"
+      },
+      "report_id": {
+        "S": "report_s5"
+      },
+      "source_url": {
+        "S": "https://feeds.example.test/grc-weekly.xml"
+      },
+      "status": {
+        "S": "completed"
+      },
+      "terminal_outcome": {
+        "S": "model_completed"
+      },
+      "terminal_reason": {
+        "NULL": true
+      },
+      "title": {
+        "S": "GRC Intelligence Report - 2026-11-02"
+      },
+      "updated_at": {
+        "S": "2026-11-09T12:10:00Z"
+      }
+    },
+    {
+      "content": {
+        "S": ""
+      },
+      "created_at": {
+        "S": "2026-11-02T08:59:00Z"
+      },
+      "job_id": {
+        "S": "job-report_s6"
+      },
+      "metadata": {
+        "M": {}
+      },
+      "report_id": {
+        "S": "report_s6"
+      },
+      "source_url": {
+        "S": "https://feeds.example.test/grc-weekly.xml"
+      },
+      "status": {
+        "S": "failed"
+      },
+      "title": {
+        "S": "GRC Intelligence Report - 2026-11-02"
+      },
+      "updated_at": {
+        "S": "2026-11-02T08:59:00Z"
+      }
+    },
+    {
+      "appearance_set_sha256": {
+        "NULL": true
+      },
+      "article_revision_ids": {
+        "L": []
+      },
+      "completed_at": {
+        "S": "2026-11-09T14:00:00Z"
+      },
+      "completion_run_id": {
+        "S": "job-report_s7"
+      },
+      "content": {
+        "S": ""
+      },
+      "created_at": {
+        "S": "2026-11-02T08:59:00Z"
+      },
+      "generated_at": {
+        "S": "2026-11-09T14:00:00Z"
+      },
+      "history_schema": {
+        "S": "grcinsight.report-outcome.v1"
+      },
+      "job_id": {
+        "S": "job-report_s7"
+      },
+      "metadata": {
+        "M": {
+          "analysis_mode": {
+            "S": "model"
+          },
+          "analysis_period": {
+            "S": "November 2026"
+          },
+          "article_count": {
+            "N": "1"
+          },
+          "fallback_reason": {
+            "NULL": true
+          },
+          "frameworks_referenced": {
+            "L": []
+          },
+          "grc_article_count": {
+            "N": "1"
+          },
+          "industries_affected": {
+            "L": []
+          },
+          "regulations_mentioned": {
+            "L": []
+          },
+          "regulatory_bodies": {
+            "L": []
+          },
+          "relevance_diagnostics": {
+            "M": {
+              "uncertain_share": {
+                "N": "0.25"
+              }
+            }
+          },
+          "report_plan": {
+            "NULL": true
+          },
+          "requested_model": {
+            "S": "example/requested-model"
+          },
+          "resolved_model": {
+            "S": "example/resolved-model"
+          },
+          "source_articles": {
+            "L": [
+              {
+                "M": {
+                  "article_evidence": {
+                    "L": [
+                      {
+                        "M": {
+                          "extraction_version": {
+                            "N": "1"
+                          },
+                          "origin": {
+                            "S": "summary"
+                          },
+                          "raw_text": {
+                            "S": "Synthetic summary for bravo."
+                          },
+                          "text": {
+                            "S": "Synthetic summary for bravo."
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  "cves": {
+                    "L": []
+                  },
+                  "digest_url": {
+                    "S": ""
+                  },
+                  "effective_date_evidence": {
+                    "L": []
+                  },
+                  "snippet": {
+                    "S": "Synthetic summary for bravo."
+                  },
+                  "title": {
+                    "S": "Synthetic regulator notice bravo"
+                  },
+                  "url": {
+                    "S": "https://news.example.test/bravo"
+                  }
+                }
+              }
+            ]
+          },
+          "source_home_url": {
+            "S": ""
+          },
+          "source_issue_date": {
+            "S": ""
+          },
+          "source_issue_url": {
+            "S": ""
+          },
+          "source_name": {
+            "S": "Synthetic GRC Weekly"
+          },
+          "source_url": {
+            "S": "https://feeds.example.test/grc-weekly.xml"
+          }
+        }
+      },
+      "outcome_sha256": {
+        "S": "b60677b8fce57387a383796919f7de19408602b239a771940c6286893814e1e7"
+      },
+      "report_id": {
+        "S": "report_s7"
+      },
+      "source_url": {
+        "S": "https://feeds.example.test/grc-weekly.xml"
+      },
+      "status": {
+        "S": "failed"
+      },
+      "terminal_outcome": {
+        "S": "failed"
+      },
+      "terminal_reason": {
+        "S": "evidence_conflict: a retained source revision does not verify"
+      },
+      "title": {
+        "S": "GRC Intelligence Report - 2026-11-02"
+      },
+      "updated_at": {
+        "S": "2026-11-09T14:00:00Z"
+      }
+    }
+  ]
+}

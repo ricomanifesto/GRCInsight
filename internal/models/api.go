@@ -95,6 +95,11 @@ type ArticleRecord struct {
 	Frameworks       []string  `json:"frameworks"`
 	Industries       []string  `json:"industries"`
 	RegulatoryBodies []string  `json:"regulatory_bodies"`
+
+	// History provenance for report listings; empty on legacy rows and workflow output.
+	RevisionID     string `json:"revision_id,omitempty"`
+	EvidenceStatus string `json:"evidence_status,omitempty"`
+	PublishedKnown *bool  `json:"published_known,omitempty"`
 }
 
 // ListArticlesResponse represents a paginated list of articles

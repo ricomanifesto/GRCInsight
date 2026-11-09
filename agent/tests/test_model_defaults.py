@@ -180,36 +180,38 @@ def test_async_lambda_writeback_persists_the_report_plan(monkeypatch):
             metadata=ReportMetadata(**stored["metadata"]),
         )
 
-    class FakeTable:
-        def __init__(self):
-            self.update = None
+    from types import SimpleNamespace
 
-        def update_item(self, **kwargs):
-            self.update = kwargs
+    from history.table import MemoryTable
 
-    table = FakeTable()
-
-    class FakeDynamoDB:
-        def Table(self, _name):
-            return table
+    reports = MemoryTable("grcinsight-reports", "report_id")
+    articles = MemoryTable("grcinsight-articles", "article_id")
+    reports.seed({"report_id": "report-1", "status": "processing", "metadata": {}})
 
     monkeypatch.setattr("core.workflow.run_grc_analysis_endpoint", fake_workflow)
-    monkeypatch.setattr(lambda_main.boto3, "resource", lambda _service: FakeDynamoDB())
+    monkeypatch.setattr(lambda_main, "_history_tables", lambda: (reports, articles))
 
     response = lambda_main.handler(
         {"feed_url": "https://example.com/feed.xml", "report_id": "report-1"},
-        object(),
+        SimpleNamespace(aws_request_id="request-1"),
     )
 
     assert response["statusCode"] == 200
-    assert table.update is not None
-    persisted_metadata = table.update["ExpressionAttributeValues"][":metadata"]
+    assert response["body"]["decision"] == "committed"
+    row = reports.items["report-1"]
+    persisted_metadata = row["metadata"]
     assert persisted_metadata["report_plan"] == report_plan
     assert persisted_metadata["source_articles"] == source_articles
     assert persisted_metadata == ReportMetadata(**stored["metadata"]).model_dump()
-    assert table.update["Key"] == {"report_id": "report-1"}
-    assert table.update["ConditionExpression"] == "attribute_exists(report_id)"
-    values = table.update["ExpressionAttributeValues"]
+    # Completion is conditional on an open row and binds the run that produced it.
+    assert row["completion_run_id"] == "report-1" and row["outcome_sha256"]
+    assert row["completion_invocation_id"] == "request-1"
+    values = {
+        f":{k}": v
+        for k, v in row.items()
+        if k in ("title", "content", "status", "updated_at", "metadata")
+    }
+    values[":generated_at"] = row["generated_at"]
     serialized = TypeSerializer().serialize(values)
     assert serialized["M"][":metadata"]["M"]["report_plan"]["M"]
     assert persisted_metadata["relevance_diagnostics"] == relevance
@@ -325,9 +327,9 @@ def test_direct_lambda_scopes_the_report_identity_to_its_invocation(
     monkeypatch.setattr("core.workflow.run_grc_analysis_endpoint", fake_workflow)
     monkeypatch.setattr(lambda_main, "_lambda_model_deadline", lambda _context, _deadline: 370.0)
     monkeypatch.setattr(
-        lambda_main.boto3,
-        "resource",
-        lambda _service: (_ for _ in ()).throw(RuntimeError("offline")),
+        lambda_main,
+        "_history_tables",
+        lambda: (_ for _ in ()).throw(RuntimeError("offline")),
     )
     event = {"feed_url": "https://example.com/feed.xml"}
     if report_id is not None:

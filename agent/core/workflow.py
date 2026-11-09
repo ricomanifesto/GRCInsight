@@ -21,6 +21,7 @@ from services.rss_service import RSSService
 from services.model_service import GRCModelService
 from services.regulatory_sources import enrich_regulatory_sources
 from core.article_evidence import capture_article_evidence
+from core.content_policy import contains_virtual_event
 from core.article_selection import article_text, selected_article_mask, workflow_selected
 from core.entities import analyze_article_grc_content, detect_risk_categories
 from core.reporting_identity import (
@@ -313,6 +314,11 @@ async def run_grc_analysis_endpoint(
                         "Skipping duplicate feed entry URL to preserve canonical evidence"
                     )
                     continue
+                if contains_virtual_event(
+                    {key: entry.get(key) for key in ("title", "description", "content")}
+                ):
+                    logger.info("Skipping a tagged virtual-event promotion")
+                    continue
                 seen_article_urls.add(url)
                 published_raw = entry.get("published", "")
                 published_dt = None
@@ -335,6 +341,7 @@ async def run_grc_analysis_endpoint(
                     source=feed_data.get("title", "Unknown Source"),
                     digest_url=_sentrydigest_item_url(feed_home_url, source_issue_date, url),
                     published=published_dt or datetime.now(),
+                    published_known=published_dt is not None,
                 )
                 articles.append(article)
             except Exception as e:
@@ -413,6 +420,9 @@ async def run_grc_analysis_endpoint(
                     source=art.source,
                     digest_url=art.digest_url,
                     published=art.published,
+                    published_known=art.published_known,
+                    content_origin=art.content_origin,
+                    content_truncated=art.content_truncated,
                     has_grc_content=has_grc,
                     regulations=local.get("regulations", []),
                     frameworks=local.get("frameworks", []),

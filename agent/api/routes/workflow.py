@@ -1,18 +1,21 @@
 """Workflow execution endpoints."""
 
+import hmac
 import os
 from typing import Any
 
 from fastapi import APIRouter, HTTPException, Request
+from fastapi.responses import JSONResponse
 from loguru import logger
 
-from models.api import WorkflowRequest, WorkflowResponse, APIError
+from models.api import APIError, ReportWorkflowRequest, WorkflowRequest, WorkflowResponse
 from core.runtime import (
     CALLER_DEADLINE_HEADER,
     deadline_from_unix_ms,
     earliest_deadline,
     get_model_deadline,
 )
+from config.settings import settings
 from core.workflow import run_grc_analysis_endpoint
 
 boto3: Any | None = None
@@ -54,6 +57,55 @@ async def run_workflow(request: WorkflowRequest, http_request: Request):
                 code="WORKFLOW_ERROR", message="Workflow execution error", details=str(e)
             ),
         )
+
+
+INTERNAL_TOKEN_HEADER = "X-GRC-Internal-Token"
+
+
+def _internal_caller(http_request: Request) -> bool:
+    """Only the Go service, holding the configured internal token, may complete reports.
+
+    The route is disabled when no token is configured.
+    """
+    expected = os.getenv("GRC_INTERNAL_TOKEN") or settings.grc_internal_token
+    provided = http_request.headers.get(INTERNAL_TOKEN_HEADER, "")
+    return bool(expected) and hmac.compare_digest(provided.encode(), expected.encode())
+
+
+@router.post("/workflow/reports/{report_id}/run")
+async def run_report_workflow(
+    report_id: str, request: ReportWorkflowRequest, http_request: Request
+):
+    """Run the workflow for an admitted report and commit it through the history contract."""
+    from history.service import commit_report, history_tables, precheck_admission
+
+    if not _internal_caller(http_request):
+        return JSONResponse(
+            status_code=403, content={"status": "refused", "decision": "unauthorized"}
+        )
+    tables = history_tables()
+    refusal = precheck_admission(
+        report_id=report_id, job_id=request.job_id, feed_url=request.feed_url, tables=tables
+    )
+    if refusal is not None:
+        status, body = refusal
+        return JSONResponse(status_code=status, content=body)
+    model_deadline = earliest_deadline(
+        get_model_deadline(),
+        deadline_from_unix_ms(http_request.headers.get(CALLER_DEADLINE_HEADER)),
+    )
+    result = await run_grc_analysis_endpoint(
+        request.feed_url, request.config, model_deadline=model_deadline
+    )
+    status, body = commit_report(
+        report_id=report_id,
+        result=result,
+        tables=tables,
+        job_id=request.job_id,
+        feed_url=request.feed_url,
+        require_job=True,
+    )
+    return JSONResponse(status_code=status, content=body)
 
 
 @router.get("/workflow/status/{report_id}")

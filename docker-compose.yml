@@ -12,6 +12,7 @@ services:
       - PYTHON_SERVICE_URL=http://python-service:8081
       - DATABASE_DSN=./data/grcinsight.db
       - LOG_LEVEL=info
+      - GRC_INTERNAL_TOKEN=${GRC_INTERNAL_TOKEN:-}
     volumes:
       - ./data:/root/data
       - ./configs:/root/configs
@@ -35,6 +36,7 @@ services:
       - LOG_LEVEL=INFO
       - HOST=0.0.0.0
       - PORT=8081
+      - GRC_INTERNAL_TOKEN=${GRC_INTERNAL_TOKEN:-}
     networks:
       - grcinsight-network
     restart: unless-stopped

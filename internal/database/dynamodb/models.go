@@ -1,9 +1,14 @@
 package dynamodb
 
 import (
+	"crypto/rand"
+	"encoding/hex"
 	"fmt"
 	"time"
 )
+
+// nowFunc is the clock used for stored timestamps.
+var nowFunc = time.Now
 
 // Report represents a GRC intelligence report for DynamoDB
 type Report struct {
@@ -16,6 +21,14 @@ type Report struct {
 	CreatedAt   string         `dynamodbav:"created_at" json:"created_at"`
 	UpdatedAt   string         `dynamodbav:"updated_at" json:"updated_at"`
 	Metadata    map[string]any `dynamodbav:"metadata" json:"metadata"`
+
+	// JobID is the admitted generation job; the report writer binds completion to it.
+	JobID string `dynamodbav:"job_id,omitempty" json:"job_id,omitempty"`
+	// Final-outcome fields written once by the report writer.
+	TerminalOutcome string `dynamodbav:"terminal_outcome,omitempty" json:"terminal_outcome,omitempty"`
+	TerminalReason  string `dynamodbav:"terminal_reason,omitempty" json:"terminal_reason,omitempty"`
+	OutcomeSHA256   string `dynamodbav:"outcome_sha256,omitempty" json:"outcome_sha256,omitempty"`
+	AppearanceSet   string `dynamodbav:"appearance_set_sha256,omitempty" json:"appearance_set_sha256,omitempty"`
 }
 
 // ReportStatus constants
@@ -47,6 +60,28 @@ type Article struct {
 	Frameworks       []string `dynamodbav:"frameworks" json:"frameworks"`
 	Industries       []string `dynamodbav:"industries" json:"industries"`
 	RegulatoryBodies []string `dynamodbav:"regulatory_bodies" json:"regulatory_bodies"`
+
+	// History fields; empty on legacy rows.
+	RecordKind       string `dynamodbav:"record_kind,omitempty" json:"record_kind,omitempty"`
+	RevisionID       string `dynamodbav:"revision_id,omitempty" json:"revision_id,omitempty"`
+	ContentSHA256    string `dynamodbav:"content_sha256,omitempty" json:"content_sha256,omitempty"`
+	AppearanceSet    string `dynamodbav:"appearance_set_sha256,omitempty" json:"appearance_set_sha256,omitempty"`
+	Position         int    `dynamodbav:"position,omitempty" json:"position,omitempty"`
+	PublishedAt      string `dynamodbav:"published_at,omitempty" json:"published_at,omitempty"`
+	PublishedAtKnown *bool  `dynamodbav:"published_at_known,omitempty" json:"published_at_known,omitempty"`
+	// CaptureSHA256 is a revision's identity digest over every observed field.
+	CaptureSHA256 string `dynamodbav:"capture_sha256,omitempty" json:"capture_sha256,omitempty"`
+	// EvidenceStatus is computed when reading; it is never stored.
+	EvidenceStatus string `dynamodbav:"-" json:"evidence_status,omitempty"`
+}
+
+// NewJobID returns a random identifier for one admitted generation job.
+func NewJobID() string {
+	b := make([]byte, 16)
+	if _, err := rand.Read(b); err != nil {
+		panic(fmt.Sprintf("crypto/rand failed: %v", err))
+	}
+	return "job_" + hex.EncodeToString(b)
 }
 
 // GenerateReportID creates a unique ID for a new report

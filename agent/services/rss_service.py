@@ -8,6 +8,9 @@ from loguru import logger
 from models.api import ArticleInput
 from config.settings import settings
 
+# Publisher pages fetched for empty feed items are kept up to this length.
+PAGE_CONTENT_LIMIT = 5000
+
 
 class RSSService:
     """Service for handling RSS feed operations."""
@@ -92,9 +95,11 @@ class RSSService:
                             if response.status_code == 200:
                                 # Simple content extraction - in production you'd want
                                 # more sophisticated content extraction
-                                enriched_article.content = response.text[
-                                    :5000
-                                ]  # Limit content size
+                                enriched_article.content = response.text[:PAGE_CONTENT_LIMIT]
+                                enriched_article.content_origin = "publisher_page"
+                                enriched_article.content_truncated = (
+                                    len(response.text) > PAGE_CONTENT_LIMIT
+                                )
                         except Exception as e:
                             logger.warning(f"Failed to fetch content for {article.url}: {e}")
 
