@@ -17,13 +17,16 @@ The prompt contains a format template, not a preselected positive answer.
 Every line of the form `Article <token>:` is a selection claim, checked
 identity first. The number must name a supplied article (no zero padding), that
 article's exact title must follow `Title:`, and a valid score must follow the
-title. Only a terminal period or one parenthetical note may follow `relevant`;
-reasons belong on a separate `Reason:` line, so a second row or a reversal on the
-same line is never read as part of a row. Because the title is matched as a whole,
-words such as risk, regulation, framework, industries, score and Title: inside it
-never act as delimiters or category headers. A list marker (`-`, `*`, `1.`) or
-bold emphasis around the whole row or the `Article N` token does not change its
-identity; emphasis inside a title is part of the title. Accepted scores are 1 through 10, with `10` or `10.0` as the upper
+title. Nothing but an optional terminal period may follow `relevant`; reasons
+belong on a separate `Reason:` line, so a second row, a parenthetical or a
+reversal on the same line is never read as part of a row. Because the title is
+matched as a whole, words such as risk, regulation, framework, industries, score
+and Title: inside it never act as delimiters or category headers. A heading
+marker (`###`), table pipes, a list marker (`-`, `*`, `1.`) or emphasis around the
+whole row or the `Article N` token does not change its identity; emphasis inside
+a title is part of the title. A line naming `Article <number>` without the exact
+row shape (for example `Article 1 - Title: ...`) is still a claim and is counted
+as skipped. `Reason:` lines are commentary, with or without emphasis. Accepted scores are 1 through 10, with `10` or `10.0` as the upper
 endpoint and decimals below 10; the score is validated, not used.
 
 A claim that fails any check credits no article: an unknown or zero-padded
@@ -47,7 +50,11 @@ treated unrecognized prose as selecting every supplied article is removed.
 When every claim was invalid, the relevance pilot's full legacy route records the
 model's selection for each article as unknown, as for a failed analysis, never as
 a decision that the article is irrelevant. Its stored relevance summary includes
-`analysis_rows`. Because the analysis now always carries positions, the workflow
+`analysis_rows`. Those unknown records count no model drops, although the
+workflow still publishes only articles selected by local signals. On the decision
+route, `analysis_rows` describes the enrichment call over the uncertain articles,
+whose positions are relative to that subset and never affect selection. Because
+the analysis now always carries positions, the workflow
 and the analysis route report the GRC-relevant count as articles selected by the
 model or by local entity and risk signals, the same count the relevance pilot
 already reported.

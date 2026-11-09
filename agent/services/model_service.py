@@ -802,12 +802,16 @@ All source references must use the supplied source numbers. Use empty arrays ins
 
             # Decoration does not change identity: allow a list marker and
             # emphasis around the row, then require the exact row.
-            claim = re.sub(r"^(?:[-*\u2022]|[0-9]+[.)])\s+", "", line)
-            wrapped = re.fullmatch(r"\*\*(.+)\*\*", claim)
-            claim = wrapped.group(1) if wrapped else claim
-            claim = re.sub(r"^\*\*(Article\s+[^*]+?)\*\*", r"\1", claim).strip()
+            claim = re.sub(r"^(?:#{1,6}|\|)\s*", "", line)
+            claim = re.sub(r"\s*\|$", "", claim)
+            claim = re.sub(r"^(?:[-*\u2022]|[0-9]+[.)])\s+", "", claim)
+            wrapped = re.fullmatch(r"(\*\*|\*|__|_)(.+)\1", claim)
+            claim = wrapped.group(2) if wrapped else claim
+            claim = re.sub(r"^(\*\*|\*|__|_)(Article\s+[^*_]+?)\1", r"\2", claim).strip()
             # "Article <token>:" is a selection claim; "Article 5 of GDPR" is not.
-            if re.match(r"article\s+\S+?:", claim, re.IGNORECASE):
+            if re.match(r"article\s+\S+?:", claim, re.IGNORECASE) or re.match(
+                r"article\s+\d+\s*(?:[-:\uff1a]|title\b)", claim, re.IGNORECASE
+            ):
                 # Identity first: the number selects one supplied article, whose
                 # exact title must follow. Words such as "score" or "Title:"
                 # inside that title therefore never act as delimiters.
@@ -820,7 +824,7 @@ All source references must use the supplied source numbers. Use empty arrays ins
                 rest = claim[head.end() :] if head else ""
                 tail = (
                     re.fullmatch(
-                        r"\s+score\s+(\S+)\s+relevant[.]?(?:\s*\([^()]*\)[.]?)?",
+                        r"\s+score\s+(\S+)\s+relevant[.]?",
                         rest[len(title) :],
                     )
                     if known and title and rest.startswith(title)
@@ -849,7 +853,7 @@ All source references must use the supplied source numbers. Use empty arrays ins
                     }
                 )
                 continue
-            if claim.startswith("Reason:"):
+            if re.match(r"[*_]*reason[*_]*\s*:", claim, re.IGNORECASE):
                 continue
 
             if "regulation" in line.lower() or "framework" in line.lower():

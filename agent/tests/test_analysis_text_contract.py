@@ -243,10 +243,10 @@ def test_malformed_rows_never_fail_the_analysis_or_select_every_article():
         "* Article 2: Title: Supplier access review score 8 relevant",
         "1. Article 2: Title: Supplier access review score 8 relevant",
         "**Article 2**: Title: Supplier access review score 8 relevant",
-        "Article 2: Title: Supplier access review score 10.0 relevant (risk)",
+        "Article 2: Title: Supplier access review score 10.0 relevant.",
     ],
 )
-def test_list_markers_emphasis_and_trailing_text_do_not_change_identity(decorated):
+def test_list_markers_and_emphasis_do_not_change_identity(decorated):
     parsed = service()._process_analysis_response(decorated, articles())
     assert parsed["grc_article_indices"] == [1]
     assert parsed["analysis_rows"] == {"accepted": 1, "skipped": 0}
@@ -446,3 +446,114 @@ def test_all_invalid_rows_on_the_full_legacy_route_are_unknown_not_rejections(mo
     assert summary is not None
     assert summary["route"] == "legacy_full" and summary["dropped_positions"] == 0
     assert summary["analysis_rows"] == {"accepted": 0, "skipped": 1}
+
+
+@pytest.mark.parametrize(
+    "line",
+    [
+        "Article 2: Title: Supplier access review score 8 relevant (not relevant)",
+        "Article 2: Title: Supplier access review score 8 relevant (correction: ignore)",
+    ],
+)
+def test_a_parenthetical_cannot_reverse_or_amend_a_row(line):
+    parsed = service()._process_analysis_response(line, articles())
+    assert parsed["grc_article_indices"] == []
+    assert parsed["analysis_rows"] == {"accepted": 0, "skipped": 1}
+
+
+@pytest.mark.parametrize(
+    "reason",
+    [
+        "**Reason:** NIST",
+        "**Reason**: NIST",
+        "*Reason:* NIST",
+        "- **Reason:** NIST",
+        "Reason: NIST",
+    ],
+)
+def test_emphasized_reason_lines_are_commentary(reason):
+    text = "Regulations: GDPR\n" + reason
+    parsed = service()._process_analysis_response(text, articles())
+    assert parsed["analysis"]["regulations_mentioned"] == ["GDPR"]
+
+
+@pytest.mark.parametrize(
+    "malformed",
+    [
+        "### Article 1: Title: Consultation notice score 8 relevant extra",
+        "*Article 1: Title: Consultation notice score 8 relevant, maybe*",
+        "| Article 1: Title: Not supplied score 8 relevant |",
+        "Article 1 - Title: Consultation notice score 8 relevant",
+        "Article 1 Title: Consultation notice score 8 relevant",
+    ],
+)
+def test_malformed_rows_are_counted_as_skipped_claims(malformed):
+    parsed = service()._process_analysis_response(malformed, articles())
+    assert parsed["grc_article_indices"] == []
+    assert parsed["analysis_rows"] == {"accepted": 0, "skipped": 1}
+
+
+@pytest.mark.parametrize(
+    "decorated",
+    [
+        "### Article 1: Title: Consultation notice score 8 relevant",
+        "*Article 1: Title: Consultation notice score 8 relevant*",
+        "| Article 1: Title: Consultation notice score 8 relevant |",
+    ],
+)
+def test_heading_table_and_italic_decoration_do_not_change_identity(decorated):
+    parsed = service()._process_analysis_response(decorated, articles())
+    assert parsed["grc_article_indices"] == [0]
+
+
+def legacy_full_model(monkeypatch, mode, response):
+    from unittest.mock import AsyncMock
+
+    from services.relevance_decisions import DecisionError
+
+    model = enabled_model(monkeypatch, None, response)
+    monkeypatch.setattr(model, "relevance_mode", mode)
+    monkeypatch.setattr(
+        model.relevance_client, "classify", AsyncMock(side_effect=DecisionError("timeout"))
+    )
+    return model
+
+
+def test_shadow_legacy_full_records_unusable_rows_as_unknown(monkeypatch):
+    import asyncio
+
+    items = three_articles()
+    model = legacy_full_model(
+        monkeypatch, "shadow", "Article 2: Title: Garbled title score 8 relevant"
+    )
+    analysis = asyncio.run(model.analyze_articles_for_grc(items))
+    assert "error" not in analysis
+    records = model.last_selection_records
+    assert records is not None and [r.model_selected for r in records] == [None, None, None]
+
+
+def test_legacy_full_with_a_usable_row_records_the_normal_mask(monkeypatch):
+    import asyncio
+
+    items = three_articles()
+    model = legacy_full_model(
+        monkeypatch,
+        "enabled",
+        f"Article 3: Title: {items[2].title} score 8 relevant\n"
+        "Article 1: Title: Garbled title score 8 relevant",
+    )
+    asyncio.run(model.analyze_articles_for_grc(items))
+    records = model.last_selection_records
+    assert records is not None
+    assert [r.model_selected for r in records] == [False, False, True]
+    summary = model.relevance_summary()
+    assert summary is not None and summary["analysis_rows"] == {"accepted": 1, "skipped": 1}
+
+    def storage_safe(value):
+        if isinstance(value, dict):
+            return all(isinstance(k, str) and storage_safe(v) for k, v in value.items())
+        if isinstance(value, list):
+            return all(storage_safe(v) for v in value)
+        return value is None or isinstance(value, (str, int, bool))
+
+    assert storage_safe(summary)
