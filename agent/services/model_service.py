@@ -766,7 +766,8 @@ All source references must use the supplied source numbers. Use empty arrays ins
         regulations = []
         industries = []
         risks = []
-        canonical_indices = set()
+        canonical_indices: set[int] = set()
+        skipped_rows = 0
         current_section = None
         for line in lines:
             line = line.strip()
@@ -791,7 +792,10 @@ All source references must use the supplied source numbers. Use empty arrays ins
                     or re.fullmatch(r"10|[0-9](?:\.[0-9]+)?", score) is None
                     or not 1 <= float(score) <= 10
                 ):
-                    raise ValueError("Article analysis row identity or score is invalid")
+                    # A row that does not bind exactly to one supplied article, or
+                    # repeats one, credits no article. Other rows stay usable.
+                    skipped_rows += 1
+                    continue
                 canonical_indices.add(index)
                 grc_articles.append(
                     {
@@ -835,6 +839,18 @@ All source references must use the supplied source numbers. Use empty arrays ins
                     if reg in line:
                         regulations.append(reg)
 
+        if skipped_rows:
+            logger.warning(
+                "Skipped {} article analysis rows that did not bind to one supplied article",
+                skipped_rows,
+            )
+            if not canonical_indices:
+                # Rows were attempted and none is usable: refuse rather than fall
+                # through to selecting every article below.
+                raise ValueError(
+                    f"no usable article analysis rows ({skipped_rows} invalid or repeated)"
+                )
+
         if not grc_articles and original_articles:
             for article in original_articles:
                 grc_articles.append(
@@ -848,6 +864,7 @@ All source references must use the supplied source numbers. Use empty arrays ins
 
         return {
             "grc_articles": grc_articles,
+            "analysis_rows": {"accepted": len(canonical_indices), "skipped": skipped_rows},
             "summary": {
                 "total_articles": len(original_articles),
                 "grc_relevant_count": len(grc_articles),

@@ -90,11 +90,12 @@ def test_canonical_title_words_never_become_sections_or_delimiters(title):
         "Article 2: Title: Supplier access review score -1 relevant",
         "Article 2: Title: Supplier access review score True relevant",
         "Article 02: Title: Supplier access review score 8 relevant",
-        "Article 2: Title: Supplier access review score 8 relevant\nArticle 2: Title: Supplier access review score 8 relevant",
     ],
 )
-def test_canonical_identity_duplicate_and_score_errors_do_not_become_fallback_success(row):
-    with pytest.raises(ValueError):
+def test_a_response_whose_rows_are_all_invalid_is_refused_not_selected_wholesale(row):
+    # With no usable row, there is no analysis to report. It must not fall
+    # through to the legacy select-everything fallback.
+    with pytest.raises(ValueError, match="no usable article analysis rows"):
         service()._process_analysis_response(row, articles())
 
 
@@ -147,3 +148,75 @@ def test_legacy_inline_reason_and_unrecognized_fallback_are_not_claimed_fixed():
         row["summary"] == "GRC analysis via comprehensive model evaluation"
         for row in fallback["grc_articles"]
     )
+
+
+def test_invalid_rows_are_skipped_and_counted_while_valid_rows_are_kept():
+    items = articles()
+    text = "\n".join(
+        [
+            "Article 3: Title: Supplier access review score 8 relevant",  # out of range
+            "Article 1: Title: Consultation notice score 11 relevant",  # score out of bounds
+            f"Article 2: Title: {items[1].title} score 8 relevant.",  # valid
+            "Article 02: Title: Consultation notice score 7 relevant",  # non-canonical number
+        ]
+    )
+    parsed = service()._process_analysis_response(text, items)
+    assert [row["title"] for row in parsed["grc_articles"]] == [items[1].title]
+    assert parsed["analysis_rows"] == {"accepted": 1, "skipped": 3}
+    assert parsed["summary"]["grc_relevant_count"] == 1
+
+
+def test_a_misattributed_row_never_credits_either_article():
+    items = articles()
+    # Article 1's number with article 2's title: neither identity is credited.
+    text = "Article 1: Title: Supplier access review score 8 relevant\n" + (
+        "Article 1: Title: Consultation notice score 6 relevant"
+    )
+    parsed = service()._process_analysis_response(text, items)
+    assert [row["title"] for row in parsed["grc_articles"]] == ["Consultation notice"]
+    assert parsed["analysis_rows"] == {"accepted": 1, "skipped": 1}
+
+
+def test_a_repeated_identity_is_kept_once():
+    items = articles()
+    row = f"Article 2: Title: {items[1].title} score 8 relevant"
+    parsed = service()._process_analysis_response(f"{row}\n{row}.", items)
+    assert [r["title"] for r in parsed["grc_articles"]] == [items[1].title]
+    assert parsed["analysis_rows"] == {"accepted": 1, "skipped": 1}
+
+
+def test_a_fully_valid_response_reports_no_skipped_rows():
+    items = articles()
+    text = (
+        f"Article 1: Title: {items[0].title} score 5 relevant\n"
+        f"Article 2: Title: {items[1].title} score 9 relevant"
+    )
+    parsed = service()._process_analysis_response(text, items)
+    assert parsed["analysis_rows"] == {"accepted": 2, "skipped": 0}
+
+
+def test_one_malformed_row_no_longer_fails_the_analysis_but_all_malformed_does():
+    import asyncio
+    from types import SimpleNamespace
+
+    items = articles()
+    model = service()
+
+    def answering(text):
+        async def invoke(**_kwargs):
+            return SimpleNamespace(text=text)
+
+        return invoke
+
+    model._invoke = answering(
+        f"Article 2: Title: {items[1].title} score 8 relevant\n"
+        "Article 1: Title: Not the supplied title score 8 relevant"
+    )
+    mixed = asyncio.run(model._analyze_articles_with_model(items))
+    assert "error" not in mixed
+    assert [row["title"] for row in mixed["grc_articles"]] == [items[1].title]
+
+    model._invoke = answering("Article 1: Title: Not the supplied title score 8 relevant")
+    refused = asyncio.run(model._analyze_articles_with_model(items))
+    assert "no usable article analysis rows" in refused["error"]
+    assert refused["grc_articles"] == []
