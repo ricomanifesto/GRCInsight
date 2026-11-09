@@ -88,7 +88,7 @@ returned only if the revision's digest verifies. Each article carries
 | `intact` | Text served from a verified revision |
 | `corrupt` | The revision does not match its digest; no text is served |
 | `missing` | The referenced revision is absent |
-| `unbound` | The report has no final outcome yet |
+| `unbound` | The report has no final outcome yet (`corrupt` and `missing` take precedence) |
 | `legacy` | A row written before history; returned as stored |
 
 `published_known` is `false` when the feed gave no date; `published` is then

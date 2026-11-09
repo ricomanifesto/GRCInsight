@@ -291,7 +291,8 @@ func TestReportArticlesShowsUnboundAppearancesOnlyWithoutAFinalOutcome(t *testin
 	// A stray appearance from a diverged retry must not join a bound report.
 	stray := map[string]types.AttributeValue{}
 	for k, v := range api.tables[ArticlesTable] {
-		if str(v["report_id"]) == "report_s2" {
+		// The alpha appearance has an intact revision, so only binding is under test.
+		if str(v["report_id"]) == "report_s2" && strings.HasSuffix(str(v["url"]), "/alpha") {
 			for name, value := range v {
 				stray[name] = value
 			}
@@ -320,6 +321,16 @@ func TestReportArticlesShowsUnboundAppearancesOnlyWithoutAFinalOutcome(t *testin
 	arts, _, err := repo.ReportArticles(context.Background(), "open_report", 20, 0)
 	if err != nil || len(arts) != 1 || arts[0].EvidenceStatus != EvidenceUnbound {
 		t.Fatalf("unbound appearance not labelled: %+v err=%v", arts, err)
+	}
+	// A missing revision outranks the unbound label.
+	for k, item := range api.tables[ArticlesTable] {
+		if str(item["record_kind"]) == RecordKindRevision && strings.HasSuffix(str(item["url"]), "/alpha") {
+			delete(api.tables[ArticlesTable], k)
+		}
+	}
+	arts, _, err = repo.ReportArticles(context.Background(), "open_report", 20, 0)
+	if err != nil || arts[0].EvidenceStatus != EvidenceMissing {
+		t.Fatalf("missing revision not reported for an unbound row: %+v err=%v", arts, err)
 	}
 }
 

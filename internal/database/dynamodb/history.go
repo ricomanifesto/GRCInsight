@@ -258,9 +258,8 @@ func (r *Repository) ReportArticles(ctx context.Context, reportID string, limit,
 		rev, ok := revisions[a.RevisionID]
 		switch {
 		case !ok:
-			if a.EvidenceStatus == "" {
-				a.EvidenceStatus = EvidenceMissing
-			}
+			// Integrity states take precedence over "unbound": no text is served.
+			a.EvidenceStatus = EvidenceMissing
 		case !verifyRevision(rev, a.ContentSHA256):
 			a.EvidenceStatus = EvidenceCorrupt
 		default:
