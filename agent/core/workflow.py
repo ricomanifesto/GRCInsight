@@ -421,6 +421,8 @@ async def run_grc_analysis_endpoint(
                     digest_url=art.digest_url,
                     published=art.published,
                     published_known=art.published_known,
+                    content_origin=art.content_origin,
+                    content_truncated=art.content_truncated,
                     has_grc_content=has_grc,
                     regulations=local.get("regulations", []),
                     frameworks=local.get("frameworks", []),

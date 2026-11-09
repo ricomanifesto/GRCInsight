@@ -273,13 +273,14 @@ def test_legacy_rows_export_with_unknown_provenance():
     )
     assert legacy["provenance_class"] == "legacy_unknown"
     assert legacy["conclusion_status"] == "legacy_unverified"
-    assert legacy["record_revision_basis"] == "computed_at_export"
+    assert legacy["source_revision_basis"] == "computed_at_export"
     snapshot = next(
         r
         for r in export_page(articles, stream="articles", limit=200)["records"]
         if r["record_type"] == "legacy_article_snapshot"
     )
     assert snapshot["timestamps"]["published_reliability"] == "legacy_unverified"
+    assert snapshot["evidence"]["kind"] == "legacy_text_unverified"
 
 
 def test_incremental_export_filters_by_change_time():
@@ -671,3 +672,65 @@ def test_writer_uses_the_same_dynamodb_settings_as_the_go_service(monkeypatch):
     seen.clear()
     history.service.history_tables()
     assert seen == {"service": "dynamodb"}
+
+
+def test_truncated_publisher_page_is_an_excerpt_with_its_own_scope(store):
+    reports, articles = store
+    page = fx.article("alpha", body="<html>" + "x" * 4994)
+    page.content_origin = "publisher_page"
+    page.content_truncated = True
+    commit(reports, articles, res=fx.result([page]))
+    rev = kinds(articles, "article_revision")[0]
+    assert rev["evidence_kind"] == "excerpt" and rev["content_truncated"] is True
+    assert rev["full_text_scope"] == "publisher_page_html"
+    assert rev["content_origin"] == "publisher_page"
+
+
+def test_publisher_page_enrichment_records_origin_and_truncation(monkeypatch):
+    import asyncio
+
+    import httpx
+
+    from models.api import ArticleInput
+    from services import rss_service as rss_module
+
+    real_client = httpx.AsyncClient
+
+    def handler(request):
+        return httpx.Response(200, text="<html>" + "y" * 6000 + "</html>")
+
+    monkeypatch.setattr(
+        rss_module.httpx,
+        "AsyncClient",
+        lambda **kw: real_client(transport=httpx.MockTransport(handler), **kw),
+    )
+    service = rss_module.RSSService()
+    empty = ArticleInput(
+        title="t", url="https://news.example.test/p", content="", published=fx.GENERATED_AT
+    )
+    feed = ArticleInput(
+        title="t", url="https://news.example.test/f", content="feed body", published=fx.GENERATED_AT
+    )
+    enriched = asyncio.run(service.enrich_articles([empty, feed]))
+    assert enriched[0].content_origin == "publisher_page"
+    assert enriched[0].content_truncated is True and len(enriched[0].content) == 5000
+    assert enriched[1].content_origin == "feed_item" and enriched[1].content_truncated is False
+
+
+def test_any_exported_change_is_a_new_record_revision():
+    _, articles = fx.tables()
+    row = {
+        "article_id": "a_20261101_00000002",
+        "url": "https://news.example.test/legacy",
+        "content": "same",
+        "created_at": "2026-11-01T00:00:00Z",
+        "updated_at": "2026-11-01T00:00:00Z",
+    }
+    articles.seed(row)
+    first = export_page(articles, stream="articles")["records"][0]
+    articles.seed({**row, "updated_at": "2026-11-09T00:00:00Z"})
+    second = export_page(articles, stream="articles")["records"][0]
+    assert first["record_id"] == second["record_id"]
+    assert first["record_revision"] != second["record_revision"]
+    unchanged = export_page(articles, stream="articles")["records"][0]
+    assert unchanged == second

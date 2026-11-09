@@ -17,11 +17,9 @@ from typing import Any
 
 from history.identity import (
     APPEARANCE_KIND,
-    MAX_RETAINED_CONTENT,
     REPORT_OUTCOME_SCHEMA,
     REVISION_KIND,
     canonical_json,
-    evidence_kind,
     outcome_digest,
     sha256_hex,
     source_key,
@@ -74,7 +72,12 @@ def decode_cursor(stream: str, cursor: str | None) -> dict[str, Any] | None:
 
 
 def _finish(record: dict[str, Any]) -> dict[str, Any]:
+    """Stamp identity: any change to the exported payload is a new ``record_revision``.
+
+    ``source_revision`` keeps the stored digest the payload was derived from.
+    """
     record = {"schema_version": EXPORT_SCHEMA, "product": PRODUCT, "pipeline": PIPELINE, **record}
+    record["record_revision"] = sha256_hex(record)
     record["record_digest"] = sha256_hex(record)
     return record
 
@@ -126,7 +129,7 @@ def report_record(item: dict[str, Any]) -> dict[str, Any]:
             conclusion_status = "not_intelligence"
     else:
         provenance = "legacy_unknown"
-        revision = sha256_hex({k: v for k, v in item.items() if k != "updated_at"})
+        revision = sha256_hex(item)
         basis = "computed_at_export"
         integrity = "unverifiable_legacy"
         mode = metadata.get("analysis_mode")
@@ -147,8 +150,8 @@ def report_record(item: dict[str, Any]) -> dict[str, Any]:
     record: dict[str, Any] = {
         "record_type": "report_outcome",
         "record_id": f"grcinsight:report:{report_id}",
-        "record_revision": revision,
-        "record_revision_basis": basis,
+        "source_revision": revision,
+        "source_revision_basis": basis,
         "report_id": report_id,
         "run_id": item.get("completion_run_id"),
         "outcome": outcome,
@@ -196,6 +199,7 @@ def _revision_record(table: str, item: dict[str, Any], include_text: bool) -> di
     evidence: dict[str, Any] = {
         "kind": item.get("evidence_kind"),
         "full_text_scope": item.get("full_text_scope"),
+        "content_origin": item.get("content_origin") or "feed_item",
         "retained_content_location": f"dynamodb://{table}/{item.get('article_id')}#content",
         "retained_length": len(content),
         "truncated": item.get("content_truncated"),
@@ -210,8 +214,8 @@ def _revision_record(table: str, item: dict[str, Any], include_text: bool) -> di
         {
             "record_type": "source_article_revision",
             "record_id": f"grcinsight:article:{item.get('source_key')}",
-            "record_revision": item.get("content_sha256"),
-            "record_revision_basis": "content_digest",
+            "source_revision": item.get("content_sha256"),
+            "source_revision_basis": "content_digest",
             "revision_id": item.get("article_id"),
             "source_key": item.get("source_key"),
             "corroboration_unit": item.get("source_key"),
@@ -247,8 +251,8 @@ def _appearance_record(item: dict[str, Any]) -> dict[str, Any]:
         {
             "record_type": "report_article_appearance",
             "record_id": f"grcinsight:appearance:{item.get('article_id')}",
-            "record_revision": sha256_hex({**identity, "classification": classification}),
-            "record_revision_basis": "appearance_digest",
+            "source_revision": sha256_hex({**identity, "classification": classification}),
+            "source_revision_basis": "appearance_digest",
             **identity,
             "run_id": item.get("run_id"),
             "content_sha256": item.get("content_sha256"),
@@ -268,8 +272,8 @@ def _legacy_article_record(table: str, item: dict[str, Any]) -> dict[str, Any]:
         {
             "record_type": "legacy_article_snapshot",
             "record_id": f"grcinsight:legacy-article:{item.get('article_id')}",
-            "record_revision": sha256_hex({k: v for k, v in item.items() if k != "updated_at"}),
-            "record_revision_basis": "computed_at_export",
+            "source_revision": sha256_hex(item),
+            "source_revision_basis": "computed_at_export",
             "article_id": item.get("article_id"),
             "report_id": item.get("report_id") or None,
             "source_key": source_key(url) if url else None,
@@ -278,11 +282,9 @@ def _legacy_article_record(table: str, item: dict[str, Any]) -> dict[str, Any]:
             "publisher": item.get("source") or None,
             "title": item.get("title"),
             "evidence": {
-                "kind": evidence_kind(
-                    summary=summary,
-                    content=content,
-                    truncated=len(content) >= MAX_RETAINED_CONTENT,
-                ),
+                # How a legacy row's text was captured is unknown (feed item, a cut
+                # publisher page or a truncated body), so completeness is not claimed.
+                "kind": "legacy_text_unverified" if (content or summary) else "metadata_only",
                 "retained_content_location": f"dynamodb://{table}/{item.get('article_id')}#content",
                 "retained_length": len(content),
                 "excerpt": _excerpt(content or summary),

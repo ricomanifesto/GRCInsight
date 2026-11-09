@@ -26,6 +26,9 @@ class ArticleInput(BaseModel):
     published: datetime
     # False when the feed gave no usable date and ``published`` is a capture-time placeholder.
     published_known: bool = True
+    # Where ``content`` came from, and whether it was cut when captured.
+    content_origin: Literal["feed_item", "publisher_page"] = "feed_item"
+    content_truncated: bool = False
 
 
 class ArticleRecord(ArticleInput):

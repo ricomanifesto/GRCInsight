@@ -146,7 +146,8 @@ def build_revision(
     title = str(article.get("title") or "")
     summary = str(article.get("summary") or "")
     captured = str(article.get("content") or "")
-    truncated = len(captured) > MAX_RETAINED_CONTENT
+    origin = "publisher_page" if article.get("content_origin") == "publisher_page" else "feed_item"
+    truncated = bool(article.get("content_truncated")) or len(captured) > MAX_RETAINED_CONTENT
     content = captured[:MAX_RETAINED_CONTENT]
     payload = revision_payload(url=url, title=title, summary=summary, content=content)
     digest = revision_digest(payload)
@@ -163,7 +164,10 @@ def build_revision(
         "captured_content_length": len(captured),
         "captured_content_sha256": sha256_hex(captured),
         "evidence_kind": evidence_kind(summary=summary, content=content, truncated=truncated),
-        "full_text_scope": "feed_item_content",
+        "full_text_scope": (
+            "publisher_page_html" if origin == "publisher_page" else "feed_item_content"
+        ),
+        "content_origin": origin,
         "source": str(article.get("source") or ""),
         "digest_url": str(article.get("digest_url") or ""),
         "published_at_known": published_known,

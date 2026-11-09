@@ -68,7 +68,10 @@ waits and keeps the last accepted report, and export reports it as `incomplete`.
   captured length and digest when truncated), the evidence kind (`full_text`
   means the complete feed-item content as captured; `excerpt`;
   `metadata_only`), `published_at` only when the feed supplied a date, and the
-  first capture time, job and report. Changed content is a new revision; the
+  first capture time, job and report. `content_origin` records whether the
+  text came from the feed item or from the publisher page fetched for an empty
+  item (`full_text_scope = publisher_page_html`); text cut at capture is always
+  an `excerpt`. Changed content is a new revision; the
   old one is never rewritten.
 - **Report appearance** (`record_kind = report_article_appearance`): keyed by
   report, appearance-set digest and position. It links a report to a revision
@@ -109,11 +112,15 @@ python -m history export --stream articles --table grcinsight-articles --limit 2
 
 Each call issues one bounded `Scan` page (1–200 items) and prints a page of
 `grcinsight.intelligence-export.v1` records with an opaque `next_cursor`.
-Records carry a stable `record_id`, a `record_revision` and a `record_digest`;
-replaying the same data yields identical records. Integrity is re-verified on
+Records carry a stable `record_id` and a `record_revision`, the SHA-256 of the
+exported payload: any change to what a record says is a new revision, and
+replaying unchanged data yields identical records. `source_revision` names the
+stored digest the record was derived from (the outcome or content digest, or
+a digest computed at export for legacy rows). Integrity is re-verified on
 every read (`intact`, `corrupt` or `unverifiable_legacy`), and rows written
 before history are exported with `provenance_class = legacy_unknown` rather
-than reconstructed. Report content appears only for verified model reports and
+than reconstructed; their text is labelled `legacy_text_unverified` because how
+it was captured is unknown. Report content appears only for verified model reports and
 legacy model reports labelled `legacy_unverified`. Export never asserts that a
 report was published.
 

@@ -636,6 +636,9 @@
       "content": {
         "S": "<p>Synthetic body for alpha, revised with a correction.</p>"
       },
+      "content_origin": {
+        "S": "feed_item"
+      },
       "content_sha256": {
         "S": "52428a8cfe43b099e63c6ce6058126683cb8798110fa417fcef39a0191ba6404"
       },
@@ -703,6 +706,9 @@
       },
       "content": {
         "S": "<p>Synthetic body for alpha: the example regulator updated its rule.</p>"
+      },
+      "content_origin": {
+        "S": "feed_item"
       },
       "content_sha256": {
         "S": "a982a38604bb003cd92039a6afa1097446093b0cb66fd8010be3783c0c0cd9ac"
@@ -772,6 +778,9 @@
       "content": {
         "S": "<p>Tampered text.</p>"
       },
+      "content_origin": {
+        "S": "feed_item"
+      },
       "content_sha256": {
         "S": "4b5df06957712478aa26b9a7a5f65b05df6604f5801bfffd4170f64ab708ae65"
       },
@@ -836,6 +845,9 @@
       },
       "content": {
         "S": "<p>Synthetic body for charlie: the example regulator updated its rule.</p>"
+      },
+      "content_origin": {
+        "S": "feed_item"
       },
       "content_sha256": {
         "S": "30f35c36c63b7b6239f5411a7311071142c5fbd57e09013884a41f2780d80f65"
