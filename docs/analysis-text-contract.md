@@ -43,35 +43,41 @@ logged by count, never by content.
 
 ## Known and unknown answers
 
-`selection_known` is true only when at least one row was accepted and the response
-does not mention the sentinel anywhere (in any case or decoration), or the entire
-response, ignoring surrounding whitespace, is exactly
-`No articles selected`. Every other response is `selection_known: false`:
-unrecognized prose, malformed or decorated attempts, all rows invalid, and the
-sentinel with any other line, punctuation or decoration (for example the sentinel
-followed by a blockquoted row). When the sentinel appears beside valid rows, those
-exact rows still credit their own articles, but the contradictory response is not a
-known selection and records no drops. Skip counts are diagnostic: a decorated
-attempt that does not begin `Article <token>:` is ignored rather than counted, and
-known/unknown never depends on recognizing it.
+`selection_known` closes over the whole response; no line is interpreted to decide
+it. It is true only when the entire response, ignoring surrounding whitespace, is
+exactly `No articles selected`, or when the response is not empty and every nonblank
+line is an accepted row. Every other response is `selection_known: false`, including
+valid rows beside any other line: a skipped or repeated row, a `Reason:` line, a
+category note such as `Regulations:`, unrecognized prose, or the sentinel in any
+spelling, decoration or split. Those exact rows still credit their own articles for
+the report; the answer only stops counting as evidence of which articles the model
+dropped. The sentinel with anything else is never a known empty answer.
 
-- **Selection.** An unknown answer selects no article. There is no fallback that
-  selects every supplied article. The workflow's local entity and risk signals
+This is deliberately conservative. The prompt still offers `Reason:` lines and
+category notes, and answers that use them are unknown for relevance evidence, so
+evidence coverage is lower for answers with commentary. Report selection, local
+overrides and the enabled pilot's decisions do not change.
+
+- **Selection.** An unknown answer selects only the articles its accepted rows
+  credit, and none when it has no accepted row. There is no fallback that selects
+  every supplied article. The workflow's local entity and risk signals
   still select articles, and report evidence is still built from every retained
   source. A refused or failed model call still follows the existing failure path.
 - **Evidence.** On the relevance pilot's full legacy route, an unknown answer is
   recorded as each article's model selection being unknown, as for a failed
-  analysis, never as a decision that the article is irrelevant. Only a declared
-  empty answer is recorded as model drops. The stored relevance summary's
-  `analysis_rows` includes `selection_known`. Unknown records count no model drops,
-  although the workflow still publishes only articles that local signals select.
+  analysis, never as a decision that the article is irrelevant. Only a known
+  answer records model drops: the declared empty answer drops every article, and a
+  known selection drops the articles it does not credit. The stored relevance
+  summary's `analysis_rows` includes `selection_known`. Unknown records count no
+  model drops, although the workflow still publishes the articles that accepted
+  rows or local signals select.
 - **Offline benchmark.** The relevance benchmark scores an unknown legacy answer
   as missing predictions, like a failed call, never as `irrelevant`.
 - **Enabled pilot.** For the decision route's uncertain subset, the pilot's
   decisions stay authoritative. The enrichment call's rows use positions within
   that subset and never change selection; its `analysis_rows` describes that call.
 
-Because the analysis always carries positions, the workflow and the analysis route
+Because a parsed analysis carries positions, the workflow and the analysis route
 report the GRC-relevant count as articles selected by the model or by local entity
 and risk signals, the same count the relevance pilot reports.
 

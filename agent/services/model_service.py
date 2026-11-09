@@ -789,7 +789,8 @@ All source references must use the supplied source numbers. Use empty arrays ins
         title exactly, its score is valid and the article was not already credited.
         Any other such line credits nothing and is counted as skipped. When no line
         is usable the model selects no article; this never becomes a selection of
-        every article.
+        every article. ``selection_known`` closes over the whole response: the exact
+        empty answer, or every nonblank line an accepted row.
         """
         lines = response_content.split("\n")
 
@@ -799,20 +800,18 @@ All source references must use the supplied source numbers. Use empty arrays ins
         risks = []
         accepted: list[int] = []
         skipped_rows = 0
-        # A known empty answer is the whole response being the owned sentinel. The
-        # sentinel next to anything else contradicts it, so that response is never
-        # a known selection (its exact rows may still credit their own articles).
+        # Evidence closes over the whole response; no line is interpreted to decide
+        # it. A known empty answer is the entire response being the owned sentinel.
+        # A known selection is a response whose every nonblank line is an accepted
+        # row. Anything else is unknown, although its exact rows still credit.
         empty_declared = response_content.strip() == EMPTY_ANALYSIS_ANSWER
-        # Downgrade only: any other mention of the sentinel, in any form, makes the
-        # response unknown. It never establishes a known empty answer.
-        contradicted = not empty_declared and EMPTY_ANALYSIS_ANSWER.lower() in (
-            response_content.lower()
-        )
+        nonblank_lines = 0
         current_section = None
         for line in lines:
             line = line.strip()
             if not line:
                 continue
+            nonblank_lines += 1
 
             # Decoration does not change identity: allow a list marker and
             # emphasis around the row, then require the exact row.
@@ -887,9 +886,10 @@ All source references must use the supplied source numbers. Use empty arrays ins
             # Positions are authoritative for selection; titles may repeat.
             "grc_article_indices": sorted(accepted),
             "analysis_rows": {"accepted": len(accepted), "skipped": skipped_rows},
-            # Known only with an accepted row (and no contradicting sentinel), or the
-            # exact empty answer. Anything else is unknown, never evidence of a drop.
-            "selection_known": (bool(accepted) and not contradicted) or empty_declared,
+            # Each accepted row is one line, so equal counts mean every nonblank
+            # line was accepted. Unknown is never evidence of a drop.
+            "selection_known": empty_declared
+            or (bool(accepted) and len(accepted) == nonblank_lines),
             "summary": {
                 "total_articles": len(original_articles),
                 "grc_relevant_count": len(grc_articles),

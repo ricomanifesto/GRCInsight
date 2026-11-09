@@ -509,7 +509,7 @@ def test_shadow_legacy_full_records_unusable_rows_as_unknown(monkeypatch):
     assert records is not None and [r.model_selected for r in records] == [None, None, None]
 
 
-def test_legacy_full_with_a_usable_row_records_the_normal_mask(monkeypatch):
+def test_legacy_full_with_a_usable_row_and_an_invalid_row_records_no_drops(monkeypatch):
     import asyncio
 
     items = three_articles()
@@ -519,13 +519,34 @@ def test_legacy_full_with_a_usable_row_records_the_normal_mask(monkeypatch):
         f"Article 3: Title: {items[2].title} score 8 relevant\n"
         "Article 1: Title: Garbled title score 8 relevant",
     )
+    analysis = asyncio.run(model.analyze_articles_for_grc(items))
+    # The exact row still selects its article for the report.
+    assert analysis["grc_article_indices"] == [2]
+    records = model.last_selection_records
+    assert records is not None
+    assert [r.model_selected for r in records] == [None, None, None]
+    summary = model.relevance_summary()
+    assert summary is not None
+    assert summary["analysis_rows"] == {"accepted": 1, "skipped": 1, "selection_known": False}
+
+
+def test_legacy_full_with_only_accepted_rows_records_the_normal_mask(monkeypatch):
+    import asyncio
+
+    items = three_articles()
+    model = legacy_full_model(
+        monkeypatch,
+        "enabled",
+        f"Article 3: Title: {items[2].title} score 8 relevant\n\n"
+        f"Article 1: Title: {items[0].title} score 7 relevant\n",
+    )
     asyncio.run(model.analyze_articles_for_grc(items))
     records = model.last_selection_records
     assert records is not None
-    assert [r.model_selected for r in records] == [False, False, True]
+    assert [r.model_selected for r in records] == [True, False, True]
     summary = model.relevance_summary()
     assert summary is not None
-    assert summary["analysis_rows"] == {"accepted": 1, "skipped": 1, "selection_known": True}
+    assert summary["analysis_rows"] == {"accepted": 2, "skipped": 0, "selection_known": True}
 
     def storage_safe(value):
         if isinstance(value, dict):
@@ -549,8 +570,15 @@ REGRESSION_MATRIX = [
     (f"1. {VALID_2}", [1], True),
     (f"**{VALID_2}**", [1], True),
     ("**Article 2**: Title: Supplier access review score 8 relevant", [1], True),
-    (f"{VALID_2}\n{VALID_2}.", [1], True),
-    (f"{VALID_2}\nArticle 3: Title: Supplier access review score 8 relevant", [1], True),
+    # Whole-response closure: exact rows still credit, but any other nonblank line
+    # (a duplicate, an invalid row, a Reason line, a category note, prose) makes the
+    # answer unknown for evidence.
+    (f"{VALID_2}\n{VALID_2}.", [1], False),
+    (f"{VALID_2}\nArticle 3: Title: Supplier access review score 8 relevant", [1], False),
+    (f"{VALID_2}\nReason: supplier access controls", [1], False),
+    (f"{VALID_2}\nRegulations: SOX", [1], False),
+    (f"{VALID_2}\nThe others are not relevant.", [1], False),
+    (f"{VALID_1}\n\n{VALID_2}\n", [0, 1], True),
     # Zero accepted rows without the declared empty answer: unknown, never a drop.
     ("Article 3: Title: Supplier access review score 8 relevant", [], False),
     ("Article 2: Title: Unknown title score 8 relevant", [], False),
@@ -583,14 +611,21 @@ REGRESSION_MATRIX = [
     ("No articles selected\nArticle 3: Title: Supplier access review score 8 relevant", [], False),
     ("No articles selected\n> Article 9: Title: Nothing supplied score 8 relevant", [], False),
     ("No articles selected\nRegulations: none", [], False),
-    # The sentinel contradicting a row: the exact row still credits its own article,
-    # but the response is not a known selection, so it records no drops.
+    # The sentinel, in any spelling, beside a row is just another non-row line: the
+    # exact row still credits its own article, and the answer is unknown.
     (f"No articles selected\n{VALID_2}", [1], False),
     (f"{VALID_2}\nNo articles selected", [1], False),
     (f"{VALID_2}\nNo articles selected.", [1], False),
     (f"{VALID_2}\n**No articles selected**", [1], False),
     (f"- {VALID_2}\n- No articles selected", [1], False),
     (f"{VALID_2}\nNO ARTICLES SELECTED", [1], False),
+    (f"{VALID_2}\nNo **articles** selected", [1], False),
+    (f"{VALID_2}\n_No_ articles selected", [1], False),
+    (f"{VALID_2}\nNo  articles selected", [1], False),
+    (f"{VALID_2}\nNo\u00a0articles selected", [1], False),
+    (f"{VALID_2}\nNo articles\nselected", [1], False),
+    (f"{VALID_2}\nNo-articles-selected", [1], False),
+    (f"{VALID_2}\nNo arti\u200bcles selected", [1], False),
     # Bold only around the whole row or the Article token.
     ("**Article 2: Title: Supplier access review** score 8 relevant", [], False),
 ]
@@ -628,14 +663,24 @@ def test_the_evidence_layer_records_only_declared_empty_answers_as_drops(
     assert records is not None and [r.model_selected for r in records] == expected
 
 
-def test_a_sentinel_contradicting_a_row_records_no_model_drops(monkeypatch):
+@pytest.mark.parametrize(
+    "extra",
+    [
+        "No articles selected",
+        "No **articles** selected",
+        "No\u00a0articles selected",
+        "Reason: supplier access controls",
+        "Regulations: SOX",
+    ],
+)
+def test_any_non_row_line_beside_a_row_records_no_model_drops(monkeypatch, extra):
     import asyncio
 
     items = three_articles()
     model = legacy_full_model(
         monkeypatch,
         "enabled",
-        f"Article 3: Title: {items[2].title} score 8 relevant\nNo articles selected",
+        f"Article 3: Title: {items[2].title} score 8 relevant\n{extra}",
     )
     analysis = asyncio.run(model.analyze_articles_for_grc(items))
     assert analysis["grc_article_indices"] == [2]
