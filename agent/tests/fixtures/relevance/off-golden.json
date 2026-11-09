@@ -37,7 +37,7 @@
       "sha256": "e6ea7a2b8ef5c598be9d67769c7a36e51578cd14b618f0d62e2caf629e201565"
     }
   ],
-  "note": "Captured from off mode at 7a10c111ca457ef5843b20ca6dc0c58259650e36 before the keep-uncertain change. Analysis lists are sorted because the parser builds them from sets.",
+  "note": "Captured from off mode at 7a10c111ca457ef5843b20ca6dc0c58259650e36 before the keep-uncertain change; off-mode analysis recaptured when invalid article rows became skipped and counted and unrecognized prose stopped selecting every article; neither prose shape is a known selection. Decision request digests are unchanged. Analysis lists are sorted because the parser builds them from sets.",
   "off": {
     "recognized": {
       "analysis": {
@@ -53,21 +53,16 @@
         "regulatory_bodies": [],
         "risk_categories": []
       },
-      "grc_articles": [
-        {
-          "relevance_score": 7.0,
-          "summary": "GRC-relevant content identified",
-          "title": "Vendor patches exploited gateway flaw | relevance"
-        },
-        {
-          "relevance_score": 7.0,
-          "summary": "GRC-relevant content identified",
-          "title": "Regulator fines payments firm | relevance"
-        }
-      ],
+      "analysis_rows": {
+        "accepted": 0,
+        "skipped": 2
+      },
+      "grc_article_indices": [],
+      "grc_articles": [],
+      "selection_known": false,
       "summary": {
-        "confidence_score": 0.8,
-        "grc_relevant_count": 2,
+        "confidence_score": 0.0,
+        "grc_relevant_count": 0,
         "total_articles": 4
       }
     },
@@ -84,35 +79,16 @@
         "regulatory_bodies": [],
         "risk_categories": []
       },
-      "grc_articles": [
-        {
-          "relevance_score": 7.0,
-          "summary": "GRC analysis via comprehensive model evaluation",
-          "title": "Vendor patches exploited gateway flaw",
-          "url": "https://news.example/a"
-        },
-        {
-          "relevance_score": 7.0,
-          "summary": "GRC analysis via comprehensive model evaluation",
-          "title": "Webinar: cloud trends",
-          "url": "https://news.example/b"
-        },
-        {
-          "relevance_score": 7.0,
-          "summary": "GRC analysis via comprehensive model evaluation",
-          "title": "Regulator fines payments firm",
-          "url": "https://news.example/c"
-        },
-        {
-          "relevance_score": 7.0,
-          "summary": "GRC analysis via comprehensive model evaluation",
-          "title": "Webinar: cloud trends",
-          "url": "https://news.example/d"
-        }
-      ],
+      "analysis_rows": {
+        "accepted": 0,
+        "skipped": 0
+      },
+      "grc_article_indices": [],
+      "grc_articles": [],
+      "selection_known": false,
       "summary": {
-        "confidence_score": 0.8,
-        "grc_relevant_count": 4,
+        "confidence_score": 0.0,
+        "grc_relevant_count": 0,
         "total_articles": 4
       }
     }

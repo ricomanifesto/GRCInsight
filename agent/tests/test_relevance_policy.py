@@ -388,7 +388,7 @@ def decided(*decisions):
 
 
 def test_recognized_fallback_format_no_longer_drops_uncertain_articles(monkeypatch):
-    # Recognized lines carry trailing text and no URL, so title matching fails.
+    # The legacy pipe-separated rows do not bind to an article, so they credit nothing.
     model = prose_service(monkeypatch, "enabled", GOLDEN["prose"]["recognized"])
     model.relevance_client.classify = AsyncMock(
         return_value=decided(

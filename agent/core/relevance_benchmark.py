@@ -136,7 +136,8 @@ async def run_comparison(
                     "relevant" if chosen or signal else "irrelevant"
                     for chosen, signal in zip(selected, local)
                 ]
-                if "error" not in analysis
+                # A failed or unknown answer predicts nothing, never "irrelevant".
+                if "error" not in analysis and analysis.get("selection_known") is not False
                 else [None] * len(articles)
             )
             predictions[path].extend(predicted)
