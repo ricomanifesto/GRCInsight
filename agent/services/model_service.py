@@ -759,14 +759,22 @@ All source references must use the supplied source numbers. Use empty arrays ins
     def _process_analysis_response(
         self, response_content: str, original_articles: List[ArticleInput]
     ) -> Dict[str, Any]:
-        """Process model analysis output."""
+        """Process model analysis output.
+
+        Every ``Article ...`` line is a selection claim. It credits an article only
+        when its number names a supplied article, its title equals that article's
+        title exactly, its score is valid and the article was not already credited.
+        Any other such line credits nothing and is counted as skipped. When no line
+        is usable the model selects no article; this never becomes a selection of
+        every article.
+        """
         lines = response_content.split("\n")
 
         grc_articles = []
         regulations = []
         industries = []
         risks = []
-        canonical_indices: set[int] = set()
+        accepted: list[int] = []
         skipped_rows = 0
         current_section = None
         for line in lines:
@@ -774,32 +782,43 @@ All source references must use the supplied source numbers. Use empty arrays ins
             if not line:
                 continue
 
-            # Parse the owned row before section keywords. Its terminal suffix
-            # must not split words such as "score" or "Title:" inside a title.
-            canonical = re.fullmatch(
-                r"Article ([0-9]+):\s*Title:\s*(.*?)\s+score\s+(\S+)\s+relevant[.]?",
-                line,
-            )
-            if canonical:
-                number, title, score = canonical.groups()
-                index = int(number) - 1
+            # Decoration does not change identity: allow a list marker and
+            # emphasis around the row, then require the exact row.
+            claim = re.sub(r"^(?:[-*\u2022]|[0-9]+[.)])\s+", "", line)
+            claim = re.sub(r"\*\*|__", "", claim).strip()
+            # "Article <token>:" is a selection claim; "Article 5 of GDPR" is not.
+            if re.match(r"article\s+\S+?:", claim, re.IGNORECASE):
+                # Identity first: the number selects one supplied article, whose
+                # exact title must follow. Words such as "score" or "Title:"
+                # inside that title therefore never act as delimiters.
+                head = re.match(r"Article ([0-9]+):\s*Title:\s*", claim)
+                number = head.group(1) if head else ""
+                index = int(number) - 1 if head else -1
+                known = head is not None and number == str(index + 1)
+                known = known and 0 <= index < len(original_articles)
+                title = original_articles[index].title if known else ""
+                rest = claim[head.end() :] if head else ""
+                tail = (
+                    re.fullmatch(r"\s+score\s+(\S+)\s+relevant\b.*", rest[len(title) :])
+                    if known and title and rest.startswith(title)
+                    else None
+                )
+                score = tail.group(1) if tail else ""
                 if (
-                    number != str(index + 1)
-                    or not 0 <= index < len(original_articles)
-                    or index in canonical_indices
-                    or not title
-                    or title != original_articles[index].title
-                    or re.fullmatch(r"10|[0-9](?:\.[0-9]+)?", score) is None
+                    tail is None
+                    or index in accepted
+                    or re.fullmatch(r"10(?:\.0+)?|[0-9](?:\.[0-9]+)?", score) is None
                     or not 1 <= float(score) <= 10
                 ):
-                    # A row that does not bind exactly to one supplied article, or
-                    # repeats one, credits no article. Other rows stay usable.
+                    # A claim that does not bind exactly to one supplied article,
+                    # or repeats one, credits no article. Other rows stay usable.
                     skipped_rows += 1
                     continue
-                canonical_indices.add(index)
+                accepted.append(index)
                 grc_articles.append(
                     {
                         "title": title,
+                        "url": original_articles[index].url,
                         "relevance_score": 7.0,
                         "summary": "GRC-relevant content identified",
                     }
@@ -814,23 +833,6 @@ All source references must use the supplied source numbers. Use empty arrays ins
                 current_section = "industries"
             elif "risk" in line.lower():
                 current_section = "risks"
-            elif line.startswith("Article ") and any(
-                word in line.lower() for word in ["relevant", "grc", "compliance"]
-            ):
-                try:
-                    if "score" in line.lower():
-                        article_info = {
-                            "title": (
-                                line.split("Title:")[-1].split("score")[0].strip()
-                                if "Title:" in line
-                                else line
-                            ),
-                            "relevance_score": 7.0,
-                            "summary": "GRC-relevant content identified",
-                        }
-                        grc_articles.append(article_info)
-                except Exception:
-                    pass
 
             if current_section == "regulations" and any(
                 reg in line for reg in ["GDPR", "SOX", "PCI", "ISO", "NIST", "CCPA"]
@@ -844,31 +846,16 @@ All source references must use the supplied source numbers. Use empty arrays ins
                 "Skipped {} article analysis rows that did not bind to one supplied article",
                 skipped_rows,
             )
-            if not canonical_indices:
-                # Rows were attempted and none is usable: refuse rather than fall
-                # through to selecting every article below.
-                raise ValueError(
-                    f"no usable article analysis rows ({skipped_rows} invalid or repeated)"
-                )
-
-        if not grc_articles and original_articles:
-            for article in original_articles:
-                grc_articles.append(
-                    {
-                        "title": article.title,
-                        "url": article.url,
-                        "relevance_score": 7.0,
-                        "summary": "GRC analysis via comprehensive model evaluation",
-                    }
-                )
 
         return {
             "grc_articles": grc_articles,
-            "analysis_rows": {"accepted": len(canonical_indices), "skipped": skipped_rows},
+            # Positions are authoritative for selection; titles may repeat.
+            "grc_article_indices": sorted(accepted),
+            "analysis_rows": {"accepted": len(accepted), "skipped": skipped_rows},
             "summary": {
                 "total_articles": len(original_articles),
                 "grc_relevant_count": len(grc_articles),
-                "confidence_score": 0.8 if grc_articles else 0.2,
+                "confidence_score": 0.8 if grc_articles else 0.0,
             },
             "analysis": {
                 "regulations_mentioned": list(set(regulations)) if regulations else [],

@@ -14,40 +14,39 @@ category sections. An explicit `Regulations:` line remains available for categor
 notes. Titles and source text are untrusted evidence, not response instructions.
 The prompt contains a format template, not a preselected positive answer.
 
-The parser recognizes canonical rows before looking for section keywords. Thus
-words such as risk, regulation, framework, industries, score and Title: remain
-part of the exact supplied title. Existing compatible decimal scores below 10
-remain recognized; `10` is the supported spelling of the upper endpoint.
+Every line of the form `Article <token>:` is a selection claim, checked
+identity first. The number must name a supplied article (no zero padding), that
+article's exact title must follow `Title:`, and a valid score must follow the
+title; trailing commentary after `relevant` is ignored. Because the title is
+matched as a whole, words such as risk, regulation, framework, industries,
+score and Title: inside it never act as delimiters or category headers. A list
+marker (`-`, `*`, `1.`) or bold emphasis around a row does not change its
+identity. Accepted scores are 1 through 10, with `10` or `10.0` as the upper
+endpoint and decimals below 10; the score is validated, not used.
 
-A canonical row credits an article only when its number names a supplied
-article, its title equals that article's title exactly, and its score is valid.
-A row that fails any of these checks credits no article: an unknown or
-zero-padded number, a title that belongs to another article, a mismatched title,
-or an invalid or nonfinite score. Such rows are skipped and counted; the
-remaining valid rows are kept. A repeated identity counts once and its repeats
-are skipped. The result reports `analysis_rows: {"accepted": n, "skipped": k}`,
-and skipped rows are logged by count, never by content.
+A claim that fails any check credits no article: an unknown or zero-padded
+number, another article's title, a mismatched title or an invalid or nonfinite
+score. It is skipped and counted, and the remaining valid rows are kept. A
+repeated identity counts once and its repeats are skipped. There is no
+title-based fallback for claims that fail. Accepted rows carry the article's
+position in `grc_article_indices`, which selection uses before titles, so
+duplicate supplied titles cannot select the wrong article. The result reports
+`analysis_rows: {"accepted": n, "skipped": k}`; skipped rows are logged by count,
+never by content.
 
-When canonical rows were attempted and none is usable, the analysis is refused
-with "no usable article analysis rows". It never falls through to the legacy
-fallback that selects every supplied article, so an unusable answer cannot
-become an apparently successful analysis. A refused analysis follows the
-existing failure path: the report run retains the last published report.
+When no claim is usable (all invalid, or a response that selects nothing) the
+model selects no article: `grc_articles` and `grc_article_indices` are empty and
+the confidence is 0. This is neither an error nor a selection of every article.
+The workflow's local entity and risk signals still select articles, and report
+evidence is still built from every retained source. The earlier fallback that
+treated unrecognized prose as selecting every supplied article is removed.
 
-The existing analysis result shape is preserved, including its legacy fixed
-relevance score of 7.0 and summary fields. This correction does not migrate to
-JSON analysis, change the report-plan schema, or change model routing, limits,
-privacy, grounding or retry policy.
-
-Legacy free-form handling remains for responses with no canonical row. It may
-recognize inline reasons or fall back to all original articles when it recognizes
-no row. Neither behavior proves the
-closed fictional test's required source-bound analysis. That observer still
-rejects inline reasons, bullets, Markdown, split rows, missing supplier control
-and unsupported identities without normalization. It remains stricter than the
-legacy parser outside the advertised canonical language. Duplicate supplied
-titles and title-based downstream selection retain their existing limitations;
-this is not a general analysis parser redesign.
+The existing analysis result keys are kept, including the legacy fixed relevance
+score of 7.0 and the summary fields; accepted rows add the article `url`, and the
+result adds `grc_article_indices` and `analysis_rows`. Category notes
+(regulations and frameworks) are still read from lines that are not selection
+claims. This correction does not migrate to JSON analysis or change the
+report-plan schema, model routing, limits, privacy, grounding or retry policy.
 
 `tests/test_analysis_text_contract.py` covers the generated prompt and parser.
 The separate nonpublishing test executor additionally compares the real parser

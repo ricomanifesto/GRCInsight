@@ -47,10 +47,12 @@ def test_prompt_owns_exact_row_and_separate_reason_without_inline_answer():
     assert parsed["grc_articles"] == [
         {
             "title": items[1].title,
+            "url": items[1].url,
             "relevance_score": 7.0,
             "summary": "GRC-relevant content identified",
         }
     ]
+    assert parsed["grc_article_indices"] == [1]
 
 
 @pytest.mark.parametrize(
@@ -73,8 +75,14 @@ def test_canonical_title_words_never_become_sections_or_delimiters(title):
     text = f"Article 2: Title: {title} score 8 relevant"
     parsed = service()._process_analysis_response(text, items)
     assert parsed["grc_articles"] == [
-        {"title": title, "relevance_score": 7.0, "summary": "GRC-relevant content identified"}
+        {
+            "title": title,
+            "url": items[1].url,
+            "relevance_score": 7.0,
+            "summary": "GRC-relevant content identified",
+        }
     ]
+    assert parsed["grc_article_indices"] == [1]
 
 
 @pytest.mark.parametrize(
@@ -92,11 +100,14 @@ def test_canonical_title_words_never_become_sections_or_delimiters(title):
         "Article 02: Title: Supplier access review score 8 relevant",
     ],
 )
-def test_a_response_whose_rows_are_all_invalid_is_refused_not_selected_wholesale(row):
-    # With no usable row, there is no analysis to report. It must not fall
-    # through to the legacy select-everything fallback.
-    with pytest.raises(ValueError, match="no usable article analysis rows"):
-        service()._process_analysis_response(row, articles())
+def test_a_response_whose_rows_are_all_invalid_selects_no_article(row):
+    # With no usable row the model selects nothing. It must never fall through to
+    # selecting every supplied article, and it credits no article.
+    parsed = service()._process_analysis_response(row, articles())
+    assert parsed["grc_articles"] == [] and parsed["grc_article_indices"] == []
+    assert parsed["analysis_rows"] == {"accepted": 0, "skipped": 1}
+    assert parsed["summary"]["grc_relevant_count"] == 0
+    assert parsed["summary"]["confidence_score"] == 0.0
 
 
 def test_separate_reason_cannot_reassign_sections_or_hide_a_row():
@@ -129,25 +140,24 @@ def test_finite_compatible_scores_preserve_existing_result_shape(score):
     assert parsed["grc_articles"] == [
         {
             "title": items[1].title,
+            "url": items[1].url,
             "relevance_score": 7.0,
             "summary": "GRC-relevant content identified",
         }
     ]
 
 
-def test_legacy_inline_reason_and_unrecognized_fallback_are_not_claimed_fixed():
+def test_trailing_commentary_keeps_identity_and_unrecognized_text_selects_nothing():
     items = articles()
     inline = service()._process_analysis_response(
         "Article 2: Title: Supplier access review score 8 relevant because review is warranted.",
         items,
     )
-    assert inline["grc_articles"][0]["title"] == items[1].title
-    fallback = service()._process_analysis_response("Unrecognized narrative", items)
-    assert len(fallback["grc_articles"]) == 2
-    assert all(
-        row["summary"] == "GRC analysis via comprehensive model evaluation"
-        for row in fallback["grc_articles"]
-    )
+    assert inline["grc_article_indices"] == [1]
+    # Prose with no row selects no article instead of every article.
+    prose = service()._process_analysis_response("Unrecognized narrative", items)
+    assert prose["grc_articles"] == [] and prose["grc_article_indices"] == []
+    assert prose["analysis_rows"] == {"accepted": 0, "skipped": 0}
 
 
 def test_invalid_rows_are_skipped_and_counted_while_valid_rows_are_kept():
@@ -162,6 +172,7 @@ def test_invalid_rows_are_skipped_and_counted_while_valid_rows_are_kept():
     )
     parsed = service()._process_analysis_response(text, items)
     assert [row["title"] for row in parsed["grc_articles"]] == [items[1].title]
+    assert parsed["grc_article_indices"] == [1]
     assert parsed["analysis_rows"] == {"accepted": 1, "skipped": 3}
     assert parsed["summary"]["grc_relevant_count"] == 1
 
@@ -195,7 +206,7 @@ def test_a_fully_valid_response_reports_no_skipped_rows():
     assert parsed["analysis_rows"] == {"accepted": 2, "skipped": 0}
 
 
-def test_one_malformed_row_no_longer_fails_the_analysis_but_all_malformed_does():
+def test_malformed_rows_never_fail_the_analysis_or_select_every_article():
     import asyncio
     from types import SimpleNamespace
 
@@ -217,6 +228,102 @@ def test_one_malformed_row_no_longer_fails_the_analysis_but_all_malformed_does()
     assert [row["title"] for row in mixed["grc_articles"]] == [items[1].title]
 
     model._invoke = answering("Article 1: Title: Not the supplied title score 8 relevant")
-    refused = asyncio.run(model._analyze_articles_with_model(items))
-    assert "no usable article analysis rows" in refused["error"]
-    assert refused["grc_articles"] == []
+    unusable = asyncio.run(model._analyze_articles_with_model(items))
+    assert "error" not in unusable
+    assert unusable["grc_articles"] == [] and unusable["grc_article_indices"] == []
+    assert unusable["analysis_rows"] == {"accepted": 0, "skipped": 1}
+
+
+@pytest.mark.parametrize(
+    "decorated",
+    [
+        "- Article 2: Title: Supplier access review score 8 relevant",
+        "* Article 2: Title: Supplier access review score 8 relevant",
+        "1. Article 2: Title: Supplier access review score 8 relevant",
+        "**Article 2**: Title: Supplier access review score 8 relevant",
+        "Article 2: Title: Supplier access review score 10.0 relevant (risk)",
+    ],
+)
+def test_list_markers_emphasis_and_trailing_text_do_not_change_identity(decorated):
+    parsed = service()._process_analysis_response(decorated, articles())
+    assert parsed["grc_article_indices"] == [1]
+    assert parsed["analysis_rows"] == {"accepted": 1, "skipped": 0}
+
+
+@pytest.mark.parametrize(
+    "decorated",
+    [
+        "- Article 1: Title: Supplier access review score 8 relevant",
+        "Article 1: Title: Supplier access review score 8 relevant, because supplier",
+        "Article \u0661: Title: Consultation notice score 8 relevant",
+    ],
+)
+def test_decorated_or_commented_claims_still_bind_exactly(decorated):
+    parsed = service()._process_analysis_response(decorated, articles())
+    assert parsed["grc_article_indices"] == []
+    assert parsed["analysis_rows"] == {"accepted": 0, "skipped": 1}
+
+
+def test_a_compliant_answer_selecting_nothing_is_an_empty_selection():
+    parsed = service()._process_analysis_response(
+        "No supplied article has clear GRC implications.\nRegulations: none", articles()
+    )
+    assert parsed["grc_articles"] == [] and parsed["grc_article_indices"] == []
+
+
+def test_mixed_valid_rows_and_mismatched_claims_never_credit_the_wrong_article():
+    items = articles()
+    text = (
+        f"Article 1: Title: {items[0].title} score 7 relevant\n"
+        "Article 1: Title: Supplier access review score 9 relevant, dup\n"
+        "Article 5 of GDPR is cited in the notice.\n"
+    )
+    parsed = service()._process_analysis_response(text, items)
+    assert parsed["grc_article_indices"] == [0]
+    assert parsed["analysis_rows"] == {"accepted": 1, "skipped": 1}
+
+
+def test_positions_not_titles_select_when_supplied_titles_collide():
+    from core.article_selection import selected_article_mask
+
+    items = articles() + [articles()[1].model_copy(update={"url": "https://other.example.test/x"})]
+    parsed = service()._process_analysis_response(
+        f"Article 2: Title: {items[1].title} score 8 relevant", items
+    )
+    assert selected_article_mask(items, parsed) == [False, True, False]
+
+
+def test_unusable_fallback_rows_never_refuse_an_enabled_relevance_selection(monkeypatch):
+    import asyncio
+    from types import SimpleNamespace
+    from unittest.mock import AsyncMock
+
+    from config.settings import settings
+    from services.relevance_decisions import ArticleDecision, RelevanceResult
+
+    monkeypatch.setattr(settings, "openrouter_api_key", "test-key")
+    monkeypatch.setattr(settings, "grc_relevance_mode", "enabled")
+    model = GRCModelService()
+    decisions = RelevanceResult(
+        (
+            ArticleDecision(0, "relevant", {"relevant": 0.99}, 0.95),
+            ArticleDecision(1, "insufficient_evidence", {"insufficient_evidence": 0.6}, 0.95),
+        ),
+        ("typesafe/jev-1.13",),
+        10,
+        0,
+        0.0,
+        0.01,
+    )
+    monkeypatch.setattr(model.relevance_client, "classify", AsyncMock(return_value=decisions))
+
+    async def invoke(**_kwargs):
+        return SimpleNamespace(text="Article 9: Title: Nothing supplied score 8 relevant")
+
+    monkeypatch.setattr(model, "_invoke", invoke)
+    analysis = asyncio.run(model.analyze_articles_for_grc(articles()))
+    assert "error" not in analysis
+    # The uncertain article stays selected; the confident one is kept too.
+    assert analysis["grc_article_indices"] == [0, 1]
+    diagnostics = model.last_relevance_diagnostics
+    assert diagnostics is not None and diagnostics["fallback_status"] == "ok"
