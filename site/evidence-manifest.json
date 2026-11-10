@@ -5,74 +5,74 @@
     "control_implications": [
       {
         "control_id": "vulnerability_management",
-        "evidence_excerpt": "Hackers are actively exploiting the \"SSHole\" vulnerability (CVE-2026-123158) in OpenSSH to execute commands, steal credentials, and establish persistent access…",
+        "evidence_excerpt": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Monday added four security flaws impacting GPUStack, SignalWire FreeSwitch, OpenBSD OpenSSH, and IBM Aspera Faspex to its Known Exploited Vulnerabilities (KEV) catalog, citing evidence of active exploitation.",
         "evidence_origin": "summary",
-        "focus": "OpenSSH",
-        "headline": "OpenSSH vulnerability weakens authentication controls",
+        "focus": "Known Exploited Vulnerabilities (KEV) catalog",
+        "headline": "Known Exploited Vulnerabilities (KEV) catalog adds four actively exploited flaws",
         "priority": "high",
-        "significance": "Active exploitation of an OpenSSH flaw allows command execution and credential theft, undermining vulnerability remediation assurance. Vulnerability and asset owners should confirm affected asset inventory, installed versions, remediation status, and exception ownership.",
-        "source_ids": [
-          1
-        ]
-      },
-      {
-        "control_id": "access_management",
-        "evidence_excerpt": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) has added a high-severity vulnerability impacting SonicWall SonicOS to its Known Exploited Vulnerabilities (KEV) catalog, following reports that it said may have been exploited in real-world attacks.",
-        "evidence_origin": "summary",
-        "focus": "SonicWall SonicOS",
-        "headline": "SonicWall SonicOS flaw exposes authentication bypass",
-        "priority": "medium",
-        "significance": "CISA cataloging of a SonicWall MFA bypass indicates potential authentication control gaps. Identity and access owners should verify access scope, authentication coverage, session revocation, and permission-test results for affected firewall appliances.",
+        "significance": "The addition of actively exploited vulnerabilities to the CISA KEV catalog signals immediate remediation priority for affected assets. Vulnerability and asset owners should confirm whether deployed products include GPUStack, SignalWire FreeSwitch, OpenBSD OpenSSH, or IBM Aspera Faspex and verify patching status.",
         "source_ids": [
           2
         ]
       },
       {
-        "control_id": "incident_response",
-        "evidence_excerpt": "Vanderbilt University warns it is responding to a cyberattack claimed by the BYOD ransomware gang, which claims to have encrypted the university's databases and stolen sensitive student, employee, and research data…",
+        "control_id": "access_management",
+        "evidence_excerpt": "Hackers are actively exploiting the \"SSHole\" vulnerability (CVE-2026-123158) in OpenSSH to execute commands, steal credentials, and establish persistent access…",
         "evidence_origin": "summary",
-        "focus": "Vanderbilt University databases",
-        "headline": "Vanderbilt University databases expose sensitive data",
+        "focus": "SSHole vulnerability",
+        "headline": "SSHole vulnerability enables command execution and credential theft",
         "priority": "high",
-        "significance": "Ransomware encryption and data exfiltration at a university test incident containment and evidence preservation. Incident response leads should review containment responsibilities, retained logs, and the most recent response exercise.",
+        "significance": "Active exploitation of the SSHole vulnerability in OpenSSH allows unauthorized command execution and credential theft, bypassing authentication controls. Identity and access owners should review SSH configurations, privileged session monitoring, and credential rotation practices for exposed systems.",
         "source_ids": [
           3
         ]
       },
       {
         "control_id": "third_party_risk",
-        "evidence_excerpt": "Japanese gaming giant SEGA has disclosed that a data breach at its third-party newsletter provider, ARARA, exposed the email addresses of 2.2 million newsletter subscribers…",
+        "evidence_excerpt": "An October cyberattack on refrigeration controllers at about 700 French retail sites was carried out by a cyber unit of Iran's Islamic Revolutionary Guard Corps (IRGC), the French government said yesterday. The attackers broke into controllers on the night of October 11 and changed their defrost settings to high temperatures. That caused food losses and, in at least 15 cases, fires. The unit…",
         "evidence_origin": "summary",
-        "focus": "ARARA",
-        "headline": "ARARA breach exposes subscriber emails",
+        "focus": "refrigeration controllers at about 700 French retail sites",
+        "headline": "Refrigeration controllers at about 700 French retail sites compromised by state-sponsored actors",
         "priority": "high",
-        "significance": "A third-party newsletter provider breach exposes subscriber data, highlighting supplier assurance gaps. Supplier risk owners should assess supplier access scope, control responsibilities, and evidence of remediation assurance.",
+        "significance": "State-sponsored compromise of operational technology at hundreds of retail sites demonstrates supply chain risk to physical infrastructure. Supplier risk owners should assess dependencies on industrial controller vendors and verify segmentation and monitoring controls for OT environments.",
         "source_ids": [
           4
         ]
       },
       {
-        "control_id": "change_management",
-        "evidence_excerpt": "N-able has taken its hosted N-central environments offline and urged on-premises customers to shut down their servers after a security researcher publicly disclosed more than 30 alleged zero-day vulnerabilities, including exploits that could let attackers take over vulnerable systems…",
+        "control_id": "third_party_risk",
+        "evidence_excerpt": "AI infrastructure startup Fireworks has disclosed a new security breach in which attackers accessed its development machines after breaching a third-party cloud provider…",
         "evidence_origin": "summary",
-        "focus": "N-central environments",
-        "headline": "N-central environments go offline after zero-day disclosure",
-        "priority": "high",
-        "significance": "Platform shutdown due to multiple zero-days tests change approval and validation controls. Change and service owners should review change approvals, rollout coverage, post-change validation, and rollback ownership.",
+        "focus": "third-party cloud provider",
+        "headline": "Third-party cloud provider exposes AI development environment",
+        "priority": "medium",
+        "significance": "A cloud provider breach leading to compromise of customer development machines highlights transitive risk in cloud supply chains. Supplier risk owners should review cloud provider assurance evidence, access scopes, and incident notification commitments.",
         "source_ids": [
-          6
+          7
         ]
       },
       {
-        "control_id": "monitoring",
-        "evidence_excerpt": "France has linked October cyberattacks that disrupted refrigeration systems at more than 700 supermarkets and other retail locations to Iranian state-backed hackers, saying the attacks caused food losses and sparked at least 15 fires…",
+        "control_id": "vulnerability_management",
+        "evidence_excerpt": "N-able said it has taken N-central Hosted Environments offline and is urging on-premises customers to shut down their servers until further notice following the public disclosure of over 30 vulnerabilities collectively tracked as Able2Shell. \"As a precautionary measure, we are temporarily taking our Hosted N-central environment offline while we take the necessary actions to secure the…",
         "evidence_origin": "summary",
-        "focus": "supermarket refrigeration systems",
-        "headline": "supermarket refrigeration systems face nation-state attacks",
+        "focus": "N-central Hosted Environments",
+        "headline": "N-central Hosted Environments taken offline after 30 zero-day disclosures",
         "priority": "high",
-        "significance": "Nation-state disruption of retail refrigeration systems challenges detection coverage for operational technology. Detection and monitoring owners should evaluate log coverage, detection tests, alert routing, and investigation ownership for OT environments.",
+        "significance": "The shutdown of a widely used management platform due to numerous zero-days indicates severe vulnerability exposure in supply chain tools. Vulnerability and asset owners should identify any N-central deployments, assess compensating controls, and coordinate with the vendor for remediation timelines.",
         "source_ids": [
-          10
+          8
+        ]
+      },
+      {
+        "control_id": "governance",
+        "evidence_excerpt": "New questionnaire captures critical data and information that improves the agency’s ability to assess incidents, identify trends and prioritize response actions.",
+        "evidence_origin": "summary",
+        "focus": "New questionnaire",
+        "headline": "New questionnaire improves incident data collection for CISA reporting",
+        "priority": "medium",
+        "significance": "CISA's updated reporting form changes incident notification expectations and data requirements for organizations. Risk and control owners should review the new questionnaire fields, align internal incident reporting procedures, and ensure evidence collection meets the enhanced standard.",
+        "source_ids": [
+          11
         ]
       }
     ],
@@ -80,33 +80,81 @@
       "paragraphs": [
         {
           "source_ids": [
-            1,
             2,
-            6
+            3,
+            8
           ],
-          "text": "Active exploitation of the SSHole vulnerability in OpenSSH and the addition of a SonicWall SonicOS authentication bypass to the CISA KEV catalog, combined with N-able taking its cloud platform offline after disclosure of over 30 zero-days, indicate widespread vulnerability exposure that weakens patch management and access controls across Linux, firewall, and management platforms."
+          "text": "Active exploitation of critical vulnerabilities across widely used infrastructure components demands immediate remediation prioritization. CISA added four actively exploited flaws to its Known Exploited Vulnerabilities catalog, while the SSHole vulnerability in OpenSSH enables credential theft and command execution, and over 30 zero-days forced the shutdown of the N-central management platform. Vulnerability and asset owners must identify affected deployments, verify patching status, and implement compensating controls where patches are unavailable."
         },
         {
           "source_ids": [
-            3,
             4,
-            10
+            7,
+            11
           ],
-          "text": "Ransomware encryption and data theft at Vanderbilt University, a third-party breach at SEGA's newsletter provider ARARA exposing 2.2 million emails, and nation-state attacks disrupting supermarket refrigeration systems demonstrate growing incident response, third-party risk, and monitoring challenges for education, retail, and critical infrastructure operators."
+          "text": "Supply chain compromises and evolving regulatory expectations extend risk oversight beyond organizational boundaries. A state-sponsored attack compromised refrigeration controllers at hundreds of French retail sites, a cloud provider breach exposed AI development environments, and CISA introduced an enhanced incident reporting form that changes notification evidence requirements. Supplier risk owners should validate third-party assurance coverage, while governance owners align incident reporting procedures with the new federal standard."
         }
       ]
     },
     "industry_impacts": [],
     "regulatory_changes": []
   },
-  "generated_at": "2026-11-10T00:37:12.915844Z",
-  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/f4fb356aede948b45ab88099823fce64dc8444b1/site/feed.xml",
+  "generated_at": "2026-11-10T09:20:59.429987Z",
+  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/0933a4d70fff345ec69e3627a23b81f2f7bf2bfe/site/feed.xml",
   "feed_home_url": "https://sentrydigest.ricomanifesto.com/",
   "digest_issue_date": "2026-11-10",
   "digest_issue_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-10/",
   "requested_model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
   "resolved_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
   "sources": [
+    {
+      "title": "Google Issues Chrome Security Update for Eighth Actively Exploited Zero-Day of 2026",
+      "url": "https://thehackernews.com/2026/11/google-issues-chrome-security-update.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-10/#reporting-749cd79bf9b6",
+      "cves": [
+        "CVE-2026-125350"
+      ],
+      "snippet": "Google Issues Chrome Security Update for Eighth Actively Exploited Zero-Day of 2026 Google on Monday released updates to patch nine security vulnerabilities, including one that has come under active exploitation in the wild. The high-severity vulnerability, assigned the CVE identifier CVE-2026-125350 (CVSS score: N/A), has been described as a use-after-free bug in the XML component. Use-after-free bugs typically occur when a program attempts to access a memory location after… Google on Monday released updates to patch nine security vulnerabilities, including one that has come under active exploitation in the wild. The high-severity vulnerability, assigned the CVE identifier CVE-2026-125350 (",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Google on Monday released updates to patch nine security vulnerabilities, including one that has come under active exploitation in the wild. The high-severity vulnerability, assigned the CVE identifier CVE-2026-125350 (CVSS score: N/A), has been described as a use-after-free bug in the XML component. Use-after-free bugs typically occur when a program attempts to access a memory location after…",
+          "text": "Google on Monday released updates to patch nine security vulnerabilities, including one that has come under active exploitation in the wild. The high-severity vulnerability, assigned the CVE identifier CVE-2026-125350 (CVSS score: N/A), has been described as a use-after-free bug in the XML component. Use-after-free bugs typically occur when a program attempts to access a memory location after…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Google on Monday released updates to patch nine security vulnerabilities, including one that has come under active exploitation in the wild. The high-severity vulnerability, assigned the CVE identifier CVE-2026-125350 (CVSS score: N/A), has been described as a use-after-free bug in the XML component. Use-after-free bugs typically occur when a program attempts to access a memory location after…",
+          "text": "Google on Monday released updates to patch nine security vulnerabilities, including one that has come under active exploitation in the wild. The high-severity vulnerability, assigned the CVE identifier CVE-2026-125350 (CVSS score: N/A), has been described as a use-after-free bug in the XML component. Use-after-free bugs typically occur when a program attempts to access a memory location after…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "CISA Warns of Active Exploitation of OpenSSH, GPUStack, FreeSWITCH, and IBM Flaws",
+      "url": "https://thehackernews.com/2026/11/cisa-warns-of-active-exploitation-of.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-10/#reporting-4703b2a7b4d7",
+      "cves": [
+        "CVE-2026-123218"
+      ],
+      "snippet": "CISA Warns of Active Exploitation of OpenSSH, GPUStack, FreeSWITCH, and IBM Flaws The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Monday added four security flaws impacting GPUStack, SignalWire FreeSwitch, OpenBSD OpenSSH, and IBM Aspera Faspex to its Known Exploited Vulnerabilities (KEV) catalog, citing evidence of active exploitation. The vulnerabilities are listed below - CVE-2026-123218 (CVSS score: 9.8) - An incorrect authorization vulnerability… The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Monday added four security flaws impacting GPUStack, SignalWire FreeSwitch, OpenBSD OpenSSH, and IBM Aspera Faspex to its Known Exploited Vulnerabilities (K",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Monday added four security flaws impacting GPUStack, SignalWire FreeSwitch, OpenBSD OpenSSH, and IBM Aspera Faspex to its Known Exploited Vulnerabilities (KEV) catalog, citing evidence of active exploitation. The vulnerabilities are listed below - CVE-2026-123218 (CVSS score: 9.8) - An incorrect authorization vulnerability…",
+          "text": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Monday added four security flaws impacting GPUStack, SignalWire FreeSwitch, OpenBSD OpenSSH, and IBM Aspera Faspex to its Known Exploited Vulnerabilities (KEV) catalog, citing evidence of active exploitation. The vulnerabilities are listed below - CVE-2026-123218 (CVSS score: 9.8) - An incorrect authorization vulnerability…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Monday added four security flaws impacting GPUStack, SignalWire FreeSwitch, OpenBSD OpenSSH, and IBM Aspera Faspex to its Known Exploited Vulnerabilities (KEV) catalog, citing evidence of active exploitation. The vulnerabilities are listed below - CVE-2026-123218 (CVSS score: 9.8) - An incorrect authorization vulnerability…",
+          "text": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Monday added four security flaws impacting GPUStack, SignalWire FreeSwitch, OpenBSD OpenSSH, and IBM Aspera Faspex to its Known Exploited Vulnerabilities (KEV) catalog, citing evidence of active exploitation. The vulnerabilities are listed below - CVE-2026-123218 (CVSS score: 9.8) - An incorrect authorization vulnerability…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
     {
       "title": "Hackers exploit SSHole OpenSSH flaw to breach Linux systems",
       "url": "https://www.bleepingcomputer.com/news/security/hackers-exploit-sshole-openssh-flaw-to-breach-linux-systems/",
@@ -132,25 +180,111 @@
       "effective_date_evidence": null
     },
     {
-      "title": "CISA Flags SonicWall SonicOS MFA Bypass Flaw Amid Reports of Possible Exploitation",
-      "url": "https://thehackernews.com/2026/11/cisa-flags-sonicwall-sonicos-mfa-bypass.html",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-10/#reporting-4d02c260bfd3",
-      "cves": [
-        "CVE-2026-19868"
-      ],
-      "snippet": "CISA Flags SonicWall SonicOS MFA Bypass Flaw Amid Reports of Possible Exploitation The U.S. Cybersecurity and Infrastructure Security Agency (CISA) has added a high-severity vulnerability impacting SonicWall SonicOS to its Known Exploited Vulnerabilities (KEV) catalog, following reports that it said may have been exploited in real-world attacks. The vulnerability, tracked as CVE-2026-19868 (CVSS score: 7.1 / 7.5), has been described as an authentication reinforcement… The U.S. Cybersecurity and Infrastructure Security Agency (CISA) has added a high-severity vulnerability impacting SonicWall SonicOS to its Known Exploited Vulnerabilities (KEV) catalog, following reports that it said may have ",
+      "title": "France Blames Iran for Sabotage Attack on Refrigeration Controllers at About 700 Retail Sites",
+      "url": "https://thehackernews.com/2026/11/france-blames-iran-for-sabotage-attack.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-10/#reporting-db918bafa08c",
+      "cves": [],
+      "snippet": "France Blames Iran for Sabotage Attack on Refrigeration Controllers at About 700 Retail Sites An October cyberattack on refrigeration controllers at about 700 French retail sites was carried out by a cyber unit of Iran's Islamic Revolutionary Guard Corps (IRGC), the French government said yesterday. The attackers broke into controllers on the night of October 11 and changed their defrost settings to high temperatures. That caused food losses and, in at least 15 cases, fires. The unit… An October cyberattack on refrigeration controllers at about 700 French retail sites was carried out by a cyber unit of Iran's Islamic Revolutionary Guard Corps (IRGC), the French government said yesterday. The",
       "article_evidence": [
         {
           "extraction_version": 1,
           "origin": "summary",
-          "raw_text": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) has added a high-severity vulnerability impacting SonicWall SonicOS to its Known Exploited Vulnerabilities (KEV) catalog, following reports that it said may have been exploited in real-world attacks. The vulnerability, tracked as CVE-2026-19868 (CVSS score: 7.1 / 7.5), has been described as an authentication reinforcement…",
-          "text": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) has added a high-severity vulnerability impacting SonicWall SonicOS to its Known Exploited Vulnerabilities (KEV) catalog, following reports that it said may have been exploited in real-world attacks. The vulnerability, tracked as CVE-2026-19868 (CVSS score: 7.1 / 7.5), has been described as an authentication reinforcement…"
+          "raw_text": "An October cyberattack on refrigeration controllers at about 700 French retail sites was carried out by a cyber unit of Iran's Islamic Revolutionary Guard Corps (IRGC), the French government said yesterday. The attackers broke into controllers on the night of October 11 and changed their defrost settings to high temperatures. That caused food losses and, in at least 15 cases, fires. The unit…",
+          "text": "An October cyberattack on refrigeration controllers at about 700 French retail sites was carried out by a cyber unit of Iran's Islamic Revolutionary Guard Corps (IRGC), the French government said yesterday. The attackers broke into controllers on the night of October 11 and changed their defrost settings to high temperatures. That caused food losses and, in at least 15 cases, fires. The unit…"
         },
         {
           "extraction_version": 1,
           "origin": "content",
-          "raw_text": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) has added a high-severity vulnerability impacting SonicWall SonicOS to its Known Exploited Vulnerabilities (KEV) catalog, following reports that it said may have been exploited in real-world attacks. The vulnerability, tracked as CVE-2026-19868 (CVSS score: 7.1 / 7.5), has been described as an authentication reinforcement…",
-          "text": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) has added a high-severity vulnerability impacting SonicWall SonicOS to its Known Exploited Vulnerabilities (KEV) catalog, following reports that it said may have been exploited in real-world attacks. The vulnerability, tracked as CVE-2026-19868 (CVSS score: 7.1 / 7.5), has been described as an authentication reinforcement…"
+          "raw_text": "An October cyberattack on refrigeration controllers at about 700 French retail sites was carried out by a cyber unit of Iran's Islamic Revolutionary Guard Corps (IRGC), the French government said yesterday. The attackers broke into controllers on the night of October 11 and changed their defrost settings to high temperatures. That caused food losses and, in at least 15 cases, fires. The unit…",
+          "text": "An October cyberattack on refrigeration controllers at about 700 French retail sites was carried out by a cyber unit of Iran's Islamic Revolutionary Guard Corps (IRGC), the French government said yesterday. The attackers broke into controllers on the night of October 11 and changed their defrost settings to high temperatures. That caused food losses and, in at least 15 cases, fires. The unit…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Google patches eighth Chrome zero-day exploited in attacks this year",
+      "url": "https://www.bleepingcomputer.com/news/security/google-patches-eighth-chrome-zero-day-exploited-in-attacks-this-year/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-10/#reporting-cf90f68ee6be",
+      "cves": [],
+      "snippet": "Google patches eighth Chrome zero-day exploited in attacks this year Google has released emergency security updates to patch a new Chrome vulnerability exploited in zero-day attacks, the eighth such flaw since the start of the year… Google has released emergency security updates to patch a new Chrome vulnerability exploited in zero-day attacks, the eighth such flaw since the start of the year…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Google has released emergency security updates to patch a new Chrome vulnerability exploited in zero-day attacks, the eighth such flaw since the start of the year…",
+          "text": "Google has released emergency security updates to patch a new Chrome vulnerability exploited in zero-day attacks, the eighth such flaw since the start of the year…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Google has released emergency security updates to patch a new Chrome vulnerability exploited in zero-day attacks, the eighth such flaw since the start of the year…",
+          "text": "Google has released emergency security updates to patch a new Chrome vulnerability exploited in zero-day attacks, the eighth such flaw since the start of the year…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Anthropic's Claude Fable 5.2 Beats GPT-6 Cyber in Multi-Stage Cyberattack Benchmark",
+      "url": "https://thehackernews.com/2026/11/anthropics-claude-fable-52-beats-gpt-6.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-10/#reporting-324a5559d0e2",
+      "cves": [],
+      "snippet": "Anthropic's Claude Fable 5.2 Beats GPT-6 Cyber in Multi-Stage Cyberattack Benchmark Anthropic on Monday released Claude Fable 5.2 and Claude Mythos 5.2 models, which it said exhibit improvements in coding, reasoning, and vision. During pre-release training, the large language models (LLMs) helped its engineers \"complete otherwise-infeasible software migrations, designed three working electronic devices from scratch, solved two open problems in the physics of black holes, made… Anthropic on Monday released Claude Fable 5.2 and Claude Mythos 5.2 models, which it said exhibit improvements in coding, reasoning, and vision. During pre-release training, the large language models (LLMs) helped its ",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Anthropic on Monday released Claude Fable 5.2 and Claude Mythos 5.2 models, which it said exhibit improvements in coding, reasoning, and vision. During pre-release training, the large language models (LLMs) helped its engineers \"complete otherwise-infeasible software migrations, designed three working electronic devices from scratch, solved two open problems in the physics of black holes, made…",
+          "text": "Anthropic on Monday released Claude Fable 5.2 and Claude Mythos 5.2 models, which it said exhibit improvements in coding, reasoning, and vision. During pre-release training, the large language models (LLMs) helped its engineers \"complete otherwise-infeasible software migrations, designed three working electronic devices from scratch, solved two open problems in the physics of black holes, made…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Anthropic on Monday released Claude Fable 5.2 and Claude Mythos 5.2 models, which it said exhibit improvements in coding, reasoning, and vision. During pre-release training, the large language models (LLMs) helped its engineers \"complete otherwise-infeasible software migrations, designed three working electronic devices from scratch, solved two open problems in the physics of black holes, made…",
+          "text": "Anthropic on Monday released Claude Fable 5.2 and Claude Mythos 5.2 models, which it said exhibit improvements in coding, reasoning, and vision. During pre-release training, the large language models (LLMs) helped its engineers \"complete otherwise-infeasible software migrations, designed three working electronic devices from scratch, solved two open problems in the physics of black holes, made…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Fireworks AI discloses new breach after cloud provider hack",
+      "url": "https://www.bleepingcomputer.com/news/security/fireworks-ai-discloses-new-breach-after-cloud-provider-hack/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-10/#reporting-4e06135bcc13",
+      "cves": [],
+      "snippet": "Fireworks AI discloses new breach after cloud provider hack AI infrastructure startup Fireworks has disclosed a new security breach in which attackers accessed its development machines after breaching a third-party cloud provider… AI infrastructure startup Fireworks has disclosed a new security breach in which attackers accessed its development machines after breaching a third-party cloud provider…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "AI infrastructure startup Fireworks has disclosed a new security breach in which attackers accessed its development machines after breaching a third-party cloud provider…",
+          "text": "AI infrastructure startup Fireworks has disclosed a new security breach in which attackers accessed its development machines after breaching a third-party cloud provider…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "AI infrastructure startup Fireworks has disclosed a new security breach in which attackers accessed its development machines after breaching a third-party cloud provider…",
+          "text": "AI infrastructure startup Fireworks has disclosed a new security breach in which attackers accessed its development machines after breaching a third-party cloud provider…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "N-able Takes N-central Cloud Offline After Researcher Discloses 33 Zero-Days with PoC Exploits",
+      "url": "https://thehackernews.com/2026/11/n-able-takes-hosted-n-central-offline.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-10/#reporting-f0d40b6eb5ca",
+      "cves": [],
+      "snippet": "N-able Takes N-central Cloud Offline After Researcher Discloses 33 Zero-Days with PoC Exploits N-able said it has taken N-central Hosted Environments offline and is urging on-premises customers to shut down their servers until further notice following the public disclosure of over 30 vulnerabilities collectively tracked as Able2Shell. \"As a precautionary measure, we are temporarily taking our Hosted N-central environment offline while we take the necessary actions to secure the… N-able said it has taken N-central Hosted Environments offline and is urging on-premises customers to shut down their servers until further notice following the public disclosure of over 30 vulnerabilities collective",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "N-able said it has taken N-central Hosted Environments offline and is urging on-premises customers to shut down their servers until further notice following the public disclosure of over 30 vulnerabilities collectively tracked as Able2Shell. \"As a precautionary measure, we are temporarily taking our Hosted N-central environment offline while we take the necessary actions to secure the…",
+          "text": "N-able said it has taken N-central Hosted Environments offline and is urging on-premises customers to shut down their servers until further notice following the public disclosure of over 30 vulnerabilities collectively tracked as Able2Shell. \"As a precautionary measure, we are temporarily taking our Hosted N-central environment offline while we take the necessary actions to secure the…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "N-able said it has taken N-central Hosted Environments offline and is urging on-premises customers to shut down their servers until further notice following the public disclosure of over 30 vulnerabilities collectively tracked as Able2Shell. \"As a precautionary measure, we are temporarily taking our Hosted N-central environment offline while we take the necessary actions to secure the…",
+          "text": "N-able said it has taken N-central Hosted Environments offline and is urging on-premises customers to shut down their servers until further notice following the public disclosure of over 30 vulnerabilities collectively tracked as Able2Shell. \"As a precautionary measure, we are temporarily taking our Hosted N-central environment offline while we take the necessary actions to secure the…"
         }
       ],
       "effective_date_evidence": null
@@ -239,138 +373,6 @@
           "origin": "content",
           "raw_text": "N-able has taken its hosted N-central environments offline and urged on-premises customers to shut down their servers after a security researcher publicly disclosed more than 30 alleged zero-day vulnerabilities, including exploits that could let attackers take over vulnerable systems…",
           "text": "N-able has taken its hosted N-central environments offline and urged on-premises customers to shut down their servers after a security researcher publicly disclosed more than 30 alleged zero-day vulnerabilities, including exploits that could let attackers take over vulnerable systems…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "York University breach exposed personal information dating to 2007",
-      "url": "https://www.bleepingcomputer.com/news/security/york-university-breach-exposed-personal-information-dating-to-2007/",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-10/#reporting-79849d176e5c",
-      "cves": [],
-      "snippet": "York University breach exposed personal information dating to 2007 York University has announced it suffered a cybersecurity incident in which a threat actor stole personal information people submitted through online forms… York University has announced it suffered a cybersecurity incident in which a threat actor stole personal information people submitted through online forms…",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "York University has announced it suffered a cybersecurity incident in which a threat actor stole personal information people submitted through online forms…",
-          "text": "York University has announced it suffered a cybersecurity incident in which a threat actor stole personal information people submitted through online forms…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "York University has announced it suffered a cybersecurity incident in which a threat actor stole personal information people submitted through online forms…",
-          "text": "York University has announced it suffered a cybersecurity incident in which a threat actor stole personal information people submitted through online forms…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "Microsoft Fixes RCE Bug in Windows Paint After Weeks of Confusion",
-      "url": "https://www.darkreading.com/application-security/microsoft-rce-bug-windows-paint-confusion",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-10/#reporting-c8c3e5769034",
-      "cves": [],
-      "snippet": "Microsoft Fixes RCE Bug in Windows Paint After Weeks of Confusion Last month, Microsoft disclosed a vulnerability in Microsoft Paint, but messaging regarding a patch was unclear. Last month, Microsoft disclosed a vulnerability in Microsoft Paint, but messaging regarding a patch was unclear.",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "Last month, Microsoft disclosed a vulnerability in Microsoft Paint, but messaging regarding a patch was unclear.",
-          "text": "Last month, Microsoft disclosed a vulnerability in Microsoft Paint, but messaging regarding a patch was unclear."
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "Last month, Microsoft disclosed a vulnerability in Microsoft Paint, but messaging regarding a patch was unclear.",
-          "text": "Last month, Microsoft disclosed a vulnerability in Microsoft Paint, but messaging regarding a patch was unclear."
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "Black Hat India 2026 Makes a Landmark Debut in Bengaluru, Bringing the Global Cybersecurity Community to India",
-      "url": "https://www.darkreading.com/cybersecurity-operations/black-hat-india-2026-landmark-debut",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-10/#reporting-97eefd9b8c2e",
-      "cves": [],
-      "snippet": "Black Hat India 2026 Makes a Landmark Debut in Bengaluru, Bringing the Global Cybersecurity Community to India Inaugural edition by Informa Markets in India brings together leading researchers, security practitioners and industry decision makers for four days of cutting-edge research, technical exchange and strategic dialogue. Inaugural edition by Informa Markets in India brings together leading researchers, security practitioners and industry decision makers for four days of cutting-edge research, technical exchange and strategic dialogue.",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "Inaugural edition by Informa Markets in India brings together leading researchers, security practitioners and industry decision makers for four days of cutting-edge research, technical exchange and strategic dialogue.",
-          "text": "Inaugural edition by Informa Markets in India brings together leading researchers, security practitioners and industry decision makers for four days of cutting-edge research, technical exchange and strategic dialogue."
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "Inaugural edition by Informa Markets in India brings together leading researchers, security practitioners and industry decision makers for four days of cutting-edge research, technical exchange and strategic dialogue.",
-          "text": "Inaugural edition by Informa Markets in India brings together leading researchers, security practitioners and industry decision makers for four days of cutting-edge research, technical exchange and strategic dialogue."
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "France blames Iranian hackers for supermarket attacks that sparked fires",
-      "url": "https://www.bleepingcomputer.com/news/security/france-blames-iranian-hackers-for-supermarket-attacks-that-sparked-fires/",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-10/#reporting-33708f427c03",
-      "cves": [],
-      "snippet": "France blames Iranian hackers for supermarket attacks that sparked fires France has linked October cyberattacks that disrupted refrigeration systems at more than 700 supermarkets and other retail locations to Iranian state-backed hackers, saying the attacks caused food losses and sparked at least 15 fires… France has linked October cyberattacks that disrupted refrigeration systems at more than 700 supermarkets and other retail locations to Iranian state-backed hackers, saying the attacks caused food losses and sparked at least 15 fires…",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "France has linked October cyberattacks that disrupted refrigeration systems at more than 700 supermarkets and other retail locations to Iranian state-backed hackers, saying the attacks caused food losses and sparked at least 15 fires…",
-          "text": "France has linked October cyberattacks that disrupted refrigeration systems at more than 700 supermarkets and other retail locations to Iranian state-backed hackers, saying the attacks caused food losses and sparked at least 15 fires…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "France has linked October cyberattacks that disrupted refrigeration systems at more than 700 supermarkets and other retail locations to Iranian state-backed hackers, saying the attacks caused food losses and sparked at least 15 fires…",
-          "text": "France has linked October cyberattacks that disrupted refrigeration systems at more than 700 supermarkets and other retail locations to Iranian state-backed hackers, saying the attacks caused food losses and sparked at least 15 fires…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "Attackers Crash Claude's 'Office Party' Flaw to Run Malicious Code on Linux",
-      "url": "https://www.darkreading.com/endpoint-security/attackers-claude-office-party-flaw-malicious-code-linux",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-10/#reporting-b9fc0becb371",
-      "cves": [],
-      "snippet": "Attackers Crash Claude's 'Office Party' Flaw to Run Malicious Code on Linux Attackers can exploit a flaw in Claude's document-processing tool by creating a temporary file that Anthropic's AI assistant can access and run on a user's machine. Attackers can exploit a flaw in Claude's document-processing tool by creating a temporary file that Anthropic's AI assistant can access and run on a user's machine.",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "Attackers can exploit a flaw in Claude's document-processing tool by creating a temporary file that Anthropic's AI assistant can access and run on a user's machine.",
-          "text": "Attackers can exploit a flaw in Claude's document-processing tool by creating a temporary file that Anthropic's AI assistant can access and run on a user's machine."
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "Attackers can exploit a flaw in Claude's document-processing tool by creating a temporary file that Anthropic's AI assistant can access and run on a user's machine.",
-          "text": "Attackers can exploit a flaw in Claude's document-processing tool by creating a temporary file that Anthropic's AI assistant can access and run on a user's machine."
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "Hackers Exploit Qubole's Trusted AWS Access to Breach Customer Accounts and Steal Data",
-      "url": "https://thehackernews.com/2026/11/hackers-exploit-quboles-trusted-aws.html",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-10/#reporting-ee5e2ceda03a",
-      "cves": [],
-      "snippet": "Hackers Exploit Qubole's Trusted AWS Access to Breach Customer Accounts and Steal Data An attacker broke into AWS accounts belonging to multiple Qubole customers between October 14 and October 26 and stole stored secrets and data, cloud security company Wiz said today. The attacker used credentials for an AWS account that Qubole's platform uses to reach those customers. How the attacker got those credentials has not been disclosed. Qubole, a data lake platform owned by Idera… An attacker broke into AWS accounts belonging to multiple Qubole customers between October 14 and October 26 and stole stored secrets and data, cloud security company Wiz said today. The attacker used credentials for an",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "An attacker broke into AWS accounts belonging to multiple Qubole customers between October 14 and October 26 and stole stored secrets and data, cloud security company Wiz said today. The attacker used credentials for an AWS account that Qubole's platform uses to reach those customers. How the attacker got those credentials has not been disclosed. Qubole, a data lake platform owned by Idera…",
-          "text": "An attacker broke into AWS accounts belonging to multiple Qubole customers between October 14 and October 26 and stole stored secrets and data, cloud security company Wiz said today. The attacker used credentials for an AWS account that Qubole's platform uses to reach those customers. How the attacker got those credentials has not been disclosed. Qubole, a data lake platform owned by Idera…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "An attacker broke into AWS accounts belonging to multiple Qubole customers between October 14 and October 26 and stole stored secrets and data, cloud security company Wiz said today. The attacker used credentials for an AWS account that Qubole's platform uses to reach those customers. How the attacker got those credentials has not been disclosed. Qubole, a data lake platform owned by Idera…",
-          "text": "An attacker broke into AWS accounts belonging to multiple Qubole customers between October 14 and October 26 and stole stored secrets and data, cloud security company Wiz said today. The attacker used credentials for an AWS account that Qubole's platform uses to reach those customers. How the attacker got those credentials has not been disclosed. Qubole, a data lake platform owned by Idera…"
         }
       ],
       "effective_date_evidence": null
