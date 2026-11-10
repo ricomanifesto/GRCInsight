@@ -54,6 +54,7 @@ class Report:
     findings: tuple[Finding, ...]
     anchors: frozenset[int]  # finding numbers that have an anchor in the rendered page
     regulatory_rows: int = 0
+    regulatory_sources: tuple[Source, ...] = ()  # one per regulatory row, in row order
 
 
 @dataclass(frozen=True)
@@ -161,6 +162,18 @@ def findings_from_plan(
             )
         )
     return tuple(findings)
+
+
+def regulatory_sources_from_plan(rows: Sequence[Any], sources: Sequence[Any]) -> tuple[Source, ...]:
+    """The stored source of each regulatory row, in row order."""
+    cited = []
+    for row in rows:
+        entry = sources[row.source_id - 1]
+        url = entry.get("url") if isinstance(entry, dict) else None
+        if isinstance(url, str) and url:
+            title = entry.get("title")
+            cited.append(Source(url=url, title=title if isinstance(title, str) else url))
+    return tuple(cited)
 
 
 def exclusion_reason(manifest: object) -> str:

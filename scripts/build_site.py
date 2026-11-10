@@ -11,6 +11,7 @@ from pathlib import Path
 import re
 import subprocess
 import sys
+from typing import NamedTuple
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "scripts"))
@@ -27,6 +28,8 @@ from core.report_plan import (  # noqa: E402
 
 from public_site import emitted_origin, presentation_origins  # noqa: E402
 import source_history  # noqa: E402
+import regulatory_register  # noqa: E402
+import regulatory_window  # noqa: E402
 from publication_state import (  # noqa: E402
     PublicationStateError,
     category_label,
@@ -41,6 +44,7 @@ EVIDENCE_MANIFEST = SITE_DIR / "evidence-manifest.json"
 PUBLICATION_STATE = SITE_DIR / "publication-state.json"
 PUBLICATION_HISTORY = SITE_DIR / "publication-history.json"
 PUBLICATION_HISTORY_INDEX = SITE_DIR / "publication-history" / "index.html"
+REGULATORY_REGISTER = SITE_DIR / "regulatory-register.json"
 ARCHIVE_DIR = SITE_DIR / "archive"
 RENDERER_JS = SITE_DIR / "static" / "renderer.js"
 REPORT_START = "<!-- REPORT_CONTENT_START -->"
@@ -278,12 +282,14 @@ def current_index_html(
     manifest: object = None,
     report_html: str | None = None,
     history_html: str = "",
+    regulatory_html: str = "",
 ) -> str:
     fields = report_fields(markdown)
     generated_raw = fields.get("generated", "")
     generated = parse_generated(generated_raw)
     if report_html is None:
         report_html = render_report(markdown, manifest)
+    report_html = regulatory_window.with_regulatory_window(report_html, regulatory_html)
     report_html, after_report = with_earlier_coverage(report_html, history_html)
     report_node = (
         f"{REPORT_START}\n"
@@ -550,10 +556,24 @@ def _history_report(key: str, generated: datetime, plan, sources: list, html: st
         findings=findings,
         anchors=frozenset(f.number for f in findings if f'id="finding-{f.number}"' in html),
         regulatory_rows=len(plan.regulatory_changes),
+        regulatory_sources=source_history.regulatory_sources_from_plan(
+            plan.regulatory_changes, sources
+        ),
     )
 
 
-def source_history_html(
+class HistoryCorpus(NamedTuple):
+    anchor: datetime
+    current: object  # source_history.Report, or None when the current plan is not comparable
+    reports: list
+    excluded: list
+
+
+def _omitted(surface: str, error: BaseException) -> None:
+    print(f"site build: optional {surface} omitted ({type(error).__name__})", file=sys.stderr)
+
+
+def history_corpus(
     markdown: str,
     current_manifest: object,
     current_plan,
@@ -561,37 +581,73 @@ def source_history_html(
     archived: list,
     archived_plans: list,
     archived_html: list[str],
-) -> tuple[str, str]:
-    """Optional history surfaces; on any error both are omitted and the build continues."""
-    try:
-        anchor = parse_generated(report_fields(markdown).get("generated", ""))
-        reports, excluded = [], []
-        for (report_md, _markdown, manifest, _fields, generated), plan, html in zip(
-            archived, archived_plans, archived_html
-        ):
-            key = report_md.parent.name
-            if plan is None:
-                excluded.append(
-                    source_history.Excluded(
-                        key=key,
-                        generated=generated,
-                        reason=source_history.exclusion_reason(manifest),
-                    )
+) -> HistoryCorpus:
+    """The comparable reports shared by every history surface; raises on unreadable input."""
+    anchor = parse_generated(report_fields(markdown).get("generated", ""))
+    reports, excluded = [], []
+    for (report_md, _markdown, manifest, _fields, generated), plan, html in zip(
+        archived, archived_plans, archived_html
+    ):
+        key = report_md.parent.name
+        if plan is None:
+            excluded.append(
+                source_history.Excluded(
+                    key=key,
+                    generated=generated,
+                    reason=source_history.exclusion_reason(manifest),
                 )
-            else:
-                reports.append(_history_report(key, generated, plan, manifest["sources"], html))
-        current = None
-        if current_plan is not None:
-            current = _history_report(
-                archive_slug(anchor), anchor, current_plan, current_manifest["sources"], current_html
             )
-        return source_history.build_views(current, anchor, reports, excluded)
-    except Exception as error:  # noqa: BLE001 - optional projection, never a publication gate
-        print(
-            f"site build: optional source history omitted ({type(error).__name__})",
-            file=sys.stderr,
+        else:
+            reports.append(_history_report(key, generated, plan, manifest["sources"], html))
+    current = None
+    if current_plan is not None:
+        current = _history_report(
+            archive_slug(anchor), anchor, current_plan, current_manifest["sources"], current_html
         )
+    return HistoryCorpus(anchor, current, reports, excluded)
+
+
+def source_history_html(corpus: HistoryCorpus | None) -> tuple[str, str]:
+    """Optional history surfaces; on any error both are omitted and the build continues."""
+    if corpus is None:
         return "", ""
+    try:
+        return source_history.build_views(
+            corpus.current, corpus.anchor, corpus.reports, corpus.excluded
+        )
+    except Exception as error:  # noqa: BLE001 - optional projection, never a publication gate
+        _omitted("source history", error)
+        return "", ""
+
+
+def register_for_build(path: Path) -> dict | None:
+    """The register file when valid; an invalid file omits only the register lane."""
+    try:
+        return regulatory_register.load_register(path)
+    except regulatory_register.RegisterInvalid as error:
+        print(f"site build: register lane omitted ({error})", file=sys.stderr)
+    except OSError as error:
+        print(f"site build: register lane omitted (unreadable: {type(error).__name__})", file=sys.stderr)
+    except Exception as error:  # noqa: BLE001 - optional data never blocks publication
+        print(f"site build: register lane omitted (unexpected {type(error).__name__})", file=sys.stderr)
+    return None
+
+
+def regulatory_window_section(corpus: HistoryCorpus | None, register: dict | None) -> str:
+    """The optional "Past 30 days" sub-section; an error omits it and nothing else."""
+    if corpus is None:
+        return ""
+    try:
+        reports = list(corpus.reports)
+        current = corpus.current
+        if current is not None and all(report.key != current.key for report in reports):
+            reports.append(current)
+        return regulatory_window.window_html(
+            corpus.anchor, archive_slug(corpus.anchor), reports, register
+        )
+    except Exception as error:  # noqa: BLE001 - optional projection, never a publication gate
+        _omitted("regulatory window", error)
+        return ""
 
 
 def expected_outputs(
@@ -637,15 +693,21 @@ def expected_outputs(
         + [(archived_markdown, manifest) for _, archived_markdown, manifest, _, _ in archived],
         [plan_review_rows(current_plan)] + [plan_review_rows(plan) for plan in archived_plans],
     )
-    current_history, archive_history = source_history_html(
-        markdown,
-        current_manifest,
-        current_plan,
-        current_html,
-        archived,
-        archived_plans,
-        archived_html,
-    )
+    try:
+        corpus = history_corpus(
+            markdown,
+            current_manifest,
+            current_plan,
+            current_html,
+            archived,
+            archived_plans,
+            archived_html,
+        )
+    except Exception as error:  # noqa: BLE001 - optional projection, never a publication gate
+        _omitted("source history", error)
+        corpus = None
+    current_history, archive_history = source_history_html(corpus)
+    regulatory_html = regulatory_window_section(corpus, register_for_build(REGULATORY_REGISTER))
     outputs = {
         INDEX_HTML: current_index_html(
             template,
@@ -655,6 +717,7 @@ def expected_outputs(
             current_manifest,
             report_html=current_html,
             history_html=current_history,
+            regulatory_html=regulatory_html,
         ),
         PUBLICATION_HISTORY_INDEX: publication_history_html(publication_history),
     }

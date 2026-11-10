@@ -1,0 +1,83 @@
+name: Read Federal Register
+
+on:
+  schedule:
+    - cron: '20 12 * * *'  # Daily at 12:20 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: grcinsight-regulatory-register
+  cancel-in-progress: false
+
+jobs:
+  read:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Check out main
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: main
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+
+      # Bounded and standard library only: one host, no redirects, at most two
+      # pages and a 30-second deadline. A failed read exits 0 and leaves the
+      # previous file unchanged.
+      - name: Read the Federal Register
+        timeout-minutes: 2
+        run: python3 scripts/regulatory_register.py refresh
+
+      - name: Rebuild, check and commit
+        run: |
+          set -euo pipefail
+          ALLOWED="site/index.html site/regulatory-register.json"
+          if [ -z "$(git status --porcelain -- site/regulatory-register.json)" ]; then
+            echo "Register unchanged; nothing to commit."
+            exit 0
+          fi
+          cp site/regulatory-register.json "$RUNNER_TEMP/regulatory-register.json"
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+
+          rebuild_and_commit() {
+            python3 scripts/build_site.py
+            make check-site
+            changed="$( { git diff --name-only HEAD; git ls-files --others --exclude-standard; } | sort -u)"
+            for path in $changed; do
+              case " $ALLOWED " in
+                *" $path "*) ;;
+                *)
+                  echo "Unexpected changed path: $path; not committing." >&2
+                  exit 1
+                  ;;
+              esac
+            done
+            git add site/index.html site/regulatory-register.json
+            git commit -m "Record Federal Register read [automated]"
+          }
+
+          rebuild_and_commit
+          attempt=1
+          max_attempts=3
+          while ! git push origin HEAD:main; do
+            if [ "$attempt" -ge "$max_attempts" ]; then
+              echo "Push refused $max_attempts times; stopping without a commit on main."
+              exit 0
+            fi
+            attempt=$((attempt + 1))
+            git fetch origin main
+            git reset --hard origin/main
+            cp "$RUNNER_TEMP/regulatory-register.json" site/regulatory-register.json
+            if [ -z "$(git status --porcelain -- site/regulatory-register.json)" ]; then
+              echo "Register already current on main."
+              exit 0
+            fi
+            rebuild_and_commit
+          done
