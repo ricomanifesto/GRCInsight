@@ -1,0 +1,379 @@
+{
+  "schema_version": 3,
+  "report_contract_version": 6,
+  "report_plan": {
+    "control_implications": [
+      {
+        "control_id": "vulnerability_management",
+        "evidence_excerpt": "Hackers are actively exploiting the \"SSHole\" vulnerability (CVE-2026-123158) in OpenSSH to execute commands, steal credentials, and establish persistent access…",
+        "evidence_origin": "summary",
+        "focus": "OpenSSH",
+        "headline": "OpenSSH vulnerability weakens authentication controls",
+        "priority": "high",
+        "significance": "Active exploitation of an OpenSSH flaw allows command execution and credential theft, undermining vulnerability remediation assurance. Vulnerability and asset owners should confirm affected asset inventory, installed versions, remediation status, and exception ownership.",
+        "source_ids": [
+          1
+        ]
+      },
+      {
+        "control_id": "access_management",
+        "evidence_excerpt": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) has added a high-severity vulnerability impacting SonicWall SonicOS to its Known Exploited Vulnerabilities (KEV) catalog, following reports that it said may have been exploited in real-world attacks.",
+        "evidence_origin": "summary",
+        "focus": "SonicWall SonicOS",
+        "headline": "SonicWall SonicOS flaw exposes authentication bypass",
+        "priority": "medium",
+        "significance": "CISA cataloging of a SonicWall MFA bypass indicates potential authentication control gaps. Identity and access owners should verify access scope, authentication coverage, session revocation, and permission-test results for affected firewall appliances.",
+        "source_ids": [
+          2
+        ]
+      },
+      {
+        "control_id": "incident_response",
+        "evidence_excerpt": "Vanderbilt University warns it is responding to a cyberattack claimed by the BYOD ransomware gang, which claims to have encrypted the university's databases and stolen sensitive student, employee, and research data…",
+        "evidence_origin": "summary",
+        "focus": "Vanderbilt University databases",
+        "headline": "Vanderbilt University databases expose sensitive data",
+        "priority": "high",
+        "significance": "Ransomware encryption and data exfiltration at a university test incident containment and evidence preservation. Incident response leads should review containment responsibilities, retained logs, and the most recent response exercise.",
+        "source_ids": [
+          3
+        ]
+      },
+      {
+        "control_id": "third_party_risk",
+        "evidence_excerpt": "Japanese gaming giant SEGA has disclosed that a data breach at its third-party newsletter provider, ARARA, exposed the email addresses of 2.2 million newsletter subscribers…",
+        "evidence_origin": "summary",
+        "focus": "ARARA",
+        "headline": "ARARA breach exposes subscriber emails",
+        "priority": "high",
+        "significance": "A third-party newsletter provider breach exposes subscriber data, highlighting supplier assurance gaps. Supplier risk owners should assess supplier access scope, control responsibilities, and evidence of remediation assurance.",
+        "source_ids": [
+          4
+        ]
+      },
+      {
+        "control_id": "change_management",
+        "evidence_excerpt": "N-able has taken its hosted N-central environments offline and urged on-premises customers to shut down their servers after a security researcher publicly disclosed more than 30 alleged zero-day vulnerabilities, including exploits that could let attackers take over vulnerable systems…",
+        "evidence_origin": "summary",
+        "focus": "N-central environments",
+        "headline": "N-central environments go offline after zero-day disclosure",
+        "priority": "high",
+        "significance": "Platform shutdown due to multiple zero-days tests change approval and validation controls. Change and service owners should review change approvals, rollout coverage, post-change validation, and rollback ownership.",
+        "source_ids": [
+          6
+        ]
+      },
+      {
+        "control_id": "monitoring",
+        "evidence_excerpt": "France has linked October cyberattacks that disrupted refrigeration systems at more than 700 supermarkets and other retail locations to Iranian state-backed hackers, saying the attacks caused food losses and sparked at least 15 fires…",
+        "evidence_origin": "summary",
+        "focus": "supermarket refrigeration systems",
+        "headline": "supermarket refrigeration systems face nation-state attacks",
+        "priority": "high",
+        "significance": "Nation-state disruption of retail refrigeration systems challenges detection coverage for operational technology. Detection and monitoring owners should evaluate log coverage, detection tests, alert routing, and investigation ownership for OT environments.",
+        "source_ids": [
+          10
+        ]
+      }
+    ],
+    "executive_brief": {
+      "paragraphs": [
+        {
+          "source_ids": [
+            1,
+            2,
+            6
+          ],
+          "text": "Active exploitation of the SSHole vulnerability in OpenSSH and the addition of a SonicWall SonicOS authentication bypass to the CISA KEV catalog, combined with N-able taking its cloud platform offline after disclosure of over 30 zero-days, indicate widespread vulnerability exposure that weakens patch management and access controls across Linux, firewall, and management platforms."
+        },
+        {
+          "source_ids": [
+            3,
+            4,
+            10
+          ],
+          "text": "Ransomware encryption and data theft at Vanderbilt University, a third-party breach at SEGA's newsletter provider ARARA exposing 2.2 million emails, and nation-state attacks disrupting supermarket refrigeration systems demonstrate growing incident response, third-party risk, and monitoring challenges for education, retail, and critical infrastructure operators."
+        }
+      ]
+    },
+    "industry_impacts": [],
+    "regulatory_changes": []
+  },
+  "generated_at": "2026-11-10T00:37:12.915844Z",
+  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/f4fb356aede948b45ab88099823fce64dc8444b1/site/feed.xml",
+  "feed_home_url": "https://sentrydigest.ricomanifesto.com/",
+  "digest_issue_date": "2026-11-10",
+  "digest_issue_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-10/",
+  "requested_model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
+  "resolved_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+  "sources": [
+    {
+      "title": "Hackers exploit SSHole OpenSSH flaw to breach Linux systems",
+      "url": "https://www.bleepingcomputer.com/news/security/hackers-exploit-sshole-openssh-flaw-to-breach-linux-systems/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-10/#reporting-2d302e9d23c0",
+      "cves": [
+        "CVE-2026-123158"
+      ],
+      "snippet": "Hackers exploit SSHole OpenSSH flaw to breach Linux systems Hackers are actively exploiting the \"SSHole\" vulnerability (CVE-2026-123158) in OpenSSH to execute commands, steal credentials, and establish persistent access… Hackers are actively exploiting the \"SSHole\" vulnerability (CVE-2026-123158) in OpenSSH to execute commands, steal credentials, and establish persistent access…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Hackers are actively exploiting the \"SSHole\" vulnerability (CVE-2026-123158) in OpenSSH to execute commands, steal credentials, and establish persistent access…",
+          "text": "Hackers are actively exploiting the \"SSHole\" vulnerability (CVE-2026-123158) in OpenSSH to execute commands, steal credentials, and establish persistent access…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Hackers are actively exploiting the \"SSHole\" vulnerability (CVE-2026-123158) in OpenSSH to execute commands, steal credentials, and establish persistent access…",
+          "text": "Hackers are actively exploiting the \"SSHole\" vulnerability (CVE-2026-123158) in OpenSSH to execute commands, steal credentials, and establish persistent access…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "CISA Flags SonicWall SonicOS MFA Bypass Flaw Amid Reports of Possible Exploitation",
+      "url": "https://thehackernews.com/2026/11/cisa-flags-sonicwall-sonicos-mfa-bypass.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-10/#reporting-4d02c260bfd3",
+      "cves": [
+        "CVE-2026-19868"
+      ],
+      "snippet": "CISA Flags SonicWall SonicOS MFA Bypass Flaw Amid Reports of Possible Exploitation The U.S. Cybersecurity and Infrastructure Security Agency (CISA) has added a high-severity vulnerability impacting SonicWall SonicOS to its Known Exploited Vulnerabilities (KEV) catalog, following reports that it said may have been exploited in real-world attacks. The vulnerability, tracked as CVE-2026-19868 (CVSS score: 7.1 / 7.5), has been described as an authentication reinforcement… The U.S. Cybersecurity and Infrastructure Security Agency (CISA) has added a high-severity vulnerability impacting SonicWall SonicOS to its Known Exploited Vulnerabilities (KEV) catalog, following reports that it said may have ",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) has added a high-severity vulnerability impacting SonicWall SonicOS to its Known Exploited Vulnerabilities (KEV) catalog, following reports that it said may have been exploited in real-world attacks. The vulnerability, tracked as CVE-2026-19868 (CVSS score: 7.1 / 7.5), has been described as an authentication reinforcement…",
+          "text": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) has added a high-severity vulnerability impacting SonicWall SonicOS to its Known Exploited Vulnerabilities (KEV) catalog, following reports that it said may have been exploited in real-world attacks. The vulnerability, tracked as CVE-2026-19868 (CVSS score: 7.1 / 7.5), has been described as an authentication reinforcement…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) has added a high-severity vulnerability impacting SonicWall SonicOS to its Known Exploited Vulnerabilities (KEV) catalog, following reports that it said may have been exploited in real-world attacks. The vulnerability, tracked as CVE-2026-19868 (CVSS score: 7.1 / 7.5), has been described as an authentication reinforcement…",
+          "text": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) has added a high-severity vulnerability impacting SonicWall SonicOS to its Known Exploited Vulnerabilities (KEV) catalog, following reports that it said may have been exploited in real-world attacks. The vulnerability, tracked as CVE-2026-19868 (CVSS score: 7.1 / 7.5), has been described as an authentication reinforcement…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Vanderbilt University hit in BYOD ransomware attack, data theft claimed",
+      "url": "https://www.bleepingcomputer.com/news/security/vanderbilt-university-hit-in-byod-ransomware-attack-data-theft-claimed/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-10/#reporting-0540b1b026c2",
+      "cves": [],
+      "snippet": "Vanderbilt University hit in BYOD ransomware attack, data theft claimed Vanderbilt University warns it is responding to a cyberattack claimed by the BYOD ransomware gang, which claims to have encrypted the university's databases and stolen sensitive student, employee, and research data… Vanderbilt University warns it is responding to a cyberattack claimed by the BYOD ransomware gang, which claims to have encrypted the university's databases and stolen sensitive student, employee, and research data…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Vanderbilt University warns it is responding to a cyberattack claimed by the BYOD ransomware gang, which claims to have encrypted the university's databases and stolen sensitive student, employee, and research data…",
+          "text": "Vanderbilt University warns it is responding to a cyberattack claimed by the BYOD ransomware gang, which claims to have encrypted the university's databases and stolen sensitive student, employee, and research data…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Vanderbilt University warns it is responding to a cyberattack claimed by the BYOD ransomware gang, which claims to have encrypted the university's databases and stolen sensitive student, employee, and research data…",
+          "text": "Vanderbilt University warns it is responding to a cyberattack claimed by the BYOD ransomware gang, which claims to have encrypted the university's databases and stolen sensitive student, employee, and research data…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "SEGA newsletter data breach exposes 2.2 million email addresses",
+      "url": "https://www.bleepingcomputer.com/news/security/sega-newsletter-data-breach-exposes-22-million-email-addresses/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-10/#reporting-d6705ab398b4",
+      "cves": [],
+      "snippet": "SEGA newsletter data breach exposes 2.2 million email addresses Japanese gaming giant SEGA has disclosed that a data breach at its third-party newsletter provider, ARARA, exposed the email addresses of 2.2 million newsletter subscribers… Japanese gaming giant SEGA has disclosed that a data breach at its third-party newsletter provider, ARARA, exposed the email addresses of 2.2 million newsletter subscribers…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Japanese gaming giant SEGA has disclosed that a data breach at its third-party newsletter provider, ARARA, exposed the email addresses of 2.2 million newsletter subscribers…",
+          "text": "Japanese gaming giant SEGA has disclosed that a data breach at its third-party newsletter provider, ARARA, exposed the email addresses of 2.2 million newsletter subscribers…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Japanese gaming giant SEGA has disclosed that a data breach at its third-party newsletter provider, ARARA, exposed the email addresses of 2.2 million newsletter subscribers…",
+          "text": "Japanese gaming giant SEGA has disclosed that a data breach at its third-party newsletter provider, ARARA, exposed the email addresses of 2.2 million newsletter subscribers…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "CISA Announces Enhanced Reporting Form for Cyber Incidents",
+      "url": "https://www.darkreading.com/cyberattacks-data-breaches/cisa-announces-enhanced-reporting-form-cyber-incidents",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-10/#reporting-0c23714afd5f",
+      "cves": [],
+      "snippet": "CISA Announces Enhanced Reporting Form for Cyber Incidents New questionnaire captures critical data and information that improves the agency’s ability to assess incidents, identify trends and prioritize response actions. New questionnaire captures critical data and information that improves the agency’s ability to assess incidents, identify trends and prioritize response actions.",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "New questionnaire captures critical data and information that improves the agency’s ability to assess incidents, identify trends and prioritize response actions.",
+          "text": "New questionnaire captures critical data and information that improves the agency’s ability to assess incidents, identify trends and prioritize response actions."
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "New questionnaire captures critical data and information that improves the agency’s ability to assess incidents, identify trends and prioritize response actions.",
+          "text": "New questionnaire captures critical data and information that improves the agency’s ability to assess incidents, identify trends and prioritize response actions."
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "N-able takes cloud platform offline after 30+ \"zero-days\" published",
+      "url": "https://www.bleepingcomputer.com/news/security/n-able-takes-cloud-platform-offline-after-30-plus-zero-days-published/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-10/#reporting-e87452b09e8a",
+      "cves": [],
+      "snippet": "N-able takes cloud platform offline after 30+ \"zero-days\" published N-able has taken its hosted N-central environments offline and urged on-premises customers to shut down their servers after a security researcher publicly disclosed more than 30 alleged zero-day vulnerabilities, including exploits that could let attackers take over vulnerable systems… N-able has taken its hosted N-central environments offline and urged on-premises customers to shut down their servers after a security researcher publicly disclosed more than 30 alleged zero-day vulnerabilities, including exploits that could let attackers take over vulnerable systems…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "N-able has taken its hosted N-central environments offline and urged on-premises customers to shut down their servers after a security researcher publicly disclosed more than 30 alleged zero-day vulnerabilities, including exploits that could let attackers take over vulnerable systems…",
+          "text": "N-able has taken its hosted N-central environments offline and urged on-premises customers to shut down their servers after a security researcher publicly disclosed more than 30 alleged zero-day vulnerabilities, including exploits that could let attackers take over vulnerable systems…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "N-able has taken its hosted N-central environments offline and urged on-premises customers to shut down their servers after a security researcher publicly disclosed more than 30 alleged zero-day vulnerabilities, including exploits that could let attackers take over vulnerable systems…",
+          "text": "N-able has taken its hosted N-central environments offline and urged on-premises customers to shut down their servers after a security researcher publicly disclosed more than 30 alleged zero-day vulnerabilities, including exploits that could let attackers take over vulnerable systems…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "York University breach exposed personal information dating to 2007",
+      "url": "https://www.bleepingcomputer.com/news/security/york-university-breach-exposed-personal-information-dating-to-2007/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-10/#reporting-79849d176e5c",
+      "cves": [],
+      "snippet": "York University breach exposed personal information dating to 2007 York University has announced it suffered a cybersecurity incident in which a threat actor stole personal information people submitted through online forms… York University has announced it suffered a cybersecurity incident in which a threat actor stole personal information people submitted through online forms…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "York University has announced it suffered a cybersecurity incident in which a threat actor stole personal information people submitted through online forms…",
+          "text": "York University has announced it suffered a cybersecurity incident in which a threat actor stole personal information people submitted through online forms…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "York University has announced it suffered a cybersecurity incident in which a threat actor stole personal information people submitted through online forms…",
+          "text": "York University has announced it suffered a cybersecurity incident in which a threat actor stole personal information people submitted through online forms…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Microsoft Fixes RCE Bug in Windows Paint After Weeks of Confusion",
+      "url": "https://www.darkreading.com/application-security/microsoft-rce-bug-windows-paint-confusion",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-10/#reporting-c8c3e5769034",
+      "cves": [],
+      "snippet": "Microsoft Fixes RCE Bug in Windows Paint After Weeks of Confusion Last month, Microsoft disclosed a vulnerability in Microsoft Paint, but messaging regarding a patch was unclear. Last month, Microsoft disclosed a vulnerability in Microsoft Paint, but messaging regarding a patch was unclear.",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Last month, Microsoft disclosed a vulnerability in Microsoft Paint, but messaging regarding a patch was unclear.",
+          "text": "Last month, Microsoft disclosed a vulnerability in Microsoft Paint, but messaging regarding a patch was unclear."
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Last month, Microsoft disclosed a vulnerability in Microsoft Paint, but messaging regarding a patch was unclear.",
+          "text": "Last month, Microsoft disclosed a vulnerability in Microsoft Paint, but messaging regarding a patch was unclear."
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Black Hat India 2026 Makes a Landmark Debut in Bengaluru, Bringing the Global Cybersecurity Community to India",
+      "url": "https://www.darkreading.com/cybersecurity-operations/black-hat-india-2026-landmark-debut",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-10/#reporting-97eefd9b8c2e",
+      "cves": [],
+      "snippet": "Black Hat India 2026 Makes a Landmark Debut in Bengaluru, Bringing the Global Cybersecurity Community to India Inaugural edition by Informa Markets in India brings together leading researchers, security practitioners and industry decision makers for four days of cutting-edge research, technical exchange and strategic dialogue. Inaugural edition by Informa Markets in India brings together leading researchers, security practitioners and industry decision makers for four days of cutting-edge research, technical exchange and strategic dialogue.",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Inaugural edition by Informa Markets in India brings together leading researchers, security practitioners and industry decision makers for four days of cutting-edge research, technical exchange and strategic dialogue.",
+          "text": "Inaugural edition by Informa Markets in India brings together leading researchers, security practitioners and industry decision makers for four days of cutting-edge research, technical exchange and strategic dialogue."
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Inaugural edition by Informa Markets in India brings together leading researchers, security practitioners and industry decision makers for four days of cutting-edge research, technical exchange and strategic dialogue.",
+          "text": "Inaugural edition by Informa Markets in India brings together leading researchers, security practitioners and industry decision makers for four days of cutting-edge research, technical exchange and strategic dialogue."
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "France blames Iranian hackers for supermarket attacks that sparked fires",
+      "url": "https://www.bleepingcomputer.com/news/security/france-blames-iranian-hackers-for-supermarket-attacks-that-sparked-fires/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-10/#reporting-33708f427c03",
+      "cves": [],
+      "snippet": "France blames Iranian hackers for supermarket attacks that sparked fires France has linked October cyberattacks that disrupted refrigeration systems at more than 700 supermarkets and other retail locations to Iranian state-backed hackers, saying the attacks caused food losses and sparked at least 15 fires… France has linked October cyberattacks that disrupted refrigeration systems at more than 700 supermarkets and other retail locations to Iranian state-backed hackers, saying the attacks caused food losses and sparked at least 15 fires…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "France has linked October cyberattacks that disrupted refrigeration systems at more than 700 supermarkets and other retail locations to Iranian state-backed hackers, saying the attacks caused food losses and sparked at least 15 fires…",
+          "text": "France has linked October cyberattacks that disrupted refrigeration systems at more than 700 supermarkets and other retail locations to Iranian state-backed hackers, saying the attacks caused food losses and sparked at least 15 fires…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "France has linked October cyberattacks that disrupted refrigeration systems at more than 700 supermarkets and other retail locations to Iranian state-backed hackers, saying the attacks caused food losses and sparked at least 15 fires…",
+          "text": "France has linked October cyberattacks that disrupted refrigeration systems at more than 700 supermarkets and other retail locations to Iranian state-backed hackers, saying the attacks caused food losses and sparked at least 15 fires…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Attackers Crash Claude's 'Office Party' Flaw to Run Malicious Code on Linux",
+      "url": "https://www.darkreading.com/endpoint-security/attackers-claude-office-party-flaw-malicious-code-linux",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-10/#reporting-b9fc0becb371",
+      "cves": [],
+      "snippet": "Attackers Crash Claude's 'Office Party' Flaw to Run Malicious Code on Linux Attackers can exploit a flaw in Claude's document-processing tool by creating a temporary file that Anthropic's AI assistant can access and run on a user's machine. Attackers can exploit a flaw in Claude's document-processing tool by creating a temporary file that Anthropic's AI assistant can access and run on a user's machine.",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Attackers can exploit a flaw in Claude's document-processing tool by creating a temporary file that Anthropic's AI assistant can access and run on a user's machine.",
+          "text": "Attackers can exploit a flaw in Claude's document-processing tool by creating a temporary file that Anthropic's AI assistant can access and run on a user's machine."
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Attackers can exploit a flaw in Claude's document-processing tool by creating a temporary file that Anthropic's AI assistant can access and run on a user's machine.",
+          "text": "Attackers can exploit a flaw in Claude's document-processing tool by creating a temporary file that Anthropic's AI assistant can access and run on a user's machine."
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Hackers Exploit Qubole's Trusted AWS Access to Breach Customer Accounts and Steal Data",
+      "url": "https://thehackernews.com/2026/11/hackers-exploit-quboles-trusted-aws.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-10/#reporting-ee5e2ceda03a",
+      "cves": [],
+      "snippet": "Hackers Exploit Qubole's Trusted AWS Access to Breach Customer Accounts and Steal Data An attacker broke into AWS accounts belonging to multiple Qubole customers between October 14 and October 26 and stole stored secrets and data, cloud security company Wiz said today. The attacker used credentials for an AWS account that Qubole's platform uses to reach those customers. How the attacker got those credentials has not been disclosed. Qubole, a data lake platform owned by Idera… An attacker broke into AWS accounts belonging to multiple Qubole customers between October 14 and October 26 and stole stored secrets and data, cloud security company Wiz said today. The attacker used credentials for an",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "An attacker broke into AWS accounts belonging to multiple Qubole customers between October 14 and October 26 and stole stored secrets and data, cloud security company Wiz said today. The attacker used credentials for an AWS account that Qubole's platform uses to reach those customers. How the attacker got those credentials has not been disclosed. Qubole, a data lake platform owned by Idera…",
+          "text": "An attacker broke into AWS accounts belonging to multiple Qubole customers between October 14 and October 26 and stole stored secrets and data, cloud security company Wiz said today. The attacker used credentials for an AWS account that Qubole's platform uses to reach those customers. How the attacker got those credentials has not been disclosed. Qubole, a data lake platform owned by Idera…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "An attacker broke into AWS accounts belonging to multiple Qubole customers between October 14 and October 26 and stole stored secrets and data, cloud security company Wiz said today. The attacker used credentials for an AWS account that Qubole's platform uses to reach those customers. How the attacker got those credentials has not been disclosed. Qubole, a data lake platform owned by Idera…",
+          "text": "An attacker broke into AWS accounts belonging to multiple Qubole customers between October 14 and October 26 and stole stored secrets and data, cloud security company Wiz said today. The attacker used credentials for an AWS account that Qubole's platform uses to reach those customers. How the attacker got those credentials has not been disclosed. Qubole, a data lake platform owned by Idera…"
+        }
+      ],
+      "effective_date_evidence": null
+    }
+  ]
+}
