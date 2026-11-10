@@ -26,6 +26,7 @@ from core.report_plan import (  # noqa: E402
 )
 
 from public_site import emitted_origin, presentation_origins  # noqa: E402
+import source_history  # noqa: E402
 from publication_state import (  # noqa: E402
     PublicationStateError,
     category_label,
@@ -46,6 +47,8 @@ REPORT_START = "<!-- REPORT_CONTENT_START -->"
 REPORT_END = "<!-- REPORT_CONTENT_END -->"
 PUBLICATION_NOTICE_START = "<!-- PUBLICATION_NOTICE_START -->"
 PUBLICATION_NOTICE_END = "<!-- PUBLICATION_NOTICE_END -->"
+EARLIER_COVERAGE_START = "<!-- EARLIER_COVERAGE_START -->"
+EARLIER_COVERAGE_END = "<!-- EARLIER_COVERAGE_END -->"
 ARCHIVE_CONTEXT_START = "<!-- ARCHIVE_CONTEXT_START -->"
 ARCHIVE_CONTEXT_END = "<!-- ARCHIVE_CONTEXT_END -->"
 PUBLIC_SITE_URL = emitted_origin("GRCInsight")
@@ -159,13 +162,13 @@ def archive_slug(value: datetime) -> str:
     return value.strftime("%Y-%m-%dT%H-%M-%SZ")
 
 
-def review_map_rows(markdown: str, manifest: object) -> list[dict[str, str]]:
-    """Project only a v5 or v6 plan that exactly reproduces this report's body."""
+def eligible_plan(markdown: str, manifest: object):
+    """The review-map gate: a v5 or v6 plan that exactly reproduces this report's body."""
     if not isinstance(manifest, dict) or manifest.get("report_contract_version") not in {5, 6}:
-        return []
+        return None
     body_start = re.search(r"^## ", markdown, re.MULTILINE)
     if body_start is None:
-        return []
+        return None
     try:
         plan = load_report_plan(
             manifest["report_plan"],
@@ -175,19 +178,30 @@ def review_map_rows(markdown: str, manifest: object) -> list[dict[str, str]]:
         validate_rendered_report(
             markdown[body_start.start() :], plan, manifest["sources"], include_digest=True
         )
-        return [
-            {
-                "focus": group[0].focus,
-                "headline": group[0].headline or group[0].focus,
-                "control": CONTROLS[group[0].control_id][0],
-                "owner": CONTROL_REVIEWS[group[0].control_id][0],
-                "priority": PRIORITIES[group[0].priority],
-            }
-            for group in report_finding_groups(plan)
-        ]
+        return plan
     except (ValueError, KeyError, TypeError, IndexError):
         # This optional projection never repairs or substitutes report evidence.
+        return None
+
+
+def plan_review_rows(plan) -> list[dict[str, str]]:
+    if plan is None:
         return []
+    return [
+        {
+            "focus": group[0].focus,
+            "headline": group[0].headline or group[0].focus,
+            "control": CONTROLS[group[0].control_id][0],
+            "owner": CONTROL_REVIEWS[group[0].control_id][0],
+            "priority": PRIORITIES[group[0].priority],
+        }
+        for group in report_finding_groups(plan)
+    ]
+
+
+def review_map_rows(markdown: str, manifest: object) -> list[dict[str, str]]:
+    """Project only a v5 or v6 plan that exactly reproduces this report's body."""
+    return plan_review_rows(eligible_plan(markdown, manifest))
 
 
 def read_manifest(path: Path) -> object:
@@ -220,17 +234,26 @@ process.stdout.write(JSON.stringify(rendered));
 """
 
 
-def render_reports(reports: list[tuple[str, object]]) -> list[str]:
-    """Render (markdown, manifest) pairs with one Node process for the batch."""
+def render_reports(
+    reports: list[tuple[str, object]],
+    review_maps: list[list[dict[str, str]]] | None = None,
+) -> list[str]:
+    """Render (markdown, manifest) pairs with one Node process for the batch.
+
+    ``review_maps`` lets a caller that already gated each plan pass the rows
+    instead of loading and validating every plan a second time.
+    """
     if not reports:
         return []
+    if review_maps is None:
+        review_maps = [review_map_rows(markdown, manifest) for markdown, manifest in reports]
     result = subprocess.run(
         ["node", "-e", RENDER_BATCH_SCRIPT, str(RENDERER_JS)],
         input=json.dumps({
             "origins": presentation_origins(),
             "reports": [
-                {"markdown": markdown, "reviewMap": review_map_rows(markdown, manifest)}
-                for markdown, manifest in reports
+                {"markdown": markdown, "reviewMap": review_map}
+                for (markdown, _manifest), review_map in zip(reports, review_maps)
             ],
         }),
         capture_output=True,
@@ -255,6 +278,7 @@ def current_index_html(
     publication_history: dict[str, object] | None = None,
     manifest: object = None,
     report_html: str | None = None,
+    history_html: str = "",
 ) -> str:
     fields = report_fields(markdown)
     generated_raw = fields.get("generated", "")
@@ -300,7 +324,18 @@ def current_index_html(
         f"          {PUBLICATION_NOTICE_END}"
     )
     built = notice_region.sub(lambda _match: notice_node, built)
-    return built
+    coverage_region = re.compile(
+        rf"{re.escape(EARLIER_COVERAGE_START)}.*?" rf"{re.escape(EARLIER_COVERAGE_END)}",
+        re.DOTALL,
+    )
+    if len(coverage_region.findall(built)) != 1:
+        fail("index.html must contain one earlier coverage marker pair")
+    coverage_node = (
+        f"{EARLIER_COVERAGE_START}\n"
+        f"{history_html}"
+        f"          {EARLIER_COVERAGE_END}"
+    )
+    return coverage_region.sub(lambda _match: coverage_node, built)
 
 
 def historical_context_note(archive_href: str | None = None) -> str:
@@ -406,7 +441,9 @@ def archive_detail_html(
     return with_archive_detail_chrome(html, generated)
 
 
-def archive_index_html(reports: list[tuple[str, str, str, str]]) -> str:
+def archive_index_html(
+    reports: list[tuple[str, str, str, str]], history_html: str = ""
+) -> str:
     items = "\n".join(
         f'<li><a href="{escape(report_key, quote=True)}/"><span>{escape(title)}</span><time datetime="{escape(generated_at, quote=True)}">{escape(label)}</time></a></li>'
         for report_key, title, generated_at, label in reports
@@ -436,7 +473,7 @@ def archive_index_html(reports: list[tuple[str, str, str, str]]) -> str:
     <header class="app-header"><div class="container"><h1 class="title">Report Archive</h1><p class="subtitle">Dated model-backed reports preserved at publication.</p><nav class="header-links" aria-label="Report resources"><a href="../">Latest report</a></nav></div></header>
     <main class="container archive-shell">
       <p>History begins August 13, 2026. A report is added only after the model-backed publication gate succeeds.</p>
-{historical_note}      <ol class="archive-list">{items}</ol>
+{historical_note}{history_html}      <ol class="archive-list">{items}</ol>
     </main>
     <footer class="app-footer"><div class="container"><span>GRCInsight report archive</span></div></footer>
   </body>
@@ -496,6 +533,58 @@ def publication_history_html(history: dict[str, object]) -> str:
 """
 
 
+def _history_report(key: str, generated: datetime, plan, sources: list, html: str):
+    findings = source_history.findings_from_plan(report_finding_groups(plan), sources)
+    return source_history.Report(
+        key=key,
+        generated=generated,
+        findings=findings,
+        anchors=frozenset(f.number for f in findings if f'id="finding-{f.number}"' in html),
+        regulatory_rows=len(plan.regulatory_changes),
+    )
+
+
+def source_history_html(
+    markdown: str,
+    current_manifest: object,
+    current_plan,
+    current_html: str,
+    archived: list,
+    archived_plans: list,
+    archived_html: list[str],
+) -> tuple[str, str]:
+    """Optional history surfaces; on any error both are omitted and the build continues."""
+    try:
+        anchor = parse_generated(report_fields(markdown).get("generated", ""))
+        reports, excluded = [], []
+        for (report_md, _markdown, manifest, _fields, generated), plan, html in zip(
+            archived, archived_plans, archived_html
+        ):
+            key = report_md.parent.name
+            if plan is None:
+                excluded.append(
+                    source_history.Excluded(
+                        key=key,
+                        generated=generated,
+                        reason=source_history.exclusion_reason(manifest),
+                    )
+                )
+            else:
+                reports.append(_history_report(key, generated, plan, manifest["sources"], html))
+        current = None
+        if current_plan is not None:
+            current = _history_report(
+                archive_slug(anchor), anchor, current_plan, current_manifest["sources"], current_html
+            )
+        return source_history.build_views(current, anchor, reports, excluded)
+    except Exception as error:  # noqa: BLE001 - optional projection, never a publication gate
+        print(
+            f"site build: optional source history omitted ({type(error).__name__})",
+            file=sys.stderr,
+        )
+        return "", ""
+
+
 def expected_outputs(
     markdown: str,
     template: str,
@@ -526,11 +615,27 @@ def expected_outputs(
                 )
             )
 
+    # Gate every plan once; the review map and the source history share it.
+    current_plan = eligible_plan(markdown, current_manifest)
+    archived_plans = [
+        eligible_plan(archived_markdown, manifest)
+        for _, archived_markdown, manifest, _, _ in archived
+    ]
     # Starting Node once per report dominated build time; render the current
     # report and every archive in a single batch instead.
     current_html, *archived_html = render_reports(
         [(markdown, current_manifest)]
-        + [(archived_markdown, manifest) for _, archived_markdown, manifest, _, _ in archived]
+        + [(archived_markdown, manifest) for _, archived_markdown, manifest, _, _ in archived],
+        [plan_review_rows(current_plan)] + [plan_review_rows(plan) for plan in archived_plans],
+    )
+    current_history, archive_history = source_history_html(
+        markdown,
+        current_manifest,
+        current_plan,
+        current_html,
+        archived,
+        archived_plans,
+        archived_html,
     )
     outputs = {
         INDEX_HTML: current_index_html(
@@ -540,6 +645,7 @@ def expected_outputs(
             publication_history,
             current_manifest,
             report_html=current_html,
+            history_html=current_history,
         ),
         PUBLICATION_HISTORY_INDEX: publication_history_html(publication_history),
     }
@@ -560,7 +666,7 @@ def expected_outputs(
                 display_timestamp(generated),
             )
         )
-    outputs[ARCHIVE_DIR / "index.html"] = archive_index_html(reports)
+    outputs[ARCHIVE_DIR / "index.html"] = archive_index_html(reports, archive_history)
     return outputs
 
 
