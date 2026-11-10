@@ -1,0 +1,382 @@
+{
+  "schema_version": 3,
+  "report_contract_version": 6,
+  "report_plan": {
+    "control_implications": [
+      {
+        "control_id": "vulnerability_management",
+        "evidence_excerpt": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Monday added four security flaws impacting GPUStack, SignalWire FreeSwitch, OpenBSD OpenSSH, and IBM Aspera Faspex to its Known Exploited Vulnerabilities (KEV) catalog, citing evidence of active exploitation. The vulnerabilities are listed below - CVE-2026-123218 (CVSS score: 9.8) - An incorrect authorization vulnerability…",
+        "evidence_origin": "summary",
+        "focus": "Known Exploited Vulnerabilities (KEV) catalog",
+        "headline": "Known Exploited Vulnerabilities (KEV) catalog adds four actively exploited flaws",
+        "priority": "high",
+        "significance": "CISA KEV additions mandate federal remediation and signal critical risk for all organizations. Vulnerability management owners must verify asset exposure and remediation status for listed products.",
+        "source_ids": [
+          2
+        ]
+      },
+      {
+        "control_id": "vulnerability_management",
+        "evidence_excerpt": "Hackers are actively exploiting the \"SSHole\" vulnerability (CVE-2026-123158) in OpenSSH to execute commands, steal credentials, and establish persistent access…",
+        "evidence_origin": "summary",
+        "focus": "SSHole vulnerability",
+        "headline": "SSHole vulnerability enables command execution and credential theft",
+        "priority": "high",
+        "significance": "Active exploitation of OpenSSH weakens remote access assurance. Access management owners must review SSH configurations and credential rotation evidence.",
+        "source_ids": [
+          3
+        ]
+      },
+      {
+        "control_id": "vulnerability_management",
+        "evidence_excerpt": "Four flaws that attackers could exploit without logging in were fixed today as part of SAP's monthly Security Patch Day—the vendor rates all four 10.0, the maximum CVSS score. Three are in the SAP NetWeaver application server, the software SAP systems run on, and one is in the Web Dispatcher, which receives web requests from the internet and passes them on to that server. The flaws in the Web…",
+        "evidence_origin": "summary",
+        "focus": "SAP NetWeaver application server",
+        "headline": "SAP NetWeaver application server receives four maximum severity patches",
+        "priority": "high",
+        "significance": "Unauthenticated remote code execution in core ERP components weakens asset assurance. Vulnerability management owners must identify deployed SAP instances and verify emergency patching.",
+        "source_ids": [
+          10
+        ]
+      },
+      {
+        "control_id": "third_party_risk",
+        "evidence_excerpt": "Cybersecurity company Barracuda Networks warned that attackers have begun exploiting two recently patched Email Security Gateway (ESG) vulnerabilities that let them run commands with root privileges…",
+        "evidence_origin": "summary",
+        "focus": "Email Security Gateway",
+        "headline": "Email Security Gateway exploits grant root command execution",
+        "priority": "high",
+        "significance": "Compromise of a security appliance weakens supply chain assurance. Third-party risk owners must confirm vendor patch deployment and assess residual access.",
+        "source_ids": [
+          7
+        ]
+      },
+      {
+        "control_id": "incident_response",
+        "evidence_excerpt": "The Russia-aligned state-sponsored threat actor known as Turla (aka Snake) is wielding a previously undocumented cyber espionage toolset called Cereal that's used to break into victims' Microsoft Exchange servers with an aim to surreptitiously collect emails. According to an ESET report shared with The Hacker News ahead of publication, the sophisticated and modular tool is designed for…",
+        "evidence_origin": "summary",
+        "focus": "Microsoft Exchange servers",
+        "headline": "Microsoft Exchange servers targeted by Turla Cereal espionage toolset",
+        "priority": "high",
+        "significance": "State-sponsored email collection weakens communication confidentiality assurance. Incident response owners must verify Exchange logging retention and compromise assessment readiness.",
+        "source_ids": [
+          8
+        ]
+      },
+      {
+        "control_id": "third_party_risk",
+        "evidence_excerpt": "An October cyberattack on refrigeration controllers at about 700 French retail sites was carried out by a cyber unit of Iran's Islamic Revolutionary Guard Corps (IRGC), the French government said yesterday. The attackers broke into controllers on the night of October 11 and changed their defrost settings to high temperatures. That caused food losses and, in at least 15 cases, fires. The unit…",
+        "evidence_origin": "summary",
+        "focus": "refrigeration controllers",
+        "headline": "refrigeration controllers sabotaged by IRGC cyber unit at retail sites",
+        "priority": "medium",
+        "significance": "Nation-state manipulation of OT devices weakens operational technology assurance. Third-party risk owners must review industrial controller exposure and supplier security commitments.",
+        "source_ids": [
+          11
+        ]
+      }
+    ],
+    "executive_brief": {
+      "paragraphs": [
+        {
+          "source_ids": [
+            2,
+            3,
+            10,
+            7,
+            8
+          ],
+          "text": "CISA added four actively exploited flaws to its Known Exploited Vulnerabilities catalog while critical vulnerabilities in OpenSSH, SAP NetWeaver, Barracuda Email Security Gateway, and Microsoft Exchange face active exploitation by criminal and state-sponsored actors. These developments elevate remediation urgency for vulnerability management programs and demand verification of third-party security appliance integrity. Control owners must confirm asset coverage for listed products and validate emergency patching completion."
+        },
+        {
+          "source_ids": [
+            11,
+            8
+          ],
+          "text": "A nation-state attack on refrigeration controllers at hundreds of retail sites demonstrates operational technology targeting with physical consequences, while Turla's Cereal malware enables persistent email collection from government Exchange servers. These incidents extend accountability to industrial control system suppliers and email platform administrators. Owners should review OT network segmentation and Exchange compromise detection capabilities."
+        }
+      ]
+    },
+    "industry_impacts": [],
+    "regulatory_changes": []
+  },
+  "generated_at": "2026-11-10T13:10:47.962573Z",
+  "feed_url": "https://sentrydigest.ricomanifesto.com/feed.xml",
+  "feed_home_url": "https://sentrydigest.ricomanifesto.com/",
+  "digest_issue_date": "2026-11-10",
+  "digest_issue_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-10/",
+  "requested_model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
+  "resolved_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+  "sources": [
+    {
+      "title": "Google Issues Chrome Security Update for Eighth Actively Exploited Zero-Day of 2026",
+      "url": "https://thehackernews.com/2026/11/google-issues-chrome-security-update.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-10/#reporting-749cd79bf9b6",
+      "cves": [
+        "CVE-2026-125350"
+      ],
+      "snippet": "Google Issues Chrome Security Update for Eighth Actively Exploited Zero-Day of 2026 Google on Monday released updates to patch nine security vulnerabilities, including one that has come under active exploitation in the wild. The high-severity vulnerability, assigned the CVE identifier CVE-2026-125350 (CVSS score: N/A), has been described as a use-after-free bug in the XML component. Use-after-free bugs typically occur when a program attempts to access a memory location after… Google on Monday released updates to patch nine security vulnerabilities, including one that has come under active exploitation in the wild. The high-severity vulnerability, assigned the CVE identifier CVE-2026-125350 (",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Google on Monday released updates to patch nine security vulnerabilities, including one that has come under active exploitation in the wild. The high-severity vulnerability, assigned the CVE identifier CVE-2026-125350 (CVSS score: N/A), has been described as a use-after-free bug in the XML component. Use-after-free bugs typically occur when a program attempts to access a memory location after…",
+          "text": "Google on Monday released updates to patch nine security vulnerabilities, including one that has come under active exploitation in the wild. The high-severity vulnerability, assigned the CVE identifier CVE-2026-125350 (CVSS score: N/A), has been described as a use-after-free bug in the XML component. Use-after-free bugs typically occur when a program attempts to access a memory location after…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Google on Monday released updates to patch nine security vulnerabilities, including one that has come under active exploitation in the wild. The high-severity vulnerability, assigned the CVE identifier CVE-2026-125350 (CVSS score: N/A), has been described as a use-after-free bug in the XML component. Use-after-free bugs typically occur when a program attempts to access a memory location after…",
+          "text": "Google on Monday released updates to patch nine security vulnerabilities, including one that has come under active exploitation in the wild. The high-severity vulnerability, assigned the CVE identifier CVE-2026-125350 (CVSS score: N/A), has been described as a use-after-free bug in the XML component. Use-after-free bugs typically occur when a program attempts to access a memory location after…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "CISA Warns of Active Exploitation of OpenSSH, GPUStack, FreeSWITCH, and IBM Flaws",
+      "url": "https://thehackernews.com/2026/11/cisa-warns-of-active-exploitation-of.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-10/#reporting-4703b2a7b4d7",
+      "cves": [
+        "CVE-2026-123218"
+      ],
+      "snippet": "CISA Warns of Active Exploitation of OpenSSH, GPUStack, FreeSWITCH, and IBM Flaws The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Monday added four security flaws impacting GPUStack, SignalWire FreeSwitch, OpenBSD OpenSSH, and IBM Aspera Faspex to its Known Exploited Vulnerabilities (KEV) catalog, citing evidence of active exploitation. The vulnerabilities are listed below - CVE-2026-123218 (CVSS score: 9.8) - An incorrect authorization vulnerability… The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Monday added four security flaws impacting GPUStack, SignalWire FreeSwitch, OpenBSD OpenSSH, and IBM Aspera Faspex to its Known Exploited Vulnerabilities (K",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Monday added four security flaws impacting GPUStack, SignalWire FreeSwitch, OpenBSD OpenSSH, and IBM Aspera Faspex to its Known Exploited Vulnerabilities (KEV) catalog, citing evidence of active exploitation. The vulnerabilities are listed below - CVE-2026-123218 (CVSS score: 9.8) - An incorrect authorization vulnerability…",
+          "text": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Monday added four security flaws impacting GPUStack, SignalWire FreeSwitch, OpenBSD OpenSSH, and IBM Aspera Faspex to its Known Exploited Vulnerabilities (KEV) catalog, citing evidence of active exploitation. The vulnerabilities are listed below - CVE-2026-123218 (CVSS score: 9.8) - An incorrect authorization vulnerability…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Monday added four security flaws impacting GPUStack, SignalWire FreeSwitch, OpenBSD OpenSSH, and IBM Aspera Faspex to its Known Exploited Vulnerabilities (KEV) catalog, citing evidence of active exploitation. The vulnerabilities are listed below - CVE-2026-123218 (CVSS score: 9.8) - An incorrect authorization vulnerability…",
+          "text": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Monday added four security flaws impacting GPUStack, SignalWire FreeSwitch, OpenBSD OpenSSH, and IBM Aspera Faspex to its Known Exploited Vulnerabilities (KEV) catalog, citing evidence of active exploitation. The vulnerabilities are listed below - CVE-2026-123218 (CVSS score: 9.8) - An incorrect authorization vulnerability…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Hackers exploit SSHole OpenSSH flaw to breach Linux systems",
+      "url": "https://www.bleepingcomputer.com/news/security/hackers-exploit-sshole-openssh-flaw-to-breach-linux-systems/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-10/#reporting-2d302e9d23c0",
+      "cves": [
+        "CVE-2026-123158"
+      ],
+      "snippet": "Hackers exploit SSHole OpenSSH flaw to breach Linux systems Hackers are actively exploiting the \"SSHole\" vulnerability (CVE-2026-123158) in OpenSSH to execute commands, steal credentials, and establish persistent access… Hackers are actively exploiting the \"SSHole\" vulnerability (CVE-2026-123158) in OpenSSH to execute commands, steal credentials, and establish persistent access…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Hackers are actively exploiting the \"SSHole\" vulnerability (CVE-2026-123158) in OpenSSH to execute commands, steal credentials, and establish persistent access…",
+          "text": "Hackers are actively exploiting the \"SSHole\" vulnerability (CVE-2026-123158) in OpenSSH to execute commands, steal credentials, and establish persistent access…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Hackers are actively exploiting the \"SSHole\" vulnerability (CVE-2026-123158) in OpenSSH to execute commands, steal credentials, and establish persistent access…",
+          "text": "Hackers are actively exploiting the \"SSHole\" vulnerability (CVE-2026-123158) in OpenSSH to execute commands, steal credentials, and establish persistent access…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "SAP patches ICM2SHELL and PROXYGATE maximum severity flaws",
+      "url": "https://www.bleepingcomputer.com/news/security/sap-patches-four-maximum-severity-security-vulnerabilities/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-10/#reporting-4864fb36b478",
+      "cves": [],
+      "snippet": "SAP patches ICM2SHELL and PROXYGATE maximum severity flaws SAP patched 35 vulnerabilities in its November 2026 security updates, including four maximum-severity issues affecting its NetWeaver, Web Dispatcher, and Gateway software… SAP patched 35 vulnerabilities in its November 2026 security updates, including four maximum-severity issues affecting its NetWeaver, Web Dispatcher, and Gateway software…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "SAP patched 35 vulnerabilities in its November 2026 security updates, including four maximum-severity issues affecting its NetWeaver, Web Dispatcher, and Gateway software…",
+          "text": "SAP patched 35 vulnerabilities in its November 2026 security updates, including four maximum-severity issues affecting its NetWeaver, Web Dispatcher, and Gateway software…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "SAP patched 35 vulnerabilities in its November 2026 security updates, including four maximum-severity issues affecting its NetWeaver, Web Dispatcher, and Gateway software…",
+          "text": "SAP patched 35 vulnerabilities in its November 2026 security updates, including four maximum-severity issues affecting its NetWeaver, Web Dispatcher, and Gateway software…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Beyond the Alert: The Case for Rich Network Data",
+      "url": "https://thehackernews.com/2026/11/beyond-alert-case-for-rich-network-data.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-10/#reporting-435fd47ef969",
+      "cves": [],
+      "snippet": "Beyond the Alert: The Case for Rich Network Data At some point your security will fail. This isn’t pessimism. It’s not because your team and tools aren’t sophisticated enough. It’s the reason we have detections in the first place. And, it’s why once we accept that prevention has its limits, we arrive at an interdiction strategy: finding and disrupting what got in. After the alert The alert tells you something happened. However, gaining… At some point your security will fail. This isn’t pessimism. It’s not because your team and tools aren’t sophisticated enough. It’s the reason we have detections in the first place. And, it’s why once we accept that prevention has its limits, we arrive at an ",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "At some point your security will fail. This isn’t pessimism. It’s not because your team and tools aren’t sophisticated enough. It’s the reason we have detections in the first place. And, it’s why once we accept that prevention has its limits, we arrive at an interdiction strategy: finding and disrupting what got in. After the alert The alert tells you something happened. However, gaining…",
+          "text": "At some point your security will fail. This isn’t pessimism. It’s not because your team and tools aren’t sophisticated enough. It’s the reason we have detections in the first place. And, it’s why once we accept that prevention has its limits, we arrive at an interdiction strategy: finding and disrupting what got in. After the alert The alert tells you something happened. However, gaining…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "At some point your security will fail. This isn’t pessimism. It’s not because your team and tools aren’t sophisticated enough. It’s the reason we have detections in the first place. And, it’s why once we accept that prevention has its limits, we arrive at an interdiction strategy: finding and disrupting what got in. After the alert The alert tells you something happened. However, gaining…",
+          "text": "At some point your security will fail. This isn’t pessimism. It’s not because your team and tools aren’t sophisticated enough. It’s the reason we have detections in the first place. And, it’s why once we accept that prevention has its limits, we arrive at an interdiction strategy: finding and disrupting what got in. After the alert The alert tells you something happened. However, gaining…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Apple Patches iMessage Group Chat Privacy Flaws and Bluetooth Pairing Vulnerabilities",
+      "url": "https://thehackernews.com/2026/11/apple-patches-imessage-group-chat.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-10/#reporting-fdab5e09d527",
+      "cves": [],
+      "snippet": "Apple Patches iMessage Group Chat Privacy Flaws and Bluetooth Pairing Vulnerabilities An iMessage flaw could let a remote attacker join a group chat and receive its messages, Apple said yesterday, and it released updates to fix it. The updates also fix a separate iMessage flaw that could let someone added to a group access messages sent before they joined. As of today, other updates released yesterday for the iPhone XS, XS Max and XR, the iPad (7th generation) and some Apple… An iMessage flaw could let a remote attacker join a group chat and receive its messages, Apple said yesterday, and it released updates to fix it. The updates also fix a separate iMessage flaw that could let someone adde",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "An iMessage flaw could let a remote attacker join a group chat and receive its messages, Apple said yesterday, and it released updates to fix it. The updates also fix a separate iMessage flaw that could let someone added to a group access messages sent before they joined. As of today, other updates released yesterday for the iPhone XS, XS Max and XR, the iPad (7th generation) and some Apple…",
+          "text": "An iMessage flaw could let a remote attacker join a group chat and receive its messages, Apple said yesterday, and it released updates to fix it. The updates also fix a separate iMessage flaw that could let someone added to a group access messages sent before they joined. As of today, other updates released yesterday for the iPhone XS, XS Max and XR, the iPad (7th generation) and some Apple…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "An iMessage flaw could let a remote attacker join a group chat and receive its messages, Apple said yesterday, and it released updates to fix it. The updates also fix a separate iMessage flaw that could let someone added to a group access messages sent before they joined. As of today, other updates released yesterday for the iPhone XS, XS Max and XR, the iPad (7th generation) and some Apple…",
+          "text": "An iMessage flaw could let a remote attacker join a group chat and receive its messages, Apple said yesterday, and it released updates to fix it. The updates also fix a separate iMessage flaw that could let someone added to a group access messages sent before they joined. As of today, other updates released yesterday for the iPhone XS, XS Max and XR, the iPad (7th generation) and some Apple…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Hackers now exploit critical Barracuda ESG flaws to gain root access",
+      "url": "https://www.bleepingcomputer.com/news/security/hackers-exploit-barracuda-email-security-gateway-flaws-to-get-root-access/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-10/#reporting-40f3a4640613",
+      "cves": [],
+      "snippet": "Hackers now exploit critical Barracuda ESG flaws to gain root access Cybersecurity company Barracuda Networks warned that attackers have begun exploiting two recently patched Email Security Gateway (ESG) vulnerabilities that let them run commands with root privileges… Cybersecurity company Barracuda Networks warned that attackers have begun exploiting two recently patched Email Security Gateway (ESG) vulnerabilities that let them run commands with root privileges…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Cybersecurity company Barracuda Networks warned that attackers have begun exploiting two recently patched Email Security Gateway (ESG) vulnerabilities that let them run commands with root privileges…",
+          "text": "Cybersecurity company Barracuda Networks warned that attackers have begun exploiting two recently patched Email Security Gateway (ESG) vulnerabilities that let them run commands with root privileges…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Cybersecurity company Barracuda Networks warned that attackers have begun exploiting two recently patched Email Security Gateway (ESG) vulnerabilities that let them run commands with root privileges…",
+          "text": "Cybersecurity company Barracuda Networks warned that attackers have begun exploiting two recently patched Email Security Gateway (ESG) vulnerabilities that let them run commands with root privileges…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Russian Turla Hackers Use New Cereal Malware to Steal Emails From Government Exchange Servers",
+      "url": "https://thehackernews.com/2026/11/russian-turla-hackers-use-new-cereal.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-10/#reporting-f91af9aa9454",
+      "cves": [],
+      "snippet": "Russian Turla Hackers Use New Cereal Malware to Steal Emails From Government Exchange Servers The Russia-aligned state-sponsored threat actor known as Turla (aka Snake) is wielding a previously undocumented cyber espionage toolset called Cereal that's used to break into victims' Microsoft Exchange servers with an aim to surreptitiously collect emails. According to an ESET report shared with The Hacker News ahead of publication, the sophisticated and modular tool is designed for… The Russia-aligned state-sponsored threat actor known as Turla (aka Snake) is wielding a previously undocumented cyber espionage toolset called Cereal that's used to break into victims' Microsoft Exchange servers wit",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "The Russia-aligned state-sponsored threat actor known as Turla (aka Snake) is wielding a previously undocumented cyber espionage toolset called Cereal that's used to break into victims' Microsoft Exchange servers with an aim to surreptitiously collect emails. According to an ESET report shared with The Hacker News ahead of publication, the sophisticated and modular tool is designed for…",
+          "text": "The Russia-aligned state-sponsored threat actor known as Turla (aka Snake) is wielding a previously undocumented cyber espionage toolset called Cereal that's used to break into victims' Microsoft Exchange servers with an aim to surreptitiously collect emails. According to an ESET report shared with The Hacker News ahead of publication, the sophisticated and modular tool is designed for…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "The Russia-aligned state-sponsored threat actor known as Turla (aka Snake) is wielding a previously undocumented cyber espionage toolset called Cereal that's used to break into victims' Microsoft Exchange servers with an aim to surreptitiously collect emails. According to an ESET report shared with The Hacker News ahead of publication, the sophisticated and modular tool is designed for…",
+          "text": "The Russia-aligned state-sponsored threat actor known as Turla (aka Snake) is wielding a previously undocumented cyber espionage toolset called Cereal that's used to break into victims' Microsoft Exchange servers with an aim to surreptitiously collect emails. According to an ESET report shared with The Hacker News ahead of publication, the sophisticated and modular tool is designed for…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Turla hackers use new Cereal malware to spy on govt Exchange servers",
+      "url": "https://www.bleepingcomputer.com/news/security/turla-hackers-use-new-ceral-malware-to-spy-on-govt-exchange-servers/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-10/#reporting-a2b42747a721",
+      "cves": [],
+      "snippet": "Turla hackers use new Cereal malware to spy on govt Exchange servers The Russian state-backed threat group Turla has been using a new malicious toolset called 'Cereal' to intercept emails on Microsoft Exchange servers at government organizations… The Russian state-backed threat group Turla has been using a new malicious toolset called 'Cereal' to intercept emails on Microsoft Exchange servers at government organizations…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "The Russian state-backed threat group Turla has been using a new malicious toolset called 'Cereal' to intercept emails on Microsoft Exchange servers at government organizations…",
+          "text": "The Russian state-backed threat group Turla has been using a new malicious toolset called 'Cereal' to intercept emails on Microsoft Exchange servers at government organizations…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "The Russian state-backed threat group Turla has been using a new malicious toolset called 'Cereal' to intercept emails on Microsoft Exchange servers at government organizations…",
+          "text": "The Russian state-backed threat group Turla has been using a new malicious toolset called 'Cereal' to intercept emails on Microsoft Exchange servers at government organizations…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "SAP Patches Four CVSS 10.0 Flaws, Including Two Enabling Remote Code Execution",
+      "url": "https://thehackernews.com/2026/11/sap-patches-four-cvss-100-flaws.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-10/#reporting-c110ef77ed02",
+      "cves": [],
+      "snippet": "SAP Patches Four CVSS 10.0 Flaws, Including Two Enabling Remote Code Execution Four flaws that attackers could exploit without logging in were fixed today as part of SAP's monthly Security Patch Day—the vendor rates all four 10.0, the maximum CVSS score. Three are in the SAP NetWeaver application server, the software SAP systems run on, and one is in the Web Dispatcher, which receives web requests from the internet and passes them on to that server. The flaws in the Web… Four flaws that attackers could exploit without logging in were fixed today as part of SAP's monthly Security Patch Day—the vendor rates all four 10.0, the maximum CVSS score. Three are in the SAP NetWeaver application serve",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Four flaws that attackers could exploit without logging in were fixed today as part of SAP's monthly Security Patch Day—the vendor rates all four 10.0, the maximum CVSS score. Three are in the SAP NetWeaver application server, the software SAP systems run on, and one is in the Web Dispatcher, which receives web requests from the internet and passes them on to that server. The flaws in the Web…",
+          "text": "Four flaws that attackers could exploit without logging in were fixed today as part of SAP's monthly Security Patch Day—the vendor rates all four 10.0, the maximum CVSS score. Three are in the SAP NetWeaver application server, the software SAP systems run on, and one is in the Web Dispatcher, which receives web requests from the internet and passes them on to that server. The flaws in the Web…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Four flaws that attackers could exploit without logging in were fixed today as part of SAP's monthly Security Patch Day—the vendor rates all four 10.0, the maximum CVSS score. Three are in the SAP NetWeaver application server, the software SAP systems run on, and one is in the Web Dispatcher, which receives web requests from the internet and passes them on to that server. The flaws in the Web…",
+          "text": "Four flaws that attackers could exploit without logging in were fixed today as part of SAP's monthly Security Patch Day—the vendor rates all four 10.0, the maximum CVSS score. Three are in the SAP NetWeaver application server, the software SAP systems run on, and one is in the Web Dispatcher, which receives web requests from the internet and passes them on to that server. The flaws in the Web…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "France Blames Iran for Sabotage Attack on Refrigeration Controllers at About 700 Retail Sites",
+      "url": "https://thehackernews.com/2026/11/france-blames-iran-for-sabotage-attack.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-10/#reporting-db918bafa08c",
+      "cves": [],
+      "snippet": "France Blames Iran for Sabotage Attack on Refrigeration Controllers at About 700 Retail Sites An October cyberattack on refrigeration controllers at about 700 French retail sites was carried out by a cyber unit of Iran's Islamic Revolutionary Guard Corps (IRGC), the French government said yesterday. The attackers broke into controllers on the night of October 11 and changed their defrost settings to high temperatures. That caused food losses and, in at least 15 cases, fires. The unit… An October cyberattack on refrigeration controllers at about 700 French retail sites was carried out by a cyber unit of Iran's Islamic Revolutionary Guard Corps (IRGC), the French government said yesterday. The",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "An October cyberattack on refrigeration controllers at about 700 French retail sites was carried out by a cyber unit of Iran's Islamic Revolutionary Guard Corps (IRGC), the French government said yesterday. The attackers broke into controllers on the night of October 11 and changed their defrost settings to high temperatures. That caused food losses and, in at least 15 cases, fires. The unit…",
+          "text": "An October cyberattack on refrigeration controllers at about 700 French retail sites was carried out by a cyber unit of Iran's Islamic Revolutionary Guard Corps (IRGC), the French government said yesterday. The attackers broke into controllers on the night of October 11 and changed their defrost settings to high temperatures. That caused food losses and, in at least 15 cases, fires. The unit…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "An October cyberattack on refrigeration controllers at about 700 French retail sites was carried out by a cyber unit of Iran's Islamic Revolutionary Guard Corps (IRGC), the French government said yesterday. The attackers broke into controllers on the night of October 11 and changed their defrost settings to high temperatures. That caused food losses and, in at least 15 cases, fires. The unit…",
+          "text": "An October cyberattack on refrigeration controllers at about 700 French retail sites was carried out by a cyber unit of Iran's Islamic Revolutionary Guard Corps (IRGC), the French government said yesterday. The attackers broke into controllers on the night of October 11 and changed their defrost settings to high temperatures. That caused food losses and, in at least 15 cases, fires. The unit…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Google patches eighth Chrome zero-day exploited in attacks this year",
+      "url": "https://www.bleepingcomputer.com/news/security/google-patches-eighth-chrome-zero-day-exploited-in-attacks-this-year/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-10/#reporting-cf90f68ee6be",
+      "cves": [],
+      "snippet": "Google patches eighth Chrome zero-day exploited in attacks this year Google has released emergency security updates to patch a new Chrome vulnerability exploited in zero-day attacks, the eighth such flaw since the start of the year… Google has released emergency security updates to patch a new Chrome vulnerability exploited in zero-day attacks, the eighth such flaw since the start of the year…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Google has released emergency security updates to patch a new Chrome vulnerability exploited in zero-day attacks, the eighth such flaw since the start of the year…",
+          "text": "Google has released emergency security updates to patch a new Chrome vulnerability exploited in zero-day attacks, the eighth such flaw since the start of the year…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Google has released emergency security updates to patch a new Chrome vulnerability exploited in zero-day attacks, the eighth such flaw since the start of the year…",
+          "text": "Google has released emergency security updates to patch a new Chrome vulnerability exploited in zero-day attacks, the eighth such flaw since the start of the year…"
+        }
+      ],
+      "effective_date_evidence": null
+    }
+  ]
+}
