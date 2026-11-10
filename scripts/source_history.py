@@ -475,7 +475,16 @@ def sources_by_control_html(view: WindowView) -> str:
             f'<details class="history-control"><summary>{escape(_control(group.control_id))} · '
             f'{count} {"source" if count == 1 else "sources"}</summary><ol>{"".join(entries)}</ol></details>'
         )
-    body = "".join(groups) if groups else "<p>No comparable report falls in this window.</p>"
+    if groups:
+        body = "".join(groups)
+    elif view.reports_in_window:
+        # A comparable plan may carry regulatory changes and no control findings.
+        body = (
+            f"<p>The {_plural(view.reports_in_window, 'report in this window cites', 'reports in this window cite')} "
+            "no finding sources to group by control.</p>"
+        )
+    else:
+        body = "<p>No comparable report falls in this window.</p>"
     return f"""      <section class="history-shell" id="sources-by-control" aria-labelledby="sources-by-control-title">
         <h2 id="sources-by-control-title">Sources by control, last 30 days</h2>
         <p class="history-scope">{" ".join(sentences)}</p>

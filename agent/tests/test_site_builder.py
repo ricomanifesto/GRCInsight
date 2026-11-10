@@ -617,3 +617,22 @@ def test_a_projection_error_yields_exactly_the_no_history_pages(real_build, monk
         if path not in (namespace["INDEX_HTML"], archive_index):
             assert degraded[path] == outputs[path]
     assert "optional source history omitted" in capsys.readouterr().err
+
+
+def test_empty_window_and_window_without_finding_sources_are_stated_differently():
+    sh = history_module()
+    # Nothing comparable inside the window: the only report is older than 30 days.
+    old = report(sh, "2026-09-01T10:00:00", ("monitoring", [A]))
+    empty = sh.sources_by_control_html(sh.window_view(at("2026-11-10T09:00:00"), [old], []))
+    assert "No comparable report falls in this window." in empty
+    assert "<details" not in empty
+    # A comparable regulatory-only report inside the window has no finding sources.
+    regulatory_only = report(sh, "2026-11-10T09:00:00", regulatory_rows=1)
+    view = sh.window_view(regulatory_only.generated, [regulatory_only], [])
+    html = sh.sources_by_control_html(view)
+    assert view.reports_in_window == 1 and view.groups == ()
+    assert "Sources cited by the 1 report published" in html
+    assert "1 sourced regulatory change" in html
+    assert "No comparable report falls in this window" not in html
+    assert "The 1 report in this window cites no finding sources to group by control." in html
+    assert "<details" not in html
