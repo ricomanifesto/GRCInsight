@@ -328,8 +328,14 @@ def current_index_html(
         rf"{re.escape(EARLIER_COVERAGE_START)}.*?" rf"{re.escape(EARLIER_COVERAGE_END)}",
         re.DOTALL,
     )
-    if len(coverage_region.findall(built)) != 1:
-        fail("index.html must contain one earlier coverage marker pair")
+    # The history block is optional: a template without its marker pair builds
+    # without it, while a duplicated or unbalanced pair is a template error.
+    starts = built.count(EARLIER_COVERAGE_START)
+    ends = built.count(EARLIER_COVERAGE_END)
+    if starts == ends == 0:
+        return built
+    if starts != 1 or ends != 1 or len(coverage_region.findall(built)) != 1:
+        fail("index.html must contain at most one earlier coverage marker pair")
     coverage_node = (
         f"{EARLIER_COVERAGE_START}\n"
         f"{history_html}"

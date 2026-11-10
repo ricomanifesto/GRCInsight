@@ -294,10 +294,8 @@ UTC = timezone.utc
 
 
 def history_module():
-    builder_namespace()  # puts scripts/ and agent/ on sys.path
-    import source_history
-
-    return source_history
+    # The builder imports its helper module; reuse that exact module object.
+    return builder_namespace()["source_history"]
 
 
 def at(text: str) -> datetime:
@@ -496,7 +494,9 @@ def test_retained_publication_shows_the_block_beside_the_notice():
     template = INDEX_HTML.read_text(encoding="utf-8")
     markdown = (REPO_ROOT / "site" / "index.md").read_text(encoding="utf-8")
     history = json.loads((REPO_ROOT / "site" / "publication-history.json").read_text())
-    generated = re.search(r"\*\*Generated:\*\*\s*(\S+)", markdown).group(1)
+    match = re.search(r"\*\*Generated:\*\*\s*(\S+)", markdown)
+    assert match is not None, "current report has no Generated field"
+    generated = match.group(1)
     state = {
         "outcome": "retained",
         "attempted_at": "2026-11-11T13:00:00Z",
@@ -636,3 +636,24 @@ def test_empty_window_and_window_without_finding_sources_are_stated_differently(
     assert "No comparable report falls in this window" not in html
     assert "The 1 report in this window cites no finding sources to group by control." in html
     assert "<details" not in html
+
+
+def test_template_without_coverage_markers_builds_without_the_optional_block():
+    namespace = builder_namespace()
+    current_index_html = namespace["current_index_html"]
+    minimal = (
+        '<time class="subtitle" id="generated">Loading</time>'
+        "<!-- PUBLICATION_NOTICE_START --><!-- PUBLICATION_NOTICE_END -->"
+        "<!-- REPORT_CONTENT_START --><!-- REPORT_CONTENT_END -->"
+    )
+    markdown = "# GRC Intelligence Report\n**Generated:** 2026-08-13T13:00:00Z\n\n## Risk\nText."
+    built = current_index_html(minimal, markdown, report_html="<p>x</p>", history_html="<p>H</p>")
+    assert "<p>H</p>" not in built and "EARLIER_COVERAGE" not in built
+    pair = "<!-- EARLIER_COVERAGE_START --><!-- EARLIER_COVERAGE_END -->"
+    built = current_index_html(
+        minimal + pair, markdown, report_html="<p>x</p>", history_html="<p>H</p>"
+    )
+    assert built.count("<p>H</p>") == 1
+    for broken in (minimal + pair + pair, minimal + "<!-- EARLIER_COVERAGE_START -->"):
+        with pytest.raises(SystemExit, match="earlier coverage marker"):
+            current_index_html(broken, markdown, report_html="<p>x</p>", history_html="<p>H</p>")

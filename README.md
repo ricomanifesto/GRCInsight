@@ -21,6 +21,8 @@ GRCInsight reads security and regulatory news and publishes a report for governa
 
 The site keeps dated reports and a [publication history](https://grcinsight.ricomanifesto.com/publication-history/) of recorded publication and retention outcomes. Runs that fail before either outcome is recorded do not appear in that history.
 
+**Earlier coverage** on the current report shows which findings cite a source that no earlier comparable report cited, and links every other source to the archived finding that first cited it, with the control it was filed under there. The [archive](https://grcinsight.ricomanifesto.com/archive/#sources-by-control) lists **sources by control** for the 30 days up to the current report: each distinct source URL cited under a control is listed once, linked to its first citation. Only archived reports whose contract v5 or v6 plan reproduces their published text are compared, so "first cited" means first in that comparable history, not first anywhere. Older reports are listed but not compared, and the archive states which UTC intervals have no comparable report; nothing is known about those intervals from the site, and a control is a topic, not one event.
+
 ## How It Works
 
 Article analysis retains its [TEXT row contract](docs/analysis-text-contract.md):
@@ -38,7 +40,7 @@ apply. The strict report-plan schema and grounding checks are unchanged.
 2. The Python service fetches RSS articles, filters for GRC relevance, and asks the configured OpenRouter model to compose a report.
 3. The report workflow retrieves the result and checks its model identity, source issue, citations, and analysis mode.
 4. Only a model-backed report with complete source and model records is published. A completed fallback-mode report keeps the last verified report and records a short refusal category. Other generation or provenance failures also keep the last verified report, but exit before adding a history event.
-5. A static builder creates the current page, dated archive, evidence manifest, and publication-history page before GitHub Pages deploys them.
+5. A static builder creates the current page, dated archive, evidence manifest, and publication-history page. The publication workflow then releases that committed `site/` tree to the production origin, which Vercel serves (see [publication/README.md](publication/README.md)).
 
 New reports separate **Sourced Regulatory Changes** from **Evidence and Decisions**. Regulatory rows require a supported primary publisher, a matching source excerpt, a complete change phrase with exact source casing, and jurisdiction text matching a complete phrase with exact source casing or `Unknown`. The bounded publisher policy and row contract live in `agent/core/report_evidence.py`; source mentions and security news alone cannot establish a regulatory change. Source excerpts are retained in the evidence manifest for publication validation.
 
@@ -287,4 +289,4 @@ preserves configured AWS CLI/profile authentication through an explicit filtered
 mode and performs its matching read-only identity preflight before mutations; see
 the [deployment guide](docs/README-Lambda-Deployment.md).
 
-`.github/workflows/deploy-site.yml` is the only Pages deployment workflow. It validates the committed `site/` directory, captures light and dark screenshots, and deploys that same artifact.
+`.github/workflows/publish-production.yml` releases the committed `site/` tree to the production origin, https://grcinsight.ricomanifesto.com/, served by Vercel through the shared publication kit described in [publication/README.md](publication/README.md). The generation workflow calls it after a report commit; it can also be run manually. `.github/workflows/deploy-site.yml` still validates the committed `site/` directory on pushes to `main`, captures light and dark screenshots, and deploys that artifact to the legacy GitHub Pages environment; the legacy Pages address does not serve the site.
