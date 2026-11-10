@@ -274,13 +274,13 @@ a:focus-visible, button:focus-visible, select:focus-visible { outline: 3px solid
 .archive-context { padding-top: 26px; }
 .archive-note { max-width: 82ch; margin: 22px 0; padding-left: 18px; border-left: 3px solid var(--warning); color: var(--muted); }
 .archive-note strong, .archive-note time { color: var(--ink); }
-.history-note { margin-top: 28px; padding: 18px 0 18px 20px; border-left: 3px solid var(--accent); color: var(--muted); overflow-wrap: anywhere; }
-.history-note h2, .history-shell h2 { margin: 0 0 6px; color: var(--ink); font-family: Georgia, "Times New Roman", serif; font-size: 21px; font-weight: 500; }
-.history-note p, .history-scope { max-width: 82ch; margin: 0 0 10px; font-size: 15px; }
-.history-findings { margin: 0 0 10px; padding-left: 20px; }
+.history-section { overflow-wrap: anywhere; }
+.history-findings { margin: 0 0 18px; padding-left: 20px; max-width: 78ch; }
 .history-findings > li { margin: 8px 0; color: var(--ink); }
 .history-sources { margin: 4px 0 0; padding-left: 18px; color: var(--muted); font-size: 14px; }
-.history-note time, .history-shell time { color: var(--ink); }
+.history-section time, .history-shell time { color: var(--ink); }
+.history-shell h2 { margin: 0 0 6px; color: var(--ink); font-family: Georgia, "Times New Roman", serif; font-size: 21px; font-weight: 500; }
+.history-scope { max-width: 82ch; margin: 0 0 10px; font-size: 15px; }
 .history-shell { margin: 22px 0 28px; color: var(--muted); overflow-wrap: anywhere; }
 .history-control { border-top: 1px solid var(--rule); padding: 10px 0; }
 .history-control summary { cursor: pointer; color: var(--ink); font-weight: 600; }
