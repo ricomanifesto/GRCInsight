@@ -1,0 +1,30 @@
+{
+  "documents": [],
+  "read": {
+    "candidates": 30,
+    "checked_at": "2026-11-10T19:53:49Z",
+    "invalid_matches": 0,
+    "pages_read": 1,
+    "query_from": "2026-09-26",
+    "query_to": "2026-11-11",
+    "truncated": false
+  },
+  "schema": "grcinsight-regulatory-register/1",
+  "source": {
+    "endpoint": "https://www.federalregister.gov/api/v1/documents.json",
+    "match": "title contains a term, case-insensitive, at word boundaries",
+    "name": "U.S. Federal Register",
+    "terms": [
+      "cybersecurity",
+      "cyber incident",
+      "information security",
+      "data security",
+      "data breach",
+      "breach notification"
+    ],
+    "types": [
+      "Rule",
+      "Proposed Rule"
+    ]
+  }
+}
