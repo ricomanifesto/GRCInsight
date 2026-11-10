@@ -274,6 +274,19 @@ a:focus-visible, button:focus-visible, select:focus-visible { outline: 3px solid
 .archive-context { padding-top: 26px; }
 .archive-note { max-width: 82ch; margin: 22px 0; padding-left: 18px; border-left: 3px solid var(--warning); color: var(--muted); }
 .archive-note strong, .archive-note time { color: var(--ink); }
+.history-note { margin-top: 28px; padding: 18px 0 18px 20px; border-left: 3px solid var(--accent); color: var(--muted); overflow-wrap: anywhere; }
+.history-note h2, .history-shell h2 { margin: 0 0 6px; color: var(--ink); font-family: Georgia, "Times New Roman", serif; font-size: 21px; font-weight: 500; }
+.history-note p, .history-scope { max-width: 82ch; margin: 0 0 10px; font-size: 15px; }
+.history-findings { margin: 0 0 10px; padding-left: 20px; }
+.history-findings > li { margin: 8px 0; color: var(--ink); }
+.history-sources { margin: 4px 0 0; padding-left: 18px; color: var(--muted); font-size: 14px; }
+.history-note time, .history-shell time { color: var(--ink); }
+.history-shell { margin: 22px 0 28px; color: var(--muted); overflow-wrap: anywhere; }
+.history-control { border-top: 1px solid var(--rule); padding: 10px 0; }
+.history-control summary { cursor: pointer; color: var(--ink); font-weight: 600; }
+.history-control ol { margin: 8px 0 0; padding-left: 20px; font-size: 14px; }
+.history-control li { margin: 6px 0; }
+.history-meta { display: block; color: var(--muted); }
 .archive-list, .publication-history-list { margin: 28px 0 0; padding: 0; border-top: 2px solid var(--ink); }
 .archive-list li, .publication-history-entry { list-style: none; border-bottom: 1px solid var(--rule); }
 .archive-list a { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 18px; padding: 16px 0; color: var(--ink); text-decoration: none; }

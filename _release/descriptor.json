@@ -7,16 +7,16 @@
   "expected_origin": "https://grcinsight.ricomanifesto.com/",
   "expected_repository": "ricomanifesto/GRCInsight",
   "kind": "release",
-  "payload_byte_total": 20034570,
-  "payload_digest": "7a5e7ff19e588ba30001658fdd2f59d79e07464e361b752f3ffab7192d086a23",
+  "payload_byte_total": 20115352,
+  "payload_digest": "6893c0f32caecf74fc69fe4c421f8a0718b08e31f5a2223b7dbe5aac9c2c1d45",
   "payload_file_count": 1048,
   "publication_mode": {
     "mode": "prepare",
     "proof": "on"
   },
-  "release_key": "ba680e09236312be581086ce493cc380ed1f3beefc649af257333a0e904bec7e",
+  "release_key": "1693f22c50160ac85d9371bd674149befe408e749debbc1bc896a1c16f7de29f",
   "schema_version": 1,
   "site": "GRCInsight",
-  "source_committed_at": "2026-11-10T15:22:54.000Z",
-  "source_revision": "35dea8d8917b9506e153ad4b5af72376ec5368f6"
+  "source_committed_at": "2026-11-10T17:22:06.000Z",
+  "source_revision": "19ce08510b73e47fd455298a01d3f119ce4f28d0"
 }
