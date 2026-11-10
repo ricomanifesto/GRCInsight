@@ -302,7 +302,7 @@ def at(text: str) -> datetime:
     return datetime.fromisoformat(text).replace(tzinfo=UTC)
 
 
-def report(sh, generated: str, *findings, regulatory_rows=0):
+def report(sh, generated: str, *findings):
     when = at(generated)
     built = tuple(
         sh.Finding(
@@ -318,7 +318,6 @@ def report(sh, generated: str, *findings, regulatory_rows=0):
         generated=when,
         findings=built,
         anchors=frozenset(f.number for f in built),
-        regulatory_rows=regulatory_rows,
     )
 
 
@@ -478,14 +477,13 @@ def test_history_text_is_escaped_and_only_http_urls_become_links():
     assert f'href="{A[0]}"' in html
 
 
-def test_regulatory_sentence_states_only_the_count():
+def test_the_archive_statement_makes_no_regulatory_claim():
     sh = history_module()
-    none = report(sh, "2026-11-10T09:00:00", ("monitoring", [A]))
-    html = sh.sources_by_control_html(sh.window_view(none.generated, [none], []))
-    assert "contains a sourced regulatory change" in html and "not regulatory activity" in html
-    some = report(sh, "2026-11-10T09:00:00", ("monitoring", [A]), regulatory_rows=2)
-    html = sh.sources_by_control_html(sh.window_view(some.generated, [some], []))
-    assert "2 sourced regulatory changes" in html
+    one = report(sh, "2026-11-10T09:00:00", ("monitoring", [A]))
+    html = sh.sources_by_control_html(sh.window_view(one.generated, [one], []))
+    statement = html.split('<p class="history-scope">')[1].split("</p>")[0]
+    assert "regulatory" not in statement
+    assert statement.endswith("A control is a topic: sources under one control are not one event.")
 
 
 def test_retained_publication_shows_the_block_beside_the_notice():
@@ -630,13 +628,13 @@ def test_empty_window_and_window_without_finding_sources_are_stated_differently(
     empty = sh.sources_by_control_html(sh.window_view(at("2026-11-10T09:00:00"), [old], []))
     assert "No comparable report falls in this window." in empty
     assert "<details" not in empty
-    # A comparable regulatory-only report inside the window has no finding sources.
-    regulatory_only = report(sh, "2026-11-10T09:00:00", regulatory_rows=1)
+    # A comparable report with no control findings has no finding sources.
+    regulatory_only = report(sh, "2026-11-10T09:00:00")
     view = sh.window_view(regulatory_only.generated, [regulatory_only], [])
     html = sh.sources_by_control_html(view)
     assert view.reports_in_window == 1 and view.groups == ()
     assert "Sources cited by the 1 report published" in html
-    assert "1 sourced regulatory change" in html
+    assert "regulatory" not in html
     assert "No comparable report falls in this window" not in html
     assert "The 1 report in this window cites no finding sources to group by control." in html
     assert "<details" not in html

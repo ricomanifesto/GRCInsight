@@ -53,8 +53,6 @@ class Report:
     generated: datetime  # UTC
     findings: tuple[Finding, ...]
     anchors: frozenset[int]  # finding numbers that have an anchor in the rendered page
-    regulatory_rows: int = 0
-    regulatory_sources: tuple[Source, ...] = ()  # one per regulatory row, in row order
 
 
 @dataclass(frozen=True)
@@ -129,7 +127,6 @@ class WindowView:
     older_reports: int
     newer_reports: int
     excluded_by_reason: dict[str, int]
-    regulatory_rows: int
 
 
 # ----- Building the corpus -----
@@ -162,18 +159,6 @@ def findings_from_plan(
             )
         )
     return tuple(findings)
-
-
-def regulatory_sources_from_plan(rows: Sequence[Any], sources: Sequence[Any]) -> tuple[Source, ...]:
-    """The stored source of each regulatory row, in row order."""
-    cited = []
-    for row in rows:
-        entry = sources[row.source_id - 1]
-        url = entry.get("url") if isinstance(entry, dict) else None
-        if isinstance(url, str) and url:
-            title = entry.get("title")
-            cited.append(Source(url=url, title=title if isinstance(title, str) else url))
-    return tuple(cited)
 
 
 def exclusion_reason(manifest: object) -> str:
@@ -297,7 +282,6 @@ def window_view(
         older_reports=sum(1 for report in all_reports if report.generated < start),
         newer_reports=sum(1 for report in all_reports if report.generated > end),
         excluded_by_reason={key: reasons[key] for key in EXCLUSION_TEXT if key in reasons},
-        regulatory_rows=sum(report.regulatory_rows for report in inside),
     )
 
 
@@ -462,14 +446,6 @@ def sources_by_control_html(view: WindowView) -> str:
             f"{count} {one if count == 1 else many} and {'is' if count == 1 else 'are'} listed below but not included."
         )
     sentences.append("A control is a topic: sources under one control are not one event.")
-    if view.regulatory_rows:
-        sentences.append(
-            f"These reports contain {_plural(view.regulatory_rows, 'sourced regulatory change', 'sourced regulatory changes')}."
-        )
-    else:
-        sentences.append(
-            "None of these reports contains a sourced regulatory change; that describes these reports, not regulatory activity."
-        )
     groups = []
     for group in view.groups:
         entries = []
@@ -494,7 +470,7 @@ def sources_by_control_html(view: WindowView) -> str:
     if groups:
         body = "".join(groups)
     elif view.reports_in_window:
-        # A comparable plan may carry regulatory changes and no control findings.
+        # A comparable plan may carry no control findings, so nothing to group.
         body = (
             f"<p>The {_plural(view.reports_in_window, 'report in this window cites', 'reports in this window cite')} "
             "no finding sources to group by control.</p>"

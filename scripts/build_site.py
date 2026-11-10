@@ -21,6 +21,7 @@ from core.report_plan import (  # noqa: E402
     CONTROL_REVIEWS,
     CONTROLS,
     PRIORITIES,
+    _quoted_text,
     load_report_plan,
     report_finding_groups,
     validate_rendered_report,
@@ -28,8 +29,6 @@ from core.report_plan import (  # noqa: E402
 
 from public_site import emitted_origin, presentation_origins  # noqa: E402
 import source_history  # noqa: E402
-import regulatory_register  # noqa: E402
-import regulatory_window  # noqa: E402
 from publication_state import (  # noqa: E402
     PublicationStateError,
     category_label,
@@ -44,7 +43,6 @@ EVIDENCE_MANIFEST = SITE_DIR / "evidence-manifest.json"
 PUBLICATION_STATE = SITE_DIR / "publication-state.json"
 PUBLICATION_HISTORY = SITE_DIR / "publication-history.json"
 PUBLICATION_HISTORY_INDEX = SITE_DIR / "publication-history" / "index.html"
-REGULATORY_REGISTER = SITE_DIR / "regulatory-register.json"
 ARCHIVE_DIR = SITE_DIR / "archive"
 RENDERER_JS = SITE_DIR / "static" / "renderer.js"
 REPORT_START = "<!-- REPORT_CONTENT_START -->"
@@ -197,6 +195,9 @@ def plan_review_rows(plan) -> list[dict[str, str]]:
             "control": CONTROLS[group[0].control_id][0],
             "owner": CONTROL_REVIEWS[group[0].control_id][0],
             "priority": PRIORITIES[group[0].priority],
+            # The finding's own passage, quoted exactly as the generator quotes it, so
+            # the page can show it where the template pointed at the regulatory table.
+            "evidence": _quoted_text(group[0].evidence_excerpt),
         }
         for group in report_finding_groups(plan)
     ]
@@ -282,14 +283,12 @@ def current_index_html(
     manifest: object = None,
     report_html: str | None = None,
     history_html: str = "",
-    regulatory_html: str = "",
 ) -> str:
     fields = report_fields(markdown)
     generated_raw = fields.get("generated", "")
     generated = parse_generated(generated_raw)
     if report_html is None:
         report_html = render_report(markdown, manifest)
-    report_html = regulatory_window.with_regulatory_window(report_html, regulatory_html)
     report_html, after_report = with_earlier_coverage(report_html, history_html)
     report_node = (
         f"{REPORT_START}\n"
@@ -555,10 +554,6 @@ def _history_report(key: str, generated: datetime, plan, sources: list, html: st
         generated=generated,
         findings=findings,
         anchors=frozenset(f.number for f in findings if f'id="finding-{f.number}"' in html),
-        regulatory_rows=len(plan.regulatory_changes),
-        regulatory_sources=source_history.regulatory_sources_from_plan(
-            plan.regulatory_changes, sources
-        ),
     )
 
 
@@ -620,34 +615,15 @@ def source_history_html(corpus: HistoryCorpus | None) -> tuple[str, str]:
         return "", ""
 
 
-def register_for_build(path: Path) -> dict | None:
-    """The register file when valid; an invalid file omits only the register lane."""
-    try:
-        return regulatory_register.load_register(path)
-    except regulatory_register.RegisterInvalid as error:
-        print(f"site build: register lane omitted ({error})", file=sys.stderr)
-    except OSError as error:
-        print(f"site build: register lane omitted (unreadable: {type(error).__name__})", file=sys.stderr)
-    except Exception as error:  # noqa: BLE001 - optional data never blocks publication
-        print(f"site build: register lane omitted (unexpected {type(error).__name__})", file=sys.stderr)
-    return None
-
-
-def regulatory_window_section(corpus: HistoryCorpus | None, register: dict | None) -> str:
-    """The optional "Past 30 days" sub-section; an error omits it and nothing else."""
-    if corpus is None:
-        return ""
-    try:
-        reports = list(corpus.reports)
-        current = corpus.current
-        if current is not None and all(report.key != current.key for report in reports):
-            reports.append(current)
-        return regulatory_window.window_html(
-            corpus.anchor, archive_slug(corpus.anchor), reports, register
+def note_unpresented_regulatory_rows(plan) -> None:
+    """A tripwire, not a gate: the site never presents regulatory rows."""
+    rows = len(plan.regulatory_changes) if plan is not None else 0
+    if rows:
+        print(
+            f"site build: the current report carries {rows} regulatory "
+            f"{'row' if rows == 1 else 'rows'} that the site does not present",
+            file=sys.stderr,
         )
-    except Exception as error:  # noqa: BLE001 - optional projection, never a publication gate
-        _omitted("regulatory window", error)
-        return ""
 
 
 def expected_outputs(
@@ -682,6 +658,7 @@ def expected_outputs(
 
     # Gate every plan once; the review map and the source history share it.
     current_plan = eligible_plan(markdown, current_manifest)
+    note_unpresented_regulatory_rows(current_plan)
     archived_plans = [
         eligible_plan(archived_markdown, manifest)
         for _, archived_markdown, manifest, _, _ in archived
@@ -707,7 +684,6 @@ def expected_outputs(
         _omitted("source history", error)
         corpus = None
     current_history, archive_history = source_history_html(corpus)
-    regulatory_html = regulatory_window_section(corpus, register_for_build(REGULATORY_REGISTER))
     outputs = {
         INDEX_HTML: current_index_html(
             template,
@@ -717,7 +693,6 @@ def expected_outputs(
             current_manifest,
             report_html=current_html,
             history_html=current_history,
-            regulatory_html=regulatory_html,
         ),
         PUBLICATION_HISTORY_INDEX: publication_history_html(publication_history),
     }

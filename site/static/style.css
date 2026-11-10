@@ -152,7 +152,7 @@ body {
   text-transform: uppercase;
 }
 
-.glance { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); margin: 0 0 34px; border-top: 2px solid var(--ink); border-bottom: 1px solid var(--rule-strong); }
+.glance { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); margin: 0 0 34px; border-top: 2px solid var(--ink); border-bottom: 1px solid var(--rule-strong); }
 .glance-item { display: flex; flex-direction: column-reverse; justify-content: flex-end; gap: 6px; min-width: 0; padding: 16px 18px 18px 0; }
 .glance-item + .glance-item { padding-left: 18px; border-left: 1px solid var(--rule); }
 .glance-value { margin: 0; color: var(--ink); font-family: Georgia, "Times New Roman", serif; font-size: 40px; font-variant-numeric: lining-nums tabular-nums; line-height: 1; }
@@ -279,16 +279,6 @@ a:focus-visible, button:focus-visible, select:focus-visible { outline: 3px solid
 .history-findings > li { margin: 8px 0; color: var(--ink); }
 .history-sources { margin: 4px 0 0; padding-left: 18px; color: var(--muted); font-size: 14px; }
 .history-section time, .history-shell time { color: var(--ink); }
-.regulatory-window { max-width: 82ch; margin: 28px 0 0; padding: 18px 0 0; border-top: 1px solid var(--rule); overflow-wrap: anywhere; }
-.card .regulatory-window h3 { margin: 0 0 4px; font-size: 19px; }
-.card .regulatory-lane h4 { margin: 18px 0 4px; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 700; }
-.regulatory-lane p { margin: 4px 0 8px; font-size: 15px; }
-.regulatory-entries { margin: 6px 0 10px; padding-left: 20px; }
-.regulatory-entry { margin: 8px 0; }
-.regulatory-meta, .regulatory-related { display: block; color: var(--muted); font-size: 14px; }
-.regulatory-more, .regulatory-scope { margin: 6px 0 10px; font-size: 14px; }
-.regulatory-more summary, .regulatory-scope summary { cursor: pointer; color: var(--accent); }
-.regulatory-window time { color: var(--ink); }
 .history-shell h2 { margin: 0 0 6px; color: var(--ink); font-family: Georgia, "Times New Roman", serif; font-size: 21px; font-weight: 500; }
 .history-scope { max-width: 82ch; margin: 0 0 10px; font-size: 15px; }
 .history-shell { margin: 22px 0 28px; color: var(--muted); overflow-wrap: anywhere; }

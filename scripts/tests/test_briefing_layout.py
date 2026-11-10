@@ -62,7 +62,6 @@ def test_summary_leads_with_figures_then_numbered_key_messages():
         ("Findings", "4"),
         ("High priority", "2"),
         ("Control areas", "4"),
-        ("Regulatory changes", "0"),
         ("Sources reviewed", "12"),
     ]
     messages = re.findall(

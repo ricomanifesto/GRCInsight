@@ -52,7 +52,8 @@ def test_review_map_groups_findings_and_links_to_static_evidence():
     markdown, manifest = fixture()
     html = builder()["render_report"](markdown, manifest)
     assert html.index("Executive Summary") < html.index("Review map")
-    assert html.index("Review map") < html.index("Sourced Regulatory Changes")
+    assert html.index("Review map") < html.index("<h2>Evidence and Decisions</h2>")
+    assert "Sourced Regulatory Changes" not in html
     assert 'aria-label="Review map"' in html
     assert "Inferred review priorities" in html
     assert "not measured risk" in html
@@ -120,7 +121,8 @@ def test_regulatory_only_report_has_no_empty_map():
     manifest = {"report_contract_version": 6, "report_plan": plan, "sources": [primary]}
     html = builder()["render_report"](markdown, manifest)
     assert 'class="review-map"' not in html
-    assert "Sourced Regulatory Changes" in html
+    assert "Sourced Regulatory Changes" not in html
+    assert "No control findings were selected." in html
 
 
 def test_renderer_escapes_map_labels_and_rejects_incomplete_navigation():

@@ -62,9 +62,9 @@ ARCHIVE_DIR = SITE_DIR / "archive"
 ARCHIVE_INDEX = ARCHIVE_DIR / "index.html"
 PUBLIC_SITE_URL = emitted_origin("GRCInsight")
 PUBLIC_DESCRIPTION = (
-    "GRCInsight turns regulatory and security feeds into audit-ready GRC "
-    "intelligence, with framework mapping, agency signals, industry relevance, "
-    "and concise action-oriented reports."
+    "GRCInsight turns security news into audit-ready GRC intelligence, with "
+    "control-area findings, framework references, and concise action-oriented "
+    "reports."
 )
 REPORT_SECTION_LABELS = {
     "Evidence and Decisions",

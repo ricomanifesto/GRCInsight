@@ -66,7 +66,8 @@ def test_reader_sees_event_limit_and_decision_without_opening_a_citation():
     validate_rendered_report(body, plan, [SOURCE])
     renderer = runpy.run_path(str(Path(__file__).resolve().parents[2] / "scripts/build_site.py"))
     html = renderer["render_report"](body)
-    assert "Java support" in html.split("<h2>Sourced Regulatory Changes")[0]
+    assert "Java support" in html.split("<h2>Evidence and Decisions")[0]
+    assert "Sourced Regulatory Changes" not in html
     assert "proof of concept" in html
 
 

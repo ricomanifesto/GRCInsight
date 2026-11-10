@@ -6,6 +6,7 @@ from pathlib import Path
 from typing import Any
 import re
 import runpy
+import subprocess
 
 import pytest
 
@@ -219,10 +220,30 @@ def test_report_plan_escapes_source_title_pipes_in_regulatory_table(title):
         markdown, builder["report_fields"](markdown), json.dumps(manifest)
     )
     rendered = builder["render_report"](markdown)
-    table = re.search(r"<tbody>(.*?)</tbody>", rendered, re.S)
-    assert table is not None and table[1].count("<td>") == 5
+    # The page does not present the regulatory table; the title stays whole elsewhere.
+    assert "Sourced Regulatory Changes" not in rendered
     assert f'aria-label="Source 1: {title}"' in rendered
     assert f">{title}</a>" in rendered
+    # The renderer's table path, still used by legacy pages, keeps an escaped pipe
+    # inside its cell when given the generated table.
+    section = re.search(r"^## Sourced Regulatory Changes\n\n(.*?)(?=^## )", markdown, re.S | re.M)
+    assert section is not None
+    script = (
+        "const fs = require('fs'), vm = require('vm'); const context = {window: {}};"
+        "vm.runInNewContext(fs.readFileSync(process.argv[1], 'utf8'), context);"
+        "process.stdout.write(context.window.GRCInsightRenderer.renderMarkdown("
+        "fs.readFileSync(0, 'utf8')));"
+    )
+    table_html = subprocess.run(
+        ["node", "-e", script, str(root / "site/static/renderer.js")],
+        input=section[1],
+        capture_output=True,
+        text=True,
+        check=True,
+    ).stdout
+    table = re.search(r"<tbody>(.*?)</tbody>", table_html, re.S)
+    assert table is not None and table[1].count("<td>") == 5
+    assert f">{title}</a>" in table_html
 
 
 def test_report_metadata_retains_the_selection_plan():
