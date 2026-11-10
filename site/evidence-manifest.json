@@ -5,12 +5,12 @@
     "control_implications": [
       {
         "control_id": "vulnerability_management",
-        "evidence_excerpt": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Monday added four security flaws impacting GPUStack, SignalWire FreeSwitch, OpenBSD OpenSSH, and IBM Aspera Faspex to its Known Exploited Vulnerabilities (KEV) catalog, citing evidence of active exploitation.",
+        "evidence_excerpt": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Monday added four security flaws impacting GPUStack, SignalWire FreeSwitch, OpenBSD OpenSSH, and IBM Aspera Faspex to its Known Exploited Vulnerabilities (KEV) catalog, citing evidence of active exploitation. The vulnerabilities are listed below - CVE-2026-123218 (CVSS score: 9.8) - An incorrect authorization vulnerability…",
         "evidence_origin": "summary",
-        "focus": "Known Exploited Vulnerabilities (KEV) catalog",
-        "headline": "Known Exploited Vulnerabilities (KEV) catalog adds four actively exploited flaws",
+        "focus": "Known Exploited Vulnerabilities catalog",
+        "headline": "Known Exploited Vulnerabilities catalog expands with four actively exploited flaws",
         "priority": "high",
-        "significance": "The addition of actively exploited vulnerabilities to the CISA KEV catalog signals immediate remediation priority for affected assets. Vulnerability and asset owners should confirm whether deployed products include GPUStack, SignalWire FreeSwitch, OpenBSD OpenSSH, or IBM Aspera Faspex and verify patching status.",
+        "significance": "The KEV catalog additions signal that multiple vendor products are under active attack, requiring immediate asset identification and remediation tracking. Vulnerability and asset owners should confirm affected-asset inventory, installed versions, remediation status and an exception owner for each listed component.",
         "source_ids": [
           2
         ]
@@ -19,58 +19,58 @@
         "control_id": "access_management",
         "evidence_excerpt": "Hackers are actively exploiting the \"SSHole\" vulnerability (CVE-2026-123158) in OpenSSH to execute commands, steal credentials, and establish persistent access…",
         "evidence_origin": "summary",
-        "focus": "SSHole vulnerability",
-        "headline": "SSHole vulnerability enables command execution and credential theft",
+        "focus": "OpenSSH SSHole vulnerability",
+        "headline": "OpenSSH SSHole vulnerability enables command execution and credential theft",
         "priority": "high",
-        "significance": "Active exploitation of the SSHole vulnerability in OpenSSH allows unauthorized command execution and credential theft, bypassing authentication controls. Identity and access owners should review SSH configurations, privileged session monitoring, and credential rotation practices for exposed systems.",
+        "significance": "Active exploitation of a core remote-access component bypasses authentication boundaries and allows persistent footholds. Identity and access owners should verify whether the reported access path bypasses account or privilege boundaries, reviewing access scope, authentication coverage, session revocation and a permission-test result.",
         "source_ids": [
           3
+        ]
+      },
+      {
+        "control_id": "vulnerability_management",
+        "evidence_excerpt": "Four flaws that attackers could exploit without logging in were fixed today as part of SAP's monthly Security Patch Day—the vendor rates all four 10.0, the maximum CVSS score. Three are in the SAP NetWeaver application server, the software SAP systems run on, and one is in the Web Dispatcher, which receives web requests from the internet and passes them on to that server. The flaws in the Web…",
+        "evidence_origin": "summary",
+        "focus": "SAP NetWeaver and Web Dispatcher",
+        "headline": "SAP NetWeaver and Web Dispatcher receive maximum severity unauthenticated patches",
+        "priority": "high",
+        "significance": "Unauthenticated remote code execution in core ERP infrastructure demands immediate deployment verification and compensating controls. Vulnerability and asset owners should confirm affected-asset inventory, installed versions, remediation status and an exception owner for each NetWeaver and Web Dispatcher instance.",
+        "source_ids": [
+          10
+        ]
+      },
+      {
+        "control_id": "vulnerability_management",
+        "evidence_excerpt": "Cybersecurity company Barracuda Networks warned that attackers have begun exploiting two recently patched Email Security Gateway (ESG) vulnerabilities that let them run commands with root privileges…",
+        "evidence_origin": "summary",
+        "focus": "Barracuda Email Security Gateway",
+        "headline": "Barracuda Email Security Gateway flaws exploited for root command execution",
+        "priority": "high",
+        "significance": "Exploitation of a security gateway itself undermines perimeter trust and grants full system control. Vulnerability and asset owners should verify whether deployed products and configurations meet the reported exposure conditions, checking affected-asset inventory, installed versions, remediation status and an exception owner.",
+        "source_ids": [
+          7
+        ]
+      },
+      {
+        "control_id": "monitoring",
+        "evidence_excerpt": "The Russia-aligned state-sponsored threat actor known as Turla (aka Snake) is wielding a previously undocumented cyber espionage toolset called Cereal that's used to break into victims' Microsoft Exchange servers with an aim to surreptitiously collect emails. According to an ESET report shared with The Hacker News ahead of publication, the sophisticated and modular tool is designed for…",
+        "evidence_origin": "summary",
+        "focus": "Microsoft Exchange servers",
+        "headline": "Microsoft Exchange servers targeted by Turla Cereal malware for email collection",
+        "priority": "high",
+        "significance": "A novel espionage toolset evading detection on critical communication infrastructure requires enhanced telemetry and detection coverage. Detection and monitoring owners should assess whether telemetry distinguishes the reported activity from expected use, reviewing log coverage, a detection test, alert routing and investigation ownership.",
+        "source_ids": [
+          8
         ]
       },
       {
         "control_id": "third_party_risk",
         "evidence_excerpt": "An October cyberattack on refrigeration controllers at about 700 French retail sites was carried out by a cyber unit of Iran's Islamic Revolutionary Guard Corps (IRGC), the French government said yesterday. The attackers broke into controllers on the night of October 11 and changed their defrost settings to high temperatures. That caused food losses and, in at least 15 cases, fires. The unit…",
         "evidence_origin": "summary",
-        "focus": "refrigeration controllers at about 700 French retail sites",
-        "headline": "Refrigeration controllers at about 700 French retail sites compromised by state-sponsored actors",
-        "priority": "high",
-        "significance": "State-sponsored compromise of operational technology at hundreds of retail sites demonstrates supply chain risk to physical infrastructure. Supplier risk owners should assess dependencies on industrial controller vendors and verify segmentation and monitoring controls for OT environments.",
-        "source_ids": [
-          4
-        ]
-      },
-      {
-        "control_id": "third_party_risk",
-        "evidence_excerpt": "AI infrastructure startup Fireworks has disclosed a new security breach in which attackers accessed its development machines after breaching a third-party cloud provider…",
-        "evidence_origin": "summary",
-        "focus": "third-party cloud provider",
-        "headline": "Third-party cloud provider exposes AI development environment",
+        "focus": "refrigeration controllers",
+        "headline": "Refrigeration controllers compromised in destructive retail supply chain attack",
         "priority": "medium",
-        "significance": "A cloud provider breach leading to compromise of customer development machines highlights transitive risk in cloud supply chains. Supplier risk owners should review cloud provider assurance evidence, access scopes, and incident notification commitments.",
-        "source_ids": [
-          7
-        ]
-      },
-      {
-        "control_id": "vulnerability_management",
-        "evidence_excerpt": "N-able said it has taken N-central Hosted Environments offline and is urging on-premises customers to shut down their servers until further notice following the public disclosure of over 30 vulnerabilities collectively tracked as Able2Shell. \"As a precautionary measure, we are temporarily taking our Hosted N-central environment offline while we take the necessary actions to secure the…",
-        "evidence_origin": "summary",
-        "focus": "N-central Hosted Environments",
-        "headline": "N-central Hosted Environments taken offline after 30 zero-day disclosures",
-        "priority": "high",
-        "significance": "The shutdown of a widely used management platform due to numerous zero-days indicates severe vulnerability exposure in supply chain tools. Vulnerability and asset owners should identify any N-central deployments, assess compensating controls, and coordinate with the vendor for remediation timelines.",
-        "source_ids": [
-          8
-        ]
-      },
-      {
-        "control_id": "governance",
-        "evidence_excerpt": "New questionnaire captures critical data and information that improves the agency’s ability to assess incidents, identify trends and prioritize response actions.",
-        "evidence_origin": "summary",
-        "focus": "New questionnaire",
-        "headline": "New questionnaire improves incident data collection for CISA reporting",
-        "priority": "medium",
-        "significance": "CISA's updated reporting form changes incident notification expectations and data requirements for organizations. Risk and control owners should review the new questionnaire fields, align internal incident reporting procedures, and ensure evidence collection meets the enhanced standard.",
+        "significance": "Operational technology in retail environments was weaponized for physical effect, expanding third-party risk beyond data theft. Supplier risk owners should determine whether a supplier has the access or operating responsibility described in this event, reviewing supplier access scope, control responsibilities and evidence of remediation assurance.",
         "source_ids": [
           11
         ]
@@ -82,25 +82,20 @@
           "source_ids": [
             2,
             3,
-            8
-          ],
-          "text": "Active exploitation of critical vulnerabilities across widely used infrastructure components demands immediate remediation prioritization. CISA added four actively exploited flaws to its Known Exploited Vulnerabilities catalog, while the SSHole vulnerability in OpenSSH enables credential theft and command execution, and over 30 zero-days forced the shutdown of the N-central management platform. Vulnerability and asset owners must identify affected deployments, verify patching status, and implement compensating controls where patches are unavailable."
-        },
-        {
-          "source_ids": [
-            4,
+            10,
             7,
+            8,
             11
           ],
-          "text": "Supply chain compromises and evolving regulatory expectations extend risk oversight beyond organizational boundaries. A state-sponsored attack compromised refrigeration controllers at hundreds of French retail sites, a cloud provider breach exposed AI development environments, and CISA introduced an enhanced incident reporting form that changes notification evidence requirements. Supplier risk owners should validate third-party assurance coverage, while governance owners align incident reporting procedures with the new federal standard."
+          "text": "Multiple critical infrastructure components and widely deployed enterprise products are under active exploitation, with CISA adding four flaws to its Known Exploited Vulnerabilities catalog while threat actors weaponize OpenSSH, SAP NetWeaver, Barracuda gateways, and Microsoft Exchange servers for persistent access and espionage. A destructive state-sponsored attack on retail refrigeration controllers demonstrates operational technology risk extending to physical consequences. Control owners must prioritize asset visibility, patch deployment verification, and detection coverage across these exposed attack surfaces."
         }
       ]
     },
     "industry_impacts": [],
     "regulatory_changes": []
   },
-  "generated_at": "2026-11-10T09:20:59.429987Z",
-  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/0933a4d70fff345ec69e3627a23b81f2f7bf2bfe/site/feed.xml",
+  "generated_at": "2026-11-10T12:23:17.204499Z",
+  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/3c943a09751206fa3400d70c6b2bd85c09266d92/site/feed.xml",
   "feed_home_url": "https://sentrydigest.ricomanifesto.com/",
   "digest_issue_date": "2026-11-10",
   "digest_issue_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-10/",
@@ -180,6 +175,160 @@
       "effective_date_evidence": null
     },
     {
+      "title": "SAP patches ICM2SHELL and PROXYGATE maximum severity flaws",
+      "url": "https://www.bleepingcomputer.com/news/security/sap-patches-four-maximum-severity-security-vulnerabilities/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-10/#reporting-4864fb36b478",
+      "cves": [],
+      "snippet": "SAP patches ICM2SHELL and PROXYGATE maximum severity flaws SAP patched 35 vulnerabilities in its November 2026 security updates, including four maximum-severity issues affecting its NetWeaver, Web Dispatcher, and Gateway software… SAP patched 35 vulnerabilities in its November 2026 security updates, including four maximum-severity issues affecting its NetWeaver, Web Dispatcher, and Gateway software…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "SAP patched 35 vulnerabilities in its November 2026 security updates, including four maximum-severity issues affecting its NetWeaver, Web Dispatcher, and Gateway software…",
+          "text": "SAP patched 35 vulnerabilities in its November 2026 security updates, including four maximum-severity issues affecting its NetWeaver, Web Dispatcher, and Gateway software…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "SAP patched 35 vulnerabilities in its November 2026 security updates, including four maximum-severity issues affecting its NetWeaver, Web Dispatcher, and Gateway software…",
+          "text": "SAP patched 35 vulnerabilities in its November 2026 security updates, including four maximum-severity issues affecting its NetWeaver, Web Dispatcher, and Gateway software…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Beyond the Alert: The Case for Rich Network Data",
+      "url": "https://thehackernews.com/2026/11/beyond-alert-case-for-rich-network-data.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-10/#reporting-435fd47ef969",
+      "cves": [],
+      "snippet": "Beyond the Alert: The Case for Rich Network Data At some point your security will fail. This isn’t pessimism. It’s not because your team and tools aren’t sophisticated enough. It’s the reason we have detections in the first place. And, it’s why once we accept that prevention has its limits, we arrive at an interdiction strategy: finding and disrupting what got in. After the alert The alert tells you something happened. However, gaining… At some point your security will fail. This isn’t pessimism. It’s not because your team and tools aren’t sophisticated enough. It’s the reason we have detections in the first place. And, it’s why once we accept that prevention has its limits, we arrive at an ",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "At some point your security will fail. This isn’t pessimism. It’s not because your team and tools aren’t sophisticated enough. It’s the reason we have detections in the first place. And, it’s why once we accept that prevention has its limits, we arrive at an interdiction strategy: finding and disrupting what got in. After the alert The alert tells you something happened. However, gaining…",
+          "text": "At some point your security will fail. This isn’t pessimism. It’s not because your team and tools aren’t sophisticated enough. It’s the reason we have detections in the first place. And, it’s why once we accept that prevention has its limits, we arrive at an interdiction strategy: finding and disrupting what got in. After the alert The alert tells you something happened. However, gaining…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "At some point your security will fail. This isn’t pessimism. It’s not because your team and tools aren’t sophisticated enough. It’s the reason we have detections in the first place. And, it’s why once we accept that prevention has its limits, we arrive at an interdiction strategy: finding and disrupting what got in. After the alert The alert tells you something happened. However, gaining…",
+          "text": "At some point your security will fail. This isn’t pessimism. It’s not because your team and tools aren’t sophisticated enough. It’s the reason we have detections in the first place. And, it’s why once we accept that prevention has its limits, we arrive at an interdiction strategy: finding and disrupting what got in. After the alert The alert tells you something happened. However, gaining…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Apple Patches iMessage Group Chat Privacy Flaws and Bluetooth Pairing Vulnerabilities",
+      "url": "https://thehackernews.com/2026/11/apple-patches-imessage-group-chat.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-10/#reporting-fdab5e09d527",
+      "cves": [],
+      "snippet": "Apple Patches iMessage Group Chat Privacy Flaws and Bluetooth Pairing Vulnerabilities An iMessage flaw could let a remote attacker join a group chat and receive its messages, Apple said yesterday, and it released updates to fix it. The updates also fix a separate iMessage flaw that could let someone added to a group access messages sent before they joined. As of today, other updates released yesterday for the iPhone XS, XS Max and XR, the iPad (7th generation) and some Apple… An iMessage flaw could let a remote attacker join a group chat and receive its messages, Apple said yesterday, and it released updates to fix it. The updates also fix a separate iMessage flaw that could let someone adde",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "An iMessage flaw could let a remote attacker join a group chat and receive its messages, Apple said yesterday, and it released updates to fix it. The updates also fix a separate iMessage flaw that could let someone added to a group access messages sent before they joined. As of today, other updates released yesterday for the iPhone XS, XS Max and XR, the iPad (7th generation) and some Apple…",
+          "text": "An iMessage flaw could let a remote attacker join a group chat and receive its messages, Apple said yesterday, and it released updates to fix it. The updates also fix a separate iMessage flaw that could let someone added to a group access messages sent before they joined. As of today, other updates released yesterday for the iPhone XS, XS Max and XR, the iPad (7th generation) and some Apple…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "An iMessage flaw could let a remote attacker join a group chat and receive its messages, Apple said yesterday, and it released updates to fix it. The updates also fix a separate iMessage flaw that could let someone added to a group access messages sent before they joined. As of today, other updates released yesterday for the iPhone XS, XS Max and XR, the iPad (7th generation) and some Apple…",
+          "text": "An iMessage flaw could let a remote attacker join a group chat and receive its messages, Apple said yesterday, and it released updates to fix it. The updates also fix a separate iMessage flaw that could let someone added to a group access messages sent before they joined. As of today, other updates released yesterday for the iPhone XS, XS Max and XR, the iPad (7th generation) and some Apple…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Hackers now exploit critical Barracuda ESG flaws to gain root access",
+      "url": "https://www.bleepingcomputer.com/news/security/hackers-exploit-barracuda-email-security-gateway-flaws-to-get-root-access/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-10/#reporting-40f3a4640613",
+      "cves": [],
+      "snippet": "Hackers now exploit critical Barracuda ESG flaws to gain root access Cybersecurity company Barracuda Networks warned that attackers have begun exploiting two recently patched Email Security Gateway (ESG) vulnerabilities that let them run commands with root privileges… Cybersecurity company Barracuda Networks warned that attackers have begun exploiting two recently patched Email Security Gateway (ESG) vulnerabilities that let them run commands with root privileges…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Cybersecurity company Barracuda Networks warned that attackers have begun exploiting two recently patched Email Security Gateway (ESG) vulnerabilities that let them run commands with root privileges…",
+          "text": "Cybersecurity company Barracuda Networks warned that attackers have begun exploiting two recently patched Email Security Gateway (ESG) vulnerabilities that let them run commands with root privileges…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Cybersecurity company Barracuda Networks warned that attackers have begun exploiting two recently patched Email Security Gateway (ESG) vulnerabilities that let them run commands with root privileges…",
+          "text": "Cybersecurity company Barracuda Networks warned that attackers have begun exploiting two recently patched Email Security Gateway (ESG) vulnerabilities that let them run commands with root privileges…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Russian Turla Hackers Use New Cereal Malware to Steal Emails From Government Exchange Servers",
+      "url": "https://thehackernews.com/2026/11/russian-turla-hackers-use-new-cereal.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-10/#reporting-f91af9aa9454",
+      "cves": [],
+      "snippet": "Russian Turla Hackers Use New Cereal Malware to Steal Emails From Government Exchange Servers The Russia-aligned state-sponsored threat actor known as Turla (aka Snake) is wielding a previously undocumented cyber espionage toolset called Cereal that's used to break into victims' Microsoft Exchange servers with an aim to surreptitiously collect emails. According to an ESET report shared with The Hacker News ahead of publication, the sophisticated and modular tool is designed for… The Russia-aligned state-sponsored threat actor known as Turla (aka Snake) is wielding a previously undocumented cyber espionage toolset called Cereal that's used to break into victims' Microsoft Exchange servers wit",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "The Russia-aligned state-sponsored threat actor known as Turla (aka Snake) is wielding a previously undocumented cyber espionage toolset called Cereal that's used to break into victims' Microsoft Exchange servers with an aim to surreptitiously collect emails. According to an ESET report shared with The Hacker News ahead of publication, the sophisticated and modular tool is designed for…",
+          "text": "The Russia-aligned state-sponsored threat actor known as Turla (aka Snake) is wielding a previously undocumented cyber espionage toolset called Cereal that's used to break into victims' Microsoft Exchange servers with an aim to surreptitiously collect emails. According to an ESET report shared with The Hacker News ahead of publication, the sophisticated and modular tool is designed for…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "The Russia-aligned state-sponsored threat actor known as Turla (aka Snake) is wielding a previously undocumented cyber espionage toolset called Cereal that's used to break into victims' Microsoft Exchange servers with an aim to surreptitiously collect emails. According to an ESET report shared with The Hacker News ahead of publication, the sophisticated and modular tool is designed for…",
+          "text": "The Russia-aligned state-sponsored threat actor known as Turla (aka Snake) is wielding a previously undocumented cyber espionage toolset called Cereal that's used to break into victims' Microsoft Exchange servers with an aim to surreptitiously collect emails. According to an ESET report shared with The Hacker News ahead of publication, the sophisticated and modular tool is designed for…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Turla hackers use new Cereal malware to spy on govt Exchange servers",
+      "url": "https://www.bleepingcomputer.com/news/security/turla-hackers-use-new-ceral-malware-to-spy-on-govt-exchange-servers/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-10/#reporting-a2b42747a721",
+      "cves": [],
+      "snippet": "Turla hackers use new Cereal malware to spy on govt Exchange servers The Russian state-backed threat group Turla has been using a new malicious toolset called 'Cereal' to intercept emails on Microsoft Exchange servers at government organizations… The Russian state-backed threat group Turla has been using a new malicious toolset called 'Cereal' to intercept emails on Microsoft Exchange servers at government organizations…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "The Russian state-backed threat group Turla has been using a new malicious toolset called 'Cereal' to intercept emails on Microsoft Exchange servers at government organizations…",
+          "text": "The Russian state-backed threat group Turla has been using a new malicious toolset called 'Cereal' to intercept emails on Microsoft Exchange servers at government organizations…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "The Russian state-backed threat group Turla has been using a new malicious toolset called 'Cereal' to intercept emails on Microsoft Exchange servers at government organizations…",
+          "text": "The Russian state-backed threat group Turla has been using a new malicious toolset called 'Cereal' to intercept emails on Microsoft Exchange servers at government organizations…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "SAP Patches Four CVSS 10.0 Flaws, Including Two Enabling Remote Code Execution",
+      "url": "https://thehackernews.com/2026/11/sap-patches-four-cvss-100-flaws.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-10/#reporting-c110ef77ed02",
+      "cves": [],
+      "snippet": "SAP Patches Four CVSS 10.0 Flaws, Including Two Enabling Remote Code Execution Four flaws that attackers could exploit without logging in were fixed today as part of SAP's monthly Security Patch Day—the vendor rates all four 10.0, the maximum CVSS score. Three are in the SAP NetWeaver application server, the software SAP systems run on, and one is in the Web Dispatcher, which receives web requests from the internet and passes them on to that server. The flaws in the Web… Four flaws that attackers could exploit without logging in were fixed today as part of SAP's monthly Security Patch Day—the vendor rates all four 10.0, the maximum CVSS score. Three are in the SAP NetWeaver application serve",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Four flaws that attackers could exploit without logging in were fixed today as part of SAP's monthly Security Patch Day—the vendor rates all four 10.0, the maximum CVSS score. Three are in the SAP NetWeaver application server, the software SAP systems run on, and one is in the Web Dispatcher, which receives web requests from the internet and passes them on to that server. The flaws in the Web…",
+          "text": "Four flaws that attackers could exploit without logging in were fixed today as part of SAP's monthly Security Patch Day—the vendor rates all four 10.0, the maximum CVSS score. Three are in the SAP NetWeaver application server, the software SAP systems run on, and one is in the Web Dispatcher, which receives web requests from the internet and passes them on to that server. The flaws in the Web…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Four flaws that attackers could exploit without logging in were fixed today as part of SAP's monthly Security Patch Day—the vendor rates all four 10.0, the maximum CVSS score. Three are in the SAP NetWeaver application server, the software SAP systems run on, and one is in the Web Dispatcher, which receives web requests from the internet and passes them on to that server. The flaws in the Web…",
+          "text": "Four flaws that attackers could exploit without logging in were fixed today as part of SAP's monthly Security Patch Day—the vendor rates all four 10.0, the maximum CVSS score. Three are in the SAP NetWeaver application server, the software SAP systems run on, and one is in the Web Dispatcher, which receives web requests from the internet and passes them on to that server. The flaws in the Web…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
       "title": "France Blames Iran for Sabotage Attack on Refrigeration Controllers at About 700 Retail Sites",
       "url": "https://thehackernews.com/2026/11/france-blames-iran-for-sabotage-attack.html",
       "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-10/#reporting-db918bafa08c",
@@ -219,160 +368,6 @@
           "origin": "content",
           "raw_text": "Google has released emergency security updates to patch a new Chrome vulnerability exploited in zero-day attacks, the eighth such flaw since the start of the year…",
           "text": "Google has released emergency security updates to patch a new Chrome vulnerability exploited in zero-day attacks, the eighth such flaw since the start of the year…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "Anthropic's Claude Fable 5.2 Beats GPT-6 Cyber in Multi-Stage Cyberattack Benchmark",
-      "url": "https://thehackernews.com/2026/11/anthropics-claude-fable-52-beats-gpt-6.html",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-10/#reporting-324a5559d0e2",
-      "cves": [],
-      "snippet": "Anthropic's Claude Fable 5.2 Beats GPT-6 Cyber in Multi-Stage Cyberattack Benchmark Anthropic on Monday released Claude Fable 5.2 and Claude Mythos 5.2 models, which it said exhibit improvements in coding, reasoning, and vision. During pre-release training, the large language models (LLMs) helped its engineers \"complete otherwise-infeasible software migrations, designed three working electronic devices from scratch, solved two open problems in the physics of black holes, made… Anthropic on Monday released Claude Fable 5.2 and Claude Mythos 5.2 models, which it said exhibit improvements in coding, reasoning, and vision. During pre-release training, the large language models (LLMs) helped its ",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "Anthropic on Monday released Claude Fable 5.2 and Claude Mythos 5.2 models, which it said exhibit improvements in coding, reasoning, and vision. During pre-release training, the large language models (LLMs) helped its engineers \"complete otherwise-infeasible software migrations, designed three working electronic devices from scratch, solved two open problems in the physics of black holes, made…",
-          "text": "Anthropic on Monday released Claude Fable 5.2 and Claude Mythos 5.2 models, which it said exhibit improvements in coding, reasoning, and vision. During pre-release training, the large language models (LLMs) helped its engineers \"complete otherwise-infeasible software migrations, designed three working electronic devices from scratch, solved two open problems in the physics of black holes, made…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "Anthropic on Monday released Claude Fable 5.2 and Claude Mythos 5.2 models, which it said exhibit improvements in coding, reasoning, and vision. During pre-release training, the large language models (LLMs) helped its engineers \"complete otherwise-infeasible software migrations, designed three working electronic devices from scratch, solved two open problems in the physics of black holes, made…",
-          "text": "Anthropic on Monday released Claude Fable 5.2 and Claude Mythos 5.2 models, which it said exhibit improvements in coding, reasoning, and vision. During pre-release training, the large language models (LLMs) helped its engineers \"complete otherwise-infeasible software migrations, designed three working electronic devices from scratch, solved two open problems in the physics of black holes, made…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "Fireworks AI discloses new breach after cloud provider hack",
-      "url": "https://www.bleepingcomputer.com/news/security/fireworks-ai-discloses-new-breach-after-cloud-provider-hack/",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-10/#reporting-4e06135bcc13",
-      "cves": [],
-      "snippet": "Fireworks AI discloses new breach after cloud provider hack AI infrastructure startup Fireworks has disclosed a new security breach in which attackers accessed its development machines after breaching a third-party cloud provider… AI infrastructure startup Fireworks has disclosed a new security breach in which attackers accessed its development machines after breaching a third-party cloud provider…",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "AI infrastructure startup Fireworks has disclosed a new security breach in which attackers accessed its development machines after breaching a third-party cloud provider…",
-          "text": "AI infrastructure startup Fireworks has disclosed a new security breach in which attackers accessed its development machines after breaching a third-party cloud provider…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "AI infrastructure startup Fireworks has disclosed a new security breach in which attackers accessed its development machines after breaching a third-party cloud provider…",
-          "text": "AI infrastructure startup Fireworks has disclosed a new security breach in which attackers accessed its development machines after breaching a third-party cloud provider…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "N-able Takes N-central Cloud Offline After Researcher Discloses 33 Zero-Days with PoC Exploits",
-      "url": "https://thehackernews.com/2026/11/n-able-takes-hosted-n-central-offline.html",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-10/#reporting-f0d40b6eb5ca",
-      "cves": [],
-      "snippet": "N-able Takes N-central Cloud Offline After Researcher Discloses 33 Zero-Days with PoC Exploits N-able said it has taken N-central Hosted Environments offline and is urging on-premises customers to shut down their servers until further notice following the public disclosure of over 30 vulnerabilities collectively tracked as Able2Shell. \"As a precautionary measure, we are temporarily taking our Hosted N-central environment offline while we take the necessary actions to secure the… N-able said it has taken N-central Hosted Environments offline and is urging on-premises customers to shut down their servers until further notice following the public disclosure of over 30 vulnerabilities collective",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "N-able said it has taken N-central Hosted Environments offline and is urging on-premises customers to shut down their servers until further notice following the public disclosure of over 30 vulnerabilities collectively tracked as Able2Shell. \"As a precautionary measure, we are temporarily taking our Hosted N-central environment offline while we take the necessary actions to secure the…",
-          "text": "N-able said it has taken N-central Hosted Environments offline and is urging on-premises customers to shut down their servers until further notice following the public disclosure of over 30 vulnerabilities collectively tracked as Able2Shell. \"As a precautionary measure, we are temporarily taking our Hosted N-central environment offline while we take the necessary actions to secure the…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "N-able said it has taken N-central Hosted Environments offline and is urging on-premises customers to shut down their servers until further notice following the public disclosure of over 30 vulnerabilities collectively tracked as Able2Shell. \"As a precautionary measure, we are temporarily taking our Hosted N-central environment offline while we take the necessary actions to secure the…",
-          "text": "N-able said it has taken N-central Hosted Environments offline and is urging on-premises customers to shut down their servers until further notice following the public disclosure of over 30 vulnerabilities collectively tracked as Able2Shell. \"As a precautionary measure, we are temporarily taking our Hosted N-central environment offline while we take the necessary actions to secure the…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "Vanderbilt University hit in BYOD ransomware attack, data theft claimed",
-      "url": "https://www.bleepingcomputer.com/news/security/vanderbilt-university-hit-in-byod-ransomware-attack-data-theft-claimed/",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-10/#reporting-0540b1b026c2",
-      "cves": [],
-      "snippet": "Vanderbilt University hit in BYOD ransomware attack, data theft claimed Vanderbilt University warns it is responding to a cyberattack claimed by the BYOD ransomware gang, which claims to have encrypted the university's databases and stolen sensitive student, employee, and research data… Vanderbilt University warns it is responding to a cyberattack claimed by the BYOD ransomware gang, which claims to have encrypted the university's databases and stolen sensitive student, employee, and research data…",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "Vanderbilt University warns it is responding to a cyberattack claimed by the BYOD ransomware gang, which claims to have encrypted the university's databases and stolen sensitive student, employee, and research data…",
-          "text": "Vanderbilt University warns it is responding to a cyberattack claimed by the BYOD ransomware gang, which claims to have encrypted the university's databases and stolen sensitive student, employee, and research data…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "Vanderbilt University warns it is responding to a cyberattack claimed by the BYOD ransomware gang, which claims to have encrypted the university's databases and stolen sensitive student, employee, and research data…",
-          "text": "Vanderbilt University warns it is responding to a cyberattack claimed by the BYOD ransomware gang, which claims to have encrypted the university's databases and stolen sensitive student, employee, and research data…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "SEGA newsletter data breach exposes 2.2 million email addresses",
-      "url": "https://www.bleepingcomputer.com/news/security/sega-newsletter-data-breach-exposes-22-million-email-addresses/",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-10/#reporting-d6705ab398b4",
-      "cves": [],
-      "snippet": "SEGA newsletter data breach exposes 2.2 million email addresses Japanese gaming giant SEGA has disclosed that a data breach at its third-party newsletter provider, ARARA, exposed the email addresses of 2.2 million newsletter subscribers… Japanese gaming giant SEGA has disclosed that a data breach at its third-party newsletter provider, ARARA, exposed the email addresses of 2.2 million newsletter subscribers…",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "Japanese gaming giant SEGA has disclosed that a data breach at its third-party newsletter provider, ARARA, exposed the email addresses of 2.2 million newsletter subscribers…",
-          "text": "Japanese gaming giant SEGA has disclosed that a data breach at its third-party newsletter provider, ARARA, exposed the email addresses of 2.2 million newsletter subscribers…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "Japanese gaming giant SEGA has disclosed that a data breach at its third-party newsletter provider, ARARA, exposed the email addresses of 2.2 million newsletter subscribers…",
-          "text": "Japanese gaming giant SEGA has disclosed that a data breach at its third-party newsletter provider, ARARA, exposed the email addresses of 2.2 million newsletter subscribers…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "CISA Announces Enhanced Reporting Form for Cyber Incidents",
-      "url": "https://www.darkreading.com/cyberattacks-data-breaches/cisa-announces-enhanced-reporting-form-cyber-incidents",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-10/#reporting-0c23714afd5f",
-      "cves": [],
-      "snippet": "CISA Announces Enhanced Reporting Form for Cyber Incidents New questionnaire captures critical data and information that improves the agency’s ability to assess incidents, identify trends and prioritize response actions. New questionnaire captures critical data and information that improves the agency’s ability to assess incidents, identify trends and prioritize response actions.",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "New questionnaire captures critical data and information that improves the agency’s ability to assess incidents, identify trends and prioritize response actions.",
-          "text": "New questionnaire captures critical data and information that improves the agency’s ability to assess incidents, identify trends and prioritize response actions."
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "New questionnaire captures critical data and information that improves the agency’s ability to assess incidents, identify trends and prioritize response actions.",
-          "text": "New questionnaire captures critical data and information that improves the agency’s ability to assess incidents, identify trends and prioritize response actions."
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "N-able takes cloud platform offline after 30+ \"zero-days\" published",
-      "url": "https://www.bleepingcomputer.com/news/security/n-able-takes-cloud-platform-offline-after-30-plus-zero-days-published/",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-10/#reporting-e87452b09e8a",
-      "cves": [],
-      "snippet": "N-able takes cloud platform offline after 30+ \"zero-days\" published N-able has taken its hosted N-central environments offline and urged on-premises customers to shut down their servers after a security researcher publicly disclosed more than 30 alleged zero-day vulnerabilities, including exploits that could let attackers take over vulnerable systems… N-able has taken its hosted N-central environments offline and urged on-premises customers to shut down their servers after a security researcher publicly disclosed more than 30 alleged zero-day vulnerabilities, including exploits that could let attackers take over vulnerable systems…",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "N-able has taken its hosted N-central environments offline and urged on-premises customers to shut down their servers after a security researcher publicly disclosed more than 30 alleged zero-day vulnerabilities, including exploits that could let attackers take over vulnerable systems…",
-          "text": "N-able has taken its hosted N-central environments offline and urged on-premises customers to shut down their servers after a security researcher publicly disclosed more than 30 alleged zero-day vulnerabilities, including exploits that could let attackers take over vulnerable systems…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "N-able has taken its hosted N-central environments offline and urged on-premises customers to shut down their servers after a security researcher publicly disclosed more than 30 alleged zero-day vulnerabilities, including exploits that could let attackers take over vulnerable systems…",
-          "text": "N-able has taken its hosted N-central environments offline and urged on-premises customers to shut down their servers after a security researcher publicly disclosed more than 30 alleged zero-day vulnerabilities, including exploits that could let attackers take over vulnerable systems…"
         }
       ],
       "effective_date_evidence": null
