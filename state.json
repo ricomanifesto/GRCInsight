@@ -6053,6 +6053,17 @@
       "release_key": "82f36967424188265c7e2a03b2b297180da313a6c9ffefda03b9d14a78334384",
       "release_ref": "e6aa2c6d8e8601bb5ecb5ef49c70acbf9ded372d",
       "stage": "serving"
+    },
+    {
+      "at": "2026-11-10T21:52:56.743Z",
+      "kind": "release",
+      "payload_digest": "1cbf48ea7b6ceab581c7b70b683699f88cd87b4fafedebee32d4350a8cac502e",
+      "proof": "on",
+      "release_key": "134a35622165c15bf9a175ea08bc523bcb736997e0bbf5b960f68e57d4e84996",
+      "release_ref": "af4c7c7f812a0f8a999a1e4f6d1930db6a2ab0a7",
+      "source_revision": "101a0c0b9e53b80e7fb76a9890afe1a1cab0723c",
+      "stage": "released",
+      "tree_digest": "281a5571440041a9245c06deab066a6d1cbb5ee83d5cc802053418fefbf33ec0"
     }
   ],
   "schema_version": 1,
