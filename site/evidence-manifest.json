@@ -5,74 +5,74 @@
     "control_implications": [
       {
         "control_id": "vulnerability_management",
-        "evidence_excerpt": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Monday added four security flaws impacting GPUStack, SignalWire FreeSwitch, OpenBSD OpenSSH, and IBM Aspera Faspex to its Known Exploited Vulnerabilities (KEV) catalog, citing evidence of active exploitation. The vulnerabilities are listed below - CVE-2026-123218 (CVSS score: 9.8) - An incorrect authorization vulnerability…",
+        "evidence_excerpt": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Monday added four security flaws impacting GPUStack, SignalWire FreeSwitch, OpenBSD OpenSSH, and IBM Aspera Faspex to its Known Exploited Vulnerabilities (KEV) catalog, citing evidence of active exploitation. The vulnerabilities are listed below - CVE-2026-123218 (CVSS score: 9.8) - An incorrect authorization vulnerability",
         "evidence_origin": "summary",
-        "focus": "Known Exploited Vulnerabilities (KEV) catalog",
-        "headline": "Known Exploited Vulnerabilities (KEV) catalog adds four actively exploited flaws",
+        "focus": "GPUStack, SignalWire FreeSwitch, OpenBSD OpenSSH",
+        "headline": "GPUStack, SignalWire FreeSwitch, OpenBSD OpenSSH added to CISA KEV catalog",
         "priority": "high",
-        "significance": "CISA KEV additions mandate federal remediation and signal critical risk for all organizations. Vulnerability management owners must verify asset exposure and remediation status for listed products.",
+        "significance": "Active exploitation of these vulnerabilities weakens patch management assurance and requires immediate asset identification. Vulnerability and asset owners should confirm whether affected products are deployed and verify remediation status with exception owners.",
         "source_ids": [
           2
         ]
       },
       {
         "control_id": "vulnerability_management",
-        "evidence_excerpt": "Hackers are actively exploiting the \"SSHole\" vulnerability (CVE-2026-123158) in OpenSSH to execute commands, steal credentials, and establish persistent access…",
+        "evidence_excerpt": "Google on Monday released updates to patch nine security vulnerabilities, including one that has come under active exploitation in the wild. The high-severity vulnerability, assigned the CVE identifier CVE-2026-125350 (CVSS score: N/A), has been described as a use-after-free bug in the XML component.",
         "evidence_origin": "summary",
-        "focus": "SSHole vulnerability",
-        "headline": "SSHole vulnerability enables command execution and credential theft",
+        "focus": "Google",
+        "headline": "Google releases updates for actively exploited zero-day",
         "priority": "high",
-        "significance": "Active exploitation of OpenSSH weakens remote access assurance. Access management owners must review SSH configurations and credential rotation evidence.",
+        "significance": "An actively exploited zero-day in a widely used browser weakens endpoint protection assurance and demands rapid deployment verification. Vulnerability and asset owners should confirm Chrome update deployment across all endpoints and validate version compliance.",
         "source_ids": [
-          3
+          1
+        ]
+      },
+      {
+        "control_id": "data_protection",
+        "evidence_excerpt": "An iOS sandbox escape published on GitHub lets an app read other apps' files on iPhones running iOS 26 and 27. That puts seed phrases, private keys, and login credentials at risk of exposure to malicious apps, Binance warned today. Apple's updates for iOS 26 and 27, released yesterday, do not list a fix.",
+        "evidence_origin": "summary",
+        "focus": "iOS sandbox escape",
+        "headline": "iOS sandbox escape exposes cryptographic keys without available fix",
+        "priority": "high",
+        "significance": "An unpatched sandbox escape that exposes cryptographic material weakens data protection controls for mobile endpoints. Data and privacy owners should assess exposure of sensitive credentials on affected iOS versions and enforce compensating controls until a patch is released.",
+        "source_ids": [
+          4
         ]
       },
       {
         "control_id": "vulnerability_management",
-        "evidence_excerpt": "Four flaws that attackers could exploit without logging in were fixed today as part of SAP's monthly Security Patch Day—the vendor rates all four 10.0, the maximum CVSS score. Three are in the SAP NetWeaver application server, the software SAP systems run on, and one is in the Web Dispatcher, which receives web requests from the internet and passes them on to that server. The flaws in the Web…",
+        "evidence_excerpt": "Four flaws that attackers could exploit without logging in were fixed today as part of SAP's monthly Security Patch Day—the vendor rates all four 10.0, the maximum CVSS score. Three are in the SAP NetWeaver application server, the software SAP systems run on, and one is in the Web Dispatcher, which receives web requests from the internet and passes them on to that server.",
         "evidence_origin": "summary",
         "focus": "SAP NetWeaver application server",
-        "headline": "SAP NetWeaver application server receives four maximum severity patches",
+        "headline": "SAP NetWeaver application server receives maximum severity patches for unauthenticated flaws",
         "priority": "high",
-        "significance": "Unauthenticated remote code execution in core ERP components weakens asset assurance. Vulnerability management owners must identify deployed SAP instances and verify emergency patching.",
+        "significance": "Unauthenticated remote code execution flaws in core ERP infrastructure weaken vulnerability management assurance and require emergency patching validation. Vulnerability and asset owners should confirm SAP NetWeaver and Web Dispatcher patch deployment and verify compensating controls for any unpatched instances.",
         "source_ids": [
-          10
+          11
         ]
       },
       {
         "control_id": "third_party_risk",
-        "evidence_excerpt": "Cybersecurity company Barracuda Networks warned that attackers have begun exploiting two recently patched Email Security Gateway (ESG) vulnerabilities that let them run commands with root privileges…",
+        "evidence_excerpt": "Cybersecurity company Barracuda Networks warned that attackers have begun exploiting two recently patched Email Security Gateway (ESG) vulnerabilities that let them run commands with root privileges",
         "evidence_origin": "summary",
-        "focus": "Email Security Gateway",
-        "headline": "Email Security Gateway exploits grant root command execution",
+        "focus": "Email Security Gateway (ESG) vulnerabilities",
+        "headline": "Email Security Gateway (ESG) vulnerabilities exploited for root access after patch release",
         "priority": "high",
-        "significance": "Compromise of a security appliance weakens supply chain assurance. Third-party risk owners must confirm vendor patch deployment and assess residual access.",
-        "source_ids": [
-          7
-        ]
-      },
-      {
-        "control_id": "incident_response",
-        "evidence_excerpt": "The Russia-aligned state-sponsored threat actor known as Turla (aka Snake) is wielding a previously undocumented cyber espionage toolset called Cereal that's used to break into victims' Microsoft Exchange servers with an aim to surreptitiously collect emails. According to an ESET report shared with The Hacker News ahead of publication, the sophisticated and modular tool is designed for…",
-        "evidence_origin": "summary",
-        "focus": "Microsoft Exchange servers",
-        "headline": "Microsoft Exchange servers targeted by Turla Cereal espionage toolset",
-        "priority": "high",
-        "significance": "State-sponsored email collection weakens communication confidentiality assurance. Incident response owners must verify Exchange logging retention and compromise assessment readiness.",
+        "significance": "Post-patch exploitation of a third-party email gateway weakens supplier assurance and indicates potential patch gaps or bypasses. Supplier risk owners should verify Barracuda ESG patch deployment completeness and request exploitation evidence from the vendor.",
         "source_ids": [
           8
         ]
       },
       {
-        "control_id": "third_party_risk",
-        "evidence_excerpt": "An October cyberattack on refrigeration controllers at about 700 French retail sites was carried out by a cyber unit of Iran's Islamic Revolutionary Guard Corps (IRGC), the French government said yesterday. The attackers broke into controllers on the night of October 11 and changed their defrost settings to high temperatures. That caused food losses and, in at least 15 cases, fires. The unit…",
+        "control_id": "monitoring",
+        "evidence_excerpt": "The Russia-aligned state-sponsored threat actor known as Turla (aka Snake) is wielding a previously undocumented cyber espionage toolset called Cereal that's used to break into victims' Microsoft Exchange servers with an aim to surreptitiously collect emails.",
         "evidence_origin": "summary",
-        "focus": "refrigeration controllers",
-        "headline": "refrigeration controllers sabotaged by IRGC cyber unit at retail sites",
+        "focus": "Microsoft Exchange servers",
+        "headline": "Microsoft Exchange servers targeted by Turla Cereal malware for email collection",
         "priority": "medium",
-        "significance": "Nation-state manipulation of OT devices weakens operational technology assurance. Third-party risk owners must review industrial controller exposure and supplier security commitments.",
+        "significance": "State-sponsored compromise of Exchange servers for email theft weakens monitoring detection assurance for privileged communications. Detection and monitoring owners should review Exchange telemetry coverage for anomalous access patterns and validate alert routing for email collection activity.",
         "source_ids": [
-          11
+          9
         ]
       }
     ],
@@ -81,27 +81,26 @@
         {
           "source_ids": [
             2,
-            3,
-            10,
-            7,
-            8
-          ],
-          "text": "CISA added four actively exploited flaws to its Known Exploited Vulnerabilities catalog while critical vulnerabilities in OpenSSH, SAP NetWeaver, Barracuda Email Security Gateway, and Microsoft Exchange face active exploitation by criminal and state-sponsored actors. These developments elevate remediation urgency for vulnerability management programs and demand verification of third-party security appliance integrity. Control owners must confirm asset coverage for listed products and validate emergency patching completion."
-        },
-        {
-          "source_ids": [
+            1,
             11,
             8
           ],
-          "text": "A nation-state attack on refrigeration controllers at hundreds of retail sites demonstrates operational technology targeting with physical consequences, while Turla's Cereal malware enables persistent email collection from government Exchange servers. These incidents extend accountability to industrial control system suppliers and email platform administrators. Owners should review OT network segmentation and Exchange compromise detection capabilities."
+          "text": "Active exploitation of vulnerabilities across browser, infrastructure, ERP, and email gateway platforms has been confirmed by CISA KEV additions, Google Chrome zero-day patches, SAP maximum-severity fixes, and Barracuda post-patch exploitation. This convergence of actively exploited flaws weakens patch management assurance across the technology stack and demands coordinated emergency remediation verification. Vulnerability and asset owners must confirm deployment of all critical patches and validate compensating controls for any systems that cannot be immediately updated."
+        },
+        {
+          "source_ids": [
+            9,
+            4
+          ],
+          "text": "Russia-aligned Turla actors are deploying novel Cereal malware to compromise Microsoft Exchange servers for email espionage, while an unpatched iOS sandbox escape exposes cryptographic keys with no vendor fix available. These developments weaken monitoring detection for privileged communications and data protection for mobile endpoints. Detection and monitoring owners should enhance Exchange access telemetry, and data privacy owners must assess credential exposure on affected iOS versions until Apple releases a patch."
         }
       ]
     },
     "industry_impacts": [],
     "regulatory_changes": []
   },
-  "generated_at": "2026-11-10T13:10:47.962573Z",
-  "feed_url": "https://sentrydigest.ricomanifesto.com/feed.xml",
+  "generated_at": "2026-11-10T15:22:31.954351Z",
+  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/0a0481f2632fa397c28d69a32e1b9f185a2e3ccf/site/feed.xml",
   "feed_home_url": "https://sentrydigest.ricomanifesto.com/",
   "digest_issue_date": "2026-11-10",
   "digest_issue_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-10/",
@@ -157,25 +156,45 @@
       "effective_date_evidence": null
     },
     {
-      "title": "Hackers exploit SSHole OpenSSH flaw to breach Linux systems",
-      "url": "https://www.bleepingcomputer.com/news/security/hackers-exploit-sshole-openssh-flaw-to-breach-linux-systems/",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-10/#reporting-2d302e9d23c0",
-      "cves": [
-        "CVE-2026-123158"
-      ],
-      "snippet": "Hackers exploit SSHole OpenSSH flaw to breach Linux systems Hackers are actively exploiting the \"SSHole\" vulnerability (CVE-2026-123158) in OpenSSH to execute commands, steal credentials, and establish persistent access… Hackers are actively exploiting the \"SSHole\" vulnerability (CVE-2026-123158) in OpenSSH to execute commands, steal credentials, and establish persistent access…",
+      "title": "AI Makes Reverse Engineering Mainstream Software & Malware Far Easier",
+      "url": "https://www.darkreading.com/application-security/ai-reverse-engineering-apps",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-10/#reporting-3928e1f4b03e",
+      "cves": [],
+      "snippet": "AI Makes Reverse Engineering Mainstream Software & Malware Far Easier Researchers unpacked, mapped, and recreated complex software and the Turla malware, raising fresh concerns for defenders. Researchers unpacked, mapped, and recreated complex software and the Turla malware, raising fresh concerns for defenders.",
       "article_evidence": [
         {
           "extraction_version": 1,
           "origin": "summary",
-          "raw_text": "Hackers are actively exploiting the \"SSHole\" vulnerability (CVE-2026-123158) in OpenSSH to execute commands, steal credentials, and establish persistent access…",
-          "text": "Hackers are actively exploiting the \"SSHole\" vulnerability (CVE-2026-123158) in OpenSSH to execute commands, steal credentials, and establish persistent access…"
+          "raw_text": "Researchers unpacked, mapped, and recreated complex software and the Turla malware, raising fresh concerns for defenders.",
+          "text": "Researchers unpacked, mapped, and recreated complex software and the Turla malware, raising fresh concerns for defenders."
         },
         {
           "extraction_version": 1,
           "origin": "content",
-          "raw_text": "Hackers are actively exploiting the \"SSHole\" vulnerability (CVE-2026-123158) in OpenSSH to execute commands, steal credentials, and establish persistent access…",
-          "text": "Hackers are actively exploiting the \"SSHole\" vulnerability (CVE-2026-123158) in OpenSSH to execute commands, steal credentials, and establish persistent access…"
+          "raw_text": "Researchers unpacked, mapped, and recreated complex software and the Turla malware, raising fresh concerns for defenders.",
+          "text": "Researchers unpacked, mapped, and recreated complex software and the Turla malware, raising fresh concerns for defenders."
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Binance Warns of iOS Sandbox Escape That Could Expose Crypto Wallet Keys, No Fix Confirmed",
+      "url": "https://thehackernews.com/2026/11/binance-warns-of-ios-sandbox-escape.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-10/#reporting-d195f153eca0",
+      "cves": [],
+      "snippet": "Binance Warns of iOS Sandbox Escape That Could Expose Crypto Wallet Keys, No Fix Confirmed An iOS sandbox escape published on GitHub lets an app read other apps' files on iPhones running iOS 26 and 27. That puts seed phrases, private keys, and login credentials at risk of exposure to malicious apps, Binance warned today. Apple's updates for iOS 26 and 27, released yesterday, do not list a fix. A researcher who goes by forcequit released the escape, called worse_query, on Sunday, a… An iOS sandbox escape published on GitHub lets an app read other apps' files on iPhones running iOS 26 and 27. That puts seed phrases, private keys, and login credentials at risk of exposure to malicious apps, Bin",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "An iOS sandbox escape published on GitHub lets an app read other apps' files on iPhones running iOS 26 and 27. That puts seed phrases, private keys, and login credentials at risk of exposure to malicious apps, Binance warned today. Apple's updates for iOS 26 and 27, released yesterday, do not list a fix. A researcher who goes by forcequit released the escape, called worse_query, on Sunday, a…",
+          "text": "An iOS sandbox escape published on GitHub lets an app read other apps' files on iPhones running iOS 26 and 27. That puts seed phrases, private keys, and login credentials at risk of exposure to malicious apps, Binance warned today. Apple's updates for iOS 26 and 27, released yesterday, do not list a fix. A researcher who goes by forcequit released the escape, called worse_query, on Sunday, a…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "An iOS sandbox escape published on GitHub lets an app read other apps' files on iPhones running iOS 26 and 27. That puts seed phrases, private keys, and login credentials at risk of exposure to malicious apps, Binance warned today. Apple's updates for iOS 26 and 27, released yesterday, do not list a fix. A researcher who goes by forcequit released the escape, called worse_query, on Sunday, a…",
+          "text": "An iOS sandbox escape published on GitHub lets an app read other apps' files on iPhones running iOS 26 and 27. That puts seed phrases, private keys, and login credentials at risk of exposure to malicious apps, Binance warned today. Apple's updates for iOS 26 and 27, released yesterday, do not list a fix. A researcher who goes by forcequit released the escape, called worse_query, on Sunday, a…"
         }
       ],
       "effective_date_evidence": null
@@ -352,28 +371,6 @@
           "origin": "content",
           "raw_text": "An October cyberattack on refrigeration controllers at about 700 French retail sites was carried out by a cyber unit of Iran's Islamic Revolutionary Guard Corps (IRGC), the French government said yesterday. The attackers broke into controllers on the night of October 11 and changed their defrost settings to high temperatures. That caused food losses and, in at least 15 cases, fires. The unit…",
           "text": "An October cyberattack on refrigeration controllers at about 700 French retail sites was carried out by a cyber unit of Iran's Islamic Revolutionary Guard Corps (IRGC), the French government said yesterday. The attackers broke into controllers on the night of October 11 and changed their defrost settings to high temperatures. That caused food losses and, in at least 15 cases, fires. The unit…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "Google patches eighth Chrome zero-day exploited in attacks this year",
-      "url": "https://www.bleepingcomputer.com/news/security/google-patches-eighth-chrome-zero-day-exploited-in-attacks-this-year/",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-10/#reporting-cf90f68ee6be",
-      "cves": [],
-      "snippet": "Google patches eighth Chrome zero-day exploited in attacks this year Google has released emergency security updates to patch a new Chrome vulnerability exploited in zero-day attacks, the eighth such flaw since the start of the year… Google has released emergency security updates to patch a new Chrome vulnerability exploited in zero-day attacks, the eighth such flaw since the start of the year…",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "Google has released emergency security updates to patch a new Chrome vulnerability exploited in zero-day attacks, the eighth such flaw since the start of the year…",
-          "text": "Google has released emergency security updates to patch a new Chrome vulnerability exploited in zero-day attacks, the eighth such flaw since the start of the year…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "Google has released emergency security updates to patch a new Chrome vulnerability exploited in zero-day attacks, the eighth such flaw since the start of the year…",
-          "text": "Google has released emergency security updates to patch a new Chrome vulnerability exploited in zero-day attacks, the eighth such flaw since the start of the year…"
         }
       ],
       "effective_date_evidence": null
