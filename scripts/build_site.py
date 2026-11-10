@@ -47,8 +47,7 @@ REPORT_START = "<!-- REPORT_CONTENT_START -->"
 REPORT_END = "<!-- REPORT_CONTENT_END -->"
 PUBLICATION_NOTICE_START = "<!-- PUBLICATION_NOTICE_START -->"
 PUBLICATION_NOTICE_END = "<!-- PUBLICATION_NOTICE_END -->"
-EARLIER_COVERAGE_START = "<!-- EARLIER_COVERAGE_START -->"
-EARLIER_COVERAGE_END = "<!-- EARLIER_COVERAGE_END -->"
+PROVENANCE_BOUNDARY = '<section class="card report-provenance"><h2>About this report</h2>'
 ARCHIVE_CONTEXT_START = "<!-- ARCHIVE_CONTEXT_START -->"
 ARCHIVE_CONTEXT_END = "<!-- ARCHIVE_CONTEXT_END -->"
 PUBLIC_SITE_URL = emitted_origin("GRCInsight")
@@ -285,11 +284,13 @@ def current_index_html(
     generated = parse_generated(generated_raw)
     if report_html is None:
         report_html = render_report(markdown, manifest)
+    report_html, after_report = with_earlier_coverage(report_html, history_html)
     report_node = (
         f"{REPORT_START}\n"
         f'          <div id="report" class="report" data-prerendered="true" '
         f'data-public-origins="{escape(json.dumps(presentation_origins()), quote=True)}" '
         f'data-generated-at="{escape(generated_raw, quote=True)}">{report_html}</div>\n'
+        f"{after_report}"
         f"          {REPORT_END}"
     )
     region = re.compile(rf"{re.escape(REPORT_START)}.*?{re.escape(REPORT_END)}", re.DOTALL)
@@ -324,24 +325,26 @@ def current_index_html(
         f"          {PUBLICATION_NOTICE_END}"
     )
     built = notice_region.sub(lambda _match: notice_node, built)
-    coverage_region = re.compile(
-        rf"{re.escape(EARLIER_COVERAGE_START)}.*?" rf"{re.escape(EARLIER_COVERAGE_END)}",
-        re.DOTALL,
+    return built
+
+
+def with_earlier_coverage(report_html: str, history_html: str) -> tuple[str, str]:
+    """Place the optional history card immediately before About this report.
+
+    Returns the report HTML and anything to place directly after the report
+    container. History never precedes the report: without exactly one
+    provenance boundary the card follows the container, with a diagnostic.
+    """
+    if not history_html:
+        return report_html, ""
+    if report_html.count(PROVENANCE_BOUNDARY) == 1:
+        return report_html.replace(PROVENANCE_BOUNDARY, history_html + PROVENANCE_BOUNDARY, 1), ""
+    print(
+        "site build: earlier coverage placed after the report "
+        "(provenance boundary not found exactly once)",
+        file=sys.stderr,
     )
-    # The history block is optional: a template without its marker pair builds
-    # without it, while a duplicated or unbalanced pair is a template error.
-    starts = built.count(EARLIER_COVERAGE_START)
-    ends = built.count(EARLIER_COVERAGE_END)
-    if starts == ends == 0:
-        return built
-    if starts != 1 or ends != 1 or len(coverage_region.findall(built)) != 1:
-        fail("index.html must contain at most one earlier coverage marker pair")
-    coverage_node = (
-        f"{EARLIER_COVERAGE_START}\n"
-        f"{history_html}"
-        f"          {EARLIER_COVERAGE_END}"
-    )
-    return coverage_region.sub(lambda _match: coverage_node, built)
+    return report_html, f"          {history_html}\n"
 
 
 def historical_context_note(archive_href: str | None = None) -> str:

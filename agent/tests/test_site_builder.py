@@ -506,10 +506,13 @@ def test_retained_publication_shows_the_block_beside_the_notice():
     current = report(sh, "2026-11-10T09:00:00", ("monitoring", [A]))
     block = sh.earlier_coverage_html(current, [current])
     built = namespace["current_index_html"](
-        template, markdown, state, history, report_html="<p>x</p>", history_html=block
+        template, markdown, state, history, report_html=REPORT_WITH_BOUNDARY, history_html=block
     )
-    assert "publication-notice-title" in built and 'id="earlier-coverage-title"' in built
-    assert built.index("publication-notice-title") < built.index("earlier-coverage-title")
+    notice = built.index("publication-notice-title")
+    summary = built.index("<h2>Executive Summary</h2>")
+    coverage = built.index('id="earlier-coverage-title"')
+    about = built.index(PROVENANCE)
+    assert notice < summary < coverage < about
 
 
 # Real-archive checks share one build of the committed site.
@@ -534,8 +537,9 @@ def test_real_build_is_deterministic(real_build):
 def test_real_build_leaves_every_archived_page_and_secondary_page_unchanged(real_build):
     namespace, outputs, _ = real_build
     archive_dir = namespace["ARCHIVE_DIR"]
+    assert archive_dir / "index.html" in outputs
     for path, content in outputs.items():
-        if path in (namespace["INDEX_HTML"], archive_dir / "index.html"):
+        if path == namespace["INDEX_HTML"]:
             continue
         assert path.read_text(encoding="utf-8") == content, path
 
@@ -560,10 +564,10 @@ def test_every_real_history_link_targets_an_existing_finding(real_build):
     for slug, n in links:
         page = outputs[archive_dir / slug / "index.html"]
         assert f'id="finding-{n}"' in page, (slug, n)
-    for n in re.findall(
-        r'<a href="#finding-(\d+)"',
-        current.split("EARLIER_COVERAGE_START")[1].split("EARLIER_COVERAGE_END")[0],
-    ):
+    block = current.split('aria-labelledby="earlier-coverage-title"')[1].split(PROVENANCE)[0]
+    in_page = re.findall(r'<a href="#finding-(\d+)"', block)
+    assert in_page
+    for n in in_page:
         assert f'id="finding-{n}"' in current
 
 
@@ -638,22 +642,111 @@ def test_empty_window_and_window_without_finding_sources_are_stated_differently(
     assert "<details" not in html
 
 
-def test_template_without_coverage_markers_builds_without_the_optional_block():
+PROVENANCE = '<section class="card report-provenance"><h2>About this report</h2>'
+REPORT_WITH_BOUNDARY = (
+    '<section class="card executive-summary"><h2>Executive Summary</h2><p>Lead.</p></section>'
+    '<section class="card"><h2>Source Highlights</h2><p>Sources.</p></section>'
+    f"{PROVENANCE}<dl></dl></section>"
+)
+MINIMAL_TEMPLATE = (
+    '<time class="subtitle" id="generated">Loading</time>'
+    "<!-- PUBLICATION_NOTICE_START --><!-- PUBLICATION_NOTICE_END -->"
+    "<!-- REPORT_CONTENT_START --><!-- REPORT_CONTENT_END -->"
+)
+MINIMAL_MARKDOWN = (
+    "# GRC Intelligence Report\n**Generated:** 2026-08-13T13:00:00Z\n\n## Risk\nText."
+)
+
+
+def report_container(built: str) -> str:
+    return built.split('<div id="report"')[1].split("<!-- REPORT_CONTENT_END -->")[0]
+
+
+def test_earlier_coverage_sits_directly_before_about_this_report():
     namespace = builder_namespace()
-    current_index_html = namespace["current_index_html"]
-    minimal = (
-        '<time class="subtitle" id="generated">Loading</time>'
-        "<!-- PUBLICATION_NOTICE_START --><!-- PUBLICATION_NOTICE_END -->"
-        "<!-- REPORT_CONTENT_START --><!-- REPORT_CONTENT_END -->"
+    sh = history_module()
+    current = report(sh, "2026-11-10T09:00:00", ("monitoring", [A]))
+    block = sh.earlier_coverage_html(current, [current])
+    built = namespace["current_index_html"](
+        MINIMAL_TEMPLATE, MINIMAL_MARKDOWN, report_html=REPORT_WITH_BOUNDARY, history_html=block
     )
-    markdown = "# GRC Intelligence Report\n**Generated:** 2026-08-13T13:00:00Z\n\n## Risk\nText."
-    built = current_index_html(minimal, markdown, report_html="<p>x</p>", history_html="<p>H</p>")
-    assert "<p>H</p>" not in built and "EARLIER_COVERAGE" not in built
-    pair = "<!-- EARLIER_COVERAGE_START --><!-- EARLIER_COVERAGE_END -->"
-    built = current_index_html(
-        minimal + pair, markdown, report_html="<p>x</p>", history_html="<p>H</p>"
+    inside = report_container(built)
+    assert inside.index("<h2>Executive Summary</h2>") < inside.index("earlier-coverage-title")
+    assert "Earlier coverage" not in built.split("<h2>Executive Summary</h2>")[0]
+    assert re.search(
+        r"</section>\s*" + re.escape(PROVENANCE), inside.split("<h2>Source Highlights</h2>")[1]
     )
-    assert built.count("<p>H</p>") == 1
-    for broken in (minimal + pair + pair, minimal + "<!-- EARLIER_COVERAGE_START -->"):
-        with pytest.raises(SystemExit, match="earlier coverage marker"):
-            current_index_html(broken, markdown, report_html="<p>x</p>", history_html="<p>H</p>")
+    assert inside.split(PROVENANCE)[0].rstrip().endswith("</section>")
+    # It is a briefing card, so the contents index and the jump menu list it.
+    assert (
+        '<section class="card history-section" aria-labelledby="earlier-coverage-title">' in inside
+    )
+    assert '<h2 id="earlier-coverage-title">Earlier coverage</h2>' in inside
+
+
+def test_block_leads_with_the_result_and_ends_with_the_method():
+    sh = history_module()
+    earlier = report(sh, "2026-11-01T10:00:00", ("monitoring", [A]))
+    current = report(sh, "2026-11-02T10:00:00", ("monitoring", [A, B]))
+    html = sh.earlier_coverage_html(current, [earlier, current])
+    summary = html.index("of this report's")
+    findings = html.index('<ol class="history-findings">')
+    scope = html.index("Compared with the")
+    archive = html.index('href="archive/#sources-by-control"')
+    assert summary < findings < scope < archive
+    assert (
+        "Older reports are not compared, so “first cited” means first in that comparable retained history."
+        in html
+    )
+
+
+@pytest.mark.parametrize("copies", [0, 2])
+def test_missing_or_duplicated_boundary_puts_the_block_after_the_report(copies, capsys):
+    namespace = builder_namespace()
+    sh = history_module()
+    current = report(sh, "2026-11-10T09:00:00", ("monitoring", [A]))
+    block = sh.earlier_coverage_html(current, [current])
+    body = '<section class="card executive-summary"><h2>Executive Summary</h2></section>' + (
+        f"{PROVENANCE}</section>" * copies
+    )
+    built = namespace["current_index_html"](
+        MINIMAL_TEMPLATE, MINIMAL_MARKDOWN, report_html=body, history_html=block
+    )
+    assert built.count('id="earlier-coverage-title"') == 1
+    assert "earlier-coverage-title" not in report_container(built).split("</div>")[0]
+    assert built.index("earlier-coverage-title") > built.index('<div id="report"')
+    assert built.index("earlier-coverage-title") > built.index("<h2>Executive Summary</h2>")
+    assert "earlier coverage placed after the report" in capsys.readouterr().err
+
+
+def test_without_history_the_report_html_is_unchanged():
+    namespace = builder_namespace()
+    built = namespace["current_index_html"](
+        MINIMAL_TEMPLATE, MINIMAL_MARKDOWN, report_html=REPORT_WITH_BOUNDARY, history_html=""
+    )
+    assert REPORT_WITH_BOUNDARY in built and "earlier-coverage" not in built
+
+
+def test_non_history_template_failures_still_fail():
+    namespace = builder_namespace()
+    broken = MINIMAL_TEMPLATE.replace("<!-- REPORT_CONTENT_END -->", "")
+    with pytest.raises(SystemExit, match="report content marker pair"):
+        namespace["current_index_html"](
+            broken, MINIMAL_MARKDOWN, report_html=REPORT_WITH_BOUNDARY, history_html="<p>H</p>"
+        )
+
+
+def test_template_has_no_history_region_before_the_report():
+    template = INDEX_HTML.read_text(encoding="utf-8")
+    assert "EARLIER_COVERAGE" not in template
+
+
+def test_real_page_leads_with_the_summary_and_lists_coverage_before_about(real_build):
+    namespace, outputs, _ = real_build
+    page = outputs[namespace["INDEX_HTML"]]
+    inside = report_container(page)
+    headings = re.findall(r'<section class="card[^"]*"[^>]*><h2[^>]*>([^<]+)</h2>', inside)
+    assert headings[0] == "Executive Summary"
+    assert headings[-2:] == ["Earlier coverage", "About this report"]
+    assert headings.count("Earlier coverage") == 1
+    assert "Earlier coverage" not in page.split('<div id="report"')[0]

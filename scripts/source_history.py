@@ -396,13 +396,16 @@ def earlier_coverage_html(current: Report, reports: Iterable[Report]) -> str:
         f"{'cites' if coverage.new_findings == 1 else 'cite'} at least one source that no earlier report "
         "in the comparable retained history cited."
     )
-    return f"""          <aside class="history-note" aria-labelledby="earlier-coverage-title">
-            <h2 id="earlier-coverage-title">Earlier coverage</h2>
-            <p>{summary} {scope}</p>
-            <ol class="history-findings">{"".join(items)}</ol>
-            <p><a href="archive/#sources-by-control">Sources by control, last 30 days</a></p>
-          </aside>
-"""
+    # A briefing card: result first, method last, listed by the contents index.
+    return (
+        '<section class="card history-section" aria-labelledby="earlier-coverage-title">'
+        '<h2 id="earlier-coverage-title">Earlier coverage</h2>'
+        f"<p>{summary}</p>"
+        f'<ol class="history-findings">{"".join(items)}</ol>'
+        f"<p>{scope}</p>"
+        '<p><a href="archive/#sources-by-control">Sources by control, last 30 days</a></p>'
+        "</section>"
+    )
 
 
 def _gap_text(gap: Gap) -> str:
