@@ -1,20 +1,20 @@
 # GRC Intelligence Report - 2026-11-10
-**Generated:** 2026-11-10T18:20:39.230484Z
+**Generated:** 2026-11-10T21:17:21.056998Z
 **Date of Issue:** November 2026
 **Analysis Period:** November 2026
-**Source:** [SentryDigest](https://raw.githubusercontent.com/ricomanifesto/SentryDigest/39b9b1f86138ff5c1c578be7d141d8386ffb208e/site/feed.xml)
+**Source:** [SentryDigest](https://raw.githubusercontent.com/ricomanifesto/SentryDigest/cd8493414782166f561d29291ac5c4e1c5753cee/site/feed.xml)
 **Source Issue:** [SentryDigest 2026-11-10](https://sentrydigest.ricomanifesto.com/archive/2026-11-10/)
 **Articles Analyzed:** 30
-**GRC-Relevant Articles:** 27
+**GRC-Relevant Articles:** 28
 **Authoring Model:** nvidia/nemotron-3-ultra-550b-a55b:free
 **Requested Route:** openrouter/nvidia/nemotron-3-ultra-550b-a55b:free
 **Analysis Mode:** Model-backed
 
 ## Executive Summary
 
-CISA KEV additions and SAP max severity patches represent authoritative vulnerability intelligence requiring immediate remediation tracking. Active exploitation of AhsayCBS backup software and Xen Orchestra virtualization management demonstrates authentication bypass chains in operational technology. Vulnerability and access management owners must verify patch deployment for KEV-listed components, SAP NetWeaver suite, AhsayCBS, and Xen Orchestra while reviewing privileged access monitoring for virtualization hosts. [CISA Warns of Active Exploitation of OpenSSH, GPUStack, FreeSWITCH, and IBM Flaws](https://thehackernews.com/2026/11/cisa-warns-of-active-exploitation-of.html); [SAP patches ICM2SHELL and PROXYGATE maximum severity flaws](https://www.bleepingcomputer.com/news/security/sap-patches-four-maximum-severity-security-vulnerabilities/); [Attackers Exploit AhsayCBS Flaws to Deploy Sandbox-Evading Python Backdoor](https://thehackernews.com/2026/11/attackers-exploit-ahsaycbs-flaws-to.html); [Critical Xen Orchestra auth bypass flaw exploited to hijack VM servers](https://www.bleepingcomputer.com/news/security/critical-xen-orchestra-auth-bypass-flaw-exploited-to-hijack-vm-servers/)
+The November 2026 Patch Tuesday addressing 1,235 Microsoft flaws including an actively exploited Outlook zero-day, combined with a Git supply chain vulnerability allowing code execution during recursive clones and an actively exploited Xen Orchestra authentication bypass, creates an urgent need for asset inventory verification and patch deployment across diverse technology stacks. Vulnerability owners must confirm coverage of affected versions and remediation timelines. [Microsoft November 2026 Patch Tuesday fixes 1,235 flaws, Outlook zero-day](https://www.bleepingcomputer.com/news/microsoft/microsoft-november-2026-patch-tuesday-fixes-1-235-flaws-outlook-zero-day/); [Git Patches Flaw That Lets Malicious Repositories Execute Code During Recursive Clones](https://thehackernews.com/2026/11/git-patches-flaw-that-lets-malicious.html); [Hackers Exploit Critical Xen Orchestra Auth Bypass Flaw to Gain Admin Access](https://thehackernews.com/2026/11/hackers-exploit-critical-xen-orchestra.html)
 
-The Fireworks AI breach expansion reveals persistent third-party data exposure affecting customer secrets and billing data, while an unfixed iOS sandbox escape places cryptographic credentials at risk on current mobile OS versions. Data protection and access management owners should assess Fireworks AI dependency and request incident scope evidence, and evaluate mobile credential storage risk pending Apple's fix for the sandbox escape. [Fireworks AI Breach Widens to Expose Customer Billing Data and Incomplete Model Weights](https://thehackernews.com/2026/11/fireworks-ai-breach-widens-to-expose.html); [Binance Warns of iOS Sandbox Escape That Could Expose Crypto Wallet Keys, No Fix Confirmed](https://thehackernews.com/2026/11/binance-warns-of-ios-sandbox-escape.html)
+A compromised Qubole AWS account enabled cross-customer data exfiltration, a Japanese retailer lost 37.62 million customer records, and AI coding agents inadvertently published credentials to public repositories, highlighting third-party access governance gaps and emerging data exposure vectors. Data and supplier risk owners should validate access scopes, breach notification readiness, and secrets detection in automated workflows. [Hackers exploit trusted AWS access to breach multiple cloud environments](https://www.bleepingcomputer.com/news/security/hackers-exploit-trusted-aws-access-to-breach-multiple-cloud-environments/); [Japanese furniture giant Nitori says hackers stole 37.6M customer records](https://www.bleepingcomputer.com/news/security/japanese-furniture-giant-nitori-says-hackers-stole-376m-customer-records/); [AI Coding Agents Leak Thousands of Secrets to GitHub](https://www.darkreading.com/cyber-risk/ai-coding-agents-leak-secrets-github)
 
 Scope: 6 findings and 0 sourced regulatory changes from 12 retained sources. Review priorities rank what to check first; confirm whether each finding applies to your organization before assigning work.
 
@@ -26,13 +26,13 @@ No sourced regulatory changes identified in the supplied evidence.
 
 Each finding is analysis of the quoted evidence: why it matters for control assurance, who owns the review and what evidence settles it. Reference controls are review aids, not a compliance determination.
 
-### Known Exploited Vulnerabilities catalog adds four actively exploited flaws
+### Microsoft's November 2026 Patch Tuesday addresses record-breaking flaw count
 
 **Review priority:** High · Vulnerability management · Owner: Vulnerability and asset owners
 
-**Why it matters:** The catalog additions signal that these vulnerabilities require immediate remediation under federal binding operational directives. Vulnerability management owners should confirm affected asset inventory and patch status for GPUStack, FreeSwitch, OpenSSH, and IBM Aspera Faspex.
+**Why it matters:** Record vulnerability volume including an actively exploited zero-day demands urgent asset inventory and patch deployment verification. Vulnerability owner should confirm affected asset coverage and remediation status.
 
-**Source evidence:** “The U.S. Cybersecurity and Infrastructure Security Agency &#40;CISA&#41; on Monday added four security flaws impacting GPUStack, SignalWire FreeSwitch, OpenBSD OpenSSH, and IBM Aspera Faspex to its Known Exploited Vulnerabilities &#40;KEV&#41; catalog, citing evidence of active exploitation.” [CISA Warns of Active Exploitation of OpenSSH, GPUStack, FreeSWITCH, and IBM Flaws](https://thehackernews.com/2026/11/cisa-warns-of-active-exploitation-of.html)
+**Source evidence:** “Today is Microsoft's November 2026 Patch Tuesday, with security updates addressing a record-breaking 1,235 flaws, including one actively exploited Microsoft Outlook zero-day vulnerability…” [Microsoft November 2026 Patch Tuesday fixes 1,235 flaws, Outlook zero-day](https://www.bleepingcomputer.com/news/microsoft/microsoft-november-2026-patch-tuesday-fixes-1-235-flaws-outlook-zero-day/)
 
 **Evidence to request:** Affected-asset inventory, installed versions, remediation status and an exception owner.
 
@@ -40,27 +40,13 @@ Each finding is analysis of the quoted evidence: why it matters for control assu
 
 **Reference controls:** ISO/IEC 27001:2022 A.8.8 (management of technical vulnerabilities); NIST CSF 2.0 ID.RA (risk assessment), PR.PS (platform security)
 
-### NetWeaver, Web Dispatcher, and Gateway software receive maximum severity patches
+### Git 2.56.1 resolves recursive clone code execution flaw
 
-**Review priority:** High · Vulnerability management · Owner: Vulnerability and asset owners
+**Review priority:** Medium · Vulnerability management · Owner: Vulnerability and asset owners
 
-**Why it matters:** Four maximum-severity vulnerabilities in core SAP components demand urgent remediation due to potential business process disruption. Vulnerability management owners should prioritize SAP patch deployment and verify compensating controls for unpatched instances.
+**Why it matters:** Ubiquitous version control tool vulnerability requires version verification across build pipelines and submodule handling controls. Asset owner should confirm Git deployment versions and supply chain integrity checks.
 
-**Source evidence:** “SAP patched 35 vulnerabilities in its November 2026 security updates, including four maximum-severity issues affecting its NetWeaver, Web Dispatcher, and Gateway software…” [SAP patches ICM2SHELL and PROXYGATE maximum severity flaws](https://www.bleepingcomputer.com/news/security/sap-patches-four-maximum-severity-security-vulnerabilities/)
-
-**Evidence to request:** Affected-asset inventory, installed versions, remediation status and an exception owner.
-
-**Decision trigger:** If applicability is confirmed, decide on remediation or a documented exception; otherwise record why the finding does not apply.
-
-**Reference controls:** ISO/IEC 27001:2022 A.8.8 (management of technical vulnerabilities); NIST CSF 2.0 ID.RA (risk assessment), PR.PS (platform security)
-
-### AhsayCBS exploitation chain bypasses authentication and executes commands
-
-**Review priority:** High · Vulnerability management · Owner: Vulnerability and asset owners
-
-**Why it matters:** Active exploitation of chained vulnerabilities in backup software demonstrates that patching alone may not suffice if authentication bypasses are weaponized. Vulnerability management owners should verify AhsayCBS patch deployment and review authentication controls for backup infrastructure.
-
-**Source evidence:** “Cybersecurity researchers have disclosed details of an attack that exploited two now-patched vulnerabilities in AhsayCBS to deliver a Python-based implant. The activity, observed by Huntress in October 2026, involves the exploitation of a chain comprising CVE-2026-105133 and CVE-2026-105134 to bypass authentication and execute arbitrary commands on affected systems.” [Attackers Exploit AhsayCBS Flaws to Deploy Sandbox-Evading Python Backdoor](https://thehackernews.com/2026/11/attackers-exploit-ahsaycbs-flaws-to.html)
+**Source evidence:** “A flaw in Git can let a malicious repository run an attacker's code on a computer that clones it recursively, together with its submodules. The Git project fixed it this week in Git 2.56.1, with matching fixes for the 2.50 through 2.55 series in 2.50.2, 2.51.3, 2.52.1, 2.53.1, 2.54.1 and 2.55.1.” [Git Patches Flaw That Lets Malicious Repositories Execute Code During Recursive Clones](https://thehackernews.com/2026/11/git-patches-flaw-that-lets-malicious.html)
 
 **Evidence to request:** Affected-asset inventory, installed versions, remediation status and an exception owner.
 
@@ -68,13 +54,13 @@ Each finding is analysis of the quoted evidence: why it matters for control assu
 
 **Reference controls:** ISO/IEC 27001:2022 A.8.8 (management of technical vulnerabilities); NIST CSF 2.0 ID.RA (risk assessment), PR.PS (platform security)
 
-### Xen Orchestra authentication bypass grants administrator privileges
+### Xen Orchestra authentication bypass flaw enables admin access
 
 **Review priority:** High · Access management · Owner: Identity and access owner
 
-**Why it matters:** An authentication bypass in virtualization management software directly compromises administrative access controls. Access management owners should confirm Xen Orchestra patch status and review privileged session monitoring for XCP-ng hosts.
+**Why it matters:** Actively exploited authentication bypass in virtualization management platform requires immediate access review and compensating controls. Access owner should confirm exposure of management interfaces and session revocation capability.
 
-**Source evidence:** “A critical authentication bypass vulnerability in Xen Orchestra is being actively exploited in attacks that could grant administrator privileges and allow takeover of XCP-ng virtualization hosts…” [Critical Xen Orchestra auth bypass flaw exploited to hijack VM servers](https://www.bleepingcomputer.com/news/security/critical-xen-orchestra-auth-bypass-flaw-exploited-to-hijack-vm-servers/)
+**Source evidence:** “French software company Vates VMS has warned of a critical security vulnerability in Xen Orchestra that it said is being actively exploited in the wild. The authentication bypass flaw, which does not yet have a CVE identifier, is tracked as VSA-2026-062.” [Hackers Exploit Critical Xen Orchestra Auth Bypass Flaw to Gain Admin Access](https://thehackernews.com/2026/11/hackers-exploit-critical-xen-orchestra.html)
 
 **Evidence to request:** Access scope, authentication coverage, session revocation and a permission-test result.
 
@@ -82,13 +68,27 @@ Each finding is analysis of the quoted evidence: why it matters for control assu
 
 **Reference controls:** ISO/IEC 27001:2022 A.5.15 (access control), A.5.18 (access rights), A.8.2 (privileged access rights); NIST CSF 2.0 PR.AA (identity management, authentication and access control)
 
-### Fireworks AI breach exposes customer billing data and model weights
+### Qubole big data platform's AWS account exposes multiple customer environments
 
-**Review priority:** Medium · Data protection · Owner: Data and privacy owners
+**Review priority:** High · Third-party risk · Owner: Supplier risk owner
 
-**Why it matters:** A third-party AI provider's expanded breach notification reveals ongoing exposure of sensitive customer data including secrets and billing details. Data protection owners should assess Fireworks AI dependency, request incident details, and evaluate data handling assurances.
+**Why it matters:** Compromised supplier credentials enabled cross-customer data access, requiring verification of third-party access scopes and assurance evidence. Supplier risk owner should confirm Qubole access boundaries and remediation assurance.
 
-**Source evidence:** “Fireworks AI disclosed on Monday that its investigation into a security incident first reported early last month uncovered further malicious activity, affecting account and billing information, alongside secrets, datasets, and incomplete models for a "limited set of accounts." In a notice published on October 10, 2026, the company said it detected unauthorized use of internal Fireworks…” [Fireworks AI Breach Widens to Expose Customer Billing Data and Incomplete Model Weights](https://thehackernews.com/2026/11/fireworks-ai-breach-widens-to-expose.html)
+**Source evidence:** “A threat actor used compromised identity and access management &#40;IAM&#41; credentials for a Qubole big data platform's AWS account to access and exfiltrate data from multiple customers' AWS environments…” [Hackers exploit trusted AWS access to breach multiple cloud environments](https://www.bleepingcomputer.com/news/security/hackers-exploit-trusted-aws-access-to-breach-multiple-cloud-environments/)
+
+**Evidence to request:** Supplier access scope, control responsibilities and evidence of remediation assurance.
+
+**Decision trigger:** If the supplier dependency exists and assurance is insufficient, request evidence or escalate the assurance gap to its owner.
+
+**Reference controls:** ISO/IEC 27001:2022 A.5.19 (supplier relationships), A.5.21 (ICT supply chain), A.5.22 (monitoring and review of supplier services); NIST CSF 2.0 GV.SC (cybersecurity supply chain risk management)
+
+### 37.62 million customer records exposed in retailer breach
+
+**Review priority:** High · Data protection · Owner: Data and privacy owners
+
+**Why it matters:** Large-scale personal data exposure triggers notification obligations and requires verification of data inventory and access controls. Data owner should confirm breach scope, notification status, and retention policy compliance.
+
+**Source evidence:** “Nitori, a major Japanese furniture and home accessories retailer, discovered that an attacker accessed a system on its network and may have stolen 37.62 million customer records…” [Japanese furniture giant Nitori says hackers stole 37.6M customer records](https://www.bleepingcomputer.com/news/security/japanese-furniture-giant-nitori-says-hackers-stole-376m-customer-records/)
 
 **Evidence to request:** Data inventory, access restrictions, audit logs and a documented exposure assessment.
 
@@ -96,31 +96,31 @@ Each finding is analysis of the quoted evidence: why it matters for control assu
 
 **Reference controls:** ISO/IEC 27001:2022 A.5.34 (privacy and protection of PII), A.8.12 (data leakage prevention), A.8.24 (use of cryptography); NIST CSF 2.0 PR.DS (data security)
 
-### iOS sandbox escape exposes cryptographic keys and credentials
+### Claude Code command saves credentials to public repositories
 
-**Review priority:** High · Access management · Owner: Identity and access owner
+**Review priority:** Medium · Data protection · Owner: Data and privacy owners
 
-**Why it matters:** A sandbox escape with no confirmed fix undermines application isolation guarantees for sensitive data. Access management owners should evaluate mobile device risk, restrict high-value credential storage on affected iOS versions, and monitor for Apple security updates.
+**Why it matters:** AI development tooling introducing credential leakage requires review of secrets management and repository scanning controls. Access owner should confirm secret detection coverage and developer workflow safeguards.
 
-**Source evidence:** “An iOS sandbox escape published on GitHub lets an app read other apps' files on iPhones running iOS 26 and 27. That puts seed phrases, private keys, and login credentials at risk of exposure to malicious apps, Binance warned today. Apple's updates for iOS 26 and 27, released yesterday, do not list a fix.” [Binance Warns of iOS Sandbox Escape That Could Expose Crypto Wallet Keys, No Fix Confirmed](https://thehackernews.com/2026/11/binance-warns-of-ios-sandbox-escape.html)
+**Source evidence:** “A command in Claude Code inadvertently saves files with credentials and other sensitive data to public Git repositories, creating security gaps for organizations.” [AI Coding Agents Leak Thousands of Secrets to GitHub](https://www.darkreading.com/cyber-risk/ai-coding-agents-leak-secrets-github)
 
-**Evidence to request:** Access scope, authentication coverage, session revocation and a permission-test result.
+**Evidence to request:** Data inventory, access restrictions, audit logs and a documented exposure assessment.
 
-**Decision trigger:** If a permission gap is reproduced, assign a control correction and verify it; otherwise retain the test evidence.
+**Decision trigger:** If relevant data is exposed to the reported access path, decide which protection or access change is needed.
 
-**Reference controls:** ISO/IEC 27001:2022 A.5.15 (access control), A.5.18 (access rights), A.8.2 (privileged access rights); NIST CSF 2.0 PR.AA (identity management, authentication and access control)
+**Reference controls:** ISO/IEC 27001:2022 A.5.34 (privacy and protection of PII), A.8.12 (data leakage prevention), A.8.24 (use of cryptography); NIST CSF 2.0 PR.DS (data security)
 
 ## Source Highlights
 
+- [Git Patches Flaw That Lets Malicious Repositories Execute Code During Recursive Clones](https://thehackernews.com/2026/11/git-patches-flaw-that-lets-malicious.html) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-10/#reporting-98e4d72a559c)
 - [Attackers Exploit AhsayCBS Flaws to Deploy Sandbox-Evading Python Backdoor](https://thehackernews.com/2026/11/attackers-exploit-ahsaycbs-flaws-to.html) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-10/#reporting-db01d072adb8)
-- [Google Issues Chrome Security Update for Eighth Actively Exploited Zero-Day of 2026](https://thehackernews.com/2026/11/google-issues-chrome-security-update.html) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-10/#reporting-749cd79bf9b6)
-- [CISA Warns of Active Exploitation of OpenSSH, GPUStack, FreeSWITCH, and IBM Flaws](https://thehackernews.com/2026/11/cisa-warns-of-active-exploitation-of.html) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-10/#reporting-4703b2a7b4d7)
-- [Critical Xen Orchestra auth bypass flaw exploited to hijack VM servers](https://www.bleepingcomputer.com/news/security/critical-xen-orchestra-auth-bypass-flaw-exploited-to-hijack-vm-servers/) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-10/#reporting-f71a910c08b1)
-- [Binance warns of iOS flaw that could leak crypto wallet secrets](https://www.bleepingcomputer.com/news/security/binance-warns-of-ios-flaw-that-could-leak-crypto-wallet-secrets/) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-10/#reporting-9d3024bd726a)
-- [Blind Eagle Uses Fake Court Notices to Deliver Remote Access Trojan Across Latin America](https://thehackernews.com/2026/11/blind-eagle-uses-fake-court-notices-to.html) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-10/#reporting-af8c1df07c8f)
-- [Fireworks AI Breach Widens to Expose Customer Billing Data and Incomplete Model Weights](https://thehackernews.com/2026/11/fireworks-ai-breach-widens-to-expose.html) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-10/#reporting-78de25647db1)
-- [Ransomware recovery is now a client retention metric](https://www.bleepingcomputer.com/news/security/ransomware-recovery-is-now-a-client-retention-metric/) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-10/#reporting-451800d549b3)
-- [AI Makes Reverse Engineering Mainstream Software & Malware Far Easier](https://www.darkreading.com/application-security/ai-reverse-engineering-apps) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-10/#reporting-3928e1f4b03e)
-- [Binance Warns of iOS Sandbox Escape That Could Expose Crypto Wallet Keys, No Fix Confirmed](https://thehackernews.com/2026/11/binance-warns-of-ios-sandbox-escape.html) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-10/#reporting-d195f153eca0)
-- [SAP patches ICM2SHELL and PROXYGATE maximum severity flaws](https://www.bleepingcomputer.com/news/security/sap-patches-four-maximum-severity-security-vulnerabilities/) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-10/#reporting-4864fb36b478)
-- [Beyond the Alert: The Case for Rich Network Data](https://thehackernews.com/2026/11/beyond-alert-case-for-rich-network-data.html) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-10/#reporting-435fd47ef969)
+- [Japanese furniture giant Nitori says hackers stole 37.6M customer records](https://www.bleepingcomputer.com/news/security/japanese-furniture-giant-nitori-says-hackers-stole-376m-customer-records/) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-10/#reporting-e01c8b6f2f4a)
+- [Checkmarx Appoints Kobi Sivilya as Chief Information Security Officer](https://www.darkreading.com/cybersecurity-careers/checkmarx-appoints-kobi-sivilya-chief-information-security-officer) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-10/#reporting-b004ff3275c6)
+- [How to Assess OT Incident Response Preparedness](https://www.darkreading.com/ics-ot-security/assess-ot-incident-response-preparedness) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-10/#reporting-cf980b20e559)
+- [Microsoft releases Windows 10 KB5131096 extended security update](https://www.bleepingcomputer.com/news/microsoft/microsoft-releases-windows-10-kb5131096-extended-security-update/) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-10/#reporting-1aa57ef5b4c0)
+- [Hackers exploit trusted AWS access to breach multiple cloud environments](https://www.bleepingcomputer.com/news/security/hackers-exploit-trusted-aws-access-to-breach-multiple-cloud-environments/) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-10/#reporting-ddf41e717f52)
+- [SGLang RCE Exploit Breaches NEAR AI, Steals Data From 18 Agents and About 100 Users](https://thehackernews.com/2026/11/sglang-rce-exploit-breaches-near-ai.html) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-10/#reporting-12e10543ab56)
+- [Microsoft November 2026 Patch Tuesday fixes 1,235 flaws, Outlook zero-day](https://www.bleepingcomputer.com/news/microsoft/microsoft-november-2026-patch-tuesday-fixes-1-235-flaws-outlook-zero-day/) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-10/#reporting-70a133457da5)
+- [AI Coding Agents Leak Thousands of Secrets to GitHub](https://www.darkreading.com/cyber-risk/ai-coding-agents-leak-secrets-github) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-10/#reporting-ef6d6400be29)
+- [Windows 11 KB5132061 & KB5131087 cumulative updates released](https://www.bleepingcomputer.com/news/microsoft/windows-11-kb5132061-and-kb5131087-cumulative-updates-released/) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-10/#reporting-e84e0783f52d)
+- [Hackers Exploit Critical Xen Orchestra Auth Bypass Flaw to Gain Admin Access](https://thehackernews.com/2026/11/hackers-exploit-critical-xen-orchestra.html) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-10/#reporting-452012a5ab46)
