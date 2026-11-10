@@ -494,15 +494,12 @@
   }
 
   function reportStatistics(markdown, rows) {
-    const regulatory = markdownSection(markdown, 'Sourced Regulatory Changes')
-      .split('\n').filter(line => /^\|/.test(line.trim())).slice(2).length;
     const sources = markdownSection(markdown, 'Source Highlights')
       .split('\n').filter(line => /^\s*-\s+\[/.test(line)).length;
     return {
       findings: rows.length,
       high: rows.filter(row => row.priority === 'High').length,
       areas: new Set(rows.map(row => row.control)).size,
-      regulatory,
       sources,
     };
   }
@@ -512,7 +509,6 @@
       ['Findings', stats.findings],
       ['High priority', stats.high],
       ['Control areas', stats.areas],
-      ['Regulatory changes', stats.regulatory],
       ['Sources reviewed', stats.sources],
     ];
     return `<dl class="glance" aria-label="Report at a glance">${items.map(([label, value]) =>
@@ -636,6 +632,52 @@
     );
   }
 
+  // The site does not present the Sourced Regulatory Changes section. Stored
+  // Markdown keeps it as generated; these projections only change the page.
+  const REMOVED_SECTION = 'Sourced Regulatory Changes';
+  // Application-written sentences about that section, one per contract version,
+  // matched exactly with counts as the only variable. Model prose is not touched.
+  const REGULATORY_SUMMARY_TEXT = [
+    // v6 scope line: keep the finding and source counts.
+    [/^(Scope: \d+ findings?) and \d+ sourced regulatory changes? (from \d+ retained sources?\. Review priorities rank what to check first; confirm whether each finding applies to your organization before assigning work\.)$/gm, '$1 $2'],
+    // v4 scope line.
+    [/^(Scope: \d+ selected control findings) and \d+ sourced regulatory changes (from \d+ retained sources\. Review questions and priorities are inferences; local exposure and legal applicability require verification\.)$/gm, '$1 $2'],
+    // v5 closing paragraph: the sentence sits between two fixed sentences.
+    [/(The supplied evidence does not establish your organization's exposure or control effectiveness\. |Some retained passages are truncated; consult the complete source before making a final decision\. )(?:No primary-source regulatory change is established by this selection\. |Regulatory applicability still requires an assessment of the cited primary material\. )(Revise the agenda if the relevant product, activity or dependency is absent, or if stronger evidence changes the assessment\.)/g, '$1$2'],
+    // v3 opening sentence; the next sentence stays.
+    [/^This report separates sourced regulatory changes from inferred control and governance implications\. (Use the primary evidence to assess applicability to your organization\.)/gm, '$1'],
+  ];
+  const REGULATORY_POINTER = /^(\*\*Source evidence:\*\* )?See the sourced regulatory evidence above\. /m;
+  const NO_FINDINGS_FALLBACK = 'The sourced regulatory table is the evidence for the applicability decision above; no additional control findings were selected.';
+
+  function transformSection(markdown, name, transform) {
+    const section = new RegExp(`(^## ${name}[ \\t]*\\n)([\\s\\S]*?)(?=^## |(?![\\s\\S]))`, 'm');
+    return markdown.replace(section, (_match, heading, body) => heading + transform(body));
+  }
+
+  function presentSummaryText(body) {
+    return REGULATORY_SUMMARY_TEXT.reduce((text, [pattern, replacement]) => text.replace(pattern, replacement), body);
+  }
+
+  // The template replaces a finding's quote with a pointer to the regulatory
+  // table when the passage was already shown. Without that table, show the
+  // finding's own quoted excerpt, which the build projects from the validated
+  // plan in the generator's own quoting. Without a projection, nothing changes.
+  function presentFindingEvidence(body, reviewMap) {
+    if (body.trim() === NO_FINDINGS_FALLBACK) return body.replace(NO_FINDINGS_FALLBACK, 'No control findings were selected.');
+    const blocks = body.split(/(?=^### )/m);
+    const findings = blocks.filter(block => block.startsWith('### ')).length;
+    if (!Array.isArray(reviewMap) || reviewMap.length !== findings) return body;
+    let index = -1;
+    return blocks.map(block => {
+      if (!block.startsWith('### ')) return block;
+      index += 1;
+      const quote = reviewMap[index] && reviewMap[index].evidence;
+      if (typeof quote !== 'string' || !quote) return block;
+      return block.replace(REGULATORY_POINTER, () => `**Source evidence:** “${quote}” `);
+    }).join('');
+  }
+
   function renderReportSections(markdown, reviewMap = []) {
     // Historical source bytes remain unchanged. Make their classification limit
     // visible without claiming a modern evidence check ran at publication.
@@ -652,6 +694,8 @@
         return `## ${heading}\n\n${note}\n\n${content}`;
       },
     );
+    markdown = transformSection(markdown, 'Executive Summary', presentSummaryText);
+    markdown = transformSection(markdown, 'Evidence and Decisions', body => presentFindingEvidence(body, reviewMap));
     const html = renderMarkdown(markdown, true);
     // The build supplies a bounded projection from the exact validated plan.
     // A map must have one entry per rendered finding or it is omitted entirely.
@@ -661,12 +705,13 @@
       reviewMap.length === findingCount && html.includes('<h2>Executive Summary</h2>') &&
       reviewMap.every(row => row && typeof row.focus === 'string' && row.focus.length > 0 &&
         typeof row.control === 'string' && row.control.length > 0 && ['High', 'Medium', 'Low'].includes(row.priority) &&
-        ['undefined', 'string'].includes(typeof row.headline) && ['undefined', 'string'].includes(typeof row.owner));
+        ['undefined', 'string'].includes(typeof row.headline) && ['undefined', 'string'].includes(typeof row.owner) &&
+        ['undefined', 'string'].includes(typeof row.evidence));
     const stats = hasMap ? reportStatistics(markdown, reviewMap) : null;
     return html
       .split(/(?=<h2>)/)
       .map(part => part.replace(/^\s*(?:<hr>\s*)+/, '').replace(/(?:\s*<hr>)+\s*$/, '').trim())
-      .filter(Boolean)
+      .filter(part => part && !part.startsWith(`<h2>${REMOVED_SECTION}</h2>`))
       .map(part => {
         if (hasMap && part.startsWith('<h2>Evidence and Decisions</h2>')) {
           let index = 0;
