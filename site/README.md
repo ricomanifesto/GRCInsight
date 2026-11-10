@@ -1,6 +1,6 @@
 # GRCInsight Static Site
 
-`site/` is the exact GitHub Pages artifact. The current report and every archive page are rendered before deployment, so the evidence remains readable when JavaScript is unavailable. Browser JavaScript adds the contents index and an optional dark theme. It preserves the pre-rendered report and only fetches Markdown when that report is absent. Reloading the page obtains a newer publication.
+`site/` is the exact static artifact the publication workflow releases to the Vercel-served production origin. The current report and every archive page are rendered before deployment, so the evidence remains readable when JavaScript is unavailable. Browser JavaScript adds the contents index and an optional dark theme. It preserves the pre-rendered report and only fetches Markdown when that report is absent. Reloading the page obtains a newer publication.
 
 Generated report files should be changed through the publication scripts, not edited by hand.
 
@@ -11,9 +11,9 @@ Publication event times come from `python3 scripts/publication_state.py timestam
 | Path | Purpose |
 |---|---|
 | `index.md` | Current generated report. |
-| `index.html` | Pre-rendered current report and page shell. |
+| `index.html` | Pre-rendered current report, its earlier-coverage block, and page shell. |
 | `evidence-manifest.json` | Source titles and URLs, CVE coverage, model identity, and the dated SentryDigest issue for the current report. |
-| `archive/` | Dated Markdown, evidence manifests, and pre-rendered report pages. |
+| `archive/` | Dated Markdown, evidence manifests, pre-rendered report pages, and an index with sources by control for the last 30 days. |
 | `publication-state.json` | Latest publish or retention outcome. |
 | `publication-history.json` | Newest-first journal of up to 30 terminal outcomes. |
 | `publication-history/` | Human-readable version of that journal. |
@@ -26,6 +26,8 @@ Publication event times come from `python3 scripts/publication_state.py timestam
 `scripts/compose_site_report.py` accepts a completed stored report and creates `index.md` plus `evidence-manifest.json`. It refuses fallback reports, mismatched source or model records, and citations that were not in the analyzed article set.
 
 `scripts/build_site.py --archive-current` snapshots the current Markdown and evidence manifest, then rebuilds the current page, archive, publication history, and related navigation. `scripts/check_site_report.py` validates the separately maintained sitemap.
+
+The build also derives the optional earlier-coverage block and the archive's sources-by-control section (`scripts/source_history.py`) from archived reports whose contract v5 or v6 plan reproduces their published text. Sources are compared by stored URL and first citation; older reports are not compared. On any error in that projection both surfaces are omitted and the build continues. Archived Markdown and manifests are never rewritten.
 
 `static/renderer.js` is used by both the build and the browser. The controller in `static/app.js` does not contain a second Markdown implementation.
 
@@ -47,4 +49,4 @@ This runs three checks:
 - `scripts/check_site_report.py` checks model and source provenance, citations, archives, publication state, pre-rendering, prose rules, public identity, and interactions.
 - `scripts/check_site_renderer.py` runs the shared renderer under Node and checks URL sanitization, report sections, provenance, and Markdown edge cases.
 
-The Pages workflow runs the same gate, captures light and dark screenshots, uploads them for review, and deploys the validated `site/` directory.
+The legacy GitHub Pages workflow that ran this gate and deployed `site/` is disabled; production publication is described in [`../publication/README.md`](../publication/README.md).
