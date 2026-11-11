@@ -1,0 +1,380 @@
+{
+  "schema_version": 3,
+  "report_contract_version": 6,
+  "report_plan": {
+    "control_implications": [
+      {
+        "control_id": "third_party_risk",
+        "evidence_excerpt": "Cloud hosting provider Railway says hackers exploited vulnerabilities in its infrastructure to steal customer authentication secrets and generate approximately $740,000 in fraudulent AI usage, potentially exposing credentials for up to 100,000 workspaces…",
+        "evidence_origin": "summary",
+        "focus": "Railway cloud hosting provider",
+        "headline": "Railway cloud hosting provider exposes customer authentication secrets",
+        "priority": "high",
+        "significance": "A third-party cloud provider breach compromised authentication secrets at scale, affecting up to 100,000 customer workspaces. The accountable owner should confirm supplier access scope, control responsibilities and evidence of remediation assurance.",
+        "source_ids": [
+          4
+        ]
+      },
+      {
+        "control_id": "access_management",
+        "evidence_excerpt": "A threat actor used compromised identity and access management (IAM) credentials for a Qubole big data platform's AWS account to access and exfiltrate data from multiple customers' AWS environments…",
+        "evidence_origin": "summary",
+        "focus": "compromised identity and access management (IAM) credentials",
+        "headline": "Compromised IAM credentials enable cross-customer AWS data exfiltration",
+        "priority": "high",
+        "significance": "Trusted third-party IAM credentials were abused to breach multiple customer environments, bypassing organizational boundaries. The accountable owner should confirm privileged access scope, authentication coverage and account revocation evidence.",
+        "source_ids": [
+          12
+        ]
+      },
+      {
+        "control_id": "vulnerability_management",
+        "evidence_excerpt": "A flaw in Git can let a malicious repository run an attacker's code on a computer that clones it recursively, together with its submodules. The Git project fixed it this week in Git 2.56.1, with matching fixes for the 2.50 through 2.55 series in 2.50.2, 2.51.3, 2.52.1, 2.53.1, 2.54.1 and 2.55.1.",
+        "evidence_origin": "summary",
+        "focus": "Git recursive clone integer truncation flaw",
+        "headline": "Git recursive clone flaw allows malicious code execution",
+        "priority": "high",
+        "significance": "A widely used development tool contains an integer truncation vulnerability enabling code execution during routine clone operations. The accountable owner should identify affected assets and verify remediation or compensating controls with their owners.",
+        "source_ids": [
+          1
+        ]
+      },
+      {
+        "control_id": "vulnerability_management",
+        "evidence_excerpt": "Microsoft did another four-digit patch drop today, releasing updates to fix almost 1,100 security vulnerabilities in its Windows operating systems and supported software. This month's Patch Tuesday addresses 63 critical flaws -- including a zero-day in Microsoft Outlook -- and comes amid important security updates from other software makers, including Adobe, Apple, Google and Mozilla.",
+        "evidence_origin": "summary",
+        "focus": "Microsoft November Patch Tuesday 1,100 vulnerabilities",
+        "headline": "Microsoft November Patch Tuesday addresses 1,100 vulnerabilities with 63 critical",
+        "priority": "high",
+        "significance": "An exceptionally large patch release including an actively exploited zero-day demands rapid asset identification and remediation validation. The accountable owner should identify affected assets and verify remediation or compensating controls with their owners.",
+        "source_ids": [
+          5
+        ]
+      },
+      {
+        "control_id": "data_protection",
+        "evidence_excerpt": "Nitori, a major Japanese furniture and home accessories retailer, discovered that an attacker accessed a system on its network and may have stolen 37.62 million customer records…",
+        "evidence_origin": "summary",
+        "focus": "Nitori customer records breach",
+        "headline": "Nitori breach exposes 37.6 million customer records",
+        "priority": "high",
+        "significance": "A major retailer suffered a large-scale customer data compromise affecting 37.6 million records. The accountable owner should review sensitive-data access, retention and protection controls with accountable owners.",
+        "source_ids": [
+          7
+        ]
+      },
+      {
+        "control_id": "vulnerability_management",
+        "evidence_excerpt": "Cybersecurity researchers have disclosed details of an attack that exploited two now-patched vulnerabilities in AhsayCBS to deliver a Python-based implant. The activity, observed by Huntress in early October 2026, involves the exploitation of a chain comprising CVE-2026-105133 and CVE-2026-105134 to bypass authentication and execute arbitrary commands on affected systems.",
+        "evidence_origin": "summary",
+        "focus": "AhsayCBS authentication bypass vulnerability chain",
+        "headline": "AhsayCBS vulnerability chain enables authentication bypass and code execution",
+        "priority": "medium",
+        "significance": "A chained vulnerability in backup software allows authentication bypass and arbitrary command execution, with active exploitation observed. The accountable owner should identify affected assets and verify remediation or compensating controls with their owners.",
+        "source_ids": [
+          2
+        ]
+      }
+    ],
+    "executive_brief": {
+      "paragraphs": [
+        {
+          "source_ids": [
+            4,
+            12,
+            7
+          ],
+          "text": "Third-party cloud and identity providers have become primary attack vectors, with a Railway infrastructure breach exposing authentication secrets for up to 100,000 workspaces and compromised Qubole IAM credentials enabling cross-customer AWS data exfiltration. Simultaneously, a major retailer lost 37.6 million customer records through unauthorized system access. These events demonstrate that supplier identity boundaries and data protection controls are being bypassed at scale, requiring immediate review of third-party access scope, credential management and supplier assurance evidence."
+        },
+        {
+          "source_ids": [
+            5,
+            1,
+            2
+          ],
+          "text": "Vulnerability management faces unprecedented volume and supply-chain reach, with Microsoft releasing patches for nearly 1,100 vulnerabilities including 63 critical flaws and an actively exploited Outlook zero-day, while a Git integer truncation flaw allows malicious code execution during routine recursive clone operations across development pipelines. An AhsayCBS authentication bypass chain has also been actively exploited. Control owners must verify asset coverage, patch deployment and compensating controls across both production systems and development toolchains."
+        }
+      ]
+    },
+    "industry_impacts": [],
+    "regulatory_changes": []
+  },
+  "generated_at": "2026-11-11T00:34:02.329818Z",
+  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/6300075f27f381f2b44c46b73c8e529a6655e592/site/feed.xml",
+  "feed_home_url": "https://sentrydigest.ricomanifesto.com/",
+  "digest_issue_date": "2026-11-11",
+  "digest_issue_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-11/",
+  "requested_model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
+  "resolved_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+  "sources": [
+    {
+      "title": "Git Patches Flaw That Lets Malicious Repositories Execute Code During Recursive Clones",
+      "url": "https://thehackernews.com/2026/11/git-patches-flaw-that-lets-malicious.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-11/#reporting-98e4d72a559c",
+      "cves": [
+        "CVE-2026-111760"
+      ],
+      "snippet": "Git Patches Flaw That Lets Malicious Repositories Execute Code During Recursive Clones A flaw in Git can let a malicious repository run an attacker's code on a computer that clones it recursively, together with its submodules. The Git project fixed it this week in Git 2.56.1, with matching fixes for the 2.50 through 2.55 series in 2.50.2, 2.51.3, 2.52.1, 2.53.1, 2.54.1 and 2.55.1. The flaw, tracked as CVE-2026-111760, is an integer truncation in how Git handles its index. An… A flaw in Git can let a malicious repository run an attacker's code on a computer that clones it recursively, together with its submodules. The Git project fixed it this week in Git 2.56.1, with matching fixes for the 2",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "A flaw in Git can let a malicious repository run an attacker's code on a computer that clones it recursively, together with its submodules. The Git project fixed it this week in Git 2.56.1, with matching fixes for the 2.50 through 2.55 series in 2.50.2, 2.51.3, 2.52.1, 2.53.1, 2.54.1 and 2.55.1. The flaw, tracked as CVE-2026-111760, is an integer truncation in how Git handles its index. An…",
+          "text": "A flaw in Git can let a malicious repository run an attacker's code on a computer that clones it recursively, together with its submodules. The Git project fixed it this week in Git 2.56.1, with matching fixes for the 2.50 through 2.55 series in 2.50.2, 2.51.3, 2.52.1, 2.53.1, 2.54.1 and 2.55.1. The flaw, tracked as CVE-2026-111760, is an integer truncation in how Git handles its index. An…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "A flaw in Git can let a malicious repository run an attacker's code on a computer that clones it recursively, together with its submodules. The Git project fixed it this week in Git 2.56.1, with matching fixes for the 2.50 through 2.55 series in 2.50.2, 2.51.3, 2.52.1, 2.53.1, 2.54.1 and 2.55.1. The flaw, tracked as CVE-2026-111760, is an integer truncation in how Git handles its index. An…",
+          "text": "A flaw in Git can let a malicious repository run an attacker's code on a computer that clones it recursively, together with its submodules. The Git project fixed it this week in Git 2.56.1, with matching fixes for the 2.50 through 2.55 series in 2.50.2, 2.51.3, 2.52.1, 2.53.1, 2.54.1 and 2.55.1. The flaw, tracked as CVE-2026-111760, is an integer truncation in how Git handles its index. An…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Attackers Exploit AhsayCBS Flaws to Deploy Sandbox-Evading Python Backdoor",
+      "url": "https://thehackernews.com/2026/11/attackers-exploit-ahsaycbs-flaws-to.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-11/#reporting-db01d072adb8",
+      "cves": [
+        "CVE-2026-105133",
+        "CVE-2026-105134"
+      ],
+      "snippet": "Attackers Exploit AhsayCBS Flaws to Deploy Sandbox-Evading Python Backdoor Cybersecurity researchers have disclosed details of an attack that exploited two now-patched vulnerabilities in AhsayCBS to deliver a Python-based implant. The activity, observed by Huntress in early October 2026, involves the exploitation of a chain comprising CVE-2026-105133 and CVE-2026-105134 to bypass authentication and execute arbitrary commands on affected systems. Patches for the two… Cybersecurity researchers have disclosed details of an attack that exploited two now-patched vulnerabilities in AhsayCBS to deliver a Python-based implant. The activity, observed by Huntress in early October 2026, involves the ex",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Cybersecurity researchers have disclosed details of an attack that exploited two now-patched vulnerabilities in AhsayCBS to deliver a Python-based implant. The activity, observed by Huntress in early October 2026, involves the exploitation of a chain comprising CVE-2026-105133 and CVE-2026-105134 to bypass authentication and execute arbitrary commands on affected systems. Patches for the two…",
+          "text": "Cybersecurity researchers have disclosed details of an attack that exploited two now-patched vulnerabilities in AhsayCBS to deliver a Python-based implant. The activity, observed by Huntress in early October 2026, involves the exploitation of a chain comprising CVE-2026-105133 and CVE-2026-105134 to bypass authentication and execute arbitrary commands on affected systems. Patches for the two…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Cybersecurity researchers have disclosed details of an attack that exploited two now-patched vulnerabilities in AhsayCBS to deliver a Python-based implant. The activity, observed by Huntress in early October 2026, involves the exploitation of a chain comprising CVE-2026-105133 and CVE-2026-105134 to bypass authentication and execute arbitrary commands on affected systems. Patches for the two…",
+          "text": "Cybersecurity researchers have disclosed details of an attack that exploited two now-patched vulnerabilities in AhsayCBS to deliver a Python-based implant. The activity, observed by Huntress in early October 2026, involves the exploitation of a chain comprising CVE-2026-105133 and CVE-2026-105134 to bypass authentication and execute arbitrary commands on affected systems. Patches for the two…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "November Patch Tuesday: An Overflowing Cornucopia of CVEs",
+      "url": "https://www.darkreading.com/vulnerabilities-threats/november-patch-tuesday-cornucopia-cves",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-11/#reporting-626108da40f3",
+      "cves": [],
+      "snippet": "November Patch Tuesday: An Overflowing Cornucopia of CVEs Microsoft serves up an actively exploited Outlook zero-day, and a wave of critical Exchange, SharePoint, Windows Search, and LDAP bugs that exhausted defenders need to prioritize fast. Microsoft serves up an actively exploited Outlook zero-day, and a wave of critical Exchange, SharePoint, Windows Search, and LDAP bugs that exhausted defenders need to prioritize fast.",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Microsoft serves up an actively exploited Outlook zero-day, and a wave of critical Exchange, SharePoint, Windows Search, and LDAP bugs that exhausted defenders need to prioritize fast.",
+          "text": "Microsoft serves up an actively exploited Outlook zero-day, and a wave of critical Exchange, SharePoint, Windows Search, and LDAP bugs that exhausted defenders need to prioritize fast."
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Microsoft serves up an actively exploited Outlook zero-day, and a wave of critical Exchange, SharePoint, Windows Search, and LDAP bugs that exhausted defenders need to prioritize fast.",
+          "text": "Microsoft serves up an actively exploited Outlook zero-day, and a wave of critical Exchange, SharePoint, Windows Search, and LDAP bugs that exhausted defenders need to prioritize fast."
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Railway breach leads to $740,000 in fraudulent AI charges",
+      "url": "https://www.bleepingcomputer.com/news/apple/railway-breach-leads-to-740-000-in-fraudulent-ai-charges/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-11/#reporting-43b50136d94d",
+      "cves": [],
+      "snippet": "Railway breach leads to $740,000 in fraudulent AI charges Cloud hosting provider Railway says hackers exploited vulnerabilities in its infrastructure to steal customer authentication secrets and generate approximately $740,000 in fraudulent AI usage, potentially exposing credentials for up to 100,000 workspaces… Cloud hosting provider Railway says hackers exploited vulnerabilities in its infrastructure to steal customer authentication secrets and generate approximately $740,000 in fraudulent AI usage, potentially exposing credentials for up to 100,000 workspaces…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Cloud hosting provider Railway says hackers exploited vulnerabilities in its infrastructure to steal customer authentication secrets and generate approximately $740,000 in fraudulent AI usage, potentially exposing credentials for up to 100,000 workspaces…",
+          "text": "Cloud hosting provider Railway says hackers exploited vulnerabilities in its infrastructure to steal customer authentication secrets and generate approximately $740,000 in fraudulent AI usage, potentially exposing credentials for up to 100,000 workspaces…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Cloud hosting provider Railway says hackers exploited vulnerabilities in its infrastructure to steal customer authentication secrets and generate approximately $740,000 in fraudulent AI usage, potentially exposing credentials for up to 100,000 workspaces…",
+          "text": "Cloud hosting provider Railway says hackers exploited vulnerabilities in its infrastructure to steal customer authentication secrets and generate approximately $740,000 in fraudulent AI usage, potentially exposing credentials for up to 100,000 workspaces…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Microsoft Fixes Nearly 1,100 Security Vulnerabilities",
+      "url": "https://krebsonsecurity.com/2026/11/microsoft-fixes-nearly-1100-security-vulnerabilities/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-11/#reporting-6e299ce35745",
+      "cves": [],
+      "snippet": "Microsoft Fixes Nearly 1,100 Security Vulnerabilities Microsoft did another four-digit patch drop today, releasing updates to fix almost 1,100 security vulnerabilities in its Windows operating systems and supported software. This month's Patch Tuesday addresses 63 critical flaws -- including a zero-day in Microsoft Outlook -- and comes amid important security updates from other software makers, including Adobe, Apple, Google and Mozilla. Microsoft did another four-digit patch drop today, releasing updates to fix almost 1,100 security vulnerabilities in its Windows operating systems and supported software. This month's Patch Tuesday addresses 63 critical flaws -- including a zero-day in Micro",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Microsoft did another four-digit patch drop today, releasing updates to fix almost 1,100 security vulnerabilities in its Windows operating systems and supported software. This month's Patch Tuesday addresses 63 critical flaws -- including a zero-day in Microsoft Outlook -- and comes amid important security updates from other software makers, including Adobe, Apple, Google and Mozilla.",
+          "text": "Microsoft did another four-digit patch drop today, releasing updates to fix almost 1,100 security vulnerabilities in its Windows operating systems and supported software. This month's Patch Tuesday addresses 63 critical flaws -- including a zero-day in Microsoft Outlook -- and comes amid important security updates from other software makers, including Adobe, Apple, Google and Mozilla."
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Microsoft did another four-digit patch drop today, releasing updates to fix almost 1,100 security vulnerabilities in its Windows operating systems and supported software. This month's Patch Tuesday addresses 63 critical flaws -- including a zero-day in Microsoft Outlook -- and comes amid important security updates from other software makers, including Adobe, Apple, Google and Mozilla.",
+          "text": "Microsoft did another four-digit patch drop today, releasing updates to fix almost 1,100 security vulnerabilities in its Windows operating systems and supported software. This month's Patch Tuesday addresses 63 critical flaws -- including a zero-day in Microsoft Outlook -- and comes amid important security updates from other software makers, including Adobe, Apple, Google and Mozilla."
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Artex: The AI Pen-Test Tool Hackers Turned Into a Weapon",
+      "url": "https://www.darkreading.com/cyberattacks-data-breaches/artex-ai-pen-test-tool-hackers-weapon",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-11/#reporting-425e8562320e",
+      "cves": [],
+      "snippet": "Artex: The AI Pen-Test Tool Hackers Turned Into a Weapon Forks of the open source Artex framework, along with 45 similar pen-testing tools, remain capable of executing credential attacks and cloud breaches at machine speed across multiple industries. Forks of the open source Artex framework, along with 45 similar pen-testing tools, remain capable of executing credential attacks and cloud breaches at machine speed across multiple industries.",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Forks of the open source Artex framework, along with 45 similar pen-testing tools, remain capable of executing credential attacks and cloud breaches at machine speed across multiple industries.",
+          "text": "Forks of the open source Artex framework, along with 45 similar pen-testing tools, remain capable of executing credential attacks and cloud breaches at machine speed across multiple industries."
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Forks of the open source Artex framework, along with 45 similar pen-testing tools, remain capable of executing credential attacks and cloud breaches at machine speed across multiple industries.",
+          "text": "Forks of the open source Artex framework, along with 45 similar pen-testing tools, remain capable of executing credential attacks and cloud breaches at machine speed across multiple industries."
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Japanese furniture giant Nitori says hackers stole 37.6M customer records",
+      "url": "https://www.bleepingcomputer.com/news/security/japanese-furniture-giant-nitori-says-hackers-stole-376m-customer-records/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-11/#reporting-e01c8b6f2f4a",
+      "cves": [],
+      "snippet": "Japanese furniture giant Nitori says hackers stole 37.6M customer records Nitori, a major Japanese furniture and home accessories retailer, discovered that an attacker accessed a system on its network and may have stolen 37.62 million customer records… Nitori, a major Japanese furniture and home accessories retailer, discovered that an attacker accessed a system on its network and may have stolen 37.62 million customer records…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Nitori, a major Japanese furniture and home accessories retailer, discovered that an attacker accessed a system on its network and may have stolen 37.62 million customer records…",
+          "text": "Nitori, a major Japanese furniture and home accessories retailer, discovered that an attacker accessed a system on its network and may have stolen 37.62 million customer records…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Nitori, a major Japanese furniture and home accessories retailer, discovered that an attacker accessed a system on its network and may have stolen 37.62 million customer records…",
+          "text": "Nitori, a major Japanese furniture and home accessories retailer, discovered that an attacker accessed a system on its network and may have stolen 37.62 million customer records…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "F-Secure Identifies 26 Ways AI Can Harm Consumers, and Where to Stop Them",
+      "url": "https://www.darkreading.com/application-security/f-secure-26-ways-ai-harm-consumers-where-to-stop-them",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-11/#reporting-a72f51291be9",
+      "cves": [],
+      "snippet": "F-Secure Identifies 26 Ways AI Can Harm Consumers, and Where to Stop Them New AI Harms Taxonomy traces how harm moves through AI systems, from misleading chatbot answers to compromised autonomous agents, and identifies where defenses can intervene. New AI Harms Taxonomy traces how harm moves through AI systems, from misleading chatbot answers to compromised autonomous agents, and identifies where defenses can intervene.",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "New AI Harms Taxonomy traces how harm moves through AI systems, from misleading chatbot answers to compromised autonomous agents, and identifies where defenses can intervene.",
+          "text": "New AI Harms Taxonomy traces how harm moves through AI systems, from misleading chatbot answers to compromised autonomous agents, and identifies where defenses can intervene."
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "New AI Harms Taxonomy traces how harm moves through AI systems, from misleading chatbot answers to compromised autonomous agents, and identifies where defenses can intervene.",
+          "text": "New AI Harms Taxonomy traces how harm moves through AI systems, from misleading chatbot answers to compromised autonomous agents, and identifies where defenses can intervene."
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Checkmarx Appoints Kobi Sivilya as Chief Information Security Officer",
+      "url": "https://www.darkreading.com/cybersecurity-careers/checkmarx-appoints-kobi-sivilya-chief-information-security-officer",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-11/#reporting-b004ff3275c6",
+      "cves": [],
+      "snippet": "Checkmarx Appoints Kobi Sivilya as Chief Information Security Officer Sivilya brings deep cybersecurity and technology leadership to Checkmarx as AI transforms software development. Sivilya brings deep cybersecurity and technology leadership to Checkmarx as AI transforms software development.",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Sivilya brings deep cybersecurity and technology leadership to Checkmarx as AI transforms software development.",
+          "text": "Sivilya brings deep cybersecurity and technology leadership to Checkmarx as AI transforms software development."
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Sivilya brings deep cybersecurity and technology leadership to Checkmarx as AI transforms software development.",
+          "text": "Sivilya brings deep cybersecurity and technology leadership to Checkmarx as AI transforms software development."
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "How to Assess OT Incident Response Preparedness",
+      "url": "https://www.darkreading.com/ics-ot-security/assess-ot-incident-response-preparedness",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-11/#reporting-cf980b20e559",
+      "cves": [],
+      "snippet": "How to Assess OT Incident Response Preparedness Cloud Range's free 28-question OT Cyber Readiness Assessment helps organizations identify gaps in operational technology (OT) incident response. Cloud Range's free 28-question OT Cyber Readiness Assessment helps organizations identify gaps in operational technology (OT) incident response.",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Cloud Range's free 28-question OT Cyber Readiness Assessment helps organizations identify gaps in operational technology (OT) incident response.",
+          "text": "Cloud Range's free 28-question OT Cyber Readiness Assessment helps organizations identify gaps in operational technology (OT) incident response."
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Cloud Range's free 28-question OT Cyber Readiness Assessment helps organizations identify gaps in operational technology (OT) incident response.",
+          "text": "Cloud Range's free 28-question OT Cyber Readiness Assessment helps organizations identify gaps in operational technology (OT) incident response."
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Microsoft releases Windows 10 KB5131096 extended security update",
+      "url": "https://www.bleepingcomputer.com/news/microsoft/microsoft-releases-windows-10-kb5131096-extended-security-update/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-11/#reporting-1aa57ef5b4c0",
+      "cves": [],
+      "snippet": "Microsoft releases Windows 10 KB5131096 extended security update Microsoft released the Windows 10 KB5131096 extended security update, which includes this month's November 2026 Patch Tuesday fixes and a few bug fixes and changes… Microsoft released the Windows 10 KB5131096 extended security update, which includes this month's November 2026 Patch Tuesday fixes and a few bug fixes and changes…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Microsoft released the Windows 10 KB5131096 extended security update, which includes this month's November 2026 Patch Tuesday fixes and a few bug fixes and changes…",
+          "text": "Microsoft released the Windows 10 KB5131096 extended security update, which includes this month's November 2026 Patch Tuesday fixes and a few bug fixes and changes…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Microsoft released the Windows 10 KB5131096 extended security update, which includes this month's November 2026 Patch Tuesday fixes and a few bug fixes and changes…",
+          "text": "Microsoft released the Windows 10 KB5131096 extended security update, which includes this month's November 2026 Patch Tuesday fixes and a few bug fixes and changes…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Hackers exploit trusted AWS access to breach multiple cloud environments",
+      "url": "https://www.bleepingcomputer.com/news/security/hackers-exploit-trusted-aws-access-to-breach-multiple-cloud-environments/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-11/#reporting-ddf41e717f52",
+      "cves": [],
+      "snippet": "Hackers exploit trusted AWS access to breach multiple cloud environments A threat actor used compromised identity and access management (IAM) credentials for a Qubole big data platform's AWS account to access and exfiltrate data from multiple customers' AWS environments… A threat actor used compromised identity and access management (IAM) credentials for a Qubole big data platform's AWS account to access and exfiltrate data from multiple customers' AWS environments…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "A threat actor used compromised identity and access management (IAM) credentials for a Qubole big data platform's AWS account to access and exfiltrate data from multiple customers' AWS environments…",
+          "text": "A threat actor used compromised identity and access management (IAM) credentials for a Qubole big data platform's AWS account to access and exfiltrate data from multiple customers' AWS environments…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "A threat actor used compromised identity and access management (IAM) credentials for a Qubole big data platform's AWS account to access and exfiltrate data from multiple customers' AWS environments…",
+          "text": "A threat actor used compromised identity and access management (IAM) credentials for a Qubole big data platform's AWS account to access and exfiltrate data from multiple customers' AWS environments…"
+        }
+      ],
+      "effective_date_evidence": null
+    }
+  ]
+}

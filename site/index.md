@@ -1,20 +1,20 @@
-# GRC Intelligence Report - 2026-11-10
-**Generated:** 2026-11-10T21:17:21.056998Z
+# GRC Intelligence Report - 2026-11-11
+**Generated:** 2026-11-11T00:34:02.329818Z
 **Date of Issue:** November 2026
 **Analysis Period:** November 2026
-**Source:** [SentryDigest](https://raw.githubusercontent.com/ricomanifesto/SentryDigest/cd8493414782166f561d29291ac5c4e1c5753cee/site/feed.xml)
-**Source Issue:** [SentryDigest 2026-11-10](https://sentrydigest.ricomanifesto.com/archive/2026-11-10/)
+**Source:** [SentryDigest](https://raw.githubusercontent.com/ricomanifesto/SentryDigest/6300075f27f381f2b44c46b73c8e529a6655e592/site/feed.xml)
+**Source Issue:** [SentryDigest 2026-11-11](https://sentrydigest.ricomanifesto.com/archive/2026-11-11/)
 **Articles Analyzed:** 30
-**GRC-Relevant Articles:** 28
+**GRC-Relevant Articles:** 29
 **Authoring Model:** nvidia/nemotron-3-ultra-550b-a55b:free
 **Requested Route:** openrouter/nvidia/nemotron-3-ultra-550b-a55b:free
 **Analysis Mode:** Model-backed
 
 ## Executive Summary
 
-The November 2026 Patch Tuesday addressing 1,235 Microsoft flaws including an actively exploited Outlook zero-day, combined with a Git supply chain vulnerability allowing code execution during recursive clones and an actively exploited Xen Orchestra authentication bypass, creates an urgent need for asset inventory verification and patch deployment across diverse technology stacks. Vulnerability owners must confirm coverage of affected versions and remediation timelines. [Microsoft November 2026 Patch Tuesday fixes 1,235 flaws, Outlook zero-day](https://www.bleepingcomputer.com/news/microsoft/microsoft-november-2026-patch-tuesday-fixes-1-235-flaws-outlook-zero-day/); [Git Patches Flaw That Lets Malicious Repositories Execute Code During Recursive Clones](https://thehackernews.com/2026/11/git-patches-flaw-that-lets-malicious.html); [Hackers Exploit Critical Xen Orchestra Auth Bypass Flaw to Gain Admin Access](https://thehackernews.com/2026/11/hackers-exploit-critical-xen-orchestra.html)
+Third-party cloud and identity providers have become primary attack vectors, with a Railway infrastructure breach exposing authentication secrets for up to 100,000 workspaces and compromised Qubole IAM credentials enabling cross-customer AWS data exfiltration. Simultaneously, a major retailer lost 37.6 million customer records through unauthorized system access. These events demonstrate that supplier identity boundaries and data protection controls are being bypassed at scale, requiring immediate review of third-party access scope, credential management and supplier assurance evidence. [Railway breach leads to $740,000 in fraudulent AI charges](https://www.bleepingcomputer.com/news/apple/railway-breach-leads-to-740-000-in-fraudulent-ai-charges/); [Hackers exploit trusted AWS access to breach multiple cloud environments](https://www.bleepingcomputer.com/news/security/hackers-exploit-trusted-aws-access-to-breach-multiple-cloud-environments/); [Japanese furniture giant Nitori says hackers stole 37.6M customer records](https://www.bleepingcomputer.com/news/security/japanese-furniture-giant-nitori-says-hackers-stole-376m-customer-records/)
 
-A compromised Qubole AWS account enabled cross-customer data exfiltration, a Japanese retailer lost 37.62 million customer records, and AI coding agents inadvertently published credentials to public repositories, highlighting third-party access governance gaps and emerging data exposure vectors. Data and supplier risk owners should validate access scopes, breach notification readiness, and secrets detection in automated workflows. [Hackers exploit trusted AWS access to breach multiple cloud environments](https://www.bleepingcomputer.com/news/security/hackers-exploit-trusted-aws-access-to-breach-multiple-cloud-environments/); [Japanese furniture giant Nitori says hackers stole 37.6M customer records](https://www.bleepingcomputer.com/news/security/japanese-furniture-giant-nitori-says-hackers-stole-376m-customer-records/); [AI Coding Agents Leak Thousands of Secrets to GitHub](https://www.darkreading.com/cyber-risk/ai-coding-agents-leak-secrets-github)
+Vulnerability management faces unprecedented volume and supply-chain reach, with Microsoft releasing patches for nearly 1,100 vulnerabilities including 63 critical flaws and an actively exploited Outlook zero-day, while a Git integer truncation flaw allows malicious code execution during routine recursive clone operations across development pipelines. An AhsayCBS authentication bypass chain has also been actively exploited. Control owners must verify asset coverage, patch deployment and compensating controls across both production systems and development toolchains. [Microsoft Fixes Nearly 1,100 Security Vulnerabilities](https://krebsonsecurity.com/2026/11/microsoft-fixes-nearly-1100-security-vulnerabilities/); [Git Patches Flaw That Lets Malicious Repositories Execute Code During Recursive Clones](https://thehackernews.com/2026/11/git-patches-flaw-that-lets-malicious.html); [Attackers Exploit AhsayCBS Flaws to Deploy Sandbox-Evading Python Backdoor](https://thehackernews.com/2026/11/attackers-exploit-ahsaycbs-flaws-to.html)
 
 Scope: 6 findings and 0 sourced regulatory changes from 12 retained sources. Review priorities rank what to check first; confirm whether each finding applies to your organization before assigning work.
 
@@ -26,55 +26,13 @@ No sourced regulatory changes identified in the supplied evidence.
 
 Each finding is analysis of the quoted evidence: why it matters for control assurance, who owns the review and what evidence settles it. Reference controls are review aids, not a compliance determination.
 
-### Microsoft's November 2026 Patch Tuesday addresses record-breaking flaw count
-
-**Review priority:** High · Vulnerability management · Owner: Vulnerability and asset owners
-
-**Why it matters:** Record vulnerability volume including an actively exploited zero-day demands urgent asset inventory and patch deployment verification. Vulnerability owner should confirm affected asset coverage and remediation status.
-
-**Source evidence:** “Today is Microsoft's November 2026 Patch Tuesday, with security updates addressing a record-breaking 1,235 flaws, including one actively exploited Microsoft Outlook zero-day vulnerability…” [Microsoft November 2026 Patch Tuesday fixes 1,235 flaws, Outlook zero-day](https://www.bleepingcomputer.com/news/microsoft/microsoft-november-2026-patch-tuesday-fixes-1-235-flaws-outlook-zero-day/)
-
-**Evidence to request:** Affected-asset inventory, installed versions, remediation status and an exception owner.
-
-**Decision trigger:** If applicability is confirmed, decide on remediation or a documented exception; otherwise record why the finding does not apply.
-
-**Reference controls:** ISO/IEC 27001:2022 A.8.8 (management of technical vulnerabilities); NIST CSF 2.0 ID.RA (risk assessment), PR.PS (platform security)
-
-### Git 2.56.1 resolves recursive clone code execution flaw
-
-**Review priority:** Medium · Vulnerability management · Owner: Vulnerability and asset owners
-
-**Why it matters:** Ubiquitous version control tool vulnerability requires version verification across build pipelines and submodule handling controls. Asset owner should confirm Git deployment versions and supply chain integrity checks.
-
-**Source evidence:** “A flaw in Git can let a malicious repository run an attacker's code on a computer that clones it recursively, together with its submodules. The Git project fixed it this week in Git 2.56.1, with matching fixes for the 2.50 through 2.55 series in 2.50.2, 2.51.3, 2.52.1, 2.53.1, 2.54.1 and 2.55.1.” [Git Patches Flaw That Lets Malicious Repositories Execute Code During Recursive Clones](https://thehackernews.com/2026/11/git-patches-flaw-that-lets-malicious.html)
-
-**Evidence to request:** Affected-asset inventory, installed versions, remediation status and an exception owner.
-
-**Decision trigger:** If applicability is confirmed, decide on remediation or a documented exception; otherwise record why the finding does not apply.
-
-**Reference controls:** ISO/IEC 27001:2022 A.8.8 (management of technical vulnerabilities); NIST CSF 2.0 ID.RA (risk assessment), PR.PS (platform security)
-
-### Xen Orchestra authentication bypass flaw enables admin access
-
-**Review priority:** High · Access management · Owner: Identity and access owner
-
-**Why it matters:** Actively exploited authentication bypass in virtualization management platform requires immediate access review and compensating controls. Access owner should confirm exposure of management interfaces and session revocation capability.
-
-**Source evidence:** “French software company Vates VMS has warned of a critical security vulnerability in Xen Orchestra that it said is being actively exploited in the wild. The authentication bypass flaw, which does not yet have a CVE identifier, is tracked as VSA-2026-062.” [Hackers Exploit Critical Xen Orchestra Auth Bypass Flaw to Gain Admin Access](https://thehackernews.com/2026/11/hackers-exploit-critical-xen-orchestra.html)
-
-**Evidence to request:** Access scope, authentication coverage, session revocation and a permission-test result.
-
-**Decision trigger:** If a permission gap is reproduced, assign a control correction and verify it; otherwise retain the test evidence.
-
-**Reference controls:** ISO/IEC 27001:2022 A.5.15 (access control), A.5.18 (access rights), A.8.2 (privileged access rights); NIST CSF 2.0 PR.AA (identity management, authentication and access control)
-
-### Qubole big data platform's AWS account exposes multiple customer environments
+### Railway cloud hosting provider exposes customer authentication secrets
 
 **Review priority:** High · Third-party risk · Owner: Supplier risk owner
 
-**Why it matters:** Compromised supplier credentials enabled cross-customer data access, requiring verification of third-party access scopes and assurance evidence. Supplier risk owner should confirm Qubole access boundaries and remediation assurance.
+**Why it matters:** A third-party cloud provider breach compromised authentication secrets at scale, affecting up to 100,000 customer workspaces. The accountable owner should confirm supplier access scope, control responsibilities and evidence of remediation assurance.
 
-**Source evidence:** “A threat actor used compromised identity and access management &#40;IAM&#41; credentials for a Qubole big data platform's AWS account to access and exfiltrate data from multiple customers' AWS environments…” [Hackers exploit trusted AWS access to breach multiple cloud environments](https://www.bleepingcomputer.com/news/security/hackers-exploit-trusted-aws-access-to-breach-multiple-cloud-environments/)
+**Source evidence:** “Cloud hosting provider Railway says hackers exploited vulnerabilities in its infrastructure to steal customer authentication secrets and generate approximately $740,000 in fraudulent AI usage, potentially exposing credentials for up to 100,000 workspaces…” [Railway breach leads to $740,000 in fraudulent AI charges](https://www.bleepingcomputer.com/news/apple/railway-breach-leads-to-740-000-in-fraudulent-ai-charges/)
 
 **Evidence to request:** Supplier access scope, control responsibilities and evidence of remediation assurance.
 
@@ -82,11 +40,25 @@ Each finding is analysis of the quoted evidence: why it matters for control assu
 
 **Reference controls:** ISO/IEC 27001:2022 A.5.19 (supplier relationships), A.5.21 (ICT supply chain), A.5.22 (monitoring and review of supplier services); NIST CSF 2.0 GV.SC (cybersecurity supply chain risk management)
 
-### 37.62 million customer records exposed in retailer breach
+### Compromised IAM credentials enable cross-customer AWS data exfiltration
+
+**Review priority:** High · Access management · Owner: Identity and access owner
+
+**Why it matters:** Trusted third-party IAM credentials were abused to breach multiple customer environments, bypassing organizational boundaries. The accountable owner should confirm privileged access scope, authentication coverage and account revocation evidence.
+
+**Source evidence:** “A threat actor used compromised identity and access management &#40;IAM&#41; credentials for a Qubole big data platform's AWS account to access and exfiltrate data from multiple customers' AWS environments…” [Hackers exploit trusted AWS access to breach multiple cloud environments](https://www.bleepingcomputer.com/news/security/hackers-exploit-trusted-aws-access-to-breach-multiple-cloud-environments/)
+
+**Evidence to request:** Access scope, authentication coverage, session revocation and a permission-test result.
+
+**Decision trigger:** If a permission gap is reproduced, assign a control correction and verify it; otherwise retain the test evidence.
+
+**Reference controls:** ISO/IEC 27001:2022 A.5.15 (access control), A.5.18 (access rights), A.8.2 (privileged access rights); NIST CSF 2.0 PR.AA (identity management, authentication and access control)
+
+### Nitori breach exposes 37.6 million customer records
 
 **Review priority:** High · Data protection · Owner: Data and privacy owners
 
-**Why it matters:** Large-scale personal data exposure triggers notification obligations and requires verification of data inventory and access controls. Data owner should confirm breach scope, notification status, and retention policy compliance.
+**Why it matters:** A major retailer suffered a large-scale customer data compromise affecting 37.6 million records. The accountable owner should review sensitive-data access, retention and protection controls with accountable owners.
 
 **Source evidence:** “Nitori, a major Japanese furniture and home accessories retailer, discovered that an attacker accessed a system on its network and may have stolen 37.62 million customer records…” [Japanese furniture giant Nitori says hackers stole 37.6M customer records](https://www.bleepingcomputer.com/news/security/japanese-furniture-giant-nitori-says-hackers-stole-376m-customer-records/)
 
@@ -96,31 +68,59 @@ Each finding is analysis of the quoted evidence: why it matters for control assu
 
 **Reference controls:** ISO/IEC 27001:2022 A.5.34 (privacy and protection of PII), A.8.12 (data leakage prevention), A.8.24 (use of cryptography); NIST CSF 2.0 PR.DS (data security)
 
-### Claude Code command saves credentials to public repositories
+### Microsoft November Patch Tuesday addresses 1,100 vulnerabilities with 63 critical
 
-**Review priority:** Medium · Data protection · Owner: Data and privacy owners
+**Review priority:** High · Vulnerability management · Owner: Vulnerability and asset owners
 
-**Why it matters:** AI development tooling introducing credential leakage requires review of secrets management and repository scanning controls. Access owner should confirm secret detection coverage and developer workflow safeguards.
+**Why it matters:** An exceptionally large patch release including an actively exploited zero-day demands rapid asset identification and remediation validation. The accountable owner should identify affected assets and verify remediation or compensating controls with their owners.
 
-**Source evidence:** “A command in Claude Code inadvertently saves files with credentials and other sensitive data to public Git repositories, creating security gaps for organizations.” [AI Coding Agents Leak Thousands of Secrets to GitHub](https://www.darkreading.com/cyber-risk/ai-coding-agents-leak-secrets-github)
+**Source evidence:** “Microsoft did another four-digit patch drop today, releasing updates to fix almost 1,100 security vulnerabilities in its Windows operating systems and supported software. This month's Patch Tuesday addresses 63 critical flaws -- including a zero-day in Microsoft Outlook -- and comes amid important security updates from other software makers, including Adobe, Apple, Google and Mozilla.” [Microsoft Fixes Nearly 1,100 Security Vulnerabilities](https://krebsonsecurity.com/2026/11/microsoft-fixes-nearly-1100-security-vulnerabilities/)
 
-**Evidence to request:** Data inventory, access restrictions, audit logs and a documented exposure assessment.
+**Evidence to request:** Affected-asset inventory, installed versions, remediation status and an exception owner.
 
-**Decision trigger:** If relevant data is exposed to the reported access path, decide which protection or access change is needed.
+**Decision trigger:** If applicability is confirmed, decide on remediation or a documented exception; otherwise record why the finding does not apply.
 
-**Reference controls:** ISO/IEC 27001:2022 A.5.34 (privacy and protection of PII), A.8.12 (data leakage prevention), A.8.24 (use of cryptography); NIST CSF 2.0 PR.DS (data security)
+**Reference controls:** ISO/IEC 27001:2022 A.8.8 (management of technical vulnerabilities); NIST CSF 2.0 ID.RA (risk assessment), PR.PS (platform security)
+
+### Git recursive clone flaw allows malicious code execution
+
+**Review priority:** High · Vulnerability management · Owner: Vulnerability and asset owners
+
+**Why it matters:** A widely used development tool contains an integer truncation vulnerability enabling code execution during routine clone operations. The accountable owner should identify affected assets and verify remediation or compensating controls with their owners.
+
+**Source evidence:** “A flaw in Git can let a malicious repository run an attacker's code on a computer that clones it recursively, together with its submodules. The Git project fixed it this week in Git 2.56.1, with matching fixes for the 2.50 through 2.55 series in 2.50.2, 2.51.3, 2.52.1, 2.53.1, 2.54.1 and 2.55.1.” [Git Patches Flaw That Lets Malicious Repositories Execute Code During Recursive Clones](https://thehackernews.com/2026/11/git-patches-flaw-that-lets-malicious.html)
+
+**Evidence to request:** Affected-asset inventory, installed versions, remediation status and an exception owner.
+
+**Decision trigger:** If applicability is confirmed, decide on remediation or a documented exception; otherwise record why the finding does not apply.
+
+**Reference controls:** ISO/IEC 27001:2022 A.8.8 (management of technical vulnerabilities); NIST CSF 2.0 ID.RA (risk assessment), PR.PS (platform security)
+
+### AhsayCBS vulnerability chain enables authentication bypass and code execution
+
+**Review priority:** Medium · Vulnerability management · Owner: Vulnerability and asset owners
+
+**Why it matters:** A chained vulnerability in backup software allows authentication bypass and arbitrary command execution, with active exploitation observed. The accountable owner should identify affected assets and verify remediation or compensating controls with their owners.
+
+**Source evidence:** “Cybersecurity researchers have disclosed details of an attack that exploited two now-patched vulnerabilities in AhsayCBS to deliver a Python-based implant. The activity, observed by Huntress in early October 2026, involves the exploitation of a chain comprising CVE-2026-105133 and CVE-2026-105134 to bypass authentication and execute arbitrary commands on affected systems.” [Attackers Exploit AhsayCBS Flaws to Deploy Sandbox-Evading Python Backdoor](https://thehackernews.com/2026/11/attackers-exploit-ahsaycbs-flaws-to.html)
+
+**Evidence to request:** Affected-asset inventory, installed versions, remediation status and an exception owner.
+
+**Decision trigger:** If applicability is confirmed, decide on remediation or a documented exception; otherwise record why the finding does not apply.
+
+**Reference controls:** ISO/IEC 27001:2022 A.8.8 (management of technical vulnerabilities); NIST CSF 2.0 ID.RA (risk assessment), PR.PS (platform security)
 
 ## Source Highlights
 
-- [Git Patches Flaw That Lets Malicious Repositories Execute Code During Recursive Clones](https://thehackernews.com/2026/11/git-patches-flaw-that-lets-malicious.html) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-10/#reporting-98e4d72a559c)
-- [Attackers Exploit AhsayCBS Flaws to Deploy Sandbox-Evading Python Backdoor](https://thehackernews.com/2026/11/attackers-exploit-ahsaycbs-flaws-to.html) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-10/#reporting-db01d072adb8)
-- [Japanese furniture giant Nitori says hackers stole 37.6M customer records](https://www.bleepingcomputer.com/news/security/japanese-furniture-giant-nitori-says-hackers-stole-376m-customer-records/) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-10/#reporting-e01c8b6f2f4a)
-- [Checkmarx Appoints Kobi Sivilya as Chief Information Security Officer](https://www.darkreading.com/cybersecurity-careers/checkmarx-appoints-kobi-sivilya-chief-information-security-officer) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-10/#reporting-b004ff3275c6)
-- [How to Assess OT Incident Response Preparedness](https://www.darkreading.com/ics-ot-security/assess-ot-incident-response-preparedness) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-10/#reporting-cf980b20e559)
-- [Microsoft releases Windows 10 KB5131096 extended security update](https://www.bleepingcomputer.com/news/microsoft/microsoft-releases-windows-10-kb5131096-extended-security-update/) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-10/#reporting-1aa57ef5b4c0)
-- [Hackers exploit trusted AWS access to breach multiple cloud environments](https://www.bleepingcomputer.com/news/security/hackers-exploit-trusted-aws-access-to-breach-multiple-cloud-environments/) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-10/#reporting-ddf41e717f52)
-- [SGLang RCE Exploit Breaches NEAR AI, Steals Data From 18 Agents and About 100 Users](https://thehackernews.com/2026/11/sglang-rce-exploit-breaches-near-ai.html) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-10/#reporting-12e10543ab56)
-- [Microsoft November 2026 Patch Tuesday fixes 1,235 flaws, Outlook zero-day](https://www.bleepingcomputer.com/news/microsoft/microsoft-november-2026-patch-tuesday-fixes-1-235-flaws-outlook-zero-day/) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-10/#reporting-70a133457da5)
-- [AI Coding Agents Leak Thousands of Secrets to GitHub](https://www.darkreading.com/cyber-risk/ai-coding-agents-leak-secrets-github) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-10/#reporting-ef6d6400be29)
-- [Windows 11 KB5132061 & KB5131087 cumulative updates released](https://www.bleepingcomputer.com/news/microsoft/windows-11-kb5132061-and-kb5131087-cumulative-updates-released/) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-10/#reporting-e84e0783f52d)
-- [Hackers Exploit Critical Xen Orchestra Auth Bypass Flaw to Gain Admin Access](https://thehackernews.com/2026/11/hackers-exploit-critical-xen-orchestra.html) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-10/#reporting-452012a5ab46)
+- [Git Patches Flaw That Lets Malicious Repositories Execute Code During Recursive Clones](https://thehackernews.com/2026/11/git-patches-flaw-that-lets-malicious.html) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-11/#reporting-98e4d72a559c)
+- [Attackers Exploit AhsayCBS Flaws to Deploy Sandbox-Evading Python Backdoor](https://thehackernews.com/2026/11/attackers-exploit-ahsaycbs-flaws-to.html) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-11/#reporting-db01d072adb8)
+- [November Patch Tuesday: An Overflowing Cornucopia of CVEs](https://www.darkreading.com/vulnerabilities-threats/november-patch-tuesday-cornucopia-cves) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-11/#reporting-626108da40f3)
+- [Railway breach leads to $740,000 in fraudulent AI charges](https://www.bleepingcomputer.com/news/apple/railway-breach-leads-to-740-000-in-fraudulent-ai-charges/) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-11/#reporting-43b50136d94d)
+- [Microsoft Fixes Nearly 1,100 Security Vulnerabilities](https://krebsonsecurity.com/2026/11/microsoft-fixes-nearly-1100-security-vulnerabilities/) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-11/#reporting-6e299ce35745)
+- [Artex: The AI Pen-Test Tool Hackers Turned Into a Weapon](https://www.darkreading.com/cyberattacks-data-breaches/artex-ai-pen-test-tool-hackers-weapon) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-11/#reporting-425e8562320e)
+- [Japanese furniture giant Nitori says hackers stole 37.6M customer records](https://www.bleepingcomputer.com/news/security/japanese-furniture-giant-nitori-says-hackers-stole-376m-customer-records/) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-11/#reporting-e01c8b6f2f4a)
+- [F-Secure Identifies 26 Ways AI Can Harm Consumers, and Where to Stop Them](https://www.darkreading.com/application-security/f-secure-26-ways-ai-harm-consumers-where-to-stop-them) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-11/#reporting-a72f51291be9)
+- [Checkmarx Appoints Kobi Sivilya as Chief Information Security Officer](https://www.darkreading.com/cybersecurity-careers/checkmarx-appoints-kobi-sivilya-chief-information-security-officer) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-11/#reporting-b004ff3275c6)
+- [How to Assess OT Incident Response Preparedness](https://www.darkreading.com/ics-ot-security/assess-ot-incident-response-preparedness) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-11/#reporting-cf980b20e559)
+- [Microsoft releases Windows 10 KB5131096 extended security update](https://www.bleepingcomputer.com/news/microsoft/microsoft-releases-windows-10-kb5131096-extended-security-update/) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-11/#reporting-1aa57ef5b4c0)
+- [Hackers exploit trusted AWS access to breach multiple cloud environments](https://www.bleepingcomputer.com/news/security/hackers-exploit-trusted-aws-access-to-breach-multiple-cloud-environments/) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-11/#reporting-ddf41e717f52)
