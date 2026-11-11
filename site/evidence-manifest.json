@@ -5,62 +5,74 @@
     "control_implications": [
       {
         "control_id": "vulnerability_management",
-        "evidence_excerpt": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) Tuesday added two security flaws impacting Cisco BroadWorks and Openwave Messaging Webtop Media Transcoder to its Known Exploited Vulnerabilities (KEV) catalog, citing evidence of active exploitation.",
-        "evidence_origin": "summary",
+        "evidence_excerpt": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) Tuesday added two security flaws impacting Cisco BroadWorks and Openwave Messaging Webtop Media Transcoder to its Known Exploited Vulnerabilities (KEV) catalog, citing evidence of active exploitation. Details of the vulnerabilities are below - CVE-2026-20320 (CVSS score: 7.5) - An improper restriction of XML external entity…",
+        "evidence_origin": "content",
         "focus": "Cisco BroadWorks and Openwave Messaging Webtop Media Transcoder",
-        "headline": "Cisco BroadWorks and Openwave Messaging Webtop Media Transcoder added to CISA KEV catalog",
+        "headline": "Cisco BroadWorks and Openwave Messaging Webtop Media Transcoder, added to KEV catalog, signals active exploitation",
         "priority": "high",
-        "significance": "The addition to the CISA KEV catalog confirms active exploitation, requiring vulnerability management owners to prioritize patching of affected Cisco BroadWorks and Openwave deployments. Accountable owners should confirm affected assets are identified and remediation is underway.",
+        "significance": "The KEV catalog addition confirms active exploitation of these vulnerabilities, requiring immediate patch verification. Vulnerability and asset owners should confirm deployed versions and remediation status for affected Cisco products.",
         "source_ids": [
           1
         ]
       },
       {
         "control_id": "vulnerability_management",
-        "evidence_excerpt": "A flaw in Git can let a malicious repository run an attacker's code on a computer that clones it recursively, together with its submodules. The Git project fixed it this week in Git 2.56.1, with matching fixes for the 2.50 through 2.55 series in 2.50.2, 2.51.3, 2.52.1, 2.53.1, 2.54.1 and 2.55.1. The flaw, tracked as CVE-2026-111760, is an integer truncation in how Git handles its index.",
-        "evidence_origin": "summary",
-        "focus": "Git project",
-        "headline": "Git project fixes integer truncation flaw in recursive clones",
-        "priority": "medium",
-        "significance": "The integer truncation flaw allows code execution during recursive Git clones, impacting software supply chain integrity. Vulnerability management owners should confirm Git versions are updated across all development and build environments.",
-        "source_ids": [
-          2
-        ]
-      },
-      {
-        "control_id": "vulnerability_management",
-        "evidence_excerpt": "Microsoft serves up an actively exploited Outlook zero-day, and a wave of critical Exchange, SharePoint, Windows Search, and LDAP bugs that exhausted defenders need to prioritize fast.",
-        "evidence_origin": "summary",
-        "focus": "Microsoft Outlook",
-        "headline": "Microsoft Outlook zero-day actively exploited in November Patch Tuesday",
+        "evidence_excerpt": "Microsoft on Tuesday released patches for a total of 1,259 vulnerabilities spanning its software portfolio, the second consecutive month where the patch volume has exceeded 1,000 flaws. These cover 726 flaws in Windows, 174 in Office, 61 in Developer Tools, 59 in SQL Server, 53 in Developer Tools, and 27 in SharePoint Server. The patches also include 165 non-Microsoft-issued CVE identifiers.",
+        "evidence_origin": "content",
+        "focus": "Microsoft software portfolio",
+        "headline": "Microsoft software portfolio, receives 1,259 patches, includes exploited Outlook zero-day",
         "priority": "high",
-        "significance": "An actively exploited Outlook zero-day combined with critical Exchange and SharePoint vulnerabilities demands immediate patching. Vulnerability management owners must prioritize deployment of November Patch Tuesday updates across affected Microsoft products.",
-        "source_ids": [
-          4
-        ]
-      },
-      {
-        "control_id": "data_protection",
-        "evidence_excerpt": "Cloud hosting provider Railway says hackers exploited vulnerabilities in its infrastructure to steal customer authentication secrets and generate approximately $740,000 in fraudulent AI usage, potentially exposing credentials for up to 100,000 workspaces…",
-        "evidence_origin": "summary",
-        "focus": "Railway",
-        "headline": "Railway breach exposes authentication secrets enabling fraudulent AI charges",
-        "priority": "high",
-        "significance": "The theft of authentication secrets from a cloud hosting provider led to significant fraudulent AI usage and potential credential exposure for thousands of workspaces. Data protection owners should assess the impact on their organization's data hosted with Railway and review supplier assurance.",
+        "significance": "The unprecedented patch volume strains remediation capacity and includes an actively exploited Outlook vulnerability. Vulnerability and asset owners should prioritize affected assets and verify emergency patching procedures.",
         "source_ids": [
           5
         ]
       },
       {
+        "control_id": "third_party_risk",
+        "evidence_excerpt": "AI provider keys that customers stored on Railway were stolen in an October breach and used to commit an estimated $740,000 in unauthorized spending, the platform-as-a-service provider said yesterday. It has promised to pay those charges itself when an AI provider will not refund them. The company builds and runs apps for its customers and stores their secrets, such as API keys and database…",
+        "evidence_origin": "content",
+        "focus": "AI provider keys that customers stored on Railway",
+        "headline": "AI provider keys that customers stored on Railway, stolen in breach, enable unauthorized AI spending",
+        "priority": "high",
+        "significance": "The breach exposes supplier secret management failures and direct financial impact from compromised credentials. Supplier risk owners should review Railway's access scope, secret handling controls, and remediation assurances.",
+        "source_ids": [
+          6
+        ]
+      },
+      {
         "control_id": "data_protection",
         "evidence_excerpt": "Nitori, a major Japanese furniture and home accessories retailer, discovered that an attacker accessed a system on its network and may have stolen 37.62 million customer records…",
-        "evidence_origin": "summary",
-        "focus": "Nitori",
-        "headline": "Nitori breach exposes 37.6 million customer records",
+        "evidence_origin": "content",
+        "focus": "37.62 million customer records",
+        "headline": "37.62 million customer records, accessed by attacker, may expose sensitive data",
         "priority": "high",
-        "significance": "A large-scale customer data breach at a major retailer underscores the need for robust data protection and incident response. Data protection owners should confirm that similar customer data stores are adequately secured and monitored.",
+        "significance": "The potential exposure of millions of customer records indicates possible data protection control gaps. Data and privacy owners should confirm data inventory, access restrictions, and breach notification readiness.",
         "source_ids": [
-          8
+          12
+        ]
+      },
+      {
+        "control_id": "incident_response",
+        "evidence_excerpt": "Cybersecurity researchers have disclosed details of an attack that exploited two now-patched vulnerabilities in AhsayCBS to deliver a Python-based implant. The activity, observed by Huntress in early October 2026, involves the exploitation of a chain comprising CVE-2026-105133 and CVE-2026-105134 to bypass authentication and execute arbitrary commands on affected systems. Patches for the two…",
+        "evidence_origin": "content",
+        "focus": "AhsayCBS",
+        "headline": "AhsayCBS, exploited in October, deploys Python implant via authentication bypass",
+        "priority": "medium",
+        "significance": "The exploited vulnerability chain demonstrates active targeting of backup software with authentication bypass. Incident response leads should verify containment procedures and evidence retention for similar backup platform exposures.",
+        "source_ids": [
+          3
+        ]
+      },
+      {
+        "control_id": "monitoring",
+        "evidence_excerpt": "Forks of the open source Artex framework, along with 45 similar pen-testing tools, remain capable of executing credential attacks and cloud breaches at machine speed across multiple industries.",
+        "evidence_origin": "content",
+        "focus": "open source Artex framework",
+        "headline": "open source Artex framework, weaponized by attackers, enables credential attacks at machine speed",
+        "priority": "medium",
+        "significance": "The weaponization of legitimate pen-testing tools blurs detection boundaries and accelerates credential attacks. Detection and monitoring owners should review telemetry coverage for Artex-like activity and alert routing.",
+        "source_ids": [
+          11
         ]
       }
     ],
@@ -69,25 +81,25 @@
         {
           "source_ids": [
             1,
-            4
+            5
           ],
-          "text": "Active exploitation of critical vulnerabilities in widely deployed software, including Cisco BroadWorks, AhsayCBS, and Microsoft Outlook, has been confirmed by CISA and threat intelligence, requiring immediate vulnerability remediation and monitoring."
+          "text": "Microsoft's November Patch Tuesday released 1,259 fixes including an actively exploited Outlook zero-day, while CISA added Cisco BroadWorks and Openwave flaws to its Known Exploited Vulnerabilities catalog confirming active exploitation. The combined volume and confirmed exploitation pressure remediation capacity across Windows, Office, Exchange, and telecommunications infrastructure. Vulnerability and asset owners must prioritize affected systems and verify emergency patching coverage."
         },
         {
           "source_ids": [
-            2,
-            5,
-            8
+            6,
+            12,
+            11
           ],
-          "text": "Supply chain and cloud service compromises, including a Git integer truncation flaw, a Railway cloud hosting breach exposing authentication secrets, and a Nitori retail data breach, highlight the need for enhanced third-party risk management and data protection controls."
+          "text": "A Railway platform breach stole customer AI provider keys enabling $740,000 in unauthorized usage, and Nitori disclosed potential exposure of 37.6 million customer records, highlighting third-party secret management and data protection control gaps. Meanwhile, weaponized forks of the Artex pen-testing framework execute credential attacks at machine speed across industries. Supplier risk and data owners should review Railway's remediation assurances, Nitori's access controls, and detection coverage for offensive tooling."
         }
       ]
     },
     "industry_impacts": [],
     "regulatory_changes": []
   },
-  "generated_at": "2026-11-11T06:27:54.91511Z",
-  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/831194edcbfd67fb393f9beaee9507cf879f5907/site/feed.xml",
+  "generated_at": "2026-11-11T09:22:12.348843Z",
+  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/b8542dd00be4584a73df3c2fea661aef420e3419/site/feed.xml",
   "feed_home_url": "https://sentrydigest.ricomanifesto.com/",
   "digest_issue_date": "2026-11-11",
   "digest_issue_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-11/",
@@ -163,6 +175,94 @@
           "origin": "content",
           "raw_text": "Cybersecurity researchers have disclosed details of an attack that exploited two now-patched vulnerabilities in AhsayCBS to deliver a Python-based implant. The activity, observed by Huntress in early October 2026, involves the exploitation of a chain comprising CVE-2026-105133 and CVE-2026-105134 to bypass authentication and execute arbitrary commands on affected systems. Patches for the two…",
           "text": "Cybersecurity researchers have disclosed details of an attack that exploited two now-patched vulnerabilities in AhsayCBS to deliver a Python-based implant. The activity, observed by Huntress in early October 2026, involves the exploitation of a chain comprising CVE-2026-105133 and CVE-2026-105134 to bypass authentication and execute arbitrary commands on affected systems. Patches for the two…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Microsoft fixes Exchange sign-ins broken by Windows Server updates",
+      "url": "https://www.bleepingcomputer.com/news/microsoft/microsoft-fixes-exchange-sign-ins-broken-by-october-windows-server-updates/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-11/#reporting-84fe717a7ff1",
+      "cves": [],
+      "snippet": "Microsoft fixes Exchange sign-ins broken by Windows Server updates Microsoft has fixed Outlook sign-in and mail delivery issues on Exchange Server systems after installing the October 2026 Windows Server security updates… Microsoft has fixed Outlook sign-in and mail delivery issues on Exchange Server systems after installing the October 2026 Windows Server security updates…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Microsoft has fixed Outlook sign-in and mail delivery issues on Exchange Server systems after installing the October 2026 Windows Server security updates…",
+          "text": "Microsoft has fixed Outlook sign-in and mail delivery issues on Exchange Server systems after installing the October 2026 Windows Server security updates…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Microsoft has fixed Outlook sign-in and mail delivery issues on Exchange Server systems after installing the October 2026 Windows Server security updates…",
+          "text": "Microsoft has fixed Outlook sign-in and mail delivery issues on Exchange Server systems after installing the October 2026 Windows Server security updates…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Microsoft Patches 1,259 Flaws, Including Exploited Outlook Bug That May Expose NTLMv2 Hashes",
+      "url": "https://thehackernews.com/2026/11/microsoft-patches-1259-flaws-including.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-11/#reporting-b4b549aacbc4",
+      "cves": [],
+      "snippet": "Microsoft Patches 1,259 Flaws, Including Exploited Outlook Bug That May Expose NTLMv2 Hashes Microsoft on Tuesday released patches for a total of 1,259 vulnerabilities spanning its software portfolio, the second consecutive month where the patch volume has exceeded 1,000 flaws. These cover 726 flaws in Windows, 174 in Office, 61 in Developer Tools, 59 in SQL Server, 53 in Developer Tools, and 27 in SharePoint Server. The patches also include 165 non-Microsoft-issued CVE identifiers. Microsoft on Tuesday released patches for a total of 1,259 vulnerabilities spanning its software portfolio, the second consecutive month where the patch volume has exceeded 1,000 flaws. These cover 726 flaws in W",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Microsoft on Tuesday released patches for a total of 1,259 vulnerabilities spanning its software portfolio, the second consecutive month where the patch volume has exceeded 1,000 flaws. These cover 726 flaws in Windows, 174 in Office, 61 in Developer Tools, 59 in SQL Server, 53 in Developer Tools, and 27 in SharePoint Server. The patches also include 165 non-Microsoft-issued CVE identifiers.",
+          "text": "Microsoft on Tuesday released patches for a total of 1,259 vulnerabilities spanning its software portfolio, the second consecutive month where the patch volume has exceeded 1,000 flaws. These cover 726 flaws in Windows, 174 in Office, 61 in Developer Tools, 59 in SQL Server, 53 in Developer Tools, and 27 in SharePoint Server. The patches also include 165 non-Microsoft-issued CVE identifiers."
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Microsoft on Tuesday released patches for a total of 1,259 vulnerabilities spanning its software portfolio, the second consecutive month where the patch volume has exceeded 1,000 flaws. These cover 726 flaws in Windows, 174 in Office, 61 in Developer Tools, 59 in SQL Server, 53 in Developer Tools, and 27 in SharePoint Server. The patches also include 165 non-Microsoft-issued CVE identifiers.",
+          "text": "Microsoft on Tuesday released patches for a total of 1,259 vulnerabilities spanning its software portfolio, the second consecutive month where the patch volume has exceeded 1,000 flaws. These cover 726 flaws in Windows, 174 in Office, 61 in Developer Tools, 59 in SQL Server, 53 in Developer Tools, and 27 in SharePoint Server. The patches also include 165 non-Microsoft-issued CVE identifiers."
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Railway Says Stolen Customer AI Keys Led to $740,000 in Estimated Unauthorized Usage Charges",
+      "url": "https://thehackernews.com/2026/11/railway-says-stolen-customer-ai-keys.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-11/#reporting-74289a15fb94",
+      "cves": [],
+      "snippet": "Railway Says Stolen Customer AI Keys Led to $740,000 in Estimated Unauthorized Usage Charges AI provider keys that customers stored on Railway were stolen in an October breach and used to commit an estimated $740,000 in unauthorized spending, the platform-as-a-service provider said yesterday. It has promised to pay those charges itself when an AI provider will not refund them. The company builds and runs apps for its customers and stores their secrets, such as API keys and database… AI provider keys that customers stored on Railway were stolen in an October breach and used to commit an estimated $740,000 in unauthorized spending, the platform-as-a-service provider said yesterday. It has prom",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "AI provider keys that customers stored on Railway were stolen in an October breach and used to commit an estimated $740,000 in unauthorized spending, the platform-as-a-service provider said yesterday. It has promised to pay those charges itself when an AI provider will not refund them. The company builds and runs apps for its customers and stores their secrets, such as API keys and database…",
+          "text": "AI provider keys that customers stored on Railway were stolen in an October breach and used to commit an estimated $740,000 in unauthorized spending, the platform-as-a-service provider said yesterday. It has promised to pay those charges itself when an AI provider will not refund them. The company builds and runs apps for its customers and stores their secrets, such as API keys and database…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "AI provider keys that customers stored on Railway were stolen in an October breach and used to commit an estimated $740,000 in unauthorized spending, the platform-as-a-service provider said yesterday. It has promised to pay those charges itself when an AI provider will not refund them. The company builds and runs apps for its customers and stores their secrets, such as API keys and database…",
+          "text": "AI provider keys that customers stored on Railway were stolen in an October breach and used to commit an estimated $740,000 in unauthorized spending, the platform-as-a-service provider said yesterday. It has promised to pay those charges itself when an AI provider will not refund them. The company builds and runs apps for its customers and stores their secrets, such as API keys and database…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Microsoft Researchers Show AI Agents Can Be Backdoored by Editing Fewer Than 10 Neurons",
+      "url": "https://thehackernews.com/2026/11/microsoft-researchers-show-ai-agents.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-11/#reporting-aa7a33eee693",
+      "cves": [],
+      "snippet": "Microsoft Researchers Show AI Agents Can Be Backdoored by Editing Fewer Than 10 Neurons An AI model can be given a hidden backdoor by editing fewer than 10 of its rarely used neurons, without retraining the model, Microsoft researchers have shown. When a chosen trigger appears, the model outputs an attacker's command, which an agent using that model would run with the agent's own permissions. The attacker must be able to change the model's weights. The team tested the method on… An AI model can be given a hidden backdoor by editing fewer than 10 of its rarely used neurons, without retraining the model, Microsoft researchers have shown. When a chosen trigger appears, the model outputs an atta",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "An AI model can be given a hidden backdoor by editing fewer than 10 of its rarely used neurons, without retraining the model, Microsoft researchers have shown. When a chosen trigger appears, the model outputs an attacker's command, which an agent using that model would run with the agent's own permissions. The attacker must be able to change the model's weights. The team tested the method on…",
+          "text": "An AI model can be given a hidden backdoor by editing fewer than 10 of its rarely used neurons, without retraining the model, Microsoft researchers have shown. When a chosen trigger appears, the model outputs an attacker's command, which an agent using that model would run with the agent's own permissions. The attacker must be able to change the model's weights. The team tested the method on…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "An AI model can be given a hidden backdoor by editing fewer than 10 of its rarely used neurons, without retraining the model, Microsoft researchers have shown. When a chosen trigger appears, the model outputs an attacker's command, which an agent using that model would run with the agent's own permissions. The attacker must be able to change the model's weights. The team tested the method on…",
+          "text": "An AI model can be given a hidden backdoor by editing fewer than 10 of its rarely used neurons, without retraining the model, Microsoft researchers have shown. When a chosen trigger appears, the model outputs an attacker's command, which an agent using that model would run with the agent's own permissions. The attacker must be able to change the model's weights. The team tested the method on…"
         }
       ],
       "effective_date_evidence": null
@@ -273,94 +373,6 @@
           "origin": "content",
           "raw_text": "Nitori, a major Japanese furniture and home accessories retailer, discovered that an attacker accessed a system on its network and may have stolen 37.62 million customer records…",
           "text": "Nitori, a major Japanese furniture and home accessories retailer, discovered that an attacker accessed a system on its network and may have stolen 37.62 million customer records…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "F-Secure Identifies 26 Ways AI Can Harm Consumers, and Where to Stop Them",
-      "url": "https://www.darkreading.com/application-security/f-secure-26-ways-ai-harm-consumers-where-to-stop-them",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-11/#reporting-a72f51291be9",
-      "cves": [],
-      "snippet": "F-Secure Identifies 26 Ways AI Can Harm Consumers, and Where to Stop Them New AI Harms Taxonomy traces how harm moves through AI systems, from misleading chatbot answers to compromised autonomous agents, and identifies where defenses can intervene. New AI Harms Taxonomy traces how harm moves through AI systems, from misleading chatbot answers to compromised autonomous agents, and identifies where defenses can intervene.",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "New AI Harms Taxonomy traces how harm moves through AI systems, from misleading chatbot answers to compromised autonomous agents, and identifies where defenses can intervene.",
-          "text": "New AI Harms Taxonomy traces how harm moves through AI systems, from misleading chatbot answers to compromised autonomous agents, and identifies where defenses can intervene."
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "New AI Harms Taxonomy traces how harm moves through AI systems, from misleading chatbot answers to compromised autonomous agents, and identifies where defenses can intervene.",
-          "text": "New AI Harms Taxonomy traces how harm moves through AI systems, from misleading chatbot answers to compromised autonomous agents, and identifies where defenses can intervene."
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "Checkmarx Appoints Kobi Sivilya as Chief Information Security Officer",
-      "url": "https://www.darkreading.com/cybersecurity-careers/checkmarx-appoints-kobi-sivilya-chief-information-security-officer",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-11/#reporting-b004ff3275c6",
-      "cves": [],
-      "snippet": "Checkmarx Appoints Kobi Sivilya as Chief Information Security Officer Sivilya brings deep cybersecurity and technology leadership to Checkmarx as AI transforms software development. Sivilya brings deep cybersecurity and technology leadership to Checkmarx as AI transforms software development.",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "Sivilya brings deep cybersecurity and technology leadership to Checkmarx as AI transforms software development.",
-          "text": "Sivilya brings deep cybersecurity and technology leadership to Checkmarx as AI transforms software development."
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "Sivilya brings deep cybersecurity and technology leadership to Checkmarx as AI transforms software development.",
-          "text": "Sivilya brings deep cybersecurity and technology leadership to Checkmarx as AI transforms software development."
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "How to Assess OT Incident Response Preparedness",
-      "url": "https://www.darkreading.com/ics-ot-security/assess-ot-incident-response-preparedness",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-11/#reporting-cf980b20e559",
-      "cves": [],
-      "snippet": "How to Assess OT Incident Response Preparedness Cloud Range's free 28-question OT Cyber Readiness Assessment helps organizations identify gaps in operational technology (OT) incident response. Cloud Range's free 28-question OT Cyber Readiness Assessment helps organizations identify gaps in operational technology (OT) incident response.",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "Cloud Range's free 28-question OT Cyber Readiness Assessment helps organizations identify gaps in operational technology (OT) incident response.",
-          "text": "Cloud Range's free 28-question OT Cyber Readiness Assessment helps organizations identify gaps in operational technology (OT) incident response."
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "Cloud Range's free 28-question OT Cyber Readiness Assessment helps organizations identify gaps in operational technology (OT) incident response.",
-          "text": "Cloud Range's free 28-question OT Cyber Readiness Assessment helps organizations identify gaps in operational technology (OT) incident response."
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "Microsoft releases Windows 10 KB5131096 extended security update",
-      "url": "https://www.bleepingcomputer.com/news/microsoft/microsoft-releases-windows-10-kb5131096-extended-security-update/",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-11/#reporting-1aa57ef5b4c0",
-      "cves": [],
-      "snippet": "Microsoft releases Windows 10 KB5131096 extended security update Microsoft released the Windows 10 KB5131096 extended security update, which includes this month's November 2026 Patch Tuesday fixes and a few bug fixes and changes… Microsoft released the Windows 10 KB5131096 extended security update, which includes this month's November 2026 Patch Tuesday fixes and a few bug fixes and changes…",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "Microsoft released the Windows 10 KB5131096 extended security update, which includes this month's November 2026 Patch Tuesday fixes and a few bug fixes and changes…",
-          "text": "Microsoft released the Windows 10 KB5131096 extended security update, which includes this month's November 2026 Patch Tuesday fixes and a few bug fixes and changes…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "Microsoft released the Windows 10 KB5131096 extended security update, which includes this month's November 2026 Patch Tuesday fixes and a few bug fixes and changes…",
-          "text": "Microsoft released the Windows 10 KB5131096 extended security update, which includes this month's November 2026 Patch Tuesday fixes and a few bug fixes and changes…"
         }
       ],
       "effective_date_evidence": null
