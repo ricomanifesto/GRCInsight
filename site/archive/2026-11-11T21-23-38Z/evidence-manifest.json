@@ -1,0 +1,379 @@
+{
+  "schema_version": 3,
+  "report_contract_version": 6,
+  "report_plan": {
+    "control_implications": [
+      {
+        "control_id": "vulnerability_management",
+        "evidence_excerpt": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) Tuesday added two security flaws impacting Cisco BroadWorks and Openwave Messaging Webtop Media Transcoder to its Known Exploited Vulnerabilities (KEV) catalog, citing evidence of active exploitation. Details of the vulnerabilities are below - CVE-2026-20320 (CVSS score: 7.5) - An improper restriction of XML external entity…",
+        "evidence_origin": "summary",
+        "focus": "Cisco BroadWorks and Openwave Messaging Webtop Media Transcoder",
+        "headline": "Cisco BroadWorks and Openwave Messaging Webtop Media Transcoder added to CISA KEV catalog",
+        "priority": "high",
+        "significance": "Active exploitation of these flaws requires immediate asset identification and remediation verification. Vulnerability and asset owners should confirm affected deployments and validate patch deployment or compensating controls.",
+        "source_ids": [
+          2
+        ]
+      },
+      {
+        "control_id": "third_party_risk",
+        "evidence_excerpt": "Notion, the digital workspace platform, disclosed that a security breach at its AI infrastructure provider, Fireworks AI, exposed Notion AI chat transcripts in a small number of workspaces…",
+        "evidence_origin": "summary",
+        "focus": "Fireworks AI",
+        "headline": "Fireworks AI breach exposes Notion AI chat transcripts",
+        "priority": "high",
+        "significance": "A supplier breach exposed customer AI chat data, highlighting third-party assurance gaps. Supplier risk owners should review AI infrastructure provider access scopes and demand remediation evidence.",
+        "source_ids": [
+          3
+        ]
+      },
+      {
+        "control_id": "third_party_risk",
+        "evidence_excerpt": "Maersk announced that a threat actor gained unauthorized access to a local legacy system inherited through an earlier acquisition and extracted data from it…",
+        "evidence_origin": "summary",
+        "focus": "local legacy system inherited through an earlier acquisition",
+        "headline": "Local legacy system inherited through earlier acquisition breached",
+        "priority": "high",
+        "significance": "An acquired legacy system provided the breach vector, indicating incomplete integration risk assessment. Supplier risk owners should verify acquisition integration controls and legacy system decommissioning timelines.",
+        "source_ids": [
+          6
+        ]
+      },
+      {
+        "control_id": "monitoring",
+        "evidence_excerpt": "Cybersecurity researchers have disclosed details of a campaign in which an emerging agentic penetration testing platform called AntiFox has been used to steal Amazon Web Services (AWS) credentials and pivot laterally into compromised environments. \"In several recently observed intrusions, Alibaba Cloud systems hosting AntiFox interfaces were associated with confirmed malicious actions against…",
+        "evidence_origin": "summary",
+        "focus": "AntiFox AI Pentesting Platform",
+        "headline": "AntiFox AI Pentesting Platform steals AWS credentials",
+        "priority": "high",
+        "significance": "A legitimate pentesting tool is weaponized for credential theft and lateral movement, challenging detection assumptions. Detection and monitoring owners should test telemetry for anomalous AntiFox activity and AWS credential access patterns.",
+        "source_ids": [
+          7
+        ]
+      },
+      {
+        "control_id": "data_protection",
+        "evidence_excerpt": "Of the 37,571 Grok-built apps that security company Claroc found online, 35,578 were open to anyone without a sign-in, the researchers said yesterday. They included 24 apps built by staff at the social network X and at SpaceXSI, the company that makes the Grok AI assistant. Most of the open apps were games, landing pages, and calculators, but about 1 in 10 contained internal business or…",
+        "evidence_origin": "summary",
+        "focus": "Grok-built apps",
+        "headline": "Grok-built apps expose confidential data and passwords",
+        "priority": "medium",
+        "significance": "Thousands of AI-generated applications lack authentication and leak sensitive data, indicating inadequate development governance. Data and privacy owners should assess exposure of internal data in AI-built applications and enforce access controls.",
+        "source_ids": [
+          12
+        ]
+      },
+      {
+        "control_id": "vulnerability_management",
+        "evidence_excerpt": "The RMM provider also released a hotfix as one of recommended mitigations to address public exploits for the alleged zero-days that allow for attacker takeover.",
+        "evidence_origin": "summary",
+        "focus": "N-central remote monitoring and management (RMM) platform",
+        "headline": "N-central remote monitoring and management (RMM) platform taken offline for 33 flaws",
+        "priority": "high",
+        "significance": "Critical RMM platform vulnerabilities enable attacker takeover, affecting managed service provider supply chains. Vulnerability and asset owners should identify N-central deployments and verify hotfix application or service isolation.",
+        "source_ids": [
+          4
+        ]
+      }
+    ],
+    "executive_brief": {
+      "paragraphs": [
+        {
+          "source_ids": [
+            2,
+            3,
+            6
+          ],
+          "text": "Active exploitation and supplier breaches demand immediate control validation across vulnerability management and third-party assurance. CISA added Cisco BroadWorks and Openwave flaws to its Known Exploited Vulnerabilities catalog citing active exploitation. Notion disclosed that its AI infrastructure provider Fireworks AI suffered a breach exposing customer AI chat transcripts. Maersk confirmed a data breach originating from a local legacy system inherited through an earlier acquisition. These events weaken vulnerability management and third-party risk controls, requiring owners to verify asset coverage, patch deployment, and supplier integration risk assessments."
+        },
+        {
+          "source_ids": [
+            7,
+            12,
+            4
+          ],
+          "text": "Weaponized tooling and AI-generated applications expand the exposure surface for credential theft and data leakage. Researchers documented the AntiFox AI pentesting platform being used to steal AWS credentials and pivot laterally in compromised environments. Over 35,000 Grok-built applications were found publicly accessible without authentication, with approximately one in ten leaking internal business data or passwords. N-able took its N-central RMM platform offline after 33 flaws including zero-days enabling attacker takeover. Monitoring and data protection controls require reassessment to detect anomalous legitimate-tool usage and govern AI-generated application deployments."
+        }
+      ]
+    },
+    "industry_impacts": [],
+    "regulatory_changes": []
+  },
+  "generated_at": "2026-11-11T21:23:38.881469Z",
+  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/d30c8f90e3c6c4011c0640432ffe84ef5e8facf4/site/feed.xml",
+  "feed_home_url": "https://sentrydigest.ricomanifesto.com/",
+  "digest_issue_date": "2026-11-11",
+  "digest_issue_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-11/",
+  "requested_model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
+  "resolved_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+  "sources": [
+    {
+      "title": "Critical Zoom Workplace Flaw Could Allow Unauthenticated Remote Privilege Escalation",
+      "url": "https://thehackernews.com/2026/11/critical-zoom-workplace-flaw-could.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-11/#reporting-95bc7c63c876",
+      "cves": [
+        "CVE-2026-108186"
+      ],
+      "snippet": "Critical Zoom Workplace Flaw Could Allow Unauthenticated Remote Privilege Escalation Zoom has released software updates to address two security flaws impacting Zoom Workplace for Windows, including a critical bug that could result in privilege escalation on affected systems. The vulnerabilities are listed below - CVE-2026-108186 (CVSS score: 9.6) - An improper input validation vulnerability that could allow an unauthenticated user to conduct an escalation of privilege via… Zoom has released software updates to address two security flaws impacting Zoom Workplace for Windows, including a critical bug that could result in privilege escalation on affected systems. The vulnerabilities are listed ",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Zoom has released software updates to address two security flaws impacting Zoom Workplace for Windows, including a critical bug that could result in privilege escalation on affected systems. The vulnerabilities are listed below - CVE-2026-108186 (CVSS score: 9.6) - An improper input validation vulnerability that could allow an unauthenticated user to conduct an escalation of privilege via…",
+          "text": "Zoom has released software updates to address two security flaws impacting Zoom Workplace for Windows, including a critical bug that could result in privilege escalation on affected systems. The vulnerabilities are listed below - CVE-2026-108186 (CVSS score: 9.6) - An improper input validation vulnerability that could allow an unauthenticated user to conduct an escalation of privilege via…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Zoom has released software updates to address two security flaws impacting Zoom Workplace for Windows, including a critical bug that could result in privilege escalation on affected systems. The vulnerabilities are listed below - CVE-2026-108186 (CVSS score: 9.6) - An improper input validation vulnerability that could allow an unauthenticated user to conduct an escalation of privilege via…",
+          "text": "Zoom has released software updates to address two security flaws impacting Zoom Workplace for Windows, including a critical bug that could result in privilege escalation on affected systems. The vulnerabilities are listed below - CVE-2026-108186 (CVSS score: 9.6) - An improper input validation vulnerability that could allow an unauthenticated user to conduct an escalation of privilege via…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Cisco BroadWorks and Openwave Flaws Actively Exploited Despite Available Patches",
+      "url": "https://thehackernews.com/2026/11/cisco-broadworks-and-openwave-flaws.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-11/#reporting-85ce9be08e64",
+      "cves": [
+        "CVE-2026-20320"
+      ],
+      "snippet": "Cisco BroadWorks and Openwave Flaws Actively Exploited Despite Available Patches The U.S. Cybersecurity and Infrastructure Security Agency (CISA) Tuesday added two security flaws impacting Cisco BroadWorks and Openwave Messaging Webtop Media Transcoder to its Known Exploited Vulnerabilities (KEV) catalog, citing evidence of active exploitation. Details of the vulnerabilities are below - CVE-2026-20320 (CVSS score: 7.5) - An improper restriction of XML external entity… The U.S. Cybersecurity and Infrastructure Security Agency (CISA) Tuesday added two security flaws impacting Cisco BroadWorks and Openwave Messaging Webtop Media Transcoder to its Known Exploited Vulnerabilities (KEV) catalog, c",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) Tuesday added two security flaws impacting Cisco BroadWorks and Openwave Messaging Webtop Media Transcoder to its Known Exploited Vulnerabilities (KEV) catalog, citing evidence of active exploitation. Details of the vulnerabilities are below - CVE-2026-20320 (CVSS score: 7.5) - An improper restriction of XML external entity…",
+          "text": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) Tuesday added two security flaws impacting Cisco BroadWorks and Openwave Messaging Webtop Media Transcoder to its Known Exploited Vulnerabilities (KEV) catalog, citing evidence of active exploitation. Details of the vulnerabilities are below - CVE-2026-20320 (CVSS score: 7.5) - An improper restriction of XML external entity…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) Tuesday added two security flaws impacting Cisco BroadWorks and Openwave Messaging Webtop Media Transcoder to its Known Exploited Vulnerabilities (KEV) catalog, citing evidence of active exploitation. Details of the vulnerabilities are below - CVE-2026-20320 (CVSS score: 7.5) - An improper restriction of XML external entity…",
+          "text": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) Tuesday added two security flaws impacting Cisco BroadWorks and Openwave Messaging Webtop Media Transcoder to its Known Exploited Vulnerabilities (KEV) catalog, citing evidence of active exploitation. Details of the vulnerabilities are below - CVE-2026-20320 (CVSS score: 7.5) - An improper restriction of XML external entity…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Notion says Fireworks breach exposed customer AI chat transcripts",
+      "url": "https://www.bleepingcomputer.com/news/security/notion-says-fireworks-breach-exposed-customer-ai-chat-transcripts/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-11/#reporting-3c445f121301",
+      "cves": [],
+      "snippet": "Notion says Fireworks breach exposed customer AI chat transcripts Notion, the digital workspace platform, disclosed that a security breach at its AI infrastructure provider, Fireworks AI, exposed Notion AI chat transcripts in a small number of workspaces… Notion, the digital workspace platform, disclosed that a security breach at its AI infrastructure provider, Fireworks AI, exposed Notion AI chat transcripts in a small number of workspaces…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Notion, the digital workspace platform, disclosed that a security breach at its AI infrastructure provider, Fireworks AI, exposed Notion AI chat transcripts in a small number of workspaces…",
+          "text": "Notion, the digital workspace platform, disclosed that a security breach at its AI infrastructure provider, Fireworks AI, exposed Notion AI chat transcripts in a small number of workspaces…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Notion, the digital workspace platform, disclosed that a security breach at its AI infrastructure provider, Fireworks AI, exposed Notion AI chat transcripts in a small number of workspaces…",
+          "text": "Notion, the digital workspace platform, disclosed that a security breach at its AI infrastructure provider, Fireworks AI, exposed Notion AI chat transcripts in a small number of workspaces…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "N-able Takes N-central Platform Offline After Discovery of 33 Flaws",
+      "url": "https://www.darkreading.com/endpoint-security/n-able-n-central-offline-33-flaws",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-11/#reporting-abb1d0352410",
+      "cves": [],
+      "snippet": "N-able Takes N-central Platform Offline After Discovery of 33 Flaws The RMM provider also released a hotfix as one of recommended mitigations to address public exploits for the alleged zero-days that allow for attacker takeover. The RMM provider also released a hotfix as one of recommended mitigations to address public exploits for the alleged zero-days that allow for attacker takeover.",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "The RMM provider also released a hotfix as one of recommended mitigations to address public exploits for the alleged zero-days that allow for attacker takeover.",
+          "text": "The RMM provider also released a hotfix as one of recommended mitigations to address public exploits for the alleged zero-days that allow for attacker takeover."
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "The RMM provider also released a hotfix as one of recommended mitigations to address public exploits for the alleged zero-days that allow for attacker takeover.",
+          "text": "The RMM provider also released a hotfix as one of recommended mitigations to address public exploits for the alleged zero-days that allow for attacker takeover."
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Who Runs the Ransomware Group Qilin?",
+      "url": "https://krebsonsecurity.com/2026/11/who-runs-the-ransomware-group-qilin/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-11/#reporting-5aca5acf75fb",
+      "cves": [],
+      "snippet": "Who Runs the Ransomware Group Qilin? The cybercrime group Qilin has emerged as the world's most active ransomware affiliate program, claiming at least 365 victim organizations in the past three months alone. But even top Russian hackers make operational security mistakes, and the administrator of Qilin has made a few key missteps over the last decade that all point to a 36-year-old man living in St. Petersburg, Russia. The cybercrime group Qilin has emerged as the world's most active ransomware affiliate program, claiming at least 365 victim organizations in the past three months alone. But even top Russian hackers make operational security mistakes, and the administrator of Qilin has made a",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "The cybercrime group Qilin has emerged as the world's most active ransomware affiliate program, claiming at least 365 victim organizations in the past three months alone. But even top Russian hackers make operational security mistakes, and the administrator of Qilin has made a few key missteps over the last decade that all point to a 36-year-old man living in St. Petersburg, Russia.",
+          "text": "The cybercrime group Qilin has emerged as the world's most active ransomware affiliate program, claiming at least 365 victim organizations in the past three months alone. But even top Russian hackers make operational security mistakes, and the administrator of Qilin has made a few key missteps over the last decade that all point to a 36-year-old man living in St. Petersburg, Russia."
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "The cybercrime group Qilin has emerged as the world's most active ransomware affiliate program, claiming at least 365 victim organizations in the past three months alone. But even top Russian hackers make operational security mistakes, and the administrator of Qilin has made a few key missteps over the last decade that all point to a 36-year-old man living in St. Petersburg, Russia.",
+          "text": "The cybercrime group Qilin has emerged as the world's most active ransomware affiliate program, claiming at least 365 victim organizations in the past three months alone. But even top Russian hackers make operational security mistakes, and the administrator of Qilin has made a few key missteps over the last decade that all point to a 36-year-old man living in St. Petersburg, Russia."
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Maersk confirms data breach as WhiteArmor ransomware demands $5 million",
+      "url": "https://www.bleepingcomputer.com/news/security/maersk-confirms-data-breach-as-whitearmor-ransomware-demands-5-million/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-11/#reporting-9d0e65808ab5",
+      "cves": [],
+      "snippet": "Maersk confirms data breach as WhiteArmor ransomware demands $5 million Maersk announced that a threat actor gained unauthorized access to a local legacy system inherited through an earlier acquisition and extracted data from it… Maersk announced that a threat actor gained unauthorized access to a local legacy system inherited through an earlier acquisition and extracted data from it…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Maersk announced that a threat actor gained unauthorized access to a local legacy system inherited through an earlier acquisition and extracted data from it…",
+          "text": "Maersk announced that a threat actor gained unauthorized access to a local legacy system inherited through an earlier acquisition and extracted data from it…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Maersk announced that a threat actor gained unauthorized access to a local legacy system inherited through an earlier acquisition and extracted data from it…",
+          "text": "Maersk announced that a threat actor gained unauthorized access to a local legacy system inherited through an earlier acquisition and extracted data from it…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "AntiFox AI Pentesting Platform Linked to Attacks That Accessed AWS Production Secrets",
+      "url": "https://thehackernews.com/2026/11/antifox-ai-pentesting-platform-linked.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-11/#reporting-99d239565756",
+      "cves": [],
+      "snippet": "AntiFox AI Pentesting Platform Linked to Attacks That Accessed AWS Production Secrets Cybersecurity researchers have disclosed details of a campaign in which an emerging agentic penetration testing platform called AntiFox has been used to steal Amazon Web Services (AWS) credentials and pivot laterally into compromised environments. \"In several recently observed intrusions, Alibaba Cloud systems hosting AntiFox interfaces were associated with confirmed malicious actions against… Cybersecurity researchers have disclosed details of a campaign in which an emerging agentic penetration testing platform called AntiFox has been used to steal Amazon Web Services (AWS) credentials and pivot laterally ",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Cybersecurity researchers have disclosed details of a campaign in which an emerging agentic penetration testing platform called AntiFox has been used to steal Amazon Web Services (AWS) credentials and pivot laterally into compromised environments. \"In several recently observed intrusions, Alibaba Cloud systems hosting AntiFox interfaces were associated with confirmed malicious actions against…",
+          "text": "Cybersecurity researchers have disclosed details of a campaign in which an emerging agentic penetration testing platform called AntiFox has been used to steal Amazon Web Services (AWS) credentials and pivot laterally into compromised environments. \"In several recently observed intrusions, Alibaba Cloud systems hosting AntiFox interfaces were associated with confirmed malicious actions against…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Cybersecurity researchers have disclosed details of a campaign in which an emerging agentic penetration testing platform called AntiFox has been used to steal Amazon Web Services (AWS) credentials and pivot laterally into compromised environments. \"In several recently observed intrusions, Alibaba Cloud systems hosting AntiFox interfaces were associated with confirmed malicious actions against…",
+          "text": "Cybersecurity researchers have disclosed details of a campaign in which an emerging agentic penetration testing platform called AntiFox has been used to steal Amazon Web Services (AWS) credentials and pivot laterally into compromised environments. \"In several recently observed intrusions, Alibaba Cloud systems hosting AntiFox interfaces were associated with confirmed malicious actions against…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Hackers use AntiFox AI agents in AWS credential-theft attacks",
+      "url": "https://www.bleepingcomputer.com/news/security/hackers-use-antifox-ai-agents-in-aws-credential-theft-attacks/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-11/#reporting-f7bee101ee02",
+      "cves": [],
+      "snippet": "Hackers use AntiFox AI agents in AWS credential-theft attacks Attackers are using Alibaba Cloud to host self-managed instances of AntiFox, an open-source agentic penetration testing platform, to target web services and AWS environments… Attackers are using Alibaba Cloud to host self-managed instances of AntiFox, an open-source agentic penetration testing platform, to target web services and AWS environments…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Attackers are using Alibaba Cloud to host self-managed instances of AntiFox, an open-source agentic penetration testing platform, to target web services and AWS environments…",
+          "text": "Attackers are using Alibaba Cloud to host self-managed instances of AntiFox, an open-source agentic penetration testing platform, to target web services and AWS environments…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Attackers are using Alibaba Cloud to host self-managed instances of AntiFox, an open-source agentic penetration testing platform, to target web services and AWS environments…",
+          "text": "Attackers are using Alibaba Cloud to host self-managed instances of AntiFox, an open-source agentic penetration testing platform, to target web services and AWS environments…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "eBPF Rootkits: Why Underground Actors Are Taking Notice",
+      "url": "https://www.bleepingcomputer.com/news/security/ebpf-rootkits-why-underground-actors-are-taking-notice/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-11/#reporting-acc7a2d0e979",
+      "cves": [],
+      "snippet": "eBPF Rootkits: Why Underground Actors Are Taking Notice Linux eBPF rootkits can hide malicious activity and evade traditional detection methods without loading kernel modules. Flare reveals how these techniques are spreading through underground forums, where threat actors are sharing rootkit source code, tutorials, and exploits targeting Linux systems… Linux eBPF rootkits can hide malicious activity and evade traditional detection methods without loading kernel modules. Flare reveals how these techniques are spreading through underground forums, where threat actors are sharing rootkit source code, tutorials, and exploits targeting Linux systems…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Linux eBPF rootkits can hide malicious activity and evade traditional detection methods without loading kernel modules. Flare reveals how these techniques are spreading through underground forums, where threat actors are sharing rootkit source code, tutorials, and exploits targeting Linux systems…",
+          "text": "Linux eBPF rootkits can hide malicious activity and evade traditional detection methods without loading kernel modules. Flare reveals how these techniques are spreading through underground forums, where threat actors are sharing rootkit source code, tutorials, and exploits targeting Linux systems…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Linux eBPF rootkits can hide malicious activity and evade traditional detection methods without loading kernel modules. Flare reveals how these techniques are spreading through underground forums, where threat actors are sharing rootkit source code, tutorials, and exploits targeting Linux systems…",
+          "text": "Linux eBPF rootkits can hide malicious activity and evade traditional detection methods without loading kernel modules. Flare reveals how these techniques are spreading through underground forums, where threat actors are sharing rootkit source code, tutorials, and exploits targeting Linux systems…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Hackers Target Qlik Sense Servers With Reverse Shells, Stage ActiveMQ and Veeam Exploits",
+      "url": "https://thehackernews.com/2026/11/hackers-target-qlik-sense-servers-with.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-11/#reporting-d8637e378806",
+      "cves": [],
+      "snippet": "Hackers Target Qlik Sense Servers With Reverse Shells, Stage ActiveMQ and Veeam Exploits Threat actors have been observed targeting Qlik Sense servers to unsuccessfully deliver PowerShell reverse shell commands against multiple environments in October 2026. Cynet's CyOps and Research teams said they identified the suspicious activity in October 2026 against several E.U.-based customers within a narrow window of just over three minutes. The activity has been found to share some… Threat actors have been observed targeting Qlik Sense servers to unsuccessfully deliver PowerShell reverse shell commands against multiple environments in October 2026. Cynet's CyOps and Research teams said they ident",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Threat actors have been observed targeting Qlik Sense servers to unsuccessfully deliver PowerShell reverse shell commands against multiple environments in October 2026. Cynet's CyOps and Research teams said they identified the suspicious activity in October 2026 against several E.U.-based customers within a narrow window of just over three minutes. The activity has been found to share some…",
+          "text": "Threat actors have been observed targeting Qlik Sense servers to unsuccessfully deliver PowerShell reverse shell commands against multiple environments in October 2026. Cynet's CyOps and Research teams said they identified the suspicious activity in October 2026 against several E.U.-based customers within a narrow window of just over three minutes. The activity has been found to share some…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Threat actors have been observed targeting Qlik Sense servers to unsuccessfully deliver PowerShell reverse shell commands against multiple environments in October 2026. Cynet's CyOps and Research teams said they identified the suspicious activity in October 2026 against several E.U.-based customers within a narrow window of just over three minutes. The activity has been found to share some…",
+          "text": "Threat actors have been observed targeting Qlik Sense servers to unsuccessfully deliver PowerShell reverse shell commands against multiple environments in October 2026. Cynet's CyOps and Research teams said they identified the suspicious activity in October 2026 against several E.U.-based customers within a narrow window of just over three minutes. The activity has been found to share some…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "N-able releases security hotfixes for zero-day vulnerabilities",
+      "url": "https://www.bleepingcomputer.com/news/security/n-able-releases-security-hotfixes-for-zero-day-vulnerabilities/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-11/#reporting-fdb07bf27f81",
+      "cves": [],
+      "snippet": "N-able releases security hotfixes for zero-day vulnerabilities N-able released hotfixes to address zero-day bugs affecting its N-central remote monitoring and management (RMM) platform, which were publicly disclosed over the weekend and forced it to take vulnerable hosted environments offline… N-able released hotfixes to address zero-day bugs affecting its N-central remote monitoring and management (RMM) platform, which were publicly disclosed over the weekend and forced it to take vulnerable hosted environments offline…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "N-able released hotfixes to address zero-day bugs affecting its N-central remote monitoring and management (RMM) platform, which were publicly disclosed over the weekend and forced it to take vulnerable hosted environments offline…",
+          "text": "N-able released hotfixes to address zero-day bugs affecting its N-central remote monitoring and management (RMM) platform, which were publicly disclosed over the weekend and forced it to take vulnerable hosted environments offline…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "N-able released hotfixes to address zero-day bugs affecting its N-central remote monitoring and management (RMM) platform, which were publicly disclosed over the weekend and forced it to take vulnerable hosted environments offline…",
+          "text": "N-able released hotfixes to address zero-day bugs affecting its N-central remote monitoring and management (RMM) platform, which were publicly disclosed over the weekend and forced it to take vulnerable hosted environments offline…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Over 35,000 Grok-Built Apps Exposed Online, Some Leaking Confidential Data and Passwords",
+      "url": "https://thehackernews.com/2026/11/over-35000-grok-built-apps-exposed.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-11/#reporting-8eeaa5e81881",
+      "cves": [],
+      "snippet": "Over 35,000 Grok-Built Apps Exposed Online, Some Leaking Confidential Data and Passwords Of the 37,571 Grok-built apps that security company Claroc found online, 35,578 were open to anyone without a sign-in, the researchers said yesterday. They included 24 apps built by staff at the social network X and at SpaceXSI, the company that makes the Grok AI assistant. Most of the open apps were games, landing pages, and calculators, but about 1 in 10 contained internal business or… Of the 37,571 Grok-built apps that security company Claroc found online, 35,578 were open to anyone without a sign-in, the researchers said yesterday. They included 24 apps built by staff at the social network X and at S",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Of the 37,571 Grok-built apps that security company Claroc found online, 35,578 were open to anyone without a sign-in, the researchers said yesterday. They included 24 apps built by staff at the social network X and at SpaceXSI, the company that makes the Grok AI assistant. Most of the open apps were games, landing pages, and calculators, but about 1 in 10 contained internal business or…",
+          "text": "Of the 37,571 Grok-built apps that security company Claroc found online, 35,578 were open to anyone without a sign-in, the researchers said yesterday. They included 24 apps built by staff at the social network X and at SpaceXSI, the company that makes the Grok AI assistant. Most of the open apps were games, landing pages, and calculators, but about 1 in 10 contained internal business or…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Of the 37,571 Grok-built apps that security company Claroc found online, 35,578 were open to anyone without a sign-in, the researchers said yesterday. They included 24 apps built by staff at the social network X and at SpaceXSI, the company that makes the Grok AI assistant. Most of the open apps were games, landing pages, and calculators, but about 1 in 10 contained internal business or…",
+          "text": "Of the 37,571 Grok-built apps that security company Claroc found online, 35,578 were open to anyone without a sign-in, the researchers said yesterday. They included 24 apps built by staff at the social network X and at SpaceXSI, the company that makes the Grok AI assistant. Most of the open apps were games, landing pages, and calculators, but about 1 in 10 contained internal business or…"
+        }
+      ],
+      "effective_date_evidence": null
+    }
+  ]
+}
