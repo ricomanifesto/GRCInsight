@@ -1471,6 +1471,14 @@
       "handle": "report_20261111_130512_859",
       "run_id": "43025897415",
       "stage": "invoked"
+    },
+    {
+      "admission_key": "run:43025897415",
+      "at": "2026-11-11T13:06:07.809Z",
+      "binding": "none",
+      "outcome": "retained",
+      "run_id": "43025897415",
+      "stage": "completed"
     }
   ],
   "schema_version": 1,
