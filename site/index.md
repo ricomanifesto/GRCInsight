@@ -1,8 +1,8 @@
 # GRC Intelligence Report - 2026-11-11
-**Generated:** 2026-11-11T09:22:12.348843Z
+**Generated:** 2026-11-11T18:17:38.339904Z
 **Date of Issue:** November 2026
 **Analysis Period:** November 2026
-**Source:** [SentryDigest](https://raw.githubusercontent.com/ricomanifesto/SentryDigest/b8542dd00be4584a73df3c2fea661aef420e3419/site/feed.xml)
+**Source:** [SentryDigest](https://raw.githubusercontent.com/ricomanifesto/SentryDigest/9272cac8c6c64cc80c6d119d250aa7b690f93282/site/feed.xml)
 **Source Issue:** [SentryDigest 2026-11-11](https://sentrydigest.ricomanifesto.com/archive/2026-11-11/)
 **Articles Analyzed:** 30
 **GRC-Relevant Articles:** 30
@@ -12,9 +12,9 @@
 
 ## Executive Summary
 
-Microsoft's November Patch Tuesday released 1,259 fixes including an actively exploited Outlook zero-day, while CISA added Cisco BroadWorks and Openwave flaws to its Known Exploited Vulnerabilities catalog confirming active exploitation. The combined volume and confirmed exploitation pressure remediation capacity across Windows, Office, Exchange, and telecommunications infrastructure. Vulnerability and asset owners must prioritize affected systems and verify emergency patching coverage. [Cisco BroadWorks and Openwave Flaws Actively Exploited Despite Available Patches](https://thehackernews.com/2026/11/cisco-broadworks-and-openwave-flaws.html); [Microsoft Patches 1,259 Flaws, Including Exploited Outlook Bug That May Expose NTLMv2 Hashes](https://thehackernews.com/2026/11/microsoft-patches-1259-flaws-including.html)
+CISA added actively exploited Cisco BroadWorks and OpenWave flaws to its Known Exploited Vulnerabilities catalog while Zoom released patches for a critical unauthenticated privilege escalation vulnerability in Zoom Workplace for Windows. These developments require vulnerability management owners to confirm emergency patch deployment across affected assets and validate that no pre-patch exploitation occurred. [Critical Zoom Workplace Flaw Could Allow Unauthenticated Remote Privilege Escalation](https://thehackernews.com/2026/11/critical-zoom-workplace-flaw-could.html); [Cisco BroadWorks and Openwave Flaws Actively Exploited Despite Available Patches](https://thehackernews.com/2026/11/cisco-broadworks-and-openwave-flaws.html)
 
-A Railway platform breach stole customer AI provider keys enabling $740,000 in unauthorized usage, and Nitori disclosed potential exposure of 37.6 million customer records, highlighting third-party secret management and data protection control gaps. Meanwhile, weaponized forks of the Artex pen-testing framework execute credential attacks at machine speed across industries. Supplier risk and data owners should review Railway's remediation assurances, Nitori's access controls, and detection coverage for offensive tooling. [Railway Says Stolen Customer AI Keys Led to $740,000 in Estimated Unauthorized Usage Charges](https://thehackernews.com/2026/11/railway-says-stolen-customer-ai-keys.html); [Japanese furniture giant Nitori says hackers stole 37.6M customer records](https://www.bleepingcomputer.com/news/security/japanese-furniture-giant-nitori-says-hackers-stole-376m-customer-records/); [Artex: The AI Pen-Test Tool Hackers Turned Into a Weapon](https://www.darkreading.com/cyberattacks-data-breaches/artex-ai-pen-test-tool-hackers-weapon)
+A Maersk data breach originated from a legacy system inherited through acquisition, attackers repurposed the AntiFox AI penetration testing platform to steal AWS credentials and move laterally, and over 35,000 Grok-built applications were found exposed online leaking confidential data. These events extend third-party risk and data protection obligations to acquired assets, approved security tools, and AI-generated code. An AI agent that bypassed identity, least-privilege, and traceability controls by default further challenges governance assumptions for autonomous systems. [Maersk confirms data breach as WhiteArmor ransomware demands $5 million](https://www.bleepingcomputer.com/news/security/maersk-confirms-data-breach-as-whitearmor-ransomware-demands-5-million/); [AntiFox AI Pentesting Platform Linked to Attacks That Accessed AWS Production Secrets](https://thehackernews.com/2026/11/antifox-ai-pentesting-platform-linked.html); [Over 35,000 Grok-Built Apps Exposed Online, Some Leaking Confidential Data and Passwords](https://thehackernews.com/2026/11/over-35000-grok-built-apps-exposed.html); [We Built An Agent That Broke All of Our Security Rules. Here's What We Learned.](https://thehackernews.com/2026/11/we-built-agent-that-broke-all-of-our.html)
 
 Scope: 6 findings and 0 sourced regulatory changes from 12 retained sources. Review priorities rank what to check first; confirm whether each finding applies to your organization before assigning work.
 
@@ -26,13 +26,13 @@ No sourced regulatory changes identified in the supplied evidence.
 
 Each finding is analysis of the quoted evidence: why it matters for control assurance, who owns the review and what evidence settles it. Reference controls are review aids, not a compliance determination.
 
-### Cisco BroadWorks and Openwave Messaging Webtop Media Transcoder, added to KEV catalog, signals active exploitation
+### Zoom Workplace for Windows permits unauthenticated privilege escalation via input validation flaw
 
 **Review priority:** High · Vulnerability management · Owner: Vulnerability and asset owners
 
-**Why it matters:** The KEV catalog addition confirms active exploitation of these vulnerabilities, requiring immediate patch verification. Vulnerability and asset owners should confirm deployed versions and remediation status for affected Cisco products.
+**Why it matters:** A critical unauthenticated privilege escalation flaw in widely deployed collaboration software demands immediate vulnerability management attention. The accountable owner should verify emergency patch deployment and validate that no exploitation occurred pre-patch.
 
-**Source evidence:** “The U.S. Cybersecurity and Infrastructure Security Agency &#40;CISA&#41; Tuesday added two security flaws impacting Cisco BroadWorks and Openwave Messaging Webtop Media Transcoder to its Known Exploited Vulnerabilities &#40;KEV&#41; catalog, citing evidence of active exploitation. Details of the vulnerabilities are below - CVE-2026-20320 &#40;CVSS score: 7.5&#41; - An improper restriction of XML external entity…” [Cisco BroadWorks and Openwave Flaws Actively Exploited Despite Available Patches](https://thehackernews.com/2026/11/cisco-broadworks-and-openwave-flaws.html)
+**Source evidence:** “Zoom has released software updates to address two security flaws impacting Zoom Workplace for Windows, including a critical bug that could result in privilege escalation on affected systems. The vulnerabilities are listed below - CVE-2026-108186 &#40;CVSS score: 9.6&#41; - An improper input validation vulnerability that could allow an unauthenticated user to conduct an escalation of privilege via…” [Critical Zoom Workplace Flaw Could Allow Unauthenticated Remote Privilege Escalation](https://thehackernews.com/2026/11/critical-zoom-workplace-flaw-could.html)
 
 **Evidence to request:** Affected-asset inventory, installed versions, remediation status and an exception owner.
 
@@ -40,13 +40,13 @@ Each finding is analysis of the quoted evidence: why it matters for control assu
 
 **Reference controls:** ISO/IEC 27001:2022 A.8.8 (management of technical vulnerabilities); NIST CSF 2.0 ID.RA (risk assessment), PR.PS (platform security)
 
-### Microsoft software portfolio, receives 1,259 patches, includes exploited Outlook zero-day
+### Cisco BroadWorks and Openwave Messaging Webtop Media Transcoder added to CISA KEV catalog
 
 **Review priority:** High · Vulnerability management · Owner: Vulnerability and asset owners
 
-**Why it matters:** The unprecedented patch volume strains remediation capacity and includes an actively exploited Outlook vulnerability. Vulnerability and asset owners should prioritize affected assets and verify emergency patching procedures.
+**Why it matters:** Active exploitation of these flaws means vulnerability management owners must confirm remediation across all affected assets. The accountable owner should verify patch deployment and compensating controls for any unpatched instances.
 
-**Source evidence:** “Microsoft on Tuesday released patches for a total of 1,259 vulnerabilities spanning its software portfolio, the second consecutive month where the patch volume has exceeded 1,000 flaws. These cover 726 flaws in Windows, 174 in Office, 61 in Developer Tools, 59 in SQL Server, 53 in Developer Tools, and 27 in SharePoint Server. The patches also include 165 non-Microsoft-issued CVE identifiers.” [Microsoft Patches 1,259 Flaws, Including Exploited Outlook Bug That May Expose NTLMv2 Hashes](https://thehackernews.com/2026/11/microsoft-patches-1259-flaws-including.html)
+**Source evidence:** “The U.S. Cybersecurity and Infrastructure Security Agency &#40;CISA&#41; Tuesday added two security flaws impacting Cisco BroadWorks and Openwave Messaging Webtop Media Transcoder to its Known Exploited Vulnerabilities &#40;KEV&#41; catalog, citing evidence of active exploitation.” [Cisco BroadWorks and Openwave Flaws Actively Exploited Despite Available Patches](https://thehackernews.com/2026/11/cisco-broadworks-and-openwave-flaws.html)
 
 **Evidence to request:** Affected-asset inventory, installed versions, remediation status and an exception owner.
 
@@ -54,13 +54,13 @@ Each finding is analysis of the quoted evidence: why it matters for control assu
 
 **Reference controls:** ISO/IEC 27001:2022 A.8.8 (management of technical vulnerabilities); NIST CSF 2.0 ID.RA (risk assessment), PR.PS (platform security)
 
-### AI provider keys that customers stored on Railway, stolen in breach, enable unauthorized AI spending
+### local legacy system inherited through an earlier acquisition exposes data via unauthorized access
 
 **Review priority:** High · Third-party risk · Owner: Supplier risk owner
 
-**Why it matters:** The breach exposes supplier secret management failures and direct financial impact from compromised credentials. Supplier risk owners should review Railway's access scope, secret handling controls, and remediation assurances.
+**Why it matters:** Acquired legacy systems can introduce uncontrolled attack surfaces that bypass standard third-party risk assessments. The accountable owner should review acquisition due diligence and legacy system integration controls.
 
-**Source evidence:** “AI provider keys that customers stored on Railway were stolen in an October breach and used to commit an estimated $740,000 in unauthorized spending, the platform-as-a-service provider said yesterday. It has promised to pay those charges itself when an AI provider will not refund them. The company builds and runs apps for its customers and stores their secrets, such as API keys and database…” [Railway Says Stolen Customer AI Keys Led to $740,000 in Estimated Unauthorized Usage Charges](https://thehackernews.com/2026/11/railway-says-stolen-customer-ai-keys.html)
+**Source evidence:** “Maersk announced that a threat actor gained unauthorized access to a local legacy system inherited through an earlier acquisition and extracted data from it…” [Maersk confirms data breach as WhiteArmor ransomware demands $5 million](https://www.bleepingcomputer.com/news/security/maersk-confirms-data-breach-as-whitearmor-ransomware-demands-5-million/)
 
 **Evidence to request:** Supplier access scope, control responsibilities and evidence of remediation assurance.
 
@@ -68,13 +68,27 @@ Each finding is analysis of the quoted evidence: why it matters for control assu
 
 **Reference controls:** ISO/IEC 27001:2022 A.5.19 (supplier relationships), A.5.21 (ICT supply chain), A.5.22 (monitoring and review of supplier services); NIST CSF 2.0 GV.SC (cybersecurity supply chain risk management)
 
-### 37.62 million customer records, accessed by attacker, may expose sensitive data
+### AntiFox AI pentesting platform steals AWS credentials and enables lateral movement
 
-**Review priority:** High · Data protection · Owner: Data and privacy owners
+**Review priority:** High · Third-party risk · Owner: Supplier risk owner
 
-**Why it matters:** The potential exposure of millions of customer records indicates possible data protection control gaps. Data and privacy owners should confirm data inventory, access restrictions, and breach notification readiness.
+**Why it matters:** Legitimate security tools repurposed for credential theft challenge third-party risk assumptions about approved software. The accountable owner should verify tool inventory and monitor for anomalous administrative activity.
 
-**Source evidence:** “Nitori, a major Japanese furniture and home accessories retailer, discovered that an attacker accessed a system on its network and may have stolen 37.62 million customer records…” [Japanese furniture giant Nitori says hackers stole 37.6M customer records](https://www.bleepingcomputer.com/news/security/japanese-furniture-giant-nitori-says-hackers-stole-376m-customer-records/)
+**Source evidence:** “Cybersecurity researchers have disclosed details of a campaign in which an emerging agentic penetration testing platform called AntiFox has been used to steal Amazon Web Services &#40;AWS&#41; credentials and pivot laterally into compromised environments.” [AntiFox AI Pentesting Platform Linked to Attacks That Accessed AWS Production Secrets](https://thehackernews.com/2026/11/antifox-ai-pentesting-platform-linked.html)
+
+**Evidence to request:** Supplier access scope, control responsibilities and evidence of remediation assurance.
+
+**Decision trigger:** If the supplier dependency exists and assurance is insufficient, request evidence or escalate the assurance gap to its owner.
+
+**Reference controls:** ISO/IEC 27001:2022 A.5.19 (supplier relationships), A.5.21 (ICT supply chain), A.5.22 (monitoring and review of supplier services); NIST CSF 2.0 GV.SC (cybersecurity supply chain risk management)
+
+### Grok-built apps exposed online leak confidential data and passwords
+
+**Review priority:** Medium · Data protection · Owner: Data and privacy owners
+
+**Why it matters:** Thousands of unauthenticated AI-generated applications expose internal business data and credentials. The accountable owner should inventory AI-generated assets and enforce authentication and data classification controls.
+
+**Source evidence:** “Of the 37,571 Grok-built apps that security company Claroc found online, 35,578 were open to anyone without a sign-in, the researchers said yesterday. They included 24 apps built by staff at the social network X and at SpaceXSI, the company that makes the Grok AI assistant. Most of the open apps were games, landing pages, and calculators, but about 1 in 10 contained internal business or…” [Over 35,000 Grok-Built Apps Exposed Online, Some Leaking Confidential Data and Passwords](https://thehackernews.com/2026/11/over-35000-grok-built-apps-exposed.html)
 
 **Evidence to request:** Data inventory, access restrictions, audit logs and a documented exposure assessment.
 
@@ -82,45 +96,31 @@ Each finding is analysis of the quoted evidence: why it matters for control assu
 
 **Reference controls:** ISO/IEC 27001:2022 A.5.34 (privacy and protection of PII), A.8.12 (data leakage prevention), A.8.24 (use of cryptography); NIST CSF 2.0 PR.DS (data security)
 
-### open source Artex framework, weaponized by attackers, enables credential attacks at machine speed
+### AI agent that broke all three by default reveals identity and traceability gaps
 
-**Review priority:** Medium · Monitoring and detection · Owner: Detection and monitoring owner
+**Review priority:** Medium · Governance and accountability · Owner: Risk and control owners
 
-**Why it matters:** The weaponization of legitimate pen-testing tools blurs detection boundaries and accelerates credential attacks. Detection and monitoring owners should review telemetry coverage for Artex-like activity and alert routing.
+**Why it matters:** AI agents operating without distinct identities, least-privilege access, or independent traceability undermine governance assumptions. The accountable owner should confirm AI agent identity management and audit trail requirements.
 
-**Source evidence:** “Forks of the open source Artex framework, along with 45 similar pen-testing tools, remain capable of executing credential attacks and cloud breaches at machine speed across multiple industries.” [Artex: The AI Pen-Test Tool Hackers Turned Into a Weapon](https://www.darkreading.com/cyberattacks-data-breaches/artex-ai-pen-test-tool-hackers-weapon)
+**Source evidence:** “We tell customers three things about securing AI agents: they need their own identities, access that fits the job they’re given, and traceability that’s separate from any human’s. That was true for us at Token as well. Then, we built an agent that broke all three by default. This helped us think through how such agents should be defended. When a browser agent acts inside a user’s authenticated…” [We Built An Agent That Broke All of Our Security Rules. Here's What We Learned.](https://thehackernews.com/2026/11/we-built-agent-that-broke-all-of-our.html)
 
-**Evidence to request:** Log coverage, a detection test, alert routing and investigation ownership.
+**Evidence to request:** The affected assumption, accountable owner and a recorded decision to act or accept risk.
 
-**Decision trigger:** If a detection test fails, assign the coverage or routing correction and repeat the test.
+**Decision trigger:** If an assumption no longer holds, record an accountable decision to change the control or accept the resulting uncertainty.
 
-**Reference controls:** ISO/IEC 27001:2022 A.8.15 (logging), A.8.16 (monitoring activities); NIST CSF 2.0 DE.CM (continuous monitoring), DE.AE (adverse event analysis)
-
-### AhsayCBS, exploited in October, deploys Python implant via authentication bypass
-
-**Review priority:** Medium · Incident response · Owner: Incident response lead
-
-**Why it matters:** The exploited vulnerability chain demonstrates active targeting of backup software with authentication bypass. Incident response leads should verify containment procedures and evidence retention for similar backup platform exposures.
-
-**Source evidence:** “Cybersecurity researchers have disclosed details of an attack that exploited two now-patched vulnerabilities in AhsayCBS to deliver a Python-based implant. The activity, observed by Huntress in early October 2026, involves the exploitation of a chain comprising CVE-2026-105133 and CVE-2026-105134 to bypass authentication and execute arbitrary commands on affected systems. Patches for the two…” [Attackers Exploit AhsayCBS Flaws to Deploy Sandbox-Evading Python Backdoor](https://thehackernews.com/2026/11/attackers-exploit-ahsaycbs-flaws-to.html)
-
-**Evidence to request:** Containment responsibilities, retained logs and the most recent response exercise.
-
-**Decision trigger:** If an exercise exposes an ownership or evidence gap, assign a response-plan correction and retest it.
-
-**Reference controls:** ISO/IEC 27001:2022 A.5.24 (incident management planning and preparation), A.5.26 (response to information security incidents); NIST CSF 2.0 RS.MA (incident management), RS.MI (incident mitigation)
+**Reference controls:** ISO/IEC 27001:2022 A.5.1 (policies for information security), A.5.2 (roles and responsibilities); NIST CSF 2.0 GV.RR (roles, responsibilities and authorities), GV.OV (oversight)
 
 ## Source Highlights
 
+- [Critical Zoom Workplace Flaw Could Allow Unauthenticated Remote Privilege Escalation](https://thehackernews.com/2026/11/critical-zoom-workplace-flaw-could.html) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-11/#reporting-95bc7c63c876)
 - [Cisco BroadWorks and Openwave Flaws Actively Exploited Despite Available Patches](https://thehackernews.com/2026/11/cisco-broadworks-and-openwave-flaws.html) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-11/#reporting-85ce9be08e64)
 - [Git Patches Flaw That Lets Malicious Repositories Execute Code During Recursive Clones](https://thehackernews.com/2026/11/git-patches-flaw-that-lets-malicious.html) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-11/#reporting-98e4d72a559c)
-- [Attackers Exploit AhsayCBS Flaws to Deploy Sandbox-Evading Python Backdoor](https://thehackernews.com/2026/11/attackers-exploit-ahsaycbs-flaws-to.html) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-11/#reporting-db01d072adb8)
-- [Microsoft fixes Exchange sign-ins broken by Windows Server updates](https://www.bleepingcomputer.com/news/microsoft/microsoft-fixes-exchange-sign-ins-broken-by-october-windows-server-updates/) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-11/#reporting-84fe717a7ff1)
-- [Microsoft Patches 1,259 Flaws, Including Exploited Outlook Bug That May Expose NTLMv2 Hashes](https://thehackernews.com/2026/11/microsoft-patches-1259-flaws-including.html) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-11/#reporting-b4b549aacbc4)
-- [Railway Says Stolen Customer AI Keys Led to $740,000 in Estimated Unauthorized Usage Charges](https://thehackernews.com/2026/11/railway-says-stolen-customer-ai-keys.html) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-11/#reporting-74289a15fb94)
-- [Microsoft Researchers Show AI Agents Can Be Backdoored by Editing Fewer Than 10 Neurons](https://thehackernews.com/2026/11/microsoft-researchers-show-ai-agents.html) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-11/#reporting-aa7a33eee693)
-- [November Patch Tuesday: An Overflowing Cornucopia of CVEs](https://www.darkreading.com/vulnerabilities-threats/november-patch-tuesday-cornucopia-cves) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-11/#reporting-626108da40f3)
-- [Railway breach leads to $740,000 in fraudulent AI charges](https://www.bleepingcomputer.com/news/apple/railway-breach-leads-to-740-000-in-fraudulent-ai-charges/) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-11/#reporting-43b50136d94d)
-- [Microsoft Fixes Nearly 1,100 Security Vulnerabilities](https://krebsonsecurity.com/2026/11/microsoft-fixes-nearly-1100-security-vulnerabilities/) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-11/#reporting-6e299ce35745)
-- [Artex: The AI Pen-Test Tool Hackers Turned Into a Weapon](https://www.darkreading.com/cyberattacks-data-breaches/artex-ai-pen-test-tool-hackers-weapon) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-11/#reporting-425e8562320e)
-- [Japanese furniture giant Nitori says hackers stole 37.6M customer records](https://www.bleepingcomputer.com/news/security/japanese-furniture-giant-nitori-says-hackers-stole-376m-customer-records/) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-11/#reporting-e01c8b6f2f4a)
+- [Who Runs the Ransomware Group Qilin?](https://krebsonsecurity.com/2026/11/who-runs-the-ransomware-group-qilin/) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-11/#reporting-5aca5acf75fb)
+- [Maersk confirms data breach as WhiteArmor ransomware demands $5 million](https://www.bleepingcomputer.com/news/security/maersk-confirms-data-breach-as-whitearmor-ransomware-demands-5-million/) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-11/#reporting-9d0e65808ab5)
+- [AntiFox AI Pentesting Platform Linked to Attacks That Accessed AWS Production Secrets](https://thehackernews.com/2026/11/antifox-ai-pentesting-platform-linked.html) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-11/#reporting-99d239565756)
+- [Hackers use AntiFox AI agents in AWS credential-theft attacks](https://www.bleepingcomputer.com/news/security/hackers-use-antifox-ai-agents-in-aws-credential-theft-attacks/) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-11/#reporting-f7bee101ee02)
+- [eBPF Rootkits: Why Underground Actors Are Taking Notice](https://www.bleepingcomputer.com/news/security/ebpf-rootkits-why-underground-actors-are-taking-notice/) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-11/#reporting-acc7a2d0e979)
+- [Hackers Target Qlik Sense Servers With Reverse Shells, Stage ActiveMQ and Veeam Exploits](https://thehackernews.com/2026/11/hackers-target-qlik-sense-servers-with.html) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-11/#reporting-d8637e378806)
+- [N-able releases security hotfixes for zero-day vulnerabilities](https://www.bleepingcomputer.com/news/security/n-able-releases-security-hotfixes-for-zero-day-vulnerabilities/) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-11/#reporting-fdb07bf27f81)
+- [Over 35,000 Grok-Built Apps Exposed Online, Some Leaking Confidential Data and Passwords](https://thehackernews.com/2026/11/over-35000-grok-built-apps-exposed.html) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-11/#reporting-8eeaa5e81881)
+- [We Built An Agent That Broke All of Our Security Rules. Here's What We Learned.](https://thehackernews.com/2026/11/we-built-agent-that-broke-all-of-our.html) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-11/#reporting-00bfb3e3b49b)
