@@ -1728,6 +1728,13 @@
       "at": "2026-11-12T12:21:24.356Z",
       "run_id": "43217085349",
       "stage": "invoked"
+    },
+    {
+      "admission_key": "digest:c07ed4eff56c71dea7be3870dc1fa5b15b4150a5",
+      "at": "2026-11-12T12:21:26.772Z",
+      "handle": "report_20261112_122126_750",
+      "run_id": "43217085349",
+      "stage": "invoked"
     }
   ],
   "schema_version": 1,
