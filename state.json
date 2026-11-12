@@ -1767,6 +1767,14 @@
       "handle": "report_20261112_130450_033",
       "run_id": "43223800647",
       "stage": "invoked"
+    },
+    {
+      "admission_key": "run:43223800647",
+      "at": "2026-11-12T13:07:17.107Z",
+      "binding": "none",
+      "outcome": "published",
+      "run_id": "43223800647",
+      "stage": "completed"
     }
   ],
   "schema_version": 1,
