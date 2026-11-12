@@ -1,8 +1,8 @@
 # GRC Intelligence Report - 2026-11-12
-**Generated:** 2026-11-12T09:19:08.834596Z
+**Generated:** 2026-11-12T12:23:01.288861Z
 **Date of Issue:** November 2026
 **Analysis Period:** November 2026
-**Source:** [SentryDigest](https://raw.githubusercontent.com/ricomanifesto/SentryDigest/af41d5061bae9d3ca6b1a3dfa2196bf95592cf5f/site/feed.xml)
+**Source:** [SentryDigest](https://raw.githubusercontent.com/ricomanifesto/SentryDigest/e8f05f0777d85890373c269e049884abf7cb601e/site/feed.xml)
 **Source Issue:** [SentryDigest 2026-11-12](https://sentrydigest.ricomanifesto.com/archive/2026-11-12/)
 **Articles Analyzed:** 30
 **GRC-Relevant Articles:** 29
@@ -12,11 +12,11 @@
 
 ## Executive Summary
 
-A coordinated supply chain campaign using 4,837 compromised GitHub accounts planted secret stealers across 1,806 repositories, while simultaneous ScreenConnect attacks disabled third-party extensions across 48 organizations and a Baker Tilly breach exposed client personal information through a third-party provider. These events demonstrate how credential theft and supplier dependencies can bypass perimeter controls and propagate across trusted relationships. Third-party risk owners must urgently map supplier access scopes, validate CI/CD credential hygiene, and confirm breach notification assurances from critical vendors. [Attacker Used 4,837 Hijacked GitHub Accounts to Run a CI Secret Stealer in 1,806+ Repositories](https://thehackernews.com/2026/11/4837-hijacked-github-accounts-ran-ci.html); [ScreenConnect Attacks Target at Least 288 Endpoints Across 48 Organizations With Rogue Clients](https://thehackernews.com/2026/11/screenconnect-attacks-target-at-least.html); [Baker Tilly notifies clients of data breach at third-party provider](https://www.bleepingcomputer.com/news/security/baker-tilly-notifies-clients-of-data-breach-at-third-party-provider/)
+Critical unauthenticated vulnerabilities in MongoDB Server, Apache HTTP Server, and Zoom Workplace for Windows require immediate asset identification and patch verification across database, web, and collaboration infrastructure. Fixed versions are available for each product, but control assurance depends on confirming deployment coverage and validating that failover, HTTP/2, and privilege pathways are effectively remediated. [Critical Pre-Auth MongoDB Flaw \(CVE-2026-118383\) Can Crash Lagging Servers on Failover](https://thehackernews.com/2026/11/critical-pre-auth-mongodb-flaw-cve-2026.html); [Critical Zoom Workplace Flaw Could Allow Unauthenticated Remote Privilege Escalation](https://thehackernews.com/2026/11/critical-zoom-workplace-flaw-could.html)
 
-Critical vulnerabilities in Apache HTTP Server's HTTP/2 module allow unauthenticated remote code execution, requiring immediate patching of affected versions. Concurrently, eMudhra's revocation of eight intermediate CA certificates due to private key mishandling erodes PKI trust, and the Greeter attack chain demonstrates deliberate log tampering to evade detection. Vulnerability and access management owners should verify asset inventories, remediation status, certificate validation controls, and log integrity monitoring. [Critical Apache HTTP/2 Flaw Could Let Unauthenticated Attackers Execute Code Remotely](https://thehackernews.com/2026/11/critical-apache-http2-flaw-could-let.html); [eMudhra revokes 8 more CA certificates after private key mishap](https://www.bleepingcomputer.com/news/security/emudhra-revokes-8-more-ca-certificates-after-private-key-mishap/); [Attackers Say 'Hello' to a Different Scale of Cloud Attack](https://www.darkreading.com/cloud-security/attackers-hello-scale-cloud-attack)
+AI-generated attack scripts, mass GitHub credential theft planting CI secret stealers, and ScreenConnect third-party extension compromises demonstrate accelerating threats to access controls and supplier dependencies. Monitoring must detect automated lateral movement, while third-party risk programs need assurance evidence for extension ecosystems and compromised developer identities. [Inside an AI Attack Against a US Retailer](https://www.darkreading.com/cyberattacks-data-breaches/inside-ai-attack-us-retailer)
 
-Scope: 6 findings and 0 sourced regulatory changes from 12 retained sources. Review priorities rank what to check first; confirm whether each finding applies to your organization before assigning work.
+Scope: 3 findings and 0 sourced regulatory changes from 12 retained sources. Review priorities rank what to check first; confirm whether each finding applies to your organization before assigning work.
 
 ## Sourced Regulatory Changes
 
@@ -26,55 +26,13 @@ No sourced regulatory changes identified in the supplied evidence.
 
 Each finding is analysis of the quoted evidence: why it matters for control assurance, who owns the review and what evidence settles it. Reference controls are review aids, not a compliance determination.
 
-### 4,837 GitHub accounts enable supply chain secret theft
-
-**Review priority:** High · Third-party risk · Owner: Supplier risk owner
-
-**Why it matters:** This compromise of developer credentials demonstrates how third-party code repositories can become vectors for credential theft and cloud credential exposure. The third-party risk owner should review supplier access scopes, CI/CD credential management, and assurance evidence for source code repositories.
-
-**Source evidence:** “Starting Tuesday, an attacker used stolen credentials for 4,837 GitHub accounts to plant a secret stealer in repositories those accounts could write to, according to Aikido Security, a security software company. The stealer is built to take the secrets and cloud credentials that a repository's CI workflows can reach.” [Attacker Used 4,837 Hijacked GitHub Accounts to Run a CI Secret Stealer in 1,806+ Repositories](https://thehackernews.com/2026/11/4837-hijacked-github-accounts-ran-ci.html)
-
-**Evidence to request:** Supplier access scope, control responsibilities and evidence of remediation assurance.
-
-**Decision trigger:** If the supplier dependency exists and assurance is insufficient, request evidence or escalate the assurance gap to its owner.
-
-**Reference controls:** ISO/IEC 27001:2022 A.5.19 (supplier relationships), A.5.21 (ICT supply chain), A.5.22 (monitoring and review of supplier services); NIST CSF 2.0 GV.SC (cybersecurity supply chain risk management)
-
-### five third-party extensions disabled after unauthorized access reports
-
-**Review priority:** High · Third-party risk · Owner: Supplier risk owner
-
-**Why it matters:** The disabling of third-party extensions indicates a supply chain compromise affecting managed service providers and their customers. The third-party risk owner should confirm supplier dependency mapping, extension approval processes, and remediation assurance from ConnectWise.
-
-**Source evidence:** “ConnectWise has taken the precautionary step of disabling five third-party extensions in partner environments following reports of unauthorized access. In an advisory posted on its site, the company said there is no evidence that the incident involves a compromise of its infrastructure or a vulnerability in the ScreenConnect software.” [ScreenConnect Attacks Target at Least 288 Endpoints Across 48 Organizations With Rogue Clients](https://thehackernews.com/2026/11/screenconnect-attacks-target-at-least.html)
-
-**Evidence to request:** Supplier access scope, control responsibilities and evidence of remediation assurance.
-
-**Decision trigger:** If the supplier dependency exists and assurance is insufficient, request evidence or escalate the assurance gap to its owner.
-
-**Reference controls:** ISO/IEC 27001:2022 A.5.19 (supplier relationships), A.5.21 (ICT supply chain), A.5.22 (monitoring and review of supplier services); NIST CSF 2.0 GV.SC (cybersecurity supply chain risk management)
-
-### data breach exposes personal information at advisory firm
-
-**Review priority:** High · Data protection · Owner: Data and privacy owners
-
-**Why it matters:** This third-party data breach highlights the risk of personal information exposure through supplier relationships. The data protection owner should review supplier data handling assurances, breach notification timelines, and affected data subject counts.
-
-**Source evidence:** “The Baker Tilly Advisory Group is notifying clients that a data breach has compromised certain personal information about them and their dependents…” [Baker Tilly notifies clients of data breach at third-party provider](https://www.bleepingcomputer.com/news/security/baker-tilly-notifies-clients-of-data-breach-at-third-party-provider/)
-
-**Evidence to request:** Data inventory, access restrictions, audit logs and a documented exposure assessment.
-
-**Decision trigger:** If relevant data is exposed to the reported access path, decide which protection or access change is needed.
-
-**Reference controls:** ISO/IEC 27001:2022 A.5.34 (privacy and protection of PII), A.8.12 (data leakage prevention), A.8.24 (use of cryptography); NIST CSF 2.0 PR.DS (data security)
-
-### Apache HTTP Server's HTTP/2 module enables remote code execution
+### MongoDB Server allows unauthenticated crash on failover
 
 **Review priority:** High · Vulnerability management · Owner: Vulnerability and asset owners
 
-**Why it matters:** This vulnerability exposes web servers to unauthenticated remote code execution, undermining patch management assurance. The vulnerability owner should confirm affected asset inventory, installed versions, and remediation status across all internet-facing systems.
+**Why it matters:** Control assurance depends on timely patching of database infrastructure exposed to unauthenticated denial of service. The vulnerability owner should confirm all replica set members run fixed versions and that failover testing validates the remediation.
 
-**Source evidence:** “A critical flaw in Apache HTTP Server's HTTP/2 module, mod&#95;http2, can let a remote attacker run code on the server. Tracked as CVE-2026-119618, it affects versions 2.4.55 through 2.4.70 and is fixed in version 2.4.71, released yesterday.” [Critical Apache HTTP/2 Flaw Could Let Unauthenticated Attackers Execute Code Remotely](https://thehackernews.com/2026/11/critical-apache-http2-flaw-could-let.html)
+**Source evidence:** “A critical flaw in MongoDB Server allows an unauthenticated attacker to send two requests that trigger a crash on the database server. The crash occurs only if that server is later chosen to take over as the main server while it still lacks some recent changes. MongoDB, the company that makes the database, released fixed versions earlier this week.” [Critical Pre-Auth MongoDB Flaw \(CVE-2026-118383\) Can Crash Lagging Servers on Failover](https://thehackernews.com/2026/11/critical-pre-auth-mongodb-flaw-cve-2026.html)
 
 **Evidence to request:** Affected-asset inventory, installed versions, remediation status and an exception owner.
 
@@ -82,13 +40,13 @@ Each finding is analysis of the quoted evidence: why it matters for control assu
 
 **Reference controls:** ISO/IEC 27001:2022 A.8.8 (management of technical vulnerabilities); NIST CSF 2.0 ID.RA (risk assessment), PR.PS (platform security)
 
-### eight additional intermediate CA certificates revoked after private key mishandling
+### Zoom Workplace for Windows permits unauthenticated privilege escalation
 
 **Review priority:** High · Access management · Owner: Identity and access owner
 
-**Why it matters:** The revocation of intermediate CA certificates due to private key mishandling undermines trust in digital certificates and PKI assurance. The access management owner should review certificate lifecycle controls, private key protection practices, and reliance on eMudhra certificates.
+**Why it matters:** Control assurance depends on rapid deployment of the vendor update to all endpoints running the affected client. The endpoint owner should confirm installation completion and verify that no unauthorized privilege changes occurred before remediation.
 
-**Source evidence:** “Certificate authority eMudhra has revoked eight additional intermediate CA certificates after an investigation into its recent certificate security incident found improper handling of private keys during the certificate-generation process…” [eMudhra revokes 8 more CA certificates after private key mishap](https://www.bleepingcomputer.com/news/security/emudhra-revokes-8-more-ca-certificates-after-private-key-mishap/)
+**Source evidence:** “Zoom has released software updates to address two security flaws impacting Zoom Workplace for Windows, including a critical bug that could result in privilege escalation on affected systems. The vulnerabilities are listed below - CVE-2026-108186 &#40;CVSS score: 9.6&#41; - An improper input validation vulnerability that could allow an unauthenticated user to conduct an escalation of privilege via” [Critical Zoom Workplace Flaw Could Allow Unauthenticated Remote Privilege Escalation](https://thehackernews.com/2026/11/critical-zoom-workplace-flaw-could.html)
 
 **Evidence to request:** Access scope, authentication coverage, session revocation and a permission-test result.
 
@@ -96,13 +54,13 @@ Each finding is analysis of the quoted evidence: why it matters for control assu
 
 **Reference controls:** ISO/IEC 27001:2022 A.5.15 (access control), A.5.18 (access rights), A.8.2 (privileged access rights); NIST CSF 2.0 PR.AA (identity management, authentication and access control)
 
-### attack chain Greeter reveals deliberate log tampering
+### AI-generated scripts enable rapid lateral movement after initial failure
 
 **Review priority:** Medium · Monitoring and detection · Owner: Detection and monitoring owner
 
-**Why it matters:** The discovery of a named attack chain that manipulates logs indicates sophisticated evasion techniques that may bypass monitoring controls. The monitoring owner should review log integrity controls, detection coverage for log tampering, and alert routing for anomalous log entries.
+**Why it matters:** Detection coverage must account for automated scripting that bypasses traditional command-pattern alerts. The monitoring owner should review telemetry for anomalous script execution velocity and confirm alert rules capture AI-assisted lateral movement.
 
-**Source evidence:** “Researchers dubbed an attack chain "Greeter" after discovering that attackers deliberately covered their trail by leaving "hello" messages in logs.” [Attackers Say 'Hello' to a Different Scale of Cloud Attack](https://www.darkreading.com/cloud-security/attackers-hello-scale-cloud-attack)
+**Source evidence:** “When hand-typed commands failed to breach a US retailer, the attacker turned to AI-generated scripts, achieving lateral movement in minutes.” [Inside an AI Attack Against a US Retailer](https://www.darkreading.com/cyberattacks-data-breaches/inside-ai-attack-us-retailer)
 
 **Evidence to request:** Log coverage, a detection test, alert routing and investigation ownership.
 
@@ -112,15 +70,15 @@ Each finding is analysis of the quoted evidence: why it matters for control assu
 
 ## Source Highlights
 
+- [Critical Pre-Auth MongoDB Flaw \(CVE-2026-118383\) Can Crash Lagging Servers on Failover](https://thehackernews.com/2026/11/critical-pre-auth-mongodb-flaw-cve-2026.html) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-12/#reporting-c776eb51cbac)
 - [Critical Apache HTTP/2 Flaw Could Let Unauthenticated Attackers Execute Code Remotely](https://thehackernews.com/2026/11/critical-apache-http2-flaw-could-let.html) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-12/#reporting-b92486adb822)
 - [Critical Zoom Workplace Flaw Could Allow Unauthenticated Remote Privilege Escalation](https://thehackernews.com/2026/11/critical-zoom-workplace-flaw-could.html) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-12/#reporting-95bc7c63c876)
+- [Microsoft: Recent Windows updates cause SQL Server performance issues](https://www.bleepingcomputer.com/news/microsoft/microsoft-recent-windows-updates-cause-sql-server-performance-issues/) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-12/#reporting-52b2d8e10bad)
+- [Inside an AI Attack Against a US Retailer](https://www.darkreading.com/cyberattacks-data-breaches/inside-ai-attack-us-retailer) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-12/#reporting-e5581e88af17)
+- [Microsoft confirms Windows security updates installation issues](https://www.bleepingcomputer.com/news/microsoft/microsoft-confirms-kb5132061-installation-issues-0x80070306-0x800f0989-0x800f0993-errors/) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-12/#reporting-56bf5f6cdef5)
+- [Hackers plant GSocket on Linux servers for persistent access](https://www.bleepingcomputer.com/news/security/hackers-plant-gsocket-on-linux-servers-for-persistent-access/) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-12/#reporting-5af37a8a0588)
 - [Node.js Fixes 16 Flaws, Including HTTP/2 Bugs That Crash Servers and Leak Other Connections' Data](https://thehackernews.com/2026/11/nodejs-fixes-16-flaws-including-http2.html) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-12/#reporting-6ee015b627a8)
 - [Attacker Used 4,837 Hijacked GitHub Accounts to Run a CI Secret Stealer in 1,806+ Repositories](https://thehackernews.com/2026/11/4837-hijacked-github-accounts-ran-ci.html) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-12/#reporting-b1fc427f51ef)
 - [ScreenConnect Attacks Target at Least 288 Endpoints Across 48 Organizations With Rogue Clients](https://thehackernews.com/2026/11/screenconnect-attacks-target-at-least.html) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-12/#reporting-0a7fd303a43b)
 - [Chinese AI Project Scouts Spies in Taiwan Chip Industry](https://www.darkreading.com/threat-intelligence/chinese-ai-project-scouts-spies-taiwan-chip-industry) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-12/#reporting-6cb51ebe7473)
 - [Japan Pushes Emergency Funding for Cybersecurity as AI-Assisted Breaches Rise](https://www.darkreading.com/cybersecurity-operations/japan-emergency-funding-cybersecurity-ai-assisted-breaches) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-12/#reporting-9a08fb8455b5)
-- [Baker Tilly notifies clients of data breach at third-party provider](https://www.bleepingcomputer.com/news/security/baker-tilly-notifies-clients-of-data-breach-at-third-party-provider/) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-12/#reporting-2fa347656b16)
-- [Active ScreenConnect attacks breach MSPs, impact dozens of organizations](https://www.bleepingcomputer.com/news/security/active-screenconnect-attacks-breach-msps-impact-dozens-of-organizations/) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-12/#reporting-8ecf3ded8f74)
-- [Attackers Say 'Hello' to a Different Scale of Cloud Attack](https://www.darkreading.com/cloud-security/attackers-hello-scale-cloud-attack) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-12/#reporting-c3250efb8424)
-- [eMudhra revokes 8 more CA certificates after private key mishap](https://www.bleepingcomputer.com/news/security/emudhra-revokes-8-more-ca-certificates-after-private-key-mishap/) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-12/#reporting-c13c660071cb)
-- [AI Raises the Stakes for Cyber Resilience](https://www.darkreading.com/cyber-risk/ai-raises-stakes-cyber-resilience) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-12/#reporting-b111380ace33)
