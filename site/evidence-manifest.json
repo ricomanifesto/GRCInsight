@@ -5,74 +5,74 @@
     "control_implications": [
       {
         "control_id": "vulnerability_management",
-        "evidence_excerpt": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) Tuesday added two security flaws impacting Cisco BroadWorks and Openwave Messaging Webtop Media Transcoder to its Known Exploited Vulnerabilities (KEV) catalog, citing evidence of active exploitation. Details of the vulnerabilities are below - CVE-2026-20320 (CVSS score: 7.5) - An improper restriction of XML external entity…",
-        "evidence_origin": "summary",
-        "focus": "Cisco BroadWorks and Openwave Messaging Webtop Media Transcoder",
-        "headline": "Cisco BroadWorks and Openwave Messaging Webtop Media Transcoder added to CISA Known Exploited Vulnerabilities catalog",
+        "evidence_excerpt": "A critical flaw in Apache HTTP Server's HTTP/2 module, mod_http2, can let a remote attacker run code on the server. Tracked as CVE-2026-119618, it affects versions 2.4.55 through 2.4.70 and is fixed in version 2.4.71, released yesterday. Only servers with HTTP/2 enabled are affected, according to Red Hat, which ships the server as part of Red Hat Enterprise Linux.",
+        "evidence_origin": "content",
+        "focus": "Apache HTTP Server",
+        "headline": "Apache HTTP Server exposes remote code execution",
         "priority": "high",
-        "significance": "Active exploitation of listed vulnerabilities requires immediate asset identification and remediation verification. The accountable owner should confirm affected assets are inventoried and patches or compensating controls are deployed.",
-        "source_ids": [
-          2
-        ]
-      },
-      {
-        "control_id": "access_management",
-        "evidence_excerpt": "Zoom has released software updates to address two security flaws impacting Zoom Workplace for Windows, including a critical bug that could result in privilege escalation on affected systems. The vulnerabilities are listed below - CVE-2026-108186 (CVSS score: 9.6) - An improper input validation vulnerability that could allow an unauthenticated user to conduct an escalation of privilege via…",
-        "evidence_origin": "summary",
-        "focus": "Zoom Workplace for Windows",
-        "headline": "Zoom Workplace for Windows privilege escalation vulnerability addressed by software updates",
-        "priority": "high",
-        "significance": "Unauthenticated privilege escalation bypasses access boundaries and threatens system integrity. The accountable owner should confirm update deployment across all instances and review privileged access controls for gaps.",
+        "significance": "This finding matters because unpatched servers allow unauthenticated remote code execution. The accountable owner should confirm asset inventory for affected versions and patch deployment status.",
         "source_ids": [
           1
         ]
       },
       {
-        "control_id": "third_party_risk",
-        "evidence_excerpt": "The Baker Tilly Advisory Group is notifying clients that a data breach has compromised certain personal information about them and their dependents…",
-        "evidence_origin": "summary",
-        "focus": "third-party provider",
-        "headline": "Third-party provider data breach compromises Baker Tilly client personal information",
+        "control_id": "vulnerability_management",
+        "evidence_excerpt": "Zoom has released software updates to address two security flaws impacting Zoom Workplace for Windows, including a critical bug that could result in privilege escalation on affected systems. The vulnerabilities are listed below - CVE-2026-108186 (CVSS score: 9.6) - An improper input validation vulnerability that could allow an unauthenticated user to conduct an escalation of privilege via…",
+        "evidence_origin": "content",
+        "focus": "Zoom Workplace for Windows",
+        "headline": "Zoom Workplace for Windows enables privilege escalation",
         "priority": "high",
-        "significance": "Supplier breach exposes client data and indicates insufficient third-party assurance. The accountable owner should review supplier dependencies, assess assurance evidence, and confirm escalation contacts for affected providers.",
+        "significance": "This finding matters because unauthenticated privilege escalation threatens endpoint integrity. The accountable owner should verify update deployment across managed devices.",
         "source_ids": [
-          5
+          2
         ]
       },
       {
-        "control_id": "monitoring",
-        "evidence_excerpt": "ConnectWise is investigating an active malware campaign targeting managed service providers (MSPs) that uses compromised ScreenConnect environments to deploy rogue remote-access clients to customer devices…",
-        "evidence_origin": "summary",
-        "focus": "ScreenConnect environments",
-        "headline": "ScreenConnect environments compromised to deploy rogue remote-access clients via MSPs",
+        "control_id": "vulnerability_management",
+        "evidence_excerpt": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) Tuesday added two security flaws impacting Cisco BroadWorks and Openwave Messaging Webtop Media Transcoder to its Known Exploited Vulnerabilities (KEV) catalog, citing evidence of active exploitation. Details of the vulnerabilities are below - CVE-2026-20320 (CVSS score: 7.5) - An improper restriction of XML external entity…",
+        "evidence_origin": "content",
+        "focus": "Cisco BroadWorks and Openwave Messaging Webtop Media Transcoder",
+        "headline": "Cisco BroadWorks and Openwave Messaging Webtop Media Transcoder added to KEV catalog",
         "priority": "high",
-        "significance": "MSP compromise extends attack surface to downstream customers and evades direct perimeter defenses. The accountable owner should review MSP monitoring coverage, detection rules for anomalous remote-access deployment, and alert routing for supply chain indicators.",
+        "significance": "This finding matters because active exploitation demands immediate remediation verification. The accountable owner should confirm patching or compensating controls for affected systems.",
         "source_ids": [
-          6
+          3
+        ]
+      },
+      {
+        "control_id": "third_party_risk",
+        "evidence_excerpt": "ConnectWise has taken the precautionary step of disabling five third-party extensions in partner environments following reports of unauthorized access. In an advisory posted on its site, the company said there is no evidence that the incident involves a compromise of its infrastructure or a vulnerability in the ScreenConnect software. \"Our initial assessment suggests the activity may involve…",
+        "evidence_origin": "content",
+        "focus": "third-party extensions in partner environments",
+        "headline": "third-party extensions in partner environments disabled after unauthorized access",
+        "priority": "high",
+        "significance": "This finding matters because third-party extensions introduce supply chain risk. The accountable owner should review extension inventory and supplier assurance evidence.",
+        "source_ids": [
+          4
         ]
       },
       {
         "control_id": "data_protection",
         "evidence_excerpt": "Certificate authority eMudhra has revoked eight additional intermediate CA certificates after an investigation into its recent certificate security incident found improper handling of private keys during the certificate-generation process…",
-        "evidence_origin": "summary",
+        "evidence_origin": "content",
         "focus": "intermediate CA certificates",
-        "headline": "Intermediate CA certificates revoked after private key mishap during certificate generation",
+        "headline": "intermediate CA certificates revoked after private key mishap",
         "priority": "medium",
-        "significance": "CA certificate revocation undermines trust chain integrity and may affect dependent systems. The accountable owner should confirm certificate inventory, identify affected services, and verify reissuance or replacement status.",
+        "significance": "This finding matters because improper private key handling undermines PKI trust. The accountable owner should validate certificate trust chains and revocation status.",
         "source_ids": [
-          8
+          10
         ]
       },
       {
-        "control_id": "change_management",
-        "evidence_excerpt": "The RMM provider also released a hotfix as one of recommended mitigations to address public exploits for the alleged zero-days that allow for attacker takeover.",
-        "evidence_origin": "summary",
-        "focus": "N-central platform",
-        "headline": "N-central platform taken offline after 33 flaws discovered with hotfix released",
+        "control_id": "third_party_risk",
+        "evidence_excerpt": "Notion, the digital workspace platform, disclosed that a security breach at its AI infrastructure provider, Fireworks AI, exposed Notion AI chat transcripts in a small number of workspaces…",
+        "evidence_origin": "content",
+        "focus": "AI infrastructure provider Fireworks AI",
+        "headline": "AI infrastructure provider Fireworks AI exposes AI chat transcripts",
         "priority": "medium",
-        "significance": "RMM platform compromise risk requires validated change deployment and rollback readiness. The accountable owner should verify hotfix deployment coverage, post-change validation evidence, and rollback ownership for affected instances.",
+        "significance": "This finding matters because AI supply chain breach risks sensitive data exposure. The accountable owner should evaluate AI vendor data protection controls and access scopes.",
         "source_ids": [
-          11
+          12
         ]
       }
     ],
@@ -80,39 +80,57 @@
       "paragraphs": [
         {
           "source_ids": [
-            2,
             1,
-            5,
-            6,
-            8,
-            11
+            2,
+            3
           ],
-          "text": "Active exploitation of Cisco vulnerabilities added to the CISA Known Exploited Vulnerabilities catalog and a critical unauthenticated privilege escalation in Zoom Workplace for Windows demand immediate vulnerability and access management review. Concurrent third-party breaches at Baker Tilly, ScreenConnect MSP environments, and Fireworks AI infrastructure expose supply chain and data protection gaps. Certificate authority eMudhra revoking intermediate CA certificates and N-able taking its N-central RMM platform offline after 33 flaws add identity trust and change management urgency."
+          "text": "Critical vulnerabilities in widely deployed software demand immediate vulnerability management action. Apache HTTP Server's HTTP/2 module allows unauthenticated remote code execution across versions 2.4.55 to 2.4.70. Zoom Workplace for Windows contains a privilege escalation flaw with a CVSS score of 9.6. CISA has added actively exploited Cisco BroadWorks and Openwave flaws to its Known Exploited Vulnerabilities catalog. Control owners must verify asset inventories, patch deployment, and compensating controls for these exposures."
         },
         {
           "source_ids": [
-            2,
-            1,
-            6,
-            5,
-            8,
-            11
+            4,
+            10,
+            12
           ],
-          "text": "Control owners should prioritize asset identification for CISA KEV-listed Cisco products, verify Zoom Workplace updates across all endpoints, assess MSP monitoring coverage for ScreenConnect compromise indicators, review third-party assurance for Baker Tilly and Fireworks AI dependencies, confirm eMudhra certificate reissuance for affected services, and validate N-able hotfix deployment with rollback evidence."
+          "text": "Third-party and supply chain incidents highlight persistent risk in external dependencies. ConnectWise disabled five third-party extensions in partner environments after unauthorized access reports. Certificate authority eMudhra revoked eight intermediate CA certificates following improper private key handling. Notion disclosed that a breach at AI infrastructure provider Fireworks AI exposed customer AI chat transcripts. Control owners should review supplier assurance evidence, certificate trust validation, and AI vendor data protection controls."
         }
       ]
     },
     "industry_impacts": [],
     "regulatory_changes": []
   },
-  "generated_at": "2026-11-12T03:18:23.071933Z",
-  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/9b57273ee961363358cf1fcc7ab64c7b4494f6ce/site/feed.xml",
+  "generated_at": "2026-11-12T06:26:03.250605Z",
+  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/58352dc655eae33cb3f7593dcaafdd304ffe0f84/site/feed.xml",
   "feed_home_url": "https://sentrydigest.ricomanifesto.com/",
   "digest_issue_date": "2026-11-12",
   "digest_issue_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-12/",
   "requested_model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
   "resolved_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
   "sources": [
+    {
+      "title": "Critical Apache HTTP/2 Flaw Could Let Unauthenticated Attackers Execute Code Remotely",
+      "url": "https://thehackernews.com/2026/11/critical-apache-http2-flaw-could-let.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-12/#reporting-b92486adb822",
+      "cves": [
+        "CVE-2026-119618"
+      ],
+      "snippet": "Critical Apache HTTP/2 Flaw Could Let Unauthenticated Attackers Execute Code Remotely A critical flaw in Apache HTTP Server's HTTP/2 module, mod_http2, can let a remote attacker run code on the server. Tracked as CVE-2026-119618, it affects versions 2.4.55 through 2.4.70 and is fixed in version 2.4.71, released yesterday. Only servers with HTTP/2 enabled are affected, according to Red Hat, which ships the server as part of Red Hat Enterprise Linux. An attacker who can reach the… A critical flaw in Apache HTTP Server's HTTP/2 module, mod_http2, can let a remote attacker run code on the server. Tracked as CVE-2026-119618, it affects versions 2.4.55 through 2.4.70 and is fixed in version 2.4.71",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "A critical flaw in Apache HTTP Server's HTTP/2 module, mod_http2, can let a remote attacker run code on the server. Tracked as CVE-2026-119618, it affects versions 2.4.55 through 2.4.70 and is fixed in version 2.4.71, released yesterday. Only servers with HTTP/2 enabled are affected, according to Red Hat, which ships the server as part of Red Hat Enterprise Linux. An attacker who can reach the…",
+          "text": "A critical flaw in Apache HTTP Server's HTTP/2 module, mod_http2, can let a remote attacker run code on the server. Tracked as CVE-2026-119618, it affects versions 2.4.55 through 2.4.70 and is fixed in version 2.4.71, released yesterday. Only servers with HTTP/2 enabled are affected, according to Red Hat, which ships the server as part of Red Hat Enterprise Linux. An attacker who can reach the…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "A critical flaw in Apache HTTP Server's HTTP/2 module, mod_http2, can let a remote attacker run code on the server. Tracked as CVE-2026-119618, it affects versions 2.4.55 through 2.4.70 and is fixed in version 2.4.71, released yesterday. Only servers with HTTP/2 enabled are affected, according to Red Hat, which ships the server as part of Red Hat Enterprise Linux. An attacker who can reach the…",
+          "text": "A critical flaw in Apache HTTP Server's HTTP/2 module, mod_http2, can let a remote attacker run code on the server. Tracked as CVE-2026-119618, it affects versions 2.4.55 through 2.4.70 and is fixed in version 2.4.71, released yesterday. Only servers with HTTP/2 enabled are affected, according to Red Hat, which ships the server as part of Red Hat Enterprise Linux. An attacker who can reach the…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
     {
       "title": "Critical Zoom Workplace Flaw Could Allow Unauthenticated Remote Privilege Escalation",
       "url": "https://thehackernews.com/2026/11/critical-zoom-workplace-flaw-could.html",
@@ -157,6 +175,28 @@
           "origin": "content",
           "raw_text": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) Tuesday added two security flaws impacting Cisco BroadWorks and Openwave Messaging Webtop Media Transcoder to its Known Exploited Vulnerabilities (KEV) catalog, citing evidence of active exploitation. Details of the vulnerabilities are below - CVE-2026-20320 (CVSS score: 7.5) - An improper restriction of XML external entity…",
           "text": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) Tuesday added two security flaws impacting Cisco BroadWorks and Openwave Messaging Webtop Media Transcoder to its Known Exploited Vulnerabilities (KEV) catalog, citing evidence of active exploitation. Details of the vulnerabilities are below - CVE-2026-20320 (CVSS score: 7.5) - An improper restriction of XML external entity…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "ScreenConnect Attacks Target at Least 288 Endpoints Across 48 Organizations With Rogue Clients",
+      "url": "https://thehackernews.com/2026/11/screenconnect-attacks-target-at-least.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-12/#reporting-0a7fd303a43b",
+      "cves": [],
+      "snippet": "ScreenConnect Attacks Target at Least 288 Endpoints Across 48 Organizations With Rogue Clients ConnectWise has taken the precautionary step of disabling five third-party extensions in partner environments following reports of unauthorized access. In an advisory posted on its site, the company said there is no evidence that the incident involves a compromise of its infrastructure or a vulnerability in the ScreenConnect software. \"Our initial assessment suggests the activity may involve… ConnectWise has taken the precautionary step of disabling five third-party extensions in partner environments following reports of unauthorized access. In an advisory posted on its site, the company said there",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "ConnectWise has taken the precautionary step of disabling five third-party extensions in partner environments following reports of unauthorized access. In an advisory posted on its site, the company said there is no evidence that the incident involves a compromise of its infrastructure or a vulnerability in the ScreenConnect software. \"Our initial assessment suggests the activity may involve…",
+          "text": "ConnectWise has taken the precautionary step of disabling five third-party extensions in partner environments following reports of unauthorized access. In an advisory posted on its site, the company said there is no evidence that the incident involves a compromise of its infrastructure or a vulnerability in the ScreenConnect software. \"Our initial assessment suggests the activity may involve…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "ConnectWise has taken the precautionary step of disabling five third-party extensions in partner environments following reports of unauthorized access. In an advisory posted on its site, the company said there is no evidence that the incident involves a compromise of its infrastructure or a vulnerability in the ScreenConnect software. \"Our initial assessment suggests the activity may involve…",
+          "text": "ConnectWise has taken the precautionary step of disabling five third-party extensions in partner environments following reports of unauthorized access. In an advisory posted on its site, the company said there is no evidence that the incident involves a compromise of its infrastructure or a vulnerability in the ScreenConnect software. \"Our initial assessment suggests the activity may involve…"
         }
       ],
       "effective_date_evidence": null
@@ -333,50 +373,6 @@
           "origin": "content",
           "raw_text": "Notion, the digital workspace platform, disclosed that a security breach at its AI infrastructure provider, Fireworks AI, exposed Notion AI chat transcripts in a small number of workspaces…",
           "text": "Notion, the digital workspace platform, disclosed that a security breach at its AI infrastructure provider, Fireworks AI, exposed Notion AI chat transcripts in a small number of workspaces…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "N-able Takes N-central Platform Offline After Discovery of 33 Flaws",
-      "url": "https://www.darkreading.com/endpoint-security/n-able-n-central-offline-33-flaws",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-12/#reporting-abb1d0352410",
-      "cves": [],
-      "snippet": "N-able Takes N-central Platform Offline After Discovery of 33 Flaws The RMM provider also released a hotfix as one of recommended mitigations to address public exploits for the alleged zero-days that allow for attacker takeover. The RMM provider also released a hotfix as one of recommended mitigations to address public exploits for the alleged zero-days that allow for attacker takeover.",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "The RMM provider also released a hotfix as one of recommended mitigations to address public exploits for the alleged zero-days that allow for attacker takeover.",
-          "text": "The RMM provider also released a hotfix as one of recommended mitigations to address public exploits for the alleged zero-days that allow for attacker takeover."
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "The RMM provider also released a hotfix as one of recommended mitigations to address public exploits for the alleged zero-days that allow for attacker takeover.",
-          "text": "The RMM provider also released a hotfix as one of recommended mitigations to address public exploits for the alleged zero-days that allow for attacker takeover."
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "Who Runs the Ransomware Group Qilin?",
-      "url": "https://krebsonsecurity.com/2026/11/who-runs-the-ransomware-group-qilin/",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-12/#reporting-5aca5acf75fb",
-      "cves": [],
-      "snippet": "Who Runs the Ransomware Group Qilin? The cybercrime group Qilin has emerged as the world's most active ransomware affiliate program, claiming at least 365 victim organizations in the past three months alone. But even top Russian hackers make operational security mistakes, and the administrator of Qilin has made a few key missteps over the last decade that all point to a 36-year-old man living in St. Petersburg, Russia. The cybercrime group Qilin has emerged as the world's most active ransomware affiliate program, claiming at least 365 victim organizations in the past three months alone. But even top Russian hackers make operational security mistakes, and the administrator of Qilin has made a",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "The cybercrime group Qilin has emerged as the world's most active ransomware affiliate program, claiming at least 365 victim organizations in the past three months alone. But even top Russian hackers make operational security mistakes, and the administrator of Qilin has made a few key missteps over the last decade that all point to a 36-year-old man living in St. Petersburg, Russia.",
-          "text": "The cybercrime group Qilin has emerged as the world's most active ransomware affiliate program, claiming at least 365 victim organizations in the past three months alone. But even top Russian hackers make operational security mistakes, and the administrator of Qilin has made a few key missteps over the last decade that all point to a 36-year-old man living in St. Petersburg, Russia."
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "The cybercrime group Qilin has emerged as the world's most active ransomware affiliate program, claiming at least 365 victim organizations in the past three months alone. But even top Russian hackers make operational security mistakes, and the administrator of Qilin has made a few key missteps over the last decade that all point to a 36-year-old man living in St. Petersburg, Russia.",
-          "text": "The cybercrime group Qilin has emerged as the world's most active ransomware affiliate program, claiming at least 365 victim organizations in the past three months alone. But even top Russian hackers make operational security mistakes, and the administrator of Qilin has made a few key missteps over the last decade that all point to a 36-year-old man living in St. Petersburg, Russia."
         }
       ],
       "effective_date_evidence": null
