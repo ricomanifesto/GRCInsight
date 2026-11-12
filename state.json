@@ -1583,6 +1583,16 @@
       "handle": "report_20261112_003437_387",
       "run_id": "43128251764",
       "stage": "invoked"
+    },
+    {
+      "admission_key": "digest:236d046b21d0c13f3902df3a3f880617ccf194d4",
+      "at": "2026-11-12T00:36:42.598Z",
+      "binding": "feed-bytes",
+      "digest_content_digest": "233531029deb1fb4a61501f4a044f35ac86ba595d986703c25b4953cf0fcda9a",
+      "outcome": "published",
+      "release_key": "f6f2da0a472a520fca252853c0427064e9cfbd2d08b1a2625cbe0d4a1e4e6560",
+      "run_id": "43128251764",
+      "stage": "completed"
     }
   ],
   "schema_version": 1,
