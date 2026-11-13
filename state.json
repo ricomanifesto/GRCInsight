@@ -2024,6 +2024,13 @@
       "at": "2026-11-13T09:18:38.817Z",
       "run_id": "43400127931",
       "stage": "invoked"
+    },
+    {
+      "admission_key": "digest:50769796df6da8f09e444d52fb21469f34d1916a",
+      "at": "2026-11-13T09:18:41.299Z",
+      "handle": "report_20261113_091840_018",
+      "run_id": "43400127931",
+      "stage": "invoked"
     }
   ],
   "schema_version": 1,
