@@ -1,8 +1,8 @@
 # GRC Intelligence Report - 2026-11-13
-**Generated:** 2026-11-13T13:08:13.192246Z
+**Generated:** 2026-11-13T15:18:19.747677Z
 **Date of Issue:** November 2026
 **Analysis Period:** November 2026
-**Source:** [SentryDigest](https://sentrydigest.ricomanifesto.com/feed.xml)
+**Source:** [SentryDigest](https://raw.githubusercontent.com/ricomanifesto/SentryDigest/62bf2daf0b451499312f0178c4932b42eac2b9ce/site/feed.xml)
 **Source Issue:** [SentryDigest 2026-11-13](https://sentrydigest.ricomanifesto.com/archive/2026-11-13/)
 **Articles Analyzed:** 30
 **GRC-Relevant Articles:** 30
@@ -12,9 +12,9 @@
 
 ## Executive Summary
 
-Critical authentication bypass and root privilege vulnerabilities in Citrix NetScaler, Check Point Security Gateways, and ConnectWise ScreenConnect are under active exploitation, demanding immediate patch deployment and supply chain assurance review. The Citrix NetScaler ADC flaw allows authentication bypass, while Check Point zero-day and PHP2Shell chains grant root access and deploy persistent backdoors. The ScreenConnect vulnerability enables worm-like lateral movement from MSP technicians to customer networks. Vulnerability and asset owners must confirm emergency patching across all affected assets, and supplier risk owners should validate MSP remediation status and monitoring coverage for lateral movement indicators. [Citrix Patches 12 NetScaler and Secure Access Client Flaws, Including Authentication Bypass](https://thehackernews.com/2026/11/citrix-patches-12-netscaler-and-secure.html); [SCKit Malware Turns ScreenConnect Support Sessions Into Potential MSP Attack Paths](https://thehackernews.com/2026/11/sckit-malware-targets-screenconnect.html); [Check Point warns of zero-day flaw exploited for root access](https://www.bleepingcomputer.com/news/security/check-point-patches-zero-day-that-lets-hackers-get-root-access/); [Hackers Exploit PHP2Shell Flaws in Check Point Gateways to Deploy TSGA Backdoor and Wipe ESXi Files](https://thehackernews.com/2026/11/hackers-exploit-php2shell-flaws-in.html)
+Critical vulnerabilities in Citrix NetScaler application delivery controllers and active exploitation of a patched flaw in ConnectWise ScreenConnect remote access software require immediate asset identification and patch verification across infrastructure and managed service provider dependencies. Authentication bypass and denial-of-service risks in NetScaler devices undermine access controls, while the ScreenConnect campaign extends compromise risk to downstream customers through trusted MSP channels. Vulnerability and asset owners should confirm affected versions are inventoried, patches applied, and MSP access scopes reviewed for excessive privileges. [Citrix Patches 12 NetScaler and Secure Access Client Flaws, Including Authentication Bypass](https://thehackernews.com/2026/11/citrix-patches-12-netscaler-and-secure.html); [SCKit Malware Turns ScreenConnect Support Sessions Into Potential MSP Attack Paths](https://thehackernews.com/2026/11/sckit-malware-targets-screenconnect.html)
 
-Emerging AI agent permission models create uncontrolled data export paths when prompt injection redirects agent identities, while most organizations lack cryptographic inventories needed for post-quantum migration. AI agents with broad record access can exfiltrate data through malicious instructions, and incomplete cryptographic estates block quantum readiness planning. Identity and access owners should review agent permission scopes and implement session revocation, while risk and control owners must initiate cryptographic asset discovery and assign migration accountability. [When an AI Agent Goes Wrong, Can You Stop It?](https://thehackernews.com/2026/11/when-ai-agent-goes-wrong-can-you-stop-it.html); [Getting Past the Post-Quantum Cryptography Discovery Phase](https://www.darkreading.com/cybersecurity-operations/getting-past-post-quantum-cryptography-discovery)
+Emerging threats include AI agents manipulating financial transactions without triggering alerts, state-level compromise of telecom infrastructure to intercept SMS multi-factor codes, and blockchain complexities that hobble security controls for exchange compromises. An international law enforcement takedown of malware infrastructure seized millions of stolen credentials, necessitating credential exposure checks. Identity and access owners should review AI agent permissions and implement transaction approvals; monitoring owners should evaluate SMS 2FA reliance and signaling telemetry; incident response leads should verify credential exposure from seized datasets; governance owners should reassess control assumptions for blockchain environments. [How one AI agent exposed five critical enterprise security gaps](https://www.bleepingcomputer.com/news/security/how-one-ai-agent-exposed-five-critical-enterprise-security-gaps/); [SilentAir Hijacks Asian Telecom Networks to Intercept SMS 2FA Codes and Spy on Taiwanese Users](https://thehackernews.com/2026/11/silentair-hijacks-asian-telecom.html); [Operation Endgame Takes Down Gootloader, CastleRAT and StealC Servers, Seizes 6.4M Stolen Logins](https://thehackernews.com/2026/11/operation-endgame-takes-down-gootloader.html); [Attackers in Binance Breach Targeted Known Weakness, Missing Controls](https://www.darkreading.com/cybersecurity-operations/attackers-binance-breach-targeted-weakness-missing-controls)
 
 Scope: 6 findings and 0 sourced regulatory changes from 12 retained sources. Review priorities rank what to check first; confirm whether each finding applies to your organization before assigning work.
 
@@ -26,13 +26,13 @@ No sourced regulatory changes identified in the supplied evidence.
 
 Each finding is analysis of the quoted evidence: why it matters for control assurance, who owns the review and what evidence settles it. Reference controls are review aids, not a compliance determination.
 
-### NetScaler ADC weakens authentication controls
+### NetScaler ADC, Citrix NetScaler Gateway, exposes authentication bypass and DoS vulnerabilities
 
 **Review priority:** High · Vulnerability management · Owner: Vulnerability and asset owners
 
-**Why it matters:** The authentication bypass in NetScaler ADC undermines access control assurance for critical infrastructure. Vulnerability and asset owners should confirm affected deployments are patched and compensating controls are validated.
+**Why it matters:** Authentication bypass in widely deployed application delivery controllers undermines access controls and could allow unauthorized administrative access. Vulnerability and asset owners should confirm affected versions are identified, patches applied, and compensating controls validated for any unpatched instances.
 
-**Source evidence:** “Citrix has released patches for multiple critical security flaws impacting NetScaler ADC, Citrix NetScaler Gateway, and NetScaler Console that could lead to denial-of-service &#40;DoS&#41; or an authentication bypass. The critical vulnerabilities that impact NetScaler ADC and NetScaler Gateway are listed below - CVE-2026-120868 &#40;CVSS score: 9.3&#41; - A memory overflow vulnerability in Packet…” [Citrix Patches 12 NetScaler and Secure Access Client Flaws, Including Authentication Bypass](https://thehackernews.com/2026/11/citrix-patches-12-netscaler-and-secure.html)
+**Source evidence:** “Citrix has released patches for multiple critical security flaws impacting NetScaler ADC, Citrix NetScaler Gateway, and NetScaler Console that could lead to denial-of-service &#40;DoS&#41; or an authentication bypass.” [Citrix Patches 12 NetScaler and Secure Access Client Flaws, Including Authentication Bypass](https://thehackernews.com/2026/11/citrix-patches-12-netscaler-and-secure.html)
 
 **Evidence to request:** Affected-asset inventory, installed versions, remediation status and an exception owner.
 
@@ -40,13 +40,13 @@ Each finding is analysis of the quoted evidence: why it matters for control assu
 
 **Reference controls:** ISO/IEC 27001:2022 A.8.8 (management of technical vulnerabilities); NIST CSF 2.0 ID.RA (risk assessment), PR.PS (platform security)
 
-### ConnectWise ScreenConnect enables supply chain compromise
+### ConnectWise ScreenConnect deployments, enables MSP attack paths via exploited flaw
 
 **Review priority:** High · Third-party risk · Owner: Supplier risk owner
 
-**Why it matters:** The exploited ScreenConnect flaw allows attackers to pivot from MSP technicians to customer networks. Supplier risk owners should verify MSP remediation status and assess lateral movement exposure.
+**Why it matters:** Exploitation of a patched flaw in remote access software used by managed service providers extends risk to downstream customers. Supplier risk owners should verify that all ScreenConnect instances are updated and that MSP access scopes are reviewed for excessive privileges.
 
-**Source evidence:** “The ongoing campaign targeting ConnectWise ScreenConnect deployments involves the exploitation of a now-patched critical security flaw in the remote access software, and not a new vulnerability, it has emerged. Blackpoint Cyber's Adversary Pursuit Group &#40;APG&#41;, which shared the details with The Hacker News, said the recovered attacker toolkit exploits CVE-2026-84869 &#40;CVSS score: 9.9&#41;, an…” [SCKit Malware Turns ScreenConnect Support Sessions Into Potential MSP Attack Paths](https://thehackernews.com/2026/11/sckit-malware-targets-screenconnect.html)
+**Source evidence:** “The ongoing campaign targeting ConnectWise ScreenConnect deployments involves the exploitation of a now-patched critical security flaw in the remote access software, and not a new vulnerability, it has emerged.” [SCKit Malware Turns ScreenConnect Support Sessions Into Potential MSP Attack Paths](https://thehackernews.com/2026/11/sckit-malware-targets-screenconnect.html)
 
 **Evidence to request:** Supplier access scope, control responsibilities and evidence of remediation assurance.
 
@@ -54,41 +54,13 @@ Each finding is analysis of the quoted evidence: why it matters for control assu
 
 **Reference controls:** ISO/IEC 27001:2022 A.5.19 (supplier relationships), A.5.21 (ICT supply chain), A.5.22 (monitoring and review of supplier services); NIST CSF 2.0 GV.SC (cybersecurity supply chain risk management)
 
-### Check Point Software exposes root privilege escalation
-
-**Review priority:** High · Vulnerability management · Owner: Vulnerability and asset owners
-
-**Why it matters:** The actively exploited zero-day grants root access and persistence on security gateways. Vulnerability and asset owners should confirm emergency hotfix deployment and validate persistence removal.
-
-**Source evidence:** “Check Point Software has released emergency hotfixes to address a high-severity flaw that hackers have been exploiting to gain root privileges and establish persistence on vulnerable devices since late October…” [Check Point warns of zero-day flaw exploited for root access](https://www.bleepingcomputer.com/news/security/check-point-patches-zero-day-that-lets-hackers-get-root-access/)
-
-**Evidence to request:** Affected-asset inventory, installed versions, remediation status and an exception owner.
-
-**Decision trigger:** If applicability is confirmed, decide on remediation or a documented exception; otherwise record why the finding does not apply.
-
-**Reference controls:** ISO/IEC 27001:2022 A.8.8 (management of technical vulnerabilities); NIST CSF 2.0 ID.RA (risk assessment), PR.PS (platform security)
-
-### Check Point Security Gateways enable backdoor deployment
-
-**Review priority:** High · Monitoring and detection · Owner: Detection and monitoring owner
-
-**Why it matters:** The PHP2Shell exploitation chain deploys persistent backdoors on security infrastructure. Detection and monitoring owners should verify telemetry covers Gaia OS privilege escalation and TSGA backdoor indicators.
-
-**Source evidence:** “An unknown threat actor has been observed targeting unpatched Check Point Security Gateways to obtain initial access via the PHP2Shell vulnerabilities and then a previously unreported local privilege escalation flaw in Gaia OS to deploy a backdoor called TSGA. The activity, detailed by Check Point, began on October 30, 2026, and targeted Israeli organizations, with a broader follow-up…” [Hackers Exploit PHP2Shell Flaws in Check Point Gateways to Deploy TSGA Backdoor and Wipe ESXi Files](https://thehackernews.com/2026/11/hackers-exploit-php2shell-flaws-in.html)
-
-**Evidence to request:** Log coverage, a detection test, alert routing and investigation ownership.
-
-**Decision trigger:** If a detection test fails, assign the coverage or routing correction and repeat the test.
-
-**Reference controls:** ISO/IEC 27001:2022 A.8.15 (logging), A.8.16 (monitoring activities); NIST CSF 2.0 DE.CM (continuous monitoring), DE.AE (adverse event analysis)
-
-### AI agent bypasses access boundaries
+### AI agent built to automate invoice processing, allows manipulation of vendor bank details
 
 **Review priority:** Medium · Access management · Owner: Identity and access owner
 
-**Why it matters:** AI agents with broad identity permissions can exfiltrate data through prompt injection. Identity and access owners should review agent permission scopes and implement session revocation capabilities.
+**Why it matters:** AI agents with financial transaction capabilities can bypass traditional email security controls, creating unauthorized payment changes. Identity and access owners should review AI agent permissions, implement transaction approval workflows, and monitor for anomalous agent behavior.
 
-**Source evidence:** “Suppose an AI agent is asked to sort support tickets and look up account details. A ticket contains instructions that lead the agent to export records to an unfamiliar destination. The agent can make the request because its identity has access to the records and its connected tools allow the action. That kind of scenario raises a response question: what does “stop the agent” actually mean? A…” [When an AI Agent Goes Wrong, Can You Stop It?](https://thehackernews.com/2026/11/when-ai-agent-goes-wrong-can-you-stop-it.html)
+**Source evidence:** “An AI agent built to automate invoice processing could be manipulated into changing vendor bank details through a malicious email, without triggering traditional security alerts.” [How one AI agent exposed five critical enterprise security gaps](https://www.bleepingcomputer.com/news/security/how-one-ai-agent-exposed-five-critical-enterprise-security-gaps/)
 
 **Evidence to request:** Access scope, authentication coverage, session revocation and a permission-test result.
 
@@ -96,13 +68,41 @@ Each finding is analysis of the quoted evidence: why it matters for control assu
 
 **Reference controls:** ISO/IEC 27001:2022 A.5.15 (access control), A.5.18 (access rights), A.8.2 (privileged access rights); NIST CSF 2.0 PR.AA (identity management, authentication and access control)
 
-### cryptographic estate lacks post-quantum readiness
+### Asian mobile operators, compromised to intercept SMS 2FA codes and spy
+
+**Review priority:** High · Monitoring and detection · Owner: Detection and monitoring owner
+
+**Why it matters:** Compromise of telecom infrastructure to intercept multi-factor authentication codes undermines identity verification for targeted users. Monitoring and detection owners should assess telemetry for anomalous signaling traffic and evaluate reliance on SMS-based 2FA for high-value accounts.
+
+**Source evidence:** “A newly identified spying group used hacked equipment inside Asian mobile operators to intercept the calls and texts of selected people, mostly in Taiwan.” [SilentAir Hijacks Asian Telecom Networks to Intercept SMS 2FA Codes and Spy on Taiwanese Users](https://thehackernews.com/2026/11/silentair-hijacks-asian-telecom.html)
+
+**Evidence to request:** Log coverage, a detection test, alert routing and investigation ownership.
+
+**Decision trigger:** If a detection test fails, assign the coverage or routing correction and repeat the test.
+
+**Reference controls:** ISO/IEC 27001:2022 A.8.15 (logging), A.8.16 (monitoring activities); NIST CSF 2.0 DE.CM (continuous monitoring), DE.AE (adverse event analysis)
+
+### servers behind Gootloader, CastleRAT and StealC, seized in international law enforcement operation
+
+**Review priority:** Medium · Incident response · Owner: Incident response lead
+
+**Why it matters:** Takedown of malware infrastructure reduces active threat but stolen credentials remain in circulation. Incident response leads should verify if organizational credentials appear in seized datasets and initiate password resets for affected accounts.
+
+**Source evidence:** “An international police operation took down servers behind Gootloader, CastleRAT and StealC this week. Criminals used the three malware tools to gain access to computers, steal passwords, and launch ransomware attacks.” [Operation Endgame Takes Down Gootloader, CastleRAT and StealC Servers, Seizes 6.4M Stolen Logins](https://thehackernews.com/2026/11/operation-endgame-takes-down-gootloader.html)
+
+**Evidence to request:** Containment responsibilities, retained logs and the most recent response exercise.
+
+**Decision trigger:** If an exercise exposes an ownership or evidence gap, assign a response-plan correction and retest it.
+
+**Reference controls:** ISO/IEC 27001:2022 A.5.24 (incident management planning and preparation), A.5.26 (response to information security incidents); NIST CSF 2.0 RS.MA (incident management), RS.MI (incident mitigation)
+
+### security controls designed to limit the damage, hobbled by blockchain complexities
 
 **Review priority:** Medium · Governance and accountability · Owner: Risk and control owners
 
-**Why it matters:** Incomplete cryptographic inventories prevent effective post-quantum migration planning. Risk and control owners should initiate cryptographic asset discovery and assign migration accountability.
+**Why it matters:** Blockchain-specific attack mechanisms can bypass traditional security controls, limiting damage containment capabilities. Governance and accountability owners should review control assumptions for blockchain-based assets and ensure incident procedures address smart contract and sweeper risks.
 
-**Source evidence:** “Most organizations haven't sorted out their cryptographic estate enough to even know where they'd start with post-quantum cryptography &#40;PQC&#41;.” [Getting Past the Post-Quantum Cryptography Discovery Phase](https://www.darkreading.com/cybersecurity-operations/getting-past-post-quantum-cryptography-discovery)
+**Source evidence:** “Blockchain complexities, such as attacker-deployed sweepers, hobble security controls designed to limit the damage of an exchange compromise.” [Attackers in Binance Breach Targeted Known Weakness, Missing Controls](https://www.darkreading.com/cybersecurity-operations/attackers-binance-breach-targeted-weakness-missing-controls)
 
 **Evidence to request:** The affected assumption, accountable owner and a recorded decision to act or accept risk.
 
@@ -114,6 +114,9 @@ Each finding is analysis of the quoted evidence: why it matters for control assu
 
 - [Citrix Patches 12 NetScaler and Secure Access Client Flaws, Including Authentication Bypass](https://thehackernews.com/2026/11/citrix-patches-12-netscaler-and-secure.html) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-13/#reporting-96d21dc534c0)
 - [SCKit Malware Turns ScreenConnect Support Sessions Into Potential MSP Attack Paths](https://thehackernews.com/2026/11/sckit-malware-targets-screenconnect.html) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-13/#reporting-0c7b196fe26f)
+- [How one AI agent exposed five critical enterprise security gaps](https://www.bleepingcomputer.com/news/security/how-one-ai-agent-exposed-five-critical-enterprise-security-gaps/) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-13/#reporting-b32ccd39bcb9)
+- [Attackers in Binance Breach Targeted Known Weakness, Missing Controls](https://www.darkreading.com/cybersecurity-operations/attackers-binance-breach-targeted-weakness-missing-controls) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-13/#reporting-43f14cb30a43)
+- [Microsoft says November security updates cause printing issues](https://www.bleepingcomputer.com/news/microsoft/microsoft-says-november-security-updates-cause-printing-issues/) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-13/#reporting-53b1d1645f89)
 - [When an AI Agent Goes Wrong, Can You Stop It?](https://thehackernews.com/2026/11/when-ai-agent-goes-wrong-can-you-stop-it.html) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-13/#reporting-ed1f4b35eca7)
 - [SilentAir Hijacks Asian Telecom Networks to Intercept SMS 2FA Codes and Spy on Taiwanese Users](https://thehackernews.com/2026/11/silentair-hijacks-asian-telecom.html) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-13/#reporting-7f22b6cf300a)
 - [Operation Endgame Takes Down Gootloader, CastleRAT and StealC Servers, Seizes 6.4M Stolen Logins](https://thehackernews.com/2026/11/operation-endgame-takes-down-gootloader.html) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-13/#reporting-d25f99854f90)
@@ -121,6 +124,3 @@ Each finding is analysis of the quoted evidence: why it matters for control assu
 - [Microsoft confirms Windows activation failures after November updates](https://www.bleepingcomputer.com/news/microsoft/microsoft-confirms-windows-activation-failures-after-november-updates/) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-13/#reporting-9c5c30b78fe1)
 - [Police arrest 354 suspects in dark web cybercrime crackdown](https://www.bleepingcomputer.com/news/security/police-arrest-354-vendors-buyers-in-global-cybercrime-crackdown/) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-13/#reporting-e539d9a442d5)
 - [Hackers Exploit PHP2Shell Flaws in Check Point Gateways to Deploy TSGA Backdoor and Wipe ESXi Files](https://thehackernews.com/2026/11/hackers-exploit-php2shell-flaws-in.html) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-13/#reporting-69d1a63879fd)
-- [Hackers Exploit N-central Flaws to Infect 21 Servers, Including 19 Running Hotfix 2](https://thehackernews.com/2026/11/hackers-exploit-n-central-flaws-to.html) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-13/#reporting-5f110aa5732b)
-- [New worm-like 'SCKit' malware targets MSPs in ScreenConnect attacks](https://www.bleepingcomputer.com/news/security/new-worm-like-sckit-malware-targets-msps-in-screenconnect-attacks/) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-13/#reporting-afe79ee14497)
-- [Getting Past the Post-Quantum Cryptography Discovery Phase](https://www.darkreading.com/cybersecurity-operations/getting-past-post-quantum-cryptography-discovery) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-13/#reporting-ea37a2419bf2)

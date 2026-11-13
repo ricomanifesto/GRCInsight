@@ -5,74 +5,74 @@
     "control_implications": [
       {
         "control_id": "vulnerability_management",
-        "evidence_excerpt": "Citrix has released patches for multiple critical security flaws impacting NetScaler ADC, Citrix NetScaler Gateway, and NetScaler Console that could lead to denial-of-service (DoS) or an authentication bypass. The critical vulnerabilities that impact NetScaler ADC and NetScaler Gateway are listed below - CVE-2026-120868 (CVSS score: 9.3) - A memory overflow vulnerability in Packet…",
+        "evidence_excerpt": "Citrix has released patches for multiple critical security flaws impacting NetScaler ADC, Citrix NetScaler Gateway, and NetScaler Console that could lead to denial-of-service (DoS) or an authentication bypass.",
         "evidence_origin": "summary",
-        "focus": "NetScaler ADC",
-        "headline": "NetScaler ADC weakens authentication controls",
+        "focus": "NetScaler ADC, Citrix NetScaler Gateway",
+        "headline": "NetScaler ADC, Citrix NetScaler Gateway, exposes authentication bypass and DoS vulnerabilities",
         "priority": "high",
-        "significance": "The authentication bypass in NetScaler ADC undermines access control assurance for critical infrastructure. Vulnerability and asset owners should confirm affected deployments are patched and compensating controls are validated.",
+        "significance": "Authentication bypass in widely deployed application delivery controllers undermines access controls and could allow unauthorized administrative access. Vulnerability and asset owners should confirm affected versions are identified, patches applied, and compensating controls validated for any unpatched instances.",
         "source_ids": [
           1
         ]
       },
       {
         "control_id": "third_party_risk",
-        "evidence_excerpt": "The ongoing campaign targeting ConnectWise ScreenConnect deployments involves the exploitation of a now-patched critical security flaw in the remote access software, and not a new vulnerability, it has emerged. Blackpoint Cyber's Adversary Pursuit Group (APG), which shared the details with The Hacker News, said the recovered attacker toolkit exploits CVE-2026-84869 (CVSS score: 9.9), an…",
+        "evidence_excerpt": "The ongoing campaign targeting ConnectWise ScreenConnect deployments involves the exploitation of a now-patched critical security flaw in the remote access software, and not a new vulnerability, it has emerged.",
         "evidence_origin": "summary",
-        "focus": "ConnectWise ScreenConnect",
-        "headline": "ConnectWise ScreenConnect enables supply chain compromise",
+        "focus": "ConnectWise ScreenConnect deployments",
+        "headline": "ConnectWise ScreenConnect deployments, enables MSP attack paths via exploited flaw",
         "priority": "high",
-        "significance": "The exploited ScreenConnect flaw allows attackers to pivot from MSP technicians to customer networks. Supplier risk owners should verify MSP remediation status and assess lateral movement exposure.",
+        "significance": "Exploitation of a patched flaw in remote access software used by managed service providers extends risk to downstream customers. Supplier risk owners should verify that all ScreenConnect instances are updated and that MSP access scopes are reviewed for excessive privileges.",
         "source_ids": [
           2
         ]
       },
       {
         "control_id": "access_management",
-        "evidence_excerpt": "Suppose an AI agent is asked to sort support tickets and look up account details. A ticket contains instructions that lead the agent to export records to an unfamiliar destination. The agent can make the request because its identity has access to the records and its connected tools allow the action. That kind of scenario raises a response question: what does “stop the agent” actually mean? A…",
+        "evidence_excerpt": "An AI agent built to automate invoice processing could be manipulated into changing vendor bank details through a malicious email, without triggering traditional security alerts.",
         "evidence_origin": "summary",
-        "focus": "AI agent",
-        "headline": "AI agent bypasses access boundaries",
+        "focus": "AI agent built to automate invoice processing",
+        "headline": "AI agent built to automate invoice processing, allows manipulation of vendor bank details",
         "priority": "medium",
-        "significance": "AI agents with broad identity permissions can exfiltrate data through prompt injection. Identity and access owners should review agent permission scopes and implement session revocation capabilities.",
+        "significance": "AI agents with financial transaction capabilities can bypass traditional email security controls, creating unauthorized payment changes. Identity and access owners should review AI agent permissions, implement transaction approval workflows, and monitor for anomalous agent behavior.",
         "source_ids": [
           3
         ]
       },
       {
-        "control_id": "vulnerability_management",
-        "evidence_excerpt": "Check Point Software has released emergency hotfixes to address a high-severity flaw that hackers have been exploiting to gain root privileges and establish persistence on vulnerable devices since late October…",
+        "control_id": "monitoring",
+        "evidence_excerpt": "A newly identified spying group used hacked equipment inside Asian mobile operators to intercept the calls and texts of selected people, mostly in Taiwan.",
         "evidence_origin": "summary",
-        "focus": "Check Point Software",
-        "headline": "Check Point Software exposes root privilege escalation",
+        "focus": "Asian mobile operators",
+        "headline": "Asian mobile operators, compromised to intercept SMS 2FA codes and spy",
         "priority": "high",
-        "significance": "The actively exploited zero-day grants root access and persistence on security gateways. Vulnerability and asset owners should confirm emergency hotfix deployment and validate persistence removal.",
+        "significance": "Compromise of telecom infrastructure to intercept multi-factor authentication codes undermines identity verification for targeted users. Monitoring and detection owners should assess telemetry for anomalous signaling traffic and evaluate reliance on SMS-based 2FA for high-value accounts.",
         "source_ids": [
-          6
+          7
         ]
       },
       {
-        "control_id": "monitoring",
-        "evidence_excerpt": "An unknown threat actor has been observed targeting unpatched Check Point Security Gateways to obtain initial access via the PHP2Shell vulnerabilities and then a previously unreported local privilege escalation flaw in Gaia OS to deploy a backdoor called TSGA. The activity, detailed by Check Point, began on October 30, 2026, and targeted Israeli organizations, with a broader follow-up…",
+        "control_id": "incident_response",
+        "evidence_excerpt": "An international police operation took down servers behind Gootloader, CastleRAT and StealC this week. Criminals used the three malware tools to gain access to computers, steal passwords, and launch ransomware attacks.",
         "evidence_origin": "summary",
-        "focus": "Check Point Security Gateways",
-        "headline": "Check Point Security Gateways enable backdoor deployment",
-        "priority": "high",
-        "significance": "The PHP2Shell exploitation chain deploys persistent backdoors on security infrastructure. Detection and monitoring owners should verify telemetry covers Gaia OS privilege escalation and TSGA backdoor indicators.",
+        "focus": "servers behind Gootloader, CastleRAT and StealC",
+        "headline": "servers behind Gootloader, CastleRAT and StealC, seized in international law enforcement operation",
+        "priority": "medium",
+        "significance": "Takedown of malware infrastructure reduces active threat but stolen credentials remain in circulation. Incident response leads should verify if organizational credentials appear in seized datasets and initiate password resets for affected accounts.",
         "source_ids": [
-          9
+          8
         ]
       },
       {
         "control_id": "governance",
-        "evidence_excerpt": "Most organizations haven't sorted out their cryptographic estate enough to even know where they'd start with post-quantum cryptography (PQC).",
+        "evidence_excerpt": "Blockchain complexities, such as attacker-deployed sweepers, hobble security controls designed to limit the damage of an exchange compromise.",
         "evidence_origin": "summary",
-        "focus": "cryptographic estate",
-        "headline": "cryptographic estate lacks post-quantum readiness",
+        "focus": "security controls designed to limit the damage",
+        "headline": "security controls designed to limit the damage, hobbled by blockchain complexities",
         "priority": "medium",
-        "significance": "Incomplete cryptographic inventories prevent effective post-quantum migration planning. Risk and control owners should initiate cryptographic asset discovery and assign migration accountability.",
+        "significance": "Blockchain-specific attack mechanisms can bypass traditional security controls, limiting damage containment capabilities. Governance and accountability owners should review control assumptions for blockchain-based assets and ensure incident procedures address smart contract and sweeper risks.",
         "source_ids": [
-          12
+          4
         ]
       }
     ],
@@ -81,26 +81,26 @@
         {
           "source_ids": [
             1,
-            2,
-            6,
-            9
+            2
           ],
-          "text": "Critical authentication bypass and root privilege vulnerabilities in Citrix NetScaler, Check Point Security Gateways, and ConnectWise ScreenConnect are under active exploitation, demanding immediate patch deployment and supply chain assurance review. The Citrix NetScaler ADC flaw allows authentication bypass, while Check Point zero-day and PHP2Shell chains grant root access and deploy persistent backdoors. The ScreenConnect vulnerability enables worm-like lateral movement from MSP technicians to customer networks. Vulnerability and asset owners must confirm emergency patching across all affected assets, and supplier risk owners should validate MSP remediation status and monitoring coverage for lateral movement indicators."
+          "text": "Critical vulnerabilities in Citrix NetScaler application delivery controllers and active exploitation of a patched flaw in ConnectWise ScreenConnect remote access software require immediate asset identification and patch verification across infrastructure and managed service provider dependencies. Authentication bypass and denial-of-service risks in NetScaler devices undermine access controls, while the ScreenConnect campaign extends compromise risk to downstream customers through trusted MSP channels. Vulnerability and asset owners should confirm affected versions are inventoried, patches applied, and MSP access scopes reviewed for excessive privileges."
         },
         {
           "source_ids": [
             3,
-            12
+            7,
+            8,
+            4
           ],
-          "text": "Emerging AI agent permission models create uncontrolled data export paths when prompt injection redirects agent identities, while most organizations lack cryptographic inventories needed for post-quantum migration. AI agents with broad record access can exfiltrate data through malicious instructions, and incomplete cryptographic estates block quantum readiness planning. Identity and access owners should review agent permission scopes and implement session revocation, while risk and control owners must initiate cryptographic asset discovery and assign migration accountability."
+          "text": "Emerging threats include AI agents manipulating financial transactions without triggering alerts, state-level compromise of telecom infrastructure to intercept SMS multi-factor codes, and blockchain complexities that hobble security controls for exchange compromises. An international law enforcement takedown of malware infrastructure seized millions of stolen credentials, necessitating credential exposure checks. Identity and access owners should review AI agent permissions and implement transaction approvals; monitoring owners should evaluate SMS 2FA reliance and signaling telemetry; incident response leads should verify credential exposure from seized datasets; governance owners should reassess control assumptions for blockchain environments."
         }
       ]
     },
     "industry_impacts": [],
     "regulatory_changes": []
   },
-  "generated_at": "2026-11-13T13:08:13.192246Z",
-  "feed_url": "https://sentrydigest.ricomanifesto.com/feed.xml",
+  "generated_at": "2026-11-13T15:18:19.747677Z",
+  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/62bf2daf0b451499312f0178c4932b42eac2b9ce/site/feed.xml",
   "feed_home_url": "https://sentrydigest.ricomanifesto.com/",
   "digest_issue_date": "2026-11-13",
   "digest_issue_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-13/",
@@ -151,6 +151,72 @@
           "origin": "content",
           "raw_text": "The ongoing campaign targeting ConnectWise ScreenConnect deployments involves the exploitation of a now-patched critical security flaw in the remote access software, and not a new vulnerability, it has emerged. Blackpoint Cyber's Adversary Pursuit Group (APG), which shared the details with The Hacker News, said the recovered attacker toolkit exploits CVE-2026-84869 (CVSS score: 9.9), an…",
           "text": "The ongoing campaign targeting ConnectWise ScreenConnect deployments involves the exploitation of a now-patched critical security flaw in the remote access software, and not a new vulnerability, it has emerged. Blackpoint Cyber's Adversary Pursuit Group (APG), which shared the details with The Hacker News, said the recovered attacker toolkit exploits CVE-2026-84869 (CVSS score: 9.9), an…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "How one AI agent exposed five critical enterprise security gaps",
+      "url": "https://www.bleepingcomputer.com/news/security/how-one-ai-agent-exposed-five-critical-enterprise-security-gaps/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-13/#reporting-b32ccd39bcb9",
+      "cves": [],
+      "snippet": "How one AI agent exposed five critical enterprise security gaps An AI agent built to automate invoice processing could be manipulated into changing vendor bank details through a malicious email, without triggering traditional security alerts. Token Security examines five critical AI agent security gaps and shares practical guidance from industry security leaders on preventing them… An AI agent built to automate invoice processing could be manipulated into changing vendor bank details through a malicious email, without triggering traditional security alerts. Token Security examines five critical AI agent security gaps and shares practical guidance from industry security leaders on preventing ",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "An AI agent built to automate invoice processing could be manipulated into changing vendor bank details through a malicious email, without triggering traditional security alerts. Token Security examines five critical AI agent security gaps and shares practical guidance from industry security leaders on preventing them…",
+          "text": "An AI agent built to automate invoice processing could be manipulated into changing vendor bank details through a malicious email, without triggering traditional security alerts. Token Security examines five critical AI agent security gaps and shares practical guidance from industry security leaders on preventing them…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "An AI agent built to automate invoice processing could be manipulated into changing vendor bank details through a malicious email, without triggering traditional security alerts. Token Security examines five critical AI agent security gaps and shares practical guidance from industry security leaders on preventing them…",
+          "text": "An AI agent built to automate invoice processing could be manipulated into changing vendor bank details through a malicious email, without triggering traditional security alerts. Token Security examines five critical AI agent security gaps and shares practical guidance from industry security leaders on preventing them…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Attackers in Binance Breach Targeted Known Weakness, Missing Controls",
+      "url": "https://www.darkreading.com/cybersecurity-operations/attackers-binance-breach-targeted-weakness-missing-controls",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-13/#reporting-43f14cb30a43",
+      "cves": [],
+      "snippet": "Attackers in Binance Breach Targeted Known Weakness, Missing Controls Blockchain complexities, such as attacker-deployed sweepers, hobble security controls designed to limit the damage of an exchange compromise. Blockchain complexities, such as attacker-deployed sweepers, hobble security controls designed to limit the damage of an exchange compromise.",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Blockchain complexities, such as attacker-deployed sweepers, hobble security controls designed to limit the damage of an exchange compromise.",
+          "text": "Blockchain complexities, such as attacker-deployed sweepers, hobble security controls designed to limit the damage of an exchange compromise."
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Blockchain complexities, such as attacker-deployed sweepers, hobble security controls designed to limit the damage of an exchange compromise.",
+          "text": "Blockchain complexities, such as attacker-deployed sweepers, hobble security controls designed to limit the damage of an exchange compromise."
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Microsoft says November security updates cause printing issues",
+      "url": "https://www.bleepingcomputer.com/news/microsoft/microsoft-says-november-security-updates-cause-printing-issues/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-13/#reporting-53b1d1645f89",
+      "cves": [],
+      "snippet": "Microsoft says November security updates cause printing issues Microsoft warned customers earlier this week that the November 2026 security updates may break printing for documents with complex formatting… Microsoft warned customers earlier this week that the November 2026 security updates may break printing for documents with complex formatting…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Microsoft warned customers earlier this week that the November 2026 security updates may break printing for documents with complex formatting…",
+          "text": "Microsoft warned customers earlier this week that the November 2026 security updates may break printing for documents with complex formatting…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Microsoft warned customers earlier this week that the November 2026 security updates may break printing for documents with complex formatting…",
+          "text": "Microsoft warned customers earlier this week that the November 2026 security updates may break printing for documents with complex formatting…"
         }
       ],
       "effective_date_evidence": null
@@ -305,72 +371,6 @@
           "origin": "content",
           "raw_text": "An unknown threat actor has been observed targeting unpatched Check Point Security Gateways to obtain initial access via the PHP2Shell vulnerabilities and then a previously unreported local privilege escalation flaw in Gaia OS to deploy a backdoor called TSGA. The activity, detailed by Check Point, began on October 30, 2026, and targeted Israeli organizations, with a broader follow-up…",
           "text": "An unknown threat actor has been observed targeting unpatched Check Point Security Gateways to obtain initial access via the PHP2Shell vulnerabilities and then a previously unreported local privilege escalation flaw in Gaia OS to deploy a backdoor called TSGA. The activity, detailed by Check Point, began on October 30, 2026, and targeted Israeli organizations, with a broader follow-up…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "Hackers Exploit N-central Flaws to Infect 21 Servers, Including 19 Running Hotfix 2",
-      "url": "https://thehackernews.com/2026/11/hackers-exploit-n-central-flaws-to.html",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-13/#reporting-5f110aa5732b",
-      "cves": [],
-      "snippet": "Hackers Exploit N-central Flaws to Infect 21 Servers, Including 19 Running Hotfix 2 N-able on Thursday said it's taking additional precautions in the wake of public disclosure of a new set of flaws tracked as 4EverAble2Shell and Agent2Shell. \"We are restricting certain N-central features and integrations,\" the company said in a Thursday update. \"These measures may affect some functionality, but we believe taking additional precautions while remediation is completed is the… N-able on Thursday said it's taking additional precautions in the wake of public disclosure of a new set of flaws tracked as 4EverAble2Shell and Agent2Shell. \"We are restricting certain N-central features and integrations,",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "N-able on Thursday said it's taking additional precautions in the wake of public disclosure of a new set of flaws tracked as 4EverAble2Shell and Agent2Shell. \"We are restricting certain N-central features and integrations,\" the company said in a Thursday update. \"These measures may affect some functionality, but we believe taking additional precautions while remediation is completed is the…",
-          "text": "N-able on Thursday said it's taking additional precautions in the wake of public disclosure of a new set of flaws tracked as 4EverAble2Shell and Agent2Shell. \"We are restricting certain N-central features and integrations,\" the company said in a Thursday update. \"These measures may affect some functionality, but we believe taking additional precautions while remediation is completed is the…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "N-able on Thursday said it's taking additional precautions in the wake of public disclosure of a new set of flaws tracked as 4EverAble2Shell and Agent2Shell. \"We are restricting certain N-central features and integrations,\" the company said in a Thursday update. \"These measures may affect some functionality, but we believe taking additional precautions while remediation is completed is the…",
-          "text": "N-able on Thursday said it's taking additional precautions in the wake of public disclosure of a new set of flaws tracked as 4EverAble2Shell and Agent2Shell. \"We are restricting certain N-central features and integrations,\" the company said in a Thursday update. \"These measures may affect some functionality, but we believe taking additional precautions while remediation is completed is the…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "New worm-like 'SCKit' malware targets MSPs in ScreenConnect attacks",
-      "url": "https://www.bleepingcomputer.com/news/security/new-worm-like-sckit-malware-targets-msps-in-screenconnect-attacks/",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-13/#reporting-afe79ee14497",
-      "cves": [],
-      "snippet": "New worm-like 'SCKit' malware targets MSPs in ScreenConnect attacks A new worm-like malware toolkit named SCKit was deployed in the recent ScreenConnect attacks targeting managed service providers (MSPs), designed to spread from infected customer devices to MSP technicians' computers and compromise additional managed networks… A new worm-like malware toolkit named SCKit was deployed in the recent ScreenConnect attacks targeting managed service providers (MSPs), designed to spread from infected customer devices to MSP technicians' computers and compromise additional managed networks…",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "A new worm-like malware toolkit named SCKit was deployed in the recent ScreenConnect attacks targeting managed service providers (MSPs), designed to spread from infected customer devices to MSP technicians' computers and compromise additional managed networks…",
-          "text": "A new worm-like malware toolkit named SCKit was deployed in the recent ScreenConnect attacks targeting managed service providers (MSPs), designed to spread from infected customer devices to MSP technicians' computers and compromise additional managed networks…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "A new worm-like malware toolkit named SCKit was deployed in the recent ScreenConnect attacks targeting managed service providers (MSPs), designed to spread from infected customer devices to MSP technicians' computers and compromise additional managed networks…",
-          "text": "A new worm-like malware toolkit named SCKit was deployed in the recent ScreenConnect attacks targeting managed service providers (MSPs), designed to spread from infected customer devices to MSP technicians' computers and compromise additional managed networks…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "Getting Past the Post-Quantum Cryptography Discovery Phase",
-      "url": "https://www.darkreading.com/cybersecurity-operations/getting-past-post-quantum-cryptography-discovery",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-13/#reporting-ea37a2419bf2",
-      "cves": [],
-      "snippet": "Getting Past the Post-Quantum Cryptography Discovery Phase Most organizations haven't sorted out their cryptographic estate enough to even know where they'd start with post-quantum cryptography (PQC). Most organizations haven't sorted out their cryptographic estate enough to even know where they'd start with post-quantum cryptography (PQC).",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "Most organizations haven't sorted out their cryptographic estate enough to even know where they'd start with post-quantum cryptography (PQC).",
-          "text": "Most organizations haven't sorted out their cryptographic estate enough to even know where they'd start with post-quantum cryptography (PQC)."
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "Most organizations haven't sorted out their cryptographic estate enough to even know where they'd start with post-quantum cryptography (PQC).",
-          "text": "Most organizations haven't sorted out their cryptographic estate enough to even know where they'd start with post-quantum cryptography (PQC)."
         }
       ],
       "effective_date_evidence": null
