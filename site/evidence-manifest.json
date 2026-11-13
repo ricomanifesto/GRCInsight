@@ -5,74 +5,62 @@
     "control_implications": [
       {
         "control_id": "vulnerability_management",
-        "evidence_excerpt": "A type confusion flaw in PostgreSQL lets a database user who can create objects run code on the server. Updates released yesterday fix it, along with 51 other security flaws. Full protection from this flaw also requires rebuilding any C-language extensions installed on the server. The flaw, tracked as CVE-2026-6460, has a CVSS score of 8.8. Any code run this way has the rights of the operating…",
+        "evidence_excerpt": "A type confusion flaw in PostgreSQL lets a database user who can create objects run code on the server. Updates released yesterday fix it, along with 51 other security flaws. Full protection from this flaw also requires rebuilding any C-language extensions installed on the server.",
         "evidence_origin": "summary",
-        "focus": "PostgreSQL database",
-        "headline": "PostgreSQL database enables authenticated remote code execution",
+        "focus": "PostgreSQL",
+        "headline": "PostgreSQL patches 52 flaws including authenticated RCE",
         "priority": "high",
-        "significance": "This vulnerability allows authenticated database users to execute arbitrary code on the server, weakening assurance of database isolation. The vulnerability and asset owner should confirm affected PostgreSQL versions are patched and C-language extensions rebuilt.",
+        "significance": "The authenticated RCE vulnerability in PostgreSQL allows database users to execute code with operating system privileges, weakening assurance of database isolation. The vulnerability owner should confirm all affected PostgreSQL instances are patched and C-language extensions rebuilt.",
         "source_ids": [
           1
         ]
       },
       {
         "control_id": "incident_response",
-        "evidence_excerpt": "German defense technology company Quantum Systems confirmed that it detected an incident in late October that was part of an active cyberattack by \"hostile actors.\"…",
+        "evidence_excerpt": "German defense technology company Quantum Systems confirmed that it detected an incident in late October that was part of an active cyberattack by \"hostile actors.\"",
         "evidence_origin": "summary",
-        "focus": "German military drone operations",
-        "headline": "German military drone operations disrupted by cyberattack",
-        "priority": "high",
-        "significance": "The disruption of military drone operations by a cyberattack indicates potential gaps in incident containment for critical defense systems. The incident response lead should review containment procedures and evidence retention for similar operational technology environments.",
+        "focus": "Quantum Systems",
+        "headline": "Quantum Systems detects cyberattack incident",
+        "priority": "medium",
+        "significance": "The detected cyberattack on Quantum Systems indicates potential disruption to defense operations and requires validated containment. The incident response lead should confirm the scope of compromise and evidence preservation for the affected drone systems.",
         "source_ids": [
-          2
+          3
         ]
       },
       {
         "control_id": "data_protection",
-        "evidence_excerpt": "Two attacks made public this week allow a malicious host to read data inside AMD SEV-SNP-protected virtual machines (VMs), which are built to keep the server's operator out. One of them, Mior, can also modify a VM's memory and fake the signed report confirming which software it runs. Both need control of the server's hypervisor, and Mior also needs control of the server's BIOS. Researchers…",
+        "evidence_excerpt": "Two attacks made public this week allow a malicious host to read data inside AMD SEV-SNP-protected virtual machines (VMs), which are built to keep the server's operator out. One of them, Mior, can also modify a VM's memory and fake the signed report confirming which software it runs.",
         "evidence_origin": "summary",
         "focus": "AMD SEV-SNP-protected virtual machines",
-        "headline": "AMD SEV-SNP-protected virtual machines expose memory to malicious host",
+        "headline": "AMD SEV-SNP-protected virtual machines expose data to malicious host",
         "priority": "high",
-        "significance": "These attacks undermine the confidentiality and integrity guarantees of hardware-isolated virtual machines, affecting data protection assurances in multi-tenant clouds. The data and privacy owner should assess whether cloud provider controls mitigate hypervisor-level compromise.",
-        "source_ids": [
-          4
-        ]
-      },
-      {
-        "control_id": "governance",
-        "evidence_excerpt": "An AI agent built to automate invoice processing could be manipulated into changing vendor bank details through a malicious email, without triggering traditional security alerts. Token Security examines five critical AI agent security gaps and shares practical guidance from industry security leaders on preventing them…",
-        "evidence_origin": "summary",
-        "focus": "AI agent",
-        "headline": "AI agent enables unauthorized vendor bank detail changes",
-        "priority": "medium",
-        "significance": "The manipulation of an AI agent to alter financial transactions without detection challenges existing governance over automated decision-making. The risk and control owner should confirm that AI agent permissions and monitoring address prompt injection and tool misuse.",
+        "significance": "The Mior and Skyfall attacks allow a malicious cloud host to read and modify protected VM memory, undermining confidential computing assurances. The data protection owner should review hypervisor and BIOS access controls for AMD SEV-SNP deployments.",
         "source_ids": [
           5
         ]
       },
       {
-        "control_id": "third_party_risk",
-        "evidence_excerpt": "Three Trezor Safe 5 wallets bought from the reseller CryptoBilis contain an implant, an extra circuit board that can copy their recovery phrases, hardware wallet maker Trezor said yesterday. The implant reads the phrase from the wallet's screen and sends it over the mobile network to a server controlled by the attackers. The company examined one of the wallets in its lab, identified the other…",
+        "control_id": "access_management",
+        "evidence_excerpt": "An AI agent built to automate invoice processing could be manipulated into changing vendor bank details through a malicious email, without triggering traditional security alerts. Token Security examines five critical AI agent security gaps and shares practical guidance from industry security leaders on preventing them",
         "evidence_origin": "summary",
-        "focus": "Trezor Safe 5 wallets",
-        "headline": "Trezor Safe 5 wallets contain hidden implants stealing recovery phrases",
-        "priority": "high",
-        "significance": "Hardware implants in cryptocurrency wallets sourced from a reseller demonstrate supply chain compromise bypassing device authenticity checks. The supplier risk owner should verify procurement channels and require hardware attestation for critical cryptographic devices.",
+        "focus": "AI agent",
+        "headline": "AI agent enables unauthorized vendor bank detail changes",
+        "priority": "medium",
+        "significance": "The AI agent's ability to change vendor bank details without alerts reveals gaps in automated process permissions and monitoring. The access management owner should review AI agent privilege scopes and implement behavioral anomaly detection.",
         "source_ids": [
-          7
+          6
         ]
       },
       {
         "control_id": "change_management",
-        "evidence_excerpt": "Microsoft warned customers earlier this week that the November 2026 security updates may break printing for documents with complex formatting…",
+        "evidence_excerpt": "Microsoft warned customers earlier this week that the November 2026 security updates may break printing for documents with complex formatting",
         "evidence_origin": "summary",
         "focus": "November 2026 security updates",
         "headline": "November 2026 security updates break printing for complex documents",
         "priority": "medium",
-        "significance": "Security updates that disrupt business-critical printing functions indicate insufficient pre-deployment validation in change management. The change and service owner should review rollout coverage and post-change validation for November patches.",
+        "significance": "The November security updates causing printing failures illustrate incomplete change validation for enterprise patch deployments. The change management owner should confirm post-patch validation procedures cover business-critical workflows before broad rollout.",
         "source_ids": [
-          9
+          10
         ]
       }
     ],
@@ -81,26 +69,25 @@
         {
           "source_ids": [
             1,
-            4,
-            7
+            5
           ],
-          "text": "Critical vulnerabilities in PostgreSQL databases and AMD SEV-SNP virtual machines, alongside hardware implants in Trezor cryptocurrency wallets, expose systemic weaknesses in vulnerability management, data protection, and third-party risk controls. The PostgreSQL flaw allows authenticated remote code execution requiring extension rebuilds, the AMD attacks enable hypervisor-level memory access, and the Trezor implants demonstrate supply chain compromise of cryptographic devices. Control owners should prioritize patching PostgreSQL, assessing cloud isolation guarantees, and verifying hardware procurement integrity."
+          "text": "Critical infrastructure vulnerabilities in PostgreSQL and AMD SEV-SNP virtual machines demand immediate remediation and hypervisor control validation to prevent authenticated remote code execution and cloud host data theft. The PostgreSQL flaw requires patching and extension rebuilding, while the Mior and Skyfall attacks expose confidential computing gaps."
         },
         {
           "source_ids": [
-            2,
-            5,
-            9
+            6,
+            10,
+            3
           ],
-          "text": "Operational disruptions to German military drones and Microsoft printing functions, combined with AI agent manipulation enabling unauthorized financial changes, highlight gaps in incident response, change management, and governance over automated systems. The drone cyberattack by hostile actors, the security update regression, and the AI agent's susceptibility to prompt injection each reveal insufficient containment, validation, and oversight controls. Owners should review incident procedures for operational technology, change validation for security patches, and AI agent permission boundaries."
+          "text": "Supply chain compromise in Trezor hardware wallets, AI agent permission gaps, Microsoft patch side effects, and the Quantum Systems cyberattack collectively elevate third-party, automated process, change management, and incident response risks. Owners should verify supplier assurance, AI agent monitoring, patch validation, and containment readiness."
         }
       ]
     },
     "industry_impacts": [],
     "regulatory_changes": []
   },
-  "generated_at": "2026-11-13T18:17:46.334918Z",
-  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/155da3747ad96ee7e10390c04811ddff49086fca/site/feed.xml",
+  "generated_at": "2026-11-13T21:14:55.607881Z",
+  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/f526d1326c41c45b3613c99ffdcedb78d24e2973/site/feed.xml",
   "feed_home_url": "https://sentrydigest.ricomanifesto.com/",
   "digest_issue_date": "2026-11-13",
   "digest_issue_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-13/",
@@ -127,6 +114,28 @@
           "origin": "content",
           "raw_text": "A type confusion flaw in PostgreSQL lets a database user who can create objects run code on the server. Updates released yesterday fix it, along with 51 other security flaws. Full protection from this flaw also requires rebuilding any C-language extensions installed on the server. The flaw, tracked as CVE-2026-6460, has a CVSS score of 8.8. Any code run this way has the rights of the operating…",
           "text": "A type confusion flaw in PostgreSQL lets a database user who can create objects run code on the server. Updates released yesterday fix it, along with 51 other security flaws. Full protection from this flaw also requires rebuilding any C-language extensions installed on the server. The flaw, tracked as CVE-2026-6460, has a CVSS score of 8.8. Any code run this way has the rights of the operating…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Trezor confirms crypto-stealing implants in three wallets, releases fix",
+      "url": "https://www.bleepingcomputer.com/news/cryptocurrency/trezor-confirms-crypto-stealing-implants-in-three-wallets-releases-fix/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-13/#reporting-d2962957f52f",
+      "cves": [],
+      "snippet": "Trezor confirms crypto-stealing implants in three wallets, releases fix Cryptocurrency hardware wallet maker Trezor has confirmed that three Safe 5 devices sold by Southeast Asian reseller CryptoBilis contained malicious hardware implants designed to steal wallet recovery phrases and send them to attackers over cellular networks… Cryptocurrency hardware wallet maker Trezor has confirmed that three Safe 5 devices sold by Southeast Asian reseller CryptoBilis contained malicious hardware implants designed to steal wallet recovery phrases and send them to attackers over cellular networks…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Cryptocurrency hardware wallet maker Trezor has confirmed that three Safe 5 devices sold by Southeast Asian reseller CryptoBilis contained malicious hardware implants designed to steal wallet recovery phrases and send them to attackers over cellular networks…",
+          "text": "Cryptocurrency hardware wallet maker Trezor has confirmed that three Safe 5 devices sold by Southeast Asian reseller CryptoBilis contained malicious hardware implants designed to steal wallet recovery phrases and send them to attackers over cellular networks…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Cryptocurrency hardware wallet maker Trezor has confirmed that three Safe 5 devices sold by Southeast Asian reseller CryptoBilis contained malicious hardware implants designed to steal wallet recovery phrases and send them to attackers over cellular networks…",
+          "text": "Cryptocurrency hardware wallet maker Trezor has confirmed that three Safe 5 devices sold by Southeast Asian reseller CryptoBilis contained malicious hardware implants designed to steal wallet recovery phrases and send them to attackers over cellular networks…"
         }
       ],
       "effective_date_evidence": null
@@ -347,28 +356,6 @@
           "origin": "content",
           "raw_text": "A newly identified spying group used hacked equipment inside Asian mobile operators to intercept the calls and texts of selected people, mostly in Taiwan. Enea, a telecom and cybersecurity software company based in Stockholm, found the group's attack sources in at least six Asian countries and named it SilentAir this week. It assessed with high confidence that SilentAir is a state-level actor…",
           "text": "A newly identified spying group used hacked equipment inside Asian mobile operators to intercept the calls and texts of selected people, mostly in Taiwan. Enea, a telecom and cybersecurity software company based in Stockholm, found the group's attack sources in at least six Asian countries and named it SilentAir this week. It assessed with high confidence that SilentAir is a state-level actor…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "Operation Endgame Takes Down Gootloader, CastleRAT and StealC Servers, Seizes 6.4M Stolen Logins",
-      "url": "https://thehackernews.com/2026/11/operation-endgame-takes-down-gootloader.html",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-13/#reporting-d25f99854f90",
-      "cves": [],
-      "snippet": "Operation Endgame Takes Down Gootloader, CastleRAT and StealC Servers, Seizes 6.4M Stolen Logins An international police operation took down servers behind Gootloader, CastleRAT and StealC this week. Criminals used the three malware tools to gain access to computers, steal passwords, and launch ransomware attacks. Police also seized about 6.4 million stolen logins belonging to more than 40,000 victims, according to Germany's Federal Criminal Police Office (BKA). Gootloader is a loader… An international police operation took down servers behind Gootloader, CastleRAT and StealC this week. Criminals used the three malware tools to gain access to computers, steal passwords, and launch ransomware",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "An international police operation took down servers behind Gootloader, CastleRAT and StealC this week. Criminals used the three malware tools to gain access to computers, steal passwords, and launch ransomware attacks. Police also seized about 6.4 million stolen logins belonging to more than 40,000 victims, according to Germany's Federal Criminal Police Office (BKA). Gootloader is a loader…",
-          "text": "An international police operation took down servers behind Gootloader, CastleRAT and StealC this week. Criminals used the three malware tools to gain access to computers, steal passwords, and launch ransomware attacks. Police also seized about 6.4 million stolen logins belonging to more than 40,000 victims, according to Germany's Federal Criminal Police Office (BKA). Gootloader is a loader…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "An international police operation took down servers behind Gootloader, CastleRAT and StealC this week. Criminals used the three malware tools to gain access to computers, steal passwords, and launch ransomware attacks. Police also seized about 6.4 million stolen logins belonging to more than 40,000 victims, according to Germany's Federal Criminal Police Office (BKA). Gootloader is a loader…",
-          "text": "An international police operation took down servers behind Gootloader, CastleRAT and StealC this week. Criminals used the three malware tools to gain access to computers, steal passwords, and launch ransomware attacks. Police also seized about 6.4 million stolen logins belonging to more than 40,000 victims, according to Germany's Federal Criminal Police Office (BKA). Gootloader is a loader…"
         }
       ],
       "effective_date_evidence": null
