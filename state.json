@@ -1980,6 +1980,12 @@
       "run_id": "43378286550",
       "source_revision": "319dfa2380defc8e7801e47793b907f09702da21",
       "stage": "admitted"
+    },
+    {
+      "admission_key": "digest:319dfa2380defc8e7801e47793b907f09702da21",
+      "at": "2026-11-13T06:23:07.920Z",
+      "run_id": "43378286550",
+      "stage": "invoked"
     }
   ],
   "schema_version": 1,
