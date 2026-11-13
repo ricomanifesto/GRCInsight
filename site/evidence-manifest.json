@@ -5,74 +5,38 @@
     "control_implications": [
       {
         "control_id": "vulnerability_management",
-        "evidence_excerpt": "Citrix has released patches for multiple critical security flaws impacting NetScaler ADC, Citrix NetScaler Gateway, and NetScaler Console that could lead to denial-of-service (DoS) or an authentication bypass. The critical vulnerabilities that impact NetScaler ADC and NetScaler Gateway are listed below - CVE-2026-120868 (CVSS score: 9.3) - A memory overflow vulnerability in Packet…",
+        "evidence_excerpt": "Citrix has released patches for multiple critical security flaws impacting NetScaler ADC, Citrix NetScaler Gateway, and NetScaler Console that could lead to denial-of-service (DoS) or an authentication bypass.",
         "evidence_origin": "summary",
-        "focus": "NetScaler ADC and NetScaler Gateway",
-        "headline": "NetScaler ADC and NetScaler Gateway exposes authentication bypass",
+        "focus": "NetScaler ADC",
+        "headline": "NetScaler ADC patches address authentication bypass",
         "priority": "high",
-        "significance": "Authentication bypass in critical networking infrastructure weakens access controls and requires immediate patching validation. The vulnerability owner should confirm deployed versions, remediation status, and any compensating controls for unpatched systems.",
+        "significance": "An authentication bypass in widely deployed NetScaler ADC could allow unauthorized access to critical infrastructure. The vulnerability management owner should confirm patch deployment across all NetScaler instances and verify compensating controls where patching is delayed.",
         "source_ids": [
           1
         ]
       },
       {
         "control_id": "third_party_risk",
-        "evidence_excerpt": "The ongoing campaign targeting ConnectWise ScreenConnect deployments involves the exploitation of a now-patched critical security flaw in the remote access software, and not a new vulnerability, it has emerged. Blackpoint Cyber's Adversary Pursuit Group (APG), which shared the details with The Hacker News, said the recovered attacker toolkit exploits CVE-2026-84869 (CVSS score: 9.9), an…",
+        "evidence_excerpt": "The ongoing campaign targeting ConnectWise ScreenConnect deployments involves the exploitation of a now-patched critical security flaw in the remote access software, and not a new vulnerability, it has emerged.",
         "evidence_origin": "summary",
         "focus": "ConnectWise ScreenConnect deployments",
-        "headline": "ConnectWise ScreenConnect deployments enables MSP attack paths",
-        "priority": "high",
-        "significance": "Exploitation of patched MSP remote access software extends risk through the supply chain. The supplier risk owner should review MSP dependencies, assurance evidence for patch deployment, and escalation contacts for affected providers.",
+        "headline": "ConnectWise ScreenConnect deployments enable MSP attack paths",
+        "priority": "medium",
+        "significance": "Exploitation of a patched ScreenConnect flaw indicates persistent supply chain risk through managed service providers. The third-party risk owner should review MSP access scopes and request evidence of vulnerability remediation from all ScreenConnect suppliers.",
         "source_ids": [
           2
         ]
       },
       {
-        "control_id": "vulnerability_management",
-        "evidence_excerpt": "A critical flaw in Apache HTTP Server's HTTP/2 module, mod_http2, can let a remote attacker run code on the server. Tracked as CVE-2026-119618, it affects versions 2.4.55 through 2.4.70 and is fixed in version 2.4.71, released yesterday. Only servers with HTTP/2 enabled are affected, according to Red Hat, which ships the server as part of Red Hat Enterprise Linux. An attacker who can reach the…",
+        "control_id": "governance",
+        "evidence_excerpt": "Most organizations haven't sorted out their cryptographic estate enough to even know where they'd start with post-quantum cryptography (PQC).",
         "evidence_origin": "summary",
-        "focus": "Apache HTTP Server's HTTP/2 module",
-        "headline": "Apache HTTP Server's HTTP/2 module allows remote code execution",
-        "priority": "high",
-        "significance": "Critical RCE in a ubiquitous web server component demands urgent asset identification and patching. The vulnerability owner should verify HTTP/2 configuration, inventory affected versions, and confirm remediation or compensating controls.",
-        "source_ids": [
-          5
-        ]
-      },
-      {
-        "control_id": "access_management",
-        "evidence_excerpt": "A new campaign dubbed 'wfx-loot' has unfolded on GitHub where threat actors used 4,837 compromised accounts to probe 61,764 repositories, open pull requests, and push secrets-stealing malware…",
-        "evidence_origin": "summary",
-        "focus": "compromised GitHub accounts",
-        "headline": "compromised GitHub accounts steals cloud credentials",
-        "priority": "high",
-        "significance": "Large-scale credential theft targeting source code repositories undermines identity controls and secret management. The access owner should review account compromise indicators, secret scanning coverage, and privileged access revocation procedures.",
-        "source_ids": [
-          7
-        ]
-      },
-      {
-        "control_id": "monitoring",
-        "evidence_excerpt": "Microsoft is investigating a widespread outage affecting multiple Microsoft 365 services, including Outlook, Microsoft Teams, and Copilot, as users report connectivity problems worldwide…",
-        "evidence_origin": "summary",
-        "focus": "Microsoft 365 services",
-        "headline": "Microsoft 365 services disrupts global productivity",
+        "focus": "cryptographic estate",
+        "headline": "Cryptographic estate unprepared for post-quantum cryptography",
         "priority": "medium",
-        "significance": "Global SaaS outage tests monitoring visibility and contingency planning. The detection owner should confirm telemetry coverage for service degradation, alert routing for provider incidents, and business continuity validation.",
+        "significance": "Lack of cryptographic inventory undermines governance oversight for post-quantum migration. The governance owner should assign accountability for cryptographic asset discovery and record a risk decision on migration timeline.",
         "source_ids": [
-          9
-        ]
-      },
-      {
-        "control_id": "vulnerability_management",
-        "evidence_excerpt": "Hackers are actively exploiting a newly disclosed N-able N-central zero-day vulnerability dubbed \"4EverAble2Shell\" to compromise servers and deploy cryptocurrency miners, with researchers reporting at least 21 affected systems, including 19 running the company's latest security update…",
-        "evidence_origin": "summary",
-        "focus": "N-able N-central zero-day vulnerability",
-        "headline": "N-able N-central zero-day vulnerability exploits servers",
-        "priority": "high",
-        "significance": "Active zero-day exploitation bypasses patching controls and affects updated systems. The vulnerability owner should assess exposure of N-central deployments, validate compensating controls, and confirm exception ownership for unmitigated instances.",
-        "source_ids": [
-          11
+          6
         ]
       }
     ],
@@ -81,26 +45,23 @@
         {
           "source_ids": [
             1,
-            5,
-            11
+            2
           ],
-          "text": "Critical vulnerabilities in widely deployed infrastructure components including Citrix NetScaler, Apache HTTP Server, and N-able N-central are being actively exploited, requiring urgent vulnerability management and patching validation."
+          "text": "Critical vulnerabilities in Citrix NetScaler, Apache HTTP Server, and N-able N-central are being actively exploited, while credential theft campaigns compromise thousands of GitHub accounts and ScreenConnect deployments enable MSP supply chain attacks. These developments demand urgent vulnerability remediation, privileged access review, and third-party assurance validation across affected infrastructure."
         },
         {
           "source_ids": [
-            2,
-            7,
-            9
+            6
           ],
-          "text": "Supply chain compromise through ScreenConnect MSP tools and GitHub credential theft campaigns extend risk to third-party dependencies and access controls, while a global Microsoft 365 outage tests monitoring and service resilience."
+          "text": "Most organizations lack visibility into their cryptographic estate, leaving them unprepared for post-quantum cryptography migration. Control owners should initiate cryptographic inventory efforts and confirm governance ownership for long-term cryptographic risk decisions."
         }
       ]
     },
     "industry_impacts": [],
     "regulatory_changes": []
   },
-  "generated_at": "2026-11-13T00:35:47.352369Z",
-  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/dc7cd252582124ba37026e57b2cf02aea5ee18a4/site/feed.xml",
+  "generated_at": "2026-11-13T03:20:43.909892Z",
+  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/41135e118c9df17977b82c31126b511710f3ca52/site/feed.xml",
   "feed_home_url": "https://sentrydigest.ricomanifesto.com/",
   "digest_issue_date": "2026-11-13",
   "digest_issue_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-13/",
@@ -204,30 +165,6 @@
       "effective_date_evidence": null
     },
     {
-      "title": "Critical Apache HTTP/2 Flaw Could Let Unauthenticated Attackers Execute Code Remotely",
-      "url": "https://thehackernews.com/2026/11/critical-apache-http2-flaw-could-let.html",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-13/#reporting-b92486adb822",
-      "cves": [
-        "CVE-2026-119618"
-      ],
-      "snippet": "Critical Apache HTTP/2 Flaw Could Let Unauthenticated Attackers Execute Code Remotely A critical flaw in Apache HTTP Server's HTTP/2 module, mod_http2, can let a remote attacker run code on the server. Tracked as CVE-2026-119618, it affects versions 2.4.55 through 2.4.70 and is fixed in version 2.4.71, released yesterday. Only servers with HTTP/2 enabled are affected, according to Red Hat, which ships the server as part of Red Hat Enterprise Linux. An attacker who can reach the… A critical flaw in Apache HTTP Server's HTTP/2 module, mod_http2, can let a remote attacker run code on the server. Tracked as CVE-2026-119618, it affects versions 2.4.55 through 2.4.70 and is fixed in version 2.4.71",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "A critical flaw in Apache HTTP Server's HTTP/2 module, mod_http2, can let a remote attacker run code on the server. Tracked as CVE-2026-119618, it affects versions 2.4.55 through 2.4.70 and is fixed in version 2.4.71, released yesterday. Only servers with HTTP/2 enabled are affected, according to Red Hat, which ships the server as part of Red Hat Enterprise Linux. An attacker who can reach the…",
-          "text": "A critical flaw in Apache HTTP Server's HTTP/2 module, mod_http2, can let a remote attacker run code on the server. Tracked as CVE-2026-119618, it affects versions 2.4.55 through 2.4.70 and is fixed in version 2.4.71, released yesterday. Only servers with HTTP/2 enabled are affected, according to Red Hat, which ships the server as part of Red Hat Enterprise Linux. An attacker who can reach the…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "A critical flaw in Apache HTTP Server's HTTP/2 module, mod_http2, can let a remote attacker run code on the server. Tracked as CVE-2026-119618, it affects versions 2.4.55 through 2.4.70 and is fixed in version 2.4.71, released yesterday. Only servers with HTTP/2 enabled are affected, according to Red Hat, which ships the server as part of Red Hat Enterprise Linux. An attacker who can reach the…",
-          "text": "A critical flaw in Apache HTTP Server's HTTP/2 module, mod_http2, can let a remote attacker run code on the server. Tracked as CVE-2026-119618, it affects versions 2.4.55 through 2.4.70 and is fixed in version 2.4.71, released yesterday. Only servers with HTTP/2 enabled are affected, according to Red Hat, which ships the server as part of Red Hat Enterprise Linux. An attacker who can reach the…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
       "title": "New worm-like 'SCKit' malware targets MSPs in ScreenConnect attacks",
       "url": "https://www.bleepingcomputer.com/news/security/new-worm-like-sckit-malware-targets-msps-in-screenconnect-attacks/",
       "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-13/#reporting-afe79ee14497",
@@ -245,6 +182,28 @@
           "origin": "content",
           "raw_text": "A new worm-like malware toolkit named SCKit was deployed in the recent ScreenConnect attacks targeting managed service providers (MSPs), designed to spread from infected customer devices to MSP technicians' computers and compromise additional managed networks…",
           "text": "A new worm-like malware toolkit named SCKit was deployed in the recent ScreenConnect attacks targeting managed service providers (MSPs), designed to spread from infected customer devices to MSP technicians' computers and compromise additional managed networks…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Getting Past the Post-Quantum Cryptography Discovery Phase",
+      "url": "https://www.darkreading.com/cybersecurity-operations/getting-past-post-quantum-cryptography-discovery",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-13/#reporting-ea37a2419bf2",
+      "cves": [],
+      "snippet": "Getting Past the Post-Quantum Cryptography Discovery Phase Most organizations haven't sorted out their cryptographic estate enough to even know where they'd start with post-quantum cryptography (PQC). Most organizations haven't sorted out their cryptographic estate enough to even know where they'd start with post-quantum cryptography (PQC).",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Most organizations haven't sorted out their cryptographic estate enough to even know where they'd start with post-quantum cryptography (PQC).",
+          "text": "Most organizations haven't sorted out their cryptographic estate enough to even know where they'd start with post-quantum cryptography (PQC)."
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Most organizations haven't sorted out their cryptographic estate enough to even know where they'd start with post-quantum cryptography (PQC).",
+          "text": "Most organizations haven't sorted out their cryptographic estate enough to even know where they'd start with post-quantum cryptography (PQC)."
         }
       ],
       "effective_date_evidence": null
