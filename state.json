@@ -1942,6 +1942,12 @@
       "run_id": "43357942733",
       "source_revision": "1d5891c6d9f41d9cc0a078c74828b33a87b0d6c4",
       "stage": "admitted"
+    },
+    {
+      "admission_key": "digest:1d5891c6d9f41d9cc0a078c74828b33a87b0d6c4",
+      "at": "2026-11-13T03:17:38.915Z",
+      "run_id": "43357942733",
+      "stage": "invoked"
     }
   ],
   "schema_version": 1,
