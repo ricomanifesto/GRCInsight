@@ -8673,6 +8673,17 @@
       "release_key": "5880416df1a9a1f4d6a284cb875ffc7b5daeff9cc923d5f49c53648a26b19565",
       "release_ref": "bd0741ed62687d1e42d9f2bd5be8cf93a94e353a",
       "stage": "serving"
+    },
+    {
+      "at": "2026-11-13T09:21:03.603Z",
+      "kind": "release",
+      "payload_digest": "f7ef87cbc7729eea770fb00e61b9e45fa15a8123c57f4a81460c72d079742abb",
+      "proof": "on",
+      "release_key": "1eae5797682a1e2145258d0870495bc5dafd358730aae9cf51398e1ae4ba5841",
+      "release_ref": "709a67ead482fc295cb7d2912f9b77fba83b6db2",
+      "source_revision": "9a8e574c13cb8c59f6b88bb8e34dce9979b02f4d",
+      "stage": "released",
+      "tree_digest": "8e41776e4e3b0f19a6b8aef5c2706d9e1218a1c3804f90e5688b20ea9c01d791"
     }
   ],
   "schema_version": 1,
