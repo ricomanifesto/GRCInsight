@@ -5,74 +5,74 @@
     "control_implications": [
       {
         "control_id": "vulnerability_management",
-        "evidence_excerpt": "Citrix has released patches for multiple critical security flaws impacting NetScaler ADC, Citrix NetScaler Gateway, and NetScaler Console that could lead to denial-of-service (DoS) or an authentication bypass.",
+        "evidence_excerpt": "Citrix has released patches for multiple critical security flaws impacting NetScaler ADC, Citrix NetScaler Gateway, and NetScaler Console that could lead to denial-of-service (DoS) or an authentication bypass. The critical vulnerabilities that impact NetScaler ADC and NetScaler Gateway are listed below - CVE-2026-120868 (CVSS score: 9.3) - A memory overflow vulnerability in Packet…",
         "evidence_origin": "summary",
-        "focus": "NetScaler ADC",
-        "headline": "NetScaler ADC patches address authentication bypass",
+        "focus": "NetScaler ADC and NetScaler Gateway",
+        "headline": "NetScaler ADC and NetScaler Gateway exposes authentication bypass",
         "priority": "high",
-        "significance": "The authentication bypass vulnerability in NetScaler ADC weakens access controls for critical network infrastructure. Vulnerability and asset owners should confirm that all affected NetScaler ADC instances are identified, patched, or covered by compensating controls.",
+        "significance": "Authentication bypass in critical networking infrastructure weakens access controls and requires immediate patching validation. The vulnerability owner should confirm deployed versions, remediation status, and any compensating controls for unpatched systems.",
         "source_ids": [
           1
         ]
       },
       {
         "control_id": "third_party_risk",
-        "evidence_excerpt": "The ongoing campaign targeting ConnectWise ScreenConnect deployments involves the exploitation of a now-patched critical security flaw in the remote access software, and not a new vulnerability, it has emerged.",
+        "evidence_excerpt": "The ongoing campaign targeting ConnectWise ScreenConnect deployments involves the exploitation of a now-patched critical security flaw in the remote access software, and not a new vulnerability, it has emerged. Blackpoint Cyber's Adversary Pursuit Group (APG), which shared the details with The Hacker News, said the recovered attacker toolkit exploits CVE-2026-84869 (CVSS score: 9.9), an…",
         "evidence_origin": "summary",
-        "focus": "ConnectWise ScreenConnect",
-        "headline": "ConnectWise ScreenConnect exploitation persists despite patch",
+        "focus": "ConnectWise ScreenConnect deployments",
+        "headline": "ConnectWise ScreenConnect deployments enables MSP attack paths",
         "priority": "high",
-        "significance": "The exploitation of a patched ScreenConnect flaw in MSP environments extends third-party risk to managed service providers. Supplier risk owners should verify that all ScreenConnect instances are updated and that supplier assurance evidence covers this vulnerability.",
+        "significance": "Exploitation of patched MSP remote access software extends risk through the supply chain. The supplier risk owner should review MSP dependencies, assurance evidence for patch deployment, and escalation contacts for affected providers.",
         "source_ids": [
           2
         ]
       },
       {
-        "control_id": "governance",
-        "evidence_excerpt": "Microsoft is investigating a widespread outage affecting multiple Microsoft 365 services, including Outlook, Microsoft Teams, and Copilot, as users report connectivity problems worldwide…",
+        "control_id": "vulnerability_management",
+        "evidence_excerpt": "A critical flaw in Apache HTTP Server's HTTP/2 module, mod_http2, can let a remote attacker run code on the server. Tracked as CVE-2026-119618, it affects versions 2.4.55 through 2.4.70 and is fixed in version 2.4.71, released yesterday. Only servers with HTTP/2 enabled are affected, according to Red Hat, which ships the server as part of Red Hat Enterprise Linux. An attacker who can reach the…",
         "evidence_origin": "summary",
-        "focus": "Microsoft 365 services",
-        "headline": "Microsoft 365 outage disrupts core productivity services",
-        "priority": "medium",
-        "significance": "The widespread outage of Microsoft 365 services challenges governance assumptions about cloud service resilience. Risk and control owners should confirm that dependency assumptions are documented and that contingency plans address extended productivity losses.",
+        "focus": "Apache HTTP Server's HTTP/2 module",
+        "headline": "Apache HTTP Server's HTTP/2 module allows remote code execution",
+        "priority": "high",
+        "significance": "Critical RCE in a ubiquitous web server component demands urgent asset identification and patching. The vulnerability owner should verify HTTP/2 configuration, inventory affected versions, and confirm remediation or compensating controls.",
         "source_ids": [
-          6
+          5
         ]
       },
       {
         "control_id": "access_management",
-        "evidence_excerpt": "The cybercriminals are retargeting law firms that refused to pay its first ransom, with a social engineering con aimed at stealing Microsoft access tokens.",
+        "evidence_excerpt": "A new campaign dubbed 'wfx-loot' has unfolded on GitHub where threat actors used 4,837 compromised accounts to probe 61,764 repositories, open pull requests, and push secrets-stealing malware…",
         "evidence_origin": "summary",
-        "focus": "Microsoft access tokens",
-        "headline": "Microsoft access tokens targeted by social engineering",
+        "focus": "compromised GitHub accounts",
+        "headline": "compromised GitHub accounts steals cloud credentials",
         "priority": "high",
-        "significance": "The targeted theft of Microsoft access tokens bypasses authentication controls and exposes sensitive legal data. Identity and access owners should confirm that token-based authentication is monitored and that privileged token revocation procedures are tested.",
+        "significance": "Large-scale credential theft targeting source code repositories undermines identity controls and secret management. The access owner should review account compromise indicators, secret scanning coverage, and privileged access revocation procedures.",
         "source_ids": [
           7
         ]
       },
       {
         "control_id": "monitoring",
-        "evidence_excerpt": "Security teams have more alerts, logs, and monitoring tools than ever. Yet when an attack happens, one simple question can still take too long to answer: Who or what is behind this activity, and what can they access?",
+        "evidence_excerpt": "Microsoft is investigating a widespread outage affecting multiple Microsoft 365 services, including Outlook, Microsoft Teams, and Copilot, as users report connectivity problems worldwide…",
         "evidence_origin": "summary",
-        "focus": "identity blind spots",
-        "headline": "Identity blind spots persist despite monitoring investments",
+        "focus": "Microsoft 365 services",
+        "headline": "Microsoft 365 services disrupts global productivity",
         "priority": "medium",
-        "significance": "The inability to quickly attribute activity to identities weakens detection and response. Detection and monitoring owners should confirm that identity telemetry correlates with access events and that alert routing reduces attribution time.",
+        "significance": "Global SaaS outage tests monitoring visibility and contingency planning. The detection owner should confirm telemetry coverage for service degradation, alert routing for provider incidents, and business continuity validation.",
         "source_ids": [
-          10
+          9
         ]
       },
       {
         "control_id": "vulnerability_management",
-        "evidence_excerpt": "Public exploit code released earlier this week claims that a local Windows user can gain SYSTEM privileges through the Common Log File System driver. The proof of concept, called SignDrop, targets a log-authentication feature added to the driver last year.",
+        "evidence_excerpt": "Hackers are actively exploiting a newly disclosed N-able N-central zero-day vulnerability dubbed \"4EverAble2Shell\" to compromise servers and deploy cryptocurrency miners, with researchers reporting at least 21 affected systems, including 19 running the company's latest security update…",
         "evidence_origin": "summary",
-        "focus": "Windows CLFS driver",
-        "headline": "Windows CLFS driver exploit enables privilege escalation",
+        "focus": "N-able N-central zero-day vulnerability",
+        "headline": "N-able N-central zero-day vulnerability exploits servers",
         "priority": "high",
-        "significance": "The public exploit for a Windows CLFS driver flaw allows local privilege escalation to SYSTEM, weakening endpoint controls. Vulnerability and asset owners should confirm that affected Windows versions are identified and that mitigations or patches are applied.",
+        "significance": "Active zero-day exploitation bypasses patching controls and affects updated systems. The vulnerability owner should assess exposure of N-central deployments, validate compensating controls, and confirm exception ownership for unmitigated instances.",
         "source_ids": [
-          12
+          11
         ]
       }
     ],
@@ -81,36 +81,36 @@
         {
           "source_ids": [
             1,
-            12
+            5,
+            11
           ],
-          "text": "Critical vulnerabilities in Citrix NetScaler and the Windows CLFS driver have been patched or publicly exploited, requiring control owners to verify asset inventories and remediation status across affected product versions."
+          "text": "Critical vulnerabilities in widely deployed infrastructure components including Citrix NetScaler, Apache HTTP Server, and N-able N-central are being actively exploited, requiring urgent vulnerability management and patching validation."
         },
         {
           "source_ids": [
             2,
             7,
-            6,
-            10
+            9
           ],
-          "text": "Simultaneously, active campaigns exploiting a patched flaw in ConnectWise ScreenConnect and social engineering targeting Microsoft access tokens demonstrate persistent identity and supply chain risks, while a widespread Microsoft 365 outage underscores governance gaps in cloud service dependencies."
+          "text": "Supply chain compromise through ScreenConnect MSP tools and GitHub credential theft campaigns extend risk to third-party dependencies and access controls, while a global Microsoft 365 outage tests monitoring and service resilience."
         }
       ]
     },
     "industry_impacts": [],
     "regulatory_changes": []
   },
-  "generated_at": "2026-11-12T21:17:53.040452Z",
-  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/de283665fe32ae942103a40b7ba03b79ac1201b4/site/feed.xml",
+  "generated_at": "2026-11-13T00:35:47.352369Z",
+  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/dc7cd252582124ba37026e57b2cf02aea5ee18a4/site/feed.xml",
   "feed_home_url": "https://sentrydigest.ricomanifesto.com/",
-  "digest_issue_date": "2026-11-12",
-  "digest_issue_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-12/",
+  "digest_issue_date": "2026-11-13",
+  "digest_issue_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-13/",
   "requested_model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
   "resolved_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
   "sources": [
     {
       "title": "Citrix Patches 12 NetScaler and Secure Access Client Flaws, Including Authentication Bypass",
       "url": "https://thehackernews.com/2026/11/citrix-patches-12-netscaler-and-secure.html",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-12/#reporting-96d21dc534c0",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-13/#reporting-96d21dc534c0",
       "cves": [
         "CVE-2026-120868"
       ],
@@ -134,7 +134,7 @@
     {
       "title": "SCKit Malware Turns ScreenConnect Support Sessions Into Potential MSP Attack Paths",
       "url": "https://thehackernews.com/2026/11/sckit-malware-targets-screenconnect.html",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-12/#reporting-0c7b196fe26f",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-13/#reporting-0c7b196fe26f",
       "cves": [
         "CVE-2026-84869"
       ],
@@ -158,7 +158,7 @@
     {
       "title": "PTC Patches Critical Windchill and FlexPLM Flaw That Could Enable Remote Code Execution",
       "url": "https://thehackernews.com/2026/11/ptc-patches-critical-windchill-and.html",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-12/#reporting-2d6f349525d6",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-13/#reporting-2d6f349525d6",
       "cves": [
         "CVE-2026-126325"
       ],
@@ -182,7 +182,7 @@
     {
       "title": "Critical Pre-Auth MongoDB Flaw (CVE-2026-118383) Can Crash Lagging Servers on Failover",
       "url": "https://thehackernews.com/2026/11/critical-pre-auth-mongodb-flaw-cve-2026.html",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-12/#reporting-c776eb51cbac",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-13/#reporting-c776eb51cbac",
       "cves": [
         "CVE-2026-118383"
       ],
@@ -206,7 +206,7 @@
     {
       "title": "Critical Apache HTTP/2 Flaw Could Let Unauthenticated Attackers Execute Code Remotely",
       "url": "https://thehackernews.com/2026/11/critical-apache-http2-flaw-could-let.html",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-12/#reporting-b92486adb822",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-13/#reporting-b92486adb822",
       "cves": [
         "CVE-2026-119618"
       ],
@@ -228,9 +228,75 @@
       "effective_date_evidence": null
     },
     {
+      "title": "New worm-like 'SCKit' malware targets MSPs in ScreenConnect attacks",
+      "url": "https://www.bleepingcomputer.com/news/security/new-worm-like-sckit-malware-targets-msps-in-screenconnect-attacks/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-13/#reporting-afe79ee14497",
+      "cves": [],
+      "snippet": "New worm-like 'SCKit' malware targets MSPs in ScreenConnect attacks A new worm-like malware toolkit named SCKit was deployed in the recent ScreenConnect attacks targeting managed service providers (MSPs), designed to spread from infected customer devices to MSP technicians' computers and compromise additional managed networks… A new worm-like malware toolkit named SCKit was deployed in the recent ScreenConnect attacks targeting managed service providers (MSPs), designed to spread from infected customer devices to MSP technicians' computers and compromise additional managed networks…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "A new worm-like malware toolkit named SCKit was deployed in the recent ScreenConnect attacks targeting managed service providers (MSPs), designed to spread from infected customer devices to MSP technicians' computers and compromise additional managed networks…",
+          "text": "A new worm-like malware toolkit named SCKit was deployed in the recent ScreenConnect attacks targeting managed service providers (MSPs), designed to spread from infected customer devices to MSP technicians' computers and compromise additional managed networks…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "A new worm-like malware toolkit named SCKit was deployed in the recent ScreenConnect attacks targeting managed service providers (MSPs), designed to spread from infected customer devices to MSP technicians' computers and compromise additional managed networks…",
+          "text": "A new worm-like malware toolkit named SCKit was deployed in the recent ScreenConnect attacks targeting managed service providers (MSPs), designed to spread from infected customer devices to MSP technicians' computers and compromise additional managed networks…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Hackers compromise 4,800 GitHub accounts to steal cloud credentials",
+      "url": "https://www.bleepingcomputer.com/news/security/hackers-compromise-4-800-github-accounts-to-steal-cloud-credentials/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-13/#reporting-ec46d2ca2fd1",
+      "cves": [],
+      "snippet": "Hackers compromise 4,800 GitHub accounts to steal cloud credentials A new campaign dubbed 'wfx-loot' has unfolded on GitHub where threat actors used 4,837 compromised accounts to probe 61,764 repositories, open pull requests, and push secrets-stealing malware… A new campaign dubbed 'wfx-loot' has unfolded on GitHub where threat actors used 4,837 compromised accounts to probe 61,764 repositories, open pull requests, and push secrets-stealing malware…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "A new campaign dubbed 'wfx-loot' has unfolded on GitHub where threat actors used 4,837 compromised accounts to probe 61,764 repositories, open pull requests, and push secrets-stealing malware…",
+          "text": "A new campaign dubbed 'wfx-loot' has unfolded on GitHub where threat actors used 4,837 compromised accounts to probe 61,764 repositories, open pull requests, and push secrets-stealing malware…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "A new campaign dubbed 'wfx-loot' has unfolded on GitHub where threat actors used 4,837 compromised accounts to probe 61,764 repositories, open pull requests, and push secrets-stealing malware…",
+          "text": "A new campaign dubbed 'wfx-loot' has unfolded on GitHub where threat actors used 4,837 compromised accounts to probe 61,764 repositories, open pull requests, and push secrets-stealing malware…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Cyber Experts Weigh In: How to Fight Artex & AntiFox",
+      "url": "https://www.darkreading.com/cybersecurity-operations/cyber-experts-fight-artex-antifox",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-13/#reporting-0ff2d74e22b4",
+      "cves": [],
+      "snippet": "Cyber Experts Weigh In: How to Fight Artex & AntiFox Cybercriminals using agentic pen-testing tools is a proverbial genie out of the bottle at this point, so enterprises need to get a defense plan in place right away. Cybercriminals using agentic pen-testing tools is a proverbial genie out of the bottle at this point, so enterprises need to get a defense plan in place right away.",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Cybercriminals using agentic pen-testing tools is a proverbial genie out of the bottle at this point, so enterprises need to get a defense plan in place right away.",
+          "text": "Cybercriminals using agentic pen-testing tools is a proverbial genie out of the bottle at this point, so enterprises need to get a defense plan in place right away."
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Cybercriminals using agentic pen-testing tools is a proverbial genie out of the bottle at this point, so enterprises need to get a defense plan in place right away.",
+          "text": "Cybercriminals using agentic pen-testing tools is a proverbial genie out of the bottle at this point, so enterprises need to get a defense plan in place right away."
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
       "title": "Massive Microsoft 365 outage disrupts Outlook, Teams, Copilot worldwide",
       "url": "https://www.bleepingcomputer.com/news/microsoft/massive-microsoft-365-outage-disrupts-outlook-teams-copilot-worldwide/",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-12/#reporting-be3a38dc184a",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-13/#reporting-be3a38dc184a",
       "cves": [],
       "snippet": "Massive Microsoft 365 outage disrupts Outlook, Teams, Copilot worldwide Microsoft is investigating a widespread outage affecting multiple Microsoft 365 services, including Outlook, Microsoft Teams, and Copilot, as users report connectivity problems worldwide… Microsoft is investigating a widespread outage affecting multiple Microsoft 365 services, including Outlook, Microsoft Teams, and Copilot, as users report connectivity problems worldwide…",
       "article_evidence": [
@@ -252,7 +318,7 @@
     {
       "title": "Extortion Group Luna Moth Flits Into Law Firms a Second Time",
       "url": "https://www.darkreading.com/data-privacy/extortion-luna-moth-law-firms-second-time",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-12/#reporting-a34cb30f4adf",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-13/#reporting-a34cb30f4adf",
       "cves": [],
       "snippet": "Extortion Group Luna Moth Flits Into Law Firms a Second Time The cybercriminals are retargeting law firms that refused to pay its first ransom, with a social engineering con aimed at stealing Microsoft access tokens. The cybercriminals are retargeting law firms that refused to pay its first ransom, with a social engineering con aimed at stealing Microsoft access tokens.",
       "article_evidence": [
@@ -274,7 +340,7 @@
     {
       "title": "New N-able \"4EverAble2Shell\" zero-day exploited hours after PoC released",
       "url": "https://www.bleepingcomputer.com/news/security/new-n-able-4everable2shell-zero-day-exploited-hours-after-poc-released/",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-12/#reporting-7f23aad252df",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-13/#reporting-7f23aad252df",
       "cves": [],
       "snippet": "New N-able \"4EverAble2Shell\" zero-day exploited hours after PoC released Hackers are actively exploiting a newly disclosed N-able N-central zero-day vulnerability dubbed \"4EverAble2Shell\" to compromise servers and deploy cryptocurrency miners, with researchers reporting at least 21 affected systems, including 19 running the company's latest security update… Hackers are actively exploiting a newly disclosed N-able N-central zero-day vulnerability dubbed \"4EverAble2Shell\" to compromise servers and deploy cryptocurrency miners, with researchers reporting at least 21 affected systems, including 19 running the company's latest security update…",
       "article_evidence": [
@@ -296,7 +362,7 @@
     {
       "title": "Apache HTTP Server patches critical HTTP/2 remote code execution flaw",
       "url": "https://www.bleepingcomputer.com/news/security/apache-http-server-patches-critical-http-2-remote-code-execution-flaw/",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-12/#reporting-e1501a330e51",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-13/#reporting-e1501a330e51",
       "cves": [],
       "snippet": "Apache HTTP Server patches critical HTTP/2 remote code execution flaw A critical vulnerability in the HTTP/2 module of Apache HTTP Server could be exploited by an unauthenticated attacker to obtain remote code execution (RCE)… A critical vulnerability in the HTTP/2 module of Apache HTTP Server could be exploited by an unauthenticated attacker to obtain remote code execution (RCE)…",
       "article_evidence": [
@@ -311,72 +377,6 @@
           "origin": "content",
           "raw_text": "A critical vulnerability in the HTTP/2 module of Apache HTTP Server could be exploited by an unauthenticated attacker to obtain remote code execution (RCE)…",
           "text": "A critical vulnerability in the HTTP/2 module of Apache HTTP Server could be exploited by an unauthenticated attacker to obtain remote code execution (RCE)…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "Webinar: See How Identity Blind Spots Put Your SOC at Risk and How to Close Them",
-      "url": "https://thehackernews.com/2026/11/your-soc-sees-alert-but-does-it-know.html",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-12/#reporting-384252220164",
-      "cves": [],
-      "snippet": "Webinar: See How Identity Blind Spots Put Your SOC at Risk and How to Close Them Security teams have more alerts, logs, and monitoring tools than ever. Yet when an attack happens, one simple question can still take too long to answer: Who or what is behind this activity, and what can they access? A suspicious login might belong to an employee. An unusual API call could come from a machine account. Or an AI agent might be accessing sensitive systems using permissions nobody… Security teams have more alerts, logs, and monitoring tools than ever. Yet when an attack happens, one simple question can still take too long to answer: Who or what is behind this activity, and what can they access? A su",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "Security teams have more alerts, logs, and monitoring tools than ever. Yet when an attack happens, one simple question can still take too long to answer: Who or what is behind this activity, and what can they access? A suspicious login might belong to an employee. An unusual API call could come from a machine account. Or an AI agent might be accessing sensitive systems using permissions nobody…",
-          "text": "Security teams have more alerts, logs, and monitoring tools than ever. Yet when an attack happens, one simple question can still take too long to answer: Who or what is behind this activity, and what can they access? A suspicious login might belong to an employee. An unusual API call could come from a machine account. Or an AI agent might be accessing sensitive systems using permissions nobody…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "Security teams have more alerts, logs, and monitoring tools than ever. Yet when an attack happens, one simple question can still take too long to answer: Who or what is behind this activity, and what can they access? A suspicious login might belong to an employee. An unusual API call could come from a machine account. Or an AI agent might be accessing sensitive systems using permissions nobody…",
-          "text": "Security teams have more alerts, logs, and monitoring tools than ever. Yet when an attack happens, one simple question can still take too long to answer: Who or what is behind this activity, and what can they access? A suspicious login might belong to an employee. An unusual API call could come from a machine account. Or an AI agent might be accessing sensitive systems using permissions nobody…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "ThreatsDay: 59 Linux Kernel Bugs, Falcon Spyware, GSocket Backdoors + 17 More Stories",
-      "url": "https://thehackernews.com/2026/11/threatsday-59-linux-kernel-bugs-falcon.html",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-12/#reporting-897c1c6b0f49",
-      "cves": [],
-      "snippet": "ThreatsDay: 59 Linux Kernel Bugs, Falcon Spyware, GSocket Backdoors + 17 More Stories A search result isn't always safe. An access request isn't always harmless. And a familiar account doesn't always mean a familiar person is using it. Simple things to remember. Yet a surprising amount of this week's trouble starts right there. Attackers are using fake websites, stolen access, and trusted tools to get into places they shouldn't be. AI is helping them build attacks faster, while… A search result isn't always safe. An access request isn't always harmless. And a familiar account doesn't always mean a familiar person is using it. Simple things to remember. Yet a surprising amount of this week's ",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "A search result isn't always safe. An access request isn't always harmless. And a familiar account doesn't always mean a familiar person is using it. Simple things to remember. Yet a surprising amount of this week's trouble starts right there. Attackers are using fake websites, stolen access, and trusted tools to get into places they shouldn't be. AI is helping them build attacks faster, while…",
-          "text": "A search result isn't always safe. An access request isn't always harmless. And a familiar account doesn't always mean a familiar person is using it. Simple things to remember. Yet a surprising amount of this week's trouble starts right there. Attackers are using fake websites, stolen access, and trusted tools to get into places they shouldn't be. AI is helping them build attacks faster, while…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "A search result isn't always safe. An access request isn't always harmless. And a familiar account doesn't always mean a familiar person is using it. Simple things to remember. Yet a surprising amount of this week's trouble starts right there. Attackers are using fake websites, stolen access, and trusted tools to get into places they shouldn't be. AI is helping them build attacks faster, while…",
-          "text": "A search result isn't always safe. An access request isn't always harmless. And a familiar account doesn't always mean a familiar person is using it. Simple things to remember. Yet a surprising amount of this week's trouble starts right there. Attackers are using fake websites, stolen access, and trusted tools to get into places they shouldn't be. AI is helping them build attacks faster, while…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "New SignDrop Zero-Day Exploit Turns Windows CLFS Security Feature Into SYSTEM Access",
-      "url": "https://thehackernews.com/2026/11/new-signdrop-zero-day-exploit-turns.html",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-12/#reporting-c892fb218fc5",
-      "cves": [],
-      "snippet": "New SignDrop Zero-Day Exploit Turns Windows CLFS Security Feature Into SYSTEM Access Public exploit code released earlier this week claims that a local Windows user can gain SYSTEM privileges through the Common Log File System driver. The proof of concept, called SignDrop, targets a log-authentication feature added to the driver last year. It abuses how clfs.sys creates companion files when a privileged process opens a prepared log, using path redirection to take control of… Public exploit code released earlier this week claims that a local Windows user can gain SYSTEM privileges through the Common Log File System driver. The proof of concept, called SignDrop, targets a log-authentication fe",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "Public exploit code released earlier this week claims that a local Windows user can gain SYSTEM privileges through the Common Log File System driver. The proof of concept, called SignDrop, targets a log-authentication feature added to the driver last year. It abuses how clfs.sys creates companion files when a privileged process opens a prepared log, using path redirection to take control of…",
-          "text": "Public exploit code released earlier this week claims that a local Windows user can gain SYSTEM privileges through the Common Log File System driver. The proof of concept, called SignDrop, targets a log-authentication feature added to the driver last year. It abuses how clfs.sys creates companion files when a privileged process opens a prepared log, using path redirection to take control of…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "Public exploit code released earlier this week claims that a local Windows user can gain SYSTEM privileges through the Common Log File System driver. The proof of concept, called SignDrop, targets a log-authentication feature added to the driver last year. It abuses how clfs.sys creates companion files when a privileged process opens a prepared log, using path redirection to take control of…",
-          "text": "Public exploit code released earlier this week claims that a local Windows user can gain SYSTEM privileges through the Common Log File System driver. The proof of concept, called SignDrop, targets a log-authentication feature added to the driver last year. It abuses how clfs.sys creates companion files when a privileged process opens a prepared log, using path redirection to take control of…"
         }
       ],
       "effective_date_evidence": null
