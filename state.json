@@ -1910,6 +1910,13 @@
       "at": "2026-11-13T00:33:31.321Z",
       "run_id": "43337966994",
       "stage": "invoked"
+    },
+    {
+      "admission_key": "digest:377f24705d127454774e2d9605f0e13a3cf13d79",
+      "at": "2026-11-13T00:33:33.331Z",
+      "handle": "report_20261113_003332_791",
+      "run_id": "43337966994",
+      "stage": "invoked"
     }
   ],
   "schema_version": 1,
