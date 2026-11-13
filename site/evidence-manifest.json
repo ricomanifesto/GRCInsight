@@ -5,60 +5,72 @@
     "control_implications": [
       {
         "control_id": "vulnerability_management",
-        "evidence_excerpt": "Citrix has released patches for multiple critical security flaws impacting NetScaler ADC, Citrix NetScaler Gateway, and NetScaler Console that could lead to denial-of-service (DoS) or an authentication bypass.",
+        "evidence_excerpt": "Citrix has released patches for multiple critical security flaws impacting NetScaler ADC, Citrix NetScaler Gateway, and NetScaler Console that could lead to denial-of-service (DoS) or an authentication bypass. The critical vulnerabilities that impact NetScaler ADC and NetScaler Gateway are listed below - CVE-2026-120868 (CVSS score: 9.3) - A memory overflow vulnerability in Packet",
         "evidence_origin": "summary",
-        "focus": "NetScaler ADC and NetScaler Gateway",
-        "headline": "NetScaler ADC and NetScaler Gateway exposes authentication bypass",
+        "focus": "NetScaler ADC",
+        "headline": "NetScaler ADC receives patches for authentication bypass and denial-of-service flaws",
         "priority": "high",
-        "significance": "Authentication bypass in critical infrastructure components weakens access control assurance. Vulnerability and asset owners should confirm affected NetScaler versions are identified and patched or mitigated.",
+        "significance": "Critical authentication bypass and DoS vulnerabilities in widely deployed network appliances require immediate asset identification and patch verification. The vulnerability owner should confirm affected NetScaler ADC, Gateway, and Console versions are inventoried and remediation status is tracked.",
         "source_ids": [
           1
         ]
       },
       {
         "control_id": "third_party_risk",
-        "evidence_excerpt": "The ongoing campaign targeting ConnectWise ScreenConnect deployments involves the exploitation of a now-patched critical security flaw in the remote access software, and not a new vulnerability, it has emerged.",
+        "evidence_excerpt": "The ongoing campaign targeting ConnectWise ScreenConnect deployments involves the exploitation of a now-patched critical security flaw in the remote access software, and not a new vulnerability, it has emerged. Blackpoint Cyber's Adversary Pursuit Group (APG), which shared the details with The Hacker News, said the recovered attacker toolkit exploits CVE-2026-84869 (CVSS score: 9.9), an",
         "evidence_origin": "summary",
-        "focus": "ConnectWise ScreenConnect deployments",
-        "headline": "ConnectWise ScreenConnect deployments exploits patched critical flaw",
+        "focus": "ConnectWise ScreenConnect",
+        "headline": "ConnectWise ScreenConnect exploited in MSP supply chain campaign via patched flaw",
         "priority": "high",
-        "significance": "Exploitation of patched flaws in MSP remote access tools extends supply chain risk. Supplier risk owners should verify ScreenConnect patch status across provider relationships and confirm remediation assurance.",
+        "significance": "Active exploitation of a patched ScreenConnect flaw in MSP environments extends third-party risk to managed networks. The supplier risk owner should verify that all ScreenConnect instances are patched and that MSP access scopes are reviewed for unauthorized lateral movement.",
         "source_ids": [
           2
         ]
       },
       {
-        "control_id": "vulnerability_management",
-        "evidence_excerpt": "PTC has released patches for a new critical vulnerability impacting Windchill and FlexPLM software that, if successfully exploited, could result in remote code execution.",
+        "control_id": "governance",
+        "evidence_excerpt": "Suppose an AI agent is asked to sort support tickets and look up account details. A ticket contains instructions that lead the agent to export records to an unfamiliar destination. The agent can make the request because its identity has access to the records and its connected tools allow the action. That kind of scenario raises a response question: what does “stop the agent” actually mean? A",
         "evidence_origin": "summary",
-        "focus": "Windchill and FlexPLM software",
-        "headline": "Windchill and FlexPLM software enables remote code execution",
-        "priority": "high",
-        "significance": "Remote code execution in product lifecycle management software weakens vulnerability management coverage. Vulnerability and asset owners should identify deployed Windchill and FlexPLM instances and verify patch deployment.",
+        "focus": "AI agent",
+        "headline": "AI agent exports records to unfamiliar destination via prompt injection",
+        "priority": "medium",
+        "significance": "Autonomous AI agents with broad identity permissions can bypass intended data boundaries through prompt injection. The governance owner should confirm that agent identities are scoped to least privilege and that kill-switch procedures for rogue agent actions are defined and tested.",
         "source_ids": [
           3
         ]
       },
       {
         "control_id": "vulnerability_management",
-        "evidence_excerpt": "An unknown threat actor has been observed targeting unpatched Check Point Security Gateways to obtain initial access via the PHP2Shell vulnerabilities and then a previously reported local privilege escalation flaw in Gaia OS to deploy a backdoor called TSGA.",
+        "evidence_excerpt": "Check Point Software has released emergency hotfixes to address a high-severity flaw that hackers have been exploiting to gain root privileges and establish persistence on vulnerable devices since late October",
         "evidence_origin": "summary",
-        "focus": "Check Point Security Gateways",
-        "headline": "Check Point Security Gateways targeted via PHP2Shell vulnerabilities",
+        "focus": "Check Point Software",
+        "headline": "Check Point Software releases emergency hotfixes for actively exploited zero-day flaw",
         "priority": "high",
-        "significance": "Active exploitation of unpatched gateways weakens perimeter defense assurance. Vulnerability and asset owners should confirm Check Point gateway patch status and review detection coverage for TSGA backdoor indicators.",
+        "significance": "An actively exploited zero-day granting root access and persistence demands urgent deployment of emergency hotfixes. The vulnerability owner should verify that all Check Point Security Gateways have applied the hotfix and that exploitation attempts are logged and investigated.",
         "source_ids": [
-          5
+          6
         ]
       },
       {
-        "control_id": "access_management",
-        "evidence_excerpt": "The cybercriminals are retargeting law firms that refused to pay its first ransom, with a social engineering con aimed at stealing Microsoft access tokens.",
+        "control_id": "change_management",
+        "evidence_excerpt": "Microsoft has confirmed that this month's Patch Tuesday security updates are causing Windows activation and licensing failures with 0x80041008 error codes",
         "evidence_origin": "summary",
-        "focus": "Microsoft access tokens",
-        "headline": "Microsoft access tokens targeted via social engineering",
+        "focus": "Microsoft Patch Tuesday security updates",
+        "headline": "Microsoft Patch Tuesday security updates cause Windows activation failures",
         "priority": "medium",
-        "significance": "Token theft through social engineering bypasses technical controls and weakens authentication assurance. Identity and access owners should confirm token protection measures and user awareness training covers credential phishing.",
+        "significance": "Security updates inducing activation failures indicate a change validation gap. The change owner should confirm that post-update validation includes licensing health checks and that rollback procedures are documented for critical production systems.",
+        "source_ids": [
+          7
+        ]
+      },
+      {
+        "control_id": "governance",
+        "evidence_excerpt": "Most organizations haven't sorted out their cryptographic estate enough to even know where they'd start with post-quantum cryptography (PQC).",
+        "evidence_origin": "summary",
+        "focus": "cryptographic estate",
+        "headline": "Cryptographic estate unprepared for post-quantum cryptography transition",
+        "priority": "medium",
+        "significance": "Lack of cryptographic inventory blocks PQC migration planning and increases future transition risk. The governance owner should initiate a cryptographic asset discovery program and assign accountability for PQC readiness milestones.",
         "source_ids": [
           12
         ]
@@ -70,24 +82,25 @@
           "source_ids": [
             1,
             2,
-            3,
-            5
+            6
           ],
-          "text": "Critical security patches released for Citrix NetScaler, PTC Windchill and FlexPLM, alongside active exploitation of Check Point Security Gateways and ConnectWise ScreenConnect deployments, collectively weaken vulnerability management and third-party risk assurance across remote access and application delivery infrastructure. Vulnerability and asset owners should confirm patch deployment for affected NetScaler, Windchill, FlexPLM, and Check Point gateways, while supplier risk owners verify ScreenConnect remediation across MSP relationships."
+          "text": "Critical vulnerability patches and active exploitation in widely deployed network and remote access products including Citrix NetScaler, Check Point gateways, and ConnectWise ScreenConnect demand immediate asset verification and remediation tracking across the supply chain."
         },
         {
           "source_ids": [
+            3,
+            7,
             12
           ],
-          "text": "A campaign compromising 4,837 GitHub accounts to steal cloud credentials and a social engineering operation targeting Microsoft access tokens at law firms weaken identity and access assurance through credential theft at scale. Identity and access owners should review GitHub token hygiene, monitor for suspicious repository activity, and confirm token protection measures and phishing awareness training."
+          "text": "Emerging risks from AI agent autonomy, post-quantum cryptography readiness gaps, and patch-induced operational failures require governance review of identity boundaries, cryptographic inventory, and change validation procedures."
         }
       ]
     },
     "industry_impacts": [],
     "regulatory_changes": []
   },
-  "generated_at": "2026-11-13T09:19:53.748669Z",
-  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/5cb23360abb67565b1b19be6d037a3dbf069f373/site/feed.xml",
+  "generated_at": "2026-11-13T12:22:10.556182Z",
+  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/b222f72d511f9ed9d1165f814d4411dae2f748c8/site/feed.xml",
   "feed_home_url": "https://sentrydigest.ricomanifesto.com/",
   "digest_issue_date": "2026-11-13",
   "digest_issue_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-13/",
@@ -143,25 +156,111 @@
       "effective_date_evidence": null
     },
     {
-      "title": "PTC Patches Critical Windchill and FlexPLM Flaw That Could Enable Remote Code Execution",
-      "url": "https://thehackernews.com/2026/11/ptc-patches-critical-windchill-and.html",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-13/#reporting-2d6f349525d6",
-      "cves": [
-        "CVE-2026-126325"
-      ],
-      "snippet": "PTC Patches Critical Windchill and FlexPLM Flaw That Could Enable Remote Code Execution PTC has released patches for a new critical vulnerability impacting Windchill and FlexPLM software that, if successfully exploited, could result in remote code execution. The security flaw, tracked as CVE-2026-126325, carries a CVSS v4 score of 9.2 out of a maximum of 10.0. It has been described as a case of improper input validation and deserialization of untrusted data that could result in… PTC has released patches for a new critical vulnerability impacting Windchill and FlexPLM software that, if successfully exploited, could result in remote code execution. The security flaw, tracked as CVE-2026-126325",
+      "title": "When an AI Agent Goes Wrong, Can You Stop It?",
+      "url": "https://thehackernews.com/2026/11/when-ai-agent-goes-wrong-can-you-stop-it.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-13/#reporting-ed1f4b35eca7",
+      "cves": [],
+      "snippet": "When an AI Agent Goes Wrong, Can You Stop It? Suppose an AI agent is asked to sort support tickets and look up account details. A ticket contains instructions that lead the agent to export records to an unfamiliar destination. The agent can make the request because its identity has access to the records and its connected tools allow the action. That kind of scenario raises a response question: what does “stop the agent” actually mean? A… Suppose an AI agent is asked to sort support tickets and look up account details. A ticket contains instructions that lead the agent to export records to an unfamiliar destination. The agent can make the request because its identity has access to the records",
       "article_evidence": [
         {
           "extraction_version": 1,
           "origin": "summary",
-          "raw_text": "PTC has released patches for a new critical vulnerability impacting Windchill and FlexPLM software that, if successfully exploited, could result in remote code execution. The security flaw, tracked as CVE-2026-126325, carries a CVSS v4 score of 9.2 out of a maximum of 10.0. It has been described as a case of improper input validation and deserialization of untrusted data that could result in…",
-          "text": "PTC has released patches for a new critical vulnerability impacting Windchill and FlexPLM software that, if successfully exploited, could result in remote code execution. The security flaw, tracked as CVE-2026-126325, carries a CVSS v4 score of 9.2 out of a maximum of 10.0. It has been described as a case of improper input validation and deserialization of untrusted data that could result in…"
+          "raw_text": "Suppose an AI agent is asked to sort support tickets and look up account details. A ticket contains instructions that lead the agent to export records to an unfamiliar destination. The agent can make the request because its identity has access to the records and its connected tools allow the action. That kind of scenario raises a response question: what does “stop the agent” actually mean? A…",
+          "text": "Suppose an AI agent is asked to sort support tickets and look up account details. A ticket contains instructions that lead the agent to export records to an unfamiliar destination. The agent can make the request because its identity has access to the records and its connected tools allow the action. That kind of scenario raises a response question: what does “stop the agent” actually mean? A…"
         },
         {
           "extraction_version": 1,
           "origin": "content",
-          "raw_text": "PTC has released patches for a new critical vulnerability impacting Windchill and FlexPLM software that, if successfully exploited, could result in remote code execution. The security flaw, tracked as CVE-2026-126325, carries a CVSS v4 score of 9.2 out of a maximum of 10.0. It has been described as a case of improper input validation and deserialization of untrusted data that could result in…",
-          "text": "PTC has released patches for a new critical vulnerability impacting Windchill and FlexPLM software that, if successfully exploited, could result in remote code execution. The security flaw, tracked as CVE-2026-126325, carries a CVSS v4 score of 9.2 out of a maximum of 10.0. It has been described as a case of improper input validation and deserialization of untrusted data that could result in…"
+          "raw_text": "Suppose an AI agent is asked to sort support tickets and look up account details. A ticket contains instructions that lead the agent to export records to an unfamiliar destination. The agent can make the request because its identity has access to the records and its connected tools allow the action. That kind of scenario raises a response question: what does “stop the agent” actually mean? A…",
+          "text": "Suppose an AI agent is asked to sort support tickets and look up account details. A ticket contains instructions that lead the agent to export records to an unfamiliar destination. The agent can make the request because its identity has access to the records and its connected tools allow the action. That kind of scenario raises a response question: what does “stop the agent” actually mean? A…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "SilentAir Hijacks Asian Telecom Networks to Intercept SMS 2FA Codes and Spy on Taiwanese Users",
+      "url": "https://thehackernews.com/2026/11/silentair-hijacks-asian-telecom.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-13/#reporting-7f22b6cf300a",
+      "cves": [],
+      "snippet": "SilentAir Hijacks Asian Telecom Networks to Intercept SMS 2FA Codes and Spy on Taiwanese Users A newly identified spying group used hacked equipment inside Asian mobile operators to intercept the calls and texts of selected people, mostly in Taiwan. Enea, a telecom and cybersecurity software company based in Stockholm, found the group's attack sources in at least six Asian countries and named it SilentAir this week. It assessed with high confidence that SilentAir is a state-level actor… A newly identified spying group used hacked equipment inside Asian mobile operators to intercept the calls and texts of selected people, mostly in Taiwan. Enea, a telecom and cybersecurity software company ba",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "A newly identified spying group used hacked equipment inside Asian mobile operators to intercept the calls and texts of selected people, mostly in Taiwan. Enea, a telecom and cybersecurity software company based in Stockholm, found the group's attack sources in at least six Asian countries and named it SilentAir this week. It assessed with high confidence that SilentAir is a state-level actor…",
+          "text": "A newly identified spying group used hacked equipment inside Asian mobile operators to intercept the calls and texts of selected people, mostly in Taiwan. Enea, a telecom and cybersecurity software company based in Stockholm, found the group's attack sources in at least six Asian countries and named it SilentAir this week. It assessed with high confidence that SilentAir is a state-level actor…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "A newly identified spying group used hacked equipment inside Asian mobile operators to intercept the calls and texts of selected people, mostly in Taiwan. Enea, a telecom and cybersecurity software company based in Stockholm, found the group's attack sources in at least six Asian countries and named it SilentAir this week. It assessed with high confidence that SilentAir is a state-level actor…",
+          "text": "A newly identified spying group used hacked equipment inside Asian mobile operators to intercept the calls and texts of selected people, mostly in Taiwan. Enea, a telecom and cybersecurity software company based in Stockholm, found the group's attack sources in at least six Asian countries and named it SilentAir this week. It assessed with high confidence that SilentAir is a state-level actor…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Operation Endgame Takes Down Gootloader, CastleRAT and StealC Servers, Seizes 6.4M Stolen Logins",
+      "url": "https://thehackernews.com/2026/11/operation-endgame-takes-down-gootloader.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-13/#reporting-d25f99854f90",
+      "cves": [],
+      "snippet": "Operation Endgame Takes Down Gootloader, CastleRAT and StealC Servers, Seizes 6.4M Stolen Logins An international police operation took down servers behind Gootloader, CastleRAT and StealC this week. Criminals used the three malware tools to gain access to computers, steal passwords, and launch ransomware attacks. Police also seized about 6.4 million stolen logins belonging to more than 40,000 victims, according to Germany's Federal Criminal Police Office (BKA). Gootloader is a loader… An international police operation took down servers behind Gootloader, CastleRAT and StealC this week. Criminals used the three malware tools to gain access to computers, steal passwords, and launch ransomware",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "An international police operation took down servers behind Gootloader, CastleRAT and StealC this week. Criminals used the three malware tools to gain access to computers, steal passwords, and launch ransomware attacks. Police also seized about 6.4 million stolen logins belonging to more than 40,000 victims, according to Germany's Federal Criminal Police Office (BKA). Gootloader is a loader…",
+          "text": "An international police operation took down servers behind Gootloader, CastleRAT and StealC this week. Criminals used the three malware tools to gain access to computers, steal passwords, and launch ransomware attacks. Police also seized about 6.4 million stolen logins belonging to more than 40,000 victims, according to Germany's Federal Criminal Police Office (BKA). Gootloader is a loader…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "An international police operation took down servers behind Gootloader, CastleRAT and StealC this week. Criminals used the three malware tools to gain access to computers, steal passwords, and launch ransomware attacks. Police also seized about 6.4 million stolen logins belonging to more than 40,000 victims, according to Germany's Federal Criminal Police Office (BKA). Gootloader is a loader…",
+          "text": "An international police operation took down servers behind Gootloader, CastleRAT and StealC this week. Criminals used the three malware tools to gain access to computers, steal passwords, and launch ransomware attacks. Police also seized about 6.4 million stolen logins belonging to more than 40,000 victims, according to Germany's Federal Criminal Police Office (BKA). Gootloader is a loader…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Check Point warns of zero-day flaw exploited for root access",
+      "url": "https://www.bleepingcomputer.com/news/security/check-point-patches-zero-day-that-lets-hackers-get-root-access/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-13/#reporting-02c1dcd61c66",
+      "cves": [],
+      "snippet": "Check Point warns of zero-day flaw exploited for root access Check Point Software has released emergency hotfixes to address a high-severity flaw that hackers have been exploiting to gain root privileges and establish persistence on vulnerable devices since late October… Check Point Software has released emergency hotfixes to address a high-severity flaw that hackers have been exploiting to gain root privileges and establish persistence on vulnerable devices since late October…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Check Point Software has released emergency hotfixes to address a high-severity flaw that hackers have been exploiting to gain root privileges and establish persistence on vulnerable devices since late October…",
+          "text": "Check Point Software has released emergency hotfixes to address a high-severity flaw that hackers have been exploiting to gain root privileges and establish persistence on vulnerable devices since late October…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Check Point Software has released emergency hotfixes to address a high-severity flaw that hackers have been exploiting to gain root privileges and establish persistence on vulnerable devices since late October…",
+          "text": "Check Point Software has released emergency hotfixes to address a high-severity flaw that hackers have been exploiting to gain root privileges and establish persistence on vulnerable devices since late October…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Microsoft confirms Windows activation failures after November updates",
+      "url": "https://www.bleepingcomputer.com/news/microsoft/microsoft-confirms-windows-activation-failures-after-november-updates/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-13/#reporting-9c5c30b78fe1",
+      "cves": [],
+      "snippet": "Microsoft confirms Windows activation failures after November updates Microsoft has confirmed that this month's Patch Tuesday security updates are causing Windows activation and licensing failures with 0x80041008 error codes… Microsoft has confirmed that this month's Patch Tuesday security updates are causing Windows activation and licensing failures with 0x80041008 error codes…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Microsoft has confirmed that this month's Patch Tuesday security updates are causing Windows activation and licensing failures with 0x80041008 error codes…",
+          "text": "Microsoft has confirmed that this month's Patch Tuesday security updates are causing Windows activation and licensing failures with 0x80041008 error codes…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Microsoft has confirmed that this month's Patch Tuesday security updates are causing Windows activation and licensing failures with 0x80041008 error codes…",
+          "text": "Microsoft has confirmed that this month's Patch Tuesday security updates are causing Windows activation and licensing failures with 0x80041008 error codes…"
         }
       ],
       "effective_date_evidence": null
@@ -193,19 +292,19 @@
       "url": "https://thehackernews.com/2026/11/hackers-exploit-php2shell-flaws-in.html",
       "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-13/#reporting-69d1a63879fd",
       "cves": [],
-      "snippet": "Hackers Exploit PHP2Shell Flaws in Check Point Gateways to Deploy TSGA Backdoor and Wipe ESXi Files An unknown threat actor has been observed targeting unpatched Check Point Security Gateways to obtain initial access via the PHP2Shell vulnerabilities and then a previously reported local privilege escalation flaw in Gaia OS to deploy a backdoor called TSGA. The activity, detailed by Check Point, began on October 30, 2026, and targeted Israeli organizations, with a broader follow-up wave… An unknown threat actor has been observed targeting unpatched Check Point Security Gateways to obtain initial access via the PHP2Shell vulnerabilities and then a previously reported local privilege escalation",
+      "snippet": "Hackers Exploit PHP2Shell Flaws in Check Point Gateways to Deploy TSGA Backdoor and Wipe ESXi Files An unknown threat actor has been observed targeting unpatched Check Point Security Gateways to obtain initial access via the PHP2Shell vulnerabilities and then a previously unreported local privilege escalation flaw in Gaia OS to deploy a backdoor called TSGA. The activity, detailed by Check Point, began on October 30, 2026, and targeted Israeli organizations, with a broader follow-up… An unknown threat actor has been observed targeting unpatched Check Point Security Gateways to obtain initial access via the PHP2Shell vulnerabilities and then a previously unreported local privilege escalation ",
       "article_evidence": [
         {
           "extraction_version": 1,
           "origin": "summary",
-          "raw_text": "An unknown threat actor has been observed targeting unpatched Check Point Security Gateways to obtain initial access via the PHP2Shell vulnerabilities and then a previously reported local privilege escalation flaw in Gaia OS to deploy a backdoor called TSGA. The activity, detailed by Check Point, began on October 30, 2026, and targeted Israeli organizations, with a broader follow-up wave…",
-          "text": "An unknown threat actor has been observed targeting unpatched Check Point Security Gateways to obtain initial access via the PHP2Shell vulnerabilities and then a previously reported local privilege escalation flaw in Gaia OS to deploy a backdoor called TSGA. The activity, detailed by Check Point, began on October 30, 2026, and targeted Israeli organizations, with a broader follow-up wave…"
+          "raw_text": "An unknown threat actor has been observed targeting unpatched Check Point Security Gateways to obtain initial access via the PHP2Shell vulnerabilities and then a previously unreported local privilege escalation flaw in Gaia OS to deploy a backdoor called TSGA. The activity, detailed by Check Point, began on October 30, 2026, and targeted Israeli organizations, with a broader follow-up…",
+          "text": "An unknown threat actor has been observed targeting unpatched Check Point Security Gateways to obtain initial access via the PHP2Shell vulnerabilities and then a previously unreported local privilege escalation flaw in Gaia OS to deploy a backdoor called TSGA. The activity, detailed by Check Point, began on October 30, 2026, and targeted Israeli organizations, with a broader follow-up…"
         },
         {
           "extraction_version": 1,
           "origin": "content",
-          "raw_text": "An unknown threat actor has been observed targeting unpatched Check Point Security Gateways to obtain initial access via the PHP2Shell vulnerabilities and then a previously reported local privilege escalation flaw in Gaia OS to deploy a backdoor called TSGA. The activity, detailed by Check Point, began on October 30, 2026, and targeted Israeli organizations, with a broader follow-up wave…",
-          "text": "An unknown threat actor has been observed targeting unpatched Check Point Security Gateways to obtain initial access via the PHP2Shell vulnerabilities and then a previously reported local privilege escalation flaw in Gaia OS to deploy a backdoor called TSGA. The activity, detailed by Check Point, began on October 30, 2026, and targeted Israeli organizations, with a broader follow-up wave…"
+          "raw_text": "An unknown threat actor has been observed targeting unpatched Check Point Security Gateways to obtain initial access via the PHP2Shell vulnerabilities and then a previously unreported local privilege escalation flaw in Gaia OS to deploy a backdoor called TSGA. The activity, detailed by Check Point, began on October 30, 2026, and targeted Israeli organizations, with a broader follow-up…",
+          "text": "An unknown threat actor has been observed targeting unpatched Check Point Security Gateways to obtain initial access via the PHP2Shell vulnerabilities and then a previously unreported local privilege escalation flaw in Gaia OS to deploy a backdoor called TSGA. The activity, detailed by Check Point, began on October 30, 2026, and targeted Israeli organizations, with a broader follow-up…"
         }
       ],
       "effective_date_evidence": null
@@ -272,94 +371,6 @@
           "origin": "content",
           "raw_text": "Most organizations haven't sorted out their cryptographic estate enough to even know where they'd start with post-quantum cryptography (PQC).",
           "text": "Most organizations haven't sorted out their cryptographic estate enough to even know where they'd start with post-quantum cryptography (PQC)."
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "Hackers compromise 4,800 GitHub accounts to steal cloud credentials",
-      "url": "https://www.bleepingcomputer.com/news/security/hackers-compromise-4-800-github-accounts-to-steal-cloud-credentials/",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-13/#reporting-ec46d2ca2fd1",
-      "cves": [],
-      "snippet": "Hackers compromise 4,800 GitHub accounts to steal cloud credentials A new campaign dubbed 'wfx-loot' has unfolded on GitHub where threat actors used 4,837 compromised accounts to probe 61,764 repositories, open pull requests, and push secrets-stealing malware… A new campaign dubbed 'wfx-loot' has unfolded on GitHub where threat actors used 4,837 compromised accounts to probe 61,764 repositories, open pull requests, and push secrets-stealing malware…",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "A new campaign dubbed 'wfx-loot' has unfolded on GitHub where threat actors used 4,837 compromised accounts to probe 61,764 repositories, open pull requests, and push secrets-stealing malware…",
-          "text": "A new campaign dubbed 'wfx-loot' has unfolded on GitHub where threat actors used 4,837 compromised accounts to probe 61,764 repositories, open pull requests, and push secrets-stealing malware…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "A new campaign dubbed 'wfx-loot' has unfolded on GitHub where threat actors used 4,837 compromised accounts to probe 61,764 repositories, open pull requests, and push secrets-stealing malware…",
-          "text": "A new campaign dubbed 'wfx-loot' has unfolded on GitHub where threat actors used 4,837 compromised accounts to probe 61,764 repositories, open pull requests, and push secrets-stealing malware…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "Cyber Experts Weigh In: How to Fight Artex & AntiFox",
-      "url": "https://www.darkreading.com/cybersecurity-operations/cyber-experts-fight-artex-antifox",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-13/#reporting-0ff2d74e22b4",
-      "cves": [],
-      "snippet": "Cyber Experts Weigh In: How to Fight Artex & AntiFox Cybercriminals using agentic pen-testing tools is a proverbial genie out of the bottle at this point, so enterprises need to get a defense plan in place right away. Cybercriminals using agentic pen-testing tools is a proverbial genie out of the bottle at this point, so enterprises need to get a defense plan in place right away.",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "Cybercriminals using agentic pen-testing tools is a proverbial genie out of the bottle at this point, so enterprises need to get a defense plan in place right away.",
-          "text": "Cybercriminals using agentic pen-testing tools is a proverbial genie out of the bottle at this point, so enterprises need to get a defense plan in place right away."
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "Cybercriminals using agentic pen-testing tools is a proverbial genie out of the bottle at this point, so enterprises need to get a defense plan in place right away.",
-          "text": "Cybercriminals using agentic pen-testing tools is a proverbial genie out of the bottle at this point, so enterprises need to get a defense plan in place right away."
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "Massive Microsoft 365 outage disrupts Outlook, Teams, Copilot worldwide",
-      "url": "https://www.bleepingcomputer.com/news/microsoft/massive-microsoft-365-outage-disrupts-outlook-teams-copilot-worldwide/",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-13/#reporting-be3a38dc184a",
-      "cves": [],
-      "snippet": "Massive Microsoft 365 outage disrupts Outlook, Teams, Copilot worldwide Microsoft is investigating a widespread outage affecting multiple Microsoft 365 services, including Outlook, Microsoft Teams, and Copilot, as users report connectivity problems worldwide… Microsoft is investigating a widespread outage affecting multiple Microsoft 365 services, including Outlook, Microsoft Teams, and Copilot, as users report connectivity problems worldwide…",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "Microsoft is investigating a widespread outage affecting multiple Microsoft 365 services, including Outlook, Microsoft Teams, and Copilot, as users report connectivity problems worldwide…",
-          "text": "Microsoft is investigating a widespread outage affecting multiple Microsoft 365 services, including Outlook, Microsoft Teams, and Copilot, as users report connectivity problems worldwide…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "Microsoft is investigating a widespread outage affecting multiple Microsoft 365 services, including Outlook, Microsoft Teams, and Copilot, as users report connectivity problems worldwide…",
-          "text": "Microsoft is investigating a widespread outage affecting multiple Microsoft 365 services, including Outlook, Microsoft Teams, and Copilot, as users report connectivity problems worldwide…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "Extortion Group Luna Moth Flits Into Law Firms a Second Time",
-      "url": "https://www.darkreading.com/data-privacy/extortion-luna-moth-law-firms-second-time",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-13/#reporting-a34cb30f4adf",
-      "cves": [],
-      "snippet": "Extortion Group Luna Moth Flits Into Law Firms a Second Time The cybercriminals are retargeting law firms that refused to pay its first ransom, with a social engineering con aimed at stealing Microsoft access tokens. The cybercriminals are retargeting law firms that refused to pay its first ransom, with a social engineering con aimed at stealing Microsoft access tokens.",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "The cybercriminals are retargeting law firms that refused to pay its first ransom, with a social engineering con aimed at stealing Microsoft access tokens.",
-          "text": "The cybercriminals are retargeting law firms that refused to pay its first ransom, with a social engineering con aimed at stealing Microsoft access tokens."
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "The cybercriminals are retargeting law firms that refused to pay its first ransom, with a social engineering con aimed at stealing Microsoft access tokens.",
-          "text": "The cybercriminals are retargeting law firms that refused to pay its first ransom, with a social engineering con aimed at stealing Microsoft access tokens."
         }
       ],
       "effective_date_evidence": null
