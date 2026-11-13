@@ -5,74 +5,74 @@
     "control_implications": [
       {
         "control_id": "vulnerability_management",
-        "evidence_excerpt": "Citrix has released patches for multiple critical security flaws impacting NetScaler ADC, Citrix NetScaler Gateway, and NetScaler Console that could lead to denial-of-service (DoS) or an authentication bypass.",
+        "evidence_excerpt": "A type confusion flaw in PostgreSQL lets a database user who can create objects run code on the server. Updates released yesterday fix it, along with 51 other security flaws. Full protection from this flaw also requires rebuilding any C-language extensions installed on the server. The flaw, tracked as CVE-2026-6460, has a CVSS score of 8.8. Any code run this way has the rights of the operating…",
         "evidence_origin": "summary",
-        "focus": "NetScaler ADC, Citrix NetScaler Gateway",
-        "headline": "NetScaler ADC, Citrix NetScaler Gateway, exposes authentication bypass and DoS vulnerabilities",
+        "focus": "PostgreSQL database",
+        "headline": "PostgreSQL database enables authenticated remote code execution",
         "priority": "high",
-        "significance": "Authentication bypass in widely deployed application delivery controllers undermines access controls and could allow unauthorized administrative access. Vulnerability and asset owners should confirm affected versions are identified, patches applied, and compensating controls validated for any unpatched instances.",
+        "significance": "This vulnerability allows authenticated database users to execute arbitrary code on the server, weakening assurance of database isolation. The vulnerability and asset owner should confirm affected PostgreSQL versions are patched and C-language extensions rebuilt.",
         "source_ids": [
           1
         ]
       },
       {
-        "control_id": "third_party_risk",
-        "evidence_excerpt": "The ongoing campaign targeting ConnectWise ScreenConnect deployments involves the exploitation of a now-patched critical security flaw in the remote access software, and not a new vulnerability, it has emerged.",
+        "control_id": "incident_response",
+        "evidence_excerpt": "German defense technology company Quantum Systems confirmed that it detected an incident in late October that was part of an active cyberattack by \"hostile actors.\"…",
         "evidence_origin": "summary",
-        "focus": "ConnectWise ScreenConnect deployments",
-        "headline": "ConnectWise ScreenConnect deployments, enables MSP attack paths via exploited flaw",
+        "focus": "German military drone operations",
+        "headline": "German military drone operations disrupted by cyberattack",
         "priority": "high",
-        "significance": "Exploitation of a patched flaw in remote access software used by managed service providers extends risk to downstream customers. Supplier risk owners should verify that all ScreenConnect instances are updated and that MSP access scopes are reviewed for excessive privileges.",
+        "significance": "The disruption of military drone operations by a cyberattack indicates potential gaps in incident containment for critical defense systems. The incident response lead should review containment procedures and evidence retention for similar operational technology environments.",
         "source_ids": [
           2
         ]
       },
       {
-        "control_id": "access_management",
-        "evidence_excerpt": "An AI agent built to automate invoice processing could be manipulated into changing vendor bank details through a malicious email, without triggering traditional security alerts.",
+        "control_id": "data_protection",
+        "evidence_excerpt": "Two attacks made public this week allow a malicious host to read data inside AMD SEV-SNP-protected virtual machines (VMs), which are built to keep the server's operator out. One of them, Mior, can also modify a VM's memory and fake the signed report confirming which software it runs. Both need control of the server's hypervisor, and Mior also needs control of the server's BIOS. Researchers…",
         "evidence_origin": "summary",
-        "focus": "AI agent built to automate invoice processing",
-        "headline": "AI agent built to automate invoice processing, allows manipulation of vendor bank details",
-        "priority": "medium",
-        "significance": "AI agents with financial transaction capabilities can bypass traditional email security controls, creating unauthorized payment changes. Identity and access owners should review AI agent permissions, implement transaction approval workflows, and monitor for anomalous agent behavior.",
+        "focus": "AMD SEV-SNP-protected virtual machines",
+        "headline": "AMD SEV-SNP-protected virtual machines expose memory to malicious host",
+        "priority": "high",
+        "significance": "These attacks undermine the confidentiality and integrity guarantees of hardware-isolated virtual machines, affecting data protection assurances in multi-tenant clouds. The data and privacy owner should assess whether cloud provider controls mitigate hypervisor-level compromise.",
         "source_ids": [
-          3
+          4
         ]
       },
       {
-        "control_id": "monitoring",
-        "evidence_excerpt": "A newly identified spying group used hacked equipment inside Asian mobile operators to intercept the calls and texts of selected people, mostly in Taiwan.",
+        "control_id": "governance",
+        "evidence_excerpt": "An AI agent built to automate invoice processing could be manipulated into changing vendor bank details through a malicious email, without triggering traditional security alerts. Token Security examines five critical AI agent security gaps and shares practical guidance from industry security leaders on preventing them…",
         "evidence_origin": "summary",
-        "focus": "Asian mobile operators",
-        "headline": "Asian mobile operators, compromised to intercept SMS 2FA codes and spy",
+        "focus": "AI agent",
+        "headline": "AI agent enables unauthorized vendor bank detail changes",
+        "priority": "medium",
+        "significance": "The manipulation of an AI agent to alter financial transactions without detection challenges existing governance over automated decision-making. The risk and control owner should confirm that AI agent permissions and monitoring address prompt injection and tool misuse.",
+        "source_ids": [
+          5
+        ]
+      },
+      {
+        "control_id": "third_party_risk",
+        "evidence_excerpt": "Three Trezor Safe 5 wallets bought from the reseller CryptoBilis contain an implant, an extra circuit board that can copy their recovery phrases, hardware wallet maker Trezor said yesterday. The implant reads the phrase from the wallet's screen and sends it over the mobile network to a server controlled by the attackers. The company examined one of the wallets in its lab, identified the other…",
+        "evidence_origin": "summary",
+        "focus": "Trezor Safe 5 wallets",
+        "headline": "Trezor Safe 5 wallets contain hidden implants stealing recovery phrases",
         "priority": "high",
-        "significance": "Compromise of telecom infrastructure to intercept multi-factor authentication codes undermines identity verification for targeted users. Monitoring and detection owners should assess telemetry for anomalous signaling traffic and evaluate reliance on SMS-based 2FA for high-value accounts.",
+        "significance": "Hardware implants in cryptocurrency wallets sourced from a reseller demonstrate supply chain compromise bypassing device authenticity checks. The supplier risk owner should verify procurement channels and require hardware attestation for critical cryptographic devices.",
         "source_ids": [
           7
         ]
       },
       {
-        "control_id": "incident_response",
-        "evidence_excerpt": "An international police operation took down servers behind Gootloader, CastleRAT and StealC this week. Criminals used the three malware tools to gain access to computers, steal passwords, and launch ransomware attacks.",
+        "control_id": "change_management",
+        "evidence_excerpt": "Microsoft warned customers earlier this week that the November 2026 security updates may break printing for documents with complex formatting…",
         "evidence_origin": "summary",
-        "focus": "servers behind Gootloader, CastleRAT and StealC",
-        "headline": "servers behind Gootloader, CastleRAT and StealC, seized in international law enforcement operation",
+        "focus": "November 2026 security updates",
+        "headline": "November 2026 security updates break printing for complex documents",
         "priority": "medium",
-        "significance": "Takedown of malware infrastructure reduces active threat but stolen credentials remain in circulation. Incident response leads should verify if organizational credentials appear in seized datasets and initiate password resets for affected accounts.",
+        "significance": "Security updates that disrupt business-critical printing functions indicate insufficient pre-deployment validation in change management. The change and service owner should review rollout coverage and post-change validation for November patches.",
         "source_ids": [
-          8
-        ]
-      },
-      {
-        "control_id": "governance",
-        "evidence_excerpt": "Blockchain complexities, such as attacker-deployed sweepers, hobble security controls designed to limit the damage of an exchange compromise.",
-        "evidence_origin": "summary",
-        "focus": "security controls designed to limit the damage",
-        "headline": "security controls designed to limit the damage, hobbled by blockchain complexities",
-        "priority": "medium",
-        "significance": "Blockchain-specific attack mechanisms can bypass traditional security controls, limiting damage containment capabilities. Governance and accountability owners should review control assumptions for blockchain-based assets and ensure incident procedures address smart contract and sweeper risks.",
-        "source_ids": [
-          4
+          9
         ]
       }
     ],
@@ -81,26 +81,26 @@
         {
           "source_ids": [
             1,
-            2
+            4,
+            7
           ],
-          "text": "Critical vulnerabilities in Citrix NetScaler application delivery controllers and active exploitation of a patched flaw in ConnectWise ScreenConnect remote access software require immediate asset identification and patch verification across infrastructure and managed service provider dependencies. Authentication bypass and denial-of-service risks in NetScaler devices undermine access controls, while the ScreenConnect campaign extends compromise risk to downstream customers through trusted MSP channels. Vulnerability and asset owners should confirm affected versions are inventoried, patches applied, and MSP access scopes reviewed for excessive privileges."
+          "text": "Critical vulnerabilities in PostgreSQL databases and AMD SEV-SNP virtual machines, alongside hardware implants in Trezor cryptocurrency wallets, expose systemic weaknesses in vulnerability management, data protection, and third-party risk controls. The PostgreSQL flaw allows authenticated remote code execution requiring extension rebuilds, the AMD attacks enable hypervisor-level memory access, and the Trezor implants demonstrate supply chain compromise of cryptographic devices. Control owners should prioritize patching PostgreSQL, assessing cloud isolation guarantees, and verifying hardware procurement integrity."
         },
         {
           "source_ids": [
-            3,
-            7,
-            8,
-            4
+            2,
+            5,
+            9
           ],
-          "text": "Emerging threats include AI agents manipulating financial transactions without triggering alerts, state-level compromise of telecom infrastructure to intercept SMS multi-factor codes, and blockchain complexities that hobble security controls for exchange compromises. An international law enforcement takedown of malware infrastructure seized millions of stolen credentials, necessitating credential exposure checks. Identity and access owners should review AI agent permissions and implement transaction approvals; monitoring owners should evaluate SMS 2FA reliance and signaling telemetry; incident response leads should verify credential exposure from seized datasets; governance owners should reassess control assumptions for blockchain environments."
+          "text": "Operational disruptions to German military drones and Microsoft printing functions, combined with AI agent manipulation enabling unauthorized financial changes, highlight gaps in incident response, change management, and governance over automated systems. The drone cyberattack by hostile actors, the security update regression, and the AI agent's susceptibility to prompt injection each reveal insufficient containment, validation, and oversight controls. Owners should review incident procedures for operational technology, change validation for security patches, and AI agent permission boundaries."
         }
       ]
     },
     "industry_impacts": [],
     "regulatory_changes": []
   },
-  "generated_at": "2026-11-13T15:18:19.747677Z",
-  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/62bf2daf0b451499312f0178c4932b42eac2b9ce/site/feed.xml",
+  "generated_at": "2026-11-13T18:17:46.334918Z",
+  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/155da3747ad96ee7e10390c04811ddff49086fca/site/feed.xml",
   "feed_home_url": "https://sentrydigest.ricomanifesto.com/",
   "digest_issue_date": "2026-11-13",
   "digest_issue_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-13/",
@@ -108,49 +108,91 @@
   "resolved_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
   "sources": [
     {
-      "title": "Citrix Patches 12 NetScaler and Secure Access Client Flaws, Including Authentication Bypass",
-      "url": "https://thehackernews.com/2026/11/citrix-patches-12-netscaler-and-secure.html",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-13/#reporting-96d21dc534c0",
+      "title": "PostgreSQL Patches 52 Flaws, Including 22-Year-Old Bug Enabling Authenticated RCE",
+      "url": "https://thehackernews.com/2026/11/postgresql-patches-52-flaws-including.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-13/#reporting-d8cc2172e29e",
       "cves": [
-        "CVE-2026-120868"
+        "CVE-2026-6460"
       ],
-      "snippet": "Citrix Patches 12 NetScaler and Secure Access Client Flaws, Including Authentication Bypass Citrix has released patches for multiple critical security flaws impacting NetScaler ADC, Citrix NetScaler Gateway, and NetScaler Console that could lead to denial-of-service (DoS) or an authentication bypass. The critical vulnerabilities that impact NetScaler ADC and NetScaler Gateway are listed below - CVE-2026-120868 (CVSS score: 9.3) - A memory overflow vulnerability in Packet… Citrix has released patches for multiple critical security flaws impacting NetScaler ADC, Citrix NetScaler Gateway, and NetScaler Console that could lead to denial-of-service (DoS) or an authentication bypass. The critical ",
+      "snippet": "PostgreSQL Patches 52 Flaws, Including 22-Year-Old Bug Enabling Authenticated RCE A type confusion flaw in PostgreSQL lets a database user who can create objects run code on the server. Updates released yesterday fix it, along with 51 other security flaws. Full protection from this flaw also requires rebuilding any C-language extensions installed on the server. The flaw, tracked as CVE-2026-6460, has a CVSS score of 8.8. Any code run this way has the rights of the operating… A type confusion flaw in PostgreSQL lets a database user who can create objects run code on the server. Updates released yesterday fix it, along with 51 other security flaws. Full protection from this flaw also requires ",
       "article_evidence": [
         {
           "extraction_version": 1,
           "origin": "summary",
-          "raw_text": "Citrix has released patches for multiple critical security flaws impacting NetScaler ADC, Citrix NetScaler Gateway, and NetScaler Console that could lead to denial-of-service (DoS) or an authentication bypass. The critical vulnerabilities that impact NetScaler ADC and NetScaler Gateway are listed below - CVE-2026-120868 (CVSS score: 9.3) - A memory overflow vulnerability in Packet…",
-          "text": "Citrix has released patches for multiple critical security flaws impacting NetScaler ADC, Citrix NetScaler Gateway, and NetScaler Console that could lead to denial-of-service (DoS) or an authentication bypass. The critical vulnerabilities that impact NetScaler ADC and NetScaler Gateway are listed below - CVE-2026-120868 (CVSS score: 9.3) - A memory overflow vulnerability in Packet…"
+          "raw_text": "A type confusion flaw in PostgreSQL lets a database user who can create objects run code on the server. Updates released yesterday fix it, along with 51 other security flaws. Full protection from this flaw also requires rebuilding any C-language extensions installed on the server. The flaw, tracked as CVE-2026-6460, has a CVSS score of 8.8. Any code run this way has the rights of the operating…",
+          "text": "A type confusion flaw in PostgreSQL lets a database user who can create objects run code on the server. Updates released yesterday fix it, along with 51 other security flaws. Full protection from this flaw also requires rebuilding any C-language extensions installed on the server. The flaw, tracked as CVE-2026-6460, has a CVSS score of 8.8. Any code run this way has the rights of the operating…"
         },
         {
           "extraction_version": 1,
           "origin": "content",
-          "raw_text": "Citrix has released patches for multiple critical security flaws impacting NetScaler ADC, Citrix NetScaler Gateway, and NetScaler Console that could lead to denial-of-service (DoS) or an authentication bypass. The critical vulnerabilities that impact NetScaler ADC and NetScaler Gateway are listed below - CVE-2026-120868 (CVSS score: 9.3) - A memory overflow vulnerability in Packet…",
-          "text": "Citrix has released patches for multiple critical security flaws impacting NetScaler ADC, Citrix NetScaler Gateway, and NetScaler Console that could lead to denial-of-service (DoS) or an authentication bypass. The critical vulnerabilities that impact NetScaler ADC and NetScaler Gateway are listed below - CVE-2026-120868 (CVSS score: 9.3) - A memory overflow vulnerability in Packet…"
+          "raw_text": "A type confusion flaw in PostgreSQL lets a database user who can create objects run code on the server. Updates released yesterday fix it, along with 51 other security flaws. Full protection from this flaw also requires rebuilding any C-language extensions installed on the server. The flaw, tracked as CVE-2026-6460, has a CVSS score of 8.8. Any code run this way has the rights of the operating…",
+          "text": "A type confusion flaw in PostgreSQL lets a database user who can create objects run code on the server. Updates released yesterday fix it, along with 51 other security flaws. Full protection from this flaw also requires rebuilding any C-language extensions installed on the server. The flaw, tracked as CVE-2026-6460, has a CVSS score of 8.8. Any code run this way has the rights of the operating…"
         }
       ],
       "effective_date_evidence": null
     },
     {
-      "title": "SCKit Malware Turns ScreenConnect Support Sessions Into Potential MSP Attack Paths",
-      "url": "https://thehackernews.com/2026/11/sckit-malware-targets-screenconnect.html",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-13/#reporting-0c7b196fe26f",
-      "cves": [
-        "CVE-2026-84869"
-      ],
-      "snippet": "SCKit Malware Turns ScreenConnect Support Sessions Into Potential MSP Attack Paths The ongoing campaign targeting ConnectWise ScreenConnect deployments involves the exploitation of a now-patched critical security flaw in the remote access software, and not a new vulnerability, it has emerged. Blackpoint Cyber's Adversary Pursuit Group (APG), which shared the details with The Hacker News, said the recovered attacker toolkit exploits CVE-2026-84869 (CVSS score: 9.9), an… The ongoing campaign targeting ConnectWise ScreenConnect deployments involves the exploitation of a now-patched critical security flaw in the remote access software, and not a new vulnerability, it has emerged. Blackpoint Cybe",
+      "title": "German military drone operations disrupted by cyberattack",
+      "url": "https://www.bleepingcomputer.com/news/security/german-military-drone-operations-disrupted-by-cyberattack/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-13/#reporting-6ce23a8d3c69",
+      "cves": [],
+      "snippet": "German military drone operations disrupted by cyberattack German defense technology company Quantum Systems confirmed that it detected an incident in late October that was part of an active cyberattack by \"hostile actors.\"… German defense technology company Quantum Systems confirmed that it detected an incident in late October that was part of an active cyberattack by \"hostile actors.\"…",
       "article_evidence": [
         {
           "extraction_version": 1,
           "origin": "summary",
-          "raw_text": "The ongoing campaign targeting ConnectWise ScreenConnect deployments involves the exploitation of a now-patched critical security flaw in the remote access software, and not a new vulnerability, it has emerged. Blackpoint Cyber's Adversary Pursuit Group (APG), which shared the details with The Hacker News, said the recovered attacker toolkit exploits CVE-2026-84869 (CVSS score: 9.9), an…",
-          "text": "The ongoing campaign targeting ConnectWise ScreenConnect deployments involves the exploitation of a now-patched critical security flaw in the remote access software, and not a new vulnerability, it has emerged. Blackpoint Cyber's Adversary Pursuit Group (APG), which shared the details with The Hacker News, said the recovered attacker toolkit exploits CVE-2026-84869 (CVSS score: 9.9), an…"
+          "raw_text": "German defense technology company Quantum Systems confirmed that it detected an incident in late October that was part of an active cyberattack by \"hostile actors.\"…",
+          "text": "German defense technology company Quantum Systems confirmed that it detected an incident in late October that was part of an active cyberattack by \"hostile actors.\"…"
         },
         {
           "extraction_version": 1,
           "origin": "content",
-          "raw_text": "The ongoing campaign targeting ConnectWise ScreenConnect deployments involves the exploitation of a now-patched critical security flaw in the remote access software, and not a new vulnerability, it has emerged. Blackpoint Cyber's Adversary Pursuit Group (APG), which shared the details with The Hacker News, said the recovered attacker toolkit exploits CVE-2026-84869 (CVSS score: 9.9), an…",
-          "text": "The ongoing campaign targeting ConnectWise ScreenConnect deployments involves the exploitation of a now-patched critical security flaw in the remote access software, and not a new vulnerability, it has emerged. Blackpoint Cyber's Adversary Pursuit Group (APG), which shared the details with The Hacker News, said the recovered attacker toolkit exploits CVE-2026-84869 (CVSS score: 9.9), an…"
+          "raw_text": "German defense technology company Quantum Systems confirmed that it detected an incident in late October that was part of an active cyberattack by \"hostile actors.\"…",
+          "text": "German defense technology company Quantum Systems confirmed that it detected an incident in late October that was part of an active cyberattack by \"hostile actors.\"…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Check Point gateways hacked via PHP2Shell to deploy VMware ESXi wiper",
+      "url": "https://www.bleepingcomputer.com/news/security/check-point-gateways-hacked-via-php2shell-to-deploy-vmware-esxi-wiper/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-13/#reporting-97c01e9fc463",
+      "cves": [],
+      "snippet": "Check Point gateways hacked via PHP2Shell to deploy VMware ESXi wiper Vulnerable Check Point Security Gateway instances have been targeted in PHP2Shell attacks that deployed data-wiping malware on VMware ESXi hosts… Vulnerable Check Point Security Gateway instances have been targeted in PHP2Shell attacks that deployed data-wiping malware on VMware ESXi hosts…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Vulnerable Check Point Security Gateway instances have been targeted in PHP2Shell attacks that deployed data-wiping malware on VMware ESXi hosts…",
+          "text": "Vulnerable Check Point Security Gateway instances have been targeted in PHP2Shell attacks that deployed data-wiping malware on VMware ESXi hosts…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Vulnerable Check Point Security Gateway instances have been targeted in PHP2Shell attacks that deployed data-wiping malware on VMware ESXi hosts…",
+          "text": "Vulnerable Check Point Security Gateway instances have been targeted in PHP2Shell attacks that deployed data-wiping malware on VMware ESXi hosts…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "New Mior and Skyfall Attacks Let Rogue Cloud Hosts Steal Secrets From AMD SEV-SNP VMs",
+      "url": "https://thehackernews.com/2026/11/new-mior-and-skyfall-attacks-let-rogue.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-13/#reporting-d93f5e12f3c1",
+      "cves": [],
+      "snippet": "New Mior and Skyfall Attacks Let Rogue Cloud Hosts Steal Secrets From AMD SEV-SNP VMs Two attacks made public this week allow a malicious host to read data inside AMD SEV-SNP-protected virtual machines (VMs), which are built to keep the server's operator out. One of them, Mior, can also modify a VM's memory and fake the signed report confirming which software it runs. Both need control of the server's hypervisor, and Mior also needs control of the server's BIOS. Researchers… Two attacks made public this week allow a malicious host to read data inside AMD SEV-SNP-protected virtual machines (VMs), which are built to keep the server's operator out. One of them, Mior, can also modify a VM's memo",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Two attacks made public this week allow a malicious host to read data inside AMD SEV-SNP-protected virtual machines (VMs), which are built to keep the server's operator out. One of them, Mior, can also modify a VM's memory and fake the signed report confirming which software it runs. Both need control of the server's hypervisor, and Mior also needs control of the server's BIOS. Researchers…",
+          "text": "Two attacks made public this week allow a malicious host to read data inside AMD SEV-SNP-protected virtual machines (VMs), which are built to keep the server's operator out. One of them, Mior, can also modify a VM's memory and fake the signed report confirming which software it runs. Both need control of the server's hypervisor, and Mior also needs control of the server's BIOS. Researchers…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Two attacks made public this week allow a malicious host to read data inside AMD SEV-SNP-protected virtual machines (VMs), which are built to keep the server's operator out. One of them, Mior, can also modify a VM's memory and fake the signed report confirming which software it runs. Both need control of the server's hypervisor, and Mior also needs control of the server's BIOS. Researchers…",
+          "text": "Two attacks made public this week allow a malicious host to read data inside AMD SEV-SNP-protected virtual machines (VMs), which are built to keep the server's operator out. One of them, Mior, can also modify a VM's memory and fake the signed report confirming which software it runs. Both need control of the server's hypervisor, and Mior also needs control of the server's BIOS. Researchers…"
         }
       ],
       "effective_date_evidence": null
@@ -173,6 +215,50 @@
           "origin": "content",
           "raw_text": "An AI agent built to automate invoice processing could be manipulated into changing vendor bank details through a malicious email, without triggering traditional security alerts. Token Security examines five critical AI agent security gaps and shares practical guidance from industry security leaders on preventing them…",
           "text": "An AI agent built to automate invoice processing could be manipulated into changing vendor bank details through a malicious email, without triggering traditional security alerts. Token Security examines five critical AI agent security gaps and shares practical guidance from industry security leaders on preventing them…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "FBI Says North Korean Hackers Stole Over $400 Million in Crypto Using Deepfake Video Calls",
+      "url": "https://thehackernews.com/2026/11/fbi-says-north-korean-hackers-stole.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-13/#reporting-d32b5f97fc67",
+      "cves": [],
+      "snippet": "FBI Says North Korean Hackers Stole Over $400 Million in Crypto Using Deepfake Video Calls The U.S. Federal Bureau of Investigation (FBI) has established that threat actors tied to the Democratic People's Republic of Korea (DPRK aka North Korea) have stolen more than $400 million worth of cryptocurrency as part of a social engineering scheme codenamed FaceStealer in the last 18 months. As part of a coordinated set of actions announced by the U.S. government, the cloud-based… The U.S. Federal Bureau of Investigation (FBI) has established that threat actors tied to the Democratic People's Republic of Korea (DPRK aka North Korea) have stolen more than $400 million worth of cryptocurrency as par",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "The U.S. Federal Bureau of Investigation (FBI) has established that threat actors tied to the Democratic People's Republic of Korea (DPRK aka North Korea) have stolen more than $400 million worth of cryptocurrency as part of a social engineering scheme codenamed FaceStealer in the last 18 months. As part of a coordinated set of actions announced by the U.S. government, the cloud-based…",
+          "text": "The U.S. Federal Bureau of Investigation (FBI) has established that threat actors tied to the Democratic People's Republic of Korea (DPRK aka North Korea) have stolen more than $400 million worth of cryptocurrency as part of a social engineering scheme codenamed FaceStealer in the last 18 months. As part of a coordinated set of actions announced by the U.S. government, the cloud-based…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "The U.S. Federal Bureau of Investigation (FBI) has established that threat actors tied to the Democratic People's Republic of Korea (DPRK aka North Korea) have stolen more than $400 million worth of cryptocurrency as part of a social engineering scheme codenamed FaceStealer in the last 18 months. As part of a coordinated set of actions announced by the U.S. government, the cloud-based…",
+          "text": "The U.S. Federal Bureau of Investigation (FBI) has established that threat actors tied to the Democratic People's Republic of Korea (DPRK aka North Korea) have stolen more than $400 million worth of cryptocurrency as part of a social engineering scheme codenamed FaceStealer in the last 18 months. As part of a coordinated set of actions announced by the U.S. government, the cloud-based…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Trezor Confirms Hidden Implants in CryptoBilis-Sold Wallets That Can Steal Recovery Phrases",
+      "url": "https://thehackernews.com/2026/11/trezor-confirms-hidden-hardware.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-13/#reporting-ea8f2c682142",
+      "cves": [],
+      "snippet": "Trezor Confirms Hidden Implants in CryptoBilis-Sold Wallets That Can Steal Recovery Phrases Three Trezor Safe 5 wallets bought from the reseller CryptoBilis contain an implant, an extra circuit board that can copy their recovery phrases, hardware wallet maker Trezor said yesterday. The implant reads the phrase from the wallet's screen and sends it over the mobile network to a server controlled by the attackers. The company examined one of the wallets in its lab, identified the other… Three Trezor Safe 5 wallets bought from the reseller CryptoBilis contain an implant, an extra circuit board that can copy their recovery phrases, hardware wallet maker Trezor said yesterday. The implant reads th",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Three Trezor Safe 5 wallets bought from the reseller CryptoBilis contain an implant, an extra circuit board that can copy their recovery phrases, hardware wallet maker Trezor said yesterday. The implant reads the phrase from the wallet's screen and sends it over the mobile network to a server controlled by the attackers. The company examined one of the wallets in its lab, identified the other…",
+          "text": "Three Trezor Safe 5 wallets bought from the reseller CryptoBilis contain an implant, an extra circuit board that can copy their recovery phrases, hardware wallet maker Trezor said yesterday. The implant reads the phrase from the wallet's screen and sends it over the mobile network to a server controlled by the attackers. The company examined one of the wallets in its lab, identified the other…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Three Trezor Safe 5 wallets bought from the reseller CryptoBilis contain an implant, an extra circuit board that can copy their recovery phrases, hardware wallet maker Trezor said yesterday. The implant reads the phrase from the wallet's screen and sends it over the mobile network to a server controlled by the attackers. The company examined one of the wallets in its lab, identified the other…",
+          "text": "Three Trezor Safe 5 wallets bought from the reseller CryptoBilis contain an implant, an extra circuit board that can copy their recovery phrases, hardware wallet maker Trezor said yesterday. The implant reads the phrase from the wallet's screen and sends it over the mobile network to a server controlled by the attackers. The company examined one of the wallets in its lab, identified the other…"
         }
       ],
       "effective_date_evidence": null
@@ -283,94 +369,6 @@
           "origin": "content",
           "raw_text": "An international police operation took down servers behind Gootloader, CastleRAT and StealC this week. Criminals used the three malware tools to gain access to computers, steal passwords, and launch ransomware attacks. Police also seized about 6.4 million stolen logins belonging to more than 40,000 victims, according to Germany's Federal Criminal Police Office (BKA). Gootloader is a loader…",
           "text": "An international police operation took down servers behind Gootloader, CastleRAT and StealC this week. Criminals used the three malware tools to gain access to computers, steal passwords, and launch ransomware attacks. Police also seized about 6.4 million stolen logins belonging to more than 40,000 victims, according to Germany's Federal Criminal Police Office (BKA). Gootloader is a loader…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "Check Point warns of zero-day flaw exploited for root access",
-      "url": "https://www.bleepingcomputer.com/news/security/check-point-patches-zero-day-that-lets-hackers-get-root-access/",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-13/#reporting-02c1dcd61c66",
-      "cves": [],
-      "snippet": "Check Point warns of zero-day flaw exploited for root access Check Point Software has released emergency hotfixes to address a high-severity flaw that hackers have been exploiting to gain root privileges and establish persistence on vulnerable devices since late October… Check Point Software has released emergency hotfixes to address a high-severity flaw that hackers have been exploiting to gain root privileges and establish persistence on vulnerable devices since late October…",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "Check Point Software has released emergency hotfixes to address a high-severity flaw that hackers have been exploiting to gain root privileges and establish persistence on vulnerable devices since late October…",
-          "text": "Check Point Software has released emergency hotfixes to address a high-severity flaw that hackers have been exploiting to gain root privileges and establish persistence on vulnerable devices since late October…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "Check Point Software has released emergency hotfixes to address a high-severity flaw that hackers have been exploiting to gain root privileges and establish persistence on vulnerable devices since late October…",
-          "text": "Check Point Software has released emergency hotfixes to address a high-severity flaw that hackers have been exploiting to gain root privileges and establish persistence on vulnerable devices since late October…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "Microsoft confirms Windows activation failures after November updates",
-      "url": "https://www.bleepingcomputer.com/news/microsoft/microsoft-confirms-windows-activation-failures-after-november-updates/",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-13/#reporting-9c5c30b78fe1",
-      "cves": [],
-      "snippet": "Microsoft confirms Windows activation failures after November updates Microsoft has confirmed that this month's Patch Tuesday security updates are causing Windows activation and licensing failures with 0x80041008 error codes… Microsoft has confirmed that this month's Patch Tuesday security updates are causing Windows activation and licensing failures with 0x80041008 error codes…",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "Microsoft has confirmed that this month's Patch Tuesday security updates are causing Windows activation and licensing failures with 0x80041008 error codes…",
-          "text": "Microsoft has confirmed that this month's Patch Tuesday security updates are causing Windows activation and licensing failures with 0x80041008 error codes…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "Microsoft has confirmed that this month's Patch Tuesday security updates are causing Windows activation and licensing failures with 0x80041008 error codes…",
-          "text": "Microsoft has confirmed that this month's Patch Tuesday security updates are causing Windows activation and licensing failures with 0x80041008 error codes…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "Police arrest 354 suspects in dark web cybercrime crackdown",
-      "url": "https://www.bleepingcomputer.com/news/security/police-arrest-354-vendors-buyers-in-global-cybercrime-crackdown/",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-13/#reporting-e539d9a442d5",
-      "cves": [],
-      "snippet": "Police arrest 354 suspects in dark web cybercrime crackdown Authorities arrested 354 suspects in a joint international operation targeting vendors and buyers on the Archetyp, Nemesis, Tor2Door, Bohemia, and Kingdom dark web marketplaces… Authorities arrested 354 suspects in a joint international operation targeting vendors and buyers on the Archetyp, Nemesis, Tor2Door, Bohemia, and Kingdom dark web marketplaces…",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "Authorities arrested 354 suspects in a joint international operation targeting vendors and buyers on the Archetyp, Nemesis, Tor2Door, Bohemia, and Kingdom dark web marketplaces…",
-          "text": "Authorities arrested 354 suspects in a joint international operation targeting vendors and buyers on the Archetyp, Nemesis, Tor2Door, Bohemia, and Kingdom dark web marketplaces…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "Authorities arrested 354 suspects in a joint international operation targeting vendors and buyers on the Archetyp, Nemesis, Tor2Door, Bohemia, and Kingdom dark web marketplaces…",
-          "text": "Authorities arrested 354 suspects in a joint international operation targeting vendors and buyers on the Archetyp, Nemesis, Tor2Door, Bohemia, and Kingdom dark web marketplaces…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "Hackers Exploit PHP2Shell Flaws in Check Point Gateways to Deploy TSGA Backdoor and Wipe ESXi Files",
-      "url": "https://thehackernews.com/2026/11/hackers-exploit-php2shell-flaws-in.html",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-13/#reporting-69d1a63879fd",
-      "cves": [],
-      "snippet": "Hackers Exploit PHP2Shell Flaws in Check Point Gateways to Deploy TSGA Backdoor and Wipe ESXi Files An unknown threat actor has been observed targeting unpatched Check Point Security Gateways to obtain initial access via the PHP2Shell vulnerabilities and then a previously unreported local privilege escalation flaw in Gaia OS to deploy a backdoor called TSGA. The activity, detailed by Check Point, began on October 30, 2026, and targeted Israeli organizations, with a broader follow-up… An unknown threat actor has been observed targeting unpatched Check Point Security Gateways to obtain initial access via the PHP2Shell vulnerabilities and then a previously unreported local privilege escalation ",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "An unknown threat actor has been observed targeting unpatched Check Point Security Gateways to obtain initial access via the PHP2Shell vulnerabilities and then a previously unreported local privilege escalation flaw in Gaia OS to deploy a backdoor called TSGA. The activity, detailed by Check Point, began on October 30, 2026, and targeted Israeli organizations, with a broader follow-up…",
-          "text": "An unknown threat actor has been observed targeting unpatched Check Point Security Gateways to obtain initial access via the PHP2Shell vulnerabilities and then a previously unreported local privilege escalation flaw in Gaia OS to deploy a backdoor called TSGA. The activity, detailed by Check Point, began on October 30, 2026, and targeted Israeli organizations, with a broader follow-up…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "An unknown threat actor has been observed targeting unpatched Check Point Security Gateways to obtain initial access via the PHP2Shell vulnerabilities and then a previously unreported local privilege escalation flaw in Gaia OS to deploy a backdoor called TSGA. The activity, detailed by Check Point, began on October 30, 2026, and targeted Israeli organizations, with a broader follow-up…",
-          "text": "An unknown threat actor has been observed targeting unpatched Check Point Security Gateways to obtain initial access via the PHP2Shell vulnerabilities and then a previously unreported local privilege escalation flaw in Gaia OS to deploy a backdoor called TSGA. The activity, detailed by Check Point, began on October 30, 2026, and targeted Israeli organizations, with a broader follow-up…"
         }
       ],
       "effective_date_evidence": null
