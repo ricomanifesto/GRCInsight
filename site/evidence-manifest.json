@@ -5,74 +5,74 @@
     "control_implications": [
       {
         "control_id": "vulnerability_management",
-        "evidence_excerpt": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Friday added a high-severity security flaw impacting UnrealIRCd, an open-source Internet Relay Chat (IRC) server, to its Known Exploited Vulnerabilities (KEV) catalog, following reports of active exploitation. The vulnerability, tracked as CVE-2026-114713 (CVSS score: 8.6), is a case of improper neutralization of delimiters…",
+        "evidence_excerpt": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Friday added a high-severity security flaw impacting UnrealIRCd, an open-source Internet Relay Chat (IRC) server, to its Known Exploited Vulnerabilities (KEV) catalog, following reports of active exploitation.",
         "evidence_origin": "summary",
         "focus": "UnrealIRCd",
-        "headline": "UnrealIRCd added to CISA KEV catalog following active exploitation",
+        "headline": "UnrealIRCd added to CISA Known Exploited Vulnerabilities catalog",
         "priority": "high",
-        "significance": "CISA KEV inclusion signals active exploitation requiring urgent patching. The accountable owner should confirm affected assets are inventoried, patched, or protected by compensating controls.",
+        "significance": "The KEV catalog addition signals active exploitation requiring immediate asset identification and remediation. Vulnerability owners should confirm whether UnrealIRCd instances exist in their environment and verify patching or compensating controls.",
         "source_ids": [
           1
         ]
       },
       {
         "control_id": "third_party_risk",
-        "evidence_excerpt": "Cryptocurrency hardware wallet maker Trezor has confirmed that three Safe 5 devices sold by Southeast Asian reseller CryptoBilis contained malicious hardware implants designed to steal wallet recovery phrases and send them to attackers over cellular networks…",
+        "evidence_excerpt": "Cursor confirmed it suffered a security breach that let hackers distribute a malicious Claude Code extension through its marketplace after stealing credentials from AI infrastructure provider Fireworks AI…",
         "evidence_origin": "summary",
-        "focus": "Trezor Safe 5 devices",
-        "headline": "Trezor Safe 5 devices confirmed with malicious hardware implants",
+        "focus": "Claude Code extension",
+        "headline": "Claude Code extension distributed via compromised Cursor marketplace",
         "priority": "high",
-        "significance": "Supply chain compromise of hardware wallets enables theft of cryptographic keys. The accountable owner should verify supply chain integrity and review supplier assurance evidence for critical hardware.",
+        "significance": "The supply chain compromise through a third-party AI provider highlights risks in marketplace integrity and credential management. Supplier risk owners should review dependencies on Cursor and Fireworks AI and request assurance of remediation.",
         "source_ids": [
-          4
+          3
+        ]
+      },
+      {
+        "control_id": "data_protection",
+        "evidence_excerpt": "Two attacks made public this week allow a malicious host to read data inside AMD SEV-SNP-protected virtual machines (VMs), which are built to keep the server's operator out. One of them, Mior, can also modify a VM's memory and fake the signed report confirming which software it runs.",
+        "evidence_origin": "summary",
+        "focus": "AMD SEV-SNP-protected virtual machines",
+        "headline": "AMD SEV-SNP-protected virtual machines exposed to malicious host data theft",
+        "priority": "high",
+        "significance": "The attacks undermine confidential computing assurances for cloud-hosted VMs, allowing host-level access to encrypted memory. Data protection owners should assess reliance on AMD SEV-SNP and verify compensating controls with cloud providers.",
+        "source_ids": [
+          9
+        ]
+      },
+      {
+        "control_id": "access_management",
+        "evidence_excerpt": "An AI agent built to automate invoice processing could be manipulated into changing vendor bank details through a malicious email, without triggering traditional security alerts. Token Security examines five critical AI agent security gaps and shares practical guidance from industry security leaders on preventing them…",
+        "evidence_origin": "summary",
+        "focus": "AI agent",
+        "headline": "AI agent manipulated to change vendor bank details via malicious email",
+        "priority": "medium",
+        "significance": "The demonstration shows AI agents can bypass traditional controls to alter financial transactions, expanding the identity and access attack surface. Access management owners should review AI agent permissions and implement behavioral monitoring for anomalous actions.",
+        "source_ids": [
+          10
+        ]
+      },
+      {
+        "control_id": "monitoring",
+        "evidence_excerpt": "Vulnerable Check Point Security Gateway instances have been targeted in PHP2Shell attacks that deployed data-wiping malware on VMware ESXi hosts…",
+        "evidence_origin": "summary",
+        "focus": "Check Point Security Gateway",
+        "headline": "Check Point Security Gateway targeted by PHP2Shell attacks deploying VMware ESXi wiper",
+        "priority": "high",
+        "significance": "The exploitation of gateway appliances to deploy destructive malware on hypervisors indicates a detection gap for lateral movement. Monitoring owners should verify telemetry coverage for Check Point appliances and ESXi host anomalies.",
+        "source_ids": [
+          8
         ]
       },
       {
         "control_id": "incident_response",
         "evidence_excerpt": "German defense technology company Quantum Systems confirmed that it detected an incident in late October that was part of an active cyberattack by \"hostile actors.\"…",
         "evidence_origin": "summary",
-        "focus": "Quantum Systems drone operations",
-        "headline": "Quantum Systems drone operations disrupted by active cyberattack",
+        "focus": "Quantum Systems",
+        "headline": "Quantum Systems detects cyberattack disrupting German military drone operations",
         "priority": "high",
-        "significance": "Critical infrastructure cyberattack disrupts military operations. The accountable owner should review incident response readiness for operational technology and confirm containment procedures.",
-        "source_ids": [
-          5
-        ]
-      },
-      {
-        "control_id": "data_protection",
-        "evidence_excerpt": "Two attacks made public this week allow a malicious host to read data inside AMD SEV-SNP-protected virtual machines (VMs), which are built to keep the server's operator out. One of them, Mior, can also modify a VM's memory and fake the signed report confirming which software it runs. Both need control of the server's hypervisor, and Mior also needs control of the server's BIOS. Researchers…",
-        "evidence_origin": "summary",
-        "focus": "AMD SEV-SNP-protected virtual machines",
-        "headline": "AMD SEV-SNP-protected virtual machines exposed to malicious host attacks",
-        "priority": "high",
-        "significance": "Cloud host can breach VM isolation and forge attestation reports. The accountable owner should assess cloud provider assurances and encryption key management for sensitive workloads.",
+        "significance": "The confirmed intrusion into a defense contractor highlights the need for robust incident response in critical infrastructure supply chains. Incident response owners should validate containment procedures and evidence retention for supplier-linked attacks.",
         "source_ids": [
           7
-        ]
-      },
-      {
-        "control_id": "governance",
-        "evidence_excerpt": "An AI agent built to automate invoice processing could be manipulated into changing vendor bank details through a malicious email, without triggering traditional security alerts. Token Security examines five critical AI agent security gaps and shares practical guidance from industry security leaders on preventing them…",
-        "evidence_origin": "summary",
-        "focus": "AI agent invoice processing",
-        "headline": "AI agent invoice processing manipulated via malicious email",
-        "priority": "medium",
-        "significance": "AI agents introduce new attack surfaces bypassing traditional controls. The accountable owner should review AI agent governance and monitoring coverage for financial transaction workflows.",
-        "source_ids": [
-          8
-        ]
-      },
-      {
-        "control_id": "change_management",
-        "evidence_excerpt": "Microsoft warned customers earlier this week that the November 2026 security updates may break printing for documents with complex formatting…",
-        "evidence_origin": "summary",
-        "focus": "November 2026 security updates",
-        "headline": "November 2026 security updates break printing for complex documents",
-        "priority": "medium",
-        "significance": "Security patches causing operational disruption. The accountable owner should validate change management testing and rollback procedures for critical business functions.",
-        "source_ids": [
-          12
         ]
       }
     ],
@@ -81,26 +81,26 @@
         {
           "source_ids": [
             1,
-            4,
-            5
+            9,
+            8
           ],
-          "text": "Active exploitation and supply chain compromises demand urgent vulnerability and third-party risk management. CISA added an UnrealIRCd flaw to its Known Exploited Vulnerabilities catalog following active exploitation. Trezor confirmed malicious hardware implants in cryptocurrency wallets sold by a Southeast Asian reseller. German defense contractor Quantum Systems detected a cyberattack disrupting military drone operations. These events show active exploitation of known vulnerabilities and supply chain compromise affecting critical infrastructure and cryptographic assets."
+          "text": "Active exploitation of critical vulnerabilities and cloud infrastructure weaknesses demands immediate control validation. CISA added an actively exploited UnrealIRCd flaw to its Known Exploited Vulnerabilities catalog, while research disclosed attacks allowing malicious hosts to breach AMD SEV-SNP confidential VMs and Check Point gateways to deploy destructive wipers on ESXi hosts. Vulnerability management, data protection, and monitoring owners must confirm asset coverage, cloud provider assurances, and detection capabilities for these active threat vectors."
         },
         {
           "source_ids": [
-            7,
-            8,
-            12
+            3,
+            10,
+            7
           ],
-          "text": "Cloud isolation failures and AI agent gaps extend attack surface while patching introduces operational risk. Research shows malicious hosts can breach AMD SEV-SNP virtual machine protections and forge attestation reports. An AI agent automating invoice processing was manipulated to alter vendor bank details without triggering alerts. Microsoft warned that November security updates break printing for complex documents. Owners should reassess cloud provider assurances, AI governance, and change validation processes."
+          "text": "Supply chain compromises and AI-driven identity risks expand the attack surface beyond traditional boundaries. A credential theft at Fireworks AI enabled malicious extension distribution through the Cursor marketplace, and an AI agent was manipulated to alter financial transactions without triggering alerts. Meanwhile a defense contractor detected a cyberattack disrupting military drone operations. Third-party risk, access management, and incident response owners should verify supplier assurance, AI agent permissions, and containment readiness for these emerging vectors."
         }
       ]
     },
     "industry_impacts": [],
     "regulatory_changes": []
   },
-  "generated_at": "2026-11-14T15:15:39.011868Z",
-  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/db20b7d6436fe83854344932c538679484ac101e/site/feed.xml",
+  "generated_at": "2026-11-14T18:19:19.514719Z",
+  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/30be4ff61c5a4cab6cacccb166301360a05b3404/site/feed.xml",
   "feed_home_url": "https://sentrydigest.ricomanifesto.com/",
   "digest_issue_date": "2026-11-14",
   "digest_issue_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-14/",
@@ -151,6 +151,50 @@
           "origin": "content",
           "raw_text": "A type confusion flaw in PostgreSQL lets a database user who can create objects run code on the server. Updates released yesterday fix it, along with 51 other security flaws. Full protection from this flaw also requires rebuilding any C-language extensions installed on the server. The flaw, tracked as CVE-2026-6460, has a CVSS score of 8.8. Any code run this way has the rights of the operating…",
           "text": "A type confusion flaw in PostgreSQL lets a database user who can create objects run code on the server. Updates released yesterday fix it, along with 51 other security flaws. Full protection from this flaw also requires rebuilding any C-language extensions installed on the server. The flaw, tracked as CVE-2026-6460, has a CVSS score of 8.8. Any code run this way has the rights of the operating…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Cursor confirms security breach led to malicious Claude Code extension",
+      "url": "https://www.bleepingcomputer.com/news/security/cursor-confirms-security-breach-led-to-malicious-claude-code-extension/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-14/#reporting-2396f465be93",
+      "cves": [],
+      "snippet": "Cursor confirms security breach led to malicious Claude Code extension Cursor confirmed it suffered a security breach that let hackers distribute a malicious Claude Code extension through its marketplace after stealing credentials from AI infrastructure provider Fireworks AI… Cursor confirmed it suffered a security breach that let hackers distribute a malicious Claude Code extension through its marketplace after stealing credentials from AI infrastructure provider Fireworks AI…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Cursor confirmed it suffered a security breach that let hackers distribute a malicious Claude Code extension through its marketplace after stealing credentials from AI infrastructure provider Fireworks AI…",
+          "text": "Cursor confirmed it suffered a security breach that let hackers distribute a malicious Claude Code extension through its marketplace after stealing credentials from AI infrastructure provider Fireworks AI…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Cursor confirmed it suffered a security breach that let hackers distribute a malicious Claude Code extension through its marketplace after stealing credentials from AI infrastructure provider Fireworks AI…",
+          "text": "Cursor confirmed it suffered a security breach that let hackers distribute a malicious Claude Code extension through its marketplace after stealing credentials from AI infrastructure provider Fireworks AI…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "US disrupts North Korean campaign behind $400 million crypto theft",
+      "url": "https://www.bleepingcomputer.com/news/security/us-disrupts-north-korean-campaign-behind-400-million-crypto-theft/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-14/#reporting-0eb645ca70f5",
+      "cves": [],
+      "snippet": "US disrupts North Korean campaign behind $400 million crypto theft The U.S. government has disrupted a North Korean social engineering campaign called 'FaceStealer', responsible for stealing more than $400 million in cryptocurrency… The U.S. government has disrupted a North Korean social engineering campaign called 'FaceStealer', responsible for stealing more than $400 million in cryptocurrency…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "The U.S. government has disrupted a North Korean social engineering campaign called 'FaceStealer', responsible for stealing more than $400 million in cryptocurrency…",
+          "text": "The U.S. government has disrupted a North Korean social engineering campaign called 'FaceStealer', responsible for stealing more than $400 million in cryptocurrency…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "The U.S. government has disrupted a North Korean social engineering campaign called 'FaceStealer', responsible for stealing more than $400 million in cryptocurrency…",
+          "text": "The U.S. government has disrupted a North Korean social engineering campaign called 'FaceStealer', responsible for stealing more than $400 million in cryptocurrency…"
         }
       ],
       "effective_date_evidence": null
@@ -327,50 +371,6 @@
           "origin": "content",
           "raw_text": "Three Trezor Safe 5 wallets bought from the reseller CryptoBilis contain an implant, an extra circuit board that can copy their recovery phrases, hardware wallet maker Trezor said yesterday. The implant reads the phrase from the wallet's screen and sends it over the mobile network to a server controlled by the attackers. The company examined one of the wallets in its lab, identified the other…",
           "text": "Three Trezor Safe 5 wallets bought from the reseller CryptoBilis contain an implant, an extra circuit board that can copy their recovery phrases, hardware wallet maker Trezor said yesterday. The implant reads the phrase from the wallet's screen and sends it over the mobile network to a server controlled by the attackers. The company examined one of the wallets in its lab, identified the other…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "Attackers in Binance Breach Targeted Known Weakness, Missing Controls",
-      "url": "https://www.darkreading.com/cybersecurity-operations/attackers-binance-breach-targeted-weakness-missing-controls",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-14/#reporting-43f14cb30a43",
-      "cves": [],
-      "snippet": "Attackers in Binance Breach Targeted Known Weakness, Missing Controls Blockchain complexities, such as attacker-deployed sweepers, hobble security controls designed to limit the damage of an exchange compromise. Blockchain complexities, such as attacker-deployed sweepers, hobble security controls designed to limit the damage of an exchange compromise.",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "Blockchain complexities, such as attacker-deployed sweepers, hobble security controls designed to limit the damage of an exchange compromise.",
-          "text": "Blockchain complexities, such as attacker-deployed sweepers, hobble security controls designed to limit the damage of an exchange compromise."
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "Blockchain complexities, such as attacker-deployed sweepers, hobble security controls designed to limit the damage of an exchange compromise.",
-          "text": "Blockchain complexities, such as attacker-deployed sweepers, hobble security controls designed to limit the damage of an exchange compromise."
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "Microsoft says November security updates cause printing issues",
-      "url": "https://www.bleepingcomputer.com/news/microsoft/microsoft-says-november-security-updates-cause-printing-issues/",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-14/#reporting-53b1d1645f89",
-      "cves": [],
-      "snippet": "Microsoft says November security updates cause printing issues Microsoft warned customers earlier this week that the November 2026 security updates may break printing for documents with complex formatting… Microsoft warned customers earlier this week that the November 2026 security updates may break printing for documents with complex formatting…",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "Microsoft warned customers earlier this week that the November 2026 security updates may break printing for documents with complex formatting…",
-          "text": "Microsoft warned customers earlier this week that the November 2026 security updates may break printing for documents with complex formatting…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "Microsoft warned customers earlier this week that the November 2026 security updates may break printing for documents with complex formatting…",
-          "text": "Microsoft warned customers earlier this week that the November 2026 security updates may break printing for documents with complex formatting…"
         }
       ],
       "effective_date_evidence": null
