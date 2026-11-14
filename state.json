@@ -9590,6 +9590,17 @@
       "release_key": "42e685d0f7fa4f394070448f5307a1e2ee6771f15481f763311672ae735c5b9c",
       "release_ref": "537eba4bf26022734c726192a4d34036fe3f2ca9",
       "stage": "serving"
+    },
+    {
+      "at": "2026-11-14T13:06:54.208Z",
+      "kind": "release",
+      "payload_digest": "604c8e97e7023ff7dcf74c48cfa7f339ea4dc15620abe98bbf09faaae050260a",
+      "proof": "on",
+      "release_key": "feb91b3a38234aab248aee8b66a549d12320580c0b63622f32752369cadf518c",
+      "release_ref": "a818738aa8a40ee841758367fd3fa2069a94ea9f",
+      "source_revision": "31d9a62edc9911aab25284264237f7682b9ba0f6",
+      "stage": "released",
+      "tree_digest": "62026a624b69404a38d527b965a902fb5d92cfdd136f0b7e007c758c4d9a5782"
     }
   ],
   "schema_version": 1,
