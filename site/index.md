@@ -1,8 +1,8 @@
 # GRC Intelligence Report - 2026-11-14
-**Generated:** 2026-11-14T13:05:57.246355Z
+**Generated:** 2026-11-14T15:15:39.011868Z
 **Date of Issue:** November 2026
 **Analysis Period:** November 2026
-**Source:** [SentryDigest](https://sentrydigest.ricomanifesto.com/feed.xml)
+**Source:** [SentryDigest](https://raw.githubusercontent.com/ricomanifesto/SentryDigest/db20b7d6436fe83854344932c538679484ac101e/site/feed.xml)
 **Source Issue:** [SentryDigest 2026-11-14](https://sentrydigest.ricomanifesto.com/archive/2026-11-14/)
 **Articles Analyzed:** 30
 **GRC-Relevant Articles:** 30
@@ -12,9 +12,9 @@
 
 ## Executive Summary
 
-Critical supply chain and database vulnerabilities demand immediate control validation this period. A confirmed hardware implant in Trezor cryptocurrency wallets from an authorized reseller demonstrates that physical supply chain compromise can defeat software security controls, while a 22-year-old PostgreSQL flaw allows authenticated users to execute code with operating system privileges. Both findings require control owners to verify patching completeness and supplier assurance evidence beyond standard software update processes. [PostgreSQL Patches 52 Flaws, Including 22-Year-Old Bug Enabling Authenticated RCE](https://thehackernews.com/2026/11/postgresql-patches-52-flaws-including.html); [Trezor confirms crypto-stealing implants in three wallets, releases fix](https://www.bleepingcomputer.com/news/cryptocurrency/trezor-confirms-crypto-stealing-implants-in-three-wallets-releases-fix/)
+Active exploitation and supply chain compromises demand urgent vulnerability and third-party risk management. CISA added an UnrealIRCd flaw to its Known Exploited Vulnerabilities catalog following active exploitation. Trezor confirmed malicious hardware implants in cryptocurrency wallets sold by a Southeast Asian reseller. German defense contractor Quantum Systems detected a cyberattack disrupting military drone operations. These events show active exploitation of known vulnerabilities and supply chain compromise affecting critical infrastructure and cryptographic assets. [Attackers Exploit UnrealIRCd Flaw That Enables Server-Level Command Injection](https://thehackernews.com/2026/11/attackers-exploit-unrealircd-flaw-that.html); [Trezor confirms crypto-stealing implants in three wallets, releases fix](https://www.bleepingcomputer.com/news/cryptocurrency/trezor-confirms-crypto-stealing-implants-in-three-wallets-releases-fix/); [German military drone operations disrupted by cyberattack](https://www.bleepingcomputer.com/news/security/german-military-drone-operations-disrupted-by-cyberattack/)
 
-Cloud isolation controls and AI agent governance gaps present emerging assurance challenges. New attacks against AMD SEV-SNP virtual machines show that confidential computing protections can be bypassed when hypervisor and BIOS layers are compromised, and AI agents with financial system access can be manipulated through prompt injection without triggering traditional alerts. Control owners must reassess reliance on hardware-enforced isolation for sensitive workloads and implement approval workflows and anomaly monitoring for autonomous agents. [New Mior and Skyfall Attacks Let Rogue Cloud Hosts Steal Secrets From AMD SEV-SNP VMs](https://thehackernews.com/2026/11/new-mior-and-skyfall-attacks-let-rogue.html); [How one AI agent exposed five critical enterprise security gaps](https://www.bleepingcomputer.com/news/security/how-one-ai-agent-exposed-five-critical-enterprise-security-gaps/)
+Cloud isolation failures and AI agent gaps extend attack surface while patching introduces operational risk. Research shows malicious hosts can breach AMD SEV-SNP virtual machine protections and forge attestation reports. An AI agent automating invoice processing was manipulated to alter vendor bank details without triggering alerts. Microsoft warned that November security updates break printing for complex documents. Owners should reassess cloud provider assurances, AI governance, and change validation processes. [New Mior and Skyfall Attacks Let Rogue Cloud Hosts Steal Secrets From AMD SEV-SNP VMs](https://thehackernews.com/2026/11/new-mior-and-skyfall-attacks-let-rogue.html); [How one AI agent exposed five critical enterprise security gaps](https://www.bleepingcomputer.com/news/security/how-one-ai-agent-exposed-five-critical-enterprise-security-gaps/); [Microsoft says November security updates cause printing issues](https://www.bleepingcomputer.com/news/microsoft/microsoft-says-november-security-updates-cause-printing-issues/)
 
 Scope: 6 findings and 0 sourced regulatory changes from 12 retained sources. Review priorities rank what to check first; confirm whether each finding applies to your organization before assigning work.
 
@@ -26,13 +26,13 @@ No sourced regulatory changes identified in the supplied evidence.
 
 Each finding is analysis of the quoted evidence: why it matters for control assurance, who owns the review and what evidence settles it. Reference controls are review aids, not a compliance determination.
 
-### PostgreSQL patches 52 flaws including authenticated RCE
+### UnrealIRCd added to CISA KEV catalog following active exploitation
 
 **Review priority:** High · Vulnerability management · Owner: Vulnerability and asset owners
 
-**Why it matters:** A critical database vulnerability allows authenticated users to execute code with operating system privileges. Control owners must verify that all PostgreSQL instances are patched and that C-language extensions are rebuilt to achieve full protection.
+**Why it matters:** CISA KEV inclusion signals active exploitation requiring urgent patching. The accountable owner should confirm affected assets are inventoried, patched, or protected by compensating controls.
 
-**Source evidence:** “A type confusion flaw in PostgreSQL lets a database user who can create objects run code on the server. Updates released yesterday fix it, along with 51 other security flaws. Full protection from this flaw also requires rebuilding any C-language extensions installed on the server. The flaw, tracked as CVE-2026-6460, has a CVSS score of 8.8. Any code run this way has the rights of the operating…” [PostgreSQL Patches 52 Flaws, Including 22-Year-Old Bug Enabling Authenticated RCE](https://thehackernews.com/2026/11/postgresql-patches-52-flaws-including.html)
+**Source evidence:** “The U.S. Cybersecurity and Infrastructure Security Agency &#40;CISA&#41; on Friday added a high-severity security flaw impacting UnrealIRCd, an open-source Internet Relay Chat &#40;IRC&#41; server, to its Known Exploited Vulnerabilities &#40;KEV&#41; catalog, following reports of active exploitation. The vulnerability, tracked as CVE-2026-114713 &#40;CVSS score: 8.6&#41;, is a case of improper neutralization of delimiters…” [Attackers Exploit UnrealIRCd Flaw That Enables Server-Level Command Injection](https://thehackernews.com/2026/11/attackers-exploit-unrealircd-flaw-that.html)
 
 **Evidence to request:** Affected-asset inventory, installed versions, remediation status and an exception owner.
 
@@ -40,11 +40,11 @@ Each finding is analysis of the quoted evidence: why it matters for control assu
 
 **Reference controls:** ISO/IEC 27001:2022 A.8.8 (management of technical vulnerabilities); NIST CSF 2.0 ID.RA (risk assessment), PR.PS (platform security)
 
-### Trezor Safe 5 wallets compromised by hardware implants in supply chain
+### Trezor Safe 5 devices confirmed with malicious hardware implants
 
 **Review priority:** High · Third-party risk · Owner: Supplier risk owner
 
-**Why it matters:** Malicious hardware implants in devices from an authorized reseller demonstrate supply chain compromise that bypasses software controls. Control owners must review hardware procurement verification and supplier assurance processes for critical cryptographic devices.
+**Why it matters:** Supply chain compromise of hardware wallets enables theft of cryptographic keys. The accountable owner should verify supply chain integrity and review supplier assurance evidence for critical hardware.
 
 **Source evidence:** “Cryptocurrency hardware wallet maker Trezor has confirmed that three Safe 5 devices sold by Southeast Asian reseller CryptoBilis contained malicious hardware implants designed to steal wallet recovery phrases and send them to attackers over cellular networks…” [Trezor confirms crypto-stealing implants in three wallets, releases fix](https://www.bleepingcomputer.com/news/cryptocurrency/trezor-confirms-crypto-stealing-implants-in-three-wallets-releases-fix/)
 
@@ -54,11 +54,25 @@ Each finding is analysis of the quoted evidence: why it matters for control assu
 
 **Reference controls:** ISO/IEC 27001:2022 A.5.19 (supplier relationships), A.5.21 (ICT supply chain), A.5.22 (monitoring and review of supplier services); NIST CSF 2.0 GV.SC (cybersecurity supply chain risk management)
 
-### AMD SEV-SNP VM protections bypassed by malicious host attacks
+### Quantum Systems drone operations disrupted by active cyberattack
 
-**Review priority:** Medium · Data protection · Owner: Data and privacy owners
+**Review priority:** High · Incident response · Owner: Incident response lead
 
-**Why it matters:** Confidential computing controls designed to protect VM data from cloud operators can be defeated by compromised hypervisor and BIOS. Control owners must assess reliance on hardware-enforced isolation and evaluate additional encryption or monitoring for sensitive workloads.
+**Why it matters:** Critical infrastructure cyberattack disrupts military operations. The accountable owner should review incident response readiness for operational technology and confirm containment procedures.
+
+**Source evidence:** “German defense technology company Quantum Systems confirmed that it detected an incident in late October that was part of an active cyberattack by "hostile actors."…” [German military drone operations disrupted by cyberattack](https://www.bleepingcomputer.com/news/security/german-military-drone-operations-disrupted-by-cyberattack/)
+
+**Evidence to request:** Containment responsibilities, retained logs and the most recent response exercise.
+
+**Decision trigger:** If an exercise exposes an ownership or evidence gap, assign a response-plan correction and retest it.
+
+**Reference controls:** ISO/IEC 27001:2022 A.5.24 (incident management planning and preparation), A.5.26 (response to information security incidents); NIST CSF 2.0 RS.MA (incident management), RS.MI (incident mitigation)
+
+### AMD SEV-SNP-protected virtual machines exposed to malicious host attacks
+
+**Review priority:** High · Data protection · Owner: Data and privacy owners
+
+**Why it matters:** Cloud host can breach VM isolation and forge attestation reports. The accountable owner should assess cloud provider assurances and encryption key management for sensitive workloads.
 
 **Source evidence:** “Two attacks made public this week allow a malicious host to read data inside AMD SEV-SNP-protected virtual machines &#40;VMs&#41;, which are built to keep the server's operator out. One of them, Mior, can also modify a VM's memory and fake the signed report confirming which software it runs. Both need control of the server's hypervisor, and Mior also needs control of the server's BIOS. Researchers…” [New Mior and Skyfall Attacks Let Rogue Cloud Hosts Steal Secrets From AMD SEV-SNP VMs](https://thehackernews.com/2026/11/new-mior-and-skyfall-attacks-let-rogue.html)
 
@@ -68,11 +82,11 @@ Each finding is analysis of the quoted evidence: why it matters for control assu
 
 **Reference controls:** ISO/IEC 27001:2022 A.5.34 (privacy and protection of PII), A.8.12 (data leakage prevention), A.8.24 (use of cryptography); NIST CSF 2.0 PR.DS (data security)
 
-### AI agent manipulated to change vendor bank details via malicious email
+### AI agent invoice processing manipulated via malicious email
 
 **Review priority:** Medium · Governance and accountability · Owner: Risk and control owners
 
-**Why it matters:** Autonomous AI agents with access to financial systems can be subverted through prompt injection without triggering conventional controls. Control owners must review AI agent permissions, implement approval workflows for sensitive actions, and establish monitoring for anomalous agent behavior.
+**Why it matters:** AI agents introduce new attack surfaces bypassing traditional controls. The accountable owner should review AI agent governance and monitoring coverage for financial transaction workflows.
 
 **Source evidence:** “An AI agent built to automate invoice processing could be manipulated into changing vendor bank details through a malicious email, without triggering traditional security alerts. Token Security examines five critical AI agent security gaps and shares practical guidance from industry security leaders on preventing them…” [How one AI agent exposed five critical enterprise security gaps](https://www.bleepingcomputer.com/news/security/how-one-ai-agent-exposed-five-critical-enterprise-security-gaps/)
 
@@ -82,36 +96,23 @@ Each finding is analysis of the quoted evidence: why it matters for control assu
 
 **Reference controls:** ISO/IEC 27001:2022 A.5.1 (policies for information security), A.5.2 (roles and responsibilities); NIST CSF 2.0 GV.RR (roles, responsibilities and authorities), GV.OV (oversight)
 
-### Check Point Security Gateway compromised via PHP2Shell to deploy ESXi wiper
+### November 2026 security updates break printing for complex documents
 
-**Review priority:** High · Vulnerability management · Owner: Vulnerability and asset owners
+**Review priority:** Medium · Change management · Owner: Change and service owners
 
-**Why it matters:** Network security gateways were exploited to deploy destructive malware on virtualization hosts. Control owners must confirm gateway patching status and validate that network segmentation limits lateral movement to hypervisor infrastructure.
+**Why it matters:** Security patches causing operational disruption. The accountable owner should validate change management testing and rollback procedures for critical business functions.
 
-**Source evidence:** “Vulnerable Check Point Security Gateway instances have been targeted in PHP2Shell attacks that deployed data-wiping malware on VMware ESXi hosts…” [Check Point gateways hacked via PHP2Shell to deploy VMware ESXi wiper](https://www.bleepingcomputer.com/news/security/check-point-gateways-hacked-via-php2shell-to-deploy-vmware-esxi-wiper/)
+**Source evidence:** “Microsoft warned customers earlier this week that the November 2026 security updates may break printing for documents with complex formatting…” [Microsoft says November security updates cause printing issues](https://www.bleepingcomputer.com/news/microsoft/microsoft-says-november-security-updates-cause-printing-issues/)
 
-**Evidence to request:** Affected-asset inventory, installed versions, remediation status and an exception owner.
+**Evidence to request:** Change approval, rollout coverage, post-change validation and rollback ownership.
 
-**Decision trigger:** If applicability is confirmed, decide on remediation or a documented exception; otherwise record why the finding does not apply.
+**Decision trigger:** If validation or recovery evidence is missing, resolve that gap before relying on the change.
 
-**Reference controls:** ISO/IEC 27001:2022 A.8.8 (management of technical vulnerabilities); NIST CSF 2.0 ID.RA (risk assessment), PR.PS (platform security)
-
-### North Korean hackers steal over $400 million in crypto using deepfake video calls
-
-**Review priority:** Medium · Incident response · Owner: Incident response lead
-
-**Why it matters:** State-sponsored actors used deepfake-enabled social engineering to compromise cryptocurrency holdings at scale. Control owners must verify identity verification controls for high-value transactions and ensure incident response procedures address AI-generated impersonation attacks.
-
-**Source evidence:** “The U.S. Federal Bureau of Investigation &#40;FBI&#41; has established that threat actors tied to the Democratic People's Republic of Korea &#40;DPRK aka North Korea&#41; have stolen more than $400 million worth of cryptocurrency as part of a social engineering scheme codenamed FaceStealer in the last 18 months. As part of a coordinated set of actions announced by the U.S. government, the cloud-based…” [FBI Says North Korean Hackers Stole Over $400 Million in Crypto Using Deepfake Video Calls](https://thehackernews.com/2026/11/fbi-says-north-korean-hackers-stole.html)
-
-**Evidence to request:** Containment responsibilities, retained logs and the most recent response exercise.
-
-**Decision trigger:** If an exercise exposes an ownership or evidence gap, assign a response-plan correction and retest it.
-
-**Reference controls:** ISO/IEC 27001:2022 A.5.24 (incident management planning and preparation), A.5.26 (response to information security incidents); NIST CSF 2.0 RS.MA (incident management), RS.MI (incident mitigation)
+**Reference controls:** ISO/IEC 27001:2022 A.8.32 (change management); NIST CSF 2.0 PR.PS (platform security)
 
 ## Source Highlights
 
+- [Attackers Exploit UnrealIRCd Flaw That Enables Server-Level Command Injection](https://thehackernews.com/2026/11/attackers-exploit-unrealircd-flaw-that.html) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-14/#reporting-e577b898eca3)
 - [PostgreSQL Patches 52 Flaws, Including 22-Year-Old Bug Enabling Authenticated RCE](https://thehackernews.com/2026/11/postgresql-patches-52-flaws-including.html) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-14/#reporting-d8cc2172e29e)
 - [ArcticRAT Cybercrime Gang Profiles Victim Finances With AI](https://www.darkreading.com/mobile-security/arcticrat-cybercrime-gang-profiles-victim-finances-ai) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-14/#reporting-c281bea158b9)
 - [Trezor confirms crypto-stealing implants in three wallets, releases fix](https://www.bleepingcomputer.com/news/cryptocurrency/trezor-confirms-crypto-stealing-implants-in-three-wallets-releases-fix/) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-14/#reporting-d2962957f52f)
@@ -123,4 +124,3 @@ Each finding is analysis of the quoted evidence: why it matters for control assu
 - [Trezor Confirms Hidden Implants in CryptoBilis-Sold Wallets That Can Steal Recovery Phrases](https://thehackernews.com/2026/11/trezor-confirms-hidden-hardware.html) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-14/#reporting-ea8f2c682142)
 - [Attackers in Binance Breach Targeted Known Weakness, Missing Controls](https://www.darkreading.com/cybersecurity-operations/attackers-binance-breach-targeted-weakness-missing-controls) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-14/#reporting-43f14cb30a43)
 - [Microsoft says November security updates cause printing issues](https://www.bleepingcomputer.com/news/microsoft/microsoft-says-november-security-updates-cause-printing-issues/) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-14/#reporting-53b1d1645f89)
-- [When an AI Agent Goes Wrong, Can You Stop It?](https://thehackernews.com/2026/11/when-ai-agent-goes-wrong-can-you-stop-it.html) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-14/#reporting-ed1f4b35eca7)
