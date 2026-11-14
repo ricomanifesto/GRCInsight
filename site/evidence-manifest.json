@@ -5,72 +5,72 @@
     "control_implications": [
       {
         "control_id": "vulnerability_management",
-        "evidence_excerpt": "A type confusion flaw in PostgreSQL lets a database user who can create objects run code on the server. Updates released yesterday fix it, along with 51 other security flaws. Full protection from this flaw also requires rebuilding any C-language extensions installed on the server. The flaw, tracked as CVE-2026-6460, has a CVSS score of 8.8. Any code run this way has the rights of the operating",
+        "evidence_excerpt": "A type confusion flaw in PostgreSQL lets a database user who can create objects run code on the server. Updates released yesterday fix it, along with 51 other security flaws. Full protection from this flaw also requires rebuilding any C-language extensions installed on the server. The flaw, tracked as CVE-2026-6460, has a CVSS score of 8.8. Any code run this way has the rights of the operating…",
         "evidence_origin": "summary",
         "focus": "PostgreSQL",
         "headline": "PostgreSQL patches 52 flaws including authenticated RCE",
         "priority": "high",
-        "significance": "The authenticated remote code execution flaw in PostgreSQL weakens database integrity and requires immediate patching and extension rebuilding. The vulnerability management owner should confirm all PostgreSQL instances are updated and C-language extensions rebuilt.",
+        "significance": "A critical database vulnerability allows authenticated users to execute code with operating system privileges. Control owners must verify that all PostgreSQL instances are patched and that C-language extensions are rebuilt to achieve full protection.",
         "source_ids": [
           1
         ]
       },
       {
         "control_id": "third_party_risk",
-        "evidence_excerpt": "Cryptocurrency hardware wallet maker Trezor has confirmed that three Safe 5 devices sold by Southeast Asian reseller CryptoBilis contained malicious hardware implants designed to steal wallet recovery phrases and send them to attackers over cellular networks",
+        "evidence_excerpt": "Cryptocurrency hardware wallet maker Trezor has confirmed that three Safe 5 devices sold by Southeast Asian reseller CryptoBilis contained malicious hardware implants designed to steal wallet recovery phrases and send them to attackers over cellular networks…",
         "evidence_origin": "summary",
-        "focus": "Safe 5 devices",
-        "headline": "Safe 5 devices contain malicious hardware implants stealing recovery phrases",
+        "focus": "Trezor Safe 5 wallets",
+        "headline": "Trezor Safe 5 wallets compromised by hardware implants in supply chain",
         "priority": "high",
-        "significance": "The supply chain compromise of hardware wallets exposes cryptocurrency assets to theft via malicious implants. The third-party risk owner should verify supplier assurance for hardware procurement and validate device integrity controls.",
+        "significance": "Malicious hardware implants in devices from an authorized reseller demonstrate supply chain compromise that bypasses software controls. Control owners must review hardware procurement verification and supplier assurance processes for critical cryptographic devices.",
         "source_ids": [
           3
         ]
       },
       {
-        "control_id": "monitoring",
-        "evidence_excerpt": "Vulnerable Check Point Security Gateway instances have been targeted in PHP2Shell attacks that deployed data-wiping malware on VMware ESXi hosts",
+        "control_id": "vulnerability_management",
+        "evidence_excerpt": "Vulnerable Check Point Security Gateway instances have been targeted in PHP2Shell attacks that deployed data-wiping malware on VMware ESXi hosts…",
         "evidence_origin": "summary",
-        "focus": "Check Point Security Gateway instances",
-        "headline": "Check Point Security Gateway instances targeted by PHP2Shell attacks deploying wiper malware",
+        "focus": "Check Point Security Gateway",
+        "headline": "Check Point Security Gateway compromised via PHP2Shell to deploy ESXi wiper",
         "priority": "high",
-        "significance": "The PHP2Shell exploitation of Check Point gateways enables destructive wiper malware deployment on virtualization hosts. The monitoring owner should confirm detection coverage for PHP2Shell activity and validate ESXi host integrity monitoring.",
+        "significance": "Network security gateways were exploited to deploy destructive malware on virtualization hosts. Control owners must confirm gateway patching status and validate that network segmentation limits lateral movement to hypervisor infrastructure.",
         "source_ids": [
           5
         ]
       },
       {
-        "control_id": "governance",
-        "evidence_excerpt": "An AI agent built to automate invoice processing could be manipulated into changing vendor bank details through a malicious email, without triggering traditional security alerts. Token Security examines five critical AI agent security gaps and shares practical guidance from industry security leaders on preventing them",
+        "control_id": "data_protection",
+        "evidence_excerpt": "Two attacks made public this week allow a malicious host to read data inside AMD SEV-SNP-protected virtual machines (VMs), which are built to keep the server's operator out. One of them, Mior, can also modify a VM's memory and fake the signed report confirming which software it runs. Both need control of the server's hypervisor, and Mior also needs control of the server's BIOS. Researchers…",
         "evidence_origin": "summary",
-        "focus": "AI agent built to automate invoice processing",
-        "headline": "AI agent built to automate invoice processing manipulated to change vendor bank details",
+        "focus": "AMD SEV-SNP-protected virtual machines",
+        "headline": "AMD SEV-SNP VM protections bypassed by malicious host attacks",
         "priority": "medium",
-        "significance": "The AI agent manipulation bypasses traditional security controls and alters financial transactions without detection. The governance owner should review AI agent access permissions and implement behavioral monitoring for automated financial workflows.",
+        "significance": "Confidential computing controls designed to protect VM data from cloud operators can be defeated by compromised hypervisor and BIOS. Control owners must assess reliance on hardware-enforced isolation and evaluate additional encryption or monitoring for sensitive workloads.",
+        "source_ids": [
+          6
+        ]
+      },
+      {
+        "control_id": "governance",
+        "evidence_excerpt": "An AI agent built to automate invoice processing could be manipulated into changing vendor bank details through a malicious email, without triggering traditional security alerts. Token Security examines five critical AI agent security gaps and shares practical guidance from industry security leaders on preventing them…",
+        "evidence_origin": "summary",
+        "focus": "AI agent",
+        "headline": "AI agent manipulated to change vendor bank details via malicious email",
+        "priority": "medium",
+        "significance": "Autonomous AI agents with access to financial systems can be subverted through prompt injection without triggering conventional controls. Control owners must review AI agent permissions, implement approval workflows for sensitive actions, and establish monitoring for anomalous agent behavior.",
         "source_ids": [
           7
         ]
       },
       {
-        "control_id": "change_management",
-        "evidence_excerpt": "Microsoft warned customers earlier this week that the November 2026 security updates may break printing for documents with complex formatting",
-        "evidence_origin": "summary",
-        "focus": "November 2026 security updates",
-        "headline": "November 2026 security updates break printing for complex documents",
-        "priority": "medium",
-        "significance": "The security updates introduce functional regression affecting document printing, potentially disrupting business operations. The change management owner should validate post-update testing procedures and confirm rollback plans for affected systems.",
-        "source_ids": [
-          11
-        ]
-      },
-      {
         "control_id": "incident_response",
-        "evidence_excerpt": "The U.S. Federal Bureau of Investigation (FBI) has established that threat actors tied to the Democratic People's Republic of Korea (DPRK aka North Korea) have stolen more than $400 million worth of cryptocurrency as part of a social engineering scheme codenamed FaceStealer in the last 18 months. As part of a coordinated set of actions announced by the U.S. government, the cloud-based",
+        "evidence_excerpt": "The U.S. Federal Bureau of Investigation (FBI) has established that threat actors tied to the Democratic People's Republic of Korea (DPRK aka North Korea) have stolen more than $400 million worth of cryptocurrency as part of a social engineering scheme codenamed FaceStealer in the last 18 months. As part of a coordinated set of actions announced by the U.S. government, the cloud-based…",
         "evidence_origin": "summary",
-        "focus": "threat actors tied to the Democratic People's Republic of Korea",
-        "headline": "threat actors tied to the Democratic People's Republic of Korea steal cryptocurrency via deepfake",
-        "priority": "high",
-        "significance": "The state-sponsored social engineering campaign using deepfake video calls has resulted in substantial cryptocurrency theft. The incident response owner should verify deepfake detection capabilities and review cryptocurrency transaction monitoring for anomalous patterns.",
+        "focus": "North Korean hackers",
+        "headline": "North Korean hackers steal over $400 million in crypto using deepfake video calls",
+        "priority": "medium",
+        "significance": "State-sponsored actors used deepfake-enabled social engineering to compromise cryptocurrency holdings at scale. Control owners must verify identity verification controls for high-value transactions and ensure incident response procedures address AI-generated impersonation attacks.",
         "source_ids": [
           8
         ]
@@ -81,26 +81,24 @@
         {
           "source_ids": [
             1,
-            5,
             3
           ],
-          "text": "Critical vulnerabilities in PostgreSQL and Check Point gateways alongside a confirmed hardware supply chain compromise of Trezor wallets demand immediate control assurance actions. The PostgreSQL authenticated remote code execution flaw requires patching and rebuilding of all C-language extensions, while the Check Point PHP2Shell exploitation enables destructive wiper deployment on virtualization hosts. The Trezor implant discovery via an unauthorized reseller underscores the need for hardware procurement verification and device integrity validation. Vulnerability management, monitoring, and third-party risk owners must confirm remediation coverage, detection rules, and supplier assurance evidence."
+          "text": "Critical supply chain and database vulnerabilities demand immediate control validation this period. A confirmed hardware implant in Trezor cryptocurrency wallets from an authorized reseller demonstrates that physical supply chain compromise can defeat software security controls, while a 22-year-old PostgreSQL flaw allows authenticated users to execute code with operating system privileges. Both findings require control owners to verify patching completeness and supplier assurance evidence beyond standard software update processes."
         },
         {
           "source_ids": [
-            7,
-            8,
-            11
+            6,
+            7
           ],
-          "text": "AI agent manipulation of financial workflows and state-sponsored deepfake cryptocurrency theft reveal gaps in automated process governance and identity verification. An invoice-processing AI agent was subverted to alter vendor bank details without triggering alerts, while North Korean threat actors used deepfake video calls to steal over four hundred million dollars in cryptocurrency. Concurrently, Microsoft security updates introduced printing regressions, highlighting the need for robust change validation. Governance, incident response, and change management owners should review AI agent access controls, deepfake detection capabilities, and post-update testing procedures."
+          "text": "Cloud isolation controls and AI agent governance gaps present emerging assurance challenges. New attacks against AMD SEV-SNP virtual machines show that confidential computing protections can be bypassed when hypervisor and BIOS layers are compromised, and AI agents with financial system access can be manipulated through prompt injection without triggering traditional alerts. Control owners must reassess reliance on hardware-enforced isolation for sensitive workloads and implement approval workflows and anomaly monitoring for autonomous agents."
         }
       ]
     },
     "industry_impacts": [],
     "regulatory_changes": []
   },
-  "generated_at": "2026-11-14T00:42:21.375481Z",
-  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/4911475d89b9b494b145ee6ab2ac47111c5e7822/site/feed.xml",
+  "generated_at": "2026-11-14T13:05:57.246355Z",
+  "feed_url": "https://sentrydigest.ricomanifesto.com/feed.xml",
   "feed_home_url": "https://sentrydigest.ricomanifesto.com/",
   "digest_issue_date": "2026-11-14",
   "digest_issue_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-14/",

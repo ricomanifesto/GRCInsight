@@ -1,0 +1,375 @@
+{
+  "schema_version": 3,
+  "report_contract_version": 6,
+  "report_plan": {
+    "control_implications": [
+      {
+        "control_id": "vulnerability_management",
+        "evidence_excerpt": "A type confusion flaw in PostgreSQL lets a database user who can create objects run code on the server. Updates released yesterday fix it, along with 51 other security flaws. Full protection from this flaw also requires rebuilding any C-language extensions installed on the server. The flaw, tracked as CVE-2026-6460, has a CVSS score of 8.8. Any code run this way has the rights of the operating…",
+        "evidence_origin": "summary",
+        "focus": "PostgreSQL",
+        "headline": "PostgreSQL patches 52 flaws including authenticated RCE",
+        "priority": "high",
+        "significance": "A critical database vulnerability allows authenticated users to execute code with operating system privileges. Control owners must verify that all PostgreSQL instances are patched and that C-language extensions are rebuilt to achieve full protection.",
+        "source_ids": [
+          1
+        ]
+      },
+      {
+        "control_id": "third_party_risk",
+        "evidence_excerpt": "Cryptocurrency hardware wallet maker Trezor has confirmed that three Safe 5 devices sold by Southeast Asian reseller CryptoBilis contained malicious hardware implants designed to steal wallet recovery phrases and send them to attackers over cellular networks…",
+        "evidence_origin": "summary",
+        "focus": "Trezor Safe 5 wallets",
+        "headline": "Trezor Safe 5 wallets compromised by hardware implants in supply chain",
+        "priority": "high",
+        "significance": "Malicious hardware implants in devices from an authorized reseller demonstrate supply chain compromise that bypasses software controls. Control owners must review hardware procurement verification and supplier assurance processes for critical cryptographic devices.",
+        "source_ids": [
+          3
+        ]
+      },
+      {
+        "control_id": "vulnerability_management",
+        "evidence_excerpt": "Vulnerable Check Point Security Gateway instances have been targeted in PHP2Shell attacks that deployed data-wiping malware on VMware ESXi hosts…",
+        "evidence_origin": "summary",
+        "focus": "Check Point Security Gateway",
+        "headline": "Check Point Security Gateway compromised via PHP2Shell to deploy ESXi wiper",
+        "priority": "high",
+        "significance": "Network security gateways were exploited to deploy destructive malware on virtualization hosts. Control owners must confirm gateway patching status and validate that network segmentation limits lateral movement to hypervisor infrastructure.",
+        "source_ids": [
+          5
+        ]
+      },
+      {
+        "control_id": "data_protection",
+        "evidence_excerpt": "Two attacks made public this week allow a malicious host to read data inside AMD SEV-SNP-protected virtual machines (VMs), which are built to keep the server's operator out. One of them, Mior, can also modify a VM's memory and fake the signed report confirming which software it runs. Both need control of the server's hypervisor, and Mior also needs control of the server's BIOS. Researchers…",
+        "evidence_origin": "summary",
+        "focus": "AMD SEV-SNP-protected virtual machines",
+        "headline": "AMD SEV-SNP VM protections bypassed by malicious host attacks",
+        "priority": "medium",
+        "significance": "Confidential computing controls designed to protect VM data from cloud operators can be defeated by compromised hypervisor and BIOS. Control owners must assess reliance on hardware-enforced isolation and evaluate additional encryption or monitoring for sensitive workloads.",
+        "source_ids": [
+          6
+        ]
+      },
+      {
+        "control_id": "governance",
+        "evidence_excerpt": "An AI agent built to automate invoice processing could be manipulated into changing vendor bank details through a malicious email, without triggering traditional security alerts. Token Security examines five critical AI agent security gaps and shares practical guidance from industry security leaders on preventing them…",
+        "evidence_origin": "summary",
+        "focus": "AI agent",
+        "headline": "AI agent manipulated to change vendor bank details via malicious email",
+        "priority": "medium",
+        "significance": "Autonomous AI agents with access to financial systems can be subverted through prompt injection without triggering conventional controls. Control owners must review AI agent permissions, implement approval workflows for sensitive actions, and establish monitoring for anomalous agent behavior.",
+        "source_ids": [
+          7
+        ]
+      },
+      {
+        "control_id": "incident_response",
+        "evidence_excerpt": "The U.S. Federal Bureau of Investigation (FBI) has established that threat actors tied to the Democratic People's Republic of Korea (DPRK aka North Korea) have stolen more than $400 million worth of cryptocurrency as part of a social engineering scheme codenamed FaceStealer in the last 18 months. As part of a coordinated set of actions announced by the U.S. government, the cloud-based…",
+        "evidence_origin": "summary",
+        "focus": "North Korean hackers",
+        "headline": "North Korean hackers steal over $400 million in crypto using deepfake video calls",
+        "priority": "medium",
+        "significance": "State-sponsored actors used deepfake-enabled social engineering to compromise cryptocurrency holdings at scale. Control owners must verify identity verification controls for high-value transactions and ensure incident response procedures address AI-generated impersonation attacks.",
+        "source_ids": [
+          8
+        ]
+      }
+    ],
+    "executive_brief": {
+      "paragraphs": [
+        {
+          "source_ids": [
+            1,
+            3
+          ],
+          "text": "Critical supply chain and database vulnerabilities demand immediate control validation this period. A confirmed hardware implant in Trezor cryptocurrency wallets from an authorized reseller demonstrates that physical supply chain compromise can defeat software security controls, while a 22-year-old PostgreSQL flaw allows authenticated users to execute code with operating system privileges. Both findings require control owners to verify patching completeness and supplier assurance evidence beyond standard software update processes."
+        },
+        {
+          "source_ids": [
+            6,
+            7
+          ],
+          "text": "Cloud isolation controls and AI agent governance gaps present emerging assurance challenges. New attacks against AMD SEV-SNP virtual machines show that confidential computing protections can be bypassed when hypervisor and BIOS layers are compromised, and AI agents with financial system access can be manipulated through prompt injection without triggering traditional alerts. Control owners must reassess reliance on hardware-enforced isolation for sensitive workloads and implement approval workflows and anomaly monitoring for autonomous agents."
+        }
+      ]
+    },
+    "industry_impacts": [],
+    "regulatory_changes": []
+  },
+  "generated_at": "2026-11-14T13:05:57.246355Z",
+  "feed_url": "https://sentrydigest.ricomanifesto.com/feed.xml",
+  "feed_home_url": "https://sentrydigest.ricomanifesto.com/",
+  "digest_issue_date": "2026-11-14",
+  "digest_issue_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-14/",
+  "requested_model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
+  "resolved_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+  "sources": [
+    {
+      "title": "PostgreSQL Patches 52 Flaws, Including 22-Year-Old Bug Enabling Authenticated RCE",
+      "url": "https://thehackernews.com/2026/11/postgresql-patches-52-flaws-including.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-14/#reporting-d8cc2172e29e",
+      "cves": [
+        "CVE-2026-6460"
+      ],
+      "snippet": "PostgreSQL Patches 52 Flaws, Including 22-Year-Old Bug Enabling Authenticated RCE A type confusion flaw in PostgreSQL lets a database user who can create objects run code on the server. Updates released yesterday fix it, along with 51 other security flaws. Full protection from this flaw also requires rebuilding any C-language extensions installed on the server. The flaw, tracked as CVE-2026-6460, has a CVSS score of 8.8. Any code run this way has the rights of the operating… A type confusion flaw in PostgreSQL lets a database user who can create objects run code on the server. Updates released yesterday fix it, along with 51 other security flaws. Full protection from this flaw also requires ",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "A type confusion flaw in PostgreSQL lets a database user who can create objects run code on the server. Updates released yesterday fix it, along with 51 other security flaws. Full protection from this flaw also requires rebuilding any C-language extensions installed on the server. The flaw, tracked as CVE-2026-6460, has a CVSS score of 8.8. Any code run this way has the rights of the operating…",
+          "text": "A type confusion flaw in PostgreSQL lets a database user who can create objects run code on the server. Updates released yesterday fix it, along with 51 other security flaws. Full protection from this flaw also requires rebuilding any C-language extensions installed on the server. The flaw, tracked as CVE-2026-6460, has a CVSS score of 8.8. Any code run this way has the rights of the operating…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "A type confusion flaw in PostgreSQL lets a database user who can create objects run code on the server. Updates released yesterday fix it, along with 51 other security flaws. Full protection from this flaw also requires rebuilding any C-language extensions installed on the server. The flaw, tracked as CVE-2026-6460, has a CVSS score of 8.8. Any code run this way has the rights of the operating…",
+          "text": "A type confusion flaw in PostgreSQL lets a database user who can create objects run code on the server. Updates released yesterday fix it, along with 51 other security flaws. Full protection from this flaw also requires rebuilding any C-language extensions installed on the server. The flaw, tracked as CVE-2026-6460, has a CVSS score of 8.8. Any code run this way has the rights of the operating…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "ArcticRAT Cybercrime Gang Profiles Victim Finances With AI",
+      "url": "https://www.darkreading.com/mobile-security/arcticrat-cybercrime-gang-profiles-victim-finances-ai",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-14/#reporting-c281bea158b9",
+      "cves": [],
+      "snippet": "ArcticRAT Cybercrime Gang Profiles Victim Finances With AI The Android malware has expanded from focusing on crypto theft to full device control, and the attackers have added advanced analysis of stolen information. The Android malware has expanded from focusing on crypto theft to full device control, and the attackers have added advanced analysis of stolen information.",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "The Android malware has expanded from focusing on crypto theft to full device control, and the attackers have added advanced analysis of stolen information.",
+          "text": "The Android malware has expanded from focusing on crypto theft to full device control, and the attackers have added advanced analysis of stolen information."
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "The Android malware has expanded from focusing on crypto theft to full device control, and the attackers have added advanced analysis of stolen information.",
+          "text": "The Android malware has expanded from focusing on crypto theft to full device control, and the attackers have added advanced analysis of stolen information."
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Trezor confirms crypto-stealing implants in three wallets, releases fix",
+      "url": "https://www.bleepingcomputer.com/news/cryptocurrency/trezor-confirms-crypto-stealing-implants-in-three-wallets-releases-fix/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-14/#reporting-d2962957f52f",
+      "cves": [],
+      "snippet": "Trezor confirms crypto-stealing implants in three wallets, releases fix Cryptocurrency hardware wallet maker Trezor has confirmed that three Safe 5 devices sold by Southeast Asian reseller CryptoBilis contained malicious hardware implants designed to steal wallet recovery phrases and send them to attackers over cellular networks… Cryptocurrency hardware wallet maker Trezor has confirmed that three Safe 5 devices sold by Southeast Asian reseller CryptoBilis contained malicious hardware implants designed to steal wallet recovery phrases and send them to attackers over cellular networks…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Cryptocurrency hardware wallet maker Trezor has confirmed that three Safe 5 devices sold by Southeast Asian reseller CryptoBilis contained malicious hardware implants designed to steal wallet recovery phrases and send them to attackers over cellular networks…",
+          "text": "Cryptocurrency hardware wallet maker Trezor has confirmed that three Safe 5 devices sold by Southeast Asian reseller CryptoBilis contained malicious hardware implants designed to steal wallet recovery phrases and send them to attackers over cellular networks…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Cryptocurrency hardware wallet maker Trezor has confirmed that three Safe 5 devices sold by Southeast Asian reseller CryptoBilis contained malicious hardware implants designed to steal wallet recovery phrases and send them to attackers over cellular networks…",
+          "text": "Cryptocurrency hardware wallet maker Trezor has confirmed that three Safe 5 devices sold by Southeast Asian reseller CryptoBilis contained malicious hardware implants designed to steal wallet recovery phrases and send them to attackers over cellular networks…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "German military drone operations disrupted by cyberattack",
+      "url": "https://www.bleepingcomputer.com/news/security/german-military-drone-operations-disrupted-by-cyberattack/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-14/#reporting-6ce23a8d3c69",
+      "cves": [],
+      "snippet": "German military drone operations disrupted by cyberattack German defense technology company Quantum Systems confirmed that it detected an incident in late October that was part of an active cyberattack by \"hostile actors.\"… German defense technology company Quantum Systems confirmed that it detected an incident in late October that was part of an active cyberattack by \"hostile actors.\"…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "German defense technology company Quantum Systems confirmed that it detected an incident in late October that was part of an active cyberattack by \"hostile actors.\"…",
+          "text": "German defense technology company Quantum Systems confirmed that it detected an incident in late October that was part of an active cyberattack by \"hostile actors.\"…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "German defense technology company Quantum Systems confirmed that it detected an incident in late October that was part of an active cyberattack by \"hostile actors.\"…",
+          "text": "German defense technology company Quantum Systems confirmed that it detected an incident in late October that was part of an active cyberattack by \"hostile actors.\"…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Check Point gateways hacked via PHP2Shell to deploy VMware ESXi wiper",
+      "url": "https://www.bleepingcomputer.com/news/security/check-point-gateways-hacked-via-php2shell-to-deploy-vmware-esxi-wiper/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-14/#reporting-97c01e9fc463",
+      "cves": [],
+      "snippet": "Check Point gateways hacked via PHP2Shell to deploy VMware ESXi wiper Vulnerable Check Point Security Gateway instances have been targeted in PHP2Shell attacks that deployed data-wiping malware on VMware ESXi hosts… Vulnerable Check Point Security Gateway instances have been targeted in PHP2Shell attacks that deployed data-wiping malware on VMware ESXi hosts…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Vulnerable Check Point Security Gateway instances have been targeted in PHP2Shell attacks that deployed data-wiping malware on VMware ESXi hosts…",
+          "text": "Vulnerable Check Point Security Gateway instances have been targeted in PHP2Shell attacks that deployed data-wiping malware on VMware ESXi hosts…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Vulnerable Check Point Security Gateway instances have been targeted in PHP2Shell attacks that deployed data-wiping malware on VMware ESXi hosts…",
+          "text": "Vulnerable Check Point Security Gateway instances have been targeted in PHP2Shell attacks that deployed data-wiping malware on VMware ESXi hosts…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "New Mior and Skyfall Attacks Let Rogue Cloud Hosts Steal Secrets From AMD SEV-SNP VMs",
+      "url": "https://thehackernews.com/2026/11/new-mior-and-skyfall-attacks-let-rogue.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-14/#reporting-d93f5e12f3c1",
+      "cves": [],
+      "snippet": "New Mior and Skyfall Attacks Let Rogue Cloud Hosts Steal Secrets From AMD SEV-SNP VMs Two attacks made public this week allow a malicious host to read data inside AMD SEV-SNP-protected virtual machines (VMs), which are built to keep the server's operator out. One of them, Mior, can also modify a VM's memory and fake the signed report confirming which software it runs. Both need control of the server's hypervisor, and Mior also needs control of the server's BIOS. Researchers… Two attacks made public this week allow a malicious host to read data inside AMD SEV-SNP-protected virtual machines (VMs), which are built to keep the server's operator out. One of them, Mior, can also modify a VM's memo",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Two attacks made public this week allow a malicious host to read data inside AMD SEV-SNP-protected virtual machines (VMs), which are built to keep the server's operator out. One of them, Mior, can also modify a VM's memory and fake the signed report confirming which software it runs. Both need control of the server's hypervisor, and Mior also needs control of the server's BIOS. Researchers…",
+          "text": "Two attacks made public this week allow a malicious host to read data inside AMD SEV-SNP-protected virtual machines (VMs), which are built to keep the server's operator out. One of them, Mior, can also modify a VM's memory and fake the signed report confirming which software it runs. Both need control of the server's hypervisor, and Mior also needs control of the server's BIOS. Researchers…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Two attacks made public this week allow a malicious host to read data inside AMD SEV-SNP-protected virtual machines (VMs), which are built to keep the server's operator out. One of them, Mior, can also modify a VM's memory and fake the signed report confirming which software it runs. Both need control of the server's hypervisor, and Mior also needs control of the server's BIOS. Researchers…",
+          "text": "Two attacks made public this week allow a malicious host to read data inside AMD SEV-SNP-protected virtual machines (VMs), which are built to keep the server's operator out. One of them, Mior, can also modify a VM's memory and fake the signed report confirming which software it runs. Both need control of the server's hypervisor, and Mior also needs control of the server's BIOS. Researchers…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "How one AI agent exposed five critical enterprise security gaps",
+      "url": "https://www.bleepingcomputer.com/news/security/how-one-ai-agent-exposed-five-critical-enterprise-security-gaps/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-14/#reporting-b32ccd39bcb9",
+      "cves": [],
+      "snippet": "How one AI agent exposed five critical enterprise security gaps An AI agent built to automate invoice processing could be manipulated into changing vendor bank details through a malicious email, without triggering traditional security alerts. Token Security examines five critical AI agent security gaps and shares practical guidance from industry security leaders on preventing them… An AI agent built to automate invoice processing could be manipulated into changing vendor bank details through a malicious email, without triggering traditional security alerts. Token Security examines five critical AI agent security gaps and shares practical guidance from industry security leaders on preventing ",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "An AI agent built to automate invoice processing could be manipulated into changing vendor bank details through a malicious email, without triggering traditional security alerts. Token Security examines five critical AI agent security gaps and shares practical guidance from industry security leaders on preventing them…",
+          "text": "An AI agent built to automate invoice processing could be manipulated into changing vendor bank details through a malicious email, without triggering traditional security alerts. Token Security examines five critical AI agent security gaps and shares practical guidance from industry security leaders on preventing them…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "An AI agent built to automate invoice processing could be manipulated into changing vendor bank details through a malicious email, without triggering traditional security alerts. Token Security examines five critical AI agent security gaps and shares practical guidance from industry security leaders on preventing them…",
+          "text": "An AI agent built to automate invoice processing could be manipulated into changing vendor bank details through a malicious email, without triggering traditional security alerts. Token Security examines five critical AI agent security gaps and shares practical guidance from industry security leaders on preventing them…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "FBI Says North Korean Hackers Stole Over $400 Million in Crypto Using Deepfake Video Calls",
+      "url": "https://thehackernews.com/2026/11/fbi-says-north-korean-hackers-stole.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-14/#reporting-d32b5f97fc67",
+      "cves": [],
+      "snippet": "FBI Says North Korean Hackers Stole Over $400 Million in Crypto Using Deepfake Video Calls The U.S. Federal Bureau of Investigation (FBI) has established that threat actors tied to the Democratic People's Republic of Korea (DPRK aka North Korea) have stolen more than $400 million worth of cryptocurrency as part of a social engineering scheme codenamed FaceStealer in the last 18 months. As part of a coordinated set of actions announced by the U.S. government, the cloud-based… The U.S. Federal Bureau of Investigation (FBI) has established that threat actors tied to the Democratic People's Republic of Korea (DPRK aka North Korea) have stolen more than $400 million worth of cryptocurrency as par",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "The U.S. Federal Bureau of Investigation (FBI) has established that threat actors tied to the Democratic People's Republic of Korea (DPRK aka North Korea) have stolen more than $400 million worth of cryptocurrency as part of a social engineering scheme codenamed FaceStealer in the last 18 months. As part of a coordinated set of actions announced by the U.S. government, the cloud-based…",
+          "text": "The U.S. Federal Bureau of Investigation (FBI) has established that threat actors tied to the Democratic People's Republic of Korea (DPRK aka North Korea) have stolen more than $400 million worth of cryptocurrency as part of a social engineering scheme codenamed FaceStealer in the last 18 months. As part of a coordinated set of actions announced by the U.S. government, the cloud-based…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "The U.S. Federal Bureau of Investigation (FBI) has established that threat actors tied to the Democratic People's Republic of Korea (DPRK aka North Korea) have stolen more than $400 million worth of cryptocurrency as part of a social engineering scheme codenamed FaceStealer in the last 18 months. As part of a coordinated set of actions announced by the U.S. government, the cloud-based…",
+          "text": "The U.S. Federal Bureau of Investigation (FBI) has established that threat actors tied to the Democratic People's Republic of Korea (DPRK aka North Korea) have stolen more than $400 million worth of cryptocurrency as part of a social engineering scheme codenamed FaceStealer in the last 18 months. As part of a coordinated set of actions announced by the U.S. government, the cloud-based…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Trezor Confirms Hidden Implants in CryptoBilis-Sold Wallets That Can Steal Recovery Phrases",
+      "url": "https://thehackernews.com/2026/11/trezor-confirms-hidden-hardware.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-14/#reporting-ea8f2c682142",
+      "cves": [],
+      "snippet": "Trezor Confirms Hidden Implants in CryptoBilis-Sold Wallets That Can Steal Recovery Phrases Three Trezor Safe 5 wallets bought from the reseller CryptoBilis contain an implant, an extra circuit board that can copy their recovery phrases, hardware wallet maker Trezor said yesterday. The implant reads the phrase from the wallet's screen and sends it over the mobile network to a server controlled by the attackers. The company examined one of the wallets in its lab, identified the other… Three Trezor Safe 5 wallets bought from the reseller CryptoBilis contain an implant, an extra circuit board that can copy their recovery phrases, hardware wallet maker Trezor said yesterday. The implant reads th",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Three Trezor Safe 5 wallets bought from the reseller CryptoBilis contain an implant, an extra circuit board that can copy their recovery phrases, hardware wallet maker Trezor said yesterday. The implant reads the phrase from the wallet's screen and sends it over the mobile network to a server controlled by the attackers. The company examined one of the wallets in its lab, identified the other…",
+          "text": "Three Trezor Safe 5 wallets bought from the reseller CryptoBilis contain an implant, an extra circuit board that can copy their recovery phrases, hardware wallet maker Trezor said yesterday. The implant reads the phrase from the wallet's screen and sends it over the mobile network to a server controlled by the attackers. The company examined one of the wallets in its lab, identified the other…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Three Trezor Safe 5 wallets bought from the reseller CryptoBilis contain an implant, an extra circuit board that can copy their recovery phrases, hardware wallet maker Trezor said yesterday. The implant reads the phrase from the wallet's screen and sends it over the mobile network to a server controlled by the attackers. The company examined one of the wallets in its lab, identified the other…",
+          "text": "Three Trezor Safe 5 wallets bought from the reseller CryptoBilis contain an implant, an extra circuit board that can copy their recovery phrases, hardware wallet maker Trezor said yesterday. The implant reads the phrase from the wallet's screen and sends it over the mobile network to a server controlled by the attackers. The company examined one of the wallets in its lab, identified the other…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Attackers in Binance Breach Targeted Known Weakness, Missing Controls",
+      "url": "https://www.darkreading.com/cybersecurity-operations/attackers-binance-breach-targeted-weakness-missing-controls",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-14/#reporting-43f14cb30a43",
+      "cves": [],
+      "snippet": "Attackers in Binance Breach Targeted Known Weakness, Missing Controls Blockchain complexities, such as attacker-deployed sweepers, hobble security controls designed to limit the damage of an exchange compromise. Blockchain complexities, such as attacker-deployed sweepers, hobble security controls designed to limit the damage of an exchange compromise.",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Blockchain complexities, such as attacker-deployed sweepers, hobble security controls designed to limit the damage of an exchange compromise.",
+          "text": "Blockchain complexities, such as attacker-deployed sweepers, hobble security controls designed to limit the damage of an exchange compromise."
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Blockchain complexities, such as attacker-deployed sweepers, hobble security controls designed to limit the damage of an exchange compromise.",
+          "text": "Blockchain complexities, such as attacker-deployed sweepers, hobble security controls designed to limit the damage of an exchange compromise."
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Microsoft says November security updates cause printing issues",
+      "url": "https://www.bleepingcomputer.com/news/microsoft/microsoft-says-november-security-updates-cause-printing-issues/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-14/#reporting-53b1d1645f89",
+      "cves": [],
+      "snippet": "Microsoft says November security updates cause printing issues Microsoft warned customers earlier this week that the November 2026 security updates may break printing for documents with complex formatting… Microsoft warned customers earlier this week that the November 2026 security updates may break printing for documents with complex formatting…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Microsoft warned customers earlier this week that the November 2026 security updates may break printing for documents with complex formatting…",
+          "text": "Microsoft warned customers earlier this week that the November 2026 security updates may break printing for documents with complex formatting…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Microsoft warned customers earlier this week that the November 2026 security updates may break printing for documents with complex formatting…",
+          "text": "Microsoft warned customers earlier this week that the November 2026 security updates may break printing for documents with complex formatting…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "When an AI Agent Goes Wrong, Can You Stop It?",
+      "url": "https://thehackernews.com/2026/11/when-ai-agent-goes-wrong-can-you-stop-it.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-14/#reporting-ed1f4b35eca7",
+      "cves": [],
+      "snippet": "When an AI Agent Goes Wrong, Can You Stop It? Suppose an AI agent is asked to sort support tickets and look up account details. A ticket contains instructions that lead the agent to export records to an unfamiliar destination. The agent can make the request because its identity has access to the records and its connected tools allow the action. That kind of scenario raises a response question: what does “stop the agent” actually mean? A… Suppose an AI agent is asked to sort support tickets and look up account details. A ticket contains instructions that lead the agent to export records to an unfamiliar destination. The agent can make the request because its identity has access to the records",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Suppose an AI agent is asked to sort support tickets and look up account details. A ticket contains instructions that lead the agent to export records to an unfamiliar destination. The agent can make the request because its identity has access to the records and its connected tools allow the action. That kind of scenario raises a response question: what does “stop the agent” actually mean? A…",
+          "text": "Suppose an AI agent is asked to sort support tickets and look up account details. A ticket contains instructions that lead the agent to export records to an unfamiliar destination. The agent can make the request because its identity has access to the records and its connected tools allow the action. That kind of scenario raises a response question: what does “stop the agent” actually mean? A…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Suppose an AI agent is asked to sort support tickets and look up account details. A ticket contains instructions that lead the agent to export records to an unfamiliar destination. The agent can make the request because its identity has access to the records and its connected tools allow the action. That kind of scenario raises a response question: what does “stop the agent” actually mean? A…",
+          "text": "Suppose an AI agent is asked to sort support tickets and look up account details. A ticket contains instructions that lead the agent to export records to an unfamiliar destination. The agent can make the request because its identity has access to the records and its connected tools allow the action. That kind of scenario raises a response question: what does “stop the agent” actually mean? A…"
+        }
+      ],
+      "effective_date_evidence": null
+    }
+  ]
+}
