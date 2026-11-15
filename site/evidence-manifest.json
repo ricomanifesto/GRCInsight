@@ -4,63 +4,75 @@
   "report_plan": {
     "control_implications": [
       {
-        "control_id": "data_protection",
-        "evidence_excerpt": "Meta was fined €805 million in Italy yesterday over a Facebook for Android feature that suggests photos and videos from users' phone galleries for them to post. The Garante, Italy's data protection authority, found that the feature was enabled by default and that the app accessed Italian users' photos, videos, and related metadata without their explicit consent.",
-        "evidence_origin": "summary",
-        "focus": "Facebook for Android feature",
-        "headline": "Facebook for Android feature accesses photos without explicit consent",
-        "priority": "high",
-        "significance": "This fine demonstrates regulatory enforcement of consent requirements for mobile data access. Data protection owners should confirm that mobile application data access controls obtain and record explicit user consent before processing gallery content.",
-        "source_ids": [
-          3
-        ]
-      },
-      {
         "control_id": "vulnerability_management",
-        "evidence_excerpt": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Friday added a high-severity security flaw impacting UnrealIRCd, an open-source Internet Relay Chat (IRC) server, to its Known Exploited Vulnerabilities (KEV) catalog, following reports of active exploitation. The vulnerability, tracked as CVE-2026-114713 (CVSS score: 8.6), is a case of improper neutralization of delimiters",
+        "evidence_excerpt": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Friday added a high-severity security flaw impacting UnrealIRCd, an open-source Internet Relay Chat (IRC) server, to its Known Exploited Vulnerabilities (KEV) catalog, following reports of active exploitation. The vulnerability, tracked as CVE-2026-114713 (CVSS score: 8.6), is a case of improper neutralization of delimiters…",
         "evidence_origin": "summary",
-        "focus": "UnrealIRCd open-source IRC server",
-        "headline": "UnrealIRCd open-source IRC server added to CISA exploited vulnerabilities catalog",
+        "focus": "UnrealIRCd",
+        "headline": "UnrealIRCd added to CISA KEV catalog",
         "priority": "high",
-        "significance": "Active exploitation of this server vulnerability mandates immediate asset identification and remediation. Vulnerability management owners should confirm whether UnrealIRCd instances exist in the environment and that patching or compensating controls are applied.",
+        "significance": "The addition to the KEV catalog signals active exploitation requiring immediate asset identification and remediation. Vulnerability owners should confirm whether UnrealIRCd instances are deployed and apply patches or compensating controls.",
         "source_ids": [
           1
         ]
       },
       {
-        "control_id": "data_protection",
-        "evidence_excerpt": "Two attacks made public this week allow a malicious host to read data inside AMD SEV-SNP-protected virtual machines (VMs), which are built to keep the server's operator out. One of them, Mior, can also modify a VM's memory and fake the signed report confirming which software it runs. Both need control of the server's hypervisor, and Mior also needs control of the server's BIOS.",
+        "control_id": "vulnerability_management",
+        "evidence_excerpt": "A type confusion flaw in PostgreSQL lets a database user who can create objects run code on the server. Updates released yesterday fix it, along with 51 other security flaws. Full protection from this flaw also requires rebuilding any C-language extensions installed on the server. The flaw, tracked as CVE-2026-6460, has a CVSS score of 8.8. Any code run this way has the rights of the operating…",
         "evidence_origin": "summary",
-        "focus": "AMD SEV-SNP-protected virtual machines",
-        "headline": "AMD SEV-SNP-protected virtual machines exposed to malicious host attacks",
+        "focus": "PostgreSQL",
+        "headline": "PostgreSQL patched for authenticated remote code execution",
         "priority": "high",
-        "significance": "Cloud confidential computing protections can be bypassed by privileged host actors. Data protection owners should assess whether workloads relying on SEV-SNP encryption have additional controls for host compromise scenarios and verify attestation verification processes.",
+        "significance": "The authenticated RCE flaw affects database servers and requires extension rebuilding for full mitigation. Asset owners should inventory PostgreSQL deployments, apply updates, and verify extension recompilation.",
         "source_ids": [
-          11
+          2
         ]
       },
       {
-        "control_id": "governance",
-        "evidence_excerpt": "An AI agent built to automate invoice processing could be manipulated into changing vendor bank details through a malicious email, without triggering traditional security alerts. Token Security examines five critical AI agent security gaps and shares practical guidance from industry security leaders on preventing them",
+        "control_id": "data_protection",
+        "evidence_excerpt": "Meta was fined €805 million in Italy yesterday over a Facebook for Android feature that suggests photos and videos from users' phone galleries for them to post. The Garante, Italy's data protection authority, found that the feature was enabled by default and that the app accessed Italian users' photos, videos, and related metadata without their explicit consent. The company has 60 days to…",
         "evidence_origin": "summary",
-        "focus": "AI agent built to automate invoice processing",
-        "headline": "AI agent built to automate invoice processing manipulated to change vendor bank details",
-        "priority": "medium",
-        "significance": "Autonomous AI agents introduce new attack surfaces that bypass conventional controls. Governance owners should confirm that AI agent deployments have defined ownership, approval workflows, and monitoring for unauthorized actions affecting financial transactions.",
+        "focus": "Facebook for Android feature",
+        "headline": "Facebook for Android feature fined for consent violation",
+        "priority": "high",
+        "significance": "The fine underscores regulatory scrutiny of default-enabled data access without explicit consent. Data protection owners should review mobile app permissions and consent flows for compliance with GDPR requirements.",
         "source_ids": [
-          12
+          3
         ]
       },
       {
         "control_id": "third_party_risk",
-        "evidence_excerpt": "Cryptocurrency hardware wallet maker Trezor has confirmed that three Safe 5 devices sold by Southeast Asian reseller CryptoBilis contained malicious hardware implants designed to steal wallet recovery phrases and send them to attackers over cellular networks",
+        "evidence_excerpt": "The compromise of Anthropic's official Claude Code extension on Cursor's extension marketplace was the result of the theft of an access key that was exposed in the wake of a breach targeting Fireworks AI. \"An attacker obtained an access key we had issued to Fireworks,\" Cursor said in a Friday update. \"The key was exposed by Fireworks, and the attacker used it to copy data from a read-only…",
         "evidence_origin": "summary",
-        "focus": "Safe 5 devices sold by Southeast Asian reseller CryptoBilis",
-        "headline": "Safe 5 devices sold by Southeast Asian reseller CryptoBilis contain malicious hardware implants",
-        "priority": "medium",
-        "significance": "Hardware supply chain compromise enables secret extraction at the physical layer. Supplier risk owners should verify authorized reseller programs, device integrity verification processes, and incident response for compromised hardware distributions.",
+        "focus": "Fireworks AI access key",
+        "headline": "Fireworks AI access key theft enables malicious extension",
+        "priority": "high",
+        "significance": "A compromised third-party key allowed supply chain injection into a trusted marketplace. Supplier risk owners should audit key management practices and monitor extension integrity for all integrated AI tools.",
+        "source_ids": [
+          4
+        ]
+      },
+      {
+        "control_id": "third_party_risk",
+        "evidence_excerpt": "Cryptocurrency hardware wallet maker Trezor has confirmed that three Safe 5 devices sold by Southeast Asian reseller CryptoBilis contained malicious hardware implants designed to steal wallet recovery phrases and send them to attackers over cellular networks…",
+        "evidence_origin": "summary",
+        "focus": "Trezor Safe 5 devices",
+        "headline": "Trezor Safe 5 devices found with hardware implants",
+        "priority": "high",
+        "significance": "Hardware supply chain compromise bypasses software controls and directly exfiltrates secrets. Procurement and supplier risk owners must verify device provenance and implement hardware attestation checks for critical assets.",
         "source_ids": [
           8
+        ]
+      },
+      {
+        "control_id": "governance",
+        "evidence_excerpt": "An AI agent built to automate invoice processing could be manipulated into changing vendor bank details through a malicious email, without triggering traditional security alerts. Token Security examines five critical AI agent security gaps and shares practical guidance from industry security leaders on preventing them…",
+        "evidence_origin": "summary",
+        "focus": "AI agent invoice processing",
+        "headline": "AI agent invoice processing manipulated to change vendor details",
+        "priority": "medium",
+        "significance": "Autonomous AI agents can be subverted to alter financial transactions without detection. Governance owners should establish AI agent authorization boundaries, monitoring, and human-in-the-loop controls for sensitive actions.",
+        "source_ids": [
+          12
         ]
       }
     ],
@@ -68,26 +80,27 @@
       "paragraphs": [
         {
           "source_ids": [
+            1,
+            2,
             3
           ],
-          "text": "Regulatory enforcement and supply chain compromises dominate this period. Italy's data protection authority fined Meta €805 million for processing user gallery data without explicit consent, signaling stricter consent enforcement for mobile applications. Simultaneously, a stolen access key issued to Fireworks AI enabled malicious code distribution through Cursor's extension marketplace, demonstrating how third-party credentials can compromise trusted software supply chains. These events require data protection owners to validate consent mechanisms and supplier risk owners to review issued credential scopes and marketplace integrity controls."
+          "text": "Active exploitation of critical vulnerabilities in widely used infrastructure components and a major GDPR enforcement action demand immediate control validation. CISA added an UnrealIRCd command injection flaw to its Known Exploited Vulnerabilities catalog, while PostgreSQL patched a 22-year-old authenticated remote code execution bug. Simultaneously, Italy's data protection authority fined Meta €805 million for processing user gallery data without explicit consent. Control owners should verify asset exposure, patch deployment, and consent mechanisms across affected systems."
         },
         {
           "source_ids": [
-            1,
-            11,
-            12,
-            8
+            4,
+            8,
+            12
           ],
-          "text": "Active exploitation and emerging attack vectors expand remediation priorities. CISA added an UnrealIRCd vulnerability to its Known Exploited Vulnerabilities catalog, mandating immediate asset identification. New research reveals AMD SEV-SNP confidential VMs can be compromised by malicious hosts with hypervisor and BIOS control, challenging cloud data protection assumptions. An AI invoice processing agent was manipulated to alter vendor payments without triggering alerts, exposing governance gaps in autonomous systems. Hardware supply chain implants in Trezor wallets further demonstrate physical-layer risks. Vulnerability management, data protection, governance, and supplier risk owners should reassess coverage for these vectors."
+          "text": "Supply chain compromises and emerging AI agent risks extend third-party and governance assurance requirements. A stolen Fireworks AI key enabled a malicious Claude Code extension on Cursor's marketplace, and Trezor confirmed hardware implants in devices sold by a reseller. Separately, an AI agent manipulating invoice processing revealed gaps in automated decision controls. Supplier risk and governance owners must review access provisioning, hardware provenance, and AI agent authorization boundaries."
         }
       ]
     },
     "industry_impacts": [],
     "regulatory_changes": []
   },
-  "generated_at": "2026-11-15T12:20:59.603115Z",
-  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/58302ca345f316bf7106856e02243bdc25a4eb3b/site/feed.xml",
+  "generated_at": "2026-11-15T13:07:04.073581Z",
+  "feed_url": "https://sentrydigest.ricomanifesto.com/feed.xml",
   "feed_home_url": "https://sentrydigest.ricomanifesto.com/",
   "digest_issue_date": "2026-11-15",
   "digest_issue_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-15/",
