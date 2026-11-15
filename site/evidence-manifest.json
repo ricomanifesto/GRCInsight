@@ -4,13 +4,37 @@
   "report_plan": {
     "control_implications": [
       {
+        "control_id": "data_protection",
+        "evidence_excerpt": "Meta was fined €805 million in Italy yesterday over a Facebook for Android feature that suggests photos and videos from users' phone galleries for them to post. The Garante, Italy's data protection authority, found that the feature was enabled by default and that the app accessed Italian users' photos, videos, and related metadata without their explicit consent. The company has 60 days to…",
+        "evidence_origin": "summary",
+        "focus": "Facebook for Android feature",
+        "headline": "Facebook for Android feature accesses photos without explicit consent",
+        "priority": "high",
+        "significance": "This finding matters for control assurance because it demonstrates regulatory enforcement against default-enabled data access without consent. The accountable owner should confirm that default settings for data access features require explicit user consent and that consent mechanisms are auditable.",
+        "source_ids": [
+          4
+        ]
+      },
+      {
+        "control_id": "third_party_risk",
+        "evidence_excerpt": "Taiwan Semiconductor Manufacturing Company (TSMC) confirmed that personal employee data has been leaked online after a threat actor put 6.9GB of information allegedly stolen from the company up for auction…",
+        "evidence_origin": "summary",
+        "focus": "cloud provider",
+        "headline": "cloud provider exposes TSMC employee personal data",
+        "priority": "high",
+        "significance": "This finding matters for control assurance because it shows supplier infrastructure compromise leading to sensitive data exposure. The accountable owner should confirm that cloud provider contracts include breach notification obligations and that supplier access to employee data is monitored and minimized.",
+        "source_ids": [
+          3
+        ]
+      },
+      {
         "control_id": "vulnerability_management",
         "evidence_excerpt": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Friday added a high-severity security flaw impacting UnrealIRCd, an open-source Internet Relay Chat (IRC) server, to its Known Exploited Vulnerabilities (KEV) catalog, following reports of active exploitation. The vulnerability, tracked as CVE-2026-114713 (CVSS score: 8.6), is a case of improper neutralization of delimiters…",
         "evidence_origin": "summary",
         "focus": "UnrealIRCd",
-        "headline": "UnrealIRCd added to CISA KEV catalog",
+        "headline": "UnrealIRCd added to CISA Known Exploited Vulnerabilities catalog",
         "priority": "high",
-        "significance": "The addition to the KEV catalog signals active exploitation requiring immediate asset identification and remediation. Vulnerability owners should confirm whether UnrealIRCd instances are deployed and apply patches or compensating controls.",
+        "significance": "This finding matters for control assurance because CISA KEV inclusion mandates urgent remediation for federal agencies and signals active exploitation. The accountable owner should confirm whether UnrealIRCd is deployed in the environment and that emergency patching procedures have been triggered.",
         "source_ids": [
           1
         ]
@@ -20,59 +44,23 @@
         "evidence_excerpt": "A type confusion flaw in PostgreSQL lets a database user who can create objects run code on the server. Updates released yesterday fix it, along with 51 other security flaws. Full protection from this flaw also requires rebuilding any C-language extensions installed on the server. The flaw, tracked as CVE-2026-6460, has a CVSS score of 8.8. Any code run this way has the rights of the operating…",
         "evidence_origin": "summary",
         "focus": "PostgreSQL",
-        "headline": "PostgreSQL patched for authenticated remote code execution",
-        "priority": "high",
-        "significance": "The authenticated RCE flaw affects database servers and requires extension rebuilding for full mitigation. Asset owners should inventory PostgreSQL deployments, apply updates, and verify extension recompilation.",
+        "headline": "PostgreSQL patches 52 flaws including authenticated RCE vulnerability",
+        "priority": "medium",
+        "significance": "This finding matters for control assurance because the vulnerability allows authenticated remote code execution and requires extension rebuilding for full protection. The accountable owner should confirm that all PostgreSQL instances are patched and that C-language extensions have been rebuilt to eliminate residual exposure.",
         "source_ids": [
           2
         ]
       },
       {
-        "control_id": "data_protection",
-        "evidence_excerpt": "Meta was fined €805 million in Italy yesterday over a Facebook for Android feature that suggests photos and videos from users' phone galleries for them to post. The Garante, Italy's data protection authority, found that the feature was enabled by default and that the app accessed Italian users' photos, videos, and related metadata without their explicit consent. The company has 60 days to…",
+        "control_id": "vulnerability_management",
+        "evidence_excerpt": "Vulnerable Check Point Security Gateway instances have been targeted in PHP2Shell attacks that deployed data-wiping malware on VMware ESXi hosts…",
         "evidence_origin": "summary",
-        "focus": "Facebook for Android feature",
-        "headline": "Facebook for Android feature fined for consent violation",
-        "priority": "high",
-        "significance": "The fine underscores regulatory scrutiny of default-enabled data access without explicit consent. Data protection owners should review mobile app permissions and consent flows for compliance with GDPR requirements.",
-        "source_ids": [
-          3
-        ]
-      },
-      {
-        "control_id": "third_party_risk",
-        "evidence_excerpt": "The compromise of Anthropic's official Claude Code extension on Cursor's extension marketplace was the result of the theft of an access key that was exposed in the wake of a breach targeting Fireworks AI. \"An attacker obtained an access key we had issued to Fireworks,\" Cursor said in a Friday update. \"The key was exposed by Fireworks, and the attacker used it to copy data from a read-only…",
-        "evidence_origin": "summary",
-        "focus": "Fireworks AI access key",
-        "headline": "Fireworks AI access key theft enables malicious extension",
-        "priority": "high",
-        "significance": "A compromised third-party key allowed supply chain injection into a trusted marketplace. Supplier risk owners should audit key management practices and monitor extension integrity for all integrated AI tools.",
-        "source_ids": [
-          4
-        ]
-      },
-      {
-        "control_id": "third_party_risk",
-        "evidence_excerpt": "Cryptocurrency hardware wallet maker Trezor has confirmed that three Safe 5 devices sold by Southeast Asian reseller CryptoBilis contained malicious hardware implants designed to steal wallet recovery phrases and send them to attackers over cellular networks…",
-        "evidence_origin": "summary",
-        "focus": "Trezor Safe 5 devices",
-        "headline": "Trezor Safe 5 devices found with hardware implants",
-        "priority": "high",
-        "significance": "Hardware supply chain compromise bypasses software controls and directly exfiltrates secrets. Procurement and supplier risk owners must verify device provenance and implement hardware attestation checks for critical assets.",
-        "source_ids": [
-          8
-        ]
-      },
-      {
-        "control_id": "governance",
-        "evidence_excerpt": "An AI agent built to automate invoice processing could be manipulated into changing vendor bank details through a malicious email, without triggering traditional security alerts. Token Security examines five critical AI agent security gaps and shares practical guidance from industry security leaders on preventing them…",
-        "evidence_origin": "summary",
-        "focus": "AI agent invoice processing",
-        "headline": "AI agent invoice processing manipulated to change vendor details",
+        "focus": "Check Point Security Gateway instances",
+        "headline": "Check Point Security Gateway instances face PHP2Shell attacks deploying wipers",
         "priority": "medium",
-        "significance": "Autonomous AI agents can be subverted to alter financial transactions without detection. Governance owners should establish AI agent authorization boundaries, monitoring, and human-in-the-loop controls for sensitive actions.",
+        "significance": "This finding matters for control assurance because network security gateways are being exploited to deploy destructive malware on hypervisors. The accountable owner should confirm that Check Point gateways are patched against PHP2Shell exploitation and that ESXi host integrity monitoring detects unauthorized wiper activity.",
         "source_ids": [
-          12
+          11
         ]
       }
     ],
@@ -80,27 +68,26 @@
       "paragraphs": [
         {
           "source_ids": [
-            1,
-            2,
+            4,
             3
           ],
-          "text": "Active exploitation of critical vulnerabilities in widely used infrastructure components and a major GDPR enforcement action demand immediate control validation. CISA added an UnrealIRCd command injection flaw to its Known Exploited Vulnerabilities catalog, while PostgreSQL patched a 22-year-old authenticated remote code execution bug. Simultaneously, Italy's data protection authority fined Meta €805 million for processing user gallery data without explicit consent. Control owners should verify asset exposure, patch deployment, and consent mechanisms across affected systems."
+          "text": "Italy's €805 million fine against Meta for default-enabled gallery access without explicit consent demonstrates escalating GDPR enforcement on data processing defaults. Simultaneously, TSMC's confirmation that employee personal data was leaked through a cloud provider highlights third-party infrastructure as a direct path for sensitive data exposure. These developments require control owners to validate that default data access settings require documented consent and that cloud supplier contracts include enforceable breach notification and data protection obligations."
         },
         {
           "source_ids": [
-            4,
-            8,
-            12
+            1,
+            2,
+            11
           ],
-          "text": "Supply chain compromises and emerging AI agent risks extend third-party and governance assurance requirements. A stolen Fireworks AI key enabled a malicious Claude Code extension on Cursor's marketplace, and Trezor confirmed hardware implants in devices sold by a reseller. Separately, an AI agent manipulating invoice processing revealed gaps in automated decision controls. Supplier risk and governance owners must review access provisioning, hardware provenance, and AI agent authorization boundaries."
+          "text": "CISA's addition of the UnrealIRCd flaw to the Known Exploited Vulnerabilities catalog and PostgreSQL's patching of 52 flaws including a 22-year-old authenticated RCE vulnerability signal active exploitation of widely deployed infrastructure components. The Cursor marketplace compromise via a stolen Fireworks AI access key and the targeting of Check Point Security Gateways to deploy ESXi wipers demonstrate that supplier credentials and network security appliances are active attack vectors. Control owners must confirm emergency patching for KEV-listed vulnerabilities, extension rebuilding for PostgreSQL, least-privilege scoping of third-party access keys, and integrity monitoring for security gateway and hypervisor layers."
         }
       ]
     },
     "industry_impacts": [],
     "regulatory_changes": []
   },
-  "generated_at": "2026-11-15T13:07:04.073581Z",
-  "feed_url": "https://sentrydigest.ricomanifesto.com/feed.xml",
+  "generated_at": "2026-11-15T18:21:58.882398Z",
+  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/0c4e6a1115d2c832ddaf008287b7e66994a65558/site/feed.xml",
   "feed_home_url": "https://sentrydigest.ricomanifesto.com/",
   "digest_issue_date": "2026-11-15",
   "digest_issue_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-15/",
@@ -151,6 +138,28 @@
           "origin": "content",
           "raw_text": "A type confusion flaw in PostgreSQL lets a database user who can create objects run code on the server. Updates released yesterday fix it, along with 51 other security flaws. Full protection from this flaw also requires rebuilding any C-language extensions installed on the server. The flaw, tracked as CVE-2026-6460, has a CVSS score of 8.8. Any code run this way has the rights of the operating…",
           "text": "A type confusion flaw in PostgreSQL lets a database user who can create objects run code on the server. Updates released yesterday fix it, along with 51 other security flaws. Full protection from this flaw also requires rebuilding any C-language extensions installed on the server. The flaw, tracked as CVE-2026-6460, has a CVSS score of 8.8. Any code run this way has the rights of the operating…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "TSMC employee data breach linked to cloud provider",
+      "url": "https://www.bleepingcomputer.com/news/security/tsmc-employee-data-breach-linked-to-cloud-provider/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-15/#reporting-288ae0a72da3",
+      "cves": [],
+      "snippet": "TSMC employee data breach linked to cloud provider Taiwan Semiconductor Manufacturing Company (TSMC) confirmed that personal employee data has been leaked online after a threat actor put 6.9GB of information allegedly stolen from the company up for auction… Taiwan Semiconductor Manufacturing Company (TSMC) confirmed that personal employee data has been leaked online after a threat actor put 6.9GB of information allegedly stolen from the company up for auction…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Taiwan Semiconductor Manufacturing Company (TSMC) confirmed that personal employee data has been leaked online after a threat actor put 6.9GB of information allegedly stolen from the company up for auction…",
+          "text": "Taiwan Semiconductor Manufacturing Company (TSMC) confirmed that personal employee data has been leaked online after a threat actor put 6.9GB of information allegedly stolen from the company up for auction…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Taiwan Semiconductor Manufacturing Company (TSMC) confirmed that personal employee data has been leaked online after a threat actor put 6.9GB of information allegedly stolen from the company up for auction…",
+          "text": "Taiwan Semiconductor Manufacturing Company (TSMC) confirmed that personal employee data has been leaked online after a threat actor put 6.9GB of information allegedly stolen from the company up for auction…"
         }
       ],
       "effective_date_evidence": null
@@ -349,28 +358,6 @@
           "origin": "content",
           "raw_text": "Two attacks made public this week allow a malicious host to read data inside AMD SEV-SNP-protected virtual machines (VMs), which are built to keep the server's operator out. One of them, Mior, can also modify a VM's memory and fake the signed report confirming which software it runs. Both need control of the server's hypervisor, and Mior also needs control of the server's BIOS. Researchers…",
           "text": "Two attacks made public this week allow a malicious host to read data inside AMD SEV-SNP-protected virtual machines (VMs), which are built to keep the server's operator out. One of them, Mior, can also modify a VM's memory and fake the signed report confirming which software it runs. Both need control of the server's hypervisor, and Mior also needs control of the server's BIOS. Researchers…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "How one AI agent exposed five critical enterprise security gaps",
-      "url": "https://www.bleepingcomputer.com/news/security/how-one-ai-agent-exposed-five-critical-enterprise-security-gaps/",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-15/#reporting-b32ccd39bcb9",
-      "cves": [],
-      "snippet": "How one AI agent exposed five critical enterprise security gaps An AI agent built to automate invoice processing could be manipulated into changing vendor bank details through a malicious email, without triggering traditional security alerts. Token Security examines five critical AI agent security gaps and shares practical guidance from industry security leaders on preventing them… An AI agent built to automate invoice processing could be manipulated into changing vendor bank details through a malicious email, without triggering traditional security alerts. Token Security examines five critical AI agent security gaps and shares practical guidance from industry security leaders on preventing ",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "An AI agent built to automate invoice processing could be manipulated into changing vendor bank details through a malicious email, without triggering traditional security alerts. Token Security examines five critical AI agent security gaps and shares practical guidance from industry security leaders on preventing them…",
-          "text": "An AI agent built to automate invoice processing could be manipulated into changing vendor bank details through a malicious email, without triggering traditional security alerts. Token Security examines five critical AI agent security gaps and shares practical guidance from industry security leaders on preventing them…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "An AI agent built to automate invoice processing could be manipulated into changing vendor bank details through a malicious email, without triggering traditional security alerts. Token Security examines five critical AI agent security gaps and shares practical guidance from industry security leaders on preventing them…",
-          "text": "An AI agent built to automate invoice processing could be manipulated into changing vendor bank details through a malicious email, without triggering traditional security alerts. Token Security examines five critical AI agent security gaps and shares practical guidance from industry security leaders on preventing them…"
         }
       ],
       "effective_date_evidence": null
