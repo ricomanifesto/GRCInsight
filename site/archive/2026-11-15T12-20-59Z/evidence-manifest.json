@@ -1,0 +1,366 @@
+{
+  "schema_version": 3,
+  "report_contract_version": 6,
+  "report_plan": {
+    "control_implications": [
+      {
+        "control_id": "data_protection",
+        "evidence_excerpt": "Meta was fined €805 million in Italy yesterday over a Facebook for Android feature that suggests photos and videos from users' phone galleries for them to post. The Garante, Italy's data protection authority, found that the feature was enabled by default and that the app accessed Italian users' photos, videos, and related metadata without their explicit consent.",
+        "evidence_origin": "summary",
+        "focus": "Facebook for Android feature",
+        "headline": "Facebook for Android feature accesses photos without explicit consent",
+        "priority": "high",
+        "significance": "This fine demonstrates regulatory enforcement of consent requirements for mobile data access. Data protection owners should confirm that mobile application data access controls obtain and record explicit user consent before processing gallery content.",
+        "source_ids": [
+          3
+        ]
+      },
+      {
+        "control_id": "vulnerability_management",
+        "evidence_excerpt": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Friday added a high-severity security flaw impacting UnrealIRCd, an open-source Internet Relay Chat (IRC) server, to its Known Exploited Vulnerabilities (KEV) catalog, following reports of active exploitation. The vulnerability, tracked as CVE-2026-114713 (CVSS score: 8.6), is a case of improper neutralization of delimiters",
+        "evidence_origin": "summary",
+        "focus": "UnrealIRCd open-source IRC server",
+        "headline": "UnrealIRCd open-source IRC server added to CISA exploited vulnerabilities catalog",
+        "priority": "high",
+        "significance": "Active exploitation of this server vulnerability mandates immediate asset identification and remediation. Vulnerability management owners should confirm whether UnrealIRCd instances exist in the environment and that patching or compensating controls are applied.",
+        "source_ids": [
+          1
+        ]
+      },
+      {
+        "control_id": "data_protection",
+        "evidence_excerpt": "Two attacks made public this week allow a malicious host to read data inside AMD SEV-SNP-protected virtual machines (VMs), which are built to keep the server's operator out. One of them, Mior, can also modify a VM's memory and fake the signed report confirming which software it runs. Both need control of the server's hypervisor, and Mior also needs control of the server's BIOS.",
+        "evidence_origin": "summary",
+        "focus": "AMD SEV-SNP-protected virtual machines",
+        "headline": "AMD SEV-SNP-protected virtual machines exposed to malicious host attacks",
+        "priority": "high",
+        "significance": "Cloud confidential computing protections can be bypassed by privileged host actors. Data protection owners should assess whether workloads relying on SEV-SNP encryption have additional controls for host compromise scenarios and verify attestation verification processes.",
+        "source_ids": [
+          11
+        ]
+      },
+      {
+        "control_id": "governance",
+        "evidence_excerpt": "An AI agent built to automate invoice processing could be manipulated into changing vendor bank details through a malicious email, without triggering traditional security alerts. Token Security examines five critical AI agent security gaps and shares practical guidance from industry security leaders on preventing them",
+        "evidence_origin": "summary",
+        "focus": "AI agent built to automate invoice processing",
+        "headline": "AI agent built to automate invoice processing manipulated to change vendor bank details",
+        "priority": "medium",
+        "significance": "Autonomous AI agents introduce new attack surfaces that bypass conventional controls. Governance owners should confirm that AI agent deployments have defined ownership, approval workflows, and monitoring for unauthorized actions affecting financial transactions.",
+        "source_ids": [
+          12
+        ]
+      },
+      {
+        "control_id": "third_party_risk",
+        "evidence_excerpt": "Cryptocurrency hardware wallet maker Trezor has confirmed that three Safe 5 devices sold by Southeast Asian reseller CryptoBilis contained malicious hardware implants designed to steal wallet recovery phrases and send them to attackers over cellular networks",
+        "evidence_origin": "summary",
+        "focus": "Safe 5 devices sold by Southeast Asian reseller CryptoBilis",
+        "headline": "Safe 5 devices sold by Southeast Asian reseller CryptoBilis contain malicious hardware implants",
+        "priority": "medium",
+        "significance": "Hardware supply chain compromise enables secret extraction at the physical layer. Supplier risk owners should verify authorized reseller programs, device integrity verification processes, and incident response for compromised hardware distributions.",
+        "source_ids": [
+          8
+        ]
+      }
+    ],
+    "executive_brief": {
+      "paragraphs": [
+        {
+          "source_ids": [
+            3
+          ],
+          "text": "Regulatory enforcement and supply chain compromises dominate this period. Italy's data protection authority fined Meta €805 million for processing user gallery data without explicit consent, signaling stricter consent enforcement for mobile applications. Simultaneously, a stolen access key issued to Fireworks AI enabled malicious code distribution through Cursor's extension marketplace, demonstrating how third-party credentials can compromise trusted software supply chains. These events require data protection owners to validate consent mechanisms and supplier risk owners to review issued credential scopes and marketplace integrity controls."
+        },
+        {
+          "source_ids": [
+            1,
+            11,
+            12,
+            8
+          ],
+          "text": "Active exploitation and emerging attack vectors expand remediation priorities. CISA added an UnrealIRCd vulnerability to its Known Exploited Vulnerabilities catalog, mandating immediate asset identification. New research reveals AMD SEV-SNP confidential VMs can be compromised by malicious hosts with hypervisor and BIOS control, challenging cloud data protection assumptions. An AI invoice processing agent was manipulated to alter vendor payments without triggering alerts, exposing governance gaps in autonomous systems. Hardware supply chain implants in Trezor wallets further demonstrate physical-layer risks. Vulnerability management, data protection, governance, and supplier risk owners should reassess coverage for these vectors."
+        }
+      ]
+    },
+    "industry_impacts": [],
+    "regulatory_changes": []
+  },
+  "generated_at": "2026-11-15T12:20:59.603115Z",
+  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/58302ca345f316bf7106856e02243bdc25a4eb3b/site/feed.xml",
+  "feed_home_url": "https://sentrydigest.ricomanifesto.com/",
+  "digest_issue_date": "2026-11-15",
+  "digest_issue_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-15/",
+  "requested_model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
+  "resolved_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+  "sources": [
+    {
+      "title": "Attackers Exploit UnrealIRCd Flaw That Enables Server-Level Command Injection",
+      "url": "https://thehackernews.com/2026/11/attackers-exploit-unrealircd-flaw-that.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-15/#reporting-e577b898eca3",
+      "cves": [
+        "CVE-2026-114713"
+      ],
+      "snippet": "Attackers Exploit UnrealIRCd Flaw That Enables Server-Level Command Injection The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Friday added a high-severity security flaw impacting UnrealIRCd, an open-source Internet Relay Chat (IRC) server, to its Known Exploited Vulnerabilities (KEV) catalog, following reports of active exploitation. The vulnerability, tracked as CVE-2026-114713 (CVSS score: 8.6), is a case of improper neutralization of delimiters… The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Friday added a high-severity security flaw impacting UnrealIRCd, an open-source Internet Relay Chat (IRC) server, to its Known Exploited Vulnerabilities (KEV) ",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Friday added a high-severity security flaw impacting UnrealIRCd, an open-source Internet Relay Chat (IRC) server, to its Known Exploited Vulnerabilities (KEV) catalog, following reports of active exploitation. The vulnerability, tracked as CVE-2026-114713 (CVSS score: 8.6), is a case of improper neutralization of delimiters…",
+          "text": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Friday added a high-severity security flaw impacting UnrealIRCd, an open-source Internet Relay Chat (IRC) server, to its Known Exploited Vulnerabilities (KEV) catalog, following reports of active exploitation. The vulnerability, tracked as CVE-2026-114713 (CVSS score: 8.6), is a case of improper neutralization of delimiters…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Friday added a high-severity security flaw impacting UnrealIRCd, an open-source Internet Relay Chat (IRC) server, to its Known Exploited Vulnerabilities (KEV) catalog, following reports of active exploitation. The vulnerability, tracked as CVE-2026-114713 (CVSS score: 8.6), is a case of improper neutralization of delimiters…",
+          "text": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Friday added a high-severity security flaw impacting UnrealIRCd, an open-source Internet Relay Chat (IRC) server, to its Known Exploited Vulnerabilities (KEV) catalog, following reports of active exploitation. The vulnerability, tracked as CVE-2026-114713 (CVSS score: 8.6), is a case of improper neutralization of delimiters…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "PostgreSQL Patches 52 Flaws, Including 22-Year-Old Bug Enabling Authenticated RCE",
+      "url": "https://thehackernews.com/2026/11/postgresql-patches-52-flaws-including.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-15/#reporting-d8cc2172e29e",
+      "cves": [
+        "CVE-2026-6460"
+      ],
+      "snippet": "PostgreSQL Patches 52 Flaws, Including 22-Year-Old Bug Enabling Authenticated RCE A type confusion flaw in PostgreSQL lets a database user who can create objects run code on the server. Updates released yesterday fix it, along with 51 other security flaws. Full protection from this flaw also requires rebuilding any C-language extensions installed on the server. The flaw, tracked as CVE-2026-6460, has a CVSS score of 8.8. Any code run this way has the rights of the operating… A type confusion flaw in PostgreSQL lets a database user who can create objects run code on the server. Updates released yesterday fix it, along with 51 other security flaws. Full protection from this flaw also requires ",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "A type confusion flaw in PostgreSQL lets a database user who can create objects run code on the server. Updates released yesterday fix it, along with 51 other security flaws. Full protection from this flaw also requires rebuilding any C-language extensions installed on the server. The flaw, tracked as CVE-2026-6460, has a CVSS score of 8.8. Any code run this way has the rights of the operating…",
+          "text": "A type confusion flaw in PostgreSQL lets a database user who can create objects run code on the server. Updates released yesterday fix it, along with 51 other security flaws. Full protection from this flaw also requires rebuilding any C-language extensions installed on the server. The flaw, tracked as CVE-2026-6460, has a CVSS score of 8.8. Any code run this way has the rights of the operating…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "A type confusion flaw in PostgreSQL lets a database user who can create objects run code on the server. Updates released yesterday fix it, along with 51 other security flaws. Full protection from this flaw also requires rebuilding any C-language extensions installed on the server. The flaw, tracked as CVE-2026-6460, has a CVSS score of 8.8. Any code run this way has the rights of the operating…",
+          "text": "A type confusion flaw in PostgreSQL lets a database user who can create objects run code on the server. Updates released yesterday fix it, along with 51 other security flaws. Full protection from this flaw also requires rebuilding any C-language extensions installed on the server. The flaw, tracked as CVE-2026-6460, has a CVSS score of 8.8. Any code run this way has the rights of the operating…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Italy Fines Meta €805 Million Over Facebook's Android Gallery Access Without Explicit Consent",
+      "url": "https://thehackernews.com/2026/11/italy-fines-meta-805-million-over.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-15/#reporting-dabf7b9c559f",
+      "cves": [],
+      "snippet": "Italy Fines Meta €805 Million Over Facebook's Android Gallery Access Without Explicit Consent Meta was fined €805 million in Italy yesterday over a Facebook for Android feature that suggests photos and videos from users' phone galleries for them to post. The Garante, Italy's data protection authority, found that the feature was enabled by default and that the app accessed Italian users' photos, videos, and related metadata without their explicit consent. The company has 60 days to… Meta was fined €805 million in Italy yesterday over a Facebook for Android feature that suggests photos and videos from users' phone galleries for them to post. The Garante, Italy's data protection authority, foun",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Meta was fined €805 million in Italy yesterday over a Facebook for Android feature that suggests photos and videos from users' phone galleries for them to post. The Garante, Italy's data protection authority, found that the feature was enabled by default and that the app accessed Italian users' photos, videos, and related metadata without their explicit consent. The company has 60 days to…",
+          "text": "Meta was fined €805 million in Italy yesterday over a Facebook for Android feature that suggests photos and videos from users' phone galleries for them to post. The Garante, Italy's data protection authority, found that the feature was enabled by default and that the app accessed Italian users' photos, videos, and related metadata without their explicit consent. The company has 60 days to…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Meta was fined €805 million in Italy yesterday over a Facebook for Android feature that suggests photos and videos from users' phone galleries for them to post. The Garante, Italy's data protection authority, found that the feature was enabled by default and that the app accessed Italian users' photos, videos, and related metadata without their explicit consent. The company has 60 days to…",
+          "text": "Meta was fined €805 million in Italy yesterday over a Facebook for Android feature that suggests photos and videos from users' phone galleries for them to post. The Garante, Italy's data protection authority, found that the feature was enabled by default and that the app accessed Italian users' photos, videos, and related metadata without their explicit consent. The company has 60 days to…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Cursor Says Stolen Fireworks AI Key Led to Trojanized Claude Code Extension Incident",
+      "url": "https://thehackernews.com/2026/11/stolen-fireworks-ai-key-led-to-cursor.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-15/#reporting-d5585df40181",
+      "cves": [],
+      "snippet": "Cursor Says Stolen Fireworks AI Key Led to Trojanized Claude Code Extension Incident The compromise of Anthropic's official Claude Code extension on Cursor's extension marketplace was the result of the theft of an access key that was exposed in the wake of a breach targeting Fireworks AI. \"An attacker obtained an access key we had issued to Fireworks,\" Cursor said in a Friday update. \"The key was exposed by Fireworks, and the attacker used it to copy data from a read-only… The compromise of Anthropic's official Claude Code extension on Cursor's extension marketplace was the result of the theft of an access key that was exposed in the wake of a breach targeting Fireworks AI. \"An attacker obta",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "The compromise of Anthropic's official Claude Code extension on Cursor's extension marketplace was the result of the theft of an access key that was exposed in the wake of a breach targeting Fireworks AI. \"An attacker obtained an access key we had issued to Fireworks,\" Cursor said in a Friday update. \"The key was exposed by Fireworks, and the attacker used it to copy data from a read-only…",
+          "text": "The compromise of Anthropic's official Claude Code extension on Cursor's extension marketplace was the result of the theft of an access key that was exposed in the wake of a breach targeting Fireworks AI. \"An attacker obtained an access key we had issued to Fireworks,\" Cursor said in a Friday update. \"The key was exposed by Fireworks, and the attacker used it to copy data from a read-only…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "The compromise of Anthropic's official Claude Code extension on Cursor's extension marketplace was the result of the theft of an access key that was exposed in the wake of a breach targeting Fireworks AI. \"An attacker obtained an access key we had issued to Fireworks,\" Cursor said in a Friday update. \"The key was exposed by Fireworks, and the attacker used it to copy data from a read-only…",
+          "text": "The compromise of Anthropic's official Claude Code extension on Cursor's extension marketplace was the result of the theft of an access key that was exposed in the wake of a breach targeting Fireworks AI. \"An attacker obtained an access key we had issued to Fireworks,\" Cursor said in a Friday update. \"The key was exposed by Fireworks, and the attacker used it to copy data from a read-only…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Cursor confirms security breach led to malicious Claude Code extension",
+      "url": "https://www.bleepingcomputer.com/news/security/cursor-confirms-security-breach-led-to-malicious-claude-code-extension/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-15/#reporting-2396f465be93",
+      "cves": [],
+      "snippet": "Cursor confirms security breach led to malicious Claude Code extension Cursor confirmed it suffered a security breach that let hackers distribute a malicious Claude Code extension through its marketplace after stealing credentials from AI infrastructure provider Fireworks AI… Cursor confirmed it suffered a security breach that let hackers distribute a malicious Claude Code extension through its marketplace after stealing credentials from AI infrastructure provider Fireworks AI…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Cursor confirmed it suffered a security breach that let hackers distribute a malicious Claude Code extension through its marketplace after stealing credentials from AI infrastructure provider Fireworks AI…",
+          "text": "Cursor confirmed it suffered a security breach that let hackers distribute a malicious Claude Code extension through its marketplace after stealing credentials from AI infrastructure provider Fireworks AI…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Cursor confirmed it suffered a security breach that let hackers distribute a malicious Claude Code extension through its marketplace after stealing credentials from AI infrastructure provider Fireworks AI…",
+          "text": "Cursor confirmed it suffered a security breach that let hackers distribute a malicious Claude Code extension through its marketplace after stealing credentials from AI infrastructure provider Fireworks AI…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "US disrupts North Korean campaign behind $400 million crypto theft",
+      "url": "https://www.bleepingcomputer.com/news/security/us-disrupts-north-korean-campaign-behind-400-million-crypto-theft/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-15/#reporting-0eb645ca70f5",
+      "cves": [],
+      "snippet": "US disrupts North Korean campaign behind $400 million crypto theft The U.S. government has disrupted a North Korean social engineering campaign called 'FaceStealer', responsible for stealing more than $400 million in cryptocurrency… The U.S. government has disrupted a North Korean social engineering campaign called 'FaceStealer', responsible for stealing more than $400 million in cryptocurrency…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "The U.S. government has disrupted a North Korean social engineering campaign called 'FaceStealer', responsible for stealing more than $400 million in cryptocurrency…",
+          "text": "The U.S. government has disrupted a North Korean social engineering campaign called 'FaceStealer', responsible for stealing more than $400 million in cryptocurrency…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "The U.S. government has disrupted a North Korean social engineering campaign called 'FaceStealer', responsible for stealing more than $400 million in cryptocurrency…",
+          "text": "The U.S. government has disrupted a North Korean social engineering campaign called 'FaceStealer', responsible for stealing more than $400 million in cryptocurrency…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "ArcticRAT Cybercrime Gang Profiles Victim Finances With AI",
+      "url": "https://www.darkreading.com/mobile-security/arcticrat-cybercrime-gang-profiles-victim-finances-ai",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-15/#reporting-c281bea158b9",
+      "cves": [],
+      "snippet": "ArcticRAT Cybercrime Gang Profiles Victim Finances With AI The Android malware has expanded from focusing on crypto theft to full device control, and the attackers have added advanced analysis of stolen information. The Android malware has expanded from focusing on crypto theft to full device control, and the attackers have added advanced analysis of stolen information.",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "The Android malware has expanded from focusing on crypto theft to full device control, and the attackers have added advanced analysis of stolen information.",
+          "text": "The Android malware has expanded from focusing on crypto theft to full device control, and the attackers have added advanced analysis of stolen information."
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "The Android malware has expanded from focusing on crypto theft to full device control, and the attackers have added advanced analysis of stolen information.",
+          "text": "The Android malware has expanded from focusing on crypto theft to full device control, and the attackers have added advanced analysis of stolen information."
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Trezor confirms crypto-stealing implants in three wallets, releases fix",
+      "url": "https://www.bleepingcomputer.com/news/cryptocurrency/trezor-confirms-crypto-stealing-implants-in-three-wallets-releases-fix/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-15/#reporting-d2962957f52f",
+      "cves": [],
+      "snippet": "Trezor confirms crypto-stealing implants in three wallets, releases fix Cryptocurrency hardware wallet maker Trezor has confirmed that three Safe 5 devices sold by Southeast Asian reseller CryptoBilis contained malicious hardware implants designed to steal wallet recovery phrases and send them to attackers over cellular networks… Cryptocurrency hardware wallet maker Trezor has confirmed that three Safe 5 devices sold by Southeast Asian reseller CryptoBilis contained malicious hardware implants designed to steal wallet recovery phrases and send them to attackers over cellular networks…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Cryptocurrency hardware wallet maker Trezor has confirmed that three Safe 5 devices sold by Southeast Asian reseller CryptoBilis contained malicious hardware implants designed to steal wallet recovery phrases and send them to attackers over cellular networks…",
+          "text": "Cryptocurrency hardware wallet maker Trezor has confirmed that three Safe 5 devices sold by Southeast Asian reseller CryptoBilis contained malicious hardware implants designed to steal wallet recovery phrases and send them to attackers over cellular networks…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Cryptocurrency hardware wallet maker Trezor has confirmed that three Safe 5 devices sold by Southeast Asian reseller CryptoBilis contained malicious hardware implants designed to steal wallet recovery phrases and send them to attackers over cellular networks…",
+          "text": "Cryptocurrency hardware wallet maker Trezor has confirmed that three Safe 5 devices sold by Southeast Asian reseller CryptoBilis contained malicious hardware implants designed to steal wallet recovery phrases and send them to attackers over cellular networks…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "German military drone operations disrupted by cyberattack",
+      "url": "https://www.bleepingcomputer.com/news/security/german-military-drone-operations-disrupted-by-cyberattack/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-15/#reporting-6ce23a8d3c69",
+      "cves": [],
+      "snippet": "German military drone operations disrupted by cyberattack German defense technology company Quantum Systems confirmed that it detected an incident in late October that was part of an active cyberattack by \"hostile actors.\"… German defense technology company Quantum Systems confirmed that it detected an incident in late October that was part of an active cyberattack by \"hostile actors.\"…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "German defense technology company Quantum Systems confirmed that it detected an incident in late October that was part of an active cyberattack by \"hostile actors.\"…",
+          "text": "German defense technology company Quantum Systems confirmed that it detected an incident in late October that was part of an active cyberattack by \"hostile actors.\"…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "German defense technology company Quantum Systems confirmed that it detected an incident in late October that was part of an active cyberattack by \"hostile actors.\"…",
+          "text": "German defense technology company Quantum Systems confirmed that it detected an incident in late October that was part of an active cyberattack by \"hostile actors.\"…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Check Point gateways hacked via PHP2Shell to deploy VMware ESXi wiper",
+      "url": "https://www.bleepingcomputer.com/news/security/check-point-gateways-hacked-via-php2shell-to-deploy-vmware-esxi-wiper/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-15/#reporting-97c01e9fc463",
+      "cves": [],
+      "snippet": "Check Point gateways hacked via PHP2Shell to deploy VMware ESXi wiper Vulnerable Check Point Security Gateway instances have been targeted in PHP2Shell attacks that deployed data-wiping malware on VMware ESXi hosts… Vulnerable Check Point Security Gateway instances have been targeted in PHP2Shell attacks that deployed data-wiping malware on VMware ESXi hosts…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Vulnerable Check Point Security Gateway instances have been targeted in PHP2Shell attacks that deployed data-wiping malware on VMware ESXi hosts…",
+          "text": "Vulnerable Check Point Security Gateway instances have been targeted in PHP2Shell attacks that deployed data-wiping malware on VMware ESXi hosts…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Vulnerable Check Point Security Gateway instances have been targeted in PHP2Shell attacks that deployed data-wiping malware on VMware ESXi hosts…",
+          "text": "Vulnerable Check Point Security Gateway instances have been targeted in PHP2Shell attacks that deployed data-wiping malware on VMware ESXi hosts…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "New Mior and Skyfall Attacks Let Rogue Cloud Hosts Steal Secrets From AMD SEV-SNP VMs",
+      "url": "https://thehackernews.com/2026/11/new-mior-and-skyfall-attacks-let-rogue.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-15/#reporting-d93f5e12f3c1",
+      "cves": [],
+      "snippet": "New Mior and Skyfall Attacks Let Rogue Cloud Hosts Steal Secrets From AMD SEV-SNP VMs Two attacks made public this week allow a malicious host to read data inside AMD SEV-SNP-protected virtual machines (VMs), which are built to keep the server's operator out. One of them, Mior, can also modify a VM's memory and fake the signed report confirming which software it runs. Both need control of the server's hypervisor, and Mior also needs control of the server's BIOS. Researchers… Two attacks made public this week allow a malicious host to read data inside AMD SEV-SNP-protected virtual machines (VMs), which are built to keep the server's operator out. One of them, Mior, can also modify a VM's memo",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Two attacks made public this week allow a malicious host to read data inside AMD SEV-SNP-protected virtual machines (VMs), which are built to keep the server's operator out. One of them, Mior, can also modify a VM's memory and fake the signed report confirming which software it runs. Both need control of the server's hypervisor, and Mior also needs control of the server's BIOS. Researchers…",
+          "text": "Two attacks made public this week allow a malicious host to read data inside AMD SEV-SNP-protected virtual machines (VMs), which are built to keep the server's operator out. One of them, Mior, can also modify a VM's memory and fake the signed report confirming which software it runs. Both need control of the server's hypervisor, and Mior also needs control of the server's BIOS. Researchers…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Two attacks made public this week allow a malicious host to read data inside AMD SEV-SNP-protected virtual machines (VMs), which are built to keep the server's operator out. One of them, Mior, can also modify a VM's memory and fake the signed report confirming which software it runs. Both need control of the server's hypervisor, and Mior also needs control of the server's BIOS. Researchers…",
+          "text": "Two attacks made public this week allow a malicious host to read data inside AMD SEV-SNP-protected virtual machines (VMs), which are built to keep the server's operator out. One of them, Mior, can also modify a VM's memory and fake the signed report confirming which software it runs. Both need control of the server's hypervisor, and Mior also needs control of the server's BIOS. Researchers…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "How one AI agent exposed five critical enterprise security gaps",
+      "url": "https://www.bleepingcomputer.com/news/security/how-one-ai-agent-exposed-five-critical-enterprise-security-gaps/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-15/#reporting-b32ccd39bcb9",
+      "cves": [],
+      "snippet": "How one AI agent exposed five critical enterprise security gaps An AI agent built to automate invoice processing could be manipulated into changing vendor bank details through a malicious email, without triggering traditional security alerts. Token Security examines five critical AI agent security gaps and shares practical guidance from industry security leaders on preventing them… An AI agent built to automate invoice processing could be manipulated into changing vendor bank details through a malicious email, without triggering traditional security alerts. Token Security examines five critical AI agent security gaps and shares practical guidance from industry security leaders on preventing ",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "An AI agent built to automate invoice processing could be manipulated into changing vendor bank details through a malicious email, without triggering traditional security alerts. Token Security examines five critical AI agent security gaps and shares practical guidance from industry security leaders on preventing them…",
+          "text": "An AI agent built to automate invoice processing could be manipulated into changing vendor bank details through a malicious email, without triggering traditional security alerts. Token Security examines five critical AI agent security gaps and shares practical guidance from industry security leaders on preventing them…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "An AI agent built to automate invoice processing could be manipulated into changing vendor bank details through a malicious email, without triggering traditional security alerts. Token Security examines five critical AI agent security gaps and shares practical guidance from industry security leaders on preventing them…",
+          "text": "An AI agent built to automate invoice processing could be manipulated into changing vendor bank details through a malicious email, without triggering traditional security alerts. Token Security examines five critical AI agent security gaps and shares practical guidance from industry security leaders on preventing them…"
+        }
+      ],
+      "effective_date_evidence": null
+    }
+  ]
+}
