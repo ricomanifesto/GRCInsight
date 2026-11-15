@@ -4,63 +4,75 @@
   "report_plan": {
     "control_implications": [
       {
-        "control_id": "data_protection",
-        "evidence_excerpt": "Meta was fined €805 million in Italy yesterday over a Facebook for Android feature that suggests photos and videos from users' phone galleries for them to post. The Garante, Italy's data protection authority, found that the feature was enabled by default and that the app accessed Italian users' photos, videos, and related metadata without their explicit consent. The company has 60 days to…",
-        "evidence_origin": "summary",
-        "focus": "Facebook for Android feature",
-        "headline": "Facebook for Android feature accesses photos without explicit consent",
-        "priority": "high",
-        "significance": "This finding matters for control assurance because it demonstrates regulatory enforcement against default-enabled data access without consent. The accountable owner should confirm that default settings for data access features require explicit user consent and that consent mechanisms are auditable.",
-        "source_ids": [
-          4
-        ]
-      },
-      {
-        "control_id": "third_party_risk",
-        "evidence_excerpt": "Taiwan Semiconductor Manufacturing Company (TSMC) confirmed that personal employee data has been leaked online after a threat actor put 6.9GB of information allegedly stolen from the company up for auction…",
-        "evidence_origin": "summary",
-        "focus": "cloud provider",
-        "headline": "cloud provider exposes TSMC employee personal data",
-        "priority": "high",
-        "significance": "This finding matters for control assurance because it shows supplier infrastructure compromise leading to sensitive data exposure. The accountable owner should confirm that cloud provider contracts include breach notification obligations and that supplier access to employee data is monitored and minimized.",
-        "source_ids": [
-          3
-        ]
-      },
-      {
         "control_id": "vulnerability_management",
         "evidence_excerpt": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Friday added a high-severity security flaw impacting UnrealIRCd, an open-source Internet Relay Chat (IRC) server, to its Known Exploited Vulnerabilities (KEV) catalog, following reports of active exploitation. The vulnerability, tracked as CVE-2026-114713 (CVSS score: 8.6), is a case of improper neutralization of delimiters…",
         "evidence_origin": "summary",
-        "focus": "UnrealIRCd",
-        "headline": "UnrealIRCd added to CISA Known Exploited Vulnerabilities catalog",
+        "focus": "UnrealIRCd IRC server",
+        "headline": "UnrealIRCd IRC server added to CISA KEV catalog for active exploitation",
         "priority": "high",
-        "significance": "This finding matters for control assurance because CISA KEV inclusion mandates urgent remediation for federal agencies and signals active exploitation. The accountable owner should confirm whether UnrealIRCd is deployed in the environment and that emergency patching procedures have been triggered.",
+        "significance": "This finding matters because active exploitation of a widely used IRC server requires immediate asset identification and patching. The vulnerability owner should confirm whether any UnrealIRCd instances are deployed and verify remediation status.",
         "source_ids": [
           1
         ]
       },
       {
-        "control_id": "vulnerability_management",
-        "evidence_excerpt": "A type confusion flaw in PostgreSQL lets a database user who can create objects run code on the server. Updates released yesterday fix it, along with 51 other security flaws. Full protection from this flaw also requires rebuilding any C-language extensions installed on the server. The flaw, tracked as CVE-2026-6460, has a CVSS score of 8.8. Any code run this way has the rights of the operating…",
+        "control_id": "third_party_risk",
+        "evidence_excerpt": "The FBI is warning that hackers are using an AI-powered penetration testing framework called ARTEX to automate cyberattacks against organizations worldwide, including a recent ConnectWise supply-chain breach that compromised Microsoft 365 customer environments…",
         "evidence_origin": "summary",
-        "focus": "PostgreSQL",
-        "headline": "PostgreSQL patches 52 flaws including authenticated RCE vulnerability",
-        "priority": "medium",
-        "significance": "This finding matters for control assurance because the vulnerability allows authenticated remote code execution and requires extension rebuilding for full protection. The accountable owner should confirm that all PostgreSQL instances are patched and that C-language extensions have been rebuilt to eliminate residual exposure.",
+        "focus": "ConnectWise supply-chain breach",
+        "headline": "ConnectWise supply-chain breach enables Microsoft 365 compromise via ARTEX tool",
+        "priority": "high",
+        "significance": "This finding matters because a supply-chain breach at a managed service provider can cascade to customer environments. The third-party risk owner should confirm the scope of ConnectWise access and review supplier assurance evidence.",
         "source_ids": [
-          2
+          3
         ]
       },
       {
-        "control_id": "vulnerability_management",
-        "evidence_excerpt": "Vulnerable Check Point Security Gateway instances have been targeted in PHP2Shell attacks that deployed data-wiping malware on VMware ESXi hosts…",
+        "control_id": "data_protection",
+        "evidence_excerpt": "Taiwan Semiconductor Manufacturing Company (TSMC) confirmed that personal employee data has been leaked online after a threat actor put 6.9GB of information allegedly stolen from the company up for auction…",
         "evidence_origin": "summary",
-        "focus": "Check Point Security Gateway instances",
-        "headline": "Check Point Security Gateway instances face PHP2Shell attacks deploying wipers",
-        "priority": "medium",
-        "significance": "This finding matters for control assurance because network security gateways are being exploited to deploy destructive malware on hypervisors. The accountable owner should confirm that Check Point gateways are patched against PHP2Shell exploitation and that ESXi host integrity monitoring detects unauthorized wiper activity.",
+        "focus": "TSMC employee data breach",
+        "headline": "TSMC employee data breach exposes personal information via cloud provider",
+        "priority": "high",
+        "significance": "This finding matters because employee personal data leaked through a cloud provider indicates potential gaps in data protection and third-party controls. The data protection owner should confirm the cloud provider's access scope and review data handling assurances.",
         "source_ids": [
-          11
+          4
+        ]
+      },
+      {
+        "control_id": "governance",
+        "evidence_excerpt": "Meta was fined €805 million in Italy yesterday over a Facebook for Android feature that suggests photos and videos from users' phone galleries for them to post. The Garante, Italy's data protection authority, found that the feature was enabled by default and that the app accessed Italian users' photos, videos, and related metadata without their explicit consent.",
+        "evidence_origin": "summary",
+        "focus": "Facebook Android feature",
+        "headline": "Facebook Android feature accesses user gallery without explicit consent per Garante",
+        "priority": "medium",
+        "significance": "This finding matters because a regulatory fine for non-consensual data access demonstrates accountability for data protection failures. The governance owner should confirm that consent mechanisms are enforced and documented for all data processing features.",
+        "source_ids": [
+          5
+        ]
+      },
+      {
+        "control_id": "incident_response",
+        "evidence_excerpt": "The U.S. government has disrupted a North Korean social engineering campaign called 'FaceStealer', responsible for stealing more than $400 million in cryptocurrency…",
+        "evidence_origin": "summary",
+        "focus": "North Korean FaceStealer campaign",
+        "headline": "North Korean FaceStealer campaign disrupted after $400 million cryptocurrency theft",
+        "priority": "high",
+        "significance": "This finding matters because state-sponsored social engineering campaigns targeting cryptocurrency require robust incident response and threat intelligence. The incident response owner should confirm detection capabilities for similar social engineering tactics and review containment procedures.",
+        "source_ids": [
+          8
+        ]
+      },
+      {
+        "control_id": "monitoring",
+        "evidence_excerpt": "The Android malware has expanded from focusing on crypto theft to full device control, and the attackers have added advanced analysis of stolen information.",
+        "evidence_origin": "summary",
+        "focus": "ArcticRAT Android malware",
+        "headline": "ArcticRAT Android malware expands to full device control with AI analysis",
+        "priority": "medium",
+        "significance": "This finding matters because evolving Android malware with AI-driven analysis increases the risk of financial profiling and device compromise. The monitoring owner should confirm mobile threat detection coverage and review alerting for anomalous device behavior.",
+        "source_ids": [
+          9
         ]
       }
     ],
@@ -68,26 +80,27 @@
       "paragraphs": [
         {
           "source_ids": [
-            4,
+            1,
             3
           ],
-          "text": "Italy's €805 million fine against Meta for default-enabled gallery access without explicit consent demonstrates escalating GDPR enforcement on data processing defaults. Simultaneously, TSMC's confirmation that employee personal data was leaked through a cloud provider highlights third-party infrastructure as a direct path for sensitive data exposure. These developments require control owners to validate that default data access settings require documented consent and that cloud supplier contracts include enforceable breach notification and data protection obligations."
+          "text": "Active exploitation of UnrealIRCd and the ARTEX AI-powered supply-chain breach via ConnectWise demonstrate that vulnerability management and third-party risk controls must address rapidly weaponized flaws and cascading compromises. Control owners should prioritize asset inventories for exposed software and verify supplier access scopes to limit lateral movement."
         },
         {
           "source_ids": [
-            1,
-            2,
-            11
+            4,
+            5,
+            8,
+            9
           ],
-          "text": "CISA's addition of the UnrealIRCd flaw to the Known Exploited Vulnerabilities catalog and PostgreSQL's patching of 52 flaws including a 22-year-old authenticated RCE vulnerability signal active exploitation of widely deployed infrastructure components. The Cursor marketplace compromise via a stolen Fireworks AI access key and the targeting of Check Point Security Gateways to deploy ESXi wipers demonstrate that supplier credentials and network security appliances are active attack vectors. Control owners must confirm emergency patching for KEV-listed vulnerabilities, extension rebuilding for PostgreSQL, least-privilege scoping of third-party access keys, and integrity monitoring for security gateway and hypervisor layers."
+          "text": "The TSMC employee data leak through a cloud provider and Italy's €805 million fine against Meta for non-consensual data access highlight accountability gaps in data protection and governance. Simultaneously, the disruption of the North Korean FaceStealer campaign and the evolution of ArcticRAT Android malware require enhanced incident response readiness and mobile monitoring coverage."
         }
       ]
     },
     "industry_impacts": [],
     "regulatory_changes": []
   },
-  "generated_at": "2026-11-15T18:21:58.882398Z",
-  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/0c4e6a1115d2c832ddaf008287b7e66994a65558/site/feed.xml",
+  "generated_at": "2026-11-15T21:16:49.444217Z",
+  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/15a5f243f2dfb69d419843e7ab07334927774b47/site/feed.xml",
   "feed_home_url": "https://sentrydigest.ricomanifesto.com/",
   "digest_issue_date": "2026-11-15",
   "digest_issue_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-15/",
@@ -138,6 +151,28 @@
           "origin": "content",
           "raw_text": "A type confusion flaw in PostgreSQL lets a database user who can create objects run code on the server. Updates released yesterday fix it, along with 51 other security flaws. Full protection from this flaw also requires rebuilding any C-language extensions installed on the server. The flaw, tracked as CVE-2026-6460, has a CVSS score of 8.8. Any code run this way has the rights of the operating…",
           "text": "A type confusion flaw in PostgreSQL lets a database user who can create objects run code on the server. Updates released yesterday fix it, along with 51 other security flaws. Full protection from this flaw also requires rebuilding any C-language extensions installed on the server. The flaw, tracked as CVE-2026-6460, has a CVSS score of 8.8. Any code run this way has the rights of the operating…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "FBI warns ARTEX AI hacking tool is powering global cyberattacks",
+      "url": "https://www.bleepingcomputer.com/news/security/fbi-warns-artex-ai-hacking-tool-is-powering-global-cyberattacks/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-15/#reporting-ddd80cd3bed8",
+      "cves": [],
+      "snippet": "FBI warns ARTEX AI hacking tool is powering global cyberattacks The FBI is warning that hackers are using an AI-powered penetration testing framework called ARTEX to automate cyberattacks against organizations worldwide, including a recent ConnectWise supply-chain breach that compromised Microsoft 365 customer environments… The FBI is warning that hackers are using an AI-powered penetration testing framework called ARTEX to automate cyberattacks against organizations worldwide, including a recent ConnectWise supply-chain breach that compromised Microsoft 365 customer environments…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "The FBI is warning that hackers are using an AI-powered penetration testing framework called ARTEX to automate cyberattacks against organizations worldwide, including a recent ConnectWise supply-chain breach that compromised Microsoft 365 customer environments…",
+          "text": "The FBI is warning that hackers are using an AI-powered penetration testing framework called ARTEX to automate cyberattacks against organizations worldwide, including a recent ConnectWise supply-chain breach that compromised Microsoft 365 customer environments…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "The FBI is warning that hackers are using an AI-powered penetration testing framework called ARTEX to automate cyberattacks against organizations worldwide, including a recent ConnectWise supply-chain breach that compromised Microsoft 365 customer environments…",
+          "text": "The FBI is warning that hackers are using an AI-powered penetration testing framework called ARTEX to automate cyberattacks against organizations worldwide, including a recent ConnectWise supply-chain breach that compromised Microsoft 365 customer environments…"
         }
       ],
       "effective_date_evidence": null
@@ -336,28 +371,6 @@
           "origin": "content",
           "raw_text": "Vulnerable Check Point Security Gateway instances have been targeted in PHP2Shell attacks that deployed data-wiping malware on VMware ESXi hosts…",
           "text": "Vulnerable Check Point Security Gateway instances have been targeted in PHP2Shell attacks that deployed data-wiping malware on VMware ESXi hosts…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "New Mior and Skyfall Attacks Let Rogue Cloud Hosts Steal Secrets From AMD SEV-SNP VMs",
-      "url": "https://thehackernews.com/2026/11/new-mior-and-skyfall-attacks-let-rogue.html",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-15/#reporting-d93f5e12f3c1",
-      "cves": [],
-      "snippet": "New Mior and Skyfall Attacks Let Rogue Cloud Hosts Steal Secrets From AMD SEV-SNP VMs Two attacks made public this week allow a malicious host to read data inside AMD SEV-SNP-protected virtual machines (VMs), which are built to keep the server's operator out. One of them, Mior, can also modify a VM's memory and fake the signed report confirming which software it runs. Both need control of the server's hypervisor, and Mior also needs control of the server's BIOS. Researchers… Two attacks made public this week allow a malicious host to read data inside AMD SEV-SNP-protected virtual machines (VMs), which are built to keep the server's operator out. One of them, Mior, can also modify a VM's memo",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "Two attacks made public this week allow a malicious host to read data inside AMD SEV-SNP-protected virtual machines (VMs), which are built to keep the server's operator out. One of them, Mior, can also modify a VM's memory and fake the signed report confirming which software it runs. Both need control of the server's hypervisor, and Mior also needs control of the server's BIOS. Researchers…",
-          "text": "Two attacks made public this week allow a malicious host to read data inside AMD SEV-SNP-protected virtual machines (VMs), which are built to keep the server's operator out. One of them, Mior, can also modify a VM's memory and fake the signed report confirming which software it runs. Both need control of the server's hypervisor, and Mior also needs control of the server's BIOS. Researchers…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "Two attacks made public this week allow a malicious host to read data inside AMD SEV-SNP-protected virtual machines (VMs), which are built to keep the server's operator out. One of them, Mior, can also modify a VM's memory and fake the signed report confirming which software it runs. Both need control of the server's hypervisor, and Mior also needs control of the server's BIOS. Researchers…",
-          "text": "Two attacks made public this week allow a malicious host to read data inside AMD SEV-SNP-protected virtual machines (VMs), which are built to keep the server's operator out. One of them, Mior, can also modify a VM's memory and fake the signed report confirming which software it runs. Both need control of the server's hypervisor, and Mior also needs control of the server's BIOS. Researchers…"
         }
       ],
       "effective_date_evidence": null
