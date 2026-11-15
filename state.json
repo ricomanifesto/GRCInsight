@@ -2388,6 +2388,13 @@
       "at": "2026-11-15T12:18:16.761Z",
       "run_id": "43713131811",
       "stage": "invoked"
+    },
+    {
+      "admission_key": "digest:c2dae6724016acb6cfb1faf3afe9722fab039a66",
+      "at": "2026-11-15T12:18:19.043Z",
+      "handle": "report_20261115_121818_217",
+      "run_id": "43713131811",
+      "stage": "invoked"
     }
   ],
   "schema_version": 1,
