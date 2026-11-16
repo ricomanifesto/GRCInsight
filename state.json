@@ -2683,6 +2683,16 @@
       "handle": "report_20261116_181752_338",
       "run_id": "43927285134",
       "stage": "invoked"
+    },
+    {
+      "admission_key": "digest:8b9027e9127033a6a1485f426a5a26c182aa7ff9",
+      "at": "2026-11-16T18:21:44.438Z",
+      "binding": "feed-bytes",
+      "digest_content_digest": "c707d4c041068a0c81eb8d1cf122136b8c0a2b684f05fc43e24feb60026a919b",
+      "outcome": "published",
+      "release_key": "134b7a64ba0dcde7fc4c3aeb192ee3f17a87c84ee63f76d294e4396d9d6b7ac0",
+      "run_id": "43927285134",
+      "stage": "completed"
     }
   ],
   "schema_version": 1,
