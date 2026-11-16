@@ -2670,6 +2670,12 @@
       "run_id": "43927285134",
       "source_revision": "8b9027e9127033a6a1485f426a5a26c182aa7ff9",
       "stage": "admitted"
+    },
+    {
+      "admission_key": "digest:8b9027e9127033a6a1485f426a5a26c182aa7ff9",
+      "at": "2026-11-16T18:17:50.236Z",
+      "run_id": "43927285134",
+      "stage": "invoked"
     }
   ],
   "schema_version": 1,
