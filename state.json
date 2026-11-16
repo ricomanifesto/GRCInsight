@@ -2708,6 +2708,12 @@
       "run_id": "43958096506",
       "source_revision": "f98af692af431bf9c94aea2930da03eb47056050",
       "stage": "admitted"
+    },
+    {
+      "admission_key": "digest:f98af692af431bf9c94aea2930da03eb47056050",
+      "at": "2026-11-16T21:15:10.358Z",
+      "run_id": "43958096506",
+      "stage": "invoked"
     }
   ],
   "schema_version": 1,
