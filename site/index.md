@@ -1,8 +1,8 @@
 # GRC Intelligence Report - 2026-11-16
-**Generated:** 2026-11-16T13:16:52.199567Z
+**Generated:** 2026-11-16T15:23:31.091439Z
 **Date of Issue:** November 2026
 **Analysis Period:** November 2026
-**Source:** [SentryDigest](https://sentrydigest.ricomanifesto.com/feed.xml)
+**Source:** [SentryDigest](https://raw.githubusercontent.com/ricomanifesto/SentryDigest/1a7619440229593a9191b5e9ef23b7a9d9dee951/site/feed.xml)
 **Source Issue:** [SentryDigest 2026-11-16](https://sentrydigest.ricomanifesto.com/archive/2026-11-16/)
 **Articles Analyzed:** 30
 **GRC-Relevant Articles:** 30
@@ -12,11 +12,11 @@
 
 ## Executive Summary
 
-CISA added an actively exploited UnrealIRCd flaw to its Known Exploited Vulnerabilities catalog, while PostgreSQL released patches for 52 vulnerabilities including a 22-year-old authenticated remote code execution flaw. These developments demand immediate asset inventory and remediation verification for affected systems. Vulnerability owners must confirm deployment scope, apply updates, and validate compensating controls where patching is delayed. [Attackers Exploit UnrealIRCd Flaw That Enables Server-Level Command Injection](https://thehackernews.com/2026/11/attackers-exploit-unrealircd-flaw-that.html); [PostgreSQL Patches 52 Flaws, Including 22-Year-Old Bug Enabling Authenticated RCE](https://thehackernews.com/2026/11/postgresql-patches-52-flaws-including.html)
+CISA added UnrealIRCd to its Known Exploited Vulnerabilities catalog while PostgreSQL patched 52 flaws including a 22-year-old authenticated RCE, and Windows Server 2016 approaches end of support, collectively escalating vulnerability remediation priorities for control owners. Simultaneously, the FBI CJIS Security Policy now mandates stronger password protections and MFA across all law enforcement accounts, requiring access management alignment. Control owners should verify asset coverage for KEV-listed components, database patching status, legacy OS migration plans, and authentication control compliance. [Attackers Exploit UnrealIRCd Flaw That Enables Server-Level Command Injection](https://thehackernews.com/2026/11/attackers-exploit-unrealircd-flaw-that.html); [PostgreSQL Patches 52 Flaws, Including 22-Year-Old Bug Enabling Authenticated RCE](https://thehackernews.com/2026/11/postgresql-patches-52-flaws-including.html)
 
-Coles Group is investigating a cybersecurity incident, SANSAR cryptomining malware evades GPU monitoring, TSMC employee data was leaked via a cloud provider, and Italy fined Meta €805 million for default gallery access without consent. These events test incident response containment, detection coverage for resource abuse, data protection across third parties, and consent mechanisms. Owners should review response procedures, telemetry for anomalous workloads, cloud provider access scopes, and default data collection settings. [Australian retail giant Coles investigates cybersecurity incident](https://www.bleepingcomputer.com/news/security/australian-retail-giant-coles-investigates-cybersecurity-incident/); [SANSAR Linux Cryptomining Malware Uses Modified NVIDIA Library to Hide GPU Activity](https://thehackernews.com/2026/11/sansar-linux-cryptomining-malware-uses.html); [TSMC employee data breach linked to cloud provider](https://www.bleepingcomputer.com/news/security/tsmc-employee-data-breach-linked-to-cloud-provider/); [Italy Fines Meta €805 Million Over Facebook's Android Gallery Access Without Explicit Consent](https://thehackernews.com/2026/11/italy-fines-meta-805-million-over.html)
+Unpatched flaws in Danfoss refrigeration controllers demonstrate persistent third-party risk in operational technology where no vendor fix exists, and the Coles Group retail incident tests sector detection and response capabilities. Owners should assess supplier dependencies for unpatchable devices and confirm incident procedures support containment and evidence preservation. [Six Unpatched Danfoss Refrigeration Controller Flaws Could Allow Remote Takeover Without Login](https://thehackernews.com/2026/11/six-unpatched-danfoss-refrigeration.html)
 
-Scope: 6 findings and 0 sourced regulatory changes from 12 retained sources. Review priorities rank what to check first; confirm whether each finding applies to your organization before assigning work.
+Scope: 3 findings and 0 sourced regulatory changes from 12 retained sources. Review priorities rank what to check first; confirm whether each finding applies to your organization before assigning work.
 
 ## Sourced Regulatory Changes
 
@@ -26,11 +26,11 @@ No sourced regulatory changes identified in the supplied evidence.
 
 Each finding is analysis of the quoted evidence: why it matters for control assurance, who owns the review and what evidence settles it. Reference controls are review aids, not a compliance determination.
 
-### UnrealIRCd added to CISA KEV catalog for active exploitation
+### UnrealIRCd added to CISA Known Exploited Vulnerabilities catalog
 
 **Review priority:** High · Vulnerability management · Owner: Vulnerability and asset owners
 
-**Why it matters:** This KEV addition signals active exploitation requiring immediate asset identification and remediation. Vulnerability owners should confirm whether UnrealIRCd is deployed and verify patching or compensating controls.
+**Why it matters:** KEV inclusion mandates prioritized remediation for federal agencies and signals critical risk for all owners. The accountable owner should confirm asset inventory includes UnrealIRCd and verify remediation status or compensating controls.
 
 **Source evidence:** “The U.S. Cybersecurity and Infrastructure Security Agency &#40;CISA&#41; on Friday added a high-severity security flaw impacting UnrealIRCd, an open-source Internet Relay Chat &#40;IRC&#41; server, to its Known Exploited Vulnerabilities &#40;KEV&#41; catalog, following reports of active exploitation.” [Attackers Exploit UnrealIRCd Flaw That Enables Server-Level Command Injection](https://thehackernews.com/2026/11/attackers-exploit-unrealircd-flaw-that.html)
 
@@ -40,11 +40,11 @@ Each finding is analysis of the quoted evidence: why it matters for control assu
 
 **Reference controls:** ISO/IEC 27001:2022 A.8.8 (management of technical vulnerabilities); NIST CSF 2.0 ID.RA (risk assessment), PR.PS (platform security)
 
-### PostgreSQL releases updates for 52 flaws including authenticated RCE
+### PostgreSQL releases patches for 52 flaws including authenticated RCE
 
 **Review priority:** High · Vulnerability management · Owner: Vulnerability and asset owners
 
-**Why it matters:** The authenticated RCE vulnerability demands urgent patching and extension rebuilding. Asset owners must inventory PostgreSQL instances, apply updates, and verify extension recompilation.
+**Why it matters:** Authenticated remote code execution in widely deployed databases demands urgent patching and extension rebuilding. The accountable owner should verify deployed versions, patch deployment, and extension rebuild completion.
 
 **Source evidence:** “A type confusion flaw in PostgreSQL lets a database user who can create objects run code on the server. Updates released yesterday fix it, along with 51 other security flaws. Full protection from this flaw also requires rebuilding any C-language extensions installed on the server.” [PostgreSQL Patches 52 Flaws, Including 22-Year-Old Bug Enabling Authenticated RCE](https://thehackernews.com/2026/11/postgresql-patches-52-flaws-including.html)
 
@@ -54,73 +54,31 @@ Each finding is analysis of the quoted evidence: why it matters for control assu
 
 **Reference controls:** ISO/IEC 27001:2022 A.8.8 (management of technical vulnerabilities); NIST CSF 2.0 ID.RA (risk assessment), PR.PS (platform security)
 
-### Coles Group Limited investigates cyber security incident with no store impact
+### Danfoss AK-SM800A refrigeration controllers have six unpatched flaws allowing remote takeover
 
-**Review priority:** Medium · Incident response · Owner: Incident response lead
+**Review priority:** Medium · Third-party risk · Owner: Supplier risk owner
 
-**Why it matters:** An ongoing investigation at a major retailer tests incident containment and communication controls. Incident response leads should review containment procedures and evidence preservation readiness.
+**Why it matters:** Unpatchable operational technology devices expose environments to remote compromise without authentication. The accountable owner should review supplier dependencies, network segmentation, and monitoring for these controllers.
 
-**Source evidence:** “Coles Group Limited, Australia's second-largest retailer, is investigating what it described as a "cyber security incident" that has not impacted the company's stores…” [Australian retail giant Coles investigates cybersecurity incident](https://www.bleepingcomputer.com/news/security/australian-retail-giant-coles-investigates-cybersecurity-incident/)
+**Source evidence:** “Six flaws in Danfoss AK-SM800A refrigeration controllers could let a remote attacker take over a controller without logging in, Dutch security consultancy Midnight Blue said earlier this week. No patch is available, and the researchers say the newest firmware, version 5.4.0, does not fix the flaws.” [Six Unpatched Danfoss Refrigeration Controller Flaws Could Allow Remote Takeover Without Login](https://thehackernews.com/2026/11/six-unpatched-danfoss-refrigeration.html)
 
-**Evidence to request:** Containment responsibilities, retained logs and the most recent response exercise.
+**Evidence to request:** Supplier access scope, control responsibilities and evidence of remediation assurance.
 
-**Decision trigger:** If an exercise exposes an ownership or evidence gap, assign a response-plan correction and retest it.
+**Decision trigger:** If the supplier dependency exists and assurance is insufficient, request evidence or escalate the assurance gap to its owner.
 
-**Reference controls:** ISO/IEC 27001:2022 A.5.24 (incident management planning and preparation), A.5.26 (response to information security incidents); NIST CSF 2.0 RS.MA (incident management), RS.MI (incident mitigation)
-
-### SANSAR Linux Cryptomining Malware evades GPU monitoring via modified NVIDIA library
-
-**Review priority:** Medium · Monitoring and detection · Owner: Detection and monitoring owner
-
-**Why it matters:** The malware's ability to hide GPU activity challenges detection coverage for resource abuse. Monitoring owners should validate telemetry for anomalous GPU workloads and TOR traffic.
-
-**Source evidence:** “A financially motivated threat activity cluster tracked as REF3364 has been attributed to a Linux-focused cryptocurrency mining operation that tampers with the readings used to detect high GPU workloads. Central to the intrusion is a toolkit called SANSAR, a Rust-based orchestrator that receives commands over the TOR anonymity network to manage CPU and GPU miners.” [SANSAR Linux Cryptomining Malware Uses Modified NVIDIA Library to Hide GPU Activity](https://thehackernews.com/2026/11/sansar-linux-cryptomining-malware-uses.html)
-
-**Evidence to request:** Log coverage, a detection test, alert routing and investigation ownership.
-
-**Decision trigger:** If a detection test fails, assign the coverage or routing correction and repeat the test.
-
-**Reference controls:** ISO/IEC 27001:2022 A.8.15 (logging), A.8.16 (monitoring activities); NIST CSF 2.0 DE.CM (continuous monitoring), DE.AE (adverse event analysis)
-
-### Taiwan Semiconductor Manufacturing Company &#40;TSMC&#41; confirms employee data leak via cloud provider
-
-**Review priority:** Medium · Data protection · Owner: Data and privacy owners
-
-**Why it matters:** A cloud provider-linked breach of sensitive employee data tests data protection and third-party assurance. Data owners must assess cloud provider access scopes and verify breach notification obligations.
-
-**Source evidence:** “Taiwan Semiconductor Manufacturing Company &#40;TSMC&#41; confirmed that personal employee data has been leaked online after a threat actor put 6.9GB of information allegedly stolen from the company up for auction…” [TSMC employee data breach linked to cloud provider](https://www.bleepingcomputer.com/news/security/tsmc-employee-data-breach-linked-to-cloud-provider/)
-
-**Evidence to request:** Data inventory, access restrictions, audit logs and a documented exposure assessment.
-
-**Decision trigger:** If relevant data is exposed to the reported access path, decide which protection or access change is needed.
-
-**Reference controls:** ISO/IEC 27001:2022 A.5.34 (privacy and protection of PII), A.8.12 (data leakage prevention), A.8.24 (use of cryptography); NIST CSF 2.0 PR.DS (data security)
-
-### Facebook for Android feature fined €805 million for default gallery access without consent
-
-**Review priority:** High · Data protection · Owner: Data and privacy owners
-
-**Why it matters:** The regulatory penalty for default data access underscores consent and data minimization requirements. Privacy owners should review default data collection settings and consent mechanisms across applications.
-
-**Source evidence:** “Meta was fined €805 million in Italy yesterday over a Facebook for Android feature that suggests photos and videos from users' phone galleries for them to post. The Garante, Italy's data protection authority, found that the feature was enabled by default and that the app accessed Italian users' photos, videos, and related metadata without their explicit consent.” [Italy Fines Meta €805 Million Over Facebook's Android Gallery Access Without Explicit Consent](https://thehackernews.com/2026/11/italy-fines-meta-805-million-over.html)
-
-**Evidence to request:** Data inventory, access restrictions, audit logs and a documented exposure assessment.
-
-**Decision trigger:** If relevant data is exposed to the reported access path, decide which protection or access change is needed.
-
-**Reference controls:** ISO/IEC 27001:2022 A.5.34 (privacy and protection of PII), A.8.12 (data leakage prevention), A.8.24 (use of cryptography); NIST CSF 2.0 PR.DS (data security)
+**Reference controls:** ISO/IEC 27001:2022 A.5.19 (supplier relationships), A.5.21 (ICT supply chain), A.5.22 (monitoring and review of supplier services); NIST CSF 2.0 GV.SC (cybersecurity supply chain risk management)
 
 ## Source Highlights
 
 - [Attackers Exploit UnrealIRCd Flaw That Enables Server-Level Command Injection](https://thehackernews.com/2026/11/attackers-exploit-unrealircd-flaw-that.html) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-16/#reporting-e577b898eca3)
 - [PostgreSQL Patches 52 Flaws, Including 22-Year-Old Bug Enabling Authenticated RCE](https://thehackernews.com/2026/11/postgresql-patches-52-flaws-including.html) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-16/#reporting-d8cc2172e29e)
+- [7 Tips For Complying with CJIS Password and MFA Requirements](https://www.bleepingcomputer.com/news/security/7-tips-for-complying-with-cjis-password-and-mfa-requirements/) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-16/#reporting-b138a94eb9b2)
+- [Google warns that fully-automated AI attacks are coming soon](https://www.bleepingcomputer.com/news/security/google-warns-that-fully-automated-ai-attacks-are-coming-soon/) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-16/#reporting-9b1f22329875)
+- [Microsoft: Windows Server 2016 reaches end of support in 60 days](https://www.bleepingcomputer.com/news/microsoft/microsoft-windows-server-2016-reaches-end-of-support-in-60-days/) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-16/#reporting-71db9eda9bde)
+- [Six Unpatched Danfoss Refrigeration Controller Flaws Could Allow Remote Takeover Without Login](https://thehackernews.com/2026/11/six-unpatched-danfoss-refrigeration.html) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-16/#reporting-a989c64e51eb)
+- [Retadup Worm Resurfaces 7 Years After Takedown to Spread CoffeeLoader Malware](https://thehackernews.com/2026/11/retadup-worm-resurfaces-7-years-after.html) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-16/#reporting-c4086de05142)
 - [Australian retail giant Coles investigates cybersecurity incident](https://www.bleepingcomputer.com/news/security/australian-retail-giant-coles-investigates-cybersecurity-incident/) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-16/#reporting-86ad7de4a47a)
 - [Anthropic’s Claude Fable 5.2 blocks fewer security tasks, while Mythos gets better at finding bugs](https://www.bleepingcomputer.com/news/artificial-intelligence/anthropics-claude-fable-52-blocks-fewer-security-tasks-while-mythos-gets-better-at-finding-bugs/) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-16/#reporting-d3122e6e57b4)
 - [SANSAR Linux Cryptomining Malware Uses Modified NVIDIA Library to Hide GPU Activity](https://thehackernews.com/2026/11/sansar-linux-cryptomining-malware-uses.html) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-16/#reporting-5ceeaae8e26f)
 - [New NoisyTCP vulnerability lets attackers crash Linux servers](https://www.bleepingcomputer.com/news/linux/new-noisytcp-linux-kernel-flaw-lets-attackers-crash-servers/) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-16/#reporting-f5ef776679d8)
 - [Microsoft pushes Windows emergency updates to fix activation failures](https://www.bleepingcomputer.com/news/microsoft/microsoft-new-windows-emergency-updates-fix-activation-licensing-failures/) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-16/#reporting-dfdbf97fc7fe)
-- [Amazon Uncovers AI Agent Campaign Targeting LiteLLM, Dify, and Other Apps for API Keys](https://thehackernews.com/2026/11/amazon-uncovers-ai-agent-campaign.html) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-16/#reporting-d6a0c3df6c7f)
-- [BO Team Exploits Log4Shell in VMware vCenter, Compromises Russian Firm's Code-Signing Server](https://thehackernews.com/2026/11/bo-team-exploits-log4shell-in-vmware.html) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-16/#reporting-1abe8912cb22)
-- [FBI warns ARTEX AI hacking tool is powering global cyberattacks](https://www.bleepingcomputer.com/news/security/fbi-warns-artex-ai-hacking-tool-is-powering-global-cyberattacks/) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-16/#reporting-ddd80cd3bed8)
-- [TSMC employee data breach linked to cloud provider](https://www.bleepingcomputer.com/news/security/tsmc-employee-data-breach-linked-to-cloud-provider/) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-16/#reporting-288ae0a72da3)
-- [Italy Fines Meta €805 Million Over Facebook's Android Gallery Access Without Explicit Consent](https://thehackernews.com/2026/11/italy-fines-meta-805-million-over.html) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-16/#reporting-dabf7b9c559f)
