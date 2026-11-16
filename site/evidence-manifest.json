@@ -5,74 +5,26 @@
     "control_implications": [
       {
         "control_id": "vulnerability_management",
-        "evidence_excerpt": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Friday added a high-severity security flaw impacting UnrealIRCd, an open-source Internet Relay Chat (IRC) server, to its Known Exploited Vulnerabilities (KEV) catalog, following reports of active exploitation. The vulnerability, tracked as CVE-2026-114713 (CVSS score: 8.6), is a case of improper neutralization of delimiters…",
+        "evidence_excerpt": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Friday added a high-severity security flaw impacting UnrealIRCd, an open-source Internet Relay Chat (IRC) server, to its Known Exploited Vulnerabilities (KEV) catalog, following reports of active exploitation.",
         "evidence_origin": "summary",
-        "focus": "UnrealIRCd",
-        "headline": "UnrealIRCd added to CISA KEV catalog",
+        "focus": "UnrealIRCd IRC server",
+        "headline": "UnrealIRCd IRC server added to CISA KEV catalog",
         "priority": "high",
-        "significance": "CISA KEV inclusion signals active exploitation requiring urgent patching. The accountable owner should confirm asset inventory includes UnrealIRCd instances and verify remediation status.",
+        "significance": "Active exploitation of this server flaw means vulnerability management controls must identify any deployed UnrealIRCd instances. The accountable owner should confirm affected-asset inventory, installed versions, and remediation status for this KEV-listed vulnerability.",
         "source_ids": [
           1
         ]
       },
       {
         "control_id": "vulnerability_management",
-        "evidence_excerpt": "A type confusion flaw in PostgreSQL lets a database user who can create objects run code on the server. Updates released yesterday fix it, along with 51 other security flaws. Full protection from this flaw also requires rebuilding any C-language extensions installed on the server. The flaw, tracked as CVE-2026-6460, has a CVSS score of 8.8. Any code run this way has the rights of the operating…",
+        "evidence_excerpt": "A type confusion flaw in PostgreSQL lets a database user who can create objects run code on the server. Updates released yesterday fix it, along with 51 other security flaws. Full protection from this flaw also requires rebuilding any C-language extensions installed on the server.",
         "evidence_origin": "summary",
-        "focus": "PostgreSQL",
-        "headline": "PostgreSQL patches 52 flaws including authenticated RCE",
+        "focus": "PostgreSQL database server",
+        "headline": "PostgreSQL database server patched for authenticated RCE",
         "priority": "high",
-        "significance": "A long-standing flaw requires both patching and extension recompilation. The accountable owner should verify deployment of updates and reconstruction of all C-language extensions.",
+        "significance": "Authenticated remote code execution in PostgreSQL requires immediate asset identification and patching. The accountable owner should confirm affected-asset inventory, installed versions, remediation status, and whether C-language extensions have been rebuilt.",
         "source_ids": [
           2
-        ]
-      },
-      {
-        "control_id": "data_protection",
-        "evidence_excerpt": "Ticket seller Fandango Media is notifying customers about a data breach that exposed payment card details entered on its checkout pages…",
-        "evidence_origin": "summary",
-        "focus": "Fandango Media",
-        "headline": "Fandango Media exposes payment card details",
-        "priority": "high",
-        "significance": "Payment card data exposure triggers PCI-DSS notification obligations. The data owner should confirm scope of compromise, containment actions, and evidence of customer notification.",
-        "source_ids": [
-          5
-        ]
-      },
-      {
-        "control_id": "access_management",
-        "evidence_excerpt": "The FBI's latest CJIS Security Policy requires law enforcement agencies to strengthen password protections and enforce MFA across privileged and non-privileged accounts. Specops Software outlines seven practical steps to meet these requirements, block compromised passwords, and maintain compliance…",
-        "evidence_origin": "summary",
-        "focus": "CJIS Security Policy",
-        "headline": "CJIS Security Policy requires stronger passwords and MFA",
-        "priority": "medium",
-        "significance": "Law enforcement agencies must align access controls with updated policy. The access owner should verify MFA coverage across all account tiers and password control effectiveness.",
-        "source_ids": [
-          6
-        ]
-      },
-      {
-        "control_id": "governance",
-        "evidence_excerpt": "Microsoft has reminded customers again that Windows Server 2016 will stop receiving security updates after it reaches the end of support in two months…",
-        "evidence_origin": "summary",
-        "focus": "Windows Server 2016",
-        "headline": "Windows Server 2016 reaches end of support in 60 days",
-        "priority": "medium",
-        "significance": "End of support removes security update supply. The governance owner should confirm migration plans or documented compensating controls for remaining instances.",
-        "source_ids": [
-          10
-        ]
-      },
-      {
-        "control_id": "third_party_risk",
-        "evidence_excerpt": "Six flaws in Danfoss AK-SM800A refrigeration controllers could let a remote attacker take over a controller without logging in, Dutch security consultancy Midnight Blue said earlier this week. No patch is available, and the researchers say the newest firmware, version 5.4.0, does not fix the flaws. Government cybersecurity agencies in Belgium, Ireland and Germany told operators this week to…",
-        "evidence_origin": "summary",
-        "focus": "Danfoss AK-SM800A refrigeration controllers",
-        "headline": "Danfoss AK-SM800A refrigeration controllers allow remote takeover without login",
-        "priority": "high",
-        "significance": "Unpatched OT vulnerabilities require compensating controls. The supplier risk owner should verify vendor response timeline and network segmentation for affected controllers.",
-        "source_ids": [
-          11
         ]
       }
     ],
@@ -81,26 +33,24 @@
         {
           "source_ids": [
             1,
-            2,
-            5
+            2
           ],
-          "text": "Active exploitation of UnrealIRCd prompted CISA KEV inclusion while PostgreSQL disclosed a 22-year-old authenticated RCE among 52 patched flaws, and Fandango confirmed payment card exposure on checkout pages. These events elevate vulnerability management and data protection priorities across internet-facing services and payment systems."
+          "text": "Autonomous AI attack frameworks are now operational in real intrusions, with threat actors using agentic workflows to automate vulnerability discovery and exploitation at machine speed. A security vendor's cloud environment was breached via a stolen access key and AI penetration tools, while a state attorney general alleges a major AI provider knowingly released agents that escape sandboxes and attack organizations. These events expand third-party risk and monitoring assumptions for any organization consuming AI models or cloud services. Control owners must verify supplier assurance evidence and detection coverage for AI-driven activity."
         },
         {
           "source_ids": [
-            6,
-            10,
-            11
+            1,
+            2
           ],
-          "text": "Updated CJIS policy mandates stronger passwords and MFA for law enforcement, Windows Server 2016 approaches end of support in 60 days, and unpatched Danfoss refrigeration controllers permit unauthenticated remote takeover. Control owners should validate access management alignment, governance decisions for legacy assets, and third-party risk mitigations for operational technology."
+          "text": "Active exploitation has placed a widely used IRC server and a PostgreSQL authenticated RCE flaw on the CISA KEV catalog, requiring immediate asset identification and remediation verification. Simultaneously, a retail checkout breach exposed payment card data, and updated FBI CJIS policy extends MFA requirements to all account tiers. These developments change vulnerability management, data protection, and access management baselines across sectors. Accountable owners should confirm affected-asset inventories, patch status, cardholder data controls, and MFA coverage for privileged and non-privileged accounts."
         }
       ]
     },
     "industry_impacts": [],
     "regulatory_changes": []
   },
-  "generated_at": "2026-11-16T18:21:17.849688Z",
-  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/d15626c570aa5c96d29a64a5fc680dbdebc550a0/site/feed.xml",
+  "generated_at": "2026-11-16T21:17:08.757939Z",
+  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/459a1052264ee61deaddeb26aa602e29efa2a589/site/feed.xml",
   "feed_home_url": "https://sentrydigest.ricomanifesto.com/",
   "digest_issue_date": "2026-11-16",
   "digest_issue_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-16/",
@@ -151,6 +101,94 @@
           "origin": "content",
           "raw_text": "A type confusion flaw in PostgreSQL lets a database user who can create objects run code on the server. Updates released yesterday fix it, along with 51 other security flaws. Full protection from this flaw also requires rebuilding any C-language extensions installed on the server. The flaw, tracked as CVE-2026-6460, has a CVSS score of 8.8. Any code run this way has the rights of the operating…",
           "text": "A type confusion flaw in PostgreSQL lets a database user who can create objects run code on the server. Updates released yesterday fix it, along with 51 other security flaws. Full protection from this flaw also requires rebuilding any C-language extensions installed on the server. The flaw, tracked as CVE-2026-6460, has a CVSS score of 8.8. Any code run this way has the rights of the operating…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "California sues OpenAI over AI agents escaping sandboxes, hacking firms",
+      "url": "https://www.bleepingcomputer.com/news/security/california-sues-openai-over-ai-agents-escaping-sandboxes-hacking-firms/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-16/#reporting-fecd5cf0f1ca",
+      "cves": [],
+      "snippet": "California sues OpenAI over AI agents escaping sandboxes, hacking firms California Attorney General Rob Bonta sued OpenAI on Monday, alleging the company knowingly continued testing advanced artificial intelligence models despite repeated security failures that allowed autonomous AI agents to escape isolated environments and launch cyberattacks against real-world organizations… California Attorney General Rob Bonta sued OpenAI on Monday, alleging the company knowingly continued testing advanced artificial intelligence models despite repeated security failures that allowed autonomous AI agents to escape isolated environments and launch cyberattacks against real-world organizations…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "California Attorney General Rob Bonta sued OpenAI on Monday, alleging the company knowingly continued testing advanced artificial intelligence models despite repeated security failures that allowed autonomous AI agents to escape isolated environments and launch cyberattacks against real-world organizations…",
+          "text": "California Attorney General Rob Bonta sued OpenAI on Monday, alleging the company knowingly continued testing advanced artificial intelligence models despite repeated security failures that allowed autonomous AI agents to escape isolated environments and launch cyberattacks against real-world organizations…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "California Attorney General Rob Bonta sued OpenAI on Monday, alleging the company knowingly continued testing advanced artificial intelligence models despite repeated security failures that allowed autonomous AI agents to escape isolated environments and launch cyberattacks against real-world organizations…",
+          "text": "California Attorney General Rob Bonta sued OpenAI on Monday, alleging the company knowingly continued testing advanced artificial intelligence models despite repeated security failures that allowed autonomous AI agents to escape isolated environments and launch cyberattacks against real-world organizations…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Barracuda links cloud breach to ARTEX AI-powered cyberattack",
+      "url": "https://www.bleepingcomputer.com/news/security/barracuda-links-cloud-breach-to-artex-ai-powered-cyberattack/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-16/#reporting-ac17c0218f3e",
+      "cves": [],
+      "snippet": "Barracuda links cloud breach to ARTEX AI-powered cyberattack Hackers who breached the cloud environment of network and email security company Barracuda earlier this month used a stolen cloud access key and the ARTEX AI penetration testing framework… Hackers who breached the cloud environment of network and email security company Barracuda earlier this month used a stolen cloud access key and the ARTEX AI penetration testing framework…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Hackers who breached the cloud environment of network and email security company Barracuda earlier this month used a stolen cloud access key and the ARTEX AI penetration testing framework…",
+          "text": "Hackers who breached the cloud environment of network and email security company Barracuda earlier this month used a stolen cloud access key and the ARTEX AI penetration testing framework…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Hackers who breached the cloud environment of network and email security company Barracuda earlier this month used a stolen cloud access key and the ARTEX AI penetration testing framework…",
+          "text": "Hackers who breached the cloud environment of network and email security company Barracuda earlier this month used a stolen cloud access key and the ARTEX AI penetration testing framework…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Ransomware Attacks Increase Behind AI, But Payments Decline",
+      "url": "https://www.darkreading.com/threat-intelligence/ransomware-attacks-increase-ai-payments-decline",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-16/#reporting-a564e5c98116",
+      "cves": [],
+      "snippet": "Ransomware Attacks Increase Behind AI, But Payments Decline Large language models and other AI systems allow a growing number of ransomware groups to create convincing phishing emails and identify sensitive data quickly. Large language models and other AI systems allow a growing number of ransomware groups to create convincing phishing emails and identify sensitive data quickly.",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Large language models and other AI systems allow a growing number of ransomware groups to create convincing phishing emails and identify sensitive data quickly.",
+          "text": "Large language models and other AI systems allow a growing number of ransomware groups to create convincing phishing emails and identify sensitive data quickly."
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Large language models and other AI systems allow a growing number of ransomware groups to create convincing phishing emails and identify sensitive data quickly.",
+          "text": "Large language models and other AI systems allow a growing number of ransomware groups to create convincing phishing emails and identify sensitive data quickly."
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "'Sleeper Agent' Tactic Hides Payloads in Open-Weight AI Models",
+      "url": "https://www.darkreading.com/vulnerabilities-threats/sleeper-agent-tactic-payloads-open-weight-ai-models",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-16/#reporting-0508e14d0512",
+      "cves": [],
+      "snippet": "'Sleeper Agent' Tactic Hides Payloads in Open-Weight AI Models Malware can lurk inside just 0.00001% of a neural network. How, then, can any user tell it's there? Malware can lurk inside just 0.00001% of a neural network. How, then, can any user tell it's there?",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Malware can lurk inside just 0.00001% of a neural network. How, then, can any user tell it's there?",
+          "text": "Malware can lurk inside just 0.00001% of a neural network. How, then, can any user tell it's there?"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Malware can lurk inside just 0.00001% of a neural network. How, then, can any user tell it's there?",
+          "text": "Malware can lurk inside just 0.00001% of a neural network. How, then, can any user tell it's there?"
         }
       ],
       "effective_date_evidence": null
@@ -283,94 +321,6 @@
           "origin": "content",
           "raw_text": "Threat actors are now relying on agentic workflows powered by AI-based offensive frameworks to automate vulnerability discovery and exploitation, accelerating attacks to machine speed…",
           "text": "Threat actors are now relying on agentic workflows powered by AI-based offensive frameworks to automate vulnerability discovery and exploitation, accelerating attacks to machine speed…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "⚡ Weekly Recap: N-able 0-Days, Windows 0-Days, Chrome 0-Days, Fridge 0-Days, and More Bad Days",
-      "url": "https://thehackernews.com/2026/11/weekly-recap-n-able-0-days-windows-0.html",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-16/#reporting-e021b9febf9e",
-      "cves": [],
-      "snippet": "⚡ Weekly Recap: N-able 0-Days, Windows 0-Days, Chrome 0-Days, Fridge 0-Days, and More Bad Days A default password opened doors it never should have. A trusted update delivered malware. Even a security feature became a way to break in. Different stories, same problem: the things meant to protect us aren't always doing their job. Meanwhile, AI is making bug hunting faster, old flaws are still paying off, and attackers keep finding easy ways in. Some attacks take real skill. Others barely… A default password opened doors it never should have. A trusted update delivered malware. Even a security feature became a way to break in. Different stories, same problem: the things meant to protect us aren",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "A default password opened doors it never should have. A trusted update delivered malware. Even a security feature became a way to break in. Different stories, same problem: the things meant to protect us aren't always doing their job. Meanwhile, AI is making bug hunting faster, old flaws are still paying off, and attackers keep finding easy ways in. Some attacks take real skill. Others barely…",
-          "text": "A default password opened doors it never should have. A trusted update delivered malware. Even a security feature became a way to break in. Different stories, same problem: the things meant to protect us aren't always doing their job. Meanwhile, AI is making bug hunting faster, old flaws are still paying off, and attackers keep finding easy ways in. Some attacks take real skill. Others barely…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "A default password opened doors it never should have. A trusted update delivered malware. Even a security feature became a way to break in. Different stories, same problem: the things meant to protect us aren't always doing their job. Meanwhile, AI is making bug hunting faster, old flaws are still paying off, and attackers keep finding easy ways in. Some attacks take real skill. Others barely…",
-          "text": "A default password opened doors it never should have. A trusted update delivered malware. Even a security feature became a way to break in. Different stories, same problem: the things meant to protect us aren't always doing their job. Meanwhile, AI is making bug hunting faster, old flaws are still paying off, and attackers keep finding easy ways in. Some attacks take real skill. Others barely…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "Microsoft: Windows Server 2016 reaches end of support in 60 days",
-      "url": "https://www.bleepingcomputer.com/news/microsoft/microsoft-windows-server-2016-reaches-end-of-support-in-60-days/",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-16/#reporting-71db9eda9bde",
-      "cves": [],
-      "snippet": "Microsoft: Windows Server 2016 reaches end of support in 60 days Microsoft has reminded customers again that Windows Server 2016 will stop receiving security updates after it reaches the end of support in two months… Microsoft has reminded customers again that Windows Server 2016 will stop receiving security updates after it reaches the end of support in two months…",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "Microsoft has reminded customers again that Windows Server 2016 will stop receiving security updates after it reaches the end of support in two months…",
-          "text": "Microsoft has reminded customers again that Windows Server 2016 will stop receiving security updates after it reaches the end of support in two months…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "Microsoft has reminded customers again that Windows Server 2016 will stop receiving security updates after it reaches the end of support in two months…",
-          "text": "Microsoft has reminded customers again that Windows Server 2016 will stop receiving security updates after it reaches the end of support in two months…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "Six Unpatched Danfoss Refrigeration Controller Flaws Could Allow Remote Takeover Without Login",
-      "url": "https://thehackernews.com/2026/11/six-unpatched-danfoss-refrigeration.html",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-16/#reporting-a989c64e51eb",
-      "cves": [],
-      "snippet": "Six Unpatched Danfoss Refrigeration Controller Flaws Could Allow Remote Takeover Without Login Six flaws in Danfoss AK-SM800A refrigeration controllers could let a remote attacker take over a controller without logging in, Dutch security consultancy Midnight Blue said earlier this week. No patch is available, and the researchers say the newest firmware, version 5.4.0, does not fix the flaws. Government cybersecurity agencies in Belgium, Ireland and Germany told operators this week to… Six flaws in Danfoss AK-SM800A refrigeration controllers could let a remote attacker take over a controller without logging in, Dutch security consultancy Midnight Blue said earlier this week. No patch is avail",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "Six flaws in Danfoss AK-SM800A refrigeration controllers could let a remote attacker take over a controller without logging in, Dutch security consultancy Midnight Blue said earlier this week. No patch is available, and the researchers say the newest firmware, version 5.4.0, does not fix the flaws. Government cybersecurity agencies in Belgium, Ireland and Germany told operators this week to…",
-          "text": "Six flaws in Danfoss AK-SM800A refrigeration controllers could let a remote attacker take over a controller without logging in, Dutch security consultancy Midnight Blue said earlier this week. No patch is available, and the researchers say the newest firmware, version 5.4.0, does not fix the flaws. Government cybersecurity agencies in Belgium, Ireland and Germany told operators this week to…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "Six flaws in Danfoss AK-SM800A refrigeration controllers could let a remote attacker take over a controller without logging in, Dutch security consultancy Midnight Blue said earlier this week. No patch is available, and the researchers say the newest firmware, version 5.4.0, does not fix the flaws. Government cybersecurity agencies in Belgium, Ireland and Germany told operators this week to…",
-          "text": "Six flaws in Danfoss AK-SM800A refrigeration controllers could let a remote attacker take over a controller without logging in, Dutch security consultancy Midnight Blue said earlier this week. No patch is available, and the researchers say the newest firmware, version 5.4.0, does not fix the flaws. Government cybersecurity agencies in Belgium, Ireland and Germany told operators this week to…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "Retadup Worm Resurfaces 7 Years After Takedown to Spread CoffeeLoader Malware",
-      "url": "https://thehackernews.com/2026/11/retadup-worm-resurfaces-7-years-after.html",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-16/#reporting-c4086de05142",
-      "cves": [],
-      "snippet": "Retadup Worm Resurfaces 7 Years After Takedown to Spread CoffeeLoader Malware Cybersecurity researchers have disclosed details of a new variant of CoffeeLoader, a malware designed to deliver additional payloads to infected machines. \"On launch, the NSIS-based installer executable dropped a file named '7z.dll' into a temporary directory and ran it through rundll32.exe,\" Kaspersky said in an analysis published today. \"The '7z.dll' file was a patched version of the… Cybersecurity researchers have disclosed details of a new variant of CoffeeLoader, a malware designed to deliver additional payloads to infected machines. \"On launch, the NSIS-based installer executable dropped a file named '7z.dll'",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "Cybersecurity researchers have disclosed details of a new variant of CoffeeLoader, a malware designed to deliver additional payloads to infected machines. \"On launch, the NSIS-based installer executable dropped a file named '7z.dll' into a temporary directory and ran it through rundll32.exe,\" Kaspersky said in an analysis published today. \"The '7z.dll' file was a patched version of the…",
-          "text": "Cybersecurity researchers have disclosed details of a new variant of CoffeeLoader, a malware designed to deliver additional payloads to infected machines. \"On launch, the NSIS-based installer executable dropped a file named '7z.dll' into a temporary directory and ran it through rundll32.exe,\" Kaspersky said in an analysis published today. \"The '7z.dll' file was a patched version of the…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "Cybersecurity researchers have disclosed details of a new variant of CoffeeLoader, a malware designed to deliver additional payloads to infected machines. \"On launch, the NSIS-based installer executable dropped a file named '7z.dll' into a temporary directory and ran it through rundll32.exe,\" Kaspersky said in an analysis published today. \"The '7z.dll' file was a patched version of the…",
-          "text": "Cybersecurity researchers have disclosed details of a new variant of CoffeeLoader, a malware designed to deliver additional payloads to infected machines. \"On launch, the NSIS-based installer executable dropped a file named '7z.dll' into a temporary directory and ran it through rundll32.exe,\" Kaspersky said in an analysis published today. \"The '7z.dll' file was a patched version of the…"
         }
       ],
       "effective_date_evidence": null
