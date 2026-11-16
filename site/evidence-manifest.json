@@ -8,9 +8,9 @@
         "evidence_excerpt": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Friday added a high-severity security flaw impacting UnrealIRCd, an open-source Internet Relay Chat (IRC) server, to its Known Exploited Vulnerabilities (KEV) catalog, following reports of active exploitation.",
         "evidence_origin": "summary",
         "focus": "UnrealIRCd",
-        "headline": "UnrealIRCd added to CISA KEV catalog for active exploitation",
+        "headline": "UnrealIRCd added to CISA Known Exploited Vulnerabilities catalog",
         "priority": "high",
-        "significance": "This KEV addition signals active exploitation requiring immediate asset identification and remediation. Vulnerability owners should confirm whether UnrealIRCd is deployed and verify patching or compensating controls.",
+        "significance": "KEV inclusion mandates prioritized remediation for federal agencies and signals critical risk for all owners. The accountable owner should confirm asset inventory includes UnrealIRCd and verify remediation status or compensating controls.",
         "source_ids": [
           1
         ]
@@ -20,59 +20,23 @@
         "evidence_excerpt": "A type confusion flaw in PostgreSQL lets a database user who can create objects run code on the server. Updates released yesterday fix it, along with 51 other security flaws. Full protection from this flaw also requires rebuilding any C-language extensions installed on the server.",
         "evidence_origin": "summary",
         "focus": "PostgreSQL",
-        "headline": "PostgreSQL releases updates for 52 flaws including authenticated RCE",
+        "headline": "PostgreSQL releases patches for 52 flaws including authenticated RCE",
         "priority": "high",
-        "significance": "The authenticated RCE vulnerability demands urgent patching and extension rebuilding. Asset owners must inventory PostgreSQL instances, apply updates, and verify extension recompilation.",
+        "significance": "Authenticated remote code execution in widely deployed databases demands urgent patching and extension rebuilding. The accountable owner should verify deployed versions, patch deployment, and extension rebuild completion.",
         "source_ids": [
           2
         ]
       },
       {
-        "control_id": "incident_response",
-        "evidence_excerpt": "Coles Group Limited, Australia's second-largest retailer, is investigating what it described as a \"cyber security incident\" that has not impacted the company's stores…",
+        "control_id": "third_party_risk",
+        "evidence_excerpt": "Six flaws in Danfoss AK-SM800A refrigeration controllers could let a remote attacker take over a controller without logging in, Dutch security consultancy Midnight Blue said earlier this week. No patch is available, and the researchers say the newest firmware, version 5.4.0, does not fix the flaws.",
         "evidence_origin": "summary",
-        "focus": "Coles Group Limited",
-        "headline": "Coles Group Limited investigates cyber security incident with no store impact",
+        "focus": "Danfoss AK-SM800A refrigeration controllers",
+        "headline": "Danfoss AK-SM800A refrigeration controllers have six unpatched flaws allowing remote takeover",
         "priority": "medium",
-        "significance": "An ongoing investigation at a major retailer tests incident containment and communication controls. Incident response leads should review containment procedures and evidence preservation readiness.",
+        "significance": "Unpatchable operational technology devices expose environments to remote compromise without authentication. The accountable owner should review supplier dependencies, network segmentation, and monitoring for these controllers.",
         "source_ids": [
-          3
-        ]
-      },
-      {
-        "control_id": "monitoring",
-        "evidence_excerpt": "A financially motivated threat activity cluster tracked as REF3364 has been attributed to a Linux-focused cryptocurrency mining operation that tampers with the readings used to detect high GPU workloads. Central to the intrusion is a toolkit called SANSAR, a Rust-based orchestrator that receives commands over the TOR anonymity network to manage CPU and GPU miners.",
-        "evidence_origin": "summary",
-        "focus": "SANSAR Linux Cryptomining Malware",
-        "headline": "SANSAR Linux Cryptomining Malware evades GPU monitoring via modified NVIDIA library",
-        "priority": "medium",
-        "significance": "The malware's ability to hide GPU activity challenges detection coverage for resource abuse. Monitoring owners should validate telemetry for anomalous GPU workloads and TOR traffic.",
-        "source_ids": [
-          5
-        ]
-      },
-      {
-        "control_id": "data_protection",
-        "evidence_excerpt": "Taiwan Semiconductor Manufacturing Company (TSMC) confirmed that personal employee data has been leaked online after a threat actor put 6.9GB of information allegedly stolen from the company up for auction…",
-        "evidence_origin": "summary",
-        "focus": "Taiwan Semiconductor Manufacturing Company (TSMC)",
-        "headline": "Taiwan Semiconductor Manufacturing Company (TSMC) confirms employee data leak via cloud provider",
-        "priority": "medium",
-        "significance": "A cloud provider-linked breach of sensitive employee data tests data protection and third-party assurance. Data owners must assess cloud provider access scopes and verify breach notification obligations.",
-        "source_ids": [
-          11
-        ]
-      },
-      {
-        "control_id": "data_protection",
-        "evidence_excerpt": "Meta was fined €805 million in Italy yesterday over a Facebook for Android feature that suggests photos and videos from users' phone galleries for them to post. The Garante, Italy's data protection authority, found that the feature was enabled by default and that the app accessed Italian users' photos, videos, and related metadata without their explicit consent.",
-        "evidence_origin": "summary",
-        "focus": "Facebook for Android feature",
-        "headline": "Facebook for Android feature fined €805 million for default gallery access without consent",
-        "priority": "high",
-        "significance": "The regulatory penalty for default data access underscores consent and data minimization requirements. Privacy owners should review default data collection settings and consent mechanisms across applications.",
-        "source_ids": [
-          12
+          6
         ]
       }
     ],
@@ -83,24 +47,21 @@
             1,
             2
           ],
-          "text": "CISA added an actively exploited UnrealIRCd flaw to its Known Exploited Vulnerabilities catalog, while PostgreSQL released patches for 52 vulnerabilities including a 22-year-old authenticated remote code execution flaw. These developments demand immediate asset inventory and remediation verification for affected systems. Vulnerability owners must confirm deployment scope, apply updates, and validate compensating controls where patching is delayed."
+          "text": "CISA added UnrealIRCd to its Known Exploited Vulnerabilities catalog while PostgreSQL patched 52 flaws including a 22-year-old authenticated RCE, and Windows Server 2016 approaches end of support, collectively escalating vulnerability remediation priorities for control owners. Simultaneously, the FBI CJIS Security Policy now mandates stronger password protections and MFA across all law enforcement accounts, requiring access management alignment. Control owners should verify asset coverage for KEV-listed components, database patching status, legacy OS migration plans, and authentication control compliance."
         },
         {
           "source_ids": [
-            3,
-            5,
-            11,
-            12
+            6
           ],
-          "text": "Coles Group is investigating a cybersecurity incident, SANSAR cryptomining malware evades GPU monitoring, TSMC employee data was leaked via a cloud provider, and Italy fined Meta €805 million for default gallery access without consent. These events test incident response containment, detection coverage for resource abuse, data protection across third parties, and consent mechanisms. Owners should review response procedures, telemetry for anomalous workloads, cloud provider access scopes, and default data collection settings."
+          "text": "Unpatched flaws in Danfoss refrigeration controllers demonstrate persistent third-party risk in operational technology where no vendor fix exists, and the Coles Group retail incident tests sector detection and response capabilities. Owners should assess supplier dependencies for unpatchable devices and confirm incident procedures support containment and evidence preservation."
         }
       ]
     },
     "industry_impacts": [],
     "regulatory_changes": []
   },
-  "generated_at": "2026-11-16T13:16:52.199567Z",
-  "feed_url": "https://sentrydigest.ricomanifesto.com/feed.xml",
+  "generated_at": "2026-11-16T15:23:31.091439Z",
+  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/1a7619440229593a9191b5e9ef23b7a9d9dee951/site/feed.xml",
   "feed_home_url": "https://sentrydigest.ricomanifesto.com/",
   "digest_issue_date": "2026-11-16",
   "digest_issue_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-16/",
@@ -151,6 +112,116 @@
           "origin": "content",
           "raw_text": "A type confusion flaw in PostgreSQL lets a database user who can create objects run code on the server. Updates released yesterday fix it, along with 51 other security flaws. Full protection from this flaw also requires rebuilding any C-language extensions installed on the server. The flaw, tracked as CVE-2026-6460, has a CVSS score of 8.8. Any code run this way has the rights of the operating…",
           "text": "A type confusion flaw in PostgreSQL lets a database user who can create objects run code on the server. Updates released yesterday fix it, along with 51 other security flaws. Full protection from this flaw also requires rebuilding any C-language extensions installed on the server. The flaw, tracked as CVE-2026-6460, has a CVSS score of 8.8. Any code run this way has the rights of the operating…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "7 Tips For Complying with CJIS Password and MFA Requirements",
+      "url": "https://www.bleepingcomputer.com/news/security/7-tips-for-complying-with-cjis-password-and-mfa-requirements/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-16/#reporting-b138a94eb9b2",
+      "cves": [],
+      "snippet": "7 Tips For Complying with CJIS Password and MFA Requirements The FBI's latest CJIS Security Policy requires law enforcement agencies to strengthen password protections and enforce MFA across privileged and non-privileged accounts. Specops Software outlines seven practical steps to meet these requirements, block compromised passwords, and maintain compliance… The FBI's latest CJIS Security Policy requires law enforcement agencies to strengthen password protections and enforce MFA across privileged and non-privileged accounts. Specops Software outlines seven practical steps to meet these requirements, block compromised passwords, and maintain compliance…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "The FBI's latest CJIS Security Policy requires law enforcement agencies to strengthen password protections and enforce MFA across privileged and non-privileged accounts. Specops Software outlines seven practical steps to meet these requirements, block compromised passwords, and maintain compliance…",
+          "text": "The FBI's latest CJIS Security Policy requires law enforcement agencies to strengthen password protections and enforce MFA across privileged and non-privileged accounts. Specops Software outlines seven practical steps to meet these requirements, block compromised passwords, and maintain compliance…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "The FBI's latest CJIS Security Policy requires law enforcement agencies to strengthen password protections and enforce MFA across privileged and non-privileged accounts. Specops Software outlines seven practical steps to meet these requirements, block compromised passwords, and maintain compliance…",
+          "text": "The FBI's latest CJIS Security Policy requires law enforcement agencies to strengthen password protections and enforce MFA across privileged and non-privileged accounts. Specops Software outlines seven practical steps to meet these requirements, block compromised passwords, and maintain compliance…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Google warns that fully-automated AI attacks are coming soon",
+      "url": "https://www.bleepingcomputer.com/news/security/google-warns-that-fully-automated-ai-attacks-are-coming-soon/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-16/#reporting-9b1f22329875",
+      "cves": [],
+      "snippet": "Google warns that fully-automated AI attacks are coming soon Threat actors are now relying on agentic workflows powered by AI-based offensive frameworks to automate vulnerability discovery and exploitation, accelerating attacks to machine speed… Threat actors are now relying on agentic workflows powered by AI-based offensive frameworks to automate vulnerability discovery and exploitation, accelerating attacks to machine speed…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Threat actors are now relying on agentic workflows powered by AI-based offensive frameworks to automate vulnerability discovery and exploitation, accelerating attacks to machine speed…",
+          "text": "Threat actors are now relying on agentic workflows powered by AI-based offensive frameworks to automate vulnerability discovery and exploitation, accelerating attacks to machine speed…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Threat actors are now relying on agentic workflows powered by AI-based offensive frameworks to automate vulnerability discovery and exploitation, accelerating attacks to machine speed…",
+          "text": "Threat actors are now relying on agentic workflows powered by AI-based offensive frameworks to automate vulnerability discovery and exploitation, accelerating attacks to machine speed…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Microsoft: Windows Server 2016 reaches end of support in 60 days",
+      "url": "https://www.bleepingcomputer.com/news/microsoft/microsoft-windows-server-2016-reaches-end-of-support-in-60-days/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-16/#reporting-71db9eda9bde",
+      "cves": [],
+      "snippet": "Microsoft: Windows Server 2016 reaches end of support in 60 days Microsoft has reminded customers again that Windows Server 2016 will stop receiving security updates after it reaches the end of support in two months… Microsoft has reminded customers again that Windows Server 2016 will stop receiving security updates after it reaches the end of support in two months…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Microsoft has reminded customers again that Windows Server 2016 will stop receiving security updates after it reaches the end of support in two months…",
+          "text": "Microsoft has reminded customers again that Windows Server 2016 will stop receiving security updates after it reaches the end of support in two months…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Microsoft has reminded customers again that Windows Server 2016 will stop receiving security updates after it reaches the end of support in two months…",
+          "text": "Microsoft has reminded customers again that Windows Server 2016 will stop receiving security updates after it reaches the end of support in two months…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Six Unpatched Danfoss Refrigeration Controller Flaws Could Allow Remote Takeover Without Login",
+      "url": "https://thehackernews.com/2026/11/six-unpatched-danfoss-refrigeration.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-16/#reporting-a989c64e51eb",
+      "cves": [],
+      "snippet": "Six Unpatched Danfoss Refrigeration Controller Flaws Could Allow Remote Takeover Without Login Six flaws in Danfoss AK-SM800A refrigeration controllers could let a remote attacker take over a controller without logging in, Dutch security consultancy Midnight Blue said earlier this week. No patch is available, and the researchers say the newest firmware, version 5.4.0, does not fix the flaws. Government cybersecurity agencies in Belgium, Ireland and Germany told operators this week to… Six flaws in Danfoss AK-SM800A refrigeration controllers could let a remote attacker take over a controller without logging in, Dutch security consultancy Midnight Blue said earlier this week. No patch is avail",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Six flaws in Danfoss AK-SM800A refrigeration controllers could let a remote attacker take over a controller without logging in, Dutch security consultancy Midnight Blue said earlier this week. No patch is available, and the researchers say the newest firmware, version 5.4.0, does not fix the flaws. Government cybersecurity agencies in Belgium, Ireland and Germany told operators this week to…",
+          "text": "Six flaws in Danfoss AK-SM800A refrigeration controllers could let a remote attacker take over a controller without logging in, Dutch security consultancy Midnight Blue said earlier this week. No patch is available, and the researchers say the newest firmware, version 5.4.0, does not fix the flaws. Government cybersecurity agencies in Belgium, Ireland and Germany told operators this week to…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Six flaws in Danfoss AK-SM800A refrigeration controllers could let a remote attacker take over a controller without logging in, Dutch security consultancy Midnight Blue said earlier this week. No patch is available, and the researchers say the newest firmware, version 5.4.0, does not fix the flaws. Government cybersecurity agencies in Belgium, Ireland and Germany told operators this week to…",
+          "text": "Six flaws in Danfoss AK-SM800A refrigeration controllers could let a remote attacker take over a controller without logging in, Dutch security consultancy Midnight Blue said earlier this week. No patch is available, and the researchers say the newest firmware, version 5.4.0, does not fix the flaws. Government cybersecurity agencies in Belgium, Ireland and Germany told operators this week to…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Retadup Worm Resurfaces 7 Years After Takedown to Spread CoffeeLoader Malware",
+      "url": "https://thehackernews.com/2026/11/retadup-worm-resurfaces-7-years-after.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-16/#reporting-c4086de05142",
+      "cves": [],
+      "snippet": "Retadup Worm Resurfaces 7 Years After Takedown to Spread CoffeeLoader Malware Cybersecurity researchers have disclosed details of a new variant of CoffeeLoader, a malware designed to deliver additional payloads to infected machines. \"On launch, the NSIS-based installer executable dropped a file named '7z.dll' into a temporary directory and ran it through rundll32.exe,\" Kaspersky said in an analysis published today. \"The '7z.dll' file was a patched version of the… Cybersecurity researchers have disclosed details of a new variant of CoffeeLoader, a malware designed to deliver additional payloads to infected machines. \"On launch, the NSIS-based installer executable dropped a file named '7z.dll'",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Cybersecurity researchers have disclosed details of a new variant of CoffeeLoader, a malware designed to deliver additional payloads to infected machines. \"On launch, the NSIS-based installer executable dropped a file named '7z.dll' into a temporary directory and ran it through rundll32.exe,\" Kaspersky said in an analysis published today. \"The '7z.dll' file was a patched version of the…",
+          "text": "Cybersecurity researchers have disclosed details of a new variant of CoffeeLoader, a malware designed to deliver additional payloads to infected machines. \"On launch, the NSIS-based installer executable dropped a file named '7z.dll' into a temporary directory and ran it through rundll32.exe,\" Kaspersky said in an analysis published today. \"The '7z.dll' file was a patched version of the…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Cybersecurity researchers have disclosed details of a new variant of CoffeeLoader, a malware designed to deliver additional payloads to infected machines. \"On launch, the NSIS-based installer executable dropped a file named '7z.dll' into a temporary directory and ran it through rundll32.exe,\" Kaspersky said in an analysis published today. \"The '7z.dll' file was a patched version of the…",
+          "text": "Cybersecurity researchers have disclosed details of a new variant of CoffeeLoader, a malware designed to deliver additional payloads to infected machines. \"On launch, the NSIS-based installer executable dropped a file named '7z.dll' into a temporary directory and ran it through rundll32.exe,\" Kaspersky said in an analysis published today. \"The '7z.dll' file was a patched version of the…"
         }
       ],
       "effective_date_evidence": null
@@ -261,116 +332,6 @@
           "origin": "content",
           "raw_text": "Microsoft has released emergency out-of-band updates to fix Windows activation and licensing failures caused by this month's security updates…",
           "text": "Microsoft has released emergency out-of-band updates to fix Windows activation and licensing failures caused by this month's security updates…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "Amazon Uncovers AI Agent Campaign Targeting LiteLLM, Dify, and Other Apps for API Keys",
-      "url": "https://thehackernews.com/2026/11/amazon-uncovers-ai-agent-campaign.html",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-16/#reporting-d6a0c3df6c7f",
-      "cves": [],
-      "snippet": "Amazon Uncovers AI Agent Campaign Targeting LiteLLM, Dify, and Other Apps for API Keys Attackers' AI agents have been hunting for weak spots in internet-exposed AI apps such as LiteLLM, One API, and Dify to steal the AI provider keys stored inside, according to the agents' own records. The records, which Amazon's threat intelligence team captured with decoy servers, describe stolen keys being used to run the AI models that powered the search for more keys. The team said this… Attackers' AI agents have been hunting for weak spots in internet-exposed AI apps such as LiteLLM, One API, and Dify to steal the AI provider keys stored inside, according to the agents' own records. The records, which ",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "Attackers' AI agents have been hunting for weak spots in internet-exposed AI apps such as LiteLLM, One API, and Dify to steal the AI provider keys stored inside, according to the agents' own records. The records, which Amazon's threat intelligence team captured with decoy servers, describe stolen keys being used to run the AI models that powered the search for more keys. The team said this…",
-          "text": "Attackers' AI agents have been hunting for weak spots in internet-exposed AI apps such as LiteLLM, One API, and Dify to steal the AI provider keys stored inside, according to the agents' own records. The records, which Amazon's threat intelligence team captured with decoy servers, describe stolen keys being used to run the AI models that powered the search for more keys. The team said this…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "Attackers' AI agents have been hunting for weak spots in internet-exposed AI apps such as LiteLLM, One API, and Dify to steal the AI provider keys stored inside, according to the agents' own records. The records, which Amazon's threat intelligence team captured with decoy servers, describe stolen keys being used to run the AI models that powered the search for more keys. The team said this…",
-          "text": "Attackers' AI agents have been hunting for weak spots in internet-exposed AI apps such as LiteLLM, One API, and Dify to steal the AI provider keys stored inside, according to the agents' own records. The records, which Amazon's threat intelligence team captured with decoy servers, describe stolen keys being used to run the AI models that powered the search for more keys. The team said this…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "BO Team Exploits Log4Shell in VMware vCenter, Compromises Russian Firm's Code-Signing Server",
-      "url": "https://thehackernews.com/2026/11/bo-team-exploits-log4shell-in-vmware.html",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-16/#reporting-1abe8912cb22",
-      "cves": [],
-      "snippet": "BO Team Exploits Log4Shell in VMware vCenter, Compromises Russian Firm's Code-Signing Server An investigation into suspicious activity within a Russian software developer's network has uncovered a months-long compromise of its development infrastructure and a software code-signing server. The activity, documented by Kaspersky's ICS CERT team after it was contacted by the affected developer in June 2025, has been attributed to a threat actor named BO Team (aka Black Owl, Hoody Hyena… An investigation into suspicious activity within a Russian software developer's network has uncovered a months-long compromise of its development infrastructure and a software code-signing server. The activity, d",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "An investigation into suspicious activity within a Russian software developer's network has uncovered a months-long compromise of its development infrastructure and a software code-signing server. The activity, documented by Kaspersky's ICS CERT team after it was contacted by the affected developer in June 2025, has been attributed to a threat actor named BO Team (aka Black Owl, Hoody Hyena…",
-          "text": "An investigation into suspicious activity within a Russian software developer's network has uncovered a months-long compromise of its development infrastructure and a software code-signing server. The activity, documented by Kaspersky's ICS CERT team after it was contacted by the affected developer in June 2025, has been attributed to a threat actor named BO Team (aka Black Owl, Hoody Hyena…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "An investigation into suspicious activity within a Russian software developer's network has uncovered a months-long compromise of its development infrastructure and a software code-signing server. The activity, documented by Kaspersky's ICS CERT team after it was contacted by the affected developer in June 2025, has been attributed to a threat actor named BO Team (aka Black Owl, Hoody Hyena…",
-          "text": "An investigation into suspicious activity within a Russian software developer's network has uncovered a months-long compromise of its development infrastructure and a software code-signing server. The activity, documented by Kaspersky's ICS CERT team after it was contacted by the affected developer in June 2025, has been attributed to a threat actor named BO Team (aka Black Owl, Hoody Hyena…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "FBI warns ARTEX AI hacking tool is powering global cyberattacks",
-      "url": "https://www.bleepingcomputer.com/news/security/fbi-warns-artex-ai-hacking-tool-is-powering-global-cyberattacks/",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-16/#reporting-ddd80cd3bed8",
-      "cves": [],
-      "snippet": "FBI warns ARTEX AI hacking tool is powering global cyberattacks The FBI is warning that hackers are using an AI-powered penetration testing framework called ARTEX to automate cyberattacks against organizations worldwide, including a recent ConnectWise supply-chain breach that compromised Microsoft 365 customer environments… The FBI is warning that hackers are using an AI-powered penetration testing framework called ARTEX to automate cyberattacks against organizations worldwide, including a recent ConnectWise supply-chain breach that compromised Microsoft 365 customer environments…",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "The FBI is warning that hackers are using an AI-powered penetration testing framework called ARTEX to automate cyberattacks against organizations worldwide, including a recent ConnectWise supply-chain breach that compromised Microsoft 365 customer environments…",
-          "text": "The FBI is warning that hackers are using an AI-powered penetration testing framework called ARTEX to automate cyberattacks against organizations worldwide, including a recent ConnectWise supply-chain breach that compromised Microsoft 365 customer environments…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "The FBI is warning that hackers are using an AI-powered penetration testing framework called ARTEX to automate cyberattacks against organizations worldwide, including a recent ConnectWise supply-chain breach that compromised Microsoft 365 customer environments…",
-          "text": "The FBI is warning that hackers are using an AI-powered penetration testing framework called ARTEX to automate cyberattacks against organizations worldwide, including a recent ConnectWise supply-chain breach that compromised Microsoft 365 customer environments…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "TSMC employee data breach linked to cloud provider",
-      "url": "https://www.bleepingcomputer.com/news/security/tsmc-employee-data-breach-linked-to-cloud-provider/",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-16/#reporting-288ae0a72da3",
-      "cves": [],
-      "snippet": "TSMC employee data breach linked to cloud provider Taiwan Semiconductor Manufacturing Company (TSMC) confirmed that personal employee data has been leaked online after a threat actor put 6.9GB of information allegedly stolen from the company up for auction… Taiwan Semiconductor Manufacturing Company (TSMC) confirmed that personal employee data has been leaked online after a threat actor put 6.9GB of information allegedly stolen from the company up for auction…",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "Taiwan Semiconductor Manufacturing Company (TSMC) confirmed that personal employee data has been leaked online after a threat actor put 6.9GB of information allegedly stolen from the company up for auction…",
-          "text": "Taiwan Semiconductor Manufacturing Company (TSMC) confirmed that personal employee data has been leaked online after a threat actor put 6.9GB of information allegedly stolen from the company up for auction…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "Taiwan Semiconductor Manufacturing Company (TSMC) confirmed that personal employee data has been leaked online after a threat actor put 6.9GB of information allegedly stolen from the company up for auction…",
-          "text": "Taiwan Semiconductor Manufacturing Company (TSMC) confirmed that personal employee data has been leaked online after a threat actor put 6.9GB of information allegedly stolen from the company up for auction…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "Italy Fines Meta €805 Million Over Facebook's Android Gallery Access Without Explicit Consent",
-      "url": "https://thehackernews.com/2026/11/italy-fines-meta-805-million-over.html",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-16/#reporting-dabf7b9c559f",
-      "cves": [],
-      "snippet": "Italy Fines Meta €805 Million Over Facebook's Android Gallery Access Without Explicit Consent Meta was fined €805 million in Italy yesterday over a Facebook for Android feature that suggests photos and videos from users' phone galleries for them to post. The Garante, Italy's data protection authority, found that the feature was enabled by default and that the app accessed Italian users' photos, videos, and related metadata without their explicit consent. The company has 60 days to… Meta was fined €805 million in Italy yesterday over a Facebook for Android feature that suggests photos and videos from users' phone galleries for them to post. The Garante, Italy's data protection authority, foun",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "Meta was fined €805 million in Italy yesterday over a Facebook for Android feature that suggests photos and videos from users' phone galleries for them to post. The Garante, Italy's data protection authority, found that the feature was enabled by default and that the app accessed Italian users' photos, videos, and related metadata without their explicit consent. The company has 60 days to…",
-          "text": "Meta was fined €805 million in Italy yesterday over a Facebook for Android feature that suggests photos and videos from users' phone galleries for them to post. The Garante, Italy's data protection authority, found that the feature was enabled by default and that the app accessed Italian users' photos, videos, and related metadata without their explicit consent. The company has 60 days to…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "Meta was fined €805 million in Italy yesterday over a Facebook for Android feature that suggests photos and videos from users' phone galleries for them to post. The Garante, Italy's data protection authority, found that the feature was enabled by default and that the app accessed Italian users' photos, videos, and related metadata without their explicit consent. The company has 60 days to…",
-          "text": "Meta was fined €805 million in Italy yesterday over a Facebook for Android feature that suggests photos and videos from users' phone galleries for them to post. The Garante, Italy's data protection authority, found that the feature was enabled by default and that the app accessed Italian users' photos, videos, and related metadata without their explicit consent. The company has 60 days to…"
         }
       ],
       "effective_date_evidence": null
