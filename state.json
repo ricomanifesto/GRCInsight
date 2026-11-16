@@ -10900,6 +10900,17 @@
       "release_key": "4d2e2c1460825ea96d36d0f7cbae242042bf8d1e00e9d6bc4721166f1490c0c8",
       "release_ref": "377c5113020e36599dae45832bb7092a90c8ad01",
       "stage": "serving"
+    },
+    {
+      "at": "2026-11-16T15:24:43.136Z",
+      "kind": "release",
+      "payload_digest": "3d0543d1b0f6b58d3e1e3e96fbd4fd7ccd38738570235b69ed3dca2f78e3da7e",
+      "proof": "on",
+      "release_key": "998d43039aa1c1b0b273c92b5bc8f00dec4caafdf923ff4145867e75037c5481",
+      "release_ref": "75565b333cf040aa71f0c5ae23b8287fb0dd2e5e",
+      "source_revision": "49b501d2085c0a26b8166c12834824f8448e9360",
+      "stage": "released",
+      "tree_digest": "f126bd260538221f056847265859dc9da73da31f3dce60994092c2a06c308ebc"
     }
   ],
   "schema_version": 1,
