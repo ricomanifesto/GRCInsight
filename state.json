@@ -2609,6 +2609,14 @@
       "handle": "report_20261116_131436_264",
       "run_id": "43873851025",
       "stage": "invoked"
+    },
+    {
+      "admission_key": "run:43873851025",
+      "at": "2026-11-16T13:17:22.207Z",
+      "binding": "none",
+      "outcome": "published",
+      "run_id": "43873851025",
+      "stage": "completed"
     }
   ],
   "schema_version": 1,
