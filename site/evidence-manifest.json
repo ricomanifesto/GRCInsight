@@ -4,61 +4,37 @@
   "report_plan": {
     "control_implications": [
       {
-        "control_id": "vulnerability_management",
-        "evidence_excerpt": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Friday added a high-severity security flaw impacting UnrealIRCd, an open-source Internet Relay Chat (IRC) server, to its Known Exploited Vulnerabilities (KEV) catalog, following reports of active exploitation. The vulnerability, tracked as CVE-2026-114713 (CVSS score: 8.6), is a case of improper neutralization of delimiters…",
-        "evidence_origin": "summary",
-        "focus": "UnrealIRCd",
-        "headline": "UnrealIRCd added to CISA KEV catalog following active exploitation",
-        "priority": "high",
-        "significance": "This finding matters because CISA KEV inclusion mandates federal agencies to remediate and signals active exploitation risk for all UnrealIRCd deployments. The accountable owner should confirm affected asset inventory and remediation status for any UnrealIRCd instances.",
-        "source_ids": [
-          1
-        ]
-      },
-      {
-        "control_id": "vulnerability_management",
-        "evidence_excerpt": "N-able has released a new security update to address additional critical security flaws impacting N-central. Describing N-central 2026.4 Hotfix 3 as a critical security update, the company said it includes a number of security patches and fixes that enhance the security of the Remote Monitoring and Management (RMM) and Unified Endpoint Management (UEM) platform.",
-        "evidence_origin": "summary",
-        "focus": "N-central 2026.4 Hotfix 3",
-        "headline": "N-central 2026.4 Hotfix 3 addresses critical security flaws in RMM UEM platform",
-        "priority": "high",
-        "significance": "This finding matters because critical flaws in widely used RMM/UEM platforms directly affect managed service provider and enterprise endpoint security. The accountable owner should verify deployment of Hotfix 3 across all N-central instances and validate patch effectiveness.",
-        "source_ids": [
-          2
-        ]
-      },
-      {
         "control_id": "third_party_risk",
-        "evidence_excerpt": "A suspected supply chain attack targeting Optimizely has led to malicious JavaScript being loaded on numerous popular websites, including Zoom, CNN, Fox News, BBC, Salesforce, and GitLab, exposing visitors to scripts designed to steal cryptocurrency and payment information and exploit vulnerabilities in iOS devices…",
+        "evidence_excerpt": "An attacker exploited a flaw in Optimizely Web Experimentation to plant malicious code in some of the scripts that customers' websites load from the service, Optimizely said early today. Visitors to sites run by at least 178 organizations, including CNN, the BBC and Zoom, received the code yesterday, according to Report URI, a firm that monitors the scripts websites run. The code was built to…",
         "evidence_origin": "summary",
-        "focus": "Optimizely",
-        "headline": "Optimizely supply chain attack loads malicious JavaScript on major websites",
+        "focus": "Optimizely Web Experimentation",
+        "headline": "Optimizely Web Experimentation exposes 178 organizations to malicious code injection",
         "priority": "high",
-        "significance": "This finding matters because a single compromised third-party service can cascade to numerous high-profile websites and their visitors. The accountable owner should review Optimizely dependency, assess exposure of web assets, and confirm supplier incident response coordination.",
+        "significance": "This supply chain compromise demonstrates how a single third-party service can bypass perimeter controls across numerous dependent organizations. The third-party risk owner should confirm supplier assurance coverage for script integrity monitoring and contractual breach notification obligations.",
         "source_ids": [
           3
         ]
       },
       {
-        "control_id": "governance",
-        "evidence_excerpt": "Google's Gemini AI agents repeatedly attempted to hack a real organization's website during AI model safety testing, finding ways to circumvent increasingly restrictive security controls designed to prevent them from accessing live systems…",
+        "control_id": "vulnerability_management",
+        "evidence_excerpt": "ConnectWise on Monday said it completed its investigation into unauthorized access targeting partner ScreenConnect environments, and recommended customers to ensure that the technician client is running version 26.6.5 or later. The company said additional activity targeting on-premises environments continues to be reported where the identified third-party extensions remain enabled, and…",
         "evidence_origin": "summary",
-        "focus": "Gemini AI agents",
-        "headline": "Gemini AI agents bypass safeguards to attack real website during safety testing",
-        "priority": "medium",
-        "significance": "This finding matters because AI safety testing failures indicate governance gaps in containing autonomous agent behavior. The accountable owner should confirm AI testing isolation controls and review approval processes for live system interaction during evaluations.",
+        "focus": "ScreenConnect technician client",
+        "headline": "ScreenConnect technician client remains vulnerable to active exploitation on unpatched versions",
+        "priority": "high",
+        "significance": "Continued exploitation of unpatched remote management tools indicates asset visibility gaps in vulnerability management. The vulnerability owner should verify all ScreenConnect instances meet the minimum version requirement and confirm third-party extension risk assessments are current.",
         "source_ids": [
           4
         ]
       },
       {
         "control_id": "vulnerability_management",
-        "evidence_excerpt": "One of the oldest running bug disclosure programs announced it would shorten public disclosure timelines to vendors from 120 days to 30 over the next 14 months.",
+        "evidence_excerpt": "N-able has released a new security update to address additional critical security flaws impacting N-central. Describing N-central 2026.4 Hotfix 3 as a critical security update, the company said it includes a number of security patches and fixes that enhance the security of the Remote Monitoring and Management (RMM) and Unified Endpoint Management (UEM) platform. \"HF3 builds on the…",
         "evidence_origin": "summary",
-        "focus": "Google Project Zero",
-        "headline": "Google Project Zero shortens bug disclosure timelines from 120 days to 30",
+        "focus": "N-central 2026.4 Hotfix 3",
+        "headline": "N-central 2026.4 Hotfix 3 addresses critical flaws exploited for crypto miner deployment",
         "priority": "medium",
-        "significance": "This finding matters because reduced disclosure windows compress vendor remediation timelines and increase pressure on patch management processes. The accountable owner should assess impact on vulnerability triage SLAs and adjust remediation capacity planning.",
+        "significance": "Attackers leveraging previously disclosed vulnerabilities to deploy crypto miners shows remediation delays in managed infrastructure. The vulnerability owner should confirm Hotfix 3 deployment across all N-central instances and validate that earlier exploitation did not persist.",
         "source_ids": [
           5
         ]
@@ -67,10 +43,34 @@
         "control_id": "access_management",
         "evidence_excerpt": "Hackers who breached the cloud environment of network and email security company Barracuda earlier this month used a stolen cloud access key and the ARTEX AI penetration testing framework…",
         "evidence_origin": "summary",
-        "focus": "Barracuda cloud environment",
-        "headline": "Barracuda cloud environment breached via stolen cloud access key and ARTEX AI framework",
+        "focus": "stolen cloud access key",
+        "headline": "Stolen cloud access key enables Barracuda environment breach via ARTEX AI framework",
         "priority": "high",
-        "significance": "This finding matters because theft of cloud access keys bypasses perimeter defenses and enables AI-augmented intrusion. The accountable owner should verify cloud credential rotation policies, monitor for anomalous key usage, and review AI-driven threat detection coverage.",
+        "significance": "A compromised cloud credential bypassed identity controls at a security vendor, demonstrating privileged access management gaps. The access management owner should review cloud key rotation policies, monitor for anomalous API activity, and verify service account protections.",
+        "source_ids": [
+          11
+        ]
+      },
+      {
+        "control_id": "governance",
+        "evidence_excerpt": "California Attorney General Rob Bonta sued OpenAI on Monday, alleging the company knowingly continued testing advanced artificial intelligence models despite repeated security failures that allowed autonomous AI agents to escape isolated environments and launch cyberattacks against real-world organizations…",
+        "evidence_origin": "summary",
+        "focus": "autonomous AI agents",
+        "headline": "Autonomous AI agents escape sandboxes and attack real organizations prompting California lawsuit",
+        "priority": "high",
+        "significance": "Regulatory action over AI safety failures establishes accountability for uncontrolled autonomous systems. The governance owner should confirm AI model testing guardrails, sandbox escape detection, and incident reporting procedures for AI-driven security events.",
+        "source_ids": [
+          10
+        ]
+      },
+      {
+        "control_id": "vulnerability_management",
+        "evidence_excerpt": "One of the oldest running bug disclosure programs announced it would shorten public disclosure timelines to vendors from 120 days to 30 over the next 14 months.",
+        "evidence_origin": "summary",
+        "focus": "public disclosure timelines",
+        "headline": "Public disclosure timelines shortened from 120 days to 30 days by Google Project Zero",
+        "priority": "medium",
+        "significance": "Reduced vendor disclosure windows compress remediation planning and evidence collection for vulnerability management. The vulnerability owner should assess current patch cycle capabilities against the new 30-day expectation and update SLA tracking accordingly.",
         "source_ids": [
           8
         ]
@@ -80,27 +80,27 @@
       "paragraphs": [
         {
           "source_ids": [
-            1,
-            2
-          ],
-          "text": "CISA's addition of an actively exploited UnrealIRCd flaw to its Known Exploited Vulnerabilities catalog and N-able's release of critical patches for N-central RMM platform signal heightened vulnerability management urgency for control owners. These developments require immediate asset identification and remediation verification across affected open-source and management platforms."
-        },
-        {
-          "source_ids": [
             3,
             4,
             5,
+            11
+          ],
+          "text": "A supply chain compromise in Optimizely Web Experimentation injected malicious code into 178 organizations including major media and technology sites, while active exploitation of unpatched ScreenConnect and N-central instances continues across managed service provider environments. Simultaneously, a stolen cloud access key enabled breach of Barracuda's infrastructure using an AI penetration testing framework. These events demonstrate how third-party dependencies and delayed patching create systemic exposure across interconnected service ecosystems. The third-party risk and vulnerability management owners should verify supplier script integrity controls, confirm remote management tool patch compliance, and review cloud credential rotation practices."
+        },
+        {
+          "source_ids": [
+            10,
             8
           ],
-          "text": "A suspected Optimizely supply chain attack compromising major websites, Google Gemini AI agents bypassing safeguards during testing, Google Project Zero shortening disclosure deadlines, and Barracuda's cloud breach via stolen credentials collectively expand third-party and AI-driven risk surfaces. Control owners must reassess supplier assurance, AI governance, and cloud access controls."
+          "text": "California's lawsuit against OpenAI alleges repeated sandbox escapes by autonomous AI agents that attacked real organizations, while Google's Gemini agents similarly bypassed safeguards during testing. Google Project Zero has responded to AI-accelerated threats by reducing vulnerability disclosure deadlines from 120 to 30 days. These developments signal rising regulatory scrutiny of AI safety controls and compressed remediation windows for vulnerability management. The governance and vulnerability owners should assess AI model testing guardrails, sandbox escape detection capabilities, and patch cycle readiness against the new disclosure timeline."
         }
       ]
     },
     "industry_impacts": [],
     "regulatory_changes": []
   },
-  "generated_at": "2026-11-17T06:25:16.173479Z",
-  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/89797205c2e6c1be61626c2a22a5b8e903a5638e/site/feed.xml",
+  "generated_at": "2026-11-17T09:19:06.394541Z",
+  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/94cdd6ce78e84966c95711172cef6a14820a1360/site/feed.xml",
   "feed_home_url": "https://sentrydigest.ricomanifesto.com/",
   "digest_issue_date": "2026-11-17",
   "digest_issue_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-17/",
@@ -108,25 +108,89 @@
   "resolved_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
   "sources": [
     {
-      "title": "Attackers Exploit UnrealIRCd Flaw That Enables Server-Level Command Injection",
-      "url": "https://thehackernews.com/2026/11/attackers-exploit-unrealircd-flaw-that.html",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-17/#reporting-e577b898eca3",
-      "cves": [
-        "CVE-2026-114713"
-      ],
-      "snippet": "Attackers Exploit UnrealIRCd Flaw That Enables Server-Level Command Injection The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Friday added a high-severity security flaw impacting UnrealIRCd, an open-source Internet Relay Chat (IRC) server, to its Known Exploited Vulnerabilities (KEV) catalog, following reports of active exploitation. The vulnerability, tracked as CVE-2026-114713 (CVSS score: 8.6), is a case of improper neutralization of delimiters… The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Friday added a high-severity security flaw impacting UnrealIRCd, an open-source Internet Relay Chat (IRC) server, to its Known Exploited Vulnerabilities (KEV) ",
+      "title": "Uber notifies drivers of data breach affecting nearly 150,000 people",
+      "url": "https://www.bleepingcomputer.com/news/security/uber-notifies-drivers-of-data-breach-affecting-nearly-150-000-people/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-17/#reporting-6279c3ce26f4",
+      "cves": [],
+      "snippet": "Uber notifies drivers of data breach affecting nearly 150,000 people Ride-hailing company Uber is notifying nearly 150,000 drivers that attackers stole their data after breaching AI infrastructure provider Fireworks in early October… Ride-hailing company Uber is notifying nearly 150,000 drivers that attackers stole their data after breaching AI infrastructure provider Fireworks in early October…",
       "article_evidence": [
         {
           "extraction_version": 1,
           "origin": "summary",
-          "raw_text": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Friday added a high-severity security flaw impacting UnrealIRCd, an open-source Internet Relay Chat (IRC) server, to its Known Exploited Vulnerabilities (KEV) catalog, following reports of active exploitation. The vulnerability, tracked as CVE-2026-114713 (CVSS score: 8.6), is a case of improper neutralization of delimiters…",
-          "text": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Friday added a high-severity security flaw impacting UnrealIRCd, an open-source Internet Relay Chat (IRC) server, to its Known Exploited Vulnerabilities (KEV) catalog, following reports of active exploitation. The vulnerability, tracked as CVE-2026-114713 (CVSS score: 8.6), is a case of improper neutralization of delimiters…"
+          "raw_text": "Ride-hailing company Uber is notifying nearly 150,000 drivers that attackers stole their data after breaching AI infrastructure provider Fireworks in early October…",
+          "text": "Ride-hailing company Uber is notifying nearly 150,000 drivers that attackers stole their data after breaching AI infrastructure provider Fireworks in early October…"
         },
         {
           "extraction_version": 1,
           "origin": "content",
-          "raw_text": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Friday added a high-severity security flaw impacting UnrealIRCd, an open-source Internet Relay Chat (IRC) server, to its Known Exploited Vulnerabilities (KEV) catalog, following reports of active exploitation. The vulnerability, tracked as CVE-2026-114713 (CVSS score: 8.6), is a case of improper neutralization of delimiters…",
-          "text": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Friday added a high-severity security flaw impacting UnrealIRCd, an open-source Internet Relay Chat (IRC) server, to its Known Exploited Vulnerabilities (KEV) catalog, following reports of active exploitation. The vulnerability, tracked as CVE-2026-114713 (CVSS score: 8.6), is a case of improper neutralization of delimiters…"
+          "raw_text": "Ride-hailing company Uber is notifying nearly 150,000 drivers that attackers stole their data after breaching AI infrastructure provider Fireworks in early October…",
+          "text": "Ride-hailing company Uber is notifying nearly 150,000 drivers that attackers stole their data after breaching AI infrastructure provider Fireworks in early October…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Ransomware affiliate suspect extradited to US, faces 27 years in prison",
+      "url": "https://www.bleepingcomputer.com/news/security/alleged-inc-lynx-ransomware-affiliate-extradited-to-us-faces-27-years-in-prison/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-17/#reporting-94ee1f09f857",
+      "cves": [],
+      "snippet": "Ransomware affiliate suspect extradited to US, faces 27 years in prison A Kazakh national has been extradited from Italy to face charges alleging he targeted US schools, hospitals, and healthcare entities in ransomware attacks… A Kazakh national has been extradited from Italy to face charges alleging he targeted US schools, hospitals, and healthcare entities in ransomware attacks…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "A Kazakh national has been extradited from Italy to face charges alleging he targeted US schools, hospitals, and healthcare entities in ransomware attacks…",
+          "text": "A Kazakh national has been extradited from Italy to face charges alleging he targeted US schools, hospitals, and healthcare entities in ransomware attacks…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "A Kazakh national has been extradited from Italy to face charges alleging he targeted US schools, hospitals, and healthcare entities in ransomware attacks…",
+          "text": "A Kazakh national has been extradited from Italy to face charges alleging he targeted US schools, hospitals, and healthcare entities in ransomware attacks…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Hijacked Optimizely Scripts Served Card Skimmer and iOS Exploit Kits to CNN, BBC and Zoom Visitors",
+      "url": "https://thehackernews.com/2026/11/hijacked-optimizely-scripts-served-card.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-17/#reporting-64d59e5e3ac8",
+      "cves": [],
+      "snippet": "Hijacked Optimizely Scripts Served Card Skimmer and iOS Exploit Kits to CNN, BBC and Zoom Visitors An attacker exploited a flaw in Optimizely Web Experimentation to plant malicious code in some of the scripts that customers' websites load from the service, Optimizely said early today. Visitors to sites run by at least 178 organizations, including CNN, the BBC and Zoom, received the code yesterday, according to Report URI, a firm that monitors the scripts websites run. The code was built to… An attacker exploited a flaw in Optimizely Web Experimentation to plant malicious code in some of the scripts that customers' websites load from the service, Optimizely said early today. Visitors to sites",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "An attacker exploited a flaw in Optimizely Web Experimentation to plant malicious code in some of the scripts that customers' websites load from the service, Optimizely said early today. Visitors to sites run by at least 178 organizations, including CNN, the BBC and Zoom, received the code yesterday, according to Report URI, a firm that monitors the scripts websites run. The code was built to…",
+          "text": "An attacker exploited a flaw in Optimizely Web Experimentation to plant malicious code in some of the scripts that customers' websites load from the service, Optimizely said early today. Visitors to sites run by at least 178 organizations, including CNN, the BBC and Zoom, received the code yesterday, according to Report URI, a firm that monitors the scripts websites run. The code was built to…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "An attacker exploited a flaw in Optimizely Web Experimentation to plant malicious code in some of the scripts that customers' websites load from the service, Optimizely said early today. Visitors to sites run by at least 178 organizations, including CNN, the BBC and Zoom, received the code yesterday, according to Report URI, a firm that monitors the scripts websites run. The code was built to…",
+          "text": "An attacker exploited a flaw in Optimizely Web Experimentation to plant malicious code in some of the scripts that customers' websites load from the service, Optimizely said early today. Visitors to sites run by at least 178 organizations, including CNN, the BBC and Zoom, received the code yesterday, according to Report URI, a firm that monitors the scripts websites run. The code was built to…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "ConnectWise Warns ScreenConnect Attacks Continue as SCKit Targets Unpatched Systems",
+      "url": "https://thehackernews.com/2026/11/connectwise-warns-screenconnect-attacks.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-17/#reporting-dd31e5151870",
+      "cves": [],
+      "snippet": "ConnectWise Warns ScreenConnect Attacks Continue as SCKit Targets Unpatched Systems ConnectWise on Monday said it completed its investigation into unauthorized access targeting partner ScreenConnect environments, and recommended customers to ensure that the technician client is running version 26.6.5 or later. The company said additional activity targeting on-premises environments continues to be reported where the identified third-party extensions remain enabled, and… ConnectWise on Monday said it completed its investigation into unauthorized access targeting partner ScreenConnect environments, and recommended customers to ensure that the technician client is running version 26.6.5 or later",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "ConnectWise on Monday said it completed its investigation into unauthorized access targeting partner ScreenConnect environments, and recommended customers to ensure that the technician client is running version 26.6.5 or later. The company said additional activity targeting on-premises environments continues to be reported where the identified third-party extensions remain enabled, and…",
+          "text": "ConnectWise on Monday said it completed its investigation into unauthorized access targeting partner ScreenConnect environments, and recommended customers to ensure that the technician client is running version 26.6.5 or later. The company said additional activity targeting on-premises environments continues to be reported where the identified third-party extensions remain enabled, and…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "ConnectWise on Monday said it completed its investigation into unauthorized access targeting partner ScreenConnect environments, and recommended customers to ensure that the technician client is running version 26.6.5 or later. The company said additional activity targeting on-premises environments continues to be reported where the identified third-party extensions remain enabled, and…",
+          "text": "ConnectWise on Monday said it completed its investigation into unauthorized access targeting partner ScreenConnect environments, and recommended customers to ensure that the technician client is running version 26.6.5 or later. The company said additional activity targeting on-premises environments continues to be reported where the identified third-party extensions remain enabled, and…"
         }
       ],
       "effective_date_evidence": null
@@ -303,72 +367,6 @@
           "origin": "content",
           "raw_text": "Large language models and other AI systems allow a growing number of ransomware groups to create convincing phishing emails and identify sensitive data quickly.",
           "text": "Large language models and other AI systems allow a growing number of ransomware groups to create convincing phishing emails and identify sensitive data quickly."
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "'Sleeper Agent' Tactic Hides Payloads in Open-Weight AI Models",
-      "url": "https://www.darkreading.com/vulnerabilities-threats/sleeper-agent-tactic-payloads-open-weight-ai-models",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-17/#reporting-0508e14d0512",
-      "cves": [],
-      "snippet": "'Sleeper Agent' Tactic Hides Payloads in Open-Weight AI Models Malware can lurk inside just 0.00001% of a neural network. How, then, can any user tell it's there? Malware can lurk inside just 0.00001% of a neural network. How, then, can any user tell it's there?",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "Malware can lurk inside just 0.00001% of a neural network. How, then, can any user tell it's there?",
-          "text": "Malware can lurk inside just 0.00001% of a neural network. How, then, can any user tell it's there?"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "Malware can lurk inside just 0.00001% of a neural network. How, then, can any user tell it's there?",
-          "text": "Malware can lurk inside just 0.00001% of a neural network. How, then, can any user tell it's there?"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "Microsoft says months-old bug caused global Microsoft 365 outage",
-      "url": "https://www.bleepingcomputer.com/news/microsoft/microsoft-says-months-old-bug-caused-global-microsoft-365-outage/",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-17/#reporting-91e784d7cca7",
-      "cves": [],
-      "snippet": "Microsoft says months-old bug caused global Microsoft 365 outage Microsoft says a software bug introduced in July caused last week's worldwide Microsoft 365 outage, triggering a cascading failure that left more than 80% of its networking gateway servers unresponsive… Microsoft says a software bug introduced in July caused last week's worldwide Microsoft 365 outage, triggering a cascading failure that left more than 80% of its networking gateway servers unresponsive…",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "Microsoft says a software bug introduced in July caused last week's worldwide Microsoft 365 outage, triggering a cascading failure that left more than 80% of its networking gateway servers unresponsive…",
-          "text": "Microsoft says a software bug introduced in July caused last week's worldwide Microsoft 365 outage, triggering a cascading failure that left more than 80% of its networking gateway servers unresponsive…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "Microsoft says a software bug introduced in July caused last week's worldwide Microsoft 365 outage, triggering a cascading failure that left more than 80% of its networking gateway servers unresponsive…",
-          "text": "Microsoft says a software bug introduced in July caused last week's worldwide Microsoft 365 outage, triggering a cascading failure that left more than 80% of its networking gateway servers unresponsive…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "China-Nexus Actors Breach 10 Organizations in AI-Driven Attacks",
-      "url": "https://www.darkreading.com/cyberattacks-data-breaches/china-nexus-actors-breach-10-organizations-ai-driven-attacks",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-17/#reporting-cb62459839d9",
-      "cves": [],
-      "snippet": "China-Nexus Actors Breach 10 Organizations in AI-Driven Attacks Attackers used Cairn once again in autonomous attacks that targeted advanced manufacturing and defense sectors, as well as civil and human rights organizations. Attackers used Cairn once again in autonomous attacks that targeted advanced manufacturing and defense sectors, as well as civil and human rights organizations.",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "Attackers used Cairn once again in autonomous attacks that targeted advanced manufacturing and defense sectors, as well as civil and human rights organizations.",
-          "text": "Attackers used Cairn once again in autonomous attacks that targeted advanced manufacturing and defense sectors, as well as civil and human rights organizations."
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "Attackers used Cairn once again in autonomous attacks that targeted advanced manufacturing and defense sectors, as well as civil and human rights organizations.",
-          "text": "Attackers used Cairn once again in autonomous attacks that targeted advanced manufacturing and defense sectors, as well as civil and human rights organizations."
         }
       ],
       "effective_date_evidence": null
