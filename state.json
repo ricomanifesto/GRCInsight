@@ -2759,6 +2759,16 @@
       "handle": "report_20261117_003337_979",
       "run_id": "43988553019",
       "stage": "invoked"
+    },
+    {
+      "admission_key": "digest:10f07809d003b9fb5dab3c241e5047dac79eb979",
+      "at": "2026-11-17T00:35:44.267Z",
+      "binding": "feed-bytes",
+      "digest_content_digest": "08c08966690e9839fea513c45f8f6f3ddc6a301ec58eabab5d9885ff17e52b06",
+      "outcome": "published",
+      "release_key": "683add7968668a95b8c10aaf889b6fcef1d7be7a5eaed3a08c10c7d50b02d37e",
+      "run_id": "43988553019",
+      "stage": "completed"
     }
   ],
   "schema_version": 1,
