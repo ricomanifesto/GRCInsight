@@ -2972,6 +2972,13 @@
       "at": "2026-11-17T15:15:58.043Z",
       "run_id": "44112211167",
       "stage": "invoked"
+    },
+    {
+      "admission_key": "digest:6456366865a4266799a36af6c7820ac470d436b0",
+      "at": "2026-11-17T15:16:00.207Z",
+      "handle": "report_20261117_151559_200",
+      "run_id": "44112211167",
+      "stage": "invoked"
     }
   ],
   "schema_version": 1,
