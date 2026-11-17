@@ -1,8 +1,8 @@
 # GRC Intelligence Report - 2026-11-17
-**Generated:** 2026-11-17T12:22:59.203412Z
+**Generated:** 2026-11-17T13:07:35.782699Z
 **Date of Issue:** November 2026
 **Analysis Period:** November 2026
-**Source:** [SentryDigest](https://raw.githubusercontent.com/ricomanifesto/SentryDigest/3dc0408ae0cd0a627bd6906d8e98290e75958309/site/feed.xml)
+**Source:** [SentryDigest](https://sentrydigest.ricomanifesto.com/feed.xml)
 **Source Issue:** [SentryDigest 2026-11-17](https://sentrydigest.ricomanifesto.com/archive/2026-11-17/)
 **Articles Analyzed:** 30
 **GRC-Relevant Articles:** 30
@@ -12,11 +12,11 @@
 
 ## Executive Summary
 
-Control owners face escalating supply chain risks as threat actors weaponize legitimate cloud services and third-party platforms for covert command-and-control and data theft. Campaigns leveraging Microsoft SharePoint and GitHub for C2, a breach of AI infrastructure provider Fireworks exposing Uber driver data, and a compromised Optimizely web experimentation service delivering malicious scripts to high-profile sites demonstrate that trusted dependencies can bypass perimeter controls. Owners should prioritize assurance of supplier access scopes, monitoring of anomalous activity in approved services, and validation of third-party script integrity. [New GitDoor and GraphDoor Backdoors Turn GitHub and SharePoint Into Covert C2 Channels](https://thehackernews.com/2026/11/new-gitdoor-and-graphdoor-backdoors.html)
+Supply chain compromises through trusted platforms and remote management tools dominated this period, with attackers exploiting legitimate services like Microsoft SharePoint and GitHub for covert command-and-control, hijacking Optimizely Web Experimentation to inject malicious scripts across 178 organizations, and breaching AI infrastructure provider Fireworks to expose 150,000 Uber driver records. Concurrently, active exploitation of ScreenConnect and N-central remote management platforms continues despite available patches, indicating persistent gaps in third-party extension management and hotfix deployment. Control owners must verify monitoring coverage for anomalous API usage on approved services, validate supplier assurance for critical AI and web service dependencies, and confirm remediation completion for all remote management tool vulnerabilities. [New GitDoor and GraphDoor Backdoors Turn GitHub and SharePoint Into Covert C2 Channels](https://thehackernews.com/2026/11/new-gitdoor-and-graphdoor-backdoors.html); [Uber notifies drivers of data breach affecting nearly 150,000 people](https://www.bleepingcomputer.com/news/security/uber-notifies-drivers-of-data-breach-affecting-nearly-150-000-people/); [Hijacked Optimizely Scripts Served Card Skimmer and iOS Exploit Kits to CNN, BBC and Zoom Visitors](https://thehackernews.com/2026/11/hijacked-optimizely-scripts-served-card.html); [ConnectWise Warns ScreenConnect Attacks Continue as SCKit Targets Unpatched Systems](https://thehackernews.com/2026/11/connectwise-warns-screenconnect-attacks.html); [N-able Patches 17 N-central Flaws as Attackers Exploit Earlier Bugs to Deploy Crypto Miners](https://thehackernews.com/2026/11/n-able-patches-17-n-central-flaws-as.html)
 
-Vulnerability management timelines are compressing as attackers exploit unpatched remote management tools and disclosure windows shrink. Active targeting of unpatched ScreenConnect technician clients, exploitation of N-central flaws for crypto-mining, and Google Project Zero's reduction of bug disclosure deadlines from 120 to 30 days collectively demand faster asset identification, patch deployment, and coordination with vendors. Owners must confirm remediation coverage for exposed management platforms and align internal SLAs with accelerated disclosure expectations. [N-able Patches 17 N-central Flaws as Attackers Exploit Earlier Bugs to Deploy Crypto Miners](https://thehackernews.com/2026/11/n-able-patches-17-n-central-flaws-as.html); [Google Project Zero Slashes Bug Disclosure Deadlines, Splitting Experts](https://www.darkreading.com/vulnerabilities-threats/google-project-zero-bug-disclosure-deadlines)
+Google Project Zero's decision to slash bug disclosure deadlines from 120 days to 30 over 14 months compresses vulnerability remediation windows across the ecosystem. This change pressures patch management processes to accelerate testing and deployment cycles, particularly for widely deployed platforms like ScreenConnect and N-central where active exploitation persists. Vulnerability management owners should assess current SLA alignment with the new disclosure timeline and document any compensating controls for assets that cannot meet accelerated patching requirements. [Google Project Zero Slashes Bug Disclosure Deadlines, Splitting Experts](https://www.darkreading.com/vulnerabilities-threats/google-project-zero-bug-disclosure-deadlines)
 
-Scope: 3 findings and 0 sourced regulatory changes from 12 retained sources. Review priorities rank what to check first; confirm whether each finding applies to your organization before assigning work.
+Scope: 6 findings and 0 sourced regulatory changes from 12 retained sources. Review priorities rank what to check first; confirm whether each finding applies to your organization before assigning work.
 
 ## Sourced Regulatory Changes
 
@@ -26,13 +26,13 @@ No sourced regulatory changes identified in the supplied evidence.
 
 Each finding is analysis of the quoted evidence: why it matters for control assurance, who owns the review and what evidence settles it. Reference controls are review aids, not a compliance determination.
 
-### Microsoft SharePoint and GitHub enable covert C2 channels
+### legitimate services like Microsoft SharePoint and GitHub enable covert command-and-control channels
 
 **Review priority:** High · Third-party risk · Owner: Supplier risk owner
 
-**Why it matters:** Legitimate cloud services used for command-and-control bypass traditional network monitoring. Control owners should confirm detection coverage for anomalous use of approved platforms and review supplier access scopes.
+**Why it matters:** This finding matters because attackers use trusted platforms to bypass network controls, making detection difficult. Control owners should confirm whether monitoring covers anomalous API usage on approved services and review supplier access scopes for SharePoint and GitHub integrations.
 
-**Source evidence:** “Government sectors in Asia and Africa have been targeted by an active cyber intrusion campaign that delivers to previously undocumented backdoors that leverage legitimate services like Microsoft SharePoint and GitHub for command‑and‑control &#40;C2&#41;. The activity has been codenamed Operation ShadowCloud by Kaspersky.” [New GitDoor and GraphDoor Backdoors Turn GitHub and SharePoint Into Covert C2 Channels](https://thehackernews.com/2026/11/new-gitdoor-and-graphdoor-backdoors.html)
+**Source evidence:** “Government sectors in Asia and Africa have been targeted by an active cyber intrusion campaign that delivers to previously undocumented backdoors that leverage legitimate services like Microsoft SharePoint and GitHub for command‑and‑control &#40;C2&#41;. The activity has been codenamed Operation ShadowCloud by Kaspersky. The Russian cybersecurity company said it identified the campaign in early 2026.” [New GitDoor and GraphDoor Backdoors Turn GitHub and SharePoint Into Covert C2 Channels](https://thehackernews.com/2026/11/new-gitdoor-and-graphdoor-backdoors.html)
 
 **Evidence to request:** Supplier access scope, control responsibilities and evidence of remediation assurance.
 
@@ -40,13 +40,41 @@ Each finding is analysis of the quoted evidence: why it matters for control assu
 
 **Reference controls:** ISO/IEC 27001:2022 A.5.19 (supplier relationships), A.5.21 (ICT supply chain), A.5.22 (monitoring and review of supplier services); NIST CSF 2.0 GV.SC (cybersecurity supply chain risk management)
 
-### N-central 2026.4 Hotfix 3 addresses critical flaws
+### AI infrastructure provider Fireworks breach exposes driver data through supply chain
+
+**Review priority:** High · Third-party risk · Owner: Supplier risk owner
+
+**Why it matters:** This finding matters because a third-party AI provider compromise led to mass driver data exposure. Control owners should verify supplier assurance evidence for AI infrastructure partners and confirm incident response coordination with critical suppliers.
+
+**Source evidence:** “Ride-hailing company Uber is notifying nearly 150,000 drivers that attackers stole their data after breaching AI infrastructure provider Fireworks in early October…” [Uber notifies drivers of data breach affecting nearly 150,000 people](https://www.bleepingcomputer.com/news/security/uber-notifies-drivers-of-data-breach-affecting-nearly-150-000-people/)
+
+**Evidence to request:** Supplier access scope, control responsibilities and evidence of remediation assurance.
+
+**Decision trigger:** If the supplier dependency exists and assurance is insufficient, request evidence or escalate the assurance gap to its owner.
+
+**Reference controls:** ISO/IEC 27001:2022 A.5.19 (supplier relationships), A.5.21 (ICT supply chain), A.5.22 (monitoring and review of supplier services); NIST CSF 2.0 GV.SC (cybersecurity supply chain risk management)
+
+### Optimizely Web Experimentation flaw enables malicious script injection across customer sites
+
+**Review priority:** High · Third-party risk · Owner: Supplier risk owner
+
+**Why it matters:** This finding matters because a single third-party service compromise affected 178 organizations simultaneously. Control owners should review supplier dependencies on web experimentation platforms and verify monitoring covers third-party script behavior anomalies.
+
+**Source evidence:** “An attacker exploited a flaw in Optimizely Web Experimentation to plant malicious code in some of the scripts that customers' websites load from the service, Optimizely said early today. Visitors to sites run by at least 178 organizations, including CNN, the BBC and Zoom, received the code yesterday, according to Report URI, a firm that monitors the scripts websites run. The code was built to…” [Hijacked Optimizely Scripts Served Card Skimmer and iOS Exploit Kits to CNN, BBC and Zoom Visitors](https://thehackernews.com/2026/11/hijacked-optimizely-scripts-served-card.html)
+
+**Evidence to request:** Supplier access scope, control responsibilities and evidence of remediation assurance.
+
+**Decision trigger:** If the supplier dependency exists and assurance is insufficient, request evidence or escalate the assurance gap to its owner.
+
+**Reference controls:** ISO/IEC 27001:2022 A.5.19 (supplier relationships), A.5.21 (ICT supply chain), A.5.22 (monitoring and review of supplier services); NIST CSF 2.0 GV.SC (cybersecurity supply chain risk management)
+
+### ScreenConnect environments face ongoing attacks exploiting unpatched third-party extensions
 
 **Review priority:** High · Vulnerability management · Owner: Vulnerability and asset owners
 
-**Why it matters:** Attackers exploit earlier N-central bugs to deploy crypto miners. Control owners should verify hotfix deployment across RMM platforms and assess compensating controls for unpatched instances.
+**Why it matters:** This finding matters because remote management tools remain targeted vectors with active exploitation. Control owners should verify all ScreenConnect instances are patched to version 26.6.5 or later and disable unnecessary third-party extensions.
 
-**Source evidence:** “N-able has released a new security update to address additional critical security flaws impacting N-central. Describing N-central 2026.4 Hotfix 3 as a critical security update, the company said it includes a number of security patches and fixes that enhance the security of the Remote Monitoring and Management &#40;RMM&#41; and Unified Endpoint Management &#40;UEM&#41; platform.” [N-able Patches 17 N-central Flaws as Attackers Exploit Earlier Bugs to Deploy Crypto Miners](https://thehackernews.com/2026/11/n-able-patches-17-n-central-flaws-as.html)
+**Source evidence:** “ConnectWise on Monday said it completed its investigation into unauthorized access targeting partner ScreenConnect environments, and recommended customers to ensure that the technician client is running version 26.6.5 or later. The company said additional activity targeting on-premises environments continues to be reported where the identified third-party extensions remain enabled, and…” [ConnectWise Warns ScreenConnect Attacks Continue as SCKit Targets Unpatched Systems](https://thehackernews.com/2026/11/connectwise-warns-screenconnect-attacks.html)
 
 **Evidence to request:** Affected-asset inventory, installed versions, remediation status and an exception owner.
 
@@ -54,11 +82,25 @@ Each finding is analysis of the quoted evidence: why it matters for control assu
 
 **Reference controls:** ISO/IEC 27001:2022 A.8.8 (management of technical vulnerabilities); NIST CSF 2.0 ID.RA (risk assessment), PR.PS (platform security)
 
-### public disclosure timelines shorten to thirty days
+### N-central 2026.4 Hotfix 3 addresses critical flaws exploited for crypto miner deployment
+
+**Review priority:** High · Vulnerability management · Owner: Vulnerability and asset owners
+
+**Why it matters:** This finding matters because attackers actively exploit earlier RMM platform bugs to deploy crypto miners. Control owners should confirm N-central hotfix deployment across all managed assets and validate compensating controls for any unpatched instances.
+
+**Source evidence:** “N-able has released a new security update to address additional critical security flaws impacting N-central. Describing N-central 2026.4 Hotfix 3 as a critical security update, the company said it includes a number of security patches and fixes that enhance the security of the Remote Monitoring and Management &#40;RMM&#41; and Unified Endpoint Management &#40;UEM&#41; platform. "HF3 builds on the…” [N-able Patches 17 N-central Flaws as Attackers Exploit Earlier Bugs to Deploy Crypto Miners](https://thehackernews.com/2026/11/n-able-patches-17-n-central-flaws-as.html)
+
+**Evidence to request:** Affected-asset inventory, installed versions, remediation status and an exception owner.
+
+**Decision trigger:** If applicability is confirmed, decide on remediation or a documented exception; otherwise record why the finding does not apply.
+
+**Reference controls:** ISO/IEC 27001:2022 A.8.8 (management of technical vulnerabilities); NIST CSF 2.0 ID.RA (risk assessment), PR.PS (platform security)
+
+### bug disclosure programs reduce vendor notification window from 120 days to 30
 
 **Review priority:** Medium · Vulnerability management · Owner: Vulnerability and asset owners
 
-**Why it matters:** Reduced vendor disclosure window from 120 to 30 days accelerates remediation pressure. Control owners should align internal vulnerability SLAs with compressed disclosure expectations and coordinate with vendors.
+**Why it matters:** This finding matters because shortened disclosure deadlines compress vulnerability remediation timelines. Control owners should assess whether current patch management processes can accommodate 30-day disclosure windows and update SLAs accordingly.
 
 **Source evidence:** “One of the oldest running bug disclosure programs announced it would shorten public disclosure timelines to vendors from 120 days to 30 over the next 14 months.” [Google Project Zero Slashes Bug Disclosure Deadlines, Splitting Experts](https://www.darkreading.com/vulnerabilities-threats/google-project-zero-bug-disclosure-deadlines)
 
