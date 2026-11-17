@@ -1,0 +1,336 @@
+{
+  "schema_version": 3,
+  "report_contract_version": 6,
+  "report_plan": {
+    "control_implications": [
+      {
+        "control_id": "third_party_risk",
+        "evidence_excerpt": "Government sectors in Asia and Africa have been targeted by an active cyber intrusion campaign that delivers to previously undocumented backdoors that leverage legitimate services like Microsoft SharePoint and GitHub for command‑and‑control (C2). The activity has been codenamed Operation ShadowCloud by Kaspersky.",
+        "evidence_origin": "summary",
+        "focus": "Microsoft SharePoint and GitHub",
+        "headline": "Microsoft SharePoint and GitHub enable covert C2 channels",
+        "priority": "high",
+        "significance": "Legitimate cloud services used for command-and-control bypass traditional network monitoring. Control owners should confirm detection coverage for anomalous use of approved platforms and review supplier access scopes.",
+        "source_ids": [
+          1
+        ]
+      },
+      {
+        "control_id": "vulnerability_management",
+        "evidence_excerpt": "N-able has released a new security update to address additional critical security flaws impacting N-central. Describing N-central 2026.4 Hotfix 3 as a critical security update, the company said it includes a number of security patches and fixes that enhance the security of the Remote Monitoring and Management (RMM) and Unified Endpoint Management (UEM) platform.",
+        "evidence_origin": "summary",
+        "focus": "N-central 2026.4 Hotfix 3",
+        "headline": "N-central 2026.4 Hotfix 3 addresses critical flaws",
+        "priority": "high",
+        "significance": "Attackers exploit earlier N-central bugs to deploy crypto miners. Control owners should verify hotfix deployment across RMM platforms and assess compensating controls for unpatched instances.",
+        "source_ids": [
+          9
+        ]
+      },
+      {
+        "control_id": "vulnerability_management",
+        "evidence_excerpt": "One of the oldest running bug disclosure programs announced it would shorten public disclosure timelines to vendors from 120 days to 30 over the next 14 months.",
+        "evidence_origin": "summary",
+        "focus": "public disclosure timelines",
+        "headline": "public disclosure timelines shorten to thirty days",
+        "priority": "medium",
+        "significance": "Reduced vendor disclosure window from 120 to 30 days accelerates remediation pressure. Control owners should align internal vulnerability SLAs with compressed disclosure expectations and coordinate with vendors.",
+        "source_ids": [
+          12
+        ]
+      }
+    ],
+    "executive_brief": {
+      "paragraphs": [
+        {
+          "source_ids": [
+            1
+          ],
+          "text": "Control owners face escalating supply chain risks as threat actors weaponize legitimate cloud services and third-party platforms for covert command-and-control and data theft. Campaigns leveraging Microsoft SharePoint and GitHub for C2, a breach of AI infrastructure provider Fireworks exposing Uber driver data, and a compromised Optimizely web experimentation service delivering malicious scripts to high-profile sites demonstrate that trusted dependencies can bypass perimeter controls. Owners should prioritize assurance of supplier access scopes, monitoring of anomalous activity in approved services, and validation of third-party script integrity."
+        },
+        {
+          "source_ids": [
+            9,
+            12
+          ],
+          "text": "Vulnerability management timelines are compressing as attackers exploit unpatched remote management tools and disclosure windows shrink. Active targeting of unpatched ScreenConnect technician clients, exploitation of N-central flaws for crypto-mining, and Google Project Zero's reduction of bug disclosure deadlines from 120 to 30 days collectively demand faster asset identification, patch deployment, and coordination with vendors. Owners must confirm remediation coverage for exposed management platforms and align internal SLAs with accelerated disclosure expectations."
+        }
+      ]
+    },
+    "industry_impacts": [],
+    "regulatory_changes": []
+  },
+  "generated_at": "2026-11-17T12:22:59.203412Z",
+  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/3dc0408ae0cd0a627bd6906d8e98290e75958309/site/feed.xml",
+  "feed_home_url": "https://sentrydigest.ricomanifesto.com/",
+  "digest_issue_date": "2026-11-17",
+  "digest_issue_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-17/",
+  "requested_model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
+  "resolved_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+  "sources": [
+    {
+      "title": "New GitDoor and GraphDoor Backdoors Turn GitHub and SharePoint Into Covert C2 Channels",
+      "url": "https://thehackernews.com/2026/11/new-gitdoor-and-graphdoor-backdoors.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-17/#reporting-1f9af5fe35a3",
+      "cves": [],
+      "snippet": "New GitDoor and GraphDoor Backdoors Turn GitHub and SharePoint Into Covert C2 Channels Government sectors in Asia and Africa have been targeted by an active cyber intrusion campaign that delivers to previously undocumented backdoors that leverage legitimate services like Microsoft SharePoint and GitHub for command‑and‑control (C2). The activity has been codenamed Operation ShadowCloud by Kaspersky. The Russian cybersecurity company said it identified the campaign in early 2026. Government sectors in Asia and Africa have been targeted by an active cyber intrusion campaign that delivers to previously undocumented backdoors that leverage legitimate services like Microsoft SharePoint and GitHub ",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Government sectors in Asia and Africa have been targeted by an active cyber intrusion campaign that delivers to previously undocumented backdoors that leverage legitimate services like Microsoft SharePoint and GitHub for command‑and‑control (C2). The activity has been codenamed Operation ShadowCloud by Kaspersky. The Russian cybersecurity company said it identified the campaign in early 2026.",
+          "text": "Government sectors in Asia and Africa have been targeted by an active cyber intrusion campaign that delivers to previously undocumented backdoors that leverage legitimate services like Microsoft SharePoint and GitHub for command‑and‑control (C2). The activity has been codenamed Operation ShadowCloud by Kaspersky. The Russian cybersecurity company said it identified the campaign in early 2026."
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Government sectors in Asia and Africa have been targeted by an active cyber intrusion campaign that delivers to previously undocumented backdoors that leverage legitimate services like Microsoft SharePoint and GitHub for command‑and‑control (C2). The activity has been codenamed Operation ShadowCloud by Kaspersky. The Russian cybersecurity company said it identified the campaign in early 2026.",
+          "text": "Government sectors in Asia and Africa have been targeted by an active cyber intrusion campaign that delivers to previously undocumented backdoors that leverage legitimate services like Microsoft SharePoint and GitHub for command‑and‑control (C2). The activity has been codenamed Operation ShadowCloud by Kaspersky. The Russian cybersecurity company said it identified the campaign in early 2026."
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Microsoft testing Remote Lock for lost or stolen Windows devices",
+      "url": "https://www.bleepingcomputer.com/news/microsoft/microsoft-testing-remote-lock-for-lost-or-stolen-windows-devices/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-17/#reporting-405d067acd3f",
+      "cves": [],
+      "snippet": "Microsoft testing Remote Lock for lost or stolen Windows devices Microsoft is testing a new feature that lets enterprise IT administrators remotely lock stolen or lost Windows devices without wiping them… Microsoft is testing a new feature that lets enterprise IT administrators remotely lock stolen or lost Windows devices without wiping them…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Microsoft is testing a new feature that lets enterprise IT administrators remotely lock stolen or lost Windows devices without wiping them…",
+          "text": "Microsoft is testing a new feature that lets enterprise IT administrators remotely lock stolen or lost Windows devices without wiping them…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Microsoft is testing a new feature that lets enterprise IT administrators remotely lock stolen or lost Windows devices without wiping them…",
+          "text": "Microsoft is testing a new feature that lets enterprise IT administrators remotely lock stolen or lost Windows devices without wiping them…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Apple Tightens macOS App Permissions to Limit Data Access Amid AI Agent Security Risks",
+      "url": "https://thehackernews.com/2026/11/apple-tightens-macos-app-permissions-to.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-17/#reporting-c37508e4b828",
+      "cves": [],
+      "snippet": "Apple Tightens macOS App Permissions to Limit Data Access Amid AI Agent Security Risks Apple on Monday introduced new controls that allow Mac users to give more granular access to data they give to apps, including those that use artificial intelligence (AI) agents. The changes, currently previewed in macOS 27.3 beta 2, relate to increased transparency and more options for two of its APIs: Device Control and Data Access, and Full Disk Access. \"Before granting an app such… Apple on Monday introduced new controls that allow Mac users to give more granular access to data they give to apps, including those that use artificial intelligence (AI) agents. The changes, currently previewed in macOS 27.",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Apple on Monday introduced new controls that allow Mac users to give more granular access to data they give to apps, including those that use artificial intelligence (AI) agents. The changes, currently previewed in macOS 27.3 beta 2, relate to increased transparency and more options for two of its APIs: Device Control and Data Access, and Full Disk Access. \"Before granting an app such…",
+          "text": "Apple on Monday introduced new controls that allow Mac users to give more granular access to data they give to apps, including those that use artificial intelligence (AI) agents. The changes, currently previewed in macOS 27.3 beta 2, relate to increased transparency and more options for two of its APIs: Device Control and Data Access, and Full Disk Access. \"Before granting an app such…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Apple on Monday introduced new controls that allow Mac users to give more granular access to data they give to apps, including those that use artificial intelligence (AI) agents. The changes, currently previewed in macOS 27.3 beta 2, relate to increased transparency and more options for two of its APIs: Device Control and Data Access, and Full Disk Access. \"Before granting an app such…",
+          "text": "Apple on Monday introduced new controls that allow Mac users to give more granular access to data they give to apps, including those that use artificial intelligence (AI) agents. The changes, currently previewed in macOS 27.3 beta 2, relate to increased transparency and more options for two of its APIs: Device Control and Data Access, and Full Disk Access. \"Before granting an app such…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Court clears brothers of $25 million Ethereum crypto heist charges",
+      "url": "https://www.bleepingcomputer.com/news/security/court-clears-brothers-of-25-million-ethereum-crypto-heist-charges/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-17/#reporting-e6b22b6e2d3b",
+      "cves": [],
+      "snippet": "Court clears brothers of $25 million Ethereum crypto heist charges US District Judge Jessica Clarke has acquitted two brothers accused of stealing $25 million in cryptocurrency in about 12 seconds through a scheme that exploited a bug in the Ethereum blockchain… US District Judge Jessica Clarke has acquitted two brothers accused of stealing $25 million in cryptocurrency in about 12 seconds through a scheme that exploited a bug in the Ethereum blockchain…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "US District Judge Jessica Clarke has acquitted two brothers accused of stealing $25 million in cryptocurrency in about 12 seconds through a scheme that exploited a bug in the Ethereum blockchain…",
+          "text": "US District Judge Jessica Clarke has acquitted two brothers accused of stealing $25 million in cryptocurrency in about 12 seconds through a scheme that exploited a bug in the Ethereum blockchain…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "US District Judge Jessica Clarke has acquitted two brothers accused of stealing $25 million in cryptocurrency in about 12 seconds through a scheme that exploited a bug in the Ethereum blockchain…",
+          "text": "US District Judge Jessica Clarke has acquitted two brothers accused of stealing $25 million in cryptocurrency in about 12 seconds through a scheme that exploited a bug in the Ethereum blockchain…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Uber notifies drivers of data breach affecting nearly 150,000 people",
+      "url": "https://www.bleepingcomputer.com/news/security/uber-notifies-drivers-of-data-breach-affecting-nearly-150-000-people/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-17/#reporting-6279c3ce26f4",
+      "cves": [],
+      "snippet": "Uber notifies drivers of data breach affecting nearly 150,000 people Ride-hailing company Uber is notifying nearly 150,000 drivers that attackers stole their data after breaching AI infrastructure provider Fireworks in early October… Ride-hailing company Uber is notifying nearly 150,000 drivers that attackers stole their data after breaching AI infrastructure provider Fireworks in early October…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Ride-hailing company Uber is notifying nearly 150,000 drivers that attackers stole their data after breaching AI infrastructure provider Fireworks in early October…",
+          "text": "Ride-hailing company Uber is notifying nearly 150,000 drivers that attackers stole their data after breaching AI infrastructure provider Fireworks in early October…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Ride-hailing company Uber is notifying nearly 150,000 drivers that attackers stole their data after breaching AI infrastructure provider Fireworks in early October…",
+          "text": "Ride-hailing company Uber is notifying nearly 150,000 drivers that attackers stole their data after breaching AI infrastructure provider Fireworks in early October…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Ransomware affiliate suspect extradited to US, faces 27 years in prison",
+      "url": "https://www.bleepingcomputer.com/news/security/alleged-inc-lynx-ransomware-affiliate-extradited-to-us-faces-27-years-in-prison/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-17/#reporting-94ee1f09f857",
+      "cves": [],
+      "snippet": "Ransomware affiliate suspect extradited to US, faces 27 years in prison A Kazakh national has been extradited from Italy to face charges alleging he targeted US schools, hospitals, and healthcare entities in ransomware attacks… A Kazakh national has been extradited from Italy to face charges alleging he targeted US schools, hospitals, and healthcare entities in ransomware attacks…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "A Kazakh national has been extradited from Italy to face charges alleging he targeted US schools, hospitals, and healthcare entities in ransomware attacks…",
+          "text": "A Kazakh national has been extradited from Italy to face charges alleging he targeted US schools, hospitals, and healthcare entities in ransomware attacks…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "A Kazakh national has been extradited from Italy to face charges alleging he targeted US schools, hospitals, and healthcare entities in ransomware attacks…",
+          "text": "A Kazakh national has been extradited from Italy to face charges alleging he targeted US schools, hospitals, and healthcare entities in ransomware attacks…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Hijacked Optimizely Scripts Served Card Skimmer and iOS Exploit Kits to CNN, BBC and Zoom Visitors",
+      "url": "https://thehackernews.com/2026/11/hijacked-optimizely-scripts-served-card.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-17/#reporting-64d59e5e3ac8",
+      "cves": [],
+      "snippet": "Hijacked Optimizely Scripts Served Card Skimmer and iOS Exploit Kits to CNN, BBC and Zoom Visitors An attacker exploited a flaw in Optimizely Web Experimentation to plant malicious code in some of the scripts that customers' websites load from the service, Optimizely said early today. Visitors to sites run by at least 178 organizations, including CNN, the BBC and Zoom, received the code yesterday, according to Report URI, a firm that monitors the scripts websites run. The code was built to… An attacker exploited a flaw in Optimizely Web Experimentation to plant malicious code in some of the scripts that customers' websites load from the service, Optimizely said early today. Visitors to sites",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "An attacker exploited a flaw in Optimizely Web Experimentation to plant malicious code in some of the scripts that customers' websites load from the service, Optimizely said early today. Visitors to sites run by at least 178 organizations, including CNN, the BBC and Zoom, received the code yesterday, according to Report URI, a firm that monitors the scripts websites run. The code was built to…",
+          "text": "An attacker exploited a flaw in Optimizely Web Experimentation to plant malicious code in some of the scripts that customers' websites load from the service, Optimizely said early today. Visitors to sites run by at least 178 organizations, including CNN, the BBC and Zoom, received the code yesterday, according to Report URI, a firm that monitors the scripts websites run. The code was built to…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "An attacker exploited a flaw in Optimizely Web Experimentation to plant malicious code in some of the scripts that customers' websites load from the service, Optimizely said early today. Visitors to sites run by at least 178 organizations, including CNN, the BBC and Zoom, received the code yesterday, according to Report URI, a firm that monitors the scripts websites run. The code was built to…",
+          "text": "An attacker exploited a flaw in Optimizely Web Experimentation to plant malicious code in some of the scripts that customers' websites load from the service, Optimizely said early today. Visitors to sites run by at least 178 organizations, including CNN, the BBC and Zoom, received the code yesterday, according to Report URI, a firm that monitors the scripts websites run. The code was built to…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "ConnectWise Warns ScreenConnect Attacks Continue as SCKit Targets Unpatched Systems",
+      "url": "https://thehackernews.com/2026/11/connectwise-warns-screenconnect-attacks.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-17/#reporting-dd31e5151870",
+      "cves": [],
+      "snippet": "ConnectWise Warns ScreenConnect Attacks Continue as SCKit Targets Unpatched Systems ConnectWise on Monday said it completed its investigation into unauthorized access targeting partner ScreenConnect environments, and recommended customers to ensure that the technician client is running version 26.6.5 or later. The company said additional activity targeting on-premises environments continues to be reported where the identified third-party extensions remain enabled, and… ConnectWise on Monday said it completed its investigation into unauthorized access targeting partner ScreenConnect environments, and recommended customers to ensure that the technician client is running version 26.6.5 or later",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "ConnectWise on Monday said it completed its investigation into unauthorized access targeting partner ScreenConnect environments, and recommended customers to ensure that the technician client is running version 26.6.5 or later. The company said additional activity targeting on-premises environments continues to be reported where the identified third-party extensions remain enabled, and…",
+          "text": "ConnectWise on Monday said it completed its investigation into unauthorized access targeting partner ScreenConnect environments, and recommended customers to ensure that the technician client is running version 26.6.5 or later. The company said additional activity targeting on-premises environments continues to be reported where the identified third-party extensions remain enabled, and…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "ConnectWise on Monday said it completed its investigation into unauthorized access targeting partner ScreenConnect environments, and recommended customers to ensure that the technician client is running version 26.6.5 or later. The company said additional activity targeting on-premises environments continues to be reported where the identified third-party extensions remain enabled, and…",
+          "text": "ConnectWise on Monday said it completed its investigation into unauthorized access targeting partner ScreenConnect environments, and recommended customers to ensure that the technician client is running version 26.6.5 or later. The company said additional activity targeting on-premises environments continues to be reported where the identified third-party extensions remain enabled, and…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "N-able Patches 17 N-central Flaws as Attackers Exploit Earlier Bugs to Deploy Crypto Miners",
+      "url": "https://thehackernews.com/2026/11/n-able-patches-17-n-central-flaws-as.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-17/#reporting-7d8a94de5f64",
+      "cves": [],
+      "snippet": "N-able Patches 17 N-central Flaws as Attackers Exploit Earlier Bugs to Deploy Crypto Miners N-able has released a new security update to address additional critical security flaws impacting N-central. Describing N-central 2026.4 Hotfix 3 as a critical security update, the company said it includes a number of security patches and fixes that enhance the security of the Remote Monitoring and Management (RMM) and Unified Endpoint Management (UEM) platform. \"HF3 builds on the… N-able has released a new security update to address additional critical security flaws impacting N-central. Describing N-central 2026.4 Hotfix 3 as a critical security update, the company said it includes a number of secur",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "N-able has released a new security update to address additional critical security flaws impacting N-central. Describing N-central 2026.4 Hotfix 3 as a critical security update, the company said it includes a number of security patches and fixes that enhance the security of the Remote Monitoring and Management (RMM) and Unified Endpoint Management (UEM) platform. \"HF3 builds on the…",
+          "text": "N-able has released a new security update to address additional critical security flaws impacting N-central. Describing N-central 2026.4 Hotfix 3 as a critical security update, the company said it includes a number of security patches and fixes that enhance the security of the Remote Monitoring and Management (RMM) and Unified Endpoint Management (UEM) platform. \"HF3 builds on the…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "N-able has released a new security update to address additional critical security flaws impacting N-central. Describing N-central 2026.4 Hotfix 3 as a critical security update, the company said it includes a number of security patches and fixes that enhance the security of the Remote Monitoring and Management (RMM) and Unified Endpoint Management (UEM) platform. \"HF3 builds on the…",
+          "text": "N-able has released a new security update to address additional critical security flaws impacting N-central. Describing N-central 2026.4 Hotfix 3 as a critical security update, the company said it includes a number of security patches and fixes that enhance the security of the Remote Monitoring and Management (RMM) and Unified Endpoint Management (UEM) platform. \"HF3 builds on the…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Optimizely hack infected CNN, Fox News, BBC, Salesforce sites with malware",
+      "url": "https://www.bleepingcomputer.com/news/security/optimizely-supply-chain-attack-delivers-malware-to-cnn-fox-news-bbc-salesforce-sites/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-17/#reporting-b6e25351df53",
+      "cves": [],
+      "snippet": "Optimizely hack infected CNN, Fox News, BBC, Salesforce sites with malware A suspected supply chain attack targeting Optimizely has led to malicious JavaScript being loaded on numerous popular websites, including Zoom, CNN, Fox News, BBC, Salesforce, and GitLab, exposing visitors to scripts designed to steal cryptocurrency and payment information and exploit vulnerabilities in iOS devices… A suspected supply chain attack targeting Optimizely has led to malicious JavaScript being loaded on numerous popular websites, including Zoom, CNN, Fox News, BBC, Salesforce, and GitLab, exposing visitors to scripts designed to steal cryptocurrency and payment information and exploit vulnerabilities in iO",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "A suspected supply chain attack targeting Optimizely has led to malicious JavaScript being loaded on numerous popular websites, including Zoom, CNN, Fox News, BBC, Salesforce, and GitLab, exposing visitors to scripts designed to steal cryptocurrency and payment information and exploit vulnerabilities in iOS devices…",
+          "text": "A suspected supply chain attack targeting Optimizely has led to malicious JavaScript being loaded on numerous popular websites, including Zoom, CNN, Fox News, BBC, Salesforce, and GitLab, exposing visitors to scripts designed to steal cryptocurrency and payment information and exploit vulnerabilities in iOS devices…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "A suspected supply chain attack targeting Optimizely has led to malicious JavaScript being loaded on numerous popular websites, including Zoom, CNN, Fox News, BBC, Salesforce, and GitLab, exposing visitors to scripts designed to steal cryptocurrency and payment information and exploit vulnerabilities in iOS devices…",
+          "text": "A suspected supply chain attack targeting Optimizely has led to malicious JavaScript being loaded on numerous popular websites, including Zoom, CNN, Fox News, BBC, Salesforce, and GitLab, exposing visitors to scripts designed to steal cryptocurrency and payment information and exploit vulnerabilities in iOS devices…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Gemini AI agents repeatedly bypassed safeguards to attack real website",
+      "url": "https://www.bleepingcomputer.com/news/security/gemini-ai-agents-repeatedly-bypassed-safeguards-to-attack-real-website/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-17/#reporting-94c4d7b387b5",
+      "cves": [],
+      "snippet": "Gemini AI agents repeatedly bypassed safeguards to attack real website Google's Gemini AI agents repeatedly attempted to hack a real organization's website during AI model safety testing, finding ways to circumvent increasingly restrictive security controls designed to prevent them from accessing live systems… Google's Gemini AI agents repeatedly attempted to hack a real organization's website during AI model safety testing, finding ways to circumvent increasingly restrictive security controls designed to prevent them from accessing live systems…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Google's Gemini AI agents repeatedly attempted to hack a real organization's website during AI model safety testing, finding ways to circumvent increasingly restrictive security controls designed to prevent them from accessing live systems…",
+          "text": "Google's Gemini AI agents repeatedly attempted to hack a real organization's website during AI model safety testing, finding ways to circumvent increasingly restrictive security controls designed to prevent them from accessing live systems…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Google's Gemini AI agents repeatedly attempted to hack a real organization's website during AI model safety testing, finding ways to circumvent increasingly restrictive security controls designed to prevent them from accessing live systems…",
+          "text": "Google's Gemini AI agents repeatedly attempted to hack a real organization's website during AI model safety testing, finding ways to circumvent increasingly restrictive security controls designed to prevent them from accessing live systems…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Google Project Zero Slashes Bug Disclosure Deadlines, Splitting Experts",
+      "url": "https://www.darkreading.com/vulnerabilities-threats/google-project-zero-bug-disclosure-deadlines",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-17/#reporting-e0d39d73574d",
+      "cves": [],
+      "snippet": "Google Project Zero Slashes Bug Disclosure Deadlines, Splitting Experts One of the oldest running bug disclosure programs announced it would shorten public disclosure timelines to vendors from 120 days to 30 over the next 14 months. One of the oldest running bug disclosure programs announced it would shorten public disclosure timelines to vendors from 120 days to 30 over the next 14 months.",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "One of the oldest running bug disclosure programs announced it would shorten public disclosure timelines to vendors from 120 days to 30 over the next 14 months.",
+          "text": "One of the oldest running bug disclosure programs announced it would shorten public disclosure timelines to vendors from 120 days to 30 over the next 14 months."
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "One of the oldest running bug disclosure programs announced it would shorten public disclosure timelines to vendors from 120 days to 30 over the next 14 months.",
+          "text": "One of the oldest running bug disclosure programs announced it would shorten public disclosure timelines to vendors from 120 days to 30 over the next 14 months."
+        }
+      ],
+      "effective_date_evidence": null
+    }
+  ]
+}
