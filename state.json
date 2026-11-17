@@ -3017,6 +3017,16 @@
       "handle": "report_20261117_181833_356",
       "run_id": "44146367073",
       "stage": "invoked"
+    },
+    {
+      "admission_key": "digest:ad7cd129f217cdab2de22f691b9170584d028cb6",
+      "at": "2026-11-17T18:21:56.910Z",
+      "binding": "feed-bytes",
+      "digest_content_digest": "2fc78803c4d547e27b35d48b40a05479c2364bc79b690dbf907da83f8922fbba",
+      "outcome": "published",
+      "release_key": "0f0587fa1a3fb6bb7c400c6fdaa763be71663bd130c37afe9d2863a1aec279a0",
+      "run_id": "44146367073",
+      "stage": "completed"
     }
   ],
   "schema_version": 1,
