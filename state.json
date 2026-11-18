@@ -3382,6 +3382,13 @@
       "at": "2026-11-18T21:14:38.148Z",
       "run_id": "44399339259",
       "stage": "invoked"
+    },
+    {
+      "admission_key": "digest:507d3d35c0c87064fa64ecc303fcd50ecab2ac14",
+      "at": "2026-11-18T21:14:40.269Z",
+      "handle": "report_20261118_211439_779",
+      "run_id": "44399339259",
+      "stage": "invoked"
     }
   ],
   "schema_version": 1,
