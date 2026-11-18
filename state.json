@@ -3270,6 +3270,13 @@
       "at": "2026-11-18T13:05:13.963Z",
       "run_id": "44310094652",
       "stage": "invoked"
+    },
+    {
+      "admission_key": "run:44310094652",
+      "at": "2026-11-18T13:05:16.266Z",
+      "handle": "report_20261118_130515_643",
+      "run_id": "44310094652",
+      "stage": "invoked"
     }
   ],
   "schema_version": 1,
