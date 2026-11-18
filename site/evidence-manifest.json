@@ -5,26 +5,38 @@
     "control_implications": [
       {
         "control_id": "vulnerability_management",
-        "evidence_excerpt": "A Java flaw called Java4Shell can let attackers without an account run their own code on Jira, Jenkins, Keycloak, and three other widely used applications, says Calif, the security research firm that disclosed it this week. The flaw is present in Java 17.0.6 and later, and the vulnerable code runs only on x86-64 Intel and AMD chips that support the AVX-512 VBMI feature. Tracked as…",
+        "evidence_excerpt": "A Java flaw called Java4Shell can let attackers without an account run their own code on Jira, Jenkins, Keycloak, and three other widely used applications, says Calif, the security research firm that disclosed it this week. The flaw is present in Java 17.0.6 and later, and the vulnerable code runs only on x86-64 Intel and AMD chips that support the AVX-512 VBMI feature.",
         "evidence_origin": "summary",
         "focus": "Jira, Jenkins, Keycloak",
-        "headline": "Jira, Jenkins, Keycloak expose unauthenticated remote code execution",
+        "headline": "Jira, Jenkins, Keycloak enable pre-auth RCE via Java4Shell flaw",
         "priority": "high",
-        "significance": "A pre-authentication RCE vulnerability in widely deployed enterprise applications undermines vulnerability management coverage and requires immediate asset identification. The accountable owner should confirm affected-asset inventory, installed versions, and remediation status with exception ownership.",
+        "significance": "The vulnerability allows unauthenticated remote code execution in widely deployed enterprise applications, weakening vulnerability management controls. The vulnerability owner should confirm affected asset inventory and remediation status for Java 17.0.6 and later on x86-64 systems.",
         "source_ids": [
           1
         ]
       },
       {
         "control_id": "third_party_risk",
-        "evidence_excerpt": "The Russia-linked cyber espionage group known as Cold Relic (formerly COLDRIVER and UNC4057) has been observed weaponizing a single cloud compromise into a launchpad for a series of linked intrusions resulting in third-party compromise. Google's Mandiant and Threat Intelligence Group (GTIG) said it investigated a 2026 compromise at a U.S.-based organization in which the adversary leveraged…",
+        "evidence_excerpt": "Threat actors have compromised Microsoft's agent-framework package to push a credential stealer, according to reports from Aikido, Chainguard, Endor Labs, OX Security, SafeDep, Socket, StepSecurity, and Google-owned Wiz. The malicious versions, 1.26.1 and 1.26.2, were published 33 minutes apart on November 17, 2026, and are designed to run a credential stealer on every Python start.",
+        "evidence_origin": "summary",
+        "focus": "Microsoft's agent-framework package",
+        "headline": "Microsoft's agent-framework package delivers credential stealer via PyPI compromise",
+        "priority": "high",
+        "significance": "A legitimate Microsoft package was compromised to distribute a credential stealer, exposing third-party risk in software supply chains. The supplier risk owner should review dependencies on Microsoft's agent-framework and obtain assurance evidence for remediation.",
+        "source_ids": [
+          3
+        ]
+      },
+      {
+        "control_id": "data_protection",
+        "evidence_excerpt": "The Russia-linked cyber espionage group known as Cold Relic (formerly COLDRIVER and UNC4057) has been observed weaponizing a single cloud compromise into a launchpad for a series of linked intrusions resulting in third-party compromise. Google's Mandiant and Threat Intelligence Group (GTIG) said it investigated a 2026 compromise at a U.S.-based organization in which the adversary leveraged",
         "evidence_origin": "summary",
         "focus": "Cold Relic",
-        "headline": "Cold Relic weaponizes single cloud compromise for linked intrusions",
-        "priority": "high",
-        "significance": "A single cloud compromise escalating into a chain of third-party intrusions demonstrates how supplier access can amplify blast radius. The supplier risk owner should review relevant supplier dependencies, assurance evidence, and escalation contacts for cloud identity providers.",
+        "headline": "Cold Relic weaponizes cloud compromise for third-party intrusions",
+        "priority": "medium",
+        "significance": "A Russia-linked espionage group used a single cloud compromise to launch further intrusions, weakening data protection controls for cloud environments. The data protection owner should review cloud compromise containment procedures and access restrictions for sensitive data.",
         "source_ids": [
-          2
+          4
         ]
       },
       {
@@ -32,47 +44,35 @@
         "evidence_excerpt": "At least 178 top web destinations unwittingly served a variety of malware exploits against visitors over the past 24 hours thanks to a security vulnerability involving Optimizely, a company that helps websites customize user experiences and test out new features. Experts say the incident, which saw data-stealing malicious software silently injected into sites like the BBC, CNN, Equifax, Ledger and Zoom, was exacerbated by the reality that few popular websites enforce strict rules on the sources of third-party content.",
         "evidence_origin": "summary",
         "focus": "Optimizely",
-        "headline": "Optimizely injects malware into 178 top websites",
+        "headline": "Optimizely injects malware into 178 top websites via third-party vulnerability",
         "priority": "high",
-        "significance": "A third-party experience platform compromise silently distributed malware to major brand websites, exposing gaps in content source governance. The supplier risk owner should verify third-party content source controls, supplier assurance evidence, and contractual remediation obligations.",
+        "significance": "A third-party platform vulnerability enabled mass malware delivery to visitors of major websites, extending third-party risk exposure. The supplier risk owner should review Optimizely's control responsibilities and the assurance evidence for remediation.",
         "source_ids": [
-          3
+          5
+        ]
+      },
+      {
+        "control_id": "data_protection",
+        "evidence_excerpt": "Credentials and access secrets exposed in public Docker Hub images are being extracted and exploited by attackers within as little as eight seconds of publication",
+        "evidence_origin": "summary",
+        "focus": "Credentials and access secrets",
+        "headline": "Credentials and access secrets are extracted and exploited within seconds",
+        "priority": "high",
+        "significance": "Cloud credentials in public container images are exploited almost instantly, undermining data protection for secrets management. The data protection owner should verify secret scanning coverage and credential rotation procedures for Docker Hub deployments.",
+        "source_ids": [
+          8
         ]
       },
       {
         "control_id": "access_management",
-        "evidence_excerpt": "Credentials and access secrets exposed in public Docker Hub images are being extracted and exploited by attackers within as little as eight seconds of publication…",
+        "evidence_excerpt": "The commercial kit uses attacker-supplied AI models to personalize lures, evade spam filters, and scale campaigns to tens of thousands of targets.",
         "evidence_origin": "summary",
-        "focus": "public Docker Hub images",
-        "headline": "public Docker Hub images leak credentials exploited within seconds",
-        "priority": "high",
-        "significance": "Secrets embedded in public container images are harvested almost instantly, rendering manual rotation ineffective. The identity and access owner should confirm secret scanning coverage in CI/CD pipelines, automated revocation workflows, and evidence of rotation compliance.",
-        "source_ids": [
-          6
-        ]
-      },
-      {
-        "control_id": "third_party_risk",
-        "evidence_excerpt": "A compromised key issued to AI infrastructure provider Fireworks was used by threat actors to access Cursor data and credentials.",
-        "evidence_origin": "summary",
-        "focus": "compromised key issued to Fireworks",
-        "headline": "Compromised key issued to Fireworks exposes Cursor data and credentials",
+        "focus": "The commercial kit",
+        "headline": "The commercial kit uses AI models to personalize lures and evade filters",
         "priority": "medium",
-        "significance": "A compromised API key at an AI infrastructure provider enabled unauthorized access to customer data and credentials. The supplier risk owner should assess the supplier's key management practices, access scope limitations, and evidence of remediation assurance.",
+        "significance": "An AI-driven phishing kit automates personalized lure creation and spam filter evasion, challenging access management controls for credential theft. The identity and access owner should confirm phishing detection coverage and authentication resilience against scaled campaigns.",
         "source_ids": [
-          11
-        ]
-      },
-      {
-        "control_id": "access_management",
-        "evidence_excerpt": "A Lack of ownership verification on the Hugging Face platform allowed researchers to take control of Kokoro, a text-to-speech model used in projects from Google, NVIDIA, AMD, Intel, and Amazon Web Services…",
-        "evidence_origin": "summary",
-        "focus": "Hugging Face platform",
-        "headline": "Hugging Face platform lacks ownership verification for AI models",
-        "priority": "medium",
-        "significance": "Absence of ownership verification on a model hosting platform enabled account takeover of a widely used AI model. The identity and access owner should confirm identity verification controls for model repositories and assess supply chain integrity for AI dependencies.",
-        "source_ids": [
-          12
+          9
         ]
       }
     ],
@@ -80,27 +80,27 @@
       "paragraphs": [
         {
           "source_ids": [
-            1
+            1,
+            3,
+            8
           ],
-          "text": "A critical Java vulnerability dubbed Java4Shell enables unauthenticated remote code execution in widely deployed enterprise applications including Jira, Jenkins, and Keycloak running on Java 17.0.6 or later with specific hardware capabilities, requiring immediate asset identification and remediation verification by vulnerability management owners."
+          "text": "A critical pre-authentication RCE vulnerability in Java applications including Jira, Jenkins, and Keycloak, combined with an active supply chain compromise of Microsoft's agent-framework package and rapid exploitation of credentials exposed in public Docker Hub images, weakens vulnerability management, third-party risk, and data protection controls across the enterprise. Control owners must verify affected asset inventories, supplier assurance evidence, and secret scanning coverage."
         },
         {
           "source_ids": [
-            2,
-            3,
-            6,
-            11,
-            12
+            4,
+            5,
+            9
           ],
-          "text": "Multiple third-party incidents — Optimizely serving malware to 178 major websites, Cold Relic weaponizing stolen Google Workspace data for linked intrusions, a compromised Fireworks key accessing Cursor credentials, and Hugging Face lacking ownership verification for AI models — alongside Docker Hub secrets exploited within seconds of publication, collectively indicate systemic gaps in supplier assurance, identity verification, and secret management controls."
+          "text": "A Russia-linked threat actor weaponized a cloud compromise for linked intrusions, a third-party platform vulnerability in Optimizely injected malware into 178 major websites, and an AI-driven phishing kit automates personalized credential theft, extending third-party risk and access management exposures. Owners should review cloud compromise containment, supplier control responsibilities, and phishing detection capabilities."
         }
       ]
     },
     "industry_impacts": [],
     "regulatory_changes": []
   },
-  "generated_at": "2026-11-18T06:25:57.770154Z",
-  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/ffdace038df660a9060e952c0c1826815ba9b9de/site/feed.xml",
+  "generated_at": "2026-11-18T09:19:08.533633Z",
+  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/d85f028a8743376952db4d130b4c847816e5c205/site/feed.xml",
   "feed_home_url": "https://sentrydigest.ricomanifesto.com/",
   "digest_issue_date": "2026-11-18",
   "digest_issue_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-18/",
@@ -108,13 +108,13 @@
   "resolved_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
   "sources": [
     {
-      "title": "Java4Shell (CVE-2026-114938) Enables Pre-Auth RCE in Jira, Jenkins, Keycloak on Java 17+ AVX-512 VBMI Servers",
+      "title": "Java4Shell Flaw (CVE-2026-114938) Enables Pre-Auth RCE in Jira, Jenkins, Keycloak and More",
       "url": "https://thehackernews.com/2026/11/java4shell-cve-2026-114938-enables-pre.html",
       "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-18/#reporting-5966ac56e61b",
       "cves": [
         "CVE-2026-114938"
       ],
-      "snippet": "Java4Shell (CVE-2026-114938) Enables Pre-Auth RCE in Jira, Jenkins, Keycloak on Java 17+ AVX-512 VBMI Servers A Java flaw called Java4Shell can let attackers without an account run their own code on Jira, Jenkins, Keycloak, and three other widely used applications, says Calif, the security research firm that disclosed it this week. The flaw is present in Java 17.0.6 and later, and the vulnerable code runs only on x86-64 Intel and AMD chips that support the AVX-512 VBMI feature. Tracked as… A Java flaw called Java4Shell can let attackers without an account run their own code on Jira, Jenkins, Keycloak, and three other widely used applications, says Calif, the security research firm that discl",
+      "snippet": "Java4Shell Flaw (CVE-2026-114938) Enables Pre-Auth RCE in Jira, Jenkins, Keycloak and More A Java flaw called Java4Shell can let attackers without an account run their own code on Jira, Jenkins, Keycloak, and three other widely used applications, says Calif, the security research firm that disclosed it this week. The flaw is present in Java 17.0.6 and later, and the vulnerable code runs only on x86-64 Intel and AMD chips that support the AVX-512 VBMI feature. Tracked as… A Java flaw called Java4Shell can let attackers without an account run their own code on Jira, Jenkins, Keycloak, and three other widely used applications, says Calif, the security research firm that disclosed it this week. ",
       "article_evidence": [
         {
           "extraction_version": 1,
@@ -127,6 +127,50 @@
           "origin": "content",
           "raw_text": "A Java flaw called Java4Shell can let attackers without an account run their own code on Jira, Jenkins, Keycloak, and three other widely used applications, says Calif, the security research firm that disclosed it this week. The flaw is present in Java 17.0.6 and later, and the vulnerable code runs only on x86-64 Intel and AMD chips that support the AVX-512 VBMI feature. Tracked as…",
           "text": "A Java flaw called Java4Shell can let attackers without an account run their own code on Jira, Jenkins, Keycloak, and three other widely used applications, says Calif, the security research firm that disclosed it this week. The flaw is present in Java 17.0.6 and later, and the vulnerable code runs only on x86-64 Intel and AMD chips that support the AVX-512 VBMI feature. Tracked as…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "British Scattered Spider hacker sentenced to 6 years in prison",
+      "url": "https://www.bleepingcomputer.com/news/security/british-scattered-spider-hacker-sentenced-to-6-years-in-prison/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-18/#reporting-9f8e9c27a393",
+      "cves": [],
+      "snippet": "British Scattered Spider hacker sentenced to 6 years in prison A leader of the Scattered Spider cybercrime collective has been sentenced to six years in prison in the United States for stealing millions in cryptocurrency and conspiring to hack a dozen companies… A leader of the Scattered Spider cybercrime collective has been sentenced to six years in prison in the United States for stealing millions in cryptocurrency and conspiring to hack a dozen companies…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "A leader of the Scattered Spider cybercrime collective has been sentenced to six years in prison in the United States for stealing millions in cryptocurrency and conspiring to hack a dozen companies…",
+          "text": "A leader of the Scattered Spider cybercrime collective has been sentenced to six years in prison in the United States for stealing millions in cryptocurrency and conspiring to hack a dozen companies…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "A leader of the Scattered Spider cybercrime collective has been sentenced to six years in prison in the United States for stealing millions in cryptocurrency and conspiring to hack a dozen companies…",
+          "text": "A leader of the Scattered Spider cybercrime collective has been sentenced to six years in prison in the United States for stealing millions in cryptocurrency and conspiring to hack a dozen companies…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Attackers Compromise Microsoft's Agent Framework PyPI Package to Steal Cloud Credentials",
+      "url": "https://thehackernews.com/2026/11/attackers-compromise-microsofts-agent.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-18/#reporting-533b590042a0",
+      "cves": [],
+      "snippet": "Attackers Compromise Microsoft's Agent Framework PyPI Package to Steal Cloud Credentials Threat actors have compromised Microsoft's agent-framework package to push a credential stealer, according to reports from Aikido, Chainguard, Endor Labs, OX Security, SafeDep, Socket, StepSecurity, and Google-owned Wiz. The malicious versions, 1.26.1 and 1.26.2, were published 33 minutes apart on November 17, 2026, and are designed to run a credential stealer on every Python start. As of… Threat actors have compromised Microsoft's agent-framework package to push a credential stealer, according to reports from Aikido, Chainguard, Endor Labs, OX Security, SafeDep, Socket, StepSecurity, and Google-owned Wi",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Threat actors have compromised Microsoft's agent-framework package to push a credential stealer, according to reports from Aikido, Chainguard, Endor Labs, OX Security, SafeDep, Socket, StepSecurity, and Google-owned Wiz. The malicious versions, 1.26.1 and 1.26.2, were published 33 minutes apart on November 17, 2026, and are designed to run a credential stealer on every Python start. As of…",
+          "text": "Threat actors have compromised Microsoft's agent-framework package to push a credential stealer, according to reports from Aikido, Chainguard, Endor Labs, OX Security, SafeDep, Socket, StepSecurity, and Google-owned Wiz. The malicious versions, 1.26.1 and 1.26.2, were published 33 minutes apart on November 17, 2026, and are designed to run a credential stealer on every Python start. As of…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Threat actors have compromised Microsoft's agent-framework package to push a credential stealer, according to reports from Aikido, Chainguard, Endor Labs, OX Security, SafeDep, Socket, StepSecurity, and Google-owned Wiz. The malicious versions, 1.26.1 and 1.26.2, were published 33 minutes apart on November 17, 2026, and are designed to run a credential stealer on every Python start. As of…",
+          "text": "Threat actors have compromised Microsoft's agent-framework package to push a credential stealer, according to reports from Aikido, Chainguard, Endor Labs, OX Security, SafeDep, Socket, StepSecurity, and Google-owned Wiz. The malicious versions, 1.26.1 and 1.26.2, were published 33 minutes apart on November 17, 2026, and are designed to run a credential stealer on every Python start. As of…"
         }
       ],
       "effective_date_evidence": null
@@ -325,50 +369,6 @@
           "origin": "content",
           "raw_text": "Apple is reporting service disruptions affecting several of its services, including iCloud Mail, iCloud Account & Sign In, Apple School Manager, and Schoolwork…",
           "text": "Apple is reporting service disruptions affecting several of its services, including iCloud Mail, iCloud Account & Sign In, Apple School Manager, and Schoolwork…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "Cursor Traces Malicious Claude Code Extension to Third-Party Breach",
-      "url": "https://www.darkreading.com/application-security/cursor-malicious-claude-code-extension-third-party-breach",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-18/#reporting-a27a6af66fc8",
-      "cves": [],
-      "snippet": "Cursor Traces Malicious Claude Code Extension to Third-Party Breach A compromised key issued to AI infrastructure provider Fireworks was used by threat actors to access Cursor data and credentials. A compromised key issued to AI infrastructure provider Fireworks was used by threat actors to access Cursor data and credentials.",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "A compromised key issued to AI infrastructure provider Fireworks was used by threat actors to access Cursor data and credentials.",
-          "text": "A compromised key issued to AI infrastructure provider Fireworks was used by threat actors to access Cursor data and credentials."
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "A compromised key issued to AI infrastructure provider Fireworks was used by threat actors to access Cursor data and credentials.",
-          "text": "A compromised key issued to AI infrastructure provider Fireworks was used by threat actors to access Cursor data and credentials."
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "Researchers hijack Hugging Face account for popular Kokoro AI model",
-      "url": "https://www.bleepingcomputer.com/news/security/researchers-hijack-hugging-face-account-for-popular-kokoro-ai-model/",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-18/#reporting-a5a96cf48fc1",
-      "cves": [],
-      "snippet": "Researchers hijack Hugging Face account for popular Kokoro AI model A Lack of ownership verification on the Hugging Face platform allowed researchers to take control of Kokoro, a text-to-speech model used in projects from Google, NVIDIA, AMD, Intel, and Amazon Web Services… A Lack of ownership verification on the Hugging Face platform allowed researchers to take control of Kokoro, a text-to-speech model used in projects from Google, NVIDIA, AMD, Intel, and Amazon Web Services…",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "A Lack of ownership verification on the Hugging Face platform allowed researchers to take control of Kokoro, a text-to-speech model used in projects from Google, NVIDIA, AMD, Intel, and Amazon Web Services…",
-          "text": "A Lack of ownership verification on the Hugging Face platform allowed researchers to take control of Kokoro, a text-to-speech model used in projects from Google, NVIDIA, AMD, Intel, and Amazon Web Services…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "A Lack of ownership verification on the Hugging Face platform allowed researchers to take control of Kokoro, a text-to-speech model used in projects from Google, NVIDIA, AMD, Intel, and Amazon Web Services…",
-          "text": "A Lack of ownership verification on the Hugging Face platform allowed researchers to take control of Kokoro, a text-to-speech model used in projects from Google, NVIDIA, AMD, Intel, and Amazon Web Services…"
         }
       ],
       "effective_date_evidence": null
