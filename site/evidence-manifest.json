@@ -8,35 +8,23 @@
         "evidence_excerpt": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Tuesday added a critical security flaw impacting Perforce Puppet, an enterprise infrastructure-as-code (IaC) and configuration management platform, to its Known Exploited Vulnerabilities (KEV) catalog, citing reports of active exploitation.",
         "evidence_origin": "summary",
         "focus": "Perforce Puppet",
-        "headline": "Perforce Puppet added to CISA KEV catalog with active exploitation",
+        "headline": "Perforce Puppet added to CISA KEV catalog",
         "priority": "high",
-        "significance": "Active exploitation of a critical infrastructure-as-code platform flaw means vulnerability management owners must confirm affected assets are identified and remediated. The accountable owner should verify deployment scope and patch status for Perforce Puppet servers.",
+        "significance": "Active exploitation of a critical infrastructure-as-code platform demands immediate vulnerability management. The accountable owner should confirm affected asset inventory and remediation status.",
         "source_ids": [
           2
-        ]
-      },
-      {
-        "control_id": "vulnerability_management",
-        "evidence_excerpt": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) has urged organizations to immediately patch a newly disclosed critical security flaw impacting Oracle Java. The flaw, tracked as CVE-2026-114938 (CVSS score: 8.1), refers to a case of out-of-bounds write that can lead to denial-of-service (DoS) or remote code execution under certain conditions.",
-        "evidence_origin": "summary",
-        "focus": "Oracle Java",
-        "headline": "Oracle Java critical flaw requires immediate patching per CISA",
-        "priority": "high",
-        "significance": "CISA's urgent patching directive for a widely deployed runtime indicates broad exposure risk. Vulnerability management owners must confirm Java 17.0.6+ instances on x86-64 AVX-512 VBMI hardware are inventoried and patched.",
-        "source_ids": [
-          12
         ]
       },
       {
         "control_id": "access_management",
         "evidence_excerpt": "On AMD-based PCs and some Intel PCs, the TPM lockout for Windows Hello and BitLocker PINs can be reset by someone who opens the PC's case, researchers at Technische Universität Berlin say. That leaves short PINs open to guessing. In lab tests, the researchers found a four-digit Hello PIN on an AMD laptop and a 6-digit BitLocker PIN on an Intel laptop this way.",
         "evidence_origin": "summary",
-        "focus": "TPM lockout for Windows Hello and BitLocker PINs",
-        "headline": "TPM lockout for Windows Hello and BitLocker PINs bypassed via hardware access",
+        "focus": "TPM lockout",
+        "headline": "TPM lockout bypassed via physical access",
         "priority": "medium",
-        "significance": "Physical access to devices can reset TPM lockout protections, exposing PIN-based authentication. Access management owners should review device encryption policies and PIN complexity requirements for AMD and Intel platforms.",
+        "significance": "Physical access can defeat TPM-protected authentication. The identity and access owner should confirm authentication coverage and session revocation evidence.",
         "source_ids": [
-          6
+          8
         ]
       }
     ],
@@ -44,19 +32,23 @@
       "paragraphs": [
         {
           "source_ids": [
-            2,
-            12,
-            6
+            2
           ],
-          "text": "CISA has added a critical Perforce Puppet flaw to its Known Exploited Vulnerabilities catalog and urged immediate patching of a Java4Shell remote code execution vulnerability in Oracle Java, signaling active exploitation of widely used infrastructure and runtime components. Simultaneously, attackers are bypassing identity verification through deepfakes and helpdesk impersonation, while research demonstrates TPM lockout protections for Windows Hello and BitLocker PINs can be defeated with physical device access. Apache Roller servers are also under active exploitation for code execution. Control owners for vulnerability management, access management, and asset inventory must prioritize confirmation of affected deployments, patch status, and verification control effectiveness."
+          "text": "Critical vulnerabilities in widely used infrastructure software are being actively exploited, with CISA adding a Perforce Puppet flaw to its Known Exploited Vulnerabilities catalog and threat actors exploiting an Apache Roller flaw for code execution. Simultaneously, a supply chain compromise of Microsoft's Agent Framework Python package on PyPI has exposed developer credentials. These developments require vulnerability and asset owners to confirm affected asset inventories and remediation status, and supplier risk owners to review dependencies and assurance evidence for compromised components."
+        },
+        {
+          "source_ids": [
+            8
+          ],
+          "text": "Identity verification controls are under pressure from deepfake-enabled helpdesk impersonation and fake IT support requests that bypass authentication, while a physical attack can reset TPM lockouts to guess Windows Hello and BitLocker PINs. Additionally, the EggStreme malware toolkit has been rebuilt to evade detection against government targets. Access management and monitoring owners should verify authentication coverage, session revocation evidence, telemetry coverage, and detection test results to address these evolving threats."
         }
       ]
     },
     "industry_impacts": [],
     "regulatory_changes": []
   },
-  "generated_at": "2026-11-18T15:19:57.018165Z",
-  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/dd0da78faf9172d8a7bc1e09e06bedffd4a6214d/site/feed.xml",
+  "generated_at": "2026-11-18T18:20:00.92447Z",
+  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/8eea43039fd35b004a86c281e900fdcbff8be1c6/site/feed.xml",
   "feed_home_url": "https://sentrydigest.ricomanifesto.com/",
   "digest_issue_date": "2026-11-18",
   "digest_issue_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-18/",
@@ -107,6 +99,50 @@
           "origin": "content",
           "raw_text": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Tuesday added a critical security flaw impacting Perforce Puppet, an enterprise infrastructure-as-code (IaC) and configuration management platform, to its Known Exploited Vulnerabilities (KEV) catalog, citing reports of active exploitation. The vulnerability, tracked as CVE-2026-115731 (CVSS score: 9.4), is a case of…",
           "text": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Tuesday added a critical security flaw impacting Perforce Puppet, an enterprise infrastructure-as-code (IaC) and configuration management platform, to its Known Exploited Vulnerabilities (KEV) catalog, citing reports of active exploitation. The vulnerability, tracked as CVE-2026-115731 (CVSS score: 9.4), is a case of…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Microsoft’s Agent Framework PyPI package compromised to steal credentials",
+      "url": "https://www.bleepingcomputer.com/news/security/microsofts-agent-framework-pypi-package-compromised-to-steal-credentials/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-18/#reporting-97ef079b76ea",
+      "cves": [],
+      "snippet": "Microsoft’s Agent Framework PyPI package compromised to steal credentials Hackers compromised Microsoft's official Agent Framework Python package on PyPI, publishing two malicious versions designed to steal cloud credentials and other sensitive information from developers' systems… Hackers compromised Microsoft's official Agent Framework Python package on PyPI, publishing two malicious versions designed to steal cloud credentials and other sensitive information from developers' systems…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Hackers compromised Microsoft's official Agent Framework Python package on PyPI, publishing two malicious versions designed to steal cloud credentials and other sensitive information from developers' systems…",
+          "text": "Hackers compromised Microsoft's official Agent Framework Python package on PyPI, publishing two malicious versions designed to steal cloud credentials and other sensitive information from developers' systems…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Hackers compromised Microsoft's official Agent Framework Python package on PyPI, publishing two malicious versions designed to steal cloud credentials and other sensitive information from developers' systems…",
+          "text": "Hackers compromised Microsoft's official Agent Framework Python package on PyPI, publishing two malicious versions designed to steal cloud credentials and other sensitive information from developers' systems…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Java4Shell Flaw Threatens Global Enterprises, Java Application Ecosystem",
+      "url": "https://www.darkreading.com/vulnerabilities-threats/java4shell-flaw-threatens-global-java-application-ecosystem",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-18/#reporting-b614b4646977",
+      "cves": [],
+      "snippet": "Java4Shell Flaw Threatens Global Enterprises, Java Application Ecosystem Discovered using AI, the memory corruption vulnerability affects the OpenJDK runtime and could allow unauthenticated attackers to take over systems. Discovered using AI, the memory corruption vulnerability affects the OpenJDK runtime and could allow unauthenticated attackers to take over systems.",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Discovered using AI, the memory corruption vulnerability affects the OpenJDK runtime and could allow unauthenticated attackers to take over systems.",
+          "text": "Discovered using AI, the memory corruption vulnerability affects the OpenJDK runtime and could allow unauthenticated attackers to take over systems."
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Discovered using AI, the memory corruption vulnerability affects the OpenJDK runtime and could allow unauthenticated attackers to take over systems.",
+          "text": "Discovered using AI, the memory corruption vulnerability affects the OpenJDK runtime and could allow unauthenticated attackers to take over systems."
         }
       ],
       "effective_date_evidence": null
@@ -283,52 +319,6 @@
           "origin": "content",
           "raw_text": "Apache has released security updates to address a critical Roller flaw that threat actors are exploiting to gain code execution on vulnerable servers…",
           "text": "Apache has released security updates to address a critical Roller flaw that threat actors are exploiting to gain code execution on vulnerable servers…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "Microsoft announces Windows Server 2028 with hardened security",
-      "url": "https://www.bleepingcomputer.com/news/microsoft/microsoft-announces-windows-server-2028-with-hardened-security/",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-18/#reporting-3cc7c5217114",
-      "cves": [],
-      "snippet": "Microsoft announces Windows Server 2028 with hardened security Microsoft has announced Windows Server 2028, the next major release of its server operating system, at the Ignite 2026 conference on Tuesday… Microsoft has announced Windows Server 2028, the next major release of its server operating system, at the Ignite 2026 conference on Tuesday…",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "Microsoft has announced Windows Server 2028, the next major release of its server operating system, at the Ignite 2026 conference on Tuesday…",
-          "text": "Microsoft has announced Windows Server 2028, the next major release of its server operating system, at the Ignite 2026 conference on Tuesday…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "Microsoft has announced Windows Server 2028, the next major release of its server operating system, at the Ignite 2026 conference on Tuesday…",
-          "text": "Microsoft has announced Windows Server 2028, the next major release of its server operating system, at the Ignite 2026 conference on Tuesday…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "CISA Urges Immediate Patching of Java4Shell Flaw That Could Allow Remote Code Execution",
-      "url": "https://thehackernews.com/2026/11/cisa-urges-immediate-patching-of.html",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-18/#reporting-e73903040477",
-      "cves": [
-        "CVE-2026-114938"
-      ],
-      "snippet": "CISA Urges Immediate Patching of Java4Shell Flaw That Could Allow Remote Code Execution The U.S. Cybersecurity and Infrastructure Security Agency (CISA) has urged organizations to immediately patch a newly disclosed critical security flaw impacting Oracle Java. The flaw, tracked as CVE-2026-114938 (CVSS score: 8.1), refers to a case of out-of-bounds write that can lead to denial-of-service (DoS) or remote code execution under certain conditions. \"This critical memory-corruption… The U.S. Cybersecurity and Infrastructure Security Agency (CISA) has urged organizations to immediately patch a newly disclosed critical security flaw impacting Oracle Java. The flaw, tracked as CVE-2026-114938 (CVSS",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) has urged organizations to immediately patch a newly disclosed critical security flaw impacting Oracle Java. The flaw, tracked as CVE-2026-114938 (CVSS score: 8.1), refers to a case of out-of-bounds write that can lead to denial-of-service (DoS) or remote code execution under certain conditions. \"This critical memory-corruption…",
-          "text": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) has urged organizations to immediately patch a newly disclosed critical security flaw impacting Oracle Java. The flaw, tracked as CVE-2026-114938 (CVSS score: 8.1), refers to a case of out-of-bounds write that can lead to denial-of-service (DoS) or remote code execution under certain conditions. \"This critical memory-corruption…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) has urged organizations to immediately patch a newly disclosed critical security flaw impacting Oracle Java. The flaw, tracked as CVE-2026-114938 (CVSS score: 8.1), refers to a case of out-of-bounds write that can lead to denial-of-service (DoS) or remote code execution under certain conditions. \"This critical memory-corruption…",
-          "text": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) has urged organizations to immediately patch a newly disclosed critical security flaw impacting Oracle Java. The flaw, tracked as CVE-2026-114938 (CVSS score: 8.1), refers to a case of out-of-bounds write that can lead to denial-of-service (DoS) or remote code execution under certain conditions. \"This critical memory-corruption…"
         }
       ],
       "effective_date_evidence": null
