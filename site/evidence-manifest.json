@@ -8,47 +8,11 @@
         "evidence_excerpt": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Tuesday added a critical security flaw impacting Perforce Puppet, an enterprise infrastructure-as-code (IaC) and configuration management platform, to its Known Exploited Vulnerabilities (KEV) catalog, citing reports of active exploitation.",
         "evidence_origin": "summary",
         "focus": "Perforce Puppet",
-        "headline": "Perforce Puppet added to CISA Known Exploited Vulnerabilities catalog",
+        "headline": "Perforce Puppet added to CISA KEV catalog with active exploitation",
         "priority": "high",
-        "significance": "Active exploitation of a critical infrastructure-as-code platform weakens vulnerability management assurance by confirming the flaw is being weaponized. Vulnerability and asset owners should confirm whether deployed Puppet instances meet the exposure conditions and verify remediation status.",
+        "significance": "Active exploitation of a critical infrastructure-as-code platform flaw means vulnerability management owners must confirm affected assets are identified and remediated. The accountable owner should verify deployment scope and patch status for Perforce Puppet servers.",
         "source_ids": [
-          1
-        ]
-      },
-      {
-        "control_id": "third_party_risk",
-        "evidence_excerpt": "Threat actors have compromised Microsoft's agent-framework package to push a credential stealer, according to reports from Aikido, Chainguard, Endor Labs, OX Security, SafeDep, Socket, StepSecurity, and Google-owned Wiz. The malicious versions, 1.26.1 and 1.26.2, were published 33 minutes apart on November 17, 2026, and are designed to run a credential stealer on every Python start.",
-        "evidence_origin": "summary",
-        "focus": "Microsoft's agent-framework package",
-        "headline": "Microsoft's agent-framework package compromised to deliver credential stealer",
-        "priority": "high",
-        "significance": "A compromised Microsoft PyPI package exposes software supply chain dependencies to credential theft, weakening third-party risk controls. Supplier risk owners should review whether the agent-framework package is used in build pipelines and confirm remediation assurance from Microsoft.",
-        "source_ids": [
-          7
-        ]
-      },
-      {
-        "control_id": "access_management",
-        "evidence_excerpt": "The Russia-linked cyber espionage group known as Cold Relic (formerly COLDRIVER and UNC4057) has been observed weaponizing a single cloud compromise into a launchpad for a series of linked intrusions resulting in third-party compromise. Google's Mandiant and Threat Intelligence Group (GTIG) said it investigated a 2026 compromise at a U.S.-based organization in which the adversary leveraged…",
-        "evidence_origin": "summary",
-        "focus": "stolen Google Workspace data",
-        "headline": "Stolen Google Workspace data weaponized for linked intrusions",
-        "priority": "high",
-        "significance": "Credential theft from a cloud workspace enables lateral movement across trusted relationships, weakening access management controls for federated identities. Identity and access owners should confirm whether Google Workspace credentials are scoped to prevent cross-organization abuse and review session revocation evidence.",
-        "source_ids": [
-          8
-        ]
-      },
-      {
-        "control_id": "third_party_risk",
-        "evidence_excerpt": "At least 178 top web destinations unwittingly served a variety of malware exploits against visitors over the past 24 hours thanks to a security vulnerability involving Optimizely, a company that helps websites customize user experiences and test out new features. Experts say the incident, which saw data-stealing malicious software silently injected into sites like the BBC, CNN, Equifax, Ledger and Zoom, was exacerbated by the reality that few popular websites enforce strict rules on the sources of third-party content.",
-        "evidence_origin": "summary",
-        "focus": "Optimizely",
-        "headline": "Optimizely vulnerability enables malware delivery to 178 websites",
-        "priority": "high",
-        "significance": "A third-party experience platform compromise exposes downstream clients to mass malware distribution, weakening third-party risk controls for client-side dependencies. Supplier risk owners should review Optimizely integration scope, confirm content security policies restrict third-party sources, and verify vendor remediation.",
-        "source_ids": [
-          10
+          2
         ]
       },
       {
@@ -56,21 +20,21 @@
         "evidence_excerpt": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) has urged organizations to immediately patch a newly disclosed critical security flaw impacting Oracle Java. The flaw, tracked as CVE-2026-114938 (CVSS score: 8.1), refers to a case of out-of-bounds write that can lead to denial-of-service (DoS) or remote code execution under certain conditions.",
         "evidence_origin": "summary",
         "focus": "Oracle Java",
-        "headline": "Oracle Java flaw prompts CISA urgent patching advisory",
+        "headline": "Oracle Java critical flaw requires immediate patching per CISA",
         "priority": "high",
-        "significance": "CISA's urgent patching directive for a widely deployed runtime indicates active exploitation risk, weakening vulnerability management timelines. Vulnerability and asset owners should identify affected Java deployments, verify patch deployment, and document any compensating controls.",
+        "significance": "CISA's urgent patching directive for a widely deployed runtime indicates broad exposure risk. Vulnerability management owners must confirm Java 17.0.6+ instances on x86-64 AVX-512 VBMI hardware are inventoried and patched.",
         "source_ids": [
-          2
+          12
         ]
       },
       {
-        "control_id": "governance",
-        "evidence_excerpt": "A leader of the Scattered Spider cybercrime collective has been sentenced to six years in prison in the United States for stealing millions in cryptocurrency and conspiring to hack a dozen companies…",
+        "control_id": "access_management",
+        "evidence_excerpt": "On AMD-based PCs and some Intel PCs, the TPM lockout for Windows Hello and BitLocker PINs can be reset by someone who opens the PC's case, researchers at Technische Universität Berlin say. That leaves short PINs open to guessing. In lab tests, the researchers found a four-digit Hello PIN on an AMD laptop and a 6-digit BitLocker PIN on an Intel laptop this way.",
         "evidence_origin": "summary",
-        "focus": "Scattered Spider cybercrime collective",
-        "headline": "Scattered Spider cybercrime collective sentenced for multi-company hacking campaign",
+        "focus": "TPM lockout for Windows Hello and BitLocker PINs",
+        "headline": "TPM lockout for Windows Hello and BitLocker PINs bypassed via hardware access",
         "priority": "medium",
-        "significance": "Criminal sentencing of a threat actor leader reinforces accountability for identity-focused attacks, supporting governance assurance that law enforcement pursues intrusions. Risk and control owners should confirm whether Scattered Spider tactics are addressed in threat models and incident response playbooks.",
+        "significance": "Physical access to devices can reset TPM lockout protections, exposing PIN-based authentication. Access management owners should review device encryption policies and PIN complexity requirements for AMD and Intel platforms.",
         "source_ids": [
           6
         ]
@@ -80,33 +44,49 @@
       "paragraphs": [
         {
           "source_ids": [
-            1,
             2,
-            7,
-            10
-          ],
-          "text": "Active exploitation of critical infrastructure-as-code and Java runtime vulnerabilities, combined with software supply chain compromises affecting Microsoft and Optimizely platforms, weakens vulnerability management and third-party risk controls across enterprise environments. CISA has added a Perforce Puppet flaw to its Known Exploited Vulnerabilities catalog and urged immediate patching of a Java4Shell defect, while threat actors weaponized a Microsoft PyPI package and an experience optimization platform to steal credentials and distribute malware at scale. Vulnerability and asset owners should verify remediation status for Puppet and Java deployments, and supplier risk owners should assess exposure to the compromised agent-framework and Optimizely integrations."
-        },
-        {
-          "source_ids": [
-            8,
+            12,
             6
           ],
-          "text": "A Russia-linked espionage group leveraged stolen Google Workspace credentials to breach a second U.S. organization, demonstrating how cloud identity compromise enables lateral movement across trusted relationships, while the sentencing of a Scattered Spider leader confirms accountability for identity-focused intrusions. Identity and access owners should confirm that federated credential scopes prevent cross-organization abuse and that session revocation controls are tested, and risk owners should validate that Scattered Spider tactics are covered in threat models and response playbooks."
+          "text": "CISA has added a critical Perforce Puppet flaw to its Known Exploited Vulnerabilities catalog and urged immediate patching of a Java4Shell remote code execution vulnerability in Oracle Java, signaling active exploitation of widely used infrastructure and runtime components. Simultaneously, attackers are bypassing identity verification through deepfakes and helpdesk impersonation, while research demonstrates TPM lockout protections for Windows Hello and BitLocker PINs can be defeated with physical device access. Apache Roller servers are also under active exploitation for code execution. Control owners for vulnerability management, access management, and asset inventory must prioritize confirmation of affected deployments, patch status, and verification control effectiveness."
         }
       ]
     },
     "industry_impacts": [],
     "regulatory_changes": []
   },
-  "generated_at": "2026-11-18T13:07:26.596673Z",
-  "feed_url": "https://sentrydigest.ricomanifesto.com/feed.xml",
+  "generated_at": "2026-11-18T15:19:57.018165Z",
+  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/dd0da78faf9172d8a7bc1e09e06bedffd4a6214d/site/feed.xml",
   "feed_home_url": "https://sentrydigest.ricomanifesto.com/",
   "digest_issue_date": "2026-11-18",
   "digest_issue_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-18/",
   "requested_model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
   "resolved_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
   "sources": [
+    {
+      "title": "Java4Shell Flaw (CVE-2026-114938) Enables Pre-Auth RCE in Jira, Jenkins, Keycloak and More",
+      "url": "https://thehackernews.com/2026/11/java4shell-cve-2026-114938-enables-pre.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-18/#reporting-5966ac56e61b",
+      "cves": [
+        "CVE-2026-114938"
+      ],
+      "snippet": "Java4Shell Flaw (CVE-2026-114938) Enables Pre-Auth RCE in Jira, Jenkins, Keycloak and More A Java flaw called Java4Shell can let attackers without an account run their own code on Jira, Jenkins, Keycloak, and three other widely used applications, says Calif, the security research firm that disclosed it this week. The flaw is present in Java 17.0.6 and later, and the vulnerable code runs only on x86-64 Intel and AMD chips that support the AVX-512 VBMI feature. Tracked as… A Java flaw called Java4Shell can let attackers without an account run their own code on Jira, Jenkins, Keycloak, and three other widely used applications, says Calif, the security research firm that disclosed it this week. ",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "A Java flaw called Java4Shell can let attackers without an account run their own code on Jira, Jenkins, Keycloak, and three other widely used applications, says Calif, the security research firm that disclosed it this week. The flaw is present in Java 17.0.6 and later, and the vulnerable code runs only on x86-64 Intel and AMD chips that support the AVX-512 VBMI feature. Tracked as…",
+          "text": "A Java flaw called Java4Shell can let attackers without an account run their own code on Jira, Jenkins, Keycloak, and three other widely used applications, says Calif, the security research firm that disclosed it this week. The flaw is present in Java 17.0.6 and later, and the vulnerable code runs only on x86-64 Intel and AMD chips that support the AVX-512 VBMI feature. Tracked as…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "A Java flaw called Java4Shell can let attackers without an account run their own code on Jira, Jenkins, Keycloak, and three other widely used applications, says Calif, the security research firm that disclosed it this week. The flaw is present in Java 17.0.6 and later, and the vulnerable code runs only on x86-64 Intel and AMD chips that support the AVX-512 VBMI feature. Tracked as…",
+          "text": "A Java flaw called Java4Shell can let attackers without an account run their own code on Jira, Jenkins, Keycloak, and three other widely used applications, says Calif, the security research firm that disclosed it this week. The flaw is present in Java 17.0.6 and later, and the vulnerable code runs only on x86-64 Intel and AMD chips that support the AVX-512 VBMI feature. Tracked as…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
     {
       "title": "Hackers Exploiting Critical Puppet RCE Flaw Affecting Enterprise Management Servers",
       "url": "https://thehackernews.com/2026/11/hackers-exploiting-critical-puppet-rce.html",
@@ -132,25 +112,111 @@
       "effective_date_evidence": null
     },
     {
-      "title": "CISA Urges Immediate Patching of Java4Shell Flaw That Could Allow Remote Code Execution",
-      "url": "https://thehackernews.com/2026/11/cisa-urges-immediate-patching-of.html",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-18/#reporting-e73903040477",
-      "cves": [
-        "CVE-2026-114938"
-      ],
-      "snippet": "CISA Urges Immediate Patching of Java4Shell Flaw That Could Allow Remote Code Execution The U.S. Cybersecurity and Infrastructure Security Agency (CISA) has urged organizations to immediately patch a newly disclosed critical security flaw impacting Oracle Java. The flaw, tracked as CVE-2026-114938 (CVSS score: 8.1), refers to a case of out-of-bounds write that can lead to denial-of-service (DoS) or remote code execution under certain conditions. \"This critical memory-corruption… The U.S. Cybersecurity and Infrastructure Security Agency (CISA) has urged organizations to immediately patch a newly disclosed critical security flaw impacting Oracle Java. The flaw, tracked as CVE-2026-114938 (CVSS",
+      "title": "From Deepfakes to Helpdesk Impersonation: Why Stronger Verification Matters",
+      "url": "https://www.bleepingcomputer.com/news/security/from-deepfakes-to-helpdesk-impersonation-why-stronger-verification-matters/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-18/#reporting-993f9d718221",
+      "cves": [],
+      "snippet": "From Deepfakes to Helpdesk Impersonation: Why Stronger Verification Matters Attackers are using deepfakes, helpdesk impersonation, and fake IT support requests to deceive employees and gain unauthorized access to corporate systems. Specops Software examines real-world attacks and explains how stronger identity verification can help organizations prevent social engineering threats… Attackers are using deepfakes, helpdesk impersonation, and fake IT support requests to deceive employees and gain unauthorized access to corporate systems. Specops Software examines real-world attacks and explains how stronger identity verification can help organizations prevent social engineering threats…",
       "article_evidence": [
         {
           "extraction_version": 1,
           "origin": "summary",
-          "raw_text": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) has urged organizations to immediately patch a newly disclosed critical security flaw impacting Oracle Java. The flaw, tracked as CVE-2026-114938 (CVSS score: 8.1), refers to a case of out-of-bounds write that can lead to denial-of-service (DoS) or remote code execution under certain conditions. \"This critical memory-corruption…",
-          "text": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) has urged organizations to immediately patch a newly disclosed critical security flaw impacting Oracle Java. The flaw, tracked as CVE-2026-114938 (CVSS score: 8.1), refers to a case of out-of-bounds write that can lead to denial-of-service (DoS) or remote code execution under certain conditions. \"This critical memory-corruption…"
+          "raw_text": "Attackers are using deepfakes, helpdesk impersonation, and fake IT support requests to deceive employees and gain unauthorized access to corporate systems. Specops Software examines real-world attacks and explains how stronger identity verification can help organizations prevent social engineering threats…",
+          "text": "Attackers are using deepfakes, helpdesk impersonation, and fake IT support requests to deceive employees and gain unauthorized access to corporate systems. Specops Software examines real-world attacks and explains how stronger identity verification can help organizations prevent social engineering threats…"
         },
         {
           "extraction_version": 1,
           "origin": "content",
-          "raw_text": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) has urged organizations to immediately patch a newly disclosed critical security flaw impacting Oracle Java. The flaw, tracked as CVE-2026-114938 (CVSS score: 8.1), refers to a case of out-of-bounds write that can lead to denial-of-service (DoS) or remote code execution under certain conditions. \"This critical memory-corruption…",
-          "text": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) has urged organizations to immediately patch a newly disclosed critical security flaw impacting Oracle Java. The flaw, tracked as CVE-2026-114938 (CVSS score: 8.1), refers to a case of out-of-bounds write that can lead to denial-of-service (DoS) or remote code execution under certain conditions. \"This critical memory-corruption…"
+          "raw_text": "Attackers are using deepfakes, helpdesk impersonation, and fake IT support requests to deceive employees and gain unauthorized access to corporate systems. Specops Software examines real-world attacks and explains how stronger identity verification can help organizations prevent social engineering threats…",
+          "text": "Attackers are using deepfakes, helpdesk impersonation, and fake IT support requests to deceive employees and gain unauthorized access to corporate systems. Specops Software examines real-world attacks and explains how stronger identity verification can help organizations prevent social engineering threats…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "New EggStreme Malware Variant Goes Silent to Evade Security Tools in Government Attacks",
+      "url": "https://thehackernews.com/2026/11/eggstreme-hackers-rebuild-malware-with.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-18/#reporting-16d1e418da7e",
+      "cves": [],
+      "snippet": "New EggStreme Malware Variant Goes Silent to Evade Security Tools in Government Attacks The suspected Chinese advanced persistent threat (APT) group behind the sophisticated EggStreme malware has rebuilt its toolkit as it continues to target government organizations in the Philippines. \"When attackers are exposed, the cheap response is to rotate,\" Bitdefender said in a technical report shared with The Hacker News. \"A file hash changes with every recompile, a domain costs a few… The suspected Chinese advanced persistent threat (APT) group behind the sophisticated EggStreme malware has rebuilt its toolkit as it continues to target government organizations in the Philippines. \"When attackers ar",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "The suspected Chinese advanced persistent threat (APT) group behind the sophisticated EggStreme malware has rebuilt its toolkit as it continues to target government organizations in the Philippines. \"When attackers are exposed, the cheap response is to rotate,\" Bitdefender said in a technical report shared with The Hacker News. \"A file hash changes with every recompile, a domain costs a few…",
+          "text": "The suspected Chinese advanced persistent threat (APT) group behind the sophisticated EggStreme malware has rebuilt its toolkit as it continues to target government organizations in the Philippines. \"When attackers are exposed, the cheap response is to rotate,\" Bitdefender said in a technical report shared with The Hacker News. \"A file hash changes with every recompile, a domain costs a few…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "The suspected Chinese advanced persistent threat (APT) group behind the sophisticated EggStreme malware has rebuilt its toolkit as it continues to target government organizations in the Philippines. \"When attackers are exposed, the cheap response is to rotate,\" Bitdefender said in a technical report shared with The Hacker News. \"A file hash changes with every recompile, a domain costs a few…",
+          "text": "The suspected Chinese advanced persistent threat (APT) group behind the sophisticated EggStreme malware has rebuilt its toolkit as it continues to target government organizations in the Philippines. \"When attackers are exposed, the cheap response is to rotate,\" Bitdefender said in a technical report shared with The Hacker News. \"A file hash changes with every recompile, a domain costs a few…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Major Brazilian Signature Apps Enable RCE & Fraud",
+      "url": "https://www.darkreading.com/vulnerabilities-threats/major-brazilian-signature-app-rce-fraud",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-18/#reporting-4a99733142bf",
+      "cves": [],
+      "snippet": "Major Brazilian Signature Apps Enable RCE & Fraud Government-sanctioned authentication middleware is used for exceptionally important legal documents, yet it's often rife with RCE bugs. Government-sanctioned authentication middleware is used for exceptionally important legal documents, yet it's often rife with RCE bugs.",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Government-sanctioned authentication middleware is used for exceptionally important legal documents, yet it's often rife with RCE bugs.",
+          "text": "Government-sanctioned authentication middleware is used for exceptionally important legal documents, yet it's often rife with RCE bugs."
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Government-sanctioned authentication middleware is used for exceptionally important legal documents, yet it's often rife with RCE bugs.",
+          "text": "Government-sanctioned authentication middleware is used for exceptionally important legal documents, yet it's often rife with RCE bugs."
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "New Attack Bypasses TPM Lockout to Crack Windows Hello and BitLocker PINs in Days, Not Years",
+      "url": "https://thehackernews.com/2026/11/flash-chip-attack-bypasses-tpm-lockout.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-18/#reporting-90f84e48047f",
+      "cves": [],
+      "snippet": "New Attack Bypasses TPM Lockout to Crack Windows Hello and BitLocker PINs in Days, Not Years On AMD-based PCs and some Intel PCs, the TPM lockout for Windows Hello and BitLocker PINs can be reset by someone who opens the PC's case, researchers at Technische Universität Berlin say. That leaves short PINs open to guessing. In lab tests, the researchers found a four-digit Hello PIN on an AMD laptop and a 6-digit BitLocker PIN on an Intel laptop this way. Both PINs were set by the… On AMD-based PCs and some Intel PCs, the TPM lockout for Windows Hello and BitLocker PINs can be reset by someone who opens the PC's case, researchers at Technische Universität Berlin say. That leaves short PINs open ",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "On AMD-based PCs and some Intel PCs, the TPM lockout for Windows Hello and BitLocker PINs can be reset by someone who opens the PC's case, researchers at Technische Universität Berlin say. That leaves short PINs open to guessing. In lab tests, the researchers found a four-digit Hello PIN on an AMD laptop and a 6-digit BitLocker PIN on an Intel laptop this way. Both PINs were set by the…",
+          "text": "On AMD-based PCs and some Intel PCs, the TPM lockout for Windows Hello and BitLocker PINs can be reset by someone who opens the PC's case, researchers at Technische Universität Berlin say. That leaves short PINs open to guessing. In lab tests, the researchers found a four-digit Hello PIN on an AMD laptop and a 6-digit BitLocker PIN on an Intel laptop this way. Both PINs were set by the…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "On AMD-based PCs and some Intel PCs, the TPM lockout for Windows Hello and BitLocker PINs can be reset by someone who opens the PC's case, researchers at Technische Universität Berlin say. That leaves short PINs open to guessing. In lab tests, the researchers found a four-digit Hello PIN on an AMD laptop and a 6-digit BitLocker PIN on an Intel laptop this way. Both PINs were set by the…",
+          "text": "On AMD-based PCs and some Intel PCs, the TPM lockout for Windows Hello and BitLocker PINs can be reset by someone who opens the PC's case, researchers at Technische Universität Berlin say. That leaves short PINs open to guessing. In lab tests, the researchers found a four-digit Hello PIN on an AMD laptop and a 6-digit BitLocker PIN on an Intel laptop this way. Both PINs were set by the…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "AI Pentesting Checklist for Web Apps: 15 Questions to Ask Before Choosing a Vendor",
+      "url": "https://thehackernews.com/2026/11/ai-pentesting-checklist-for-web-apps-15.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-18/#reporting-e3f6e444c8de",
+      "cves": [],
+      "snippet": "AI Pentesting Checklist for Web Apps: 15 Questions to Ask Before Choosing a Vendor TL;DR Attackers move first. On average, exploitation now starts before a patch exists (Mandiant M-Trends 2026). In 1H 2026, 23% of vulnerabilities VulnCheck added to its exploited list were hit on or before disclosure day. AI pentesting vendors aren't interchangeable. Most look convincing in a demo. The gaps show up in your logged-in flows, your coverage, and your production safety. Make… TL;DR Attackers move first. On average, exploitation now starts before a patch exists (Mandiant M-Trends 2026). In 1H 2026, 23% of vulnerabilities VulnCheck added to its exploited list were hit on or before disclosure day. AI",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "TL;DR Attackers move first. On average, exploitation now starts before a patch exists (Mandiant M-Trends 2026). In 1H 2026, 23% of vulnerabilities VulnCheck added to its exploited list were hit on or before disclosure day. AI pentesting vendors aren't interchangeable. Most look convincing in a demo. The gaps show up in your logged-in flows, your coverage, and your production safety. Make…",
+          "text": "TL;DR Attackers move first. On average, exploitation now starts before a patch exists (Mandiant M-Trends 2026). In 1H 2026, 23% of vulnerabilities VulnCheck added to its exploited list were hit on or before disclosure day. AI pentesting vendors aren't interchangeable. Most look convincing in a demo. The gaps show up in your logged-in flows, your coverage, and your production safety. Make…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "TL;DR Attackers move first. On average, exploitation now starts before a patch exists (Mandiant M-Trends 2026). In 1H 2026, 23% of vulnerabilities VulnCheck added to its exploited list were hit on or before disclosure day. AI pentesting vendors aren't interchangeable. Most look convincing in a demo. The gaps show up in your logged-in flows, your coverage, and your production safety. Make…",
+          "text": "TL;DR Attackers move first. On average, exploitation now starts before a patch exists (Mandiant M-Trends 2026). In 1H 2026, 23% of vulnerabilities VulnCheck added to its exploited list were hit on or before disclosure day. AI pentesting vendors aren't interchangeable. Most look convincing in a demo. The gaps show up in your logged-in flows, your coverage, and your production safety. Make…"
         }
       ],
       "effective_date_evidence": null
@@ -173,6 +239,28 @@
           "origin": "content",
           "raw_text": "The Alliance for Creativity and Entertainment (ACE) has announced the shutdown of Dizigom, one of Turkey's largest piracy sites, after a settlement agreement with the site's operators…",
           "text": "The Alliance for Creativity and Entertainment (ACE) has announced the shutdown of Dizigom, one of Turkey's largest piracy sites, after a settlement agreement with the site's operators…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Quality Isn’t The Main Worry About AI Pentesting — Data Privacy and Production Safety Are",
+      "url": "https://thehackernews.com/2026/11/quality-isnt-main-worry-about-ai.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-18/#reporting-1df2f3726abc",
+      "cves": [],
+      "snippet": "Quality Isn’t The Main Worry About AI Pentesting — Data Privacy and Production Safety Are AI is speeding up how software is built, which means more code, more changes, and more chances for vulnerabilities to reach production. It's speeding up how attackers find and exploit them too, with time-to-exploit now down to a single day. Security testing has to keep up with both. AI pentesting has emerged as a way to run in-depth tests whenever teams need them, instead of waiting for the… AI is speeding up how software is built, which means more code, more changes, and more chances for vulnerabilities to reach production. It's speeding up how attackers find and exploit them too, with time-to-exploit ",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "AI is speeding up how software is built, which means more code, more changes, and more chances for vulnerabilities to reach production. It's speeding up how attackers find and exploit them too, with time-to-exploit now down to a single day. Security testing has to keep up with both. AI pentesting has emerged as a way to run in-depth tests whenever teams need them, instead of waiting for the…",
+          "text": "AI is speeding up how software is built, which means more code, more changes, and more chances for vulnerabilities to reach production. It's speeding up how attackers find and exploit them too, with time-to-exploit now down to a single day. Security testing has to keep up with both. AI pentesting has emerged as a way to run in-depth tests whenever teams need them, instead of waiting for the…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "AI is speeding up how software is built, which means more code, more changes, and more chances for vulnerabilities to reach production. It's speeding up how attackers find and exploit them too, with time-to-exploit now down to a single day. Security testing has to keep up with both. AI pentesting has emerged as a way to run in-depth tests whenever teams need them, instead of waiting for the…",
+          "text": "AI is speeding up how software is built, which means more code, more changes, and more chances for vulnerabilities to reach production. It's speeding up how attackers find and exploit them too, with time-to-exploit now down to a single day. Security testing has to keep up with both. AI pentesting has emerged as a way to run in-depth tests whenever teams need them, instead of waiting for the…"
         }
       ],
       "effective_date_evidence": null
@@ -222,157 +310,25 @@
       "effective_date_evidence": null
     },
     {
-      "title": "British Scattered Spider hacker sentenced to 6 years in prison",
-      "url": "https://www.bleepingcomputer.com/news/security/british-scattered-spider-hacker-sentenced-to-6-years-in-prison/",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-18/#reporting-9f8e9c27a393",
-      "cves": [],
-      "snippet": "British Scattered Spider hacker sentenced to 6 years in prison A leader of the Scattered Spider cybercrime collective has been sentenced to six years in prison in the United States for stealing millions in cryptocurrency and conspiring to hack a dozen companies… A leader of the Scattered Spider cybercrime collective has been sentenced to six years in prison in the United States for stealing millions in cryptocurrency and conspiring to hack a dozen companies…",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "A leader of the Scattered Spider cybercrime collective has been sentenced to six years in prison in the United States for stealing millions in cryptocurrency and conspiring to hack a dozen companies…",
-          "text": "A leader of the Scattered Spider cybercrime collective has been sentenced to six years in prison in the United States for stealing millions in cryptocurrency and conspiring to hack a dozen companies…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "A leader of the Scattered Spider cybercrime collective has been sentenced to six years in prison in the United States for stealing millions in cryptocurrency and conspiring to hack a dozen companies…",
-          "text": "A leader of the Scattered Spider cybercrime collective has been sentenced to six years in prison in the United States for stealing millions in cryptocurrency and conspiring to hack a dozen companies…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "Attackers Compromise Microsoft's Agent Framework PyPI Package to Steal Cloud Credentials",
-      "url": "https://thehackernews.com/2026/11/attackers-compromise-microsofts-agent.html",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-18/#reporting-533b590042a0",
-      "cves": [],
-      "snippet": "Attackers Compromise Microsoft's Agent Framework PyPI Package to Steal Cloud Credentials Threat actors have compromised Microsoft's agent-framework package to push a credential stealer, according to reports from Aikido, Chainguard, Endor Labs, OX Security, SafeDep, Socket, StepSecurity, and Google-owned Wiz. The malicious versions, 1.26.1 and 1.26.2, were published 33 minutes apart on November 17, 2026, and are designed to run a credential stealer on every Python start. As of… Threat actors have compromised Microsoft's agent-framework package to push a credential stealer, according to reports from Aikido, Chainguard, Endor Labs, OX Security, SafeDep, Socket, StepSecurity, and Google-owned Wi",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "Threat actors have compromised Microsoft's agent-framework package to push a credential stealer, according to reports from Aikido, Chainguard, Endor Labs, OX Security, SafeDep, Socket, StepSecurity, and Google-owned Wiz. The malicious versions, 1.26.1 and 1.26.2, were published 33 minutes apart on November 17, 2026, and are designed to run a credential stealer on every Python start. As of…",
-          "text": "Threat actors have compromised Microsoft's agent-framework package to push a credential stealer, according to reports from Aikido, Chainguard, Endor Labs, OX Security, SafeDep, Socket, StepSecurity, and Google-owned Wiz. The malicious versions, 1.26.1 and 1.26.2, were published 33 minutes apart on November 17, 2026, and are designed to run a credential stealer on every Python start. As of…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "Threat actors have compromised Microsoft's agent-framework package to push a credential stealer, according to reports from Aikido, Chainguard, Endor Labs, OX Security, SafeDep, Socket, StepSecurity, and Google-owned Wiz. The malicious versions, 1.26.1 and 1.26.2, were published 33 minutes apart on November 17, 2026, and are designed to run a credential stealer on every Python start. As of…",
-          "text": "Threat actors have compromised Microsoft's agent-framework package to push a credential stealer, according to reports from Aikido, Chainguard, Endor Labs, OX Security, SafeDep, Socket, StepSecurity, and Google-owned Wiz. The malicious versions, 1.26.1 and 1.26.2, were published 33 minutes apart on November 17, 2026, and are designed to run a credential stealer on every Python start. As of…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "Russian COLD RELIC Hackers Use Stolen Google Workspace Data to Breach Second U.S. Organization",
-      "url": "https://thehackernews.com/2026/11/russian-cold-relic-hackers-use-stolen.html",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-18/#reporting-4816a5c313d5",
-      "cves": [],
-      "snippet": "Russian COLD RELIC Hackers Use Stolen Google Workspace Data to Breach Second U.S. Organization The Russia-linked cyber espionage group known as Cold Relic (formerly COLDRIVER and UNC4057) has been observed weaponizing a single cloud compromise into a launchpad for a series of linked intrusions resulting in third-party compromise. Google's Mandiant and Threat Intelligence Group (GTIG) said it investigated a 2026 compromise at a U.S.-based organization in which the adversary leveraged… The Russia-linked cyber espionage group known as Cold Relic (formerly COLDRIVER and UNC4057) has been observed weaponizing a single cloud compromise into a launchpad for a series of linked intrusions resulting i",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "The Russia-linked cyber espionage group known as Cold Relic (formerly COLDRIVER and UNC4057) has been observed weaponizing a single cloud compromise into a launchpad for a series of linked intrusions resulting in third-party compromise. Google's Mandiant and Threat Intelligence Group (GTIG) said it investigated a 2026 compromise at a U.S.-based organization in which the adversary leveraged…",
-          "text": "The Russia-linked cyber espionage group known as Cold Relic (formerly COLDRIVER and UNC4057) has been observed weaponizing a single cloud compromise into a launchpad for a series of linked intrusions resulting in third-party compromise. Google's Mandiant and Threat Intelligence Group (GTIG) said it investigated a 2026 compromise at a U.S.-based organization in which the adversary leveraged…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "The Russia-linked cyber espionage group known as Cold Relic (formerly COLDRIVER and UNC4057) has been observed weaponizing a single cloud compromise into a launchpad for a series of linked intrusions resulting in third-party compromise. Google's Mandiant and Threat Intelligence Group (GTIG) said it investigated a 2026 compromise at a U.S.-based organization in which the adversary leveraged…",
-          "text": "The Russia-linked cyber espionage group known as Cold Relic (formerly COLDRIVER and UNC4057) has been observed weaponizing a single cloud compromise into a launchpad for a series of linked intrusions resulting in third-party compromise. Google's Mandiant and Threat Intelligence Group (GTIG) said it investigated a 2026 compromise at a U.S.-based organization in which the adversary leveraged…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "Java4Shell Flaw (CVE-2026-114938) Enables Pre-Auth RCE in Jira, Jenkins, Keycloak and More",
-      "url": "https://thehackernews.com/2026/11/java4shell-cve-2026-114938-enables-pre.html",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-18/#reporting-5966ac56e61b",
+      "title": "CISA Urges Immediate Patching of Java4Shell Flaw That Could Allow Remote Code Execution",
+      "url": "https://thehackernews.com/2026/11/cisa-urges-immediate-patching-of.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-18/#reporting-e73903040477",
       "cves": [
         "CVE-2026-114938"
       ],
-      "snippet": "Java4Shell Flaw (CVE-2026-114938) Enables Pre-Auth RCE in Jira, Jenkins, Keycloak and More A Java flaw called Java4Shell can let attackers without an account run their own code on Jira, Jenkins, Keycloak, and three other widely used applications, says Calif, the security research firm that disclosed it this week. The flaw is present in Java 17.0.6 and later, and the vulnerable code runs only on x86-64 Intel and AMD chips that support the AVX-512 VBMI feature. Tracked as… A Java flaw called Java4Shell can let attackers without an account run their own code on Jira, Jenkins, Keycloak, and three other widely used applications, says Calif, the security research firm that disclosed it this week. ",
+      "snippet": "CISA Urges Immediate Patching of Java4Shell Flaw That Could Allow Remote Code Execution The U.S. Cybersecurity and Infrastructure Security Agency (CISA) has urged organizations to immediately patch a newly disclosed critical security flaw impacting Oracle Java. The flaw, tracked as CVE-2026-114938 (CVSS score: 8.1), refers to a case of out-of-bounds write that can lead to denial-of-service (DoS) or remote code execution under certain conditions. \"This critical memory-corruption… The U.S. Cybersecurity and Infrastructure Security Agency (CISA) has urged organizations to immediately patch a newly disclosed critical security flaw impacting Oracle Java. The flaw, tracked as CVE-2026-114938 (CVSS",
       "article_evidence": [
         {
           "extraction_version": 1,
           "origin": "summary",
-          "raw_text": "A Java flaw called Java4Shell can let attackers without an account run their own code on Jira, Jenkins, Keycloak, and three other widely used applications, says Calif, the security research firm that disclosed it this week. The flaw is present in Java 17.0.6 and later, and the vulnerable code runs only on x86-64 Intel and AMD chips that support the AVX-512 VBMI feature. Tracked as…",
-          "text": "A Java flaw called Java4Shell can let attackers without an account run their own code on Jira, Jenkins, Keycloak, and three other widely used applications, says Calif, the security research firm that disclosed it this week. The flaw is present in Java 17.0.6 and later, and the vulnerable code runs only on x86-64 Intel and AMD chips that support the AVX-512 VBMI feature. Tracked as…"
+          "raw_text": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) has urged organizations to immediately patch a newly disclosed critical security flaw impacting Oracle Java. The flaw, tracked as CVE-2026-114938 (CVSS score: 8.1), refers to a case of out-of-bounds write that can lead to denial-of-service (DoS) or remote code execution under certain conditions. \"This critical memory-corruption…",
+          "text": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) has urged organizations to immediately patch a newly disclosed critical security flaw impacting Oracle Java. The flaw, tracked as CVE-2026-114938 (CVSS score: 8.1), refers to a case of out-of-bounds write that can lead to denial-of-service (DoS) or remote code execution under certain conditions. \"This critical memory-corruption…"
         },
         {
           "extraction_version": 1,
           "origin": "content",
-          "raw_text": "A Java flaw called Java4Shell can let attackers without an account run their own code on Jira, Jenkins, Keycloak, and three other widely used applications, says Calif, the security research firm that disclosed it this week. The flaw is present in Java 17.0.6 and later, and the vulnerable code runs only on x86-64 Intel and AMD chips that support the AVX-512 VBMI feature. Tracked as…",
-          "text": "A Java flaw called Java4Shell can let attackers without an account run their own code on Jira, Jenkins, Keycloak, and three other widely used applications, says Calif, the security research firm that disclosed it this week. The flaw is present in Java 17.0.6 and later, and the vulnerable code runs only on x86-64 Intel and AMD chips that support the AVX-512 VBMI feature. Tracked as…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "Attackers Used Optimizely to A/B Test Malware on Top Websites",
-      "url": "https://krebsonsecurity.com/2026/11/attackers-used-optimizely-to-a-b-test-malware-on-top-websites/",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-18/#reporting-e010dc913600",
-      "cves": [],
-      "snippet": "Attackers Used Optimizely to A/B Test Malware on Top Websites At least 178 top web destinations unwittingly served a variety of malware exploits against visitors over the past 24 hours thanks to a security vulnerability involving Optimizely, a company that helps websites customize user experiences and test out new features. Experts say the incident, which saw data-stealing malicious software silently injected into sites like the BBC, CNN, Equifax, Ledger and Zoom, was exacerbated by the reality that few popular websites enforce strict rules on the sources of third-party content. At least 178 top web destinations unwittingly served a variety of malware exploits against visitors over the past ",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "At least 178 top web destinations unwittingly served a variety of malware exploits against visitors over the past 24 hours thanks to a security vulnerability involving Optimizely, a company that helps websites customize user experiences and test out new features. Experts say the incident, which saw data-stealing malicious software silently injected into sites like the BBC, CNN, Equifax, Ledger and Zoom, was exacerbated by the reality that few popular websites enforce strict rules on the sources of third-party content.",
-          "text": "At least 178 top web destinations unwittingly served a variety of malware exploits against visitors over the past 24 hours thanks to a security vulnerability involving Optimizely, a company that helps websites customize user experiences and test out new features. Experts say the incident, which saw data-stealing malicious software silently injected into sites like the BBC, CNN, Equifax, Ledger and Zoom, was exacerbated by the reality that few popular websites enforce strict rules on the sources of third-party content."
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "At least 178 top web destinations unwittingly served a variety of malware exploits against visitors over the past 24 hours thanks to a security vulnerability involving Optimizely, a company that helps websites customize user experiences and test out new features. Experts say the incident, which saw data-stealing malicious software silently injected into sites like the BBC, CNN, Equifax, Ledger and Zoom, was exacerbated by the reality that few popular websites enforce strict rules on the sources of third-party content.",
-          "text": "At least 178 top web destinations unwittingly served a variety of malware exploits against visitors over the past 24 hours thanks to a security vulnerability involving Optimizely, a company that helps websites customize user experiences and test out new features. Experts say the incident, which saw data-stealing malicious software silently injected into sites like the BBC, CNN, Equifax, Ledger and Zoom, was exacerbated by the reality that few popular websites enforce strict rules on the sources of third-party content."
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "Critical Java4Shell flaw allows RCE attacks on major Java applications",
-      "url": "https://www.bleepingcomputer.com/news/security/critical-java4shell-flaw-allows-rce-attacks-on-major-java-applications/",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-18/#reporting-fca3dc2fb776",
-      "cves": [],
-      "snippet": "Critical Java4Shell flaw allows RCE attacks on major Java applications A critical vulnerability dubbed Java4Shell in OpenJDK, the open-source implementation of Java, can allow unauthenticated attackers to remotely execute code on popular enterprise applications, including Jenkins, Atlassian Jira, Confluence, and Keycloak… A critical vulnerability dubbed Java4Shell in OpenJDK, the open-source implementation of Java, can allow unauthenticated attackers to remotely execute code on popular enterprise applications, including Jenkins, Atlassian Jira, Confluence, and Keycloak…",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "A critical vulnerability dubbed Java4Shell in OpenJDK, the open-source implementation of Java, can allow unauthenticated attackers to remotely execute code on popular enterprise applications, including Jenkins, Atlassian Jira, Confluence, and Keycloak…",
-          "text": "A critical vulnerability dubbed Java4Shell in OpenJDK, the open-source implementation of Java, can allow unauthenticated attackers to remotely execute code on popular enterprise applications, including Jenkins, Atlassian Jira, Confluence, and Keycloak…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "A critical vulnerability dubbed Java4Shell in OpenJDK, the open-source implementation of Java, can allow unauthenticated attackers to remotely execute code on popular enterprise applications, including Jenkins, Atlassian Jira, Confluence, and Keycloak…",
-          "text": "A critical vulnerability dubbed Java4Shell in OpenJDK, the open-source implementation of Java, can allow unauthenticated attackers to remotely execute code on popular enterprise applications, including Jenkins, Atlassian Jira, Confluence, and Keycloak…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "Optimizely Malware Attacks Highlight Third-Party Vendor Risks",
-      "url": "https://www.darkreading.com/cyber-risk/optimizely-malware-attacks-third-party-vendor-risks",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-18/#reporting-eca290345628",
-      "cves": [],
-      "snippet": "Optimizely Malware Attacks Highlight Third-Party Vendor Risks At least 178 organizations, including several major brands, unwittingly exposed website visitors to hydra-like malware via a third-party platform. At least 178 organizations, including several major brands, unwittingly exposed website visitors to hydra-like malware via a third-party platform.",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "At least 178 organizations, including several major brands, unwittingly exposed website visitors to hydra-like malware via a third-party platform.",
-          "text": "At least 178 organizations, including several major brands, unwittingly exposed website visitors to hydra-like malware via a third-party platform."
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "At least 178 organizations, including several major brands, unwittingly exposed website visitors to hydra-like malware via a third-party platform.",
-          "text": "At least 178 organizations, including several major brands, unwittingly exposed website visitors to hydra-like malware via a third-party platform."
+          "raw_text": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) has urged organizations to immediately patch a newly disclosed critical security flaw impacting Oracle Java. The flaw, tracked as CVE-2026-114938 (CVSS score: 8.1), refers to a case of out-of-bounds write that can lead to denial-of-service (DoS) or remote code execution under certain conditions. \"This critical memory-corruption…",
+          "text": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) has urged organizations to immediately patch a newly disclosed critical security flaw impacting Oracle Java. The flaw, tracked as CVE-2026-114938 (CVSS score: 8.1), refers to a case of out-of-bounds write that can lead to denial-of-service (DoS) or remote code execution under certain conditions. \"This critical memory-corruption…"
         }
       ],
       "effective_date_evidence": null
