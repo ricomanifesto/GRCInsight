@@ -3313,6 +3313,16 @@
       "handle": "report_20261118_151540_108",
       "run_id": "44333483110",
       "stage": "invoked"
+    },
+    {
+      "admission_key": "digest:b778df4c7fa88dea46ab8f8d02a99512540197d9",
+      "at": "2026-11-18T15:20:36.591Z",
+      "binding": "feed-bytes",
+      "digest_content_digest": "33a7497ff4f8ea62ef67763c82ebbe673b89be2338d72fbeaeca55c7646c625c",
+      "outcome": "published",
+      "release_key": "f71665fdceddd4e7cda303e9ba5629da33939ffc6ccb60cb8f8dfee6f040e4ea",
+      "run_id": "44333483110",
+      "stage": "completed"
     }
   ],
   "schema_version": 1,
