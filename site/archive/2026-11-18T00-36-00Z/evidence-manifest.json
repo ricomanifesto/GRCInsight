@@ -1,0 +1,377 @@
+{
+  "schema_version": 3,
+  "report_contract_version": 6,
+  "report_plan": {
+    "control_implications": [
+      {
+        "control_id": "vulnerability_management",
+        "evidence_excerpt": "Oracle is preparing to release security patches for 11 vulnerabilities in Java SE on Tuesday, November 17, 2026, all of which may be exploited remotely without authentication, as separate reports warn of a potentially critical remote code execution (RCE) flaw affecting OpenJDK. The 11 vulnerabilities carry a maximum CVSS 3.1 severity score of 8.1, according to Oracle's advance security notice.",
+        "evidence_origin": "summary",
+        "focus": "Java SE",
+        "headline": "Java SE exposes remote exploitation risk",
+        "priority": "high",
+        "significance": "Unpatched Java SE vulnerabilities allow unauthenticated remote code execution, undermining vulnerability management controls. Owner should confirm asset inventory covers all Java deployments and patching status.",
+        "source_ids": [
+          1
+        ]
+      },
+      {
+        "control_id": "third_party_risk",
+        "evidence_excerpt": "At least 178 organizations, including several major brands, unwittingly exposed website visitors to hydra-like malware via a third-party platform.",
+        "evidence_origin": "summary",
+        "focus": "third-party platform",
+        "headline": "third-party platform enables malware distribution to visitors",
+        "priority": "high",
+        "significance": "Third-party platform compromise exposed 178 organizations' visitors to malware, weakening supplier assurance. Owner should review supplier dependencies and verify third-party security controls.",
+        "source_ids": [
+          3
+        ]
+      },
+      {
+        "control_id": "data_protection",
+        "evidence_excerpt": "Credentials and access secrets exposed in public Docker Hub images are being extracted and exploited by attackers within as little as eight seconds of publication…",
+        "evidence_origin": "summary",
+        "focus": "Credentials and access secrets",
+        "headline": "Credentials and access secrets leaked in Docker Hub images",
+        "priority": "high",
+        "significance": "Rapid credential theft from public Docker images undermines data protection controls for cloud secrets. Owner should confirm secret scanning and rotation processes cover container registries.",
+        "source_ids": [
+          4
+        ]
+      },
+      {
+        "control_id": "access_management",
+        "evidence_excerpt": "A compromised key issued to AI infrastructure provider Fireworks was used by threat actors to access Cursor data and credentials.",
+        "evidence_origin": "summary",
+        "focus": "compromised key",
+        "headline": "compromised key enables unauthorized access to Cursor data",
+        "priority": "high",
+        "significance": "Third-party AI provider key compromise exposed internal credentials, weakening access management controls. Owner should review third-party API key governance and rotation policies.",
+        "source_ids": [
+          9
+        ]
+      },
+      {
+        "control_id": "monitoring",
+        "evidence_excerpt": "The commercial kit uses attacker-supplied AI models to personalize lures, evade spam filters, and scale campaigns to tens of thousands of targets.",
+        "evidence_origin": "summary",
+        "focus": "commercial kit",
+        "headline": "commercial kit uses AI models to evade spam filters",
+        "priority": "medium",
+        "significance": "AI-enhanced phishing kit bypasses traditional email defenses, challenging monitoring and detection controls. Owner should verify phishing simulation coverage and AI-aware filter configurations.",
+        "source_ids": [
+          5
+        ]
+      },
+      {
+        "control_id": "incident_response",
+        "evidence_excerpt": "The Fugaku supercomputer operated by Japan's RIKEN Center for Computational Science has been taken offline following a security breach…",
+        "evidence_origin": "summary",
+        "focus": "Fugaku supercomputer",
+        "headline": "Fugaku supercomputer taken offline after security breach",
+        "priority": "medium",
+        "significance": "Critical government infrastructure outage highlights incident response gaps for high-value assets. Owner should confirm containment procedures and evidence preservation for supercomputing systems.",
+        "source_ids": [
+          6
+        ]
+      }
+    ],
+    "executive_brief": {
+      "paragraphs": [
+        {
+          "source_ids": [
+            1,
+            3,
+            4,
+            9
+          ],
+          "text": "Critical vulnerabilities in widely used Java SE components expose organizations to unauthenticated remote code execution, while third-party platform compromises and rapid credential theft from Docker Hub demonstrate supply chain and secret management failures. These developments collectively weaken vulnerability management, third-party risk, data protection, and access management controls."
+        },
+        {
+          "source_ids": [
+            5,
+            6
+          ],
+          "text": "AI-enhanced phishing kits evade traditional email defenses, and critical infrastructure outages test incident response readiness. Monitoring and incident response controls must adapt to AI-driven threats and high-impact availability events."
+        }
+      ]
+    },
+    "industry_impacts": [],
+    "regulatory_changes": []
+  },
+  "generated_at": "2026-11-18T00:36:00.872523Z",
+  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/b4fbaf1bed971e3986e573cd9b9a3004b88569df/site/feed.xml",
+  "feed_home_url": "https://sentrydigest.ricomanifesto.com/",
+  "digest_issue_date": "2026-11-18",
+  "digest_issue_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-18/",
+  "requested_model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
+  "resolved_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+  "sources": [
+    {
+      "title": "Oracle to Patch 11 Java Flaws Today as Critical OpenJDK RCE (CVE-2026-114938) Report Emerges",
+      "url": "https://thehackernews.com/2026/11/oracle-to-patch-11-java-flaws-today-as.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-18/#reporting-e5492f986750",
+      "cves": [
+        "CVE-2026-114938"
+      ],
+      "snippet": "Oracle to Patch 11 Java Flaws Today as Critical OpenJDK RCE (CVE-2026-114938) Report Emerges Oracle is preparing to release security patches for 11 vulnerabilities in Java SE on Tuesday, November 17, 2026, all of which may be exploited remotely without authentication, as separate reports warn of a potentially critical remote code execution (RCE) flaw affecting OpenJDK. The 11 vulnerabilities carry a maximum CVSS 3.1 severity score of 8.1, according to Oracle's advance security notice. Oracle is preparing to release security patches for 11 vulnerabilities in Java SE on Tuesday, November 17, 2026, all of which may be exploited remotely without authentication, as separate reports warn of a pote",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Oracle is preparing to release security patches for 11 vulnerabilities in Java SE on Tuesday, November 17, 2026, all of which may be exploited remotely without authentication, as separate reports warn of a potentially critical remote code execution (RCE) flaw affecting OpenJDK. The 11 vulnerabilities carry a maximum CVSS 3.1 severity score of 8.1, according to Oracle's advance security notice.",
+          "text": "Oracle is preparing to release security patches for 11 vulnerabilities in Java SE on Tuesday, November 17, 2026, all of which may be exploited remotely without authentication, as separate reports warn of a potentially critical remote code execution (RCE) flaw affecting OpenJDK. The 11 vulnerabilities carry a maximum CVSS 3.1 severity score of 8.1, according to Oracle's advance security notice."
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Oracle is preparing to release security patches for 11 vulnerabilities in Java SE on Tuesday, November 17, 2026, all of which may be exploited remotely without authentication, as separate reports warn of a potentially critical remote code execution (RCE) flaw affecting OpenJDK. The 11 vulnerabilities carry a maximum CVSS 3.1 severity score of 8.1, according to Oracle's advance security notice.",
+          "text": "Oracle is preparing to release security patches for 11 vulnerabilities in Java SE on Tuesday, November 17, 2026, all of which may be exploited remotely without authentication, as separate reports warn of a potentially critical remote code execution (RCE) flaw affecting OpenJDK. The 11 vulnerabilities carry a maximum CVSS 3.1 severity score of 8.1, according to Oracle's advance security notice."
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Critical Java4Shell flaw allows RCE attacks on major Java applications",
+      "url": "https://www.bleepingcomputer.com/news/security/critical-java4shell-flaw-allows-rce-attacks-on-major-java-applications/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-18/#reporting-fca3dc2fb776",
+      "cves": [],
+      "snippet": "Critical Java4Shell flaw allows RCE attacks on major Java applications A critical vulnerability dubbed Java4Shell in OpenJDK, the open-source implementation of Java, can allow unauthenticated attackers to remotely execute code on popular enterprise applications, including Jenkins, Atlassian Jira, Confluence, and Keycloak… A critical vulnerability dubbed Java4Shell in OpenJDK, the open-source implementation of Java, can allow unauthenticated attackers to remotely execute code on popular enterprise applications, including Jenkins, Atlassian Jira, Confluence, and Keycloak…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "A critical vulnerability dubbed Java4Shell in OpenJDK, the open-source implementation of Java, can allow unauthenticated attackers to remotely execute code on popular enterprise applications, including Jenkins, Atlassian Jira, Confluence, and Keycloak…",
+          "text": "A critical vulnerability dubbed Java4Shell in OpenJDK, the open-source implementation of Java, can allow unauthenticated attackers to remotely execute code on popular enterprise applications, including Jenkins, Atlassian Jira, Confluence, and Keycloak…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "A critical vulnerability dubbed Java4Shell in OpenJDK, the open-source implementation of Java, can allow unauthenticated attackers to remotely execute code on popular enterprise applications, including Jenkins, Atlassian Jira, Confluence, and Keycloak…",
+          "text": "A critical vulnerability dubbed Java4Shell in OpenJDK, the open-source implementation of Java, can allow unauthenticated attackers to remotely execute code on popular enterprise applications, including Jenkins, Atlassian Jira, Confluence, and Keycloak…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Optimizely Malware Attacks Highlight Third-Party Vendor Risks",
+      "url": "https://www.darkreading.com/cyber-risk/optimizely-malware-attacks-third-party-vendor-risks",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-18/#reporting-eca290345628",
+      "cves": [],
+      "snippet": "Optimizely Malware Attacks Highlight Third-Party Vendor Risks At least 178 organizations, including several major brands, unwittingly exposed website visitors to hydra-like malware via a third-party platform. At least 178 organizations, including several major brands, unwittingly exposed website visitors to hydra-like malware via a third-party platform.",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "At least 178 organizations, including several major brands, unwittingly exposed website visitors to hydra-like malware via a third-party platform.",
+          "text": "At least 178 organizations, including several major brands, unwittingly exposed website visitors to hydra-like malware via a third-party platform."
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "At least 178 organizations, including several major brands, unwittingly exposed website visitors to hydra-like malware via a third-party platform.",
+          "text": "At least 178 organizations, including several major brands, unwittingly exposed website visitors to hydra-like malware via a third-party platform."
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Cloud keys leaked in Docker Hub images are stolen within seconds",
+      "url": "https://www.bleepingcomputer.com/news/security/cloud-keys-leaked-in-docker-hub-images-are-stolen-within-seconds/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-18/#reporting-2cac7202a964",
+      "cves": [],
+      "snippet": "Cloud keys leaked in Docker Hub images are stolen within seconds Credentials and access secrets exposed in public Docker Hub images are being extracted and exploited by attackers within as little as eight seconds of publication… Credentials and access secrets exposed in public Docker Hub images are being extracted and exploited by attackers within as little as eight seconds of publication…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Credentials and access secrets exposed in public Docker Hub images are being extracted and exploited by attackers within as little as eight seconds of publication…",
+          "text": "Credentials and access secrets exposed in public Docker Hub images are being extracted and exploited by attackers within as little as eight seconds of publication…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Credentials and access secrets exposed in public Docker Hub images are being extracted and exploited by attackers within as little as eight seconds of publication…",
+          "text": "Credentials and access secrets exposed in public Docker Hub images are being extracted and exploited by attackers within as little as eight seconds of publication…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "'TheMailer' Phishing Kit Puts AI in the Driver's Seat",
+      "url": "https://www.darkreading.com/perimeter/themailer-phishing-kit-ai-drivers-seat",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-18/#reporting-164e150f1026",
+      "cves": [],
+      "snippet": "'TheMailer' Phishing Kit Puts AI in the Driver's Seat The commercial kit uses attacker-supplied AI models to personalize lures, evade spam filters, and scale campaigns to tens of thousands of targets. The commercial kit uses attacker-supplied AI models to personalize lures, evade spam filters, and scale campaigns to tens of thousands of targets.",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "The commercial kit uses attacker-supplied AI models to personalize lures, evade spam filters, and scale campaigns to tens of thousands of targets.",
+          "text": "The commercial kit uses attacker-supplied AI models to personalize lures, evade spam filters, and scale campaigns to tens of thousands of targets."
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "The commercial kit uses attacker-supplied AI models to personalize lures, evade spam filters, and scale campaigns to tens of thousands of targets.",
+          "text": "The commercial kit uses attacker-supplied AI models to personalize lures, evade spam filters, and scale campaigns to tens of thousands of targets."
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Japan takes Fugaku supercomputer offlline after cyberattack",
+      "url": "https://www.bleepingcomputer.com/news/security/japan-takes-fugaku-supercomputer-offlline-after-cyberattack/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-18/#reporting-b578b4efad12",
+      "cves": [],
+      "snippet": "Japan takes Fugaku supercomputer offlline after cyberattack The Fugaku supercomputer operated by Japan's RIKEN Center for Computational Science has been taken offline following a security breach… The Fugaku supercomputer operated by Japan's RIKEN Center for Computational Science has been taken offline following a security breach…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "The Fugaku supercomputer operated by Japan's RIKEN Center for Computational Science has been taken offline following a security breach…",
+          "text": "The Fugaku supercomputer operated by Japan's RIKEN Center for Computational Science has been taken offline following a security breach…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "The Fugaku supercomputer operated by Japan's RIKEN Center for Computational Science has been taken offline following a security breach…",
+          "text": "The Fugaku supercomputer operated by Japan's RIKEN Center for Computational Science has been taken offline following a security breach…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Researchers Claim Two RCE Exploits That Bypass Telegram’s New Android Defenses",
+      "url": "https://thehackernews.com/2026/11/researchers-claim-two-rce-exploits-that.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-18/#reporting-6bab39afba04",
+      "cves": [],
+      "snippet": "Researchers Claim Two RCE Exploits That Bypass Telegram’s New Android Defenses A malicious widget can bypass the security filter that Telegram added to its Android app last week and run code outside it, according to NebuSec, a security company. Widgets are small interactive blocks that bots send inside chat messages, and their JavaScript runs on the user's phone. The researchers ran their demonstration on a Telegram test server, because only approved bots can send… A malicious widget can bypass the security filter that Telegram added to its Android app last week and run code outside it, according to NebuSec, a security company. Widgets are small interactive blocks that bots send inside chat ",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "A malicious widget can bypass the security filter that Telegram added to its Android app last week and run code outside it, according to NebuSec, a security company. Widgets are small interactive blocks that bots send inside chat messages, and their JavaScript runs on the user's phone. The researchers ran their demonstration on a Telegram test server, because only approved bots can send…",
+          "text": "A malicious widget can bypass the security filter that Telegram added to its Android app last week and run code outside it, according to NebuSec, a security company. Widgets are small interactive blocks that bots send inside chat messages, and their JavaScript runs on the user's phone. The researchers ran their demonstration on a Telegram test server, because only approved bots can send…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "A malicious widget can bypass the security filter that Telegram added to its Android app last week and run code outside it, according to NebuSec, a security company. Widgets are small interactive blocks that bots send inside chat messages, and their JavaScript runs on the user's phone. The researchers ran their demonstration on a Telegram test server, because only approved bots can send…",
+          "text": "A malicious widget can bypass the security filter that Telegram added to its Android app last week and run code outside it, according to NebuSec, a security company. Widgets are small interactive blocks that bots send inside chat messages, and their JavaScript runs on the user's phone. The researchers ran their demonstration on a Telegram test server, because only approved bots can send…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Apple reports outages affecting iCloud Mail, AppleCare and more",
+      "url": "https://www.bleepingcomputer.com/news/apple/apple-reports-outages-affecting-icloud-mail-applecare-and-more/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-18/#reporting-d82820a08fcb",
+      "cves": [],
+      "snippet": "Apple reports outages affecting iCloud Mail, AppleCare and more Apple is reporting service disruptions affecting several of its services, including iCloud Mail, iCloud Account & Sign In, Apple School Manager, and Schoolwork… Apple is reporting service disruptions affecting several of its services, including iCloud Mail, iCloud Account & Sign In, Apple School Manager, and Schoolwork…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Apple is reporting service disruptions affecting several of its services, including iCloud Mail, iCloud Account & Sign In, Apple School Manager, and Schoolwork…",
+          "text": "Apple is reporting service disruptions affecting several of its services, including iCloud Mail, iCloud Account & Sign In, Apple School Manager, and Schoolwork…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Apple is reporting service disruptions affecting several of its services, including iCloud Mail, iCloud Account & Sign In, Apple School Manager, and Schoolwork…",
+          "text": "Apple is reporting service disruptions affecting several of its services, including iCloud Mail, iCloud Account & Sign In, Apple School Manager, and Schoolwork…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Cursor Traces Malicious Claude Code Extension to Third-Party Breach",
+      "url": "https://www.darkreading.com/application-security/cursor-malicious-claude-code-extension-third-party-breach",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-18/#reporting-a27a6af66fc8",
+      "cves": [],
+      "snippet": "Cursor Traces Malicious Claude Code Extension to Third-Party Breach A compromised key issued to AI infrastructure provider Fireworks was used by threat actors to access Cursor data and credentials. A compromised key issued to AI infrastructure provider Fireworks was used by threat actors to access Cursor data and credentials.",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "A compromised key issued to AI infrastructure provider Fireworks was used by threat actors to access Cursor data and credentials.",
+          "text": "A compromised key issued to AI infrastructure provider Fireworks was used by threat actors to access Cursor data and credentials."
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "A compromised key issued to AI infrastructure provider Fireworks was used by threat actors to access Cursor data and credentials.",
+          "text": "A compromised key issued to AI infrastructure provider Fireworks was used by threat actors to access Cursor data and credentials."
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Researchers hijack Hugging Face account for popular Kokoro AI model",
+      "url": "https://www.bleepingcomputer.com/news/security/researchers-hijack-hugging-face-account-for-popular-kokoro-ai-model/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-18/#reporting-a5a96cf48fc1",
+      "cves": [],
+      "snippet": "Researchers hijack Hugging Face account for popular Kokoro AI model A Lack of ownership verification on the Hugging Face platform allowed researchers to take control of Kokoro, a text-to-speech model used in projects from Google, NVIDIA, AMD, Intel, and Amazon Web Services… A Lack of ownership verification on the Hugging Face platform allowed researchers to take control of Kokoro, a text-to-speech model used in projects from Google, NVIDIA, AMD, Intel, and Amazon Web Services…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "A Lack of ownership verification on the Hugging Face platform allowed researchers to take control of Kokoro, a text-to-speech model used in projects from Google, NVIDIA, AMD, Intel, and Amazon Web Services…",
+          "text": "A Lack of ownership verification on the Hugging Face platform allowed researchers to take control of Kokoro, a text-to-speech model used in projects from Google, NVIDIA, AMD, Intel, and Amazon Web Services…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "A Lack of ownership verification on the Hugging Face platform allowed researchers to take control of Kokoro, a text-to-speech model used in projects from Google, NVIDIA, AMD, Intel, and Amazon Web Services…",
+          "text": "A Lack of ownership verification on the Hugging Face platform allowed researchers to take control of Kokoro, a text-to-speech model used in projects from Google, NVIDIA, AMD, Intel, and Amazon Web Services…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Tor releases emergency update amid ongoing DDoS attack",
+      "url": "https://www.bleepingcomputer.com/news/security/tor-releases-emergency-update-amid-ongoing-ddos-attack/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-18/#reporting-6ab6f9140451",
+      "cves": [],
+      "snippet": "Tor releases emergency update amid ongoing DDoS attack The Tor Project has released a security update for its network relay software to increase defenses against an ongoing distributed denial-of-service attack that it says has overwhelmed relays and affected most operators… The Tor Project has released a security update for its network relay software to increase defenses against an ongoing distributed denial-of-service attack that it says has overwhelmed relays and affected most operators…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "The Tor Project has released a security update for its network relay software to increase defenses against an ongoing distributed denial-of-service attack that it says has overwhelmed relays and affected most operators…",
+          "text": "The Tor Project has released a security update for its network relay software to increase defenses against an ongoing distributed denial-of-service attack that it says has overwhelmed relays and affected most operators…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "The Tor Project has released a security update for its network relay software to increase defenses against an ongoing distributed denial-of-service attack that it says has overwhelmed relays and affected most operators…",
+          "text": "The Tor Project has released a security update for its network relay software to increase defenses against an ongoing distributed denial-of-service attack that it says has overwhelmed relays and affected most operators…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Flipper Devices launches $399 ‘Flipper One’ Linux-based multi-tool",
+      "url": "https://www.bleepingcomputer.com/news/hardware/flipper-devices-launches-399-flipper-one-linux-based-multi-tool/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-18/#reporting-c05daafd4523",
+      "cves": [],
+      "snippet": "Flipper Devices launches $399 ‘Flipper One’ Linux-based multi-tool Flipper Devices, the company behind the popular Flipper Zero pentesting device, has launched a crowdfunding campaign for Flipper One, a portable Linux computer and networking multi-tool… Flipper Devices, the company behind the popular Flipper Zero pentesting device, has launched a crowdfunding campaign for Flipper One, a portable Linux computer and networking multi-tool…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Flipper Devices, the company behind the popular Flipper Zero pentesting device, has launched a crowdfunding campaign for Flipper One, a portable Linux computer and networking multi-tool…",
+          "text": "Flipper Devices, the company behind the popular Flipper Zero pentesting device, has launched a crowdfunding campaign for Flipper One, a portable Linux computer and networking multi-tool…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Flipper Devices, the company behind the popular Flipper Zero pentesting device, has launched a crowdfunding campaign for Flipper One, a portable Linux computer and networking multi-tool…",
+          "text": "Flipper Devices, the company behind the popular Flipper Zero pentesting device, has launched a crowdfunding campaign for Flipper One, a portable Linux computer and networking multi-tool…"
+        }
+      ],
+      "effective_date_evidence": null
+    }
+  ]
+}
