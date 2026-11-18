@@ -5,14 +5,26 @@
     "control_implications": [
       {
         "control_id": "vulnerability_management",
-        "evidence_excerpt": "Oracle is preparing to release security patches for 11 vulnerabilities in Java SE on Tuesday, November 17, 2026, all of which may be exploited remotely without authentication, as separate reports warn of a potentially critical remote code execution (RCE) flaw affecting OpenJDK.",
+        "evidence_excerpt": "A Java flaw called Java4Shell can let attackers without an account run their own code on Jira, Jenkins, Keycloak, and three other widely used applications, says Calif, the security research firm that disclosed it this week. The flaw is present in Java 17.0.6 and later, and the vulnerable code runs only on x86-64 Intel and AMD chips that support the AVX-512 VBMI feature. Tracked as…",
         "evidence_origin": "summary",
-        "focus": "Java SE",
-        "headline": "Java SE patches address critical remote code execution",
+        "focus": "Jira, Jenkins, Keycloak",
+        "headline": "Jira, Jenkins, Keycloak expose unauthenticated remote code execution",
         "priority": "high",
-        "significance": "The remote exploitation without authentication weakens vulnerability management assurance. The vulnerability owner should confirm asset inventory coverage for Java SE and OpenJDK deployments and verify patch deployment timelines.",
+        "significance": "A pre-authentication RCE vulnerability in widely deployed enterprise applications undermines vulnerability management coverage and requires immediate asset identification. The accountable owner should confirm affected-asset inventory, installed versions, and remediation status with exception ownership.",
         "source_ids": [
           1
+        ]
+      },
+      {
+        "control_id": "third_party_risk",
+        "evidence_excerpt": "The Russia-linked cyber espionage group known as Cold Relic (formerly COLDRIVER and UNC4057) has been observed weaponizing a single cloud compromise into a launchpad for a series of linked intrusions resulting in third-party compromise. Google's Mandiant and Threat Intelligence Group (GTIG) said it investigated a 2026 compromise at a U.S.-based organization in which the adversary leveraged…",
+        "evidence_origin": "summary",
+        "focus": "Cold Relic",
+        "headline": "Cold Relic weaponizes single cloud compromise for linked intrusions",
+        "priority": "high",
+        "significance": "A single cloud compromise escalating into a chain of third-party intrusions demonstrates how supplier access can amplify blast radius. The supplier risk owner should review relevant supplier dependencies, assurance evidence, and escalation contacts for cloud identity providers.",
+        "source_ids": [
+          2
         ]
       },
       {
@@ -20,59 +32,47 @@
         "evidence_excerpt": "At least 178 top web destinations unwittingly served a variety of malware exploits against visitors over the past 24 hours thanks to a security vulnerability involving Optimizely, a company that helps websites customize user experiences and test out new features. Experts say the incident, which saw data-stealing malicious software silently injected into sites like the BBC, CNN, Equifax, Ledger and Zoom, was exacerbated by the reality that few popular websites enforce strict rules on the sources of third-party content.",
         "evidence_origin": "summary",
         "focus": "Optimizely",
-        "headline": "Optimizely vulnerability enables malware injection across major websites",
+        "headline": "Optimizely injects malware into 178 top websites",
         "priority": "high",
-        "significance": "Third-party content delivery compromise weakens supplier assurance and exposes visitors to data theft. The supplier risk owner should review Optimizely integration scope, contractual security requirements, and monitoring for unauthorized script behavior.",
+        "significance": "A third-party experience platform compromise silently distributed malware to major brand websites, exposing gaps in content source governance. The supplier risk owner should verify third-party content source controls, supplier assurance evidence, and contractual remediation obligations.",
         "source_ids": [
-          2
-        ]
-      },
-      {
-        "control_id": "monitoring",
-        "evidence_excerpt": "Credentials and access secrets exposed in public Docker Hub images are being extracted and exploited by attackers within as little as eight seconds of publication…",
-        "evidence_origin": "summary",
-        "focus": "public Docker Hub images",
-        "headline": "public Docker Hub images expose credentials within seconds",
-        "priority": "high",
-        "significance": "Rapid credential exploitation weakens monitoring detection and response windows. The monitoring owner should verify secret scanning coverage for container registries and alerting on anomalous credential use.",
-        "source_ids": [
-          5
+          3
         ]
       },
       {
         "control_id": "access_management",
-        "evidence_excerpt": "The commercial kit uses attacker-supplied AI models to personalize lures, evade spam filters, and scale campaigns to tens of thousands of targets.",
+        "evidence_excerpt": "Credentials and access secrets exposed in public Docker Hub images are being extracted and exploited by attackers within as little as eight seconds of publication…",
         "evidence_origin": "summary",
-        "focus": "The commercial kit",
-        "headline": "The commercial kit uses AI models to personalize phishing lures",
-        "priority": "medium",
-        "significance": "AI-enhanced phishing evades traditional filters and increases credential compromise likelihood. The identity and access owner should evaluate authentication resilience against personalized lures and confirm phishing simulation coverage.",
+        "focus": "public Docker Hub images",
+        "headline": "public Docker Hub images leak credentials exploited within seconds",
+        "priority": "high",
+        "significance": "Secrets embedded in public container images are harvested almost instantly, rendering manual rotation ineffective. The identity and access owner should confirm secret scanning coverage in CI/CD pipelines, automated revocation workflows, and evidence of rotation compliance.",
         "source_ids": [
           6
-        ]
-      },
-      {
-        "control_id": "incident_response",
-        "evidence_excerpt": "The Fugaku supercomputer operated by Japan's RIKEN Center for Computational Science has been taken offline following a security breach…",
-        "evidence_origin": "summary",
-        "focus": "Fugaku supercomputer",
-        "headline": "Fugaku supercomputer taken offline after security breach",
-        "priority": "high",
-        "significance": "Critical infrastructure outage tests incident containment and recovery procedures. The incident response lead should validate containment playbooks for high-value assets and confirm evidence preservation for forensic analysis.",
-        "source_ids": [
-          7
         ]
       },
       {
         "control_id": "third_party_risk",
         "evidence_excerpt": "A compromised key issued to AI infrastructure provider Fireworks was used by threat actors to access Cursor data and credentials.",
         "evidence_origin": "summary",
-        "focus": "AI infrastructure provider Fireworks",
-        "headline": "AI infrastructure provider Fireworks exposes Cursor data via compromised key",
-        "priority": "high",
-        "significance": "Supply chain credential theft undermines third-party assurance and enables downstream access. The supplier risk owner should review Fireworks access scope, key rotation practices, and contractual incident notification terms.",
+        "focus": "compromised key issued to Fireworks",
+        "headline": "Compromised key issued to Fireworks exposes Cursor data and credentials",
+        "priority": "medium",
+        "significance": "A compromised API key at an AI infrastructure provider enabled unauthorized access to customer data and credentials. The supplier risk owner should assess the supplier's key management practices, access scope limitations, and evidence of remediation assurance.",
         "source_ids": [
-          10
+          11
+        ]
+      },
+      {
+        "control_id": "access_management",
+        "evidence_excerpt": "A Lack of ownership verification on the Hugging Face platform allowed researchers to take control of Kokoro, a text-to-speech model used in projects from Google, NVIDIA, AMD, Intel, and Amazon Web Services…",
+        "evidence_origin": "summary",
+        "focus": "Hugging Face platform",
+        "headline": "Hugging Face platform lacks ownership verification for AI models",
+        "priority": "medium",
+        "significance": "Absence of ownership verification on a model hosting platform enabled account takeover of a widely used AI model. The identity and access owner should confirm identity verification controls for model repositories and assess supply chain integrity for AI dependencies.",
+        "source_ids": [
+          12
         ]
       }
     ],
@@ -80,27 +80,27 @@
       "paragraphs": [
         {
           "source_ids": [
-            2,
-            10
+            1
           ],
-          "text": "Third-party vendor compromises at Optimizely and Fireworks demonstrate how trusted platforms can become conduits for malware distribution and credential theft, affecting hundreds of major websites and downstream AI tooling. Control owners must reassess supplier integration boundaries, enforce strict content security policies, and demand timely incident notification from critical vendors."
+          "text": "A critical Java vulnerability dubbed Java4Shell enables unauthenticated remote code execution in widely deployed enterprise applications including Jira, Jenkins, and Keycloak running on Java 17.0.6 or later with specific hardware capabilities, requiring immediate asset identification and remediation verification by vulnerability management owners."
         },
         {
           "source_ids": [
-            1,
-            5,
-            7,
-            6
+            2,
+            3,
+            6,
+            11,
+            12
           ],
-          "text": "Critical vulnerabilities in Java SE and OpenJDK, near-instant exploitation of Docker Hub credentials, and the Fugaku supercomputer breach require accelerated patch cycles, secret rotation, and validated incident response playbooks. Meanwhile AI-driven phishing kits further erode authentication assumptions, necessitating enhanced detection and user resilience testing."
+          "text": "Multiple third-party incidents — Optimizely serving malware to 178 major websites, Cold Relic weaponizing stolen Google Workspace data for linked intrusions, a compromised Fireworks key accessing Cursor credentials, and Hugging Face lacking ownership verification for AI models — alongside Docker Hub secrets exploited within seconds of publication, collectively indicate systemic gaps in supplier assurance, identity verification, and secret management controls."
         }
       ]
     },
     "industry_impacts": [],
     "regulatory_changes": []
   },
-  "generated_at": "2026-11-18T03:21:10.954364Z",
-  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/9465ecac4e249a2d4bef0d42b0423c9bf825ab17/site/feed.xml",
+  "generated_at": "2026-11-18T06:25:57.770154Z",
+  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/ffdace038df660a9060e952c0c1826815ba9b9de/site/feed.xml",
   "feed_home_url": "https://sentrydigest.ricomanifesto.com/",
   "digest_issue_date": "2026-11-18",
   "digest_issue_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-18/",
@@ -108,25 +108,47 @@
   "resolved_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
   "sources": [
     {
-      "title": "Oracle to Patch 11 Java Flaws Today as Critical OpenJDK RCE (CVE-2026-114938) Report Emerges",
-      "url": "https://thehackernews.com/2026/11/oracle-to-patch-11-java-flaws-today-as.html",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-18/#reporting-e5492f986750",
+      "title": "Java4Shell (CVE-2026-114938) Enables Pre-Auth RCE in Jira, Jenkins, Keycloak on Java 17+ AVX-512 VBMI Servers",
+      "url": "https://thehackernews.com/2026/11/java4shell-cve-2026-114938-enables-pre.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-18/#reporting-5966ac56e61b",
       "cves": [
         "CVE-2026-114938"
       ],
-      "snippet": "Oracle to Patch 11 Java Flaws Today as Critical OpenJDK RCE (CVE-2026-114938) Report Emerges Oracle is preparing to release security patches for 11 vulnerabilities in Java SE on Tuesday, November 17, 2026, all of which may be exploited remotely without authentication, as separate reports warn of a potentially critical remote code execution (RCE) flaw affecting OpenJDK. The 11 vulnerabilities carry a maximum CVSS 3.1 severity score of 8.1, according to Oracle's advance security notice. Oracle is preparing to release security patches for 11 vulnerabilities in Java SE on Tuesday, November 17, 2026, all of which may be exploited remotely without authentication, as separate reports warn of a pote",
+      "snippet": "Java4Shell (CVE-2026-114938) Enables Pre-Auth RCE in Jira, Jenkins, Keycloak on Java 17+ AVX-512 VBMI Servers A Java flaw called Java4Shell can let attackers without an account run their own code on Jira, Jenkins, Keycloak, and three other widely used applications, says Calif, the security research firm that disclosed it this week. The flaw is present in Java 17.0.6 and later, and the vulnerable code runs only on x86-64 Intel and AMD chips that support the AVX-512 VBMI feature. Tracked as… A Java flaw called Java4Shell can let attackers without an account run their own code on Jira, Jenkins, Keycloak, and three other widely used applications, says Calif, the security research firm that discl",
       "article_evidence": [
         {
           "extraction_version": 1,
           "origin": "summary",
-          "raw_text": "Oracle is preparing to release security patches for 11 vulnerabilities in Java SE on Tuesday, November 17, 2026, all of which may be exploited remotely without authentication, as separate reports warn of a potentially critical remote code execution (RCE) flaw affecting OpenJDK. The 11 vulnerabilities carry a maximum CVSS 3.1 severity score of 8.1, according to Oracle's advance security notice.",
-          "text": "Oracle is preparing to release security patches for 11 vulnerabilities in Java SE on Tuesday, November 17, 2026, all of which may be exploited remotely without authentication, as separate reports warn of a potentially critical remote code execution (RCE) flaw affecting OpenJDK. The 11 vulnerabilities carry a maximum CVSS 3.1 severity score of 8.1, according to Oracle's advance security notice."
+          "raw_text": "A Java flaw called Java4Shell can let attackers without an account run their own code on Jira, Jenkins, Keycloak, and three other widely used applications, says Calif, the security research firm that disclosed it this week. The flaw is present in Java 17.0.6 and later, and the vulnerable code runs only on x86-64 Intel and AMD chips that support the AVX-512 VBMI feature. Tracked as…",
+          "text": "A Java flaw called Java4Shell can let attackers without an account run their own code on Jira, Jenkins, Keycloak, and three other widely used applications, says Calif, the security research firm that disclosed it this week. The flaw is present in Java 17.0.6 and later, and the vulnerable code runs only on x86-64 Intel and AMD chips that support the AVX-512 VBMI feature. Tracked as…"
         },
         {
           "extraction_version": 1,
           "origin": "content",
-          "raw_text": "Oracle is preparing to release security patches for 11 vulnerabilities in Java SE on Tuesday, November 17, 2026, all of which may be exploited remotely without authentication, as separate reports warn of a potentially critical remote code execution (RCE) flaw affecting OpenJDK. The 11 vulnerabilities carry a maximum CVSS 3.1 severity score of 8.1, according to Oracle's advance security notice.",
-          "text": "Oracle is preparing to release security patches for 11 vulnerabilities in Java SE on Tuesday, November 17, 2026, all of which may be exploited remotely without authentication, as separate reports warn of a potentially critical remote code execution (RCE) flaw affecting OpenJDK. The 11 vulnerabilities carry a maximum CVSS 3.1 severity score of 8.1, according to Oracle's advance security notice."
+          "raw_text": "A Java flaw called Java4Shell can let attackers without an account run their own code on Jira, Jenkins, Keycloak, and three other widely used applications, says Calif, the security research firm that disclosed it this week. The flaw is present in Java 17.0.6 and later, and the vulnerable code runs only on x86-64 Intel and AMD chips that support the AVX-512 VBMI feature. Tracked as…",
+          "text": "A Java flaw called Java4Shell can let attackers without an account run their own code on Jira, Jenkins, Keycloak, and three other widely used applications, says Calif, the security research firm that disclosed it this week. The flaw is present in Java 17.0.6 and later, and the vulnerable code runs only on x86-64 Intel and AMD chips that support the AVX-512 VBMI feature. Tracked as…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Russian COLD RELIC Hackers Use Stolen Google Workspace Data to Breach Second U.S. Organization",
+      "url": "https://thehackernews.com/2026/11/russian-cold-relic-hackers-use-stolen.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-18/#reporting-4816a5c313d5",
+      "cves": [],
+      "snippet": "Russian COLD RELIC Hackers Use Stolen Google Workspace Data to Breach Second U.S. Organization The Russia-linked cyber espionage group known as Cold Relic (formerly COLDRIVER and UNC4057) has been observed weaponizing a single cloud compromise into a launchpad for a series of linked intrusions resulting in third-party compromise. Google's Mandiant and Threat Intelligence Group (GTIG) said it investigated a 2026 compromise at a U.S.-based organization in which the adversary leveraged… The Russia-linked cyber espionage group known as Cold Relic (formerly COLDRIVER and UNC4057) has been observed weaponizing a single cloud compromise into a launchpad for a series of linked intrusions resulting i",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "The Russia-linked cyber espionage group known as Cold Relic (formerly COLDRIVER and UNC4057) has been observed weaponizing a single cloud compromise into a launchpad for a series of linked intrusions resulting in third-party compromise. Google's Mandiant and Threat Intelligence Group (GTIG) said it investigated a 2026 compromise at a U.S.-based organization in which the adversary leveraged…",
+          "text": "The Russia-linked cyber espionage group known as Cold Relic (formerly COLDRIVER and UNC4057) has been observed weaponizing a single cloud compromise into a launchpad for a series of linked intrusions resulting in third-party compromise. Google's Mandiant and Threat Intelligence Group (GTIG) said it investigated a 2026 compromise at a U.S.-based organization in which the adversary leveraged…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "The Russia-linked cyber espionage group known as Cold Relic (formerly COLDRIVER and UNC4057) has been observed weaponizing a single cloud compromise into a launchpad for a series of linked intrusions resulting in third-party compromise. Google's Mandiant and Threat Intelligence Group (GTIG) said it investigated a 2026 compromise at a U.S.-based organization in which the adversary leveraged…",
+          "text": "The Russia-linked cyber espionage group known as Cold Relic (formerly COLDRIVER and UNC4057) has been observed weaponizing a single cloud compromise into a launchpad for a series of linked intrusions resulting in third-party compromise. Google's Mandiant and Threat Intelligence Group (GTIG) said it investigated a 2026 compromise at a U.S.-based organization in which the adversary leveraged…"
         }
       ],
       "effective_date_evidence": null
@@ -347,28 +369,6 @@
           "origin": "content",
           "raw_text": "A Lack of ownership verification on the Hugging Face platform allowed researchers to take control of Kokoro, a text-to-speech model used in projects from Google, NVIDIA, AMD, Intel, and Amazon Web Services…",
           "text": "A Lack of ownership verification on the Hugging Face platform allowed researchers to take control of Kokoro, a text-to-speech model used in projects from Google, NVIDIA, AMD, Intel, and Amazon Web Services…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "Tor releases emergency update amid ongoing DDoS attack",
-      "url": "https://www.bleepingcomputer.com/news/security/tor-releases-emergency-update-amid-ongoing-ddos-attack/",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-18/#reporting-6ab6f9140451",
-      "cves": [],
-      "snippet": "Tor releases emergency update amid ongoing DDoS attack The Tor Project has released a security update for its network relay software to increase defenses against an ongoing distributed denial-of-service attack that it says has overwhelmed relays and affected most operators… The Tor Project has released a security update for its network relay software to increase defenses against an ongoing distributed denial-of-service attack that it says has overwhelmed relays and affected most operators…",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "The Tor Project has released a security update for its network relay software to increase defenses against an ongoing distributed denial-of-service attack that it says has overwhelmed relays and affected most operators…",
-          "text": "The Tor Project has released a security update for its network relay software to increase defenses against an ongoing distributed denial-of-service attack that it says has overwhelmed relays and affected most operators…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "The Tor Project has released a security update for its network relay software to increase defenses against an ongoing distributed denial-of-service attack that it says has overwhelmed relays and affected most operators…",
-          "text": "The Tor Project has released a security update for its network relay software to increase defenses against an ongoing distributed denial-of-service attack that it says has overwhelmed relays and affected most operators…"
         }
       ],
       "effective_date_evidence": null
