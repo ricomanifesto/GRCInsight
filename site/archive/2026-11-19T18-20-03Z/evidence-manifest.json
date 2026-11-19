@@ -1,0 +1,376 @@
+{
+  "schema_version": 3,
+  "report_contract_version": 6,
+  "report_plan": {
+    "control_implications": [
+      {
+        "control_id": "vulnerability_management",
+        "evidence_excerpt": "One of the early targets of PHP2Shell exploitation was the firewall. On October 28, Palo Alto Networks confirmed that attackers were exploiting the two PHP vulnerabilities, CVE-2026-109618 and CVE-2026-109619, against PAN-OS management interfaces exposed to the internet. Both flaws let anyone execute code on the web server without authentication.",
+        "evidence_origin": "summary",
+        "focus": "PAN-OS management interfaces",
+        "headline": "PAN-OS management interfaces exposes unauthenticated code execution",
+        "priority": "high",
+        "significance": "Active exploitation of firewall management interfaces bypasses authentication and allows unauthenticated code execution, weakening perimeter assurance. The vulnerability owner should confirm emergency patching of PAN-OS and validate that management interfaces are not internet-exposed.",
+        "source_ids": [
+          3
+        ]
+      },
+      {
+        "control_id": "vulnerability_management",
+        "evidence_excerpt": "A critical security flaw in Apache Roller, an open-source, Java-based blogging platform, has come under active exploitation in the wild, according to the Apache Software Foundation (ASF) The vulnerability, tracked as CVE-2026-129448 (CVSS score: 9.8), is a case of unauthenticated deserialization in the XML-RPC endpoint that could lead to remote code execution.",
+        "evidence_origin": "summary",
+        "focus": "Apache Roller XML-RPC endpoint",
+        "headline": "Apache Roller XML-RPC endpoint enables unauthenticated deserialization",
+        "priority": "high",
+        "significance": "Active exploitation of unauthenticated deserialization in a widely used blogging platform compromises server integrity and demands immediate remediation. The asset owner should verify Apache Roller deployments, apply patches, and monitor XML-RPC endpoint traffic for anomalies.",
+        "source_ids": [
+          5
+        ]
+      },
+      {
+        "control_id": "access_management",
+        "evidence_excerpt": "A critical flaw in VMware vCenter lets an attacker with network access bypass authentication and gain unauthorized access to the system, Broadcom, which owns VMware, said in an advisory published today. Fixed versions are out for all supported branches, and the company lists no workaround. vCenter is the central console for managing an organization's ESX hosts and virtual machines.",
+        "evidence_origin": "summary",
+        "focus": "VMware vCenter authentication bypass",
+        "headline": "VMware vCenter authentication bypass allows unauthorized system access",
+        "priority": "high",
+        "significance": "Authentication bypass in the central virtualization management console grants unauthorized administrative access, undermining identity controls. The access owner should confirm vCenter patching, restrict network access to management interfaces, and review privileged account activity.",
+        "source_ids": [
+          7
+        ]
+      },
+      {
+        "control_id": "vulnerability_management",
+        "evidence_excerpt": "A flaw in NGINX's HTTP/2 support can allow an attacker to run code on servers with HTTP/2 enabled, without needing to log in. The decade-old flaw, CVE-2026-123007, dubbed \"nginx2root,\" has been present in NGINX's open-source code since version 1.9.5, released on September 22, 2015. Fixed versions 1.31.9 and 1.30.7 came out today.",
+        "evidence_origin": "summary",
+        "focus": "NGINX HTTP/2 support flaw",
+        "headline": "NGINX HTTP/2 support flaw permits unauthenticated code execution",
+        "priority": "medium",
+        "significance": "A long-standing vulnerability in NGINX HTTP/2 allows unauthenticated remote code execution on exposed web servers, requiring urgent version upgrades. The vulnerability owner should inventory NGINX deployments, apply fixed versions 1.31.9 or 1.30.7, and verify HTTP/2 configuration.",
+        "source_ids": [
+          4
+        ]
+      },
+      {
+        "control_id": "access_management",
+        "evidence_excerpt": "Under specific conditions, a critical vulnerability in Drupal core can allow an attacker without login credentials to use the built-in installer to attempt to reinstall a site. That can lead to a site takeover or remote code execution, and the project rates the vulnerable configurations as uncommon. Fixed releases for all supported branches shipped yesterday.",
+        "evidence_origin": "summary",
+        "focus": "Drupal core installer vulnerability",
+        "headline": "Drupal core installer vulnerability enables unauthenticated site takeover",
+        "priority": "medium",
+        "significance": "Unauthenticated site reinstallation via the Drupal installer can lead to complete site compromise, affecting web application integrity. The application owner should apply Drupal security updates, review installer exposure, and validate site configuration against vulnerable conditions.",
+        "source_ids": [
+          10
+        ]
+      }
+    ],
+    "executive_brief": {
+      "paragraphs": [
+        {
+          "source_ids": [
+            3,
+            5,
+            7,
+            4,
+            10
+          ],
+          "text": "Critical unauthenticated remote code execution vulnerabilities in Palo Alto Networks PAN-OS, Apache Roller, VMware vCenter, NGINX, and Drupal are under active exploitation, demanding immediate patching of internet-exposed management interfaces and web applications to prevent unauthorized system access and site compromise. The convergence of authentication bypass and deserialization flaws across core infrastructure components elevates the urgency for vulnerability remediation and access restriction validation."
+        },
+        {
+          "source_ids": [
+            3,
+            5,
+            7
+          ],
+          "text": "Ransomware intrusion patterns involving credential theft, lateral movement, and security control disabling provide detectable precursors before encryption, enabling earlier containment through enhanced monitoring of warning signs identified by security researchers. Integrating these indicators into detection rules improves response readiness against evolving ransomware operations."
+        }
+      ]
+    },
+    "industry_impacts": [],
+    "regulatory_changes": []
+  },
+  "generated_at": "2026-11-19T18:20:03.755851Z",
+  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/a7e4e0f4216b71072e0e1e489f0150e044bfcffa/site/feed.xml",
+  "feed_home_url": "https://sentrydigest.ricomanifesto.com/",
+  "digest_issue_date": "2026-11-19",
+  "digest_issue_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-19/",
+  "requested_model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
+  "resolved_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+  "sources": [
+    {
+      "title": "phpAfterShell Explained: How Hackers Could Turn a PHP Session Flaw Into Code Execution",
+      "url": "https://thehackernews.com/2026/11/phpaftershell-explained-how-hackers.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-19/#reporting-ea8cebf5d32b",
+      "cves": [
+        "CVE-2026-126714"
+      ],
+      "snippet": "phpAfterShell Explained: How Hackers Could Turn a PHP Session Flaw Into Code Execution PHP's default file-based session storage can be made to return objects an attacker chose, by cutting off a session write at the right moment. When combined with a second weakness, such as a suitable gadget chain in the app, those objects can allow the attacker to run code on the server. Today's PHP releases fix the flaw, called phpAfterShell. The flaw is tracked as CVE-2026-126714 and rated… PHP's default file-based session storage can be made to return objects an attacker chose, by cutting off a session write at the right moment. When combined with a second weakness, such as a suitable gadget chain in the",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "PHP's default file-based session storage can be made to return objects an attacker chose, by cutting off a session write at the right moment. When combined with a second weakness, such as a suitable gadget chain in the app, those objects can allow the attacker to run code on the server. Today's PHP releases fix the flaw, called phpAfterShell. The flaw is tracked as CVE-2026-126714 and rated…",
+          "text": "PHP's default file-based session storage can be made to return objects an attacker chose, by cutting off a session write at the right moment. When combined with a second weakness, such as a suitable gadget chain in the app, those objects can allow the attacker to run code on the server. Today's PHP releases fix the flaw, called phpAfterShell. The flaw is tracked as CVE-2026-126714 and rated…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "PHP's default file-based session storage can be made to return objects an attacker chose, by cutting off a session write at the right moment. When combined with a second weakness, such as a suitable gadget chain in the app, those objects can allow the attacker to run code on the server. Today's PHP releases fix the flaw, called phpAfterShell. The flaw is tracked as CVE-2026-126714 and rated…",
+          "text": "PHP's default file-based session storage can be made to return objects an attacker chose, by cutting off a session write at the right moment. When combined with a second weakness, such as a suitable gadget chain in the app, those objects can allow the attacker to run code on the server. Today's PHP releases fix the flaw, called phpAfterShell. The flaw is tracked as CVE-2026-126714 and rated…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "PHP Fixes 7 Critical Flaws, Including Bugs That Could Allow Remote Code Execution",
+      "url": "https://thehackernews.com/2026/11/php-fixes-7-critical-flaws-including.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-19/#reporting-dcfa8134ceac",
+      "cves": [
+        "CVE-2026-115560"
+      ],
+      "snippet": "PHP Fixes 7 Critical Flaws, Including Bugs That Could Allow Remote Code Execution The PHP Foundation has released security updates to address multiple critical security flaws that could be exploited to achieve remote code execution on affected deployments, including CVE-2026-115560. The release of the patch follows an advance notice in which the project maintainers alerted users to multiple critical vulnerabilities affecting all supported PHP versions under specific… The PHP Foundation has released security updates to address multiple critical security flaws that could be exploited to achieve remote code execution on affected deployments, including CVE-2026-115560. The release of the patch f",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "The PHP Foundation has released security updates to address multiple critical security flaws that could be exploited to achieve remote code execution on affected deployments, including CVE-2026-115560. The release of the patch follows an advance notice in which the project maintainers alerted users to multiple critical vulnerabilities affecting all supported PHP versions under specific…",
+          "text": "The PHP Foundation has released security updates to address multiple critical security flaws that could be exploited to achieve remote code execution on affected deployments, including CVE-2026-115560. The release of the patch follows an advance notice in which the project maintainers alerted users to multiple critical vulnerabilities affecting all supported PHP versions under specific…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "The PHP Foundation has released security updates to address multiple critical security flaws that could be exploited to achieve remote code execution on affected deployments, including CVE-2026-115560. The release of the patch follows an advance notice in which the project maintainers alerted users to multiple critical vulnerabilities affecting all supported PHP versions under specific…",
+          "text": "The PHP Foundation has released security updates to address multiple critical security flaws that could be exploited to achieve remote code execution on affected deployments, including CVE-2026-115560. The release of the patch follows an advance notice in which the project maintainers alerted users to multiple critical vulnerabilities affecting all supported PHP versions under specific…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Everything Is a Web Application, Including Your Firewall",
+      "url": "https://thehackernews.com/2026/11/everything-is-web-application-including.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-19/#reporting-79fb717d814d",
+      "cves": [
+        "CVE-2026-109618",
+        "CVE-2026-109619"
+      ],
+      "snippet": "Everything Is a Web Application, Including Your Firewall One of the early targets of PHP2Shell exploitation was the firewall. On October 28, Palo Alto Networks confirmed that attackers were exploiting the two PHP vulnerabilities, CVE-2026-109618 and CVE-2026-109619, against PAN-OS management interfaces exposed to the internet. Both flaws let anyone execute code on the web server without authentication. The disclosure itself went a little wrong. One of the early targets of PHP2Shell exploitation was the firewall. On October 28, Palo Alto Networks confirmed that attackers were exploiting the two PHP vulnerabilities, CVE-2026-109618 and CVE-2026-109619, against PAN-OS management interfaces expo",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "One of the early targets of PHP2Shell exploitation was the firewall. On October 28, Palo Alto Networks confirmed that attackers were exploiting the two PHP vulnerabilities, CVE-2026-109618 and CVE-2026-109619, against PAN-OS management interfaces exposed to the internet. Both flaws let anyone execute code on the web server without authentication. The disclosure itself went a little wrong.",
+          "text": "One of the early targets of PHP2Shell exploitation was the firewall. On October 28, Palo Alto Networks confirmed that attackers were exploiting the two PHP vulnerabilities, CVE-2026-109618 and CVE-2026-109619, against PAN-OS management interfaces exposed to the internet. Both flaws let anyone execute code on the web server without authentication. The disclosure itself went a little wrong."
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "One of the early targets of PHP2Shell exploitation was the firewall. On October 28, Palo Alto Networks confirmed that attackers were exploiting the two PHP vulnerabilities, CVE-2026-109618 and CVE-2026-109619, against PAN-OS management interfaces exposed to the internet. Both flaws let anyone execute code on the web server without authentication. The disclosure itself went a little wrong.",
+          "text": "One of the early targets of PHP2Shell exploitation was the firewall. On October 28, Palo Alto Networks confirmed that attackers were exploiting the two PHP vulnerabilities, CVE-2026-109618 and CVE-2026-109619, against PAN-OS management interfaces exposed to the internet. Both flaws let anyone execute code on the web server without authentication. The disclosure itself went a little wrong."
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "10-Year-Old NGINX HTTP/2 Flaw Lets Unauthenticated Attackers Execute Code on Servers",
+      "url": "https://thehackernews.com/2026/11/10-year-old-nginx-http2-flaw-lets.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-19/#reporting-04e49dcbdb74",
+      "cves": [
+        "CVE-2026-123007"
+      ],
+      "snippet": "10-Year-Old NGINX HTTP/2 Flaw Lets Unauthenticated Attackers Execute Code on Servers A flaw in NGINX's HTTP/2 support can allow an attacker to run code on servers with HTTP/2 enabled, without needing to log in. The decade-old flaw, CVE-2026-123007, dubbed \"nginx2root,\" has been present in NGINX's open-source code since version 1.9.5, released on September 22, 2015. Fixed versions 1.31.9 and 1.30.7 came out today. F5, the company behind NGINX, says attackers can run code where… A flaw in NGINX's HTTP/2 support can allow an attacker to run code on servers with HTTP/2 enabled, without needing to log in. The decade-old flaw, CVE-2026-123007, dubbed \"nginx2root,\" has been present in NGINX's open-",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "A flaw in NGINX's HTTP/2 support can allow an attacker to run code on servers with HTTP/2 enabled, without needing to log in. The decade-old flaw, CVE-2026-123007, dubbed \"nginx2root,\" has been present in NGINX's open-source code since version 1.9.5, released on September 22, 2015. Fixed versions 1.31.9 and 1.30.7 came out today. F5, the company behind NGINX, says attackers can run code where…",
+          "text": "A flaw in NGINX's HTTP/2 support can allow an attacker to run code on servers with HTTP/2 enabled, without needing to log in. The decade-old flaw, CVE-2026-123007, dubbed \"nginx2root,\" has been present in NGINX's open-source code since version 1.9.5, released on September 22, 2015. Fixed versions 1.31.9 and 1.30.7 came out today. F5, the company behind NGINX, says attackers can run code where…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "A flaw in NGINX's HTTP/2 support can allow an attacker to run code on servers with HTTP/2 enabled, without needing to log in. The decade-old flaw, CVE-2026-123007, dubbed \"nginx2root,\" has been present in NGINX's open-source code since version 1.9.5, released on September 22, 2015. Fixed versions 1.31.9 and 1.30.7 came out today. F5, the company behind NGINX, says attackers can run code where…",
+          "text": "A flaw in NGINX's HTTP/2 support can allow an attacker to run code on servers with HTTP/2 enabled, without needing to log in. The decade-old flaw, CVE-2026-123007, dubbed \"nginx2root,\" has been present in NGINX's open-source code since version 1.9.5, released on September 22, 2015. Fixed versions 1.31.9 and 1.30.7 came out today. F5, the company behind NGINX, says attackers can run code where…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Critical Apache Roller RCE Flaw Under Active Exploitation, No Authentication Required",
+      "url": "https://thehackernews.com/2026/11/critical-apache-roller-rce-flaw-under.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-19/#reporting-6ec0dce548ff",
+      "cves": [
+        "CVE-2026-129448"
+      ],
+      "snippet": "Critical Apache Roller RCE Flaw Under Active Exploitation, No Authentication Required A critical security flaw in Apache Roller, an open-source, Java-based blogging platform, has come under active exploitation in the wild, according to the Apache Software Foundation (ASF) The vulnerability, tracked as CVE-2026-129448 (CVSS score: 9.8), is a case of unauthenticated deserialization in the XML-RPC endpoint that could lead to remote code execution. \"Deserialization of Untrusted… A critical security flaw in Apache Roller, an open-source, Java-based blogging platform, has come under active exploitation in the wild, according to the Apache Software Foundation (ASF) The vulnerability, tracked as CVE",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "A critical security flaw in Apache Roller, an open-source, Java-based blogging platform, has come under active exploitation in the wild, according to the Apache Software Foundation (ASF) The vulnerability, tracked as CVE-2026-129448 (CVSS score: 9.8), is a case of unauthenticated deserialization in the XML-RPC endpoint that could lead to remote code execution. \"Deserialization of Untrusted…",
+          "text": "A critical security flaw in Apache Roller, an open-source, Java-based blogging platform, has come under active exploitation in the wild, according to the Apache Software Foundation (ASF) The vulnerability, tracked as CVE-2026-129448 (CVSS score: 9.8), is a case of unauthenticated deserialization in the XML-RPC endpoint that could lead to remote code execution. \"Deserialization of Untrusted…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "A critical security flaw in Apache Roller, an open-source, Java-based blogging platform, has come under active exploitation in the wild, according to the Apache Software Foundation (ASF) The vulnerability, tracked as CVE-2026-129448 (CVSS score: 9.8), is a case of unauthenticated deserialization in the XML-RPC endpoint that could lead to remote code execution. \"Deserialization of Untrusted…",
+          "text": "A critical security flaw in Apache Roller, an open-source, Java-based blogging platform, has come under active exploitation in the wild, according to the Apache Software Foundation (ASF) The vulnerability, tracked as CVE-2026-129448 (CVSS score: 9.8), is a case of unauthenticated deserialization in the XML-RPC endpoint that could lead to remote code execution. \"Deserialization of Untrusted…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "PHP security updates fix 18 flaws, including critical RCE bugs",
+      "url": "https://www.bleepingcomputer.com/news/security/php-security-updates-fix-18-flaws-including-critical-rce-bugs/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-19/#reporting-8e443c2964ac",
+      "cves": [],
+      "snippet": "PHP security updates fix 18 flaws, including critical RCE bugs The PHP development team released security updates addressing 18 vulnerabilities, including critical flaws that could allow unauthenticated attackers to remotely execute code on vulnerable servers… The PHP development team released security updates addressing 18 vulnerabilities, including critical flaws that could allow unauthenticated attackers to remotely execute code on vulnerable servers…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "The PHP development team released security updates addressing 18 vulnerabilities, including critical flaws that could allow unauthenticated attackers to remotely execute code on vulnerable servers…",
+          "text": "The PHP development team released security updates addressing 18 vulnerabilities, including critical flaws that could allow unauthenticated attackers to remotely execute code on vulnerable servers…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "The PHP development team released security updates addressing 18 vulnerabilities, including critical flaws that could allow unauthenticated attackers to remotely execute code on vulnerable servers…",
+          "text": "The PHP development team released security updates addressing 18 vulnerabilities, including critical flaws that could allow unauthenticated attackers to remotely execute code on vulnerable servers…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Critical VMware vCenter Flaw (CVSS 9.8) Lets Network Attackers Bypass Authentication",
+      "url": "https://thehackernews.com/2026/11/critical-vmware-vcenter-flaw-cvss-98.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-19/#reporting-63edce0941e0",
+      "cves": [],
+      "snippet": "Critical VMware vCenter Flaw (CVSS 9.8) Lets Network Attackers Bypass Authentication A critical flaw in VMware vCenter lets an attacker with network access bypass authentication and gain unauthorized access to the system, Broadcom, which owns VMware, said in an advisory published today. Fixed versions are out for all supported branches, and the company lists no workaround. vCenter is the central console for managing an organization's ESX hosts and virtual machines. The… A critical flaw in VMware vCenter lets an attacker with network access bypass authentication and gain unauthorized access to the system, Broadcom, which owns VMware, said in an advisory published today. Fixed versions are out",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "A critical flaw in VMware vCenter lets an attacker with network access bypass authentication and gain unauthorized access to the system, Broadcom, which owns VMware, said in an advisory published today. Fixed versions are out for all supported branches, and the company lists no workaround. vCenter is the central console for managing an organization's ESX hosts and virtual machines. The…",
+          "text": "A critical flaw in VMware vCenter lets an attacker with network access bypass authentication and gain unauthorized access to the system, Broadcom, which owns VMware, said in an advisory published today. Fixed versions are out for all supported branches, and the company lists no workaround. vCenter is the central console for managing an organization's ESX hosts and virtual machines. The…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "A critical flaw in VMware vCenter lets an attacker with network access bypass authentication and gain unauthorized access to the system, Broadcom, which owns VMware, said in an advisory published today. Fixed versions are out for all supported branches, and the company lists no workaround. vCenter is the central console for managing an organization's ESX hosts and virtual machines. The…",
+          "text": "A critical flaw in VMware vCenter lets an attacker with network access bypass authentication and gain unauthorized access to the system, Broadcom, which owns VMware, said in an advisory published today. Fixed versions are out for all supported branches, and the company lists no workaround. vCenter is the central console for managing an organization's ESX hosts and virtual machines. The…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Five warning signs of ransomware breach before encryption or data theft",
+      "url": "https://www.bleepingcomputer.com/news/security/five-warning-signs-of-ransomware-breach-before-encryption-or-data-theft/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-19/#reporting-eb38241a0eaf",
+      "cves": [],
+      "snippet": "Five warning signs of ransomware breach before encryption or data theft Ransomware attacks often involve credential theft, lateral movement, and attempts to disable security controls long before encryption begins. Acronis examines five warning signs that can help defenders detect intrusions earlier, contain malicious activity, and protect critical systems and backups… Ransomware attacks often involve credential theft, lateral movement, and attempts to disable security controls long before encryption begins. Acronis examines five warning signs that can help defenders detect intrusions earlier, contain malicious activity, and protect critical systems and backups…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Ransomware attacks often involve credential theft, lateral movement, and attempts to disable security controls long before encryption begins. Acronis examines five warning signs that can help defenders detect intrusions earlier, contain malicious activity, and protect critical systems and backups…",
+          "text": "Ransomware attacks often involve credential theft, lateral movement, and attempts to disable security controls long before encryption begins. Acronis examines five warning signs that can help defenders detect intrusions earlier, contain malicious activity, and protect critical systems and backups…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Ransomware attacks often involve credential theft, lateral movement, and attempts to disable security controls long before encryption begins. Acronis examines five warning signs that can help defenders detect intrusions earlier, contain malicious activity, and protect critical systems and backups…",
+          "text": "Ransomware attacks often involve credential theft, lateral movement, and attempts to disable security controls long before encryption begins. Acronis examines five warning signs that can help defenders detect intrusions earlier, contain malicious activity, and protect critical systems and backups…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Critical NGINX ‘NGINX2Root’ bugs let attackers hijack servers",
+      "url": "https://www.bleepingcomputer.com/news/security/critical-nginx-nginx2root-bugs-let-attackers-hijack-servers/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-19/#reporting-03c656aa7f62",
+      "cves": [],
+      "snippet": "Critical NGINX ‘NGINX2Root’ bugs let attackers hijack servers Two critical NGINX vulnerabilities dubbed \"nginx2root\" allow unauthenticated attackers to execute code remotely on vulnerable web servers, with researchers demonstrating how the flaws can be chained with a Linux kernel bug to gain root access… Two critical NGINX vulnerabilities dubbed \"nginx2root\" allow unauthenticated attackers to execute code remotely on vulnerable web servers, with researchers demonstrating how the flaws can be chained with a Linux kernel bug to gain root access…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Two critical NGINX vulnerabilities dubbed \"nginx2root\" allow unauthenticated attackers to execute code remotely on vulnerable web servers, with researchers demonstrating how the flaws can be chained with a Linux kernel bug to gain root access…",
+          "text": "Two critical NGINX vulnerabilities dubbed \"nginx2root\" allow unauthenticated attackers to execute code remotely on vulnerable web servers, with researchers demonstrating how the flaws can be chained with a Linux kernel bug to gain root access…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Two critical NGINX vulnerabilities dubbed \"nginx2root\" allow unauthenticated attackers to execute code remotely on vulnerable web servers, with researchers demonstrating how the flaws can be chained with a Linux kernel bug to gain root access…",
+          "text": "Two critical NGINX vulnerabilities dubbed \"nginx2root\" allow unauthenticated attackers to execute code remotely on vulnerable web servers, with researchers demonstrating how the flaws can be chained with a Linux kernel bug to gain root access…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Drupal Patches Critical Installer Flaw That Could Give Unauthenticated Attackers Control of Sites",
+      "url": "https://thehackernews.com/2026/11/drupal-patches-critical-installer-flaw.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-19/#reporting-88c544823e0d",
+      "cves": [],
+      "snippet": "Drupal Patches Critical Installer Flaw That Could Give Unauthenticated Attackers Control of Sites Under specific conditions, a critical vulnerability in Drupal core can allow an attacker without login credentials to use the built-in installer to attempt to reinstall a site. That can lead to a site takeover or remote code execution, and the project rates the vulnerable configurations as uncommon. Fixed releases for all supported branches shipped yesterday. The Drupal Security Team disclosed… Under specific conditions, a critical vulnerability in Drupal core can allow an attacker without login credentials to use the built-in installer to attempt to reinstall a site. That can lead to a site tak",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Under specific conditions, a critical vulnerability in Drupal core can allow an attacker without login credentials to use the built-in installer to attempt to reinstall a site. That can lead to a site takeover or remote code execution, and the project rates the vulnerable configurations as uncommon. Fixed releases for all supported branches shipped yesterday. The Drupal Security Team disclosed…",
+          "text": "Under specific conditions, a critical vulnerability in Drupal core can allow an attacker without login credentials to use the built-in installer to attempt to reinstall a site. That can lead to a site takeover or remote code execution, and the project rates the vulnerable configurations as uncommon. Fixed releases for all supported branches shipped yesterday. The Drupal Security Team disclosed…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Under specific conditions, a critical vulnerability in Drupal core can allow an attacker without login credentials to use the built-in installer to attempt to reinstall a site. That can lead to a site takeover or remote code execution, and the project rates the vulnerable configurations as uncommon. Fixed releases for all supported branches shipped yesterday. The Drupal Security Team disclosed…",
+          "text": "Under specific conditions, a critical vulnerability in Drupal core can allow an attacker without login credentials to use the built-in installer to attempt to reinstall a site. That can lead to a site takeover or remote code execution, and the project rates the vulnerable configurations as uncommon. Fixed releases for all supported branches shipped yesterday. The Drupal Security Team disclosed…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Why Holiday Security Can't Wait for Black Friday",
+      "url": "https://www.darkreading.com/cybersecurity-operations/why-holiday-security-cant-wait-black-friday",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-19/#reporting-d6e891227416",
+      "cves": [],
+      "snippet": "Why Holiday Security Can't Wait for Black Friday Bot-driven fraud and holiday social engineering attacks stretch across many weeks, straining security teams and small businesses alike. Bot-driven fraud and holiday social engineering attacks stretch across many weeks, straining security teams and small businesses alike.",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Bot-driven fraud and holiday social engineering attacks stretch across many weeks, straining security teams and small businesses alike.",
+          "text": "Bot-driven fraud and holiday social engineering attacks stretch across many weeks, straining security teams and small businesses alike."
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Bot-driven fraud and holiday social engineering attacks stretch across many weeks, straining security teams and small businesses alike.",
+          "text": "Bot-driven fraud and holiday social engineering attacks stretch across many weeks, straining security teams and small businesses alike."
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Drupal patches critical RCE flaw, warns exploits may surface quickly",
+      "url": "https://www.bleepingcomputer.com/news/security/drupal-patches-critical-rce-flaw-warns-exploits-may-surface-quickly/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-19/#reporting-9ca9ce7f9de5",
+      "cves": [],
+      "snippet": "Drupal patches critical RCE flaw, warns exploits may surface quickly The Drupal Security Team has patched a critical remote code execution vulnerability that can let attackers take over vulnerable sites… The Drupal Security Team has patched a critical remote code execution vulnerability that can let attackers take over vulnerable sites…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "The Drupal Security Team has patched a critical remote code execution vulnerability that can let attackers take over vulnerable sites…",
+          "text": "The Drupal Security Team has patched a critical remote code execution vulnerability that can let attackers take over vulnerable sites…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "The Drupal Security Team has patched a critical remote code execution vulnerability that can let attackers take over vulnerable sites…",
+          "text": "The Drupal Security Team has patched a critical remote code execution vulnerability that can let attackers take over vulnerable sites…"
+        }
+      ],
+      "effective_date_evidence": null
+    }
+  ]
+}
