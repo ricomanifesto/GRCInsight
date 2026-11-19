@@ -3678,6 +3678,13 @@
       "at": "2026-11-19T21:18:02.459Z",
       "run_id": "44617283244",
       "stage": "invoked"
+    },
+    {
+      "admission_key": "digest:ba228333aec3ef8533ab0290ef38d3118d4d3175",
+      "at": "2026-11-19T21:18:04.986Z",
+      "handle": "report_20261119_211804_559",
+      "run_id": "44617283244",
+      "stage": "invoked"
     }
   ],
   "schema_version": 1,
