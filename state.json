@@ -3528,6 +3528,12 @@
       "run_id": "44523650315",
       "source_revision": "005966908d9f629aa9764b1789c083396680f81d",
       "stage": "admitted"
+    },
+    {
+      "admission_key": "digest:005966908d9f629aa9764b1789c083396680f81d",
+      "at": "2026-11-19T12:25:13.105Z",
+      "run_id": "44523650315",
+      "stage": "invoked"
     }
   ],
   "schema_version": 1,
