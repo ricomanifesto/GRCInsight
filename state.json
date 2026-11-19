@@ -13793,6 +13793,126 @@
       "source_revision": "c1c79372bf767528c8fe1e33887bb7003cc0ccab",
       "stage": "released",
       "tree_digest": "bf0ea712024664180e0c9b81f560c3f4bf1b62c060f251dc5fab4c422c3ef27a"
+    },
+    {
+      "at": "2026-11-19T06:31:35.854Z",
+      "proof": {
+        "absent": [
+          {
+            "path": "_publication/build.js",
+            "status": 404
+          },
+          {
+            "path": "vercel.json",
+            "status": 404
+          }
+        ],
+        "checked_at": "2026-11-19T06:31:35.557Z",
+        "failures": [],
+        "listing_digest": "39d2080111af8da7b8dd51d03a3923e77f722b7b86087d7a513e685328a68690",
+        "ok": true,
+        "origin": "https://grcinsight.ricomanifesto.com/",
+        "receipt": {
+          "environment": "production",
+          "git_commit_sha": "298b3f645a8713189a772037ea4e064366667d9c",
+          "git_ref": "vercel-production",
+          "production_host": "grcinsight.ricomanifesto.com",
+          "release_key": "9d4ab14d004f0f9f45c62f893bd24a1bac1960749f426f3540be325acf72e39d",
+          "repository": "ricomanifesto/GRCInsight",
+          "schema_version": 1
+        },
+        "samples": [
+          {
+            "headers": {
+              "age": "20",
+              "cache-control": "public, max-age=0, must-revalidate",
+              "content-type": "text/html; charset=utf-8",
+              "etag": "W/\"a0566531481b73a0952adbbb8a370635\""
+            },
+            "ok": true,
+            "path": "index.html",
+            "status": 200,
+            "url": "https://grcinsight.ricomanifesto.com/"
+          },
+          {
+            "headers": {
+              "age": "20",
+              "cache-control": "public, max-age=0, must-revalidate",
+              "content-type": "application/json; charset=utf-8",
+              "etag": "\"1d638bef6e2ff82e29a8ff4d7a2af69a\""
+            },
+            "ok": true,
+            "path": "publication-state.json",
+            "status": 200,
+            "url": "https://grcinsight.ricomanifesto.com/publication-state.json"
+          },
+          {
+            "headers": {
+              "age": "20",
+              "cache-control": "public, max-age=0, must-revalidate",
+              "content-type": "text/html; charset=utf-8",
+              "etag": "W/\"e23273974ad92c74ecbf4926651aac25\""
+            },
+            "ok": true,
+            "path": "archive/2026-11-19T06-30-02Z/index.html",
+            "status": 200,
+            "url": "https://grcinsight.ricomanifesto.com/archive/2026-11-19T06-30-02Z/"
+          },
+          {
+            "headers": {
+              "age": "20",
+              "cache-control": "public, max-age=0, must-revalidate",
+              "content-type": "application/xml; charset=utf-8",
+              "etag": "\"2f6b73807935048ace6ecce1f656caca\""
+            },
+            "ok": true,
+            "path": "sitemap.xml",
+            "status": 200,
+            "url": "https://grcinsight.ricomanifesto.com/sitemap.xml"
+          },
+          {
+            "headers": {
+              "age": "20",
+              "cache-control": "public, max-age=0, must-revalidate",
+              "content-type": "text/css; charset=utf-8",
+              "etag": "W/\"45dd375746d35997ce9c639e2ca54c19\""
+            },
+            "ok": true,
+            "path": "static/style.css",
+            "status": 200,
+            "url": "https://grcinsight.ricomanifesto.com/static/style.css"
+          },
+          {
+            "headers": {
+              "age": "0",
+              "cache-control": "public, max-age=0, must-revalidate",
+              "content-type": "text/plain; charset=utf-8",
+              "etag": "W/\"ec486102bcf3e45efcbc2013be7e6d8d\""
+            },
+            "ok": true,
+            "path": "_release/served-inventory.txt",
+            "status": 200
+          },
+          {
+            "headers": {
+              "age": "0",
+              "cache-control": "public, max-age=0, must-revalidate",
+              "content-type": "application/json; charset=utf-8",
+              "etag": "\"4a9946e6cd34e649fed7b8f2ba3c9781\""
+            },
+            "ok": true,
+            "path": "_release/descriptor.json",
+            "status": 200
+          }
+        ],
+        "served_digest": "b8cb8c991e97aeb025cf8f59f8c3d2f761cecc67937a9e59403d28c2885da26e",
+        "served_file_count": 1225,
+        "served_release_key": "9d4ab14d004f0f9f45c62f893bd24a1bac1960749f426f3540be325acf72e39d",
+        "tls": true
+      },
+      "release_key": "9d4ab14d004f0f9f45c62f893bd24a1bac1960749f426f3540be325acf72e39d",
+      "release_ref": "298b3f645a8713189a772037ea4e064366667d9c",
+      "stage": "serving"
     }
   ],
   "schema_version": 1,
