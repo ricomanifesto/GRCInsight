@@ -8,59 +8,71 @@
         "evidence_excerpt": "One of the early targets of PHP2Shell exploitation was the firewall. On October 28, Palo Alto Networks confirmed that attackers were exploiting the two PHP vulnerabilities, CVE-2026-109618 and CVE-2026-109619, against PAN-OS management interfaces exposed to the internet. Both flaws let anyone execute code on the web server without authentication.",
         "evidence_origin": "summary",
         "focus": "PAN-OS management interfaces",
-        "headline": "PAN-OS management interfaces exposes unauthenticated code execution",
+        "headline": "PAN-OS management interfaces exploited via unauthenticated PHP flaws",
         "priority": "high",
-        "significance": "Active exploitation of firewall management interfaces bypasses authentication and allows unauthenticated code execution, weakening perimeter assurance. The vulnerability owner should confirm emergency patching of PAN-OS and validate that management interfaces are not internet-exposed.",
+        "significance": "Internet-exposed firewall management interfaces are being actively exploited for unauthenticated code execution. The accountable owner must confirm that all PAN-OS management interfaces are removed from internet exposure and that emergency patches are applied.",
         "source_ids": [
           3
         ]
       },
       {
         "control_id": "vulnerability_management",
-        "evidence_excerpt": "A critical security flaw in Apache Roller, an open-source, Java-based blogging platform, has come under active exploitation in the wild, according to the Apache Software Foundation (ASF) The vulnerability, tracked as CVE-2026-129448 (CVSS score: 9.8), is a case of unauthenticated deserialization in the XML-RPC endpoint that could lead to remote code execution.",
-        "evidence_origin": "summary",
-        "focus": "Apache Roller XML-RPC endpoint",
-        "headline": "Apache Roller XML-RPC endpoint enables unauthenticated deserialization",
-        "priority": "high",
-        "significance": "Active exploitation of unauthenticated deserialization in a widely used blogging platform compromises server integrity and demands immediate remediation. The asset owner should verify Apache Roller deployments, apply patches, and monitor XML-RPC endpoint traffic for anomalies.",
-        "source_ids": [
-          5
-        ]
-      },
-      {
-        "control_id": "access_management",
-        "evidence_excerpt": "A critical flaw in VMware vCenter lets an attacker with network access bypass authentication and gain unauthorized access to the system, Broadcom, which owns VMware, said in an advisory published today. Fixed versions are out for all supported branches, and the company lists no workaround. vCenter is the central console for managing an organization's ESX hosts and virtual machines.",
-        "evidence_origin": "summary",
-        "focus": "VMware vCenter authentication bypass",
-        "headline": "VMware vCenter authentication bypass allows unauthorized system access",
-        "priority": "high",
-        "significance": "Authentication bypass in the central virtualization management console grants unauthorized administrative access, undermining identity controls. The access owner should confirm vCenter patching, restrict network access to management interfaces, and review privileged account activity.",
-        "source_ids": [
-          7
-        ]
-      },
-      {
-        "control_id": "vulnerability_management",
         "evidence_excerpt": "A flaw in NGINX's HTTP/2 support can allow an attacker to run code on servers with HTTP/2 enabled, without needing to log in. The decade-old flaw, CVE-2026-123007, dubbed \"nginx2root,\" has been present in NGINX's open-source code since version 1.9.5, released on September 22, 2015. Fixed versions 1.31.9 and 1.30.7 came out today.",
         "evidence_origin": "summary",
-        "focus": "NGINX HTTP/2 support flaw",
-        "headline": "NGINX HTTP/2 support flaw permits unauthenticated code execution",
-        "priority": "medium",
-        "significance": "A long-standing vulnerability in NGINX HTTP/2 allows unauthenticated remote code execution on exposed web servers, requiring urgent version upgrades. The vulnerability owner should inventory NGINX deployments, apply fixed versions 1.31.9 or 1.30.7, and verify HTTP/2 configuration.",
+        "focus": "NGINX HTTP/2 support",
+        "headline": "NGINX HTTP/2 support enables unauthenticated remote code execution",
+        "priority": "high",
+        "significance": "A long-standing vulnerability in widely deployed NGINX versions allows unauthenticated attackers to execute code on any server with HTTP/2 enabled. The accountable owner must inventory all NGINX instances, verify HTTP/2 configuration, and apply fixed versions immediately.",
         "source_ids": [
           4
         ]
       },
       {
+        "control_id": "data_protection",
+        "evidence_excerpt": "Transport for London (TfL) has announced that around 265,000 Oyster photocard customers may have had their account details exposed in a data breach…",
+        "evidence_origin": "summary",
+        "focus": "Oyster photocard customers",
+        "headline": "Oyster photocard customers account details exposed in data breach",
+        "priority": "high",
+        "significance": "Personal data of 265,000 transport users has been exposed in a confirmed breach. The accountable owner must verify the scope of exposed data fields, notify affected individuals where required, and assess whether data retention and access controls were sufficient.",
+        "source_ids": [
+          7
+        ]
+      },
+      {
         "control_id": "access_management",
+        "evidence_excerpt": "A critical flaw in VMware vCenter lets an attacker with network access bypass authentication and gain unauthorized access to the system, Broadcom, which owns VMware, said in an advisory published today. Fixed versions are out for all supported branches, and the company lists no workaround.",
+        "evidence_origin": "summary",
+        "focus": "VMware vCenter",
+        "headline": "VMware vCenter authentication bypass allows unauthorized system access",
+        "priority": "high",
+        "significance": "The central management console for virtualized infrastructure can be accessed without credentials by any network attacker. The accountable owner must confirm that all vCenter instances are patched, network segmentation limits exposure, and no unauthorized access has occurred.",
+        "source_ids": [
+          9
+        ]
+      },
+      {
+        "control_id": "vulnerability_management",
         "evidence_excerpt": "Under specific conditions, a critical vulnerability in Drupal core can allow an attacker without login credentials to use the built-in installer to attempt to reinstall a site. That can lead to a site takeover or remote code execution, and the project rates the vulnerable configurations as uncommon. Fixed releases for all supported branches shipped yesterday.",
         "evidence_origin": "summary",
-        "focus": "Drupal core installer vulnerability",
-        "headline": "Drupal core installer vulnerability enables unauthenticated site takeover",
-        "priority": "medium",
-        "significance": "Unauthenticated site reinstallation via the Drupal installer can lead to complete site compromise, affecting web application integrity. The application owner should apply Drupal security updates, review installer exposure, and validate site configuration against vulnerable conditions.",
+        "focus": "Drupal core installer",
+        "headline": "Drupal core installer enables unauthenticated site takeover and code execution",
+        "priority": "high",
+        "significance": "Unauthenticated attackers can exploit the Drupal installer to seize control of sites or execute code. The accountable owner must identify all Drupal deployments, verify installer exposure conditions, and apply fixed releases across all supported branches.",
         "source_ids": [
-          10
+          12
+        ]
+      },
+      {
+        "control_id": "vulnerability_management",
+        "evidence_excerpt": "The PHP Foundation has released security updates to address multiple critical security flaws that could be exploited to achieve remote code execution on affected deployments, including CVE-2026-115560. The release of the patch follows an advance notice in which the project maintainers alerted users to multiple critical vulnerabilities affecting all supported PHP versions under specific…",
+        "evidence_origin": "summary",
+        "focus": "PHP supported versions",
+        "headline": "PHP supported versions receive patches for multiple critical remote code execution flaws",
+        "priority": "high",
+        "significance": "All supported PHP versions are affected by critical vulnerabilities enabling remote code execution. The accountable owner must inventory all PHP deployments, apply the latest security updates, and verify that compensating controls are in place where immediate patching is not feasible.",
+        "source_ids": [
+          2
         ]
       }
     ],
@@ -68,29 +80,22 @@
       "paragraphs": [
         {
           "source_ids": [
+            2,
             3,
-            5,
-            7,
             4,
-            10
+            7,
+            9,
+            12
           ],
-          "text": "Critical unauthenticated remote code execution vulnerabilities in Palo Alto Networks PAN-OS, Apache Roller, VMware vCenter, NGINX, and Drupal are under active exploitation, demanding immediate patching of internet-exposed management interfaces and web applications to prevent unauthorized system access and site compromise. The convergence of authentication bypass and deserialization flaws across core infrastructure components elevates the urgency for vulnerability remediation and access restriction validation."
-        },
-        {
-          "source_ids": [
-            3,
-            5,
-            7
-          ],
-          "text": "Ransomware intrusion patterns involving credential theft, lateral movement, and security control disabling provide detectable precursors before encryption, enabling earlier containment through enhanced monitoring of warning signs identified by security researchers. Integrating these indicators into detection rules improves response readiness against evolving ransomware operations."
+          "text": "Multiple critical unauthenticated remote code execution vulnerabilities have been disclosed and actively exploited across widely deployed infrastructure components including PHP runtimes, NGINX web servers, PAN-OS firewalls, VMware vCenter, and Drupal CMS, while a confirmed data breach at Transport for London exposed personal details of 265,000 Oyster photocard customers. These developments demand immediate patching, exposure reduction, and breach assessment across all affected assets."
         }
       ]
     },
     "industry_impacts": [],
     "regulatory_changes": []
   },
-  "generated_at": "2026-11-19T18:20:03.755851Z",
-  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/a7e4e0f4216b71072e0e1e489f0150e044bfcffa/site/feed.xml",
+  "generated_at": "2026-11-19T21:20:16.532565Z",
+  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/a542c82c31444263321ea3b27ac006ed361c242a/site/feed.xml",
   "feed_home_url": "https://sentrydigest.ricomanifesto.com/",
   "digest_issue_date": "2026-11-19",
   "digest_issue_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-19/",
@@ -195,25 +200,67 @@
       "effective_date_evidence": null
     },
     {
-      "title": "Critical Apache Roller RCE Flaw Under Active Exploitation, No Authentication Required",
-      "url": "https://thehackernews.com/2026/11/critical-apache-roller-rce-flaw-under.html",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-19/#reporting-6ec0dce548ff",
-      "cves": [
-        "CVE-2026-129448"
-      ],
-      "snippet": "Critical Apache Roller RCE Flaw Under Active Exploitation, No Authentication Required A critical security flaw in Apache Roller, an open-source, Java-based blogging platform, has come under active exploitation in the wild, according to the Apache Software Foundation (ASF) The vulnerability, tracked as CVE-2026-129448 (CVSS score: 9.8), is a case of unauthenticated deserialization in the XML-RPC endpoint that could lead to remote code execution. \"Deserialization of Untrusted… A critical security flaw in Apache Roller, an open-source, Java-based blogging platform, has come under active exploitation in the wild, according to the Apache Software Foundation (ASF) The vulnerability, tracked as CVE",
+      "title": "Navigating Vulnerability Hysteria in the AI Era",
+      "url": "https://www.darkreading.com/vulnerabilities-threats/navigating-vulnerability-hysteria-ai-era",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-19/#reporting-1172616db460",
+      "cves": [],
+      "snippet": "Navigating Vulnerability Hysteria in the AI Era This installment of the Reporters' Notebook video series examines the fallout from recent high-severity flaw disclosures, exploring how fears of AI-assisted exploits trigger widespread panic, operational disruptions, and growing warning fatigue. This installment of the Reporters' Notebook video series examines the fallout from recent high-severity flaw disclosures, exploring how fears of AI-assisted exploits trigger widespread panic, operational disruptions, and growing warning fatigue.",
       "article_evidence": [
         {
           "extraction_version": 1,
           "origin": "summary",
-          "raw_text": "A critical security flaw in Apache Roller, an open-source, Java-based blogging platform, has come under active exploitation in the wild, according to the Apache Software Foundation (ASF) The vulnerability, tracked as CVE-2026-129448 (CVSS score: 9.8), is a case of unauthenticated deserialization in the XML-RPC endpoint that could lead to remote code execution. \"Deserialization of Untrusted…",
-          "text": "A critical security flaw in Apache Roller, an open-source, Java-based blogging platform, has come under active exploitation in the wild, according to the Apache Software Foundation (ASF) The vulnerability, tracked as CVE-2026-129448 (CVSS score: 9.8), is a case of unauthenticated deserialization in the XML-RPC endpoint that could lead to remote code execution. \"Deserialization of Untrusted…"
+          "raw_text": "This installment of the Reporters' Notebook video series examines the fallout from recent high-severity flaw disclosures, exploring how fears of AI-assisted exploits trigger widespread panic, operational disruptions, and growing warning fatigue.",
+          "text": "This installment of the Reporters' Notebook video series examines the fallout from recent high-severity flaw disclosures, exploring how fears of AI-assisted exploits trigger widespread panic, operational disruptions, and growing warning fatigue."
         },
         {
           "extraction_version": 1,
           "origin": "content",
-          "raw_text": "A critical security flaw in Apache Roller, an open-source, Java-based blogging platform, has come under active exploitation in the wild, according to the Apache Software Foundation (ASF) The vulnerability, tracked as CVE-2026-129448 (CVSS score: 9.8), is a case of unauthenticated deserialization in the XML-RPC endpoint that could lead to remote code execution. \"Deserialization of Untrusted…",
-          "text": "A critical security flaw in Apache Roller, an open-source, Java-based blogging platform, has come under active exploitation in the wild, according to the Apache Software Foundation (ASF) The vulnerability, tracked as CVE-2026-129448 (CVSS score: 9.8), is a case of unauthenticated deserialization in the XML-RPC endpoint that could lead to remote code execution. \"Deserialization of Untrusted…"
+          "raw_text": "This installment of the Reporters' Notebook video series examines the fallout from recent high-severity flaw disclosures, exploring how fears of AI-assisted exploits trigger widespread panic, operational disruptions, and growing warning fatigue.",
+          "text": "This installment of the Reporters' Notebook video series examines the fallout from recent high-severity flaw disclosures, exploring how fears of AI-assisted exploits trigger widespread panic, operational disruptions, and growing warning fatigue."
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "ThreatsDay: GPT-6.2 Jailbreak Flaws, BubbleLoader PNG Malware, $500M Ransom Demands + 17 More Stories",
+      "url": "https://thehackernews.com/2026/11/threatsday-gpt-62-jailbreak-flaws.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-19/#reporting-cc7a57153914",
+      "cves": [],
+      "snippet": "ThreatsDay: GPT-6.2 Jailbreak Flaws, BubbleLoader PNG Malware, $500M Ransom Demands + 17 More Stories The easiest way to fool someone is to give them something they already expect. A job offer. A message about a service outage. A familiar app. Nothing looks strange at first. And that's the problem. This week's stories show how ordinary things are being used to steal data, spread malware, and get people to hand over access. There's another shift worth watching. AI is making some attacks easier… The easiest way to fool someone is to give them something they already expect. A job offer. A message about a service outage. A familiar app. Nothing looks strange at first. And that's the problem. Thi",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "The easiest way to fool someone is to give them something they already expect. A job offer. A message about a service outage. A familiar app. Nothing looks strange at first. And that's the problem. This week's stories show how ordinary things are being used to steal data, spread malware, and get people to hand over access. There's another shift worth watching. AI is making some attacks easier…",
+          "text": "The easiest way to fool someone is to give them something they already expect. A job offer. A message about a service outage. A familiar app. Nothing looks strange at first. And that's the problem. This week's stories show how ordinary things are being used to steal data, spread malware, and get people to hand over access. There's another shift worth watching. AI is making some attacks easier…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "The easiest way to fool someone is to give them something they already expect. A job offer. A message about a service outage. A familiar app. Nothing looks strange at first. And that's the problem. This week's stories show how ordinary things are being used to steal data, spread malware, and get people to hand over access. There's another shift worth watching. AI is making some attacks easier…",
+          "text": "The easiest way to fool someone is to give them something they already expect. A job offer. A message about a service outage. A familiar app. Nothing looks strange at first. And that's the problem. This week's stories show how ordinary things are being used to steal data, spread malware, and get people to hand over access. There's another shift worth watching. AI is making some attacks easier…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Transport for London breach exposes 265,000 Oyster card users' data",
+      "url": "https://www.bleepingcomputer.com/news/security/transport-for-london-breach-exposes-265-000-oyster-card-users-data/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-19/#reporting-37781c126ada",
+      "cves": [],
+      "snippet": "Transport for London breach exposes 265,000 Oyster card users' data Transport for London (TfL) has announced that around 265,000 Oyster photocard customers may have had their account details exposed in a data breach… Transport for London (TfL) has announced that around 265,000 Oyster photocard customers may have had their account details exposed in a data breach…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Transport for London (TfL) has announced that around 265,000 Oyster photocard customers may have had their account details exposed in a data breach…",
+          "text": "Transport for London (TfL) has announced that around 265,000 Oyster photocard customers may have had their account details exposed in a data breach…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Transport for London (TfL) has announced that around 265,000 Oyster photocard customers may have had their account details exposed in a data breach…",
+          "text": "Transport for London (TfL) has announced that around 265,000 Oyster photocard customers may have had their account details exposed in a data breach…"
         }
       ],
       "effective_date_evidence": null
@@ -324,50 +371,6 @@
           "origin": "content",
           "raw_text": "Under specific conditions, a critical vulnerability in Drupal core can allow an attacker without login credentials to use the built-in installer to attempt to reinstall a site. That can lead to a site takeover or remote code execution, and the project rates the vulnerable configurations as uncommon. Fixed releases for all supported branches shipped yesterday. The Drupal Security Team disclosed…",
           "text": "Under specific conditions, a critical vulnerability in Drupal core can allow an attacker without login credentials to use the built-in installer to attempt to reinstall a site. That can lead to a site takeover or remote code execution, and the project rates the vulnerable configurations as uncommon. Fixed releases for all supported branches shipped yesterday. The Drupal Security Team disclosed…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "Why Holiday Security Can't Wait for Black Friday",
-      "url": "https://www.darkreading.com/cybersecurity-operations/why-holiday-security-cant-wait-black-friday",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-19/#reporting-d6e891227416",
-      "cves": [],
-      "snippet": "Why Holiday Security Can't Wait for Black Friday Bot-driven fraud and holiday social engineering attacks stretch across many weeks, straining security teams and small businesses alike. Bot-driven fraud and holiday social engineering attacks stretch across many weeks, straining security teams and small businesses alike.",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "Bot-driven fraud and holiday social engineering attacks stretch across many weeks, straining security teams and small businesses alike.",
-          "text": "Bot-driven fraud and holiday social engineering attacks stretch across many weeks, straining security teams and small businesses alike."
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "Bot-driven fraud and holiday social engineering attacks stretch across many weeks, straining security teams and small businesses alike.",
-          "text": "Bot-driven fraud and holiday social engineering attacks stretch across many weeks, straining security teams and small businesses alike."
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "Drupal patches critical RCE flaw, warns exploits may surface quickly",
-      "url": "https://www.bleepingcomputer.com/news/security/drupal-patches-critical-rce-flaw-warns-exploits-may-surface-quickly/",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-19/#reporting-9ca9ce7f9de5",
-      "cves": [],
-      "snippet": "Drupal patches critical RCE flaw, warns exploits may surface quickly The Drupal Security Team has patched a critical remote code execution vulnerability that can let attackers take over vulnerable sites… The Drupal Security Team has patched a critical remote code execution vulnerability that can let attackers take over vulnerable sites…",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "The Drupal Security Team has patched a critical remote code execution vulnerability that can let attackers take over vulnerable sites…",
-          "text": "The Drupal Security Team has patched a critical remote code execution vulnerability that can let attackers take over vulnerable sites…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "The Drupal Security Team has patched a critical remote code execution vulnerability that can let attackers take over vulnerable sites…",
-          "text": "The Drupal Security Team has patched a critical remote code execution vulnerability that can let attackers take over vulnerable sites…"
         }
       ],
       "effective_date_evidence": null
