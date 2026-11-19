@@ -1,22 +1,22 @@
 {
   "content_identity": {
-    "publication_state_digest": "fd996e612e5ee17a9909f7e4e8d8c0791f494e4f9dd7be75f925827e310bf888",
-    "report_generated_at": "2026-11-19T13:07:06.874867Z"
+    "publication_state_digest": "e164abab3676050fdbb424d24b0c4ac536458c3c25f821c19fff311041e3b5df",
+    "report_generated_at": "2026-11-19T15:17:54.328463Z"
   },
   "descriptor_path": "_release/descriptor.json",
   "expected_origin": "https://grcinsight.ricomanifesto.com/",
   "expected_repository": "ricomanifesto/GRCInsight",
   "kind": "release",
-  "payload_byte_total": 24971100,
-  "payload_digest": "f6426eebb4d8ee43e47f155c884e0edb8cc9853cc83c1c2a7e5bfe2704ab7798",
-  "payload_file_count": 1231,
+  "payload_byte_total": 25026457,
+  "payload_digest": "13f6ce1b9a3a93f20bad612b57a0ea327e4311fcd85bf8384ff111bf98c3835a",
+  "payload_file_count": 1234,
   "publication_mode": {
     "mode": "prepare",
     "proof": "on"
   },
-  "release_key": "2a7ebc2bba3378053765fa4f8abda6c4f9c9635df28ea4449712724d1dbe3526",
+  "release_key": "a02503e652f6c5be17a477c2b474fe136b850c9ba29219517a9e02c852704e02",
   "schema_version": 1,
   "site": "GRCInsight",
-  "source_committed_at": "2026-11-19T13:07:37.000Z",
-  "source_revision": "e4e81449b0003f3784dfc8167ff25d44d37549a8"
+  "source_committed_at": "2026-11-19T15:18:23.000Z",
+  "source_revision": "7e88d3ca37ae29ef8479e8395d51bb372fcb2a3b"
 }
