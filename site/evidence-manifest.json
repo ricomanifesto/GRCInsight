@@ -4,75 +4,75 @@
   "report_plan": {
     "control_implications": [
       {
-        "control_id": "third_party_risk",
-        "evidence_excerpt": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Tuesday added a critical security flaw impacting Perforce Puppet, an enterprise infrastructure-as-code (IaC) and configuration management platform, to its Known Exploited Vulnerabilities (KEV) catalog, citing reports of active exploitation.",
-        "evidence_origin": "summary",
-        "focus": "Perforce Puppet",
-        "headline": "Perforce Puppet added to CISA KEV catalog",
-        "priority": "high",
-        "significance": "Active exploitation of a widely used infrastructure-as-code platform increases third-party risk because compromised Puppet servers can control enterprise configuration. The accountable owner should confirm supplier dependencies, assurance evidence, and escalation contacts for Perforce Puppet.",
-        "source_ids": [
-          4
-        ]
-      },
-      {
         "control_id": "vulnerability_management",
-        "evidence_excerpt": "A flaw in NGINX's HTTP/2 support can allow an attacker to run code on servers with HTTP/2 enabled, without needing to log in. The decade-old flaw, CVE-2026-123007, dubbed \"nginx2root,\" has been present in NGINX's open-source code since version 1.9.5, released on September 22, 2015. Fixed versions 1.31.9 and 1.30.7 came out today.",
+        "evidence_excerpt": "A flaw in NGINX's HTTP/2 support can allow an attacker to run code on servers with HTTP/2 enabled, without needing to log in. The decade-old flaw, CVE-2026-123007, dubbed \"nginx2root,\" has been present in NGINX's open-source code since version 1.9.5, released on September 22, 2015. Fixed versions 1.31.9 and 1.30.7 came out today. F5, the company behind NGINX, says attackers can run code where…",
         "evidence_origin": "summary",
         "focus": "NGINX HTTP/2 support",
-        "headline": "NGINX HTTP/2 support enables unauthenticated code execution",
-        "priority": "medium",
-        "significance": "A decade-old vulnerability in a ubiquitous web server component weakens vulnerability management by exposing unpatched servers to unauthenticated remote code execution. The accountable owner should identify affected assets, verify remediation status, and document any exceptions.",
+        "headline": "NGINX HTTP/2 support allows unauthenticated code execution",
+        "priority": "high",
+        "significance": "This decade-old vulnerability in widely deployed web server software weakens assurance that asset inventories and patch management cover long-standing components. The accountable owner should confirm affected NGINX versions are identified and fixed versions 1.31.9 or 1.30.7 are deployed.",
         "source_ids": [
           1
         ]
       },
       {
-        "control_id": "access_management",
-        "evidence_excerpt": "A Java flaw called Java4Shell can let attackers without an account run their own code on Jira, Jenkins, Keycloak, and three other widely used applications, says Calif, the security research firm that disclosed it this week. The flaw is present in Java 17.0.6 and later, and the vulnerable code runs only on x86-64 Intel and AMD chips that support the AVX-512 VBMI feature.",
+        "control_id": "vulnerability_management",
+        "evidence_excerpt": "A critical security flaw in Apache Roller, an open-source, Java-based blogging platform, has come under active exploitation in the wild, according to the Apache Software Foundation (ASF) The vulnerability, tracked as CVE-2026-129448 (CVSS score: 9.8), is a case of unauthenticated deserialization in the XML-RPC endpoint that could lead to remote code execution. \"Deserialization of Untrusted…",
         "evidence_origin": "summary",
-        "focus": "Java4Shell flaw",
-        "headline": "Java4Shell flaw enables pre-auth RCE in Keycloak",
+        "focus": "Apache Roller XML-RPC endpoint",
+        "headline": "Apache Roller XML-RPC endpoint under active exploitation",
         "priority": "high",
-        "significance": "Pre-authentication remote code execution in identity and access management tools such as Keycloak weakens access management by bypassing authentication boundaries. The accountable owner should review privileged access, authentication coverage, and session revocation evidence for affected applications.",
+        "significance": "Active exploitation of this unauthenticated deserialization flaw weakens confidence that internet-facing Java applications are monitored for known exploited vulnerabilities. The accountable owner should confirm Apache Roller instances are identified and emergency patching or mitigation is underway.",
+        "source_ids": [
+          2
+        ]
+      },
+      {
+        "control_id": "vulnerability_management",
+        "evidence_excerpt": "A Java flaw called Java4Shell can let attackers without an account run their own code on Jira, Jenkins, Keycloak, and three other widely used applications, says Calif, the security research firm that disclosed it this week. The flaw is present in Java 17.0.6 and later, and the vulnerable code runs only on x86-64 Intel and AMD chips that support the AVX-512 VBMI feature. Tracked as…",
+        "evidence_origin": "summary",
+        "focus": "Java4Shell flaw in Java 17.0.6 and later",
+        "headline": "Java4Shell flaw enables pre-auth RCE in Jira Jenkins Keycloak",
+        "priority": "high",
+        "significance": "This hardware-dependent Java vulnerability exposes widely deployed enterprise applications to pre-authentication remote code execution. The accountable owner should confirm affected Java versions on compatible hardware are identified and vendor mitigations are applied.",
         "source_ids": [
           3
         ]
       },
       {
-        "control_id": "data_protection",
-        "evidence_excerpt": "Low-privilege database accounts that cannot read a single application table can still be used to run code on the database server itself, a researcher has shown, by reaching memory-corruption bugs in the engine code behind ordinary SQL. The exploits, published yesterday, are the researcher's proofs of concept against PostgreSQL, MySQL and ClickHouse, plus a separate Oracle chain that needs no…",
+        "control_id": "third_party_risk",
+        "evidence_excerpt": "N-able on Wednesday disclosed that unknown threat actors gained unauthorized access to one of the servers in the Mail Assure and Spam Experts Hosted Cloud, causing it to disable management interfaces and APIs. \"We have taken steps to mitigate the threat and are continuing to harden our services to reduce the risk of recurrence,\" N-able said. \"The investigation is ongoing, but at this time we…",
         "evidence_origin": "summary",
-        "focus": "Low-privilege database accounts",
-        "headline": "Low-privilege database accounts enable server code execution",
-        "priority": "medium",
-        "significance": "Memory-corruption bugs in database engines allow low-privilege accounts to execute code on the server, threatening data protection for sensitive information stored in PostgreSQL, MySQL, and Oracle. The accountable owner should review sensitive-data access restrictions, audit logs, and exposure assessments.",
+        "focus": "N-able Mail Assure and Spam Experts Hosted Cloud",
+        "headline": "N-able Mail Assure and Spam Experts Hosted Cloud breached",
+        "priority": "high",
+        "significance": "A supplier compromise disabling email security management interfaces weakens assurance that third-party security services maintain resilience. The accountable owner should confirm the scope of supplier access, review N-able's remediation evidence, and evaluate alternative email security controls.",
         "source_ids": [
           6
         ]
       },
       {
-        "control_id": "incident_response",
-        "evidence_excerpt": "Ukrainian authorities, working with the FBI, have arrested four suspected members of an international ransomware organization linked to more than $40.5 million in ransom payments from at least 28 companies worldwide…",
+        "control_id": "vulnerability_management",
+        "evidence_excerpt": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Wednesday added four vulnerabilities impacting Synology DiskStation Manager (DSM), BerriAI LiteLLM, Apache Axis, and Vanderbilt University Research Electronic Data Capture (REDCap) to its Known Exploited Vulnerabilities (KEV) catalog, citing evidence of active exploitation. The vulnerabilities are listed below -…",
         "evidence_origin": "summary",
-        "focus": "international ransomware organization",
-        "headline": "international ransomware organization arrested by authorities",
-        "priority": "medium",
-        "significance": "Law enforcement disruption of a prolific ransomware group alters the threat landscape but may trigger retaliation or affiliate migration, requiring incident response readiness. The accountable owner should review containment responsibilities, retained logs, and the most recent response exercise.",
+        "focus": "Synology DiskStation Manager BerriAI LiteLLM Apache Axis Vanderbilt REDCap",
+        "headline": "CISA adds four actively exploited flaws to KEV catalog",
+        "priority": "high",
+        "significance": "CISA's KEV additions signal immediate remediation expectations for federal and critical infrastructure operators. The accountable owner should confirm assets running Synology DSM, BerriAI LiteLLM, Apache Axis, or Vanderbilt REDCap are identified and emergency patching is prioritized.",
         "source_ids": [
-          9
+          10
         ]
       },
       {
-        "control_id": "monitoring",
-        "evidence_excerpt": "The Russia-linked threat group is using data stolen from one victim to target others via convincing impersonations and social engineering attacks.",
+        "control_id": "vulnerability_management",
+        "evidence_excerpt": "Ruby contains seven memory-safety flaws in its regular expression engine and its string case-conversion code. For five of them, its maintainers say, proof-of-concept exploits, or PoCs, have shown that crafted input can run code on the machine. \"We are aware of PoCs that prove some of them can be used to trigger remote code execution,\" the maintainers said. The project released fixed versions…",
         "evidence_origin": "summary",
-        "focus": "Russia-linked threat group",
-        "headline": "Russia-linked threat group leverages stolen data for impersonation",
-        "priority": "high",
-        "significance": "Credential theft and impersonation chains enable lateral movement that evades standard detection, weakening monitoring and detection coverage. The accountable owner should review log coverage, detection tests, alert routing, and investigation ownership for identity-based anomalies.",
+        "focus": "Ruby regular expression engine and string case-conversion code",
+        "headline": "Ruby regex engine flaws enable proof-of-concept RCE",
+        "priority": "medium",
+        "significance": "Memory-safety flaws in Ruby's core libraries with published PoCs weaken assurance that application dependencies are free from exploitable conditions. The accountable owner should confirm affected Ruby versions are upgraded to fixed releases across all applications.",
         "source_ids": [
-          10
+          8
         ]
       }
     ],
@@ -80,27 +80,27 @@
       "paragraphs": [
         {
           "source_ids": [
-            4,
+            1,
+            2,
             3,
-            1
+            6,
+            10
           ],
-          "text": "Third-party and supply chain risk elevated by active exploitation of Puppet IaC platform added to CISA KEV, while pre-authentication RCE flaws in Java-based enterprise tools (Jira, Jenkins, Keycloak) and decade-old NGINX HTTP/2 vulnerability demand immediate asset identification and remediation verification."
+          "text": "This period reveals a convergence of actively exploited vulnerabilities in foundational infrastructure components and a significant supplier compromise that collectively weaken control assurance across web serving, application platforms, and email security services. CISA added four actively exploited flaws to its Known Exploited Vulnerabilities catalog while critical unauthenticated remote code execution vulnerabilities were disclosed in NGINX HTTP/2, Apache Roller, and Java runtimes affecting Jira, Jenkins, and Keycloak. Simultaneously, the N-able cloud breach disabled email security management interfaces across three regions. These developments demand immediate asset identification and emergency remediation verification by vulnerability and third-party risk owners."
         },
         {
           "source_ids": [
-            6,
-            10,
-            9
+            8
           ],
-          "text": "Database engine memory-corruption exploits demonstrate that low-privilege accounts can achieve server-level code execution, while Russia-linked APT campaigns weaponize stolen credentials for impersonation chains and law enforcement disrupts a major ransomware operation, collectively requiring enhanced monitoring coverage and incident response readiness."
+          "text": "Additional findings extend the exposure surface to database engines, scripting languages, and endpoint protections. Researcher demonstrations showed low-privilege database accounts can achieve remote code execution on PostgreSQL, MySQL, and Oracle systems. Ruby released fixes for seven memory-safety flaws with five having proof-of-concept exploits. Microsoft introduced Edge Lockdown Mode to reduce browser attack surface while acknowledging hotpatch issues affecting application launches. PHP announced critical fixes for all supported versions. Vulnerability management owners should expand scanning coverage to database layers and language runtimes, while change management owners validate Microsoft hotpatch impacts."
         }
       ]
     },
     "industry_impacts": [],
     "regulatory_changes": []
   },
-  "generated_at": "2026-11-19T09:20:06.664915Z",
-  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/d9a53deaab03f73c43b53ae98a20dee6893d3caf/site/feed.xml",
+  "generated_at": "2026-11-19T12:26:35.692347Z",
+  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/18798ed2479a7f9a6fdd532b668abdb1d6ddfd55/site/feed.xml",
   "feed_home_url": "https://sentrydigest.ricomanifesto.com/",
   "digest_issue_date": "2026-11-19",
   "digest_issue_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-19/",
@@ -180,25 +180,89 @@
       "effective_date_evidence": null
     },
     {
-      "title": "Hackers Exploiting Critical Puppet RCE Flaw Affecting Enterprise Management Servers",
-      "url": "https://thehackernews.com/2026/11/hackers-exploiting-critical-puppet-rce.html",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-19/#reporting-eeab189c3475",
-      "cves": [
-        "CVE-2026-115731"
-      ],
-      "snippet": "Hackers Exploiting Critical Puppet RCE Flaw Affecting Enterprise Management Servers The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Tuesday added a critical security flaw impacting Perforce Puppet, an enterprise infrastructure-as-code (IaC) and configuration management platform, to its Known Exploited Vulnerabilities (KEV) catalog, citing reports of active exploitation. The vulnerability, tracked as CVE-2026-115731 (CVSS score: 9.4), is a case of… The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Tuesday added a critical security flaw impacting Perforce Puppet, an enterprise infrastructure-as-code (IaC) and configuration management platform, to its Known",
+      "title": "Microsoft tests new Edge Lockdown Mode that disables GPU APIs",
+      "url": "https://www.bleepingcomputer.com/news/microsoft/microsoft-tests-new-edge-lockdown-mode-that-disables-gpu-apis/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-19/#reporting-abfd462e0ed1",
+      "cves": [],
+      "snippet": "Microsoft tests new Edge Lockdown Mode that disables GPU APIs Microsoft is developing a new Edge security feature to reduce the attack surface by disabling the WebGL, WebGL2, and WebGPU APIs… Microsoft is developing a new Edge security feature to reduce the attack surface by disabling the WebGL, WebGL2, and WebGPU APIs…",
       "article_evidence": [
         {
           "extraction_version": 1,
           "origin": "summary",
-          "raw_text": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Tuesday added a critical security flaw impacting Perforce Puppet, an enterprise infrastructure-as-code (IaC) and configuration management platform, to its Known Exploited Vulnerabilities (KEV) catalog, citing reports of active exploitation. The vulnerability, tracked as CVE-2026-115731 (CVSS score: 9.4), is a case of…",
-          "text": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Tuesday added a critical security flaw impacting Perforce Puppet, an enterprise infrastructure-as-code (IaC) and configuration management platform, to its Known Exploited Vulnerabilities (KEV) catalog, citing reports of active exploitation. The vulnerability, tracked as CVE-2026-115731 (CVSS score: 9.4), is a case of…"
+          "raw_text": "Microsoft is developing a new Edge security feature to reduce the attack surface by disabling the WebGL, WebGL2, and WebGPU APIs…",
+          "text": "Microsoft is developing a new Edge security feature to reduce the attack surface by disabling the WebGL, WebGL2, and WebGPU APIs…"
         },
         {
           "extraction_version": 1,
           "origin": "content",
-          "raw_text": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Tuesday added a critical security flaw impacting Perforce Puppet, an enterprise infrastructure-as-code (IaC) and configuration management platform, to its Known Exploited Vulnerabilities (KEV) catalog, citing reports of active exploitation. The vulnerability, tracked as CVE-2026-115731 (CVSS score: 9.4), is a case of…",
-          "text": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Tuesday added a critical security flaw impacting Perforce Puppet, an enterprise infrastructure-as-code (IaC) and configuration management platform, to its Known Exploited Vulnerabilities (KEV) catalog, citing reports of active exploitation. The vulnerability, tracked as CVE-2026-115731 (CVSS score: 9.4), is a case of…"
+          "raw_text": "Microsoft is developing a new Edge security feature to reduce the attack surface by disabling the WebGL, WebGL2, and WebGPU APIs…",
+          "text": "Microsoft is developing a new Edge security feature to reduce the attack surface by disabling the WebGL, WebGL2, and WebGPU APIs…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Microsoft confirms app installation, launch issues after hotpatch",
+      "url": "https://www.bleepingcomputer.com/news/microsoft/microsoft-confirms-app-installation-launch-issues-after-hotpatch/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-19/#reporting-b737cfc44cd6",
+      "cves": [],
+      "snippet": "Microsoft confirms app installation, launch issues after hotpatch Microsoft has shared a workaround for installation and launch issues affecting Office and third-party applications after installing this month's Windows 11 hotpatch… Microsoft has shared a workaround for installation and launch issues affecting Office and third-party applications after installing this month's Windows 11 hotpatch…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Microsoft has shared a workaround for installation and launch issues affecting Office and third-party applications after installing this month's Windows 11 hotpatch…",
+          "text": "Microsoft has shared a workaround for installation and launch issues affecting Office and third-party applications after installing this month's Windows 11 hotpatch…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Microsoft has shared a workaround for installation and launch issues affecting Office and third-party applications after installing this month's Windows 11 hotpatch…",
+          "text": "Microsoft has shared a workaround for installation and launch issues affecting Office and third-party applications after installing this month's Windows 11 hotpatch…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Hackers Breach N-able Cloud Server, Disrupting Email Security Management Across 3 Regions",
+      "url": "https://thehackernews.com/2026/11/n-able-confirms-hackers-accessed-cloud.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-19/#reporting-6ebe391a8b41",
+      "cves": [],
+      "snippet": "Hackers Breach N-able Cloud Server, Disrupting Email Security Management Across 3 Regions N-able on Wednesday disclosed that unknown threat actors gained unauthorized access to one of the servers in the Mail Assure and Spam Experts Hosted Cloud, causing it to disable management interfaces and APIs. \"We have taken steps to mitigate the threat and are continuing to harden our services to reduce the risk of recurrence,\" N-able said. \"The investigation is ongoing, but at this time we… N-able on Wednesday disclosed that unknown threat actors gained unauthorized access to one of the servers in the Mail Assure and Spam Experts Hosted Cloud, causing it to disable management interfaces and APIs. \"We ",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "N-able on Wednesday disclosed that unknown threat actors gained unauthorized access to one of the servers in the Mail Assure and Spam Experts Hosted Cloud, causing it to disable management interfaces and APIs. \"We have taken steps to mitigate the threat and are continuing to harden our services to reduce the risk of recurrence,\" N-able said. \"The investigation is ongoing, but at this time we…",
+          "text": "N-able on Wednesday disclosed that unknown threat actors gained unauthorized access to one of the servers in the Mail Assure and Spam Experts Hosted Cloud, causing it to disable management interfaces and APIs. \"We have taken steps to mitigate the threat and are continuing to harden our services to reduce the risk of recurrence,\" N-able said. \"The investigation is ongoing, but at this time we…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "N-able on Wednesday disclosed that unknown threat actors gained unauthorized access to one of the servers in the Mail Assure and Spam Experts Hosted Cloud, causing it to disable management interfaces and APIs. \"We have taken steps to mitigate the threat and are continuing to harden our services to reduce the risk of recurrence,\" N-able said. \"The investigation is ongoing, but at this time we…",
+          "text": "N-able on Wednesday disclosed that unknown threat actors gained unauthorized access to one of the servers in the Mail Assure and Spam Experts Hosted Cloud, causing it to disable management interfaces and APIs. \"We have taken steps to mitigate the threat and are continuing to harden our services to reduce the risk of recurrence,\" N-able said. \"The investigation is ongoing, but at this time we…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "NVIDIA investigating Gentlemen ransomware breach claims",
+      "url": "https://www.bleepingcomputer.com/news/security/nvidia-investigating-gentlemen-ransomware-breach-claims/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-19/#reporting-dc1081452c88",
+      "cves": [],
+      "snippet": "NVIDIA investigating Gentlemen ransomware breach claims NVIDIA is investigating claims of a security breach after the Gentlemen ransomware group has added the company to its dark web data leak site… NVIDIA is investigating claims of a security breach after the Gentlemen ransomware group has added the company to its dark web data leak site…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "NVIDIA is investigating claims of a security breach after the Gentlemen ransomware group has added the company to its dark web data leak site…",
+          "text": "NVIDIA is investigating claims of a security breach after the Gentlemen ransomware group has added the company to its dark web data leak site…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "NVIDIA is investigating claims of a security breach after the Gentlemen ransomware group has added the company to its dark web data leak site…",
+          "text": "NVIDIA is investigating claims of a security breach after the Gentlemen ransomware group has added the company to its dark web data leak site…"
         }
       ],
       "effective_date_evidence": null
@@ -248,6 +312,28 @@
       "effective_date_evidence": null
     },
     {
+      "title": "CISA Warns of 4 Exploited Flaws Linked to Ransomware, Cryptomining, and LLMjacking Attacks",
+      "url": "https://thehackernews.com/2026/11/cisa-warns-of-4-exploited-flaws-linked.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-19/#reporting-dd71654a2f47",
+      "cves": [],
+      "snippet": "CISA Warns of 4 Exploited Flaws Linked to Ransomware, Cryptomining, and LLMjacking Attacks The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Wednesday added four vulnerabilities impacting Synology DiskStation Manager (DSM), BerriAI LiteLLM, Apache Axis, and Vanderbilt University Research Electronic Data Capture (REDCap) to its Known Exploited Vulnerabilities (KEV) catalog, citing evidence of active exploitation. The vulnerabilities are listed below -… The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Wednesday added four vulnerabilities impacting Synology DiskStation Manager (DSM), BerriAI LiteLLM, Apache Axis, and Vanderbilt University Research Electronic",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Wednesday added four vulnerabilities impacting Synology DiskStation Manager (DSM), BerriAI LiteLLM, Apache Axis, and Vanderbilt University Research Electronic Data Capture (REDCap) to its Known Exploited Vulnerabilities (KEV) catalog, citing evidence of active exploitation. The vulnerabilities are listed below -…",
+          "text": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Wednesday added four vulnerabilities impacting Synology DiskStation Manager (DSM), BerriAI LiteLLM, Apache Axis, and Vanderbilt University Research Electronic Data Capture (REDCap) to its Known Exploited Vulnerabilities (KEV) catalog, citing evidence of active exploitation. The vulnerabilities are listed below -…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Wednesday added four vulnerabilities impacting Synology DiskStation Manager (DSM), BerriAI LiteLLM, Apache Axis, and Vanderbilt University Research Electronic Data Capture (REDCap) to its Known Exploited Vulnerabilities (KEV) catalog, citing evidence of active exploitation. The vulnerabilities are listed below -…",
+          "text": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Wednesday added four vulnerabilities impacting Synology DiskStation Manager (DSM), BerriAI LiteLLM, Apache Axis, and Vanderbilt University Research Electronic Data Capture (REDCap) to its Known Exploited Vulnerabilities (KEV) catalog, citing evidence of active exploitation. The vulnerabilities are listed below -…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
       "title": "Africa Retakes Top Spot as Most Attacked Region, Led by Nigeria Surge",
       "url": "https://www.darkreading.com/threat-intelligence/africa-top-spot-most-attacked-region-nigeria-surge",
       "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-19/#reporting-78a07fb55a22",
@@ -287,94 +373,6 @@
           "origin": "content",
           "raw_text": "The maintainers of the PHP programming language on Wednesday issued an advisory announcing an upcoming security release that addresses critical flaws. The release is scheduled for November 19, 2026, between 2 and 2:30 p.m. UTC. \"These releases are part of PHP's regular four-week release cycle and will address security vulnerabilities affecting all supported PHP versions,\" the maintainers said.",
           "text": "The maintainers of the PHP programming language on Wednesday issued an advisory announcing an upcoming security release that addresses critical flaws. The release is scheduled for November 19, 2026, between 2 and 2:30 p.m. UTC. \"These releases are part of PHP's regular four-week release cycle and will address security vulnerabilities affecting all supported PHP versions,\" the maintainers said."
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "Ukraine, FBI arrest ransomware gang members tied to $40M in ransoms",
-      "url": "https://www.bleepingcomputer.com/news/security/ukraine-fbi-arrest-ransomware-gang-members-tied-to-40m-in-ransoms/",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-19/#reporting-98624c3d23ee",
-      "cves": [],
-      "snippet": "Ukraine, FBI arrest ransomware gang members tied to $40M in ransoms Ukrainian authorities, working with the FBI, have arrested four suspected members of an international ransomware organization linked to more than $40.5 million in ransom payments from at least 28 companies worldwide… Ukrainian authorities, working with the FBI, have arrested four suspected members of an international ransomware organization linked to more than $40.5 million in ransom payments from at least 28 companies worldwide…",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "Ukrainian authorities, working with the FBI, have arrested four suspected members of an international ransomware organization linked to more than $40.5 million in ransom payments from at least 28 companies worldwide…",
-          "text": "Ukrainian authorities, working with the FBI, have arrested four suspected members of an international ransomware organization linked to more than $40.5 million in ransom payments from at least 28 companies worldwide…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "Ukrainian authorities, working with the FBI, have arrested four suspected members of an international ransomware organization linked to more than $40.5 million in ransom payments from at least 28 companies worldwide…",
-          "text": "Ukrainian authorities, working with the FBI, have arrested four suspected members of an international ransomware organization linked to more than $40.5 million in ransom payments from at least 28 companies worldwide…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "Russia's Cold Relic APT Turns One Cloud Breach Into Another",
-      "url": "https://www.darkreading.com/cyberattacks-data-breaches/cold-relic-turns-one-cloud-breach-into-another",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-19/#reporting-597438bcf54f",
-      "cves": [],
-      "snippet": "Russia's Cold Relic APT Turns One Cloud Breach Into Another The Russia-linked threat group is using data stolen from one victim to target others via convincing impersonations and social engineering attacks. The Russia-linked threat group is using data stolen from one victim to target others via convincing impersonations and social engineering attacks.",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "The Russia-linked threat group is using data stolen from one victim to target others via convincing impersonations and social engineering attacks.",
-          "text": "The Russia-linked threat group is using data stolen from one victim to target others via convincing impersonations and social engineering attacks."
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "The Russia-linked threat group is using data stolen from one victim to target others via convincing impersonations and social engineering attacks.",
-          "text": "The Russia-linked threat group is using data stolen from one victim to target others via convincing impersonations and social engineering attacks."
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "Coinbase blocks $4.7 million in transfers to Elon Musk deepfake scam",
-      "url": "https://www.bleepingcomputer.com/news/security/coinbase-blocks-47-million-in-transfers-to-elon-musk-deepfake-scam/",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-19/#reporting-3208f46dd169",
-      "cves": [],
-      "snippet": "Coinbase blocks $4.7 million in transfers to Elon Musk deepfake scam Coinbase says it blocked $4.7 million in cryptocurrency transfers to scammers promoting a fake giveaway using an AI-generated deepfake of Elon Musk during a Tesla livestream that attracted more than 500,000 viewers… Coinbase says it blocked $4.7 million in cryptocurrency transfers to scammers promoting a fake giveaway using an AI-generated deepfake of Elon Musk during a Tesla livestream that attracted more than 500,000 viewers…",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "Coinbase says it blocked $4.7 million in cryptocurrency transfers to scammers promoting a fake giveaway using an AI-generated deepfake of Elon Musk during a Tesla livestream that attracted more than 500,000 viewers…",
-          "text": "Coinbase says it blocked $4.7 million in cryptocurrency transfers to scammers promoting a fake giveaway using an AI-generated deepfake of Elon Musk during a Tesla livestream that attracted more than 500,000 viewers…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "Coinbase says it blocked $4.7 million in cryptocurrency transfers to scammers promoting a fake giveaway using an AI-generated deepfake of Elon Musk during a Tesla livestream that attracted more than 500,000 viewers…",
-          "text": "Coinbase says it blocked $4.7 million in cryptocurrency transfers to scammers promoting a fake giveaway using an AI-generated deepfake of Elon Musk during a Tesla livestream that attracted more than 500,000 viewers…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "Strike Graph Launches Integration AI to Automate Continuous Compliance Evidence Using Any Existing Tool",
-      "url": "https://www.darkreading.com/cyber-risk/strike-graph-launches-integration-ai-to-automate-continuous-compliance-evidence-using-any-existing-tool",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-19/#reporting-2a612a97044a",
-      "cves": [],
-      "snippet": "Strike Graph Launches Integration AI to Automate Continuous Compliance Evidence Using Any Existing Tool New agentic AI solution leverages APIs to collect compliance evidence from systems and applies it to over 30 frameworks with no duplicate work. New agentic AI solution leverages APIs to collect compliance evidence from systems and applies it to over 30 frameworks with no duplicate work.",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "New agentic AI solution leverages APIs to collect compliance evidence from systems and applies it to over 30 frameworks with no duplicate work.",
-          "text": "New agentic AI solution leverages APIs to collect compliance evidence from systems and applies it to over 30 frameworks with no duplicate work."
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "New agentic AI solution leverages APIs to collect compliance evidence from systems and applies it to over 30 frameworks with no duplicate work.",
-          "text": "New agentic AI solution leverages APIs to collect compliance evidence from systems and applies it to over 30 frameworks with no duplicate work."
         }
       ],
       "effective_date_evidence": null
