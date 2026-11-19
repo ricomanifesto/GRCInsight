@@ -5,12 +5,24 @@
     "control_implications": [
       {
         "control_id": "vulnerability_management",
+        "evidence_excerpt": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Tuesday added a critical security flaw impacting Perforce Puppet, an enterprise infrastructure-as-code (IaC) and configuration management platform, to its Known Exploited Vulnerabilities (KEV) catalog, citing reports of active exploitation.",
+        "evidence_origin": "summary",
+        "focus": "Perforce Puppet",
+        "headline": "Perforce Puppet joins CISA Known Exploited Vulnerabilities catalog signaling active exploitation",
+        "priority": "high",
+        "significance": "Active exploitation of a critical infrastructure-as-code platform weakens vulnerability management assurance by confirming that unpatched instances are being targeted. The accountable owner should confirm affected asset inventory and verify remediation or compensating controls are in place.",
+        "source_ids": [
+          4
+        ]
+      },
+      {
+        "control_id": "vulnerability_management",
         "evidence_excerpt": "A flaw in NGINX's HTTP/2 support can allow an attacker to run code on servers with HTTP/2 enabled, without needing to log in. The decade-old flaw, CVE-2026-123007, dubbed \"nginx2root,\" has been present in NGINX's open-source code since version 1.9.5, released on September 22, 2015. Fixed versions 1.31.9 and 1.30.7 came out today.",
         "evidence_origin": "summary",
-        "focus": "NGINX's HTTP/2 support",
-        "headline": "NGINX's HTTP/2 support enables unauthenticated code execution",
-        "priority": "medium",
-        "significance": "This decade-old vulnerability in a ubiquitous web server component weakens assurance that asset inventories capture long-standing exposures. The accountable owner should confirm that all NGINX instances with HTTP/2 enabled have been identified and patched to fixed versions.",
+        "focus": "NGINX HTTP/2 support",
+        "headline": "NGINX HTTP/2 support enables unauthenticated remote code execution via decade-old flaw",
+        "priority": "high",
+        "significance": "A long-standing unauthenticated remote code execution flaw in a ubiquitous web server weakens vulnerability management by exposing potentially unpatched instances. The accountable owner should identify all NGINX deployments with HTTP/2 enabled and confirm application of fixed versions.",
         "source_ids": [
           1
         ]
@@ -19,24 +31,24 @@
         "control_id": "vulnerability_management",
         "evidence_excerpt": "A critical security flaw in Apache Roller, an open-source, Java-based blogging platform, has come under active exploitation in the wild, according to the Apache Software Foundation (ASF) The vulnerability, tracked as CVE-2026-129448 (CVSS score: 9.8), is a case of unauthenticated deserialization in the XML-RPC endpoint that could lead to remote code execution.",
         "evidence_origin": "summary",
-        "focus": "Apache Roller XML-RPC endpoint",
-        "headline": "Apache Roller XML-RPC endpoint permits unauthenticated remote code execution",
+        "focus": "Apache Roller",
+        "headline": "Apache Roller suffers active exploitation via unauthenticated deserialization flaw",
         "priority": "high",
-        "significance": "Active exploitation of a critical deserialization flaw in a widely used blogging platform undermines vulnerability management coverage for internet-facing applications. The accountable owner should confirm that any Apache Roller deployments have been assessed for exploitation and remediated.",
+        "significance": "Active exploitation of a critical deserialization flaw in a blogging platform weakens vulnerability management by indicating that unpatched instances are being compromised. The accountable owner should verify whether Apache Roller is deployed and ensure the XML-RPC endpoint is secured or patched.",
         "source_ids": [
           2
         ]
       },
       {
-        "control_id": "third_party_risk",
-        "evidence_excerpt": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Tuesday added a critical security flaw impacting Perforce Puppet, an enterprise infrastructure-as-code (IaC) and configuration management platform, to its Known Exploited Vulnerabilities (KEV) catalog, citing reports of active exploitation. The vulnerability, tracked as CVE-2026-115731 (CVSS score: 9.4), is a case of…",
+        "control_id": "vulnerability_management",
+        "evidence_excerpt": "A Java flaw called Java4Shell can let attackers without an account run their own code on Jira, Jenkins, Keycloak, and three other widely used applications, says Calif, the security research firm that disclosed it this week. The flaw is present in Java 17.0.6 and later, and the vulnerable code runs only on x86-64 Intel and AMD chips that support the AVX-512 VBMI feature.",
         "evidence_origin": "summary",
-        "focus": "Perforce Puppet enterprise infrastructure-as-code platform",
-        "headline": "Perforce Puppet enterprise infrastructure-as-code platform added to CISA exploited vulnerabilities catalog",
-        "priority": "high",
-        "significance": "CISA KEV inclusion signals active exploitation of a core infrastructure automation tool, extending risk to all dependent environments. The accountable owner should confirm that Perforce Puppet instances are inventoried, patched, and that supplier communications address exploitation evidence.",
+        "focus": "Java4Shell flaw",
+        "headline": "Java4Shell flaw enables pre-authentication remote code execution across multiple enterprise applications",
+        "priority": "medium",
+        "significance": "A hardware-dependent Java flaw affecting widely used enterprise applications weakens vulnerability management by creating a conditional exposure that may be overlooked. The accountable owner should inventory affected Java versions on relevant hardware and assess applicability of mitigations.",
         "source_ids": [
-          4
+          3
         ]
       },
       {
@@ -44,35 +56,23 @@
         "evidence_excerpt": "A reported cyberattack on Wellington IT has exposed sensitive information belonging to members of 50 credit unions, the majority of which are located in Ireland…",
         "evidence_origin": "summary",
         "focus": "Wellington IT",
-        "headline": "Wellington IT exposes credit union member data in reported cyberattack",
+        "headline": "Wellington IT cyberattack exposes sensitive data of 50 credit unions",
         "priority": "high",
-        "significance": "A single IT provider breach compromising multiple credit unions demonstrates concentration risk in shared service dependencies. The accountable owner should confirm that supplier assurance programs cover data protection obligations and incident notification for critical third parties.",
+        "significance": "A supply chain breach at an IT provider compromising sensitive financial data weakens third-party risk assurance by demonstrating cascading impact across multiple regulated entities. The accountable owner should review supplier dependencies, assurance evidence, and escalation contacts for similar providers.",
         "source_ids": [
-          10
-        ]
-      },
-      {
-        "control_id": "third_party_risk",
-        "evidence_excerpt": "Hackers compromised Microsoft's official Agent Framework Python package on PyPI, publishing two malicious versions designed to steal cloud credentials and other sensitive information from developers' systems…",
-        "evidence_origin": "summary",
-        "focus": "Microsoft's official Agent Framework Python package",
-        "headline": "Microsoft's official Agent Framework Python package compromised to steal cloud credentials",
-        "priority": "high",
-        "significance": "Supply chain compromise of an official Microsoft package on a public repository undermines trust in dependency management controls. The accountable owner should confirm that software composition analysis detects malicious package versions and that developer credential rotation procedures are tested.",
-        "source_ids": [
-          12
+          11
         ]
       },
       {
         "control_id": "vulnerability_management",
-        "evidence_excerpt": "Six critical vulnerabilities in F5 BIG-IP allow an attacker to crash the Traffic Management Microkernel (TMM) without logging in, disrupting traffic until the TMM restarts. Each flaw needs a specific setup on a virtual server: an iRule that uses a particular command, or an APM policy that includes two particular kinds of agent. F5, which makes BIG-IP, disclosed the flaws today and says they…",
+        "evidence_excerpt": "Six critical vulnerabilities in F5 BIG-IP allow an attacker to crash the Traffic Management Microkernel (TMM) without logging in, disrupting traffic until the TMM restarts. Each flaw needs a specific setup on a virtual server: an iRule that uses a particular command, or an APM policy that includes two particular kinds of agent.",
         "evidence_origin": "summary",
-        "focus": "F5 BIG-IP Traffic Management Microkernel",
-        "headline": "F5 BIG-IP Traffic Management Microkernel vulnerable to unauthenticated crash",
-        "priority": "medium",
-        "significance": "Multiple critical flaws in a core traffic management component require configuration-specific exposure assessment beyond version checks. The accountable owner should confirm that BIG-IP deployments have been evaluated for the specific iRule and APM policy conditions that trigger the vulnerabilities.",
+        "focus": "F5 BIG-IP",
+        "headline": "F5 BIG-IP critical vulnerabilities allow unauthenticated Traffic Management Microkernel crashes",
+        "priority": "high",
+        "significance": "Multiple critical flaws in a core application delivery platform weaken vulnerability management by enabling unauthenticated disruption of traffic management. The accountable owner should identify affected BIG-IP configurations and validate remediation or compensating controls.",
         "source_ids": [
-          11
+          12
         ]
       }
     ],
@@ -82,25 +82,25 @@
           "source_ids": [
             1,
             2,
+            3,
             4,
-            11
+            12
           ],
-          "text": "Active exploitation of critical vulnerabilities in widely deployed infrastructure components including NGINX, Apache Roller, Perforce Puppet, and F5 BIG-IP demands immediate asset identification and remediation verification across internet-facing and internal systems. The addition of Perforce Puppet to the CISA Known Exploited Vulnerabilities catalog elevates urgency for configuration management platforms that underpin automated environments."
+          "text": "Critical vulnerabilities in widely deployed infrastructure components including NGINX, Perforce Puppet, Apache Roller, Java runtime, and F5 BIG-IP are under active exploitation or have fixes released, requiring immediate asset identification and remediation verification by vulnerability management owners."
         },
         {
           "source_ids": [
-            10,
-            12
+            11
           ],
-          "text": "Supply chain compromises affecting Microsoft's official Agent Framework Python package on PyPI and a reported cyberattack on IT provider Wellington IT extend risk to dependent organizations, requiring supplier assurance reviews and software composition analysis validation. These events demonstrate how single points of failure in shared services and trusted repositories can cascade across multiple entities."
+          "text": "A supply chain breach at Wellington IT exposed sensitive data of 50 credit unions while law enforcement arrested ransomware operators linked to $40.5 million in payments, underscoring the need for third-party risk assurance and incident response readiness."
         }
       ]
     },
     "industry_impacts": [],
     "regulatory_changes": []
   },
-  "generated_at": "2026-11-19T00:35:10.402883Z",
-  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/1f6adc21187d51b8b0e8c72966d793a25b0c0cef/site/feed.xml",
+  "generated_at": "2026-11-19T06:30:02.743185Z",
+  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/80230dbb4041dbdfbe1281446345e218ffa49ed0/site/feed.xml",
   "feed_home_url": "https://sentrydigest.ricomanifesto.com/",
   "digest_issue_date": "2026-11-19",
   "digest_issue_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-19/",
@@ -199,6 +199,28 @@
           "origin": "content",
           "raw_text": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Tuesday added a critical security flaw impacting Perforce Puppet, an enterprise infrastructure-as-code (IaC) and configuration management platform, to its Known Exploited Vulnerabilities (KEV) catalog, citing reports of active exploitation. The vulnerability, tracked as CVE-2026-115731 (CVSS score: 9.4), is a case of…",
           "text": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Tuesday added a critical security flaw impacting Perforce Puppet, an enterprise infrastructure-as-code (IaC) and configuration management platform, to its Known Exploited Vulnerabilities (KEV) catalog, citing reports of active exploitation. The vulnerability, tracked as CVE-2026-115731 (CVSS score: 9.4), is a case of…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "PHP Warns of Critical Security Flaws Affecting All Supported Versions, Fixes Coming November 19",
+      "url": "https://thehackernews.com/2026/11/php-warns-of-critical-security-flaws.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-19/#reporting-75b5f9594128",
+      "cves": [],
+      "snippet": "PHP Warns of Critical Security Flaws Affecting All Supported Versions, Fixes Coming November 19 The maintainers of the PHP programming language on Wednesday issued an advisory announcing an upcoming security release that addresses critical flaws. The release is scheduled for November 19, 2026, between 2 and 2:30 p.m. UTC. \"These releases are part of PHP's regular four-week release cycle and will address security vulnerabilities affecting all supported PHP versions,\" the maintainers said. The maintainers of the PHP programming language on Wednesday issued an advisory announcing an upcoming security release that addresses critical flaws. The release is scheduled for November 19, 2026, between ",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "The maintainers of the PHP programming language on Wednesday issued an advisory announcing an upcoming security release that addresses critical flaws. The release is scheduled for November 19, 2026, between 2 and 2:30 p.m. UTC. \"These releases are part of PHP's regular four-week release cycle and will address security vulnerabilities affecting all supported PHP versions,\" the maintainers said.",
+          "text": "The maintainers of the PHP programming language on Wednesday issued an advisory announcing an upcoming security release that addresses critical flaws. The release is scheduled for November 19, 2026, between 2 and 2:30 p.m. UTC. \"These releases are part of PHP's regular four-week release cycle and will address security vulnerabilities affecting all supported PHP versions,\" the maintainers said."
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "The maintainers of the PHP programming language on Wednesday issued an advisory announcing an upcoming security release that addresses critical flaws. The release is scheduled for November 19, 2026, between 2 and 2:30 p.m. UTC. \"These releases are part of PHP's regular four-week release cycle and will address security vulnerabilities affecting all supported PHP versions,\" the maintainers said.",
+          "text": "The maintainers of the PHP programming language on Wednesday issued an advisory announcing an upcoming security release that addresses critical flaws. The release is scheduled for November 19, 2026, between 2 and 2:30 p.m. UTC. \"These releases are part of PHP's regular four-week release cycle and will address security vulnerabilities affecting all supported PHP versions,\" the maintainers said."
         }
       ],
       "effective_date_evidence": null
@@ -353,28 +375,6 @@
           "origin": "content",
           "raw_text": "Six critical vulnerabilities in F5 BIG-IP allow an attacker to crash the Traffic Management Microkernel (TMM) without logging in, disrupting traffic until the TMM restarts. Each flaw needs a specific setup on a virtual server: an iRule that uses a particular command, or an APM policy that includes two particular kinds of agent. F5, which makes BIG-IP, disclosed the flaws today and says they…",
           "text": "Six critical vulnerabilities in F5 BIG-IP allow an attacker to crash the Traffic Management Microkernel (TMM) without logging in, disrupting traffic until the TMM restarts. Each flaw needs a specific setup on a virtual server: an iRule that uses a particular command, or an APM policy that includes two particular kinds of agent. F5, which makes BIG-IP, disclosed the flaws today and says they…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "Microsoft’s Agent Framework PyPI package compromised to steal credentials",
-      "url": "https://www.bleepingcomputer.com/news/security/microsofts-agent-framework-pypi-package-compromised-to-steal-credentials/",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-19/#reporting-97ef079b76ea",
-      "cves": [],
-      "snippet": "Microsoft’s Agent Framework PyPI package compromised to steal credentials Hackers compromised Microsoft's official Agent Framework Python package on PyPI, publishing two malicious versions designed to steal cloud credentials and other sensitive information from developers' systems… Hackers compromised Microsoft's official Agent Framework Python package on PyPI, publishing two malicious versions designed to steal cloud credentials and other sensitive information from developers' systems…",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "Hackers compromised Microsoft's official Agent Framework Python package on PyPI, publishing two malicious versions designed to steal cloud credentials and other sensitive information from developers' systems…",
-          "text": "Hackers compromised Microsoft's official Agent Framework Python package on PyPI, publishing two malicious versions designed to steal cloud credentials and other sensitive information from developers' systems…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "Hackers compromised Microsoft's official Agent Framework Python package on PyPI, publishing two malicious versions designed to steal cloud credentials and other sensitive information from developers' systems…",
-          "text": "Hackers compromised Microsoft's official Agent Framework Python package on PyPI, publishing two malicious versions designed to steal cloud credentials and other sensitive information from developers' systems…"
         }
       ],
       "effective_date_evidence": null
