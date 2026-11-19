@@ -4,13 +4,13 @@
   "report_plan": {
     "control_implications": [
       {
-        "control_id": "vulnerability_management",
+        "control_id": "third_party_risk",
         "evidence_excerpt": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Tuesday added a critical security flaw impacting Perforce Puppet, an enterprise infrastructure-as-code (IaC) and configuration management platform, to its Known Exploited Vulnerabilities (KEV) catalog, citing reports of active exploitation.",
         "evidence_origin": "summary",
         "focus": "Perforce Puppet",
-        "headline": "Perforce Puppet joins CISA Known Exploited Vulnerabilities catalog signaling active exploitation",
+        "headline": "Perforce Puppet added to CISA KEV catalog",
         "priority": "high",
-        "significance": "Active exploitation of a critical infrastructure-as-code platform weakens vulnerability management assurance by confirming that unpatched instances are being targeted. The accountable owner should confirm affected asset inventory and verify remediation or compensating controls are in place.",
+        "significance": "Active exploitation of a widely used infrastructure-as-code platform increases third-party risk because compromised Puppet servers can control enterprise configuration. The accountable owner should confirm supplier dependencies, assurance evidence, and escalation contacts for Perforce Puppet.",
         "source_ids": [
           4
         ]
@@ -20,59 +20,59 @@
         "evidence_excerpt": "A flaw in NGINX's HTTP/2 support can allow an attacker to run code on servers with HTTP/2 enabled, without needing to log in. The decade-old flaw, CVE-2026-123007, dubbed \"nginx2root,\" has been present in NGINX's open-source code since version 1.9.5, released on September 22, 2015. Fixed versions 1.31.9 and 1.30.7 came out today.",
         "evidence_origin": "summary",
         "focus": "NGINX HTTP/2 support",
-        "headline": "NGINX HTTP/2 support enables unauthenticated remote code execution via decade-old flaw",
-        "priority": "high",
-        "significance": "A long-standing unauthenticated remote code execution flaw in a ubiquitous web server weakens vulnerability management by exposing potentially unpatched instances. The accountable owner should identify all NGINX deployments with HTTP/2 enabled and confirm application of fixed versions.",
+        "headline": "NGINX HTTP/2 support enables unauthenticated code execution",
+        "priority": "medium",
+        "significance": "A decade-old vulnerability in a ubiquitous web server component weakens vulnerability management by exposing unpatched servers to unauthenticated remote code execution. The accountable owner should identify affected assets, verify remediation status, and document any exceptions.",
         "source_ids": [
           1
         ]
       },
       {
-        "control_id": "vulnerability_management",
-        "evidence_excerpt": "A critical security flaw in Apache Roller, an open-source, Java-based blogging platform, has come under active exploitation in the wild, according to the Apache Software Foundation (ASF) The vulnerability, tracked as CVE-2026-129448 (CVSS score: 9.8), is a case of unauthenticated deserialization in the XML-RPC endpoint that could lead to remote code execution.",
-        "evidence_origin": "summary",
-        "focus": "Apache Roller",
-        "headline": "Apache Roller suffers active exploitation via unauthenticated deserialization flaw",
-        "priority": "high",
-        "significance": "Active exploitation of a critical deserialization flaw in a blogging platform weakens vulnerability management by indicating that unpatched instances are being compromised. The accountable owner should verify whether Apache Roller is deployed and ensure the XML-RPC endpoint is secured or patched.",
-        "source_ids": [
-          2
-        ]
-      },
-      {
-        "control_id": "vulnerability_management",
+        "control_id": "access_management",
         "evidence_excerpt": "A Java flaw called Java4Shell can let attackers without an account run their own code on Jira, Jenkins, Keycloak, and three other widely used applications, says Calif, the security research firm that disclosed it this week. The flaw is present in Java 17.0.6 and later, and the vulnerable code runs only on x86-64 Intel and AMD chips that support the AVX-512 VBMI feature.",
         "evidence_origin": "summary",
         "focus": "Java4Shell flaw",
-        "headline": "Java4Shell flaw enables pre-authentication remote code execution across multiple enterprise applications",
-        "priority": "medium",
-        "significance": "A hardware-dependent Java flaw affecting widely used enterprise applications weakens vulnerability management by creating a conditional exposure that may be overlooked. The accountable owner should inventory affected Java versions on relevant hardware and assess applicability of mitigations.",
+        "headline": "Java4Shell flaw enables pre-auth RCE in Keycloak",
+        "priority": "high",
+        "significance": "Pre-authentication remote code execution in identity and access management tools such as Keycloak weakens access management by bypassing authentication boundaries. The accountable owner should review privileged access, authentication coverage, and session revocation evidence for affected applications.",
         "source_ids": [
           3
         ]
       },
       {
-        "control_id": "third_party_risk",
-        "evidence_excerpt": "A reported cyberattack on Wellington IT has exposed sensitive information belonging to members of 50 credit unions, the majority of which are located in Ireland…",
+        "control_id": "data_protection",
+        "evidence_excerpt": "Low-privilege database accounts that cannot read a single application table can still be used to run code on the database server itself, a researcher has shown, by reaching memory-corruption bugs in the engine code behind ordinary SQL. The exploits, published yesterday, are the researcher's proofs of concept against PostgreSQL, MySQL and ClickHouse, plus a separate Oracle chain that needs no…",
         "evidence_origin": "summary",
-        "focus": "Wellington IT",
-        "headline": "Wellington IT cyberattack exposes sensitive data of 50 credit unions",
-        "priority": "high",
-        "significance": "A supply chain breach at an IT provider compromising sensitive financial data weakens third-party risk assurance by demonstrating cascading impact across multiple regulated entities. The accountable owner should review supplier dependencies, assurance evidence, and escalation contacts for similar providers.",
+        "focus": "Low-privilege database accounts",
+        "headline": "Low-privilege database accounts enable server code execution",
+        "priority": "medium",
+        "significance": "Memory-corruption bugs in database engines allow low-privilege accounts to execute code on the server, threatening data protection for sensitive information stored in PostgreSQL, MySQL, and Oracle. The accountable owner should review sensitive-data access restrictions, audit logs, and exposure assessments.",
         "source_ids": [
-          11
+          6
         ]
       },
       {
-        "control_id": "vulnerability_management",
-        "evidence_excerpt": "Six critical vulnerabilities in F5 BIG-IP allow an attacker to crash the Traffic Management Microkernel (TMM) without logging in, disrupting traffic until the TMM restarts. Each flaw needs a specific setup on a virtual server: an iRule that uses a particular command, or an APM policy that includes two particular kinds of agent.",
+        "control_id": "incident_response",
+        "evidence_excerpt": "Ukrainian authorities, working with the FBI, have arrested four suspected members of an international ransomware organization linked to more than $40.5 million in ransom payments from at least 28 companies worldwide…",
         "evidence_origin": "summary",
-        "focus": "F5 BIG-IP",
-        "headline": "F5 BIG-IP critical vulnerabilities allow unauthenticated Traffic Management Microkernel crashes",
-        "priority": "high",
-        "significance": "Multiple critical flaws in a core application delivery platform weaken vulnerability management by enabling unauthenticated disruption of traffic management. The accountable owner should identify affected BIG-IP configurations and validate remediation or compensating controls.",
+        "focus": "international ransomware organization",
+        "headline": "international ransomware organization arrested by authorities",
+        "priority": "medium",
+        "significance": "Law enforcement disruption of a prolific ransomware group alters the threat landscape but may trigger retaliation or affiliate migration, requiring incident response readiness. The accountable owner should review containment responsibilities, retained logs, and the most recent response exercise.",
         "source_ids": [
-          12
+          9
+        ]
+      },
+      {
+        "control_id": "monitoring",
+        "evidence_excerpt": "The Russia-linked threat group is using data stolen from one victim to target others via convincing impersonations and social engineering attacks.",
+        "evidence_origin": "summary",
+        "focus": "Russia-linked threat group",
+        "headline": "Russia-linked threat group leverages stolen data for impersonation",
+        "priority": "high",
+        "significance": "Credential theft and impersonation chains enable lateral movement that evades standard detection, weakening monitoring and detection coverage. The accountable owner should review log coverage, detection tests, alert routing, and investigation ownership for identity-based anomalies.",
+        "source_ids": [
+          10
         ]
       }
     ],
@@ -80,27 +80,27 @@
       "paragraphs": [
         {
           "source_ids": [
-            1,
-            2,
-            3,
             4,
-            12
+            3,
+            1
           ],
-          "text": "Critical vulnerabilities in widely deployed infrastructure components including NGINX, Perforce Puppet, Apache Roller, Java runtime, and F5 BIG-IP are under active exploitation or have fixes released, requiring immediate asset identification and remediation verification by vulnerability management owners."
+          "text": "Third-party and supply chain risk elevated by active exploitation of Puppet IaC platform added to CISA KEV, while pre-authentication RCE flaws in Java-based enterprise tools (Jira, Jenkins, Keycloak) and decade-old NGINX HTTP/2 vulnerability demand immediate asset identification and remediation verification."
         },
         {
           "source_ids": [
-            11
+            6,
+            10,
+            9
           ],
-          "text": "A supply chain breach at Wellington IT exposed sensitive data of 50 credit unions while law enforcement arrested ransomware operators linked to $40.5 million in payments, underscoring the need for third-party risk assurance and incident response readiness."
+          "text": "Database engine memory-corruption exploits demonstrate that low-privilege accounts can achieve server-level code execution, while Russia-linked APT campaigns weaponize stolen credentials for impersonation chains and law enforcement disrupts a major ransomware operation, collectively requiring enhanced monitoring coverage and incident response readiness."
         }
       ]
     },
     "industry_impacts": [],
     "regulatory_changes": []
   },
-  "generated_at": "2026-11-19T06:30:02.743185Z",
-  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/80230dbb4041dbdfbe1281446345e218ffa49ed0/site/feed.xml",
+  "generated_at": "2026-11-19T09:20:06.664915Z",
+  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/d9a53deaab03f73c43b53ae98a20dee6893d3caf/site/feed.xml",
   "feed_home_url": "https://sentrydigest.ricomanifesto.com/",
   "digest_issue_date": "2026-11-19",
   "digest_issue_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-19/",
@@ -199,6 +199,72 @@
           "origin": "content",
           "raw_text": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Tuesday added a critical security flaw impacting Perforce Puppet, an enterprise infrastructure-as-code (IaC) and configuration management platform, to its Known Exploited Vulnerabilities (KEV) catalog, citing reports of active exploitation. The vulnerability, tracked as CVE-2026-115731 (CVSS score: 9.4), is a case of…",
           "text": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Tuesday added a critical security flaw impacting Perforce Puppet, an enterprise infrastructure-as-code (IaC) and configuration management platform, to its Known Exploited Vulnerabilities (KEV) catalog, citing reports of active exploitation. The vulnerability, tracked as CVE-2026-115731 (CVSS score: 9.4), is a case of…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Ruby Releases Fixes for 7 Regex and String Flaws, Warns 5 Have Proof-of-Concept RCE",
+      "url": "https://thehackernews.com/2026/11/ruby-releases-fixes-for-7-regex-and.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-19/#reporting-29eb33240b0f",
+      "cves": [],
+      "snippet": "Ruby Releases Fixes for 7 Regex and String Flaws, Warns 5 Have Proof-of-Concept RCE Ruby contains seven memory-safety flaws in its regular expression engine and its string case-conversion code. For five of them, its maintainers say, proof-of-concept exploits, or PoCs, have shown that crafted input can run code on the machine. \"We are aware of PoCs that prove some of them can be used to trigger remote code execution,\" the maintainers said. The project released fixed versions… Ruby contains seven memory-safety flaws in its regular expression engine and its string case-conversion code. For five of them, its maintainers say, proof-of-concept exploits, or PoCs, have shown that crafted input can r",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Ruby contains seven memory-safety flaws in its regular expression engine and its string case-conversion code. For five of them, its maintainers say, proof-of-concept exploits, or PoCs, have shown that crafted input can run code on the machine. \"We are aware of PoCs that prove some of them can be used to trigger remote code execution,\" the maintainers said. The project released fixed versions…",
+          "text": "Ruby contains seven memory-safety flaws in its regular expression engine and its string case-conversion code. For five of them, its maintainers say, proof-of-concept exploits, or PoCs, have shown that crafted input can run code on the machine. \"We are aware of PoCs that prove some of them can be used to trigger remote code execution,\" the maintainers said. The project released fixed versions…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Ruby contains seven memory-safety flaws in its regular expression engine and its string case-conversion code. For five of them, its maintainers say, proof-of-concept exploits, or PoCs, have shown that crafted input can run code on the machine. \"We are aware of PoCs that prove some of them can be used to trigger remote code execution,\" the maintainers said. The project released fixed versions…",
+          "text": "Ruby contains seven memory-safety flaws in its regular expression engine and its string case-conversion code. For five of them, its maintainers say, proof-of-concept exploits, or PoCs, have shown that crafted input can run code on the machine. \"We are aware of PoCs that prove some of them can be used to trigger remote code execution,\" the maintainers said. The project released fixed versions…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Researcher Demonstrates Database RCE Exploits Affecting PostgreSQL, MySQL and Oracle",
+      "url": "https://thehackernews.com/2026/11/researcher-demonstrates-database-rce.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-19/#reporting-3914c4d93285",
+      "cves": [],
+      "snippet": "Researcher Demonstrates Database RCE Exploits Affecting PostgreSQL, MySQL and Oracle Low-privilege database accounts that cannot read a single application table can still be used to run code on the database server itself, a researcher has shown, by reaching memory-corruption bugs in the engine code behind ordinary SQL. The exploits, published yesterday, are the researcher's proofs of concept against PostgreSQL, MySQL and ClickHouse, plus a separate Oracle chain that needs no… Low-privilege database accounts that cannot read a single application table can still be used to run code on the database server itself, a researcher has shown, by reaching memory-corruption bugs in the engine code behi",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Low-privilege database accounts that cannot read a single application table can still be used to run code on the database server itself, a researcher has shown, by reaching memory-corruption bugs in the engine code behind ordinary SQL. The exploits, published yesterday, are the researcher's proofs of concept against PostgreSQL, MySQL and ClickHouse, plus a separate Oracle chain that needs no…",
+          "text": "Low-privilege database accounts that cannot read a single application table can still be used to run code on the database server itself, a researcher has shown, by reaching memory-corruption bugs in the engine code behind ordinary SQL. The exploits, published yesterday, are the researcher's proofs of concept against PostgreSQL, MySQL and ClickHouse, plus a separate Oracle chain that needs no…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Low-privilege database accounts that cannot read a single application table can still be used to run code on the database server itself, a researcher has shown, by reaching memory-corruption bugs in the engine code behind ordinary SQL. The exploits, published yesterday, are the researcher's proofs of concept against PostgreSQL, MySQL and ClickHouse, plus a separate Oracle chain that needs no…",
+          "text": "Low-privilege database accounts that cannot read a single application table can still be used to run code on the database server itself, a researcher has shown, by reaching memory-corruption bugs in the engine code behind ordinary SQL. The exploits, published yesterday, are the researcher's proofs of concept against PostgreSQL, MySQL and ClickHouse, plus a separate Oracle chain that needs no…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Africa Retakes Top Spot as Most Attacked Region, Led by Nigeria Surge",
+      "url": "https://www.darkreading.com/threat-intelligence/africa-top-spot-most-attacked-region-nigeria-surge",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-19/#reporting-78a07fb55a22",
+      "cves": [],
+      "snippet": "Africa Retakes Top Spot as Most Attacked Region, Led by Nigeria Surge Nigeria faced more than double the cyber threats of the previous year, with Angola and Kenya also in the top-5 most attacked countries globally. Nigeria faced more than double the cyber threats of the previous year, with Angola and Kenya also in the top-5 most attacked countries globally.",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Nigeria faced more than double the cyber threats of the previous year, with Angola and Kenya also in the top-5 most attacked countries globally.",
+          "text": "Nigeria faced more than double the cyber threats of the previous year, with Angola and Kenya also in the top-5 most attacked countries globally."
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Nigeria faced more than double the cyber threats of the previous year, with Angola and Kenya also in the top-5 most attacked countries globally.",
+          "text": "Nigeria faced more than double the cyber threats of the previous year, with Angola and Kenya also in the top-5 most attacked countries globally."
         }
       ],
       "effective_date_evidence": null
@@ -309,72 +375,6 @@
           "origin": "content",
           "raw_text": "New agentic AI solution leverages APIs to collect compliance evidence from systems and applies it to over 30 frameworks with no duplicate work.",
           "text": "New agentic AI solution leverages APIs to collect compliance evidence from systems and applies it to over 30 frameworks with no duplicate work."
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "AttackIQ Research Reveals How Iranian Cyber Groups Hand Off Network Access to Enable Destructive Attacks",
-      "url": "https://www.darkreading.com/threat-intelligence/attackiq-research-reveals-iranian-cyber-groups",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-19/#reporting-598072de3005",
-      "cves": [],
-      "snippet": "AttackIQ Research Reveals How Iranian Cyber Groups Hand Off Network Access to Enable Destructive Attacks Analysis of 20 Iranian state-sponsored threat groups details how espionage, ransomware, and hacktivism intersect in state-backed cyber campaigns. Analysis of 20 Iranian state-sponsored threat groups details how espionage, ransomware, and hacktivism intersect in state-backed cyber campaigns.",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "Analysis of 20 Iranian state-sponsored threat groups details how espionage, ransomware, and hacktivism intersect in state-backed cyber campaigns.",
-          "text": "Analysis of 20 Iranian state-sponsored threat groups details how espionage, ransomware, and hacktivism intersect in state-backed cyber campaigns."
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "Analysis of 20 Iranian state-sponsored threat groups details how espionage, ransomware, and hacktivism intersect in state-backed cyber campaigns.",
-          "text": "Analysis of 20 Iranian state-sponsored threat groups details how espionage, ransomware, and hacktivism intersect in state-backed cyber campaigns."
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "Data breach impacts 40 Irish credit unions in reported IT provider hack",
-      "url": "https://www.bleepingcomputer.com/news/security/data-breach-impacts-40-irish-credit-unions-in-reported-it-provider-hack/",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-19/#reporting-c3f1d9d987e8",
-      "cves": [],
-      "snippet": "Data breach impacts 40 Irish credit unions in reported IT provider hack A reported cyberattack on Wellington IT has exposed sensitive information belonging to members of 50 credit unions, the majority of which are located in Ireland… A reported cyberattack on Wellington IT has exposed sensitive information belonging to members of 50 credit unions, the majority of which are located in Ireland…",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "A reported cyberattack on Wellington IT has exposed sensitive information belonging to members of 50 credit unions, the majority of which are located in Ireland…",
-          "text": "A reported cyberattack on Wellington IT has exposed sensitive information belonging to members of 50 credit unions, the majority of which are located in Ireland…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "A reported cyberattack on Wellington IT has exposed sensitive information belonging to members of 50 credit unions, the majority of which are located in Ireland…",
-          "text": "A reported cyberattack on Wellington IT has exposed sensitive information belonging to members of 50 credit unions, the majority of which are located in Ireland…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "F5 Warns 6 Critical BIG-IP Flaws Can Crash Traffic in Specific Setups, May Allow RCE",
-      "url": "https://thehackernews.com/2026/11/f5-warns-6-critical-big-ip-flaws-can.html",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-19/#reporting-4ab4f5e03685",
-      "cves": [],
-      "snippet": "F5 Warns 6 Critical BIG-IP Flaws Can Crash Traffic in Specific Setups, May Allow RCE Six critical vulnerabilities in F5 BIG-IP allow an attacker to crash the Traffic Management Microkernel (TMM) without logging in, disrupting traffic until the TMM restarts. Each flaw needs a specific setup on a virtual server: an iRule that uses a particular command, or an APM policy that includes two particular kinds of agent. F5, which makes BIG-IP, disclosed the flaws today and says they… Six critical vulnerabilities in F5 BIG-IP allow an attacker to crash the Traffic Management Microkernel (TMM) without logging in, disrupting traffic until the TMM restarts. Each flaw needs a specific setup on a virtual s",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "Six critical vulnerabilities in F5 BIG-IP allow an attacker to crash the Traffic Management Microkernel (TMM) without logging in, disrupting traffic until the TMM restarts. Each flaw needs a specific setup on a virtual server: an iRule that uses a particular command, or an APM policy that includes two particular kinds of agent. F5, which makes BIG-IP, disclosed the flaws today and says they…",
-          "text": "Six critical vulnerabilities in F5 BIG-IP allow an attacker to crash the Traffic Management Microkernel (TMM) without logging in, disrupting traffic until the TMM restarts. Each flaw needs a specific setup on a virtual server: an iRule that uses a particular command, or an APM policy that includes two particular kinds of agent. F5, which makes BIG-IP, disclosed the flaws today and says they…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "Six critical vulnerabilities in F5 BIG-IP allow an attacker to crash the Traffic Management Microkernel (TMM) without logging in, disrupting traffic until the TMM restarts. Each flaw needs a specific setup on a virtual server: an iRule that uses a particular command, or an APM policy that includes two particular kinds of agent. F5, which makes BIG-IP, disclosed the flaws today and says they…",
-          "text": "Six critical vulnerabilities in F5 BIG-IP allow an attacker to crash the Traffic Management Microkernel (TMM) without logging in, disrupting traffic until the TMM restarts. Each flaw needs a specific setup on a virtual server: an iRule that uses a particular command, or an APM policy that includes two particular kinds of agent. F5, which makes BIG-IP, disclosed the flaws today and says they…"
         }
       ],
       "effective_date_evidence": null
