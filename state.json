@@ -3968,6 +3968,12 @@
       "run_id": "44818533277",
       "source_revision": "8d7004fa89275ebf6d17159a6b0f0cdb39f11129",
       "stage": "admitted"
+    },
+    {
+      "admission_key": "digest:8d7004fa89275ebf6d17159a6b0f0cdb39f11129",
+      "at": "2026-11-20T21:14:38.968Z",
+      "run_id": "44818533277",
+      "stage": "invoked"
     }
   ],
   "schema_version": 1,
