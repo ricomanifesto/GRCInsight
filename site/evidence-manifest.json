@@ -4,75 +4,75 @@
   "report_plan": {
     "control_implications": [
       {
+        "control_id": "data_protection",
+        "evidence_excerpt": "Bell Canada has confirmed that an \"agentic\" threat actor breached its systems on November 17, 2026, and stole enterprise customer data, including information from a system used to order and provision telecommunications circuits",
+        "evidence_origin": "summary",
+        "focus": "enterprise customer data",
+        "headline": "enterprise customer data stolen in Bell Canada breach",
+        "priority": "high",
+        "significance": "The breach exposes sensitive telecommunications provisioning data and confirms active targeting of critical infrastructure operators. Data and privacy owners should verify inventory of provisioning-system records, confirm access restrictions and audit logs, and document an exposure assessment for affected enterprise customers.",
+        "source_ids": [
+          6
+        ]
+      },
+      {
         "control_id": "third_party_risk",
-        "evidence_excerpt": "J.P. Morgan Chase warned it suffered a data breach after a cyberattack at a third-party service provider exposed customers' personal information and marketing data…",
+        "evidence_excerpt": "J.P. Morgan Chase warned it suffered a data breach after a cyberattack at a third-party service provider exposed customers' personal information and marketing data",
         "evidence_origin": "summary",
         "focus": "third-party service provider",
-        "headline": "third-party service provider, exposes, customer data via cyberattack",
+        "headline": "third-party service provider breach exposes Chase customer data",
         "priority": "high",
-        "significance": "This breach demonstrates that supplier compromises can directly expose sensitive financial data. The third-party risk owner should confirm supplier access scopes and assurance evidence for critical service providers.",
+        "significance": "A supplier compromise cascaded to a major financial institution, revealing personal and marketing data. Supplier risk owners should review the provider's access scope, control responsibilities, and evidence of remediation assurance, and confirm escalation contacts for similar dependencies.",
         "source_ids": [
-          8
+          11
         ]
       },
       {
         "control_id": "vulnerability_management",
-        "evidence_excerpt": "A flaw in KVM, the hypervisor built into the Linux kernel, let researchers read about 127 GB of a cloud server's memory from inside a virtual machine of their own on DigitalOcean. On a shared server, that memory can include other customers' virtual machines. The flaw, tracked as CVE-2026-99312, affects only hosts with AMD processors and nested virtualization enabled. Fixed kernels shipped…",
+        "evidence_excerpt": "Threat actors have been observed exploiting a recently disclosed critical security flaw in Cisco Expressway to breach a Russian organization shortly after the public release of a proof-of-concept (PoC) exploit. The activity involves the exploitation of CVE-2026-76466 (CVSS score: 9.8), a vulnerability that could allow an unauthenticated, remote attacker with network access to a Cisco Expressway",
         "evidence_origin": "summary",
-        "focus": "the hypervisor built into the Linux kernel",
-        "headline": "the hypervisor built into the Linux kernel, allows, guest VMs to access host memory",
+        "focus": "Cisco Expressway",
+        "headline": "Cisco Expressway exploited after PoC release",
         "priority": "high",
-        "significance": "This hypervisor flaw breaks memory isolation between tenant VMs on shared AMD hosts. The vulnerability management owner should identify affected cloud assets and verify kernel patch deployment.",
-        "source_ids": [
-          1
-        ]
-      },
-      {
-        "control_id": "vulnerability_management",
-        "evidence_excerpt": "The suspected China-nexus cyber espionage group known as Armory Castle (formerly UNC5221) has been attributed to the zero-day exploitation of a critical security flaw in VMware vCenter Server in early September 2026. The vulnerability, tracked as CVE-2026-123890 (CVSS score: 9.8), is a case of authentication bypass in the VMware Directory Service that could be exploited to gain unauthorized…",
-        "evidence_origin": "summary",
-        "focus": "VMware vCenter Server",
-        "headline": "VMware vCenter Server, suffers, authentication bypass exploited by threat actors",
-        "priority": "high",
-        "significance": "Active exploitation of a vCenter authentication bypass gives attackers administrative access. The vulnerability management owner should confirm vCenter patching and review administrative access logs.",
+        "significance": "Rapid weaponization of a critical remote-access flaw demonstrates shrinking patch windows for edge communication infrastructure. Vulnerability and asset owners should identify deployed Expressway instances, verify installed versions against the fixed release, and confirm remediation or compensating controls with their owners.",
         "source_ids": [
           3
         ]
       },
       {
-        "control_id": "incident_response",
-        "evidence_excerpt": "N-able says attackers who breached one of its servers have caused a major outage affecting Mail Assure and SpamExperts Hosted Cloud services worldwide…",
+        "control_id": "vulnerability_management",
+        "evidence_excerpt": "The suspected China-nexus cyber espionage group known as Armory Castle (formerly UNC5221) has been attributed to the zero-day exploitation of a critical security flaw in VMware vCenter Server in early September 2026. The vulnerability, tracked as CVE-2026-123890 (CVSS score: 9.8), is a case of authentication bypass in the VMware Directory Service that could be exploited to gain unauthorized",
         "evidence_origin": "summary",
-        "focus": "one of its servers",
-        "headline": "one of its servers, breached, causing major outage to hosted cloud services",
-        "priority": "medium",
-        "significance": "A supplier server breach caused widespread email security service disruption. The incident response lead should review supplier incident notification timelines and service recovery evidence.",
+        "focus": "VMware vCenter Server",
+        "headline": "VMware vCenter Server zero-day exploited by espionage group",
+        "priority": "high",
+        "significance": "Authentication bypass in a core virtualization management platform enables persistent administrative access. Vulnerability and asset owners should inventory vCenter deployments, verify emergency patch application, and validate that compensating detection covers Directory Service anomalies.",
         "source_ids": [
-          10
+          4
+        ]
+      },
+      {
+        "control_id": "third_party_risk",
+        "evidence_excerpt": "A flaw in KVM, the hypervisor built into the Linux kernel, let researchers read about 127 GB of a cloud server's memory from inside a virtual machine of their own on DigitalOcean. On a shared server, that memory can include other customers' virtual machines. The flaw, tracked as CVE-2026-99312, affects only hosts with AMD processors and nested virtualization enabled. Fixed kernels shipped",
+        "evidence_origin": "summary",
+        "focus": "Linux KVM hypervisor on AMD hosts",
+        "headline": "Linux KVM hypervisor flaw exposes cross-VM memory on AMD hosts",
+        "priority": "medium",
+        "significance": "Cloud tenants on affected AMD hosts could access peer VM memory, undermining isolation guarantees. Supplier risk owners should confirm cloud providers' kernel patch status for nested-virtualization environments, review shared-tenancy assurances, and request evidence of remediation validation.",
+        "source_ids": [
+          2
         ]
       },
       {
         "control_id": "access_management",
-        "evidence_excerpt": "Tracking company passwords in spreadsheets can leave IT administrators unaware of weak, reused, or compromised credentials stored and shared outside approved systems. NordPass explains how centralized password management can improve credential visibility, identify security risks, and simplify secure password sharing…",
+        "evidence_excerpt": "Meta-owned WhatsApp has addressed security vulnerabilities, including one impacting its Android app that it suspects may have been exploited in connection with scam messages. The vulnerability, tracked as CVE-2026-23871, has been described as a case of incomplete validation of external ad-reply URLs in WhatsApp for Android and WhatsApp Business for Android before 2.26.17.4. The issue could",
         "evidence_origin": "summary",
-        "focus": "company passwords in spreadsheets",
-        "headline": "company passwords in spreadsheets, leave, IT administrators unaware of credential risks",
+        "focus": "WhatsApp for Android and WhatsApp Business for Android",
+        "headline": "WhatsApp Android URL validation flaw suspected in scam exploitation",
         "priority": "medium",
-        "significance": "Decentralized password tracking creates blind spots for credential compromise. The identity and access owner should enforce centralized password management and verify credential audit coverage.",
+        "significance": "Incomplete URL validation in a widely deployed messaging client enables credential harvesting via malicious ad-reply links. Identity and access owners should verify mobile device management policies enforce version 2.26.17.4 or later, confirm user awareness of scam vectors, and review session revocation capabilities for compromised accounts.",
         "source_ids": [
-          9
-        ]
-      },
-      {
-        "control_id": "change_management",
-        "evidence_excerpt": "Starting this week, Microsoft has begun automatically upgrading eligible devices that aren't managed by an IT department to Windows 11 26H2…",
-        "evidence_origin": "summary",
-        "focus": "Windows 11 26H2",
-        "headline": "Windows 11 26H2, begins, automatic upgrade on unmanaged devices",
-        "priority": "low",
-        "significance": "Automatic OS upgrades on unmanaged devices bypass organizational change controls. The change management owner should verify device management policies and upgrade validation procedures.",
-        "source_ids": [
-          11
+          1
         ]
       }
     ],
@@ -80,33 +80,57 @@
       "paragraphs": [
         {
           "source_ids": [
-            8,
-            1,
-            3
+            3,
+            4,
+            6,
+            11
           ],
-          "text": "A third-party service provider breach exposed personal and marketing data of Chase, Visa, and Mastercard customers, while a Linux KVM hypervisor flaw allowed cross-tenant memory access on shared AMD hosts and a VMware vCenter zero-day was actively exploited for administrative access. These events indicate that supplier compromises and hypervisor vulnerabilities can bypass tenant isolation and directly impact sensitive financial data. Control owners should prioritize supplier assurance reviews and cloud infrastructure patching verification."
+          "text": "Active exploitation of critical infrastructure flaws and supplier compromises dominated the period, with threat actors weaponizing zero-days in VMware vCenter and Cisco Expressway within days of disclosure while a third-party breach cascaded to major financial institutions and an \"agentic\" actor stole telecommunications provisioning data. These events reveal shrinking patch windows for edge and virtualization platforms and demonstrate how supplier dependencies amplify blast radius across banking and telecom sectors."
         },
         {
           "source_ids": [
-            10,
-            9,
-            11
+            1,
+            2
           ],
-          "text": "An N-able server breach caused a global outage of email security services, spreadsheet-based password tracking left administrators blind to credential risks, and Microsoft began automatically upgrading unmanaged devices to Windows 11 26H2 without IT oversight. These developments highlight gaps in supplier incident response, credential governance, and change control for unmanaged endpoints. Owners should confirm supplier notification obligations, enforce centralized password management, and validate device management policies."
+          "text": "Cloud hypervisor isolation failed on AMD hosts running nested virtualization, a widely used messaging client shipped an incomplete URL validation flaw suspected in scam campaigns, and password hygiene gaps persist in enterprise environments. Control owners should prioritize verification of emergency patches for vCenter and Expressway, confirm cloud provider kernel updates for KVM, enforce mobile app version minimums, and migrate credential storage from spreadsheets to centralized managers."
         }
       ]
     },
     "industry_impacts": [],
     "regulatory_changes": []
   },
-  "generated_at": "2026-11-20T18:20:03.355143Z",
-  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/f98b07467a64915388b994724f0f721429865012/site/feed.xml",
+  "generated_at": "2026-11-20T21:15:53.259948Z",
+  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/77d7474714c7a122d7d56e8f0fcb267734f96211/site/feed.xml",
   "feed_home_url": "https://sentrydigest.ricomanifesto.com/",
   "digest_issue_date": "2026-11-20",
   "digest_issue_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-20/",
   "requested_model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
   "resolved_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
   "sources": [
+    {
+      "title": "WhatsApp Patches 3 Security Flaws, Including Android Bug Suspected of Use in Scams",
+      "url": "https://thehackernews.com/2026/11/whatsapp-patches-3-security-flaws.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-20/#reporting-b44c0a854e15",
+      "cves": [
+        "CVE-2026-23871"
+      ],
+      "snippet": "WhatsApp Patches 3 Security Flaws, Including Android Bug Suspected of Use in Scams Meta-owned WhatsApp has addressed security vulnerabilities, including one impacting its Android app that it suspects may have been exploited in connection with scam messages. The vulnerability, tracked as CVE-2026-23871, has been described as a case of incomplete validation of external ad-reply URLs in WhatsApp for Android and WhatsApp Business for Android before 2.26.17.4. The issue could… Meta-owned WhatsApp has addressed security vulnerabilities, including one impacting its Android app that it suspects may have been exploited in connection with scam messages. The vulnerability, tracked as CVE-2026-23871, ha",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Meta-owned WhatsApp has addressed security vulnerabilities, including one impacting its Android app that it suspects may have been exploited in connection with scam messages. The vulnerability, tracked as CVE-2026-23871, has been described as a case of incomplete validation of external ad-reply URLs in WhatsApp for Android and WhatsApp Business for Android before 2.26.17.4. The issue could…",
+          "text": "Meta-owned WhatsApp has addressed security vulnerabilities, including one impacting its Android app that it suspects may have been exploited in connection with scam messages. The vulnerability, tracked as CVE-2026-23871, has been described as a case of incomplete validation of external ad-reply URLs in WhatsApp for Android and WhatsApp Business for Android before 2.26.17.4. The issue could…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Meta-owned WhatsApp has addressed security vulnerabilities, including one impacting its Android app that it suspects may have been exploited in connection with scam messages. The vulnerability, tracked as CVE-2026-23871, has been described as a case of incomplete validation of external ad-reply URLs in WhatsApp for Android and WhatsApp Business for Android before 2.26.17.4. The issue could…",
+          "text": "Meta-owned WhatsApp has addressed security vulnerabilities, including one impacting its Android app that it suspects may have been exploited in connection with scam messages. The vulnerability, tracked as CVE-2026-23871, has been described as a case of incomplete validation of external ad-reply URLs in WhatsApp for Android and WhatsApp Business for Android before 2.26.17.4. The issue could…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
     {
       "title": "Linux KVM Flaw CVE-2026-99312 Lets Guest VMs Access Host Memory on AMD Hosts",
       "url": "https://thehackernews.com/2026/11/new-linux-kvm-flaw-cve-2026-99312-lets.html",
@@ -204,25 +228,45 @@
       "effective_date_evidence": null
     },
     {
-      "title": "PHP Fixes 7 Critical Flaws, Including Bugs That Could Allow Remote Code Execution",
-      "url": "https://thehackernews.com/2026/11/php-fixes-7-critical-flaws-including.html",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-20/#reporting-dcfa8134ceac",
-      "cves": [
-        "CVE-2026-115560"
-      ],
-      "snippet": "PHP Fixes 7 Critical Flaws, Including Bugs That Could Allow Remote Code Execution The PHP Foundation has released security updates to address multiple critical security flaws that could be exploited to achieve remote code execution on affected deployments, including CVE-2026-115560. The release of the patch follows an advance notice in which the project maintainers alerted users to multiple critical vulnerabilities affecting all supported PHP versions under specific… The PHP Foundation has released security updates to address multiple critical security flaws that could be exploited to achieve remote code execution on affected deployments, including CVE-2026-115560. The release of the patch f",
+      "title": "Bell Canada says 'agentic' hacker stole enterprise customer data",
+      "url": "https://www.bleepingcomputer.com/news/security/bell-canada-says-agentic-hacker-stole-enterprise-customer-data/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-20/#reporting-a1277bddeebe",
+      "cves": [],
+      "snippet": "Bell Canada says 'agentic' hacker stole enterprise customer data Bell Canada has confirmed that an \"agentic\" threat actor breached its systems on November 17, 2026, and stole enterprise customer data, including information from a system used to order and provision telecommunications circuits… Bell Canada has confirmed that an \"agentic\" threat actor breached its systems on November 17, 2026, and stole enterprise customer data, including information from a system used to order and provision telecommunications circuits…",
       "article_evidence": [
         {
           "extraction_version": 1,
           "origin": "summary",
-          "raw_text": "The PHP Foundation has released security updates to address multiple critical security flaws that could be exploited to achieve remote code execution on affected deployments, including CVE-2026-115560. The release of the patch follows an advance notice in which the project maintainers alerted users to multiple critical vulnerabilities affecting all supported PHP versions under specific…",
-          "text": "The PHP Foundation has released security updates to address multiple critical security flaws that could be exploited to achieve remote code execution on affected deployments, including CVE-2026-115560. The release of the patch follows an advance notice in which the project maintainers alerted users to multiple critical vulnerabilities affecting all supported PHP versions under specific…"
+          "raw_text": "Bell Canada has confirmed that an \"agentic\" threat actor breached its systems on November 17, 2026, and stole enterprise customer data, including information from a system used to order and provision telecommunications circuits…",
+          "text": "Bell Canada has confirmed that an \"agentic\" threat actor breached its systems on November 17, 2026, and stole enterprise customer data, including information from a system used to order and provision telecommunications circuits…"
         },
         {
           "extraction_version": 1,
           "origin": "content",
-          "raw_text": "The PHP Foundation has released security updates to address multiple critical security flaws that could be exploited to achieve remote code execution on affected deployments, including CVE-2026-115560. The release of the patch follows an advance notice in which the project maintainers alerted users to multiple critical vulnerabilities affecting all supported PHP versions under specific…",
-          "text": "The PHP Foundation has released security updates to address multiple critical security flaws that could be exploited to achieve remote code execution on affected deployments, including CVE-2026-115560. The release of the patch follows an advance notice in which the project maintainers alerted users to multiple critical vulnerabilities affecting all supported PHP versions under specific…"
+          "raw_text": "Bell Canada has confirmed that an \"agentic\" threat actor breached its systems on November 17, 2026, and stole enterprise customer data, including information from a system used to order and provision telecommunications circuits…",
+          "text": "Bell Canada has confirmed that an \"agentic\" threat actor breached its systems on November 17, 2026, and stole enterprise customer data, including information from a system used to order and provision telecommunications circuits…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "In Security, Words Matter as Much as Tools, Maybe More",
+      "url": "https://www.darkreading.com/cybersecurity-operations/security-words-matter",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-20/#reporting-fdc780d56a7e",
+      "cves": [],
+      "snippet": "In Security, Words Matter as Much as Tools, Maybe More From talking cloud security to using AI, cyber leaders are finding that clear, disciplined communication is now a front-line defense capability across the enterprise. From talking cloud security to using AI, cyber leaders are finding that clear, disciplined communication is now a front-line defense capability across the enterprise.",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "From talking cloud security to using AI, cyber leaders are finding that clear, disciplined communication is now a front-line defense capability across the enterprise.",
+          "text": "From talking cloud security to using AI, cyber leaders are finding that clear, disciplined communication is now a front-line defense capability across the enterprise."
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "From talking cloud security to using AI, cyber leaders are finding that clear, disciplined communication is now a front-line defense capability across the enterprise.",
+          "text": "From talking cloud security to using AI, cyber leaders are finding that clear, disciplined communication is now a front-line defense capability across the enterprise."
         }
       ],
       "effective_date_evidence": null
@@ -245,6 +289,28 @@
           "origin": "content",
           "raw_text": "Threat actors used the open-source AI penetration-testing framework Cairn to find a previously unknown vulnerability in a medical imaging application…",
           "text": "Threat actors used the open-source AI penetration-testing framework Cairn to find a previously unknown vulnerability in a medical imaging application…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "What We Missed: Nvidia CEO Scandal Rocks AI Industry",
+      "url": "https://www.darkreading.com/cyber-risk/what-we-missed-nvidia-ceo-scandal-rocks-ai-industry",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-20/#reporting-6932b88861c6",
+      "cves": [],
+      "snippet": "What We Missed: Nvidia CEO Scandal Rocks AI Industry In this video, Dark Reading editors discuss some of the news they didn't get a chance to cover, from Jensen Huang's resignation from Nvidia to Microsoft's recent cloud outage. In this video, Dark Reading editors discuss some of the news they didn't get a chance to cover, from Jensen Huang's resignation from Nvidia to Microsoft's recent cloud outage.",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "In this video, Dark Reading editors discuss some of the news they didn't get a chance to cover, from Jensen Huang's resignation from Nvidia to Microsoft's recent cloud outage.",
+          "text": "In this video, Dark Reading editors discuss some of the news they didn't get a chance to cover, from Jensen Huang's resignation from Nvidia to Microsoft's recent cloud outage."
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "In this video, Dark Reading editors discuss some of the news they didn't get a chance to cover, from Jensen Huang's resignation from Nvidia to Microsoft's recent cloud outage.",
+          "text": "In this video, Dark Reading editors discuss some of the news they didn't get a chance to cover, from Jensen Huang's resignation from Nvidia to Microsoft's recent cloud outage."
         }
       ],
       "effective_date_evidence": null
@@ -311,72 +377,6 @@
           "origin": "content",
           "raw_text": "Tracking company passwords in spreadsheets can leave IT administrators unaware of weak, reused, or compromised credentials stored and shared outside approved systems. NordPass explains how centralized password management can improve credential visibility, identify security risks, and simplify secure password sharing…",
           "text": "Tracking company passwords in spreadsheets can leave IT administrators unaware of weak, reused, or compromised credentials stored and shared outside approved systems. NordPass explains how centralized password management can improve credential visibility, identify security risks, and simplify secure password sharing…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "N-able says recent security breach led to major service outage",
-      "url": "https://www.bleepingcomputer.com/news/microsoft/n-able-says-recent-security-breach-led-to-major-service-outage/",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-20/#reporting-63176744cc4b",
-      "cves": [],
-      "snippet": "N-able says recent security breach led to major service outage N-able says attackers who breached one of its servers have caused a major outage affecting Mail Assure and SpamExperts Hosted Cloud services worldwide… N-able says attackers who breached one of its servers have caused a major outage affecting Mail Assure and SpamExperts Hosted Cloud services worldwide…",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "N-able says attackers who breached one of its servers have caused a major outage affecting Mail Assure and SpamExperts Hosted Cloud services worldwide…",
-          "text": "N-able says attackers who breached one of its servers have caused a major outage affecting Mail Assure and SpamExperts Hosted Cloud services worldwide…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "N-able says attackers who breached one of its servers have caused a major outage affecting Mail Assure and SpamExperts Hosted Cloud services worldwide…",
-          "text": "N-able says attackers who breached one of its servers have caused a major outage affecting Mail Assure and SpamExperts Hosted Cloud services worldwide…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "Microsoft now automatically installs Windows 11 26H2 on unmanaged devices",
-      "url": "https://www.bleepingcomputer.com/news/microsoft/microsoft-now-automatically-installs-windows-11-26h2-on-personal-and-unmanaged-pcs/",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-20/#reporting-0736dd63e3ff",
-      "cves": [],
-      "snippet": "Microsoft now automatically installs Windows 11 26H2 on unmanaged devices Starting this week, Microsoft has begun automatically upgrading eligible devices that aren't managed by an IT department to Windows 11 26H2… Starting this week, Microsoft has begun automatically upgrading eligible devices that aren't managed by an IT department to Windows 11 26H2…",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "Starting this week, Microsoft has begun automatically upgrading eligible devices that aren't managed by an IT department to Windows 11 26H2…",
-          "text": "Starting this week, Microsoft has begun automatically upgrading eligible devices that aren't managed by an IT department to Windows 11 26H2…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "Starting this week, Microsoft has begun automatically upgrading eligible devices that aren't managed by an IT department to Windows 11 26H2…",
-          "text": "Starting this week, Microsoft has begun automatically upgrading eligible devices that aren't managed by an IT department to Windows 11 26H2…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "The Path to AI Autonomy in the SOC",
-      "url": "https://thehackernews.com/2026/11/the-path-to-ai-autonomy-in-soc.html",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-20/#reporting-b18719ed382d",
-      "cves": [],
-      "snippet": "The Path to AI Autonomy in the SOC Security leaders are about to hand AI agents a lot more authority. In a recent a16z survey of CISOs at organizations with more than 1,000 employees, 36% said they are comfortable today letting AI agents act autonomously on low-risk security actions. In 12 months from now, 60% expect to be comfortable at that level. Overall, AI SOC was the highest ranking initiative for 2027. The pressure… Security leaders are about to hand AI agents a lot more authority. In a recent a16z survey of CISOs at organizations with more than 1,000 employees, 36% said they are comfortable today letting AI agents act autonomously on low-risk security actions. In 12 months from now, ",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "Security leaders are about to hand AI agents a lot more authority. In a recent a16z survey of CISOs at organizations with more than 1,000 employees, 36% said they are comfortable today letting AI agents act autonomously on low-risk security actions. In 12 months from now, 60% expect to be comfortable at that level. Overall, AI SOC was the highest ranking initiative for 2027. The pressure…",
-          "text": "Security leaders are about to hand AI agents a lot more authority. In a recent a16z survey of CISOs at organizations with more than 1,000 employees, 36% said they are comfortable today letting AI agents act autonomously on low-risk security actions. In 12 months from now, 60% expect to be comfortable at that level. Overall, AI SOC was the highest ranking initiative for 2027. The pressure…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "Security leaders are about to hand AI agents a lot more authority. In a recent a16z survey of CISOs at organizations with more than 1,000 employees, 36% said they are comfortable today letting AI agents act autonomously on low-risk security actions. In 12 months from now, 60% expect to be comfortable at that level. Overall, AI SOC was the highest ranking initiative for 2027. The pressure…",
-          "text": "Security leaders are about to hand AI agents a lot more authority. In a recent a16z survey of CISOs at organizations with more than 1,000 employees, 36% said they are comfortable today letting AI agents act autonomously on low-risk security actions. In 12 months from now, 60% expect to be comfortable at that level. Overall, AI SOC was the highest ranking initiative for 2027. The pressure…"
         }
       ],
       "effective_date_evidence": null
