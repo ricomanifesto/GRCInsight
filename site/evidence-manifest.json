@@ -4,73 +4,73 @@
   "report_plan": {
     "control_implications": [
       {
-        "control_id": "data_protection",
-        "evidence_excerpt": "A flaw in KVM, the hypervisor built into the Linux kernel, let researchers read about 127 GB of a cloud server's memory from inside a virtual machine of their own on DigitalOcean. On a shared server, that memory can include other customers' virtual machines.",
+        "control_id": "third_party_risk",
+        "evidence_excerpt": "J.P. Morgan Chase warned it suffered a data breach after a cyberattack at a third-party service provider exposed customers' personal information and marketing data…",
         "evidence_origin": "summary",
-        "focus": "Linux KVM hypervisor",
-        "headline": "Linux KVM hypervisor exposes host memory to guest VMs",
+        "focus": "third-party service provider",
+        "headline": "third-party service provider, exposes, customer data via cyberattack",
         "priority": "high",
-        "significance": "This matters because cloud tenants cannot verify hypervisor isolation controls on shared AMD infrastructure. Data protection owner should confirm whether supplier assurance covers nested virtualization risks and cross-tenant memory access.",
+        "significance": "This breach demonstrates that supplier compromises can directly expose sensitive financial data. The third-party risk owner should confirm supplier access scopes and assurance evidence for critical service providers.",
+        "source_ids": [
+          8
+        ]
+      },
+      {
+        "control_id": "vulnerability_management",
+        "evidence_excerpt": "A flaw in KVM, the hypervisor built into the Linux kernel, let researchers read about 127 GB of a cloud server's memory from inside a virtual machine of their own on DigitalOcean. On a shared server, that memory can include other customers' virtual machines. The flaw, tracked as CVE-2026-99312, affects only hosts with AMD processors and nested virtualization enabled. Fixed kernels shipped…",
+        "evidence_origin": "summary",
+        "focus": "the hypervisor built into the Linux kernel",
+        "headline": "the hypervisor built into the Linux kernel, allows, guest VMs to access host memory",
+        "priority": "high",
+        "significance": "This hypervisor flaw breaks memory isolation between tenant VMs on shared AMD hosts. The vulnerability management owner should identify affected cloud assets and verify kernel patch deployment.",
         "source_ids": [
           1
         ]
       },
       {
         "control_id": "vulnerability_management",
-        "evidence_excerpt": "Threat actors have been observed exploiting a recently disclosed critical security flaw in Cisco Expressway to breach a Russian organization shortly after the public release of a proof-of-concept (PoC) exploit.",
-        "evidence_origin": "summary",
-        "focus": "Cisco Expressway",
-        "headline": "Cisco Expressway exploitation breaches network perimeter",
-        "priority": "high",
-        "significance": "This matters because perimeter collaboration devices are being exploited immediately after PoC release. Vulnerability management owner should confirm asset inventory includes all Expressway instances and emergency patching procedures were executed.",
-        "source_ids": [
-          2
-        ]
-      },
-      {
-        "control_id": "third_party_risk",
-        "evidence_excerpt": "The suspected China-nexus cyber espionage group known as Armory Castle (formerly UNC5221) has been attributed to the zero-day exploitation of a critical security flaw in VMware vCenter Server in early September 2026.",
+        "evidence_excerpt": "The suspected China-nexus cyber espionage group known as Armory Castle (formerly UNC5221) has been attributed to the zero-day exploitation of a critical security flaw in VMware vCenter Server in early September 2026. The vulnerability, tracked as CVE-2026-123890 (CVSS score: 9.8), is a case of authentication bypass in the VMware Directory Service that could be exploited to gain unauthorized…",
         "evidence_origin": "summary",
         "focus": "VMware vCenter Server",
-        "headline": "VMware vCenter Server zero-day enables authentication bypass",
+        "headline": "VMware vCenter Server, suffers, authentication bypass exploited by threat actors",
         "priority": "high",
-        "significance": "This matters because virtualization management platforms are targeted by sophisticated actors. Third-party risk owner should confirm whether vCenter access is scoped and monitored and whether supplier provided exploitation indicators.",
+        "significance": "Active exploitation of a vCenter authentication bypass gives attackers administrative access. The vulnerability management owner should confirm vCenter patching and review administrative access logs.",
         "source_ids": [
           3
         ]
       },
       {
+        "control_id": "incident_response",
+        "evidence_excerpt": "N-able says attackers who breached one of its servers have caused a major outage affecting Mail Assure and SpamExperts Hosted Cloud services worldwide…",
+        "evidence_origin": "summary",
+        "focus": "one of its servers",
+        "headline": "one of its servers, breached, causing major outage to hosted cloud services",
+        "priority": "medium",
+        "significance": "A supplier server breach caused widespread email security service disruption. The incident response lead should review supplier incident notification timelines and service recovery evidence.",
+        "source_ids": [
+          10
+        ]
+      },
+      {
         "control_id": "access_management",
-        "evidence_excerpt": "Tracking company passwords in spreadsheets can leave IT administrators unaware of weak, reused, or compromised credentials stored and shared outside approved systems.",
+        "evidence_excerpt": "Tracking company passwords in spreadsheets can leave IT administrators unaware of weak, reused, or compromised credentials stored and shared outside approved systems. NordPass explains how centralized password management can improve credential visibility, identify security risks, and simplify secure password sharing…",
         "evidence_origin": "summary",
         "focus": "company passwords in spreadsheets",
-        "headline": "Company passwords in spreadsheets weaken credential governance",
+        "headline": "company passwords in spreadsheets, leave, IT administrators unaware of credential risks",
         "priority": "medium",
-        "significance": "This matters because unmanaged credential storage bypasses access review controls. Access management owner should confirm whether password management policy prohibits spreadsheet storage and whether privileged account inventories are complete.",
+        "significance": "Decentralized password tracking creates blind spots for credential compromise. The identity and access owner should enforce centralized password management and verify credential audit coverage.",
         "source_ids": [
-          6
+          9
         ]
       },
       {
-        "control_id": "third_party_risk",
-        "evidence_excerpt": "N-able says attackers who breached one of its servers have caused a major outage affecting Mail Assure and SpamExperts Hosted Cloud services worldwide",
+        "control_id": "change_management",
+        "evidence_excerpt": "Starting this week, Microsoft has begun automatically upgrading eligible devices that aren't managed by an IT department to Windows 11 26H2…",
         "evidence_origin": "summary",
-        "focus": "N-able security breach",
-        "headline": "N-able security breach disrupts hosted email services",
-        "priority": "high",
-        "significance": "This matters because supplier compromise caused widespread service disruption. Third-party risk owner should confirm whether N-able is a critical supplier and whether incident notification and service continuity assurances were tested.",
-        "source_ids": [
-          7
-        ]
-      },
-      {
-        "control_id": "vulnerability_management",
-        "evidence_excerpt": "SonicWall has urged all customers still running Generation 6 firewalls to retire and replace them immediately and stop exposing the devices on the internet edge, citing security risks fueled by AI-assisted attacks.",
-        "evidence_origin": "summary",
-        "focus": "Generation 6 firewalls",
-        "headline": "Generation 6 firewalls lose security patch support",
-        "priority": "high",
-        "significance": "This matters because unsupported perimeter devices cannot receive vulnerability remediation. Vulnerability management owner should confirm whether any Gen 6 firewalls remain in production and whether replacement timeline is approved.",
+        "focus": "Windows 11 26H2",
+        "headline": "Windows 11 26H2, begins, automatic upgrade on unmanaged devices",
+        "priority": "low",
+        "significance": "Automatic OS upgrades on unmanaged devices bypass organizational change controls. The change management owner should verify device management policies and upgrade validation procedures.",
         "source_ids": [
           11
         ]
@@ -80,27 +80,27 @@
       "paragraphs": [
         {
           "source_ids": [
+            8,
             1,
-            2,
             3
           ],
-          "text": "Cloud hypervisor isolation failure and actively exploited perimeter vulnerabilities create immediate control assurance gaps. The Linux KVM flaw allows cross-tenant memory access on shared AMD hosts, while Cisco Expressway and VMware vCenter are being exploited in the wild. Control owners must verify supplier assurance for virtualization platforms and confirm emergency patching for internet-facing appliances."
+          "text": "A third-party service provider breach exposed personal and marketing data of Chase, Visa, and Mastercard customers, while a Linux KVM hypervisor flaw allowed cross-tenant memory access on shared AMD hosts and a VMware vCenter zero-day was actively exploited for administrative access. These events indicate that supplier compromises and hypervisor vulnerabilities can bypass tenant isolation and directly impact sensitive financial data. Control owners should prioritize supplier assurance reviews and cloud infrastructure patching verification."
         },
         {
           "source_ids": [
-            6,
-            7,
+            10,
+            9,
             11
           ],
-          "text": "Credential governance gaps and supplier-dependent service disruptions compound risk. Unmanaged password storage bypasses access controls, the N-able breach demonstrates cascading outage impact from supplier compromise, and SonicWall Gen 6 firewalls lose all patch support. Owners should confirm password management policy enforcement, critical supplier continuity testing, and end-of-life device replacement approvals."
+          "text": "An N-able server breach caused a global outage of email security services, spreadsheet-based password tracking left administrators blind to credential risks, and Microsoft began automatically upgrading unmanaged devices to Windows 11 26H2 without IT oversight. These developments highlight gaps in supplier incident response, credential governance, and change control for unmanaged endpoints. Owners should confirm supplier notification obligations, enforce centralized password management, and validate device management policies."
         }
       ]
     },
     "industry_impacts": [],
     "regulatory_changes": []
   },
-  "generated_at": "2026-11-20T15:18:05.016071Z",
-  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/bc93182f87c305e54085d60ef2b4dfa135b6d821/site/feed.xml",
+  "generated_at": "2026-11-20T18:20:03.355143Z",
+  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/f98b07467a64915388b994724f0f721429865012/site/feed.xml",
   "feed_home_url": "https://sentrydigest.ricomanifesto.com/",
   "digest_issue_date": "2026-11-20",
   "digest_issue_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-20/",
@@ -228,6 +228,72 @@
       "effective_date_evidence": null
     },
     {
+      "title": "Hackers use autonomous AI tool Cairn to find zero-day, take over server",
+      "url": "https://www.bleepingcomputer.com/news/security/hackers-use-autonomous-ai-tool-cairn-to-find-zero-day-take-over-server/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-20/#reporting-209648e572bd",
+      "cves": [],
+      "snippet": "Hackers use autonomous AI tool Cairn to find zero-day, take over server Threat actors used the open-source AI penetration-testing framework Cairn to find a previously unknown vulnerability in a medical imaging application… Threat actors used the open-source AI penetration-testing framework Cairn to find a previously unknown vulnerability in a medical imaging application…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Threat actors used the open-source AI penetration-testing framework Cairn to find a previously unknown vulnerability in a medical imaging application…",
+          "text": "Threat actors used the open-source AI penetration-testing framework Cairn to find a previously unknown vulnerability in a medical imaging application…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Threat actors used the open-source AI penetration-testing framework Cairn to find a previously unknown vulnerability in a medical imaging application…",
+          "text": "Threat actors used the open-source AI penetration-testing framework Cairn to find a previously unknown vulnerability in a medical imaging application…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Bazuka Android Malware Uses Fake Screen Overlays to Hide Credential Theft and Device Control",
+      "url": "https://thehackernews.com/2026/11/bazuka-android-malware-uses-fake-screen.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-20/#reporting-0b4042589720",
+      "cves": [],
+      "snippet": "Bazuka Android Malware Uses Fake Screen Overlays to Hide Credential Theft and Device Control Cybersecurity researchers have disclosed details of a previously unknown Android malware framework called Bazuka that offers large language model (LLM) integration for victim management and control at scale. Dutch mobile security company ThreatFabric said it discovered the threat in late October 2026 during an investigation into an NFC-relay banking Trojan. \"Bazuka is a full malware framework… Cybersecurity researchers have disclosed details of a previously unknown Android malware framework called Bazuka that offers large language model (LLM) integration for victim management and control at scale. Du",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Cybersecurity researchers have disclosed details of a previously unknown Android malware framework called Bazuka that offers large language model (LLM) integration for victim management and control at scale. Dutch mobile security company ThreatFabric said it discovered the threat in late October 2026 during an investigation into an NFC-relay banking Trojan. \"Bazuka is a full malware framework…",
+          "text": "Cybersecurity researchers have disclosed details of a previously unknown Android malware framework called Bazuka that offers large language model (LLM) integration for victim management and control at scale. Dutch mobile security company ThreatFabric said it discovered the threat in late October 2026 during an investigation into an NFC-relay banking Trojan. \"Bazuka is a full malware framework…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Cybersecurity researchers have disclosed details of a previously unknown Android malware framework called Bazuka that offers large language model (LLM) integration for victim management and control at scale. Dutch mobile security company ThreatFabric said it discovered the threat in late October 2026 during an investigation into an NFC-relay banking Trojan. \"Bazuka is a full malware framework…",
+          "text": "Cybersecurity researchers have disclosed details of a previously unknown Android malware framework called Bazuka that offers large language model (LLM) integration for victim management and control at scale. Dutch mobile security company ThreatFabric said it discovered the threat in late October 2026 during an investigation into an NFC-relay banking Trojan. \"Bazuka is a full malware framework…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Vendor data breach exposes Chase, Visa, Mastercard customer info",
+      "url": "https://www.bleepingcomputer.com/news/security/vendor-data-breach-exposes-chase-visa-mastercard-customer-info/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-20/#reporting-c3a9fb72b6dc",
+      "cves": [],
+      "snippet": "Vendor data breach exposes Chase, Visa, Mastercard customer info J.P. Morgan Chase warned it suffered a data breach after a cyberattack at a third-party service provider exposed customers' personal information and marketing data… J.P. Morgan Chase warned it suffered a data breach after a cyberattack at a third-party service provider exposed customers' personal information and marketing data…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "J.P. Morgan Chase warned it suffered a data breach after a cyberattack at a third-party service provider exposed customers' personal information and marketing data…",
+          "text": "J.P. Morgan Chase warned it suffered a data breach after a cyberattack at a third-party service provider exposed customers' personal information and marketing data…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "J.P. Morgan Chase warned it suffered a data breach after a cyberattack at a third-party service provider exposed customers' personal information and marketing data…",
+          "text": "J.P. Morgan Chase warned it suffered a data breach after a cyberattack at a third-party service provider exposed customers' personal information and marketing data…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
       "title": "Still tracking company passwords in spreadsheets? You’re flying blind.",
       "url": "https://www.bleepingcomputer.com/news/security/still-tracking-company-passwords-in-spreadsheets-youre-flying-blind/",
       "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-20/#reporting-8991c2c279cd",
@@ -311,72 +377,6 @@
           "origin": "content",
           "raw_text": "Security leaders are about to hand AI agents a lot more authority. In a recent a16z survey of CISOs at organizations with more than 1,000 employees, 36% said they are comfortable today letting AI agents act autonomously on low-risk security actions. In 12 months from now, 60% expect to be comfortable at that level. Overall, AI SOC was the highest ranking initiative for 2027. The pressure…",
           "text": "Security leaders are about to hand AI agents a lot more authority. In a recent a16z survey of CISOs at organizations with more than 1,000 employees, 36% said they are comfortable today letting AI agents act autonomously on low-risk security actions. In 12 months from now, 60% expect to be comfortable at that level. Overall, AI SOC was the highest ranking initiative for 2027. The pressure…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "F5 releases emergency patches for critical BIG-IP RCE flaws",
-      "url": "https://www.bleepingcomputer.com/news/security/f5-releases-emergency-patches-for-critical-big-ip-rce-flaws/",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-20/#reporting-6008bba5a127",
-      "cves": [],
-      "snippet": "F5 releases emergency patches for critical BIG-IP RCE flaws US cybersecurity company F5 warned customers to patch five critical BIG-IP vulnerabilities that attackers can exploit to trigger denial-of-service (DoS) or gain remote code execution… US cybersecurity company F5 warned customers to patch five critical BIG-IP vulnerabilities that attackers can exploit to trigger denial-of-service (DoS) or gain remote code execution…",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "US cybersecurity company F5 warned customers to patch five critical BIG-IP vulnerabilities that attackers can exploit to trigger denial-of-service (DoS) or gain remote code execution…",
-          "text": "US cybersecurity company F5 warned customers to patch five critical BIG-IP vulnerabilities that attackers can exploit to trigger denial-of-service (DoS) or gain remote code execution…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "US cybersecurity company F5 warned customers to patch five critical BIG-IP vulnerabilities that attackers can exploit to trigger denial-of-service (DoS) or gain remote code execution…",
-          "text": "US cybersecurity company F5 warned customers to patch five critical BIG-IP vulnerabilities that attackers can exploit to trigger denial-of-service (DoS) or gain remote code execution…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "SonicWall Warns Gen 6 Firewalls Won't Get Security Patches, Even for Critical Flaws",
-      "url": "https://thehackernews.com/2026/11/sonicwall-warns-gen-6-firewalls-wont.html",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-20/#reporting-823ccfebdf7a",
-      "cves": [],
-      "snippet": "SonicWall Warns Gen 6 Firewalls Won't Get Security Patches, Even for Critical Flaws SonicWall has urged all customers still running Generation 6 firewalls to retire and replace them immediately and stop exposing the devices on the internet edge, citing security risks fueled by AI-assisted attacks. \"Attackers now use automation and AI to find and exploit unsupported edge devices faster than ever,\" SonicWall said. \"We expect internet-facing Gen 6 firewalls to be actively… SonicWall has urged all customers still running Generation 6 firewalls to retire and replace them immediately and stop exposing the devices on the internet edge, citing security risks fueled by AI-assisted attacks. \"Attackers",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "SonicWall has urged all customers still running Generation 6 firewalls to retire and replace them immediately and stop exposing the devices on the internet edge, citing security risks fueled by AI-assisted attacks. \"Attackers now use automation and AI to find and exploit unsupported edge devices faster than ever,\" SonicWall said. \"We expect internet-facing Gen 6 firewalls to be actively…",
-          "text": "SonicWall has urged all customers still running Generation 6 firewalls to retire and replace them immediately and stop exposing the devices on the internet edge, citing security risks fueled by AI-assisted attacks. \"Attackers now use automation and AI to find and exploit unsupported edge devices faster than ever,\" SonicWall said. \"We expect internet-facing Gen 6 firewalls to be actively…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "SonicWall has urged all customers still running Generation 6 firewalls to retire and replace them immediately and stop exposing the devices on the internet edge, citing security risks fueled by AI-assisted attacks. \"Attackers now use automation and AI to find and exploit unsupported edge devices faster than ever,\" SonicWall said. \"We expect internet-facing Gen 6 firewalls to be actively…",
-          "text": "SonicWall has urged all customers still running Generation 6 firewalls to retire and replace them immediately and stop exposing the devices on the internet edge, citing security risks fueled by AI-assisted attacks. \"Attackers now use automation and AI to find and exploit unsupported edge devices faster than ever,\" SonicWall said. \"We expect internet-facing Gen 6 firewalls to be actively…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "Windows 11 KB5132057 update released with 28 changes and fixes",
-      "url": "https://www.bleepingcomputer.com/news/microsoft/windows-11-kb5132057-update-released-with-28-changes-and-fixes/",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-20/#reporting-60993c5d14ea",
-      "cves": [],
-      "snippet": "Windows 11 KB5132057 update released with 28 changes and fixes Microsoft released the KB5132057 November Windows 11 preview update, which comes with 28 changes, including improvements to Windows Search, Windows Hello, and the Run dialog… Microsoft released the KB5132057 November Windows 11 preview update, which comes with 28 changes, including improvements to Windows Search, Windows Hello, and the Run dialog…",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "Microsoft released the KB5132057 November Windows 11 preview update, which comes with 28 changes, including improvements to Windows Search, Windows Hello, and the Run dialog…",
-          "text": "Microsoft released the KB5132057 November Windows 11 preview update, which comes with 28 changes, including improvements to Windows Search, Windows Hello, and the Run dialog…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "Microsoft released the KB5132057 November Windows 11 preview update, which comes with 28 changes, including improvements to Windows Search, Windows Hello, and the Run dialog…",
-          "text": "Microsoft released the KB5132057 November Windows 11 preview update, which comes with 28 changes, including improvements to Windows Search, Windows Hello, and the Run dialog…"
         }
       ],
       "effective_date_evidence": null
