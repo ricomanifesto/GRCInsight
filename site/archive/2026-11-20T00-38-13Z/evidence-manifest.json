@@ -1,0 +1,380 @@
+{
+  "schema_version": 3,
+  "report_contract_version": 6,
+  "report_plan": {
+    "control_implications": [
+      {
+        "control_id": "vulnerability_management",
+        "evidence_excerpt": "One of the early targets of PHP2Shell exploitation was the firewall. On October 28, Palo Alto Networks confirmed that attackers were exploiting the two PHP vulnerabilities, CVE-2026-109618 and CVE-2026-109619, against PAN-OS management interfaces exposed to the internet. Both flaws let anyone execute code on the web server without authentication.",
+        "evidence_origin": "summary",
+        "focus": "PAN-OS management interfaces",
+        "headline": "PAN-OS management interfaces exploited via PHP vulnerabilities",
+        "priority": "high",
+        "significance": "This finding weakens assurance that network security infrastructure is protected against unauthenticated code execution. The accountable owner should confirm that all PAN-OS management interfaces are patched and not exposed to the internet.",
+        "source_ids": [
+          3
+        ]
+      },
+      {
+        "control_id": "vulnerability_management",
+        "evidence_excerpt": "Broadcom has released security updates to fix a critical VMware vCenter Server authentication bypass vulnerability that Chinese-linked hackers have exploited in zero-day attacks since September 2026…",
+        "evidence_origin": "summary",
+        "focus": "VMware vCenter Server",
+        "headline": "VMware vCenter Server authentication bypass exploited since September",
+        "priority": "high",
+        "significance": "This finding exposes a prolonged zero-day exploitation of core virtualization infrastructure. The accountable owner should confirm that vCenter servers are updated and that any compromise during the exposure window has been investigated.",
+        "source_ids": [
+          4
+        ]
+      },
+      {
+        "control_id": "data_protection",
+        "evidence_excerpt": "SBC Medical Group has warned in a filing with the U.S. Securities and Exchange Commission (SEC) that two cybersecurity incidents exposed sensitive customer and employee information, including personal data belonging to 1.6 million people…",
+        "evidence_origin": "summary",
+        "focus": "sensitive customer and employee information",
+        "headline": "sensitive customer and employee information exposed in SEC-reported breach",
+        "priority": "high",
+        "significance": "This finding weakens assurance that personal data protection controls prevent large-scale exposure. The accountable owner should confirm that data inventory, access restrictions, and breach notification procedures are effective for similar sensitive data holdings.",
+        "source_ids": [
+          6
+        ]
+      },
+      {
+        "control_id": "vulnerability_management",
+        "evidence_excerpt": "ASUS released Control Center Express v1.7.29 to fix three critical vulnerabilities that could let remote attackers gain administrative control of the management console and the devices it manages…",
+        "evidence_origin": "summary",
+        "focus": "Control Center Express",
+        "headline": "Control Center Express vulnerabilities allow remote administrative control",
+        "priority": "medium",
+        "significance": "This finding extends risk to device management consoles that could grant attackers full administrative access. The accountable owner should verify that all instances are updated to v1.7.29 and that administrative access is restricted to trusted networks.",
+        "source_ids": [
+          7
+        ]
+      },
+      {
+        "control_id": "data_protection",
+        "evidence_excerpt": "Transport for London (TfL) has announced that around 265,000 Oyster photocard customers may have had their account details exposed in a data breach…",
+        "evidence_origin": "summary",
+        "focus": "Oyster photocard customers",
+        "headline": "Oyster photocard customers account details exposed in data breach",
+        "priority": "high",
+        "significance": "This finding exposes public sector identity and payment data to unauthorized access. The accountable owner should confirm that similar citizen data systems have adequate protection and breach detection capabilities.",
+        "source_ids": [
+          12
+        ]
+      },
+      {
+        "control_id": "governance",
+        "evidence_excerpt": "Companies deploying AI agents have the illusion of control, but several incidents demonstrate that businesses need to be ready to enforce directions.",
+        "evidence_origin": "summary",
+        "focus": "self-hosted AI models",
+        "headline": "self-hosted AI models require stronger steering controls",
+        "priority": "medium",
+        "significance": "This finding removes assurance that self-hosted AI deployments are inherently controllable. The accountable owner should confirm that governance frameworks include enforceable steering mechanisms for AI agent behavior.",
+        "source_ids": [
+          5
+        ]
+      }
+    ],
+    "executive_brief": {
+      "paragraphs": [
+        {
+          "source_ids": [
+            3,
+            4
+          ],
+          "text": "Active exploitation of critical infrastructure vulnerabilities demands immediate remediation verification. Attackers are leveraging PHP flaws to achieve unauthenticated code execution on exposed PAN-OS management interfaces, while a VMware vCenter authentication bypass has been exploited since September 2026 by Chinese-linked actors. Control owners must confirm that all affected systems are patched, management interfaces are not internet-accessible, and any potential compromise during exposure windows has been investigated. These events weaken assurance that network security and virtualization foundations remain trustworthy without validated compensating controls."
+        },
+        {
+          "source_ids": [
+            6,
+            12
+          ],
+          "text": "Large-scale personal data breaches at healthcare and public sector organizations highlight persistent data protection control gaps. SBC Medical Group disclosed two incidents exposing sensitive information of 1.6 million individuals in an SEC filing, while Transport for London confirmed account details of 265,000 Oyster photocard customers may have been exposed. Data protection owners should verify that sensitive data inventories, access restrictions, and breach detection capabilities are sufficient to prevent or rapidly identify similar exposures. These incidents weaken confidence in existing data handling assurances across sectors."
+        }
+      ]
+    },
+    "industry_impacts": [],
+    "regulatory_changes": []
+  },
+  "generated_at": "2026-11-20T00:38:13.469211Z",
+  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/adfc4b20cc9918bd68f8b510d7b32c8c3fa75398/site/feed.xml",
+  "feed_home_url": "https://sentrydigest.ricomanifesto.com/",
+  "digest_issue_date": "2026-11-20",
+  "digest_issue_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-20/",
+  "requested_model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
+  "resolved_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+  "sources": [
+    {
+      "title": "phpAfterShell Explained: How Hackers Could Turn a PHP Session Flaw Into Code Execution",
+      "url": "https://thehackernews.com/2026/11/phpaftershell-explained-how-hackers.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-20/#reporting-ea8cebf5d32b",
+      "cves": [
+        "CVE-2026-126714"
+      ],
+      "snippet": "phpAfterShell Explained: How Hackers Could Turn a PHP Session Flaw Into Code Execution PHP's default file-based session storage can be made to return objects an attacker chose, by cutting off a session write at the right moment. When combined with a second weakness, such as a suitable gadget chain in the app, those objects can allow the attacker to run code on the server. Today's PHP releases fix the flaw, called phpAfterShell. The flaw is tracked as CVE-2026-126714 and rated… PHP's default file-based session storage can be made to return objects an attacker chose, by cutting off a session write at the right moment. When combined with a second weakness, such as a suitable gadget chain in the",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "PHP's default file-based session storage can be made to return objects an attacker chose, by cutting off a session write at the right moment. When combined with a second weakness, such as a suitable gadget chain in the app, those objects can allow the attacker to run code on the server. Today's PHP releases fix the flaw, called phpAfterShell. The flaw is tracked as CVE-2026-126714 and rated…",
+          "text": "PHP's default file-based session storage can be made to return objects an attacker chose, by cutting off a session write at the right moment. When combined with a second weakness, such as a suitable gadget chain in the app, those objects can allow the attacker to run code on the server. Today's PHP releases fix the flaw, called phpAfterShell. The flaw is tracked as CVE-2026-126714 and rated…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "PHP's default file-based session storage can be made to return objects an attacker chose, by cutting off a session write at the right moment. When combined with a second weakness, such as a suitable gadget chain in the app, those objects can allow the attacker to run code on the server. Today's PHP releases fix the flaw, called phpAfterShell. The flaw is tracked as CVE-2026-126714 and rated…",
+          "text": "PHP's default file-based session storage can be made to return objects an attacker chose, by cutting off a session write at the right moment. When combined with a second weakness, such as a suitable gadget chain in the app, those objects can allow the attacker to run code on the server. Today's PHP releases fix the flaw, called phpAfterShell. The flaw is tracked as CVE-2026-126714 and rated…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "PHP Fixes 7 Critical Flaws, Including Bugs That Could Allow Remote Code Execution",
+      "url": "https://thehackernews.com/2026/11/php-fixes-7-critical-flaws-including.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-20/#reporting-dcfa8134ceac",
+      "cves": [
+        "CVE-2026-115560"
+      ],
+      "snippet": "PHP Fixes 7 Critical Flaws, Including Bugs That Could Allow Remote Code Execution The PHP Foundation has released security updates to address multiple critical security flaws that could be exploited to achieve remote code execution on affected deployments, including CVE-2026-115560. The release of the patch follows an advance notice in which the project maintainers alerted users to multiple critical vulnerabilities affecting all supported PHP versions under specific… The PHP Foundation has released security updates to address multiple critical security flaws that could be exploited to achieve remote code execution on affected deployments, including CVE-2026-115560. The release of the patch f",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "The PHP Foundation has released security updates to address multiple critical security flaws that could be exploited to achieve remote code execution on affected deployments, including CVE-2026-115560. The release of the patch follows an advance notice in which the project maintainers alerted users to multiple critical vulnerabilities affecting all supported PHP versions under specific…",
+          "text": "The PHP Foundation has released security updates to address multiple critical security flaws that could be exploited to achieve remote code execution on affected deployments, including CVE-2026-115560. The release of the patch follows an advance notice in which the project maintainers alerted users to multiple critical vulnerabilities affecting all supported PHP versions under specific…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "The PHP Foundation has released security updates to address multiple critical security flaws that could be exploited to achieve remote code execution on affected deployments, including CVE-2026-115560. The release of the patch follows an advance notice in which the project maintainers alerted users to multiple critical vulnerabilities affecting all supported PHP versions under specific…",
+          "text": "The PHP Foundation has released security updates to address multiple critical security flaws that could be exploited to achieve remote code execution on affected deployments, including CVE-2026-115560. The release of the patch follows an advance notice in which the project maintainers alerted users to multiple critical vulnerabilities affecting all supported PHP versions under specific…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Everything Is a Web Application, Including Your Firewall",
+      "url": "https://thehackernews.com/2026/11/everything-is-web-application-including.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-20/#reporting-79fb717d814d",
+      "cves": [
+        "CVE-2026-109618",
+        "CVE-2026-109619"
+      ],
+      "snippet": "Everything Is a Web Application, Including Your Firewall One of the early targets of PHP2Shell exploitation was the firewall. On October 28, Palo Alto Networks confirmed that attackers were exploiting the two PHP vulnerabilities, CVE-2026-109618 and CVE-2026-109619, against PAN-OS management interfaces exposed to the internet. Both flaws let anyone execute code on the web server without authentication. The disclosure itself went a little wrong. One of the early targets of PHP2Shell exploitation was the firewall. On October 28, Palo Alto Networks confirmed that attackers were exploiting the two PHP vulnerabilities, CVE-2026-109618 and CVE-2026-109619, against PAN-OS management interfaces expo",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "One of the early targets of PHP2Shell exploitation was the firewall. On October 28, Palo Alto Networks confirmed that attackers were exploiting the two PHP vulnerabilities, CVE-2026-109618 and CVE-2026-109619, against PAN-OS management interfaces exposed to the internet. Both flaws let anyone execute code on the web server without authentication. The disclosure itself went a little wrong.",
+          "text": "One of the early targets of PHP2Shell exploitation was the firewall. On October 28, Palo Alto Networks confirmed that attackers were exploiting the two PHP vulnerabilities, CVE-2026-109618 and CVE-2026-109619, against PAN-OS management interfaces exposed to the internet. Both flaws let anyone execute code on the web server without authentication. The disclosure itself went a little wrong."
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "One of the early targets of PHP2Shell exploitation was the firewall. On October 28, Palo Alto Networks confirmed that attackers were exploiting the two PHP vulnerabilities, CVE-2026-109618 and CVE-2026-109619, against PAN-OS management interfaces exposed to the internet. Both flaws let anyone execute code on the web server without authentication. The disclosure itself went a little wrong.",
+          "text": "One of the early targets of PHP2Shell exploitation was the firewall. On October 28, Palo Alto Networks confirmed that attackers were exploiting the two PHP vulnerabilities, CVE-2026-109618 and CVE-2026-109619, against PAN-OS management interfaces exposed to the internet. Both flaws let anyone execute code on the web server without authentication. The disclosure itself went a little wrong."
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "VMware patches vCenter zero-day exploited in attacks since September",
+      "url": "https://www.bleepingcomputer.com/news/security/vmware-patches-vcenter-zero-day-exploited-in-attacks-since-september/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-20/#reporting-15f220796a18",
+      "cves": [],
+      "snippet": "VMware patches vCenter zero-day exploited in attacks since September Broadcom has released security updates to fix a critical VMware vCenter Server authentication bypass vulnerability that Chinese-linked hackers have exploited in zero-day attacks since September 2026… Broadcom has released security updates to fix a critical VMware vCenter Server authentication bypass vulnerability that Chinese-linked hackers have exploited in zero-day attacks since September 2026…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Broadcom has released security updates to fix a critical VMware vCenter Server authentication bypass vulnerability that Chinese-linked hackers have exploited in zero-day attacks since September 2026…",
+          "text": "Broadcom has released security updates to fix a critical VMware vCenter Server authentication bypass vulnerability that Chinese-linked hackers have exploited in zero-day attacks since September 2026…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Broadcom has released security updates to fix a critical VMware vCenter Server authentication bypass vulnerability that Chinese-linked hackers have exploited in zero-day attacks since September 2026…",
+          "text": "Broadcom has released security updates to fix a critical VMware vCenter Server authentication bypass vulnerability that Chinese-linked hackers have exploited in zero-day attacks since September 2026…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Qwen Incidents Show Self-Hosted AI Models Need Stronger Steering",
+      "url": "https://www.darkreading.com/cyber-risk/qwen-incidents-self-hosted-ai-models-stronger-steering",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-20/#reporting-6057d88428e7",
+      "cves": [],
+      "snippet": "Qwen Incidents Show Self-Hosted AI Models Need Stronger Steering Companies deploying AI agents have the illusion of control, but several incidents demonstrate that businesses need to be ready to enforce directions. Companies deploying AI agents have the illusion of control, but several incidents demonstrate that businesses need to be ready to enforce directions.",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Companies deploying AI agents have the illusion of control, but several incidents demonstrate that businesses need to be ready to enforce directions.",
+          "text": "Companies deploying AI agents have the illusion of control, but several incidents demonstrate that businesses need to be ready to enforce directions."
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Companies deploying AI agents have the illusion of control, but several incidents demonstrate that businesses need to be ready to enforce directions.",
+          "text": "Companies deploying AI agents have the illusion of control, but several incidents demonstrate that businesses need to be ready to enforce directions."
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Hackers steal data of 1.6 million SBC Medical Group customers",
+      "url": "https://www.bleepingcomputer.com/news/security/hackers-steal-data-of-16-million-sbc-medical-group-customers/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-20/#reporting-f234841cd5e8",
+      "cves": [],
+      "snippet": "Hackers steal data of 1.6 million SBC Medical Group customers SBC Medical Group has warned in a filing with the U.S. Securities and Exchange Commission (SEC) that two cybersecurity incidents exposed sensitive customer and employee information, including personal data belonging to 1.6 million people… SBC Medical Group has warned in a filing with the U.S. Securities and Exchange Commission (SEC) that two cybersecurity incidents exposed sensitive customer and employee information, including personal data belonging to 1.6 million people…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "SBC Medical Group has warned in a filing with the U.S. Securities and Exchange Commission (SEC) that two cybersecurity incidents exposed sensitive customer and employee information, including personal data belonging to 1.6 million people…",
+          "text": "SBC Medical Group has warned in a filing with the U.S. Securities and Exchange Commission (SEC) that two cybersecurity incidents exposed sensitive customer and employee information, including personal data belonging to 1.6 million people…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "SBC Medical Group has warned in a filing with the U.S. Securities and Exchange Commission (SEC) that two cybersecurity incidents exposed sensitive customer and employee information, including personal data belonging to 1.6 million people…",
+          "text": "SBC Medical Group has warned in a filing with the U.S. Securities and Exchange Commission (SEC) that two cybersecurity incidents exposed sensitive customer and employee information, including personal data belonging to 1.6 million people…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "ASUS warns of critical hard-coded key flaw in Control Center Express",
+      "url": "https://www.bleepingcomputer.com/news/security/asus-warns-of-critical-hard-coded-key-flaw-in-control-center-express/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-20/#reporting-8ea9e80818a4",
+      "cves": [],
+      "snippet": "ASUS warns of critical hard-coded key flaw in Control Center Express ASUS released Control Center Express v1.7.29 to fix three critical vulnerabilities that could let remote attackers gain administrative control of the management console and the devices it manages… ASUS released Control Center Express v1.7.29 to fix three critical vulnerabilities that could let remote attackers gain administrative control of the management console and the devices it manages…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "ASUS released Control Center Express v1.7.29 to fix three critical vulnerabilities that could let remote attackers gain administrative control of the management console and the devices it manages…",
+          "text": "ASUS released Control Center Express v1.7.29 to fix three critical vulnerabilities that could let remote attackers gain administrative control of the management console and the devices it manages…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "ASUS released Control Center Express v1.7.29 to fix three critical vulnerabilities that could let remote attackers gain administrative control of the management console and the devices it manages…",
+          "text": "ASUS released Control Center Express v1.7.29 to fix three critical vulnerabilities that could let remote attackers gain administrative control of the management console and the devices it manages…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Second Norwegian Energy Company Breached in Two Days",
+      "url": "https://www.darkreading.com/cyberattacks-data-breaches/second-norwegian-energy-company-breached",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-20/#reporting-31961e8884c3",
+      "cves": [],
+      "snippet": "Second Norwegian Energy Company Breached in Two Days No specific link has been drawn between the two incidents, though they certainly sing the same notes. No specific link has been drawn between the two incidents, though they certainly sing the same notes.",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "No specific link has been drawn between the two incidents, though they certainly sing the same notes.",
+          "text": "No specific link has been drawn between the two incidents, though they certainly sing the same notes."
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "No specific link has been drawn between the two incidents, though they certainly sing the same notes.",
+          "text": "No specific link has been drawn between the two incidents, though they certainly sing the same notes."
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Critical PHP Flaws Allow Code Execution, But Don't Panic 'PHP2Shell'-Style",
+      "url": "https://www.darkreading.com/application-security/critical-php-flaws-code-execution-panic-php2shell",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-20/#reporting-aa9a0ee7df8d",
+      "cves": [],
+      "snippet": "Critical PHP Flaws Allow Code Execution, But Don't Panic 'PHP2Shell'-Style November's monthly security release patches seven critical PHP flaws that should be addressed ASAP, though experts say exploitability varies and depends heavily on configuration. November's monthly security release patches seven critical PHP flaws that should be addressed ASAP, though experts say exploitability varies and depends heavily on configuration.",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "November's monthly security release patches seven critical PHP flaws that should be addressed ASAP, though experts say exploitability varies and depends heavily on configuration.",
+          "text": "November's monthly security release patches seven critical PHP flaws that should be addressed ASAP, though experts say exploitability varies and depends heavily on configuration."
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "November's monthly security release patches seven critical PHP flaws that should be addressed ASAP, though experts say exploitability varies and depends heavily on configuration.",
+          "text": "November's monthly security release patches seven critical PHP flaws that should be addressed ASAP, though experts say exploitability varies and depends heavily on configuration."
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Navigating Vulnerability Hysteria in the AI Era",
+      "url": "https://www.darkreading.com/vulnerabilities-threats/navigating-vulnerability-hysteria-ai-era",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-20/#reporting-1172616db460",
+      "cves": [],
+      "snippet": "Navigating Vulnerability Hysteria in the AI Era This installment of the Reporters' Notebook video series examines the fallout from recent high-severity flaw disclosures, exploring how fears of AI-assisted exploits trigger widespread panic, operational disruptions, and growing warning fatigue. This installment of the Reporters' Notebook video series examines the fallout from recent high-severity flaw disclosures, exploring how fears of AI-assisted exploits trigger widespread panic, operational disruptions, and growing warning fatigue.",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "This installment of the Reporters' Notebook video series examines the fallout from recent high-severity flaw disclosures, exploring how fears of AI-assisted exploits trigger widespread panic, operational disruptions, and growing warning fatigue.",
+          "text": "This installment of the Reporters' Notebook video series examines the fallout from recent high-severity flaw disclosures, exploring how fears of AI-assisted exploits trigger widespread panic, operational disruptions, and growing warning fatigue."
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "This installment of the Reporters' Notebook video series examines the fallout from recent high-severity flaw disclosures, exploring how fears of AI-assisted exploits trigger widespread panic, operational disruptions, and growing warning fatigue.",
+          "text": "This installment of the Reporters' Notebook video series examines the fallout from recent high-severity flaw disclosures, exploring how fears of AI-assisted exploits trigger widespread panic, operational disruptions, and growing warning fatigue."
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "ThreatsDay: GPT-6.2 Jailbreak Flaws, BubbleLoader PNG Malware, $500M Ransom Demands + 17 More Stories",
+      "url": "https://thehackernews.com/2026/11/threatsday-gpt-62-jailbreak-flaws.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-20/#reporting-cc7a57153914",
+      "cves": [],
+      "snippet": "ThreatsDay: GPT-6.2 Jailbreak Flaws, BubbleLoader PNG Malware, $500M Ransom Demands + 17 More Stories The easiest way to fool someone is to give them something they already expect. A job offer. A message about a service outage. A familiar app. Nothing looks strange at first. And that's the problem. This week's stories show how ordinary things are being used to steal data, spread malware, and get people to hand over access. There's another shift worth watching. AI is making some attacks easier… The easiest way to fool someone is to give them something they already expect. A job offer. A message about a service outage. A familiar app. Nothing looks strange at first. And that's the problem. Thi",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "The easiest way to fool someone is to give them something they already expect. A job offer. A message about a service outage. A familiar app. Nothing looks strange at first. And that's the problem. This week's stories show how ordinary things are being used to steal data, spread malware, and get people to hand over access. There's another shift worth watching. AI is making some attacks easier…",
+          "text": "The easiest way to fool someone is to give them something they already expect. A job offer. A message about a service outage. A familiar app. Nothing looks strange at first. And that's the problem. This week's stories show how ordinary things are being used to steal data, spread malware, and get people to hand over access. There's another shift worth watching. AI is making some attacks easier…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "The easiest way to fool someone is to give them something they already expect. A job offer. A message about a service outage. A familiar app. Nothing looks strange at first. And that's the problem. This week's stories show how ordinary things are being used to steal data, spread malware, and get people to hand over access. There's another shift worth watching. AI is making some attacks easier…",
+          "text": "The easiest way to fool someone is to give them something they already expect. A job offer. A message about a service outage. A familiar app. Nothing looks strange at first. And that's the problem. This week's stories show how ordinary things are being used to steal data, spread malware, and get people to hand over access. There's another shift worth watching. AI is making some attacks easier…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Transport for London breach exposes 265,000 Oyster card users' data",
+      "url": "https://www.bleepingcomputer.com/news/security/transport-for-london-breach-exposes-265-000-oyster-card-users-data/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-20/#reporting-37781c126ada",
+      "cves": [],
+      "snippet": "Transport for London breach exposes 265,000 Oyster card users' data Transport for London (TfL) has announced that around 265,000 Oyster photocard customers may have had their account details exposed in a data breach… Transport for London (TfL) has announced that around 265,000 Oyster photocard customers may have had their account details exposed in a data breach…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Transport for London (TfL) has announced that around 265,000 Oyster photocard customers may have had their account details exposed in a data breach…",
+          "text": "Transport for London (TfL) has announced that around 265,000 Oyster photocard customers may have had their account details exposed in a data breach…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Transport for London (TfL) has announced that around 265,000 Oyster photocard customers may have had their account details exposed in a data breach…",
+          "text": "Transport for London (TfL) has announced that around 265,000 Oyster photocard customers may have had their account details exposed in a data breach…"
+        }
+      ],
+      "effective_date_evidence": null
+    }
+  ]
+}
