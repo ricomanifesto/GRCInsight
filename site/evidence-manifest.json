@@ -4,61 +4,73 @@
   "report_plan": {
     "control_implications": [
       {
-        "control_id": "vulnerability_management",
-        "evidence_excerpt": "Threat actors have been observed exploiting a recently disclosed critical security flaw in Cisco Expressway to breach a Russian organization shortly after the public release of a proof-of-concept (PoC) exploit. The activity involves the exploitation of CVE-2026-76466 (CVSS score: 9.8), a vulnerability that could allow an unauthenticated, remote attacker with network access to a Cisco Expressway",
+        "control_id": "data_protection",
+        "evidence_excerpt": "A flaw in KVM, the hypervisor built into the Linux kernel, let researchers read about 127 GB of a cloud server's memory from inside a virtual machine of their own on DigitalOcean. On a shared server, that memory can include other customers' virtual machines.",
         "evidence_origin": "summary",
-        "focus": "Cisco Expressway",
-        "headline": "Cisco Expressway exploited by threat actors breaching network",
+        "focus": "Linux KVM hypervisor",
+        "headline": "Linux KVM hypervisor exposes host memory to guest VMs",
         "priority": "high",
-        "significance": "This critical vulnerability allows unauthenticated remote access to Cisco Expressway devices, weakening perimeter security controls. Vulnerability and asset owners should confirm whether affected Cisco Expressway deployments are identified and patched.",
+        "significance": "This matters because cloud tenants cannot verify hypervisor isolation controls on shared AMD infrastructure. Data protection owner should confirm whether supplier assurance covers nested virtualization risks and cross-tenant memory access.",
         "source_ids": [
           1
         ]
       },
       {
         "control_id": "vulnerability_management",
-        "evidence_excerpt": "The suspected China-nexus cyber espionage group known as Armory Castle (formerly UNC5221) has been attributed to the zero-day exploitation of a critical security flaw in VMware vCenter Server in early September 2026. The vulnerability, tracked as CVE-2026-123890 (CVSS score: 9.8), is a case of authentication bypass in the VMware Directory Service that could be exploited to gain unauthorized",
+        "evidence_excerpt": "Threat actors have been observed exploiting a recently disclosed critical security flaw in Cisco Expressway to breach a Russian organization shortly after the public release of a proof-of-concept (PoC) exploit.",
         "evidence_origin": "summary",
-        "focus": "VMware vCenter Server",
-        "headline": "VMware vCenter Server exploited via authentication bypass",
+        "focus": "Cisco Expressway",
+        "headline": "Cisco Expressway exploitation breaches network perimeter",
         "priority": "high",
-        "significance": "An authentication bypass in VMware vCenter Server enables unauthorized administrative access, exposing virtualization infrastructure. Vulnerability and asset owners should verify vCenter Server versions and apply Broadcom security updates.",
+        "significance": "This matters because perimeter collaboration devices are being exploited immediately after PoC release. Vulnerability management owner should confirm asset inventory includes all Expressway instances and emergency patching procedures were executed.",
         "source_ids": [
           2
         ]
       },
       {
-        "control_id": "vulnerability_management",
-        "evidence_excerpt": "One of the early targets of PHP2Shell exploitation was the firewall. On October 28, Palo Alto Networks confirmed that attackers were exploiting the two PHP vulnerabilities, CVE-2026-109618 and CVE-2026-109619, against PAN-OS management interfaces exposed to the internet. Both flaws let anyone execute code on the web server without authentication.",
+        "control_id": "third_party_risk",
+        "evidence_excerpt": "The suspected China-nexus cyber espionage group known as Armory Castle (formerly UNC5221) has been attributed to the zero-day exploitation of a critical security flaw in VMware vCenter Server in early September 2026.",
         "evidence_origin": "summary",
-        "focus": "PAN-OS management interfaces",
-        "headline": "PAN-OS management interfaces exploited via PHP vulnerabilities",
+        "focus": "VMware vCenter Server",
+        "headline": "VMware vCenter Server zero-day enables authentication bypass",
         "priority": "high",
-        "significance": "Internet-exposed PAN-OS management interfaces are actively exploited for unauthenticated code execution, weakening network perimeter controls. Vulnerability and asset owners should confirm management interfaces are not internet-accessible and patches are applied.",
+        "significance": "This matters because virtualization management platforms are targeted by sophisticated actors. Third-party risk owner should confirm whether vCenter access is scoped and monitored and whether supplier provided exploitation indicators.",
         "source_ids": [
-          5
+          3
         ]
       },
       {
-        "control_id": "vulnerability_management",
-        "evidence_excerpt": "US cybersecurity company F5 warned customers to patch five critical BIG-IP vulnerabilities that attackers can exploit to trigger denial-of-service (DoS) or gain remote code execution",
+        "control_id": "access_management",
+        "evidence_excerpt": "Tracking company passwords in spreadsheets can leave IT administrators unaware of weak, reused, or compromised credentials stored and shared outside approved systems.",
         "evidence_origin": "summary",
-        "focus": "F5 BIG-IP",
-        "headline": "F5 BIG-IP critical vulnerabilities require emergency patching",
+        "focus": "company passwords in spreadsheets",
+        "headline": "Company passwords in spreadsheets weaken credential governance",
+        "priority": "medium",
+        "significance": "This matters because unmanaged credential storage bypasses access review controls. Access management owner should confirm whether password management policy prohibits spreadsheet storage and whether privileged account inventories are complete.",
+        "source_ids": [
+          6
+        ]
+      },
+      {
+        "control_id": "third_party_risk",
+        "evidence_excerpt": "N-able says attackers who breached one of its servers have caused a major outage affecting Mail Assure and SpamExperts Hosted Cloud services worldwide",
+        "evidence_origin": "summary",
+        "focus": "N-able security breach",
+        "headline": "N-able security breach disrupts hosted email services",
         "priority": "high",
-        "significance": "Five critical BIG-IP vulnerabilities enable remote code execution and denial-of-service, threatening application delivery infrastructure. Vulnerability and asset owners should verify emergency patches are deployed across all BIG-IP instances.",
+        "significance": "This matters because supplier compromise caused widespread service disruption. Third-party risk owner should confirm whether N-able is a critical supplier and whether incident notification and service continuity assurances were tested.",
         "source_ids": [
           7
         ]
       },
       {
-        "control_id": "access_management",
-        "evidence_excerpt": "A newly disclosed unpatched zero-day technique called FastUnlock lets someone with physical access to a locked Windows computer start programs without signing in. Whoever uses it gets only a limited account, not administrator control of the machine. The method was posted yesterday by a researcher who uses the handles MSNightmare and Nightmare Eclipse",
+        "control_id": "vulnerability_management",
+        "evidence_excerpt": "SonicWall has urged all customers still running Generation 6 firewalls to retire and replace them immediately and stop exposing the devices on the internet edge, citing security risks fueled by AI-assisted attacks.",
         "evidence_origin": "summary",
-        "focus": "Windows FastUnlock technique",
-        "headline": "Windows FastUnlock technique bypasses lock screen authentication",
-        "priority": "medium",
-        "significance": "Physical access bypass of Windows lock screen weakens endpoint access controls for unattended devices. Identity and access owners should assess physical security controls and evaluate mitigations for unpatched zero-day techniques.",
+        "focus": "Generation 6 firewalls",
+        "headline": "Generation 6 firewalls lose security patch support",
+        "priority": "high",
+        "significance": "This matters because unsupported perimeter devices cannot receive vulnerability remediation. Vulnerability management owner should confirm whether any Gen 6 firewalls remain in production and whether replacement timeline is approved.",
         "source_ids": [
           11
         ]
@@ -70,30 +82,55 @@
           "source_ids": [
             1,
             2,
-            5,
-            7
+            3
           ],
-          "text": "Multiple critical infrastructure vulnerabilities are under active exploitation, including Cisco Expressway, VMware vCenter Server, Palo Alto Networks PAN-OS management interfaces, and F5 BIG-IP devices. These flaws enable unauthenticated remote code execution and authentication bypass across network perimeter, virtualization, and application delivery systems. Control owners must verify asset inventories, patch deployment, and exposure reduction for these high-value targets."
+          "text": "Cloud hypervisor isolation failure and actively exploited perimeter vulnerabilities create immediate control assurance gaps. The Linux KVM flaw allows cross-tenant memory access on shared AMD hosts, while Cisco Expressway and VMware vCenter are being exploited in the wild. Control owners must verify supplier assurance for virtualization platforms and confirm emergency patching for internet-facing appliances."
         },
         {
           "source_ids": [
+            6,
+            7,
             11
           ],
-          "text": "Vendor end-of-support decisions and unpatched zero-day techniques further erode assurance. SonicWall has discontinued patches for Generation 6 firewalls, requiring immediate replacement, while a new Windows FastUnlock technique bypasses lock screen authentication on physically accessible devices. Owners should confirm retirement timelines for unsupported edge devices and evaluate physical access compensating controls."
+          "text": "Credential governance gaps and supplier-dependent service disruptions compound risk. Unmanaged password storage bypasses access controls, the N-able breach demonstrates cascading outage impact from supplier compromise, and SonicWall Gen 6 firewalls lose all patch support. Owners should confirm password management policy enforcement, critical supplier continuity testing, and end-of-life device replacement approvals."
         }
       ]
     },
     "industry_impacts": [],
     "regulatory_changes": []
   },
-  "generated_at": "2026-11-20T13:07:10.912117Z",
-  "feed_url": "https://sentrydigest.ricomanifesto.com/feed.xml",
+  "generated_at": "2026-11-20T15:18:05.016071Z",
+  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/bc93182f87c305e54085d60ef2b4dfa135b6d821/site/feed.xml",
   "feed_home_url": "https://sentrydigest.ricomanifesto.com/",
   "digest_issue_date": "2026-11-20",
   "digest_issue_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-20/",
   "requested_model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
   "resolved_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
   "sources": [
+    {
+      "title": "Linux KVM Flaw CVE-2026-99312 Lets Guest VMs Access Host Memory on AMD Hosts",
+      "url": "https://thehackernews.com/2026/11/new-linux-kvm-flaw-cve-2026-99312-lets.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-20/#reporting-c7b209f2aed8",
+      "cves": [
+        "CVE-2026-99312"
+      ],
+      "snippet": "Linux KVM Flaw CVE-2026-99312 Lets Guest VMs Access Host Memory on AMD Hosts A flaw in KVM, the hypervisor built into the Linux kernel, let researchers read about 127 GB of a cloud server's memory from inside a virtual machine of their own on DigitalOcean. On a shared server, that memory can include other customers' virtual machines. The flaw, tracked as CVE-2026-99312, affects only hosts with AMD processors and nested virtualization enabled. Fixed kernels shipped… A flaw in KVM, the hypervisor built into the Linux kernel, let researchers read about 127 GB of a cloud server's memory from inside a virtual machine of their own on DigitalOcean. On a shared server, that memory can include other ",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "A flaw in KVM, the hypervisor built into the Linux kernel, let researchers read about 127 GB of a cloud server's memory from inside a virtual machine of their own on DigitalOcean. On a shared server, that memory can include other customers' virtual machines. The flaw, tracked as CVE-2026-99312, affects only hosts with AMD processors and nested virtualization enabled. Fixed kernels shipped…",
+          "text": "A flaw in KVM, the hypervisor built into the Linux kernel, let researchers read about 127 GB of a cloud server's memory from inside a virtual machine of their own on DigitalOcean. On a shared server, that memory can include other customers' virtual machines. The flaw, tracked as CVE-2026-99312, affects only hosts with AMD processors and nested virtualization enabled. Fixed kernels shipped…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "A flaw in KVM, the hypervisor built into the Linux kernel, let researchers read about 127 GB of a cloud server's memory from inside a virtual machine of their own on DigitalOcean. On a shared server, that memory can include other customers' virtual machines. The flaw, tracked as CVE-2026-99312, affects only hosts with AMD processors and nested virtualization enabled. Fixed kernels shipped…",
+          "text": "A flaw in KVM, the hypervisor built into the Linux kernel, let researchers read about 127 GB of a cloud server's memory from inside a virtual machine of their own on DigitalOcean. On a shared server, that memory can include other customers' virtual machines. The flaw, tracked as CVE-2026-99312, affects only hosts with AMD processors and nested virtualization enabled. Fixed kernels shipped…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
     {
       "title": "Hackers Exploit Critical Cisco Expressway Flaw, Breach Four Devices and Reach Internal Network",
       "url": "https://thehackernews.com/2026/11/hackers-exploit-critical-cisco.html",
@@ -191,26 +228,45 @@
       "effective_date_evidence": null
     },
     {
-      "title": "Everything Is a Web Application, Including Your Firewall",
-      "url": "https://thehackernews.com/2026/11/everything-is-web-application-including.html",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-20/#reporting-79fb717d814d",
-      "cves": [
-        "CVE-2026-109618",
-        "CVE-2026-109619"
-      ],
-      "snippet": "Everything Is a Web Application, Including Your Firewall One of the early targets of PHP2Shell exploitation was the firewall. On October 28, Palo Alto Networks confirmed that attackers were exploiting the two PHP vulnerabilities, CVE-2026-109618 and CVE-2026-109619, against PAN-OS management interfaces exposed to the internet. Both flaws let anyone execute code on the web server without authentication. The disclosure itself went a little wrong. One of the early targets of PHP2Shell exploitation was the firewall. On October 28, Palo Alto Networks confirmed that attackers were exploiting the two PHP vulnerabilities, CVE-2026-109618 and CVE-2026-109619, against PAN-OS management interfaces expo",
+      "title": "Still tracking company passwords in spreadsheets? You’re flying blind.",
+      "url": "https://www.bleepingcomputer.com/news/security/still-tracking-company-passwords-in-spreadsheets-youre-flying-blind/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-20/#reporting-8991c2c279cd",
+      "cves": [],
+      "snippet": "Still tracking company passwords in spreadsheets? You’re flying blind. Tracking company passwords in spreadsheets can leave IT administrators unaware of weak, reused, or compromised credentials stored and shared outside approved systems. NordPass explains how centralized password management can improve credential visibility, identify security risks, and simplify secure password sharing… Tracking company passwords in spreadsheets can leave IT administrators unaware of weak, reused, or compromised credentials stored and shared outside approved systems. NordPass explains how centralized password management can improve credential visibility, identify security risks, and simplify secure password ",
       "article_evidence": [
         {
           "extraction_version": 1,
           "origin": "summary",
-          "raw_text": "One of the early targets of PHP2Shell exploitation was the firewall. On October 28, Palo Alto Networks confirmed that attackers were exploiting the two PHP vulnerabilities, CVE-2026-109618 and CVE-2026-109619, against PAN-OS management interfaces exposed to the internet. Both flaws let anyone execute code on the web server without authentication. The disclosure itself went a little wrong.",
-          "text": "One of the early targets of PHP2Shell exploitation was the firewall. On October 28, Palo Alto Networks confirmed that attackers were exploiting the two PHP vulnerabilities, CVE-2026-109618 and CVE-2026-109619, against PAN-OS management interfaces exposed to the internet. Both flaws let anyone execute code on the web server without authentication. The disclosure itself went a little wrong."
+          "raw_text": "Tracking company passwords in spreadsheets can leave IT administrators unaware of weak, reused, or compromised credentials stored and shared outside approved systems. NordPass explains how centralized password management can improve credential visibility, identify security risks, and simplify secure password sharing…",
+          "text": "Tracking company passwords in spreadsheets can leave IT administrators unaware of weak, reused, or compromised credentials stored and shared outside approved systems. NordPass explains how centralized password management can improve credential visibility, identify security risks, and simplify secure password sharing…"
         },
         {
           "extraction_version": 1,
           "origin": "content",
-          "raw_text": "One of the early targets of PHP2Shell exploitation was the firewall. On October 28, Palo Alto Networks confirmed that attackers were exploiting the two PHP vulnerabilities, CVE-2026-109618 and CVE-2026-109619, against PAN-OS management interfaces exposed to the internet. Both flaws let anyone execute code on the web server without authentication. The disclosure itself went a little wrong.",
-          "text": "One of the early targets of PHP2Shell exploitation was the firewall. On October 28, Palo Alto Networks confirmed that attackers were exploiting the two PHP vulnerabilities, CVE-2026-109618 and CVE-2026-109619, against PAN-OS management interfaces exposed to the internet. Both flaws let anyone execute code on the web server without authentication. The disclosure itself went a little wrong."
+          "raw_text": "Tracking company passwords in spreadsheets can leave IT administrators unaware of weak, reused, or compromised credentials stored and shared outside approved systems. NordPass explains how centralized password management can improve credential visibility, identify security risks, and simplify secure password sharing…",
+          "text": "Tracking company passwords in spreadsheets can leave IT administrators unaware of weak, reused, or compromised credentials stored and shared outside approved systems. NordPass explains how centralized password management can improve credential visibility, identify security risks, and simplify secure password sharing…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "N-able says recent security breach led to major service outage",
+      "url": "https://www.bleepingcomputer.com/news/microsoft/n-able-says-recent-security-breach-led-to-major-service-outage/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-20/#reporting-63176744cc4b",
+      "cves": [],
+      "snippet": "N-able says recent security breach led to major service outage N-able says attackers who breached one of its servers have caused a major outage affecting Mail Assure and SpamExperts Hosted Cloud services worldwide… N-able says attackers who breached one of its servers have caused a major outage affecting Mail Assure and SpamExperts Hosted Cloud services worldwide…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "N-able says attackers who breached one of its servers have caused a major outage affecting Mail Assure and SpamExperts Hosted Cloud services worldwide…",
+          "text": "N-able says attackers who breached one of its servers have caused a major outage affecting Mail Assure and SpamExperts Hosted Cloud services worldwide…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "N-able says attackers who breached one of its servers have caused a major outage affecting Mail Assure and SpamExperts Hosted Cloud services worldwide…",
+          "text": "N-able says attackers who breached one of its servers have caused a major outage affecting Mail Assure and SpamExperts Hosted Cloud services worldwide…"
         }
       ],
       "effective_date_evidence": null
@@ -233,6 +289,28 @@
           "origin": "content",
           "raw_text": "Starting this week, Microsoft has begun automatically upgrading eligible devices that aren't managed by an IT department to Windows 11 26H2…",
           "text": "Starting this week, Microsoft has begun automatically upgrading eligible devices that aren't managed by an IT department to Windows 11 26H2…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "The Path to AI Autonomy in the SOC",
+      "url": "https://thehackernews.com/2026/11/the-path-to-ai-autonomy-in-soc.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-20/#reporting-b18719ed382d",
+      "cves": [],
+      "snippet": "The Path to AI Autonomy in the SOC Security leaders are about to hand AI agents a lot more authority. In a recent a16z survey of CISOs at organizations with more than 1,000 employees, 36% said they are comfortable today letting AI agents act autonomously on low-risk security actions. In 12 months from now, 60% expect to be comfortable at that level. Overall, AI SOC was the highest ranking initiative for 2027. The pressure… Security leaders are about to hand AI agents a lot more authority. In a recent a16z survey of CISOs at organizations with more than 1,000 employees, 36% said they are comfortable today letting AI agents act autonomously on low-risk security actions. In 12 months from now, ",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Security leaders are about to hand AI agents a lot more authority. In a recent a16z survey of CISOs at organizations with more than 1,000 employees, 36% said they are comfortable today letting AI agents act autonomously on low-risk security actions. In 12 months from now, 60% expect to be comfortable at that level. Overall, AI SOC was the highest ranking initiative for 2027. The pressure…",
+          "text": "Security leaders are about to hand AI agents a lot more authority. In a recent a16z survey of CISOs at organizations with more than 1,000 employees, 36% said they are comfortable today letting AI agents act autonomously on low-risk security actions. In 12 months from now, 60% expect to be comfortable at that level. Overall, AI SOC was the highest ranking initiative for 2027. The pressure…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Security leaders are about to hand AI agents a lot more authority. In a recent a16z survey of CISOs at organizations with more than 1,000 employees, 36% said they are comfortable today letting AI agents act autonomously on low-risk security actions. In 12 months from now, 60% expect to be comfortable at that level. Overall, AI SOC was the highest ranking initiative for 2027. The pressure…",
+          "text": "Security leaders are about to hand AI agents a lot more authority. In a recent a16z survey of CISOs at organizations with more than 1,000 employees, 36% said they are comfortable today letting AI agents act autonomously on low-risk security actions. In 12 months from now, 60% expect to be comfortable at that level. Overall, AI SOC was the highest ranking initiative for 2027. The pressure…"
         }
       ],
       "effective_date_evidence": null
@@ -299,72 +377,6 @@
           "origin": "content",
           "raw_text": "Microsoft released the KB5132057 November Windows 11 preview update, which comes with 28 changes, including improvements to Windows Search, Windows Hello, and the Run dialog…",
           "text": "Microsoft released the KB5132057 November Windows 11 preview update, which comes with 28 changes, including improvements to Windows Search, Windows Hello, and the Run dialog…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "ROMULUS ClickFix Attacks Deliver RAT That Can Spy on Users and Control PCs",
-      "url": "https://thehackernews.com/2026/11/romulus-clickfix-attacks-deliver-rat.html",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-20/#reporting-e40617893cab",
-      "cves": [],
-      "snippet": "ROMULUS ClickFix Attacks Deliver RAT That Can Spy on Users and Control PCs Threat actors have been observed using the ROMULUS ClickFix malware delivery platform to deliver a previously undocumented remote access trojan (RAT) that shares similarities with CNCMachineRMS. \"ROMULUS likely operates as a delivery service, distributing CNCMachineRMS and Legion Loader through separate chains while retaining ClickFix and signed binary sideloading techniques,\" Blackpoint… Threat actors have been observed using the ROMULUS ClickFix malware delivery platform to deliver a previously undocumented remote access trojan (RAT) that shares similarities with CNCMachineRMS. \"ROMULUS likely operates as a delivery",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "Threat actors have been observed using the ROMULUS ClickFix malware delivery platform to deliver a previously undocumented remote access trojan (RAT) that shares similarities with CNCMachineRMS. \"ROMULUS likely operates as a delivery service, distributing CNCMachineRMS and Legion Loader through separate chains while retaining ClickFix and signed binary sideloading techniques,\" Blackpoint…",
-          "text": "Threat actors have been observed using the ROMULUS ClickFix malware delivery platform to deliver a previously undocumented remote access trojan (RAT) that shares similarities with CNCMachineRMS. \"ROMULUS likely operates as a delivery service, distributing CNCMachineRMS and Legion Loader through separate chains while retaining ClickFix and signed binary sideloading techniques,\" Blackpoint…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "Threat actors have been observed using the ROMULUS ClickFix malware delivery platform to deliver a previously undocumented remote access trojan (RAT) that shares similarities with CNCMachineRMS. \"ROMULUS likely operates as a delivery service, distributing CNCMachineRMS and Legion Loader through separate chains while retaining ClickFix and signed binary sideloading techniques,\" Blackpoint…",
-          "text": "Threat actors have been observed using the ROMULUS ClickFix malware delivery platform to deliver a previously undocumented remote access trojan (RAT) that shares similarities with CNCMachineRMS. \"ROMULUS likely operates as a delivery service, distributing CNCMachineRMS and Legion Loader through separate chains while retaining ClickFix and signed binary sideloading techniques,\" Blackpoint…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "New Unpatched Windows 0-Day FastUnlock Lets Someone Holding a Locked PC Run Programs on It",
-      "url": "https://thehackernews.com/2026/11/new-unpatched-windows-0-day-fastunlock.html",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-20/#reporting-4b0033536e57",
-      "cves": [],
-      "snippet": "New Unpatched Windows 0-Day FastUnlock Lets Someone Holding a Locked PC Run Programs on It A newly disclosed unpatched zero-day technique called FastUnlock lets someone with physical access to a locked Windows computer start programs without signing in. Whoever uses it gets only a limited account, not administrator control of the machine. The method was posted yesterday by a researcher who uses the handles MSNightmare and Nightmare Eclipse, and the endpoint-security firm ThreatLocker… A newly disclosed unpatched zero-day technique called FastUnlock lets someone with physical access to a locked Windows computer start programs without signing in. Whoever uses it gets only a limited account, no",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "A newly disclosed unpatched zero-day technique called FastUnlock lets someone with physical access to a locked Windows computer start programs without signing in. Whoever uses it gets only a limited account, not administrator control of the machine. The method was posted yesterday by a researcher who uses the handles MSNightmare and Nightmare Eclipse, and the endpoint-security firm ThreatLocker…",
-          "text": "A newly disclosed unpatched zero-day technique called FastUnlock lets someone with physical access to a locked Windows computer start programs without signing in. Whoever uses it gets only a limited account, not administrator control of the machine. The method was posted yesterday by a researcher who uses the handles MSNightmare and Nightmare Eclipse, and the endpoint-security firm ThreatLocker…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "A newly disclosed unpatched zero-day technique called FastUnlock lets someone with physical access to a locked Windows computer start programs without signing in. Whoever uses it gets only a limited account, not administrator control of the machine. The method was posted yesterday by a researcher who uses the handles MSNightmare and Nightmare Eclipse, and the endpoint-security firm ThreatLocker…",
-          "text": "A newly disclosed unpatched zero-day technique called FastUnlock lets someone with physical access to a locked Windows computer start programs without signing in. Whoever uses it gets only a limited account, not administrator control of the machine. The method was posted yesterday by a researcher who uses the handles MSNightmare and Nightmare Eclipse, and the endpoint-security firm ThreatLocker…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "VMware patches vCenter zero-day exploited in attacks since September",
-      "url": "https://www.bleepingcomputer.com/news/security/vmware-patches-vcenter-zero-day-exploited-in-attacks-since-september/",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-20/#reporting-15f220796a18",
-      "cves": [],
-      "snippet": "VMware patches vCenter zero-day exploited in attacks since September Broadcom has released security updates to fix a critical VMware vCenter Server authentication bypass vulnerability that Chinese-linked hackers have exploited in zero-day attacks since September 2026… Broadcom has released security updates to fix a critical VMware vCenter Server authentication bypass vulnerability that Chinese-linked hackers have exploited in zero-day attacks since September 2026…",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "Broadcom has released security updates to fix a critical VMware vCenter Server authentication bypass vulnerability that Chinese-linked hackers have exploited in zero-day attacks since September 2026…",
-          "text": "Broadcom has released security updates to fix a critical VMware vCenter Server authentication bypass vulnerability that Chinese-linked hackers have exploited in zero-day attacks since September 2026…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "Broadcom has released security updates to fix a critical VMware vCenter Server authentication bypass vulnerability that Chinese-linked hackers have exploited in zero-day attacks since September 2026…",
-          "text": "Broadcom has released security updates to fix a critical VMware vCenter Server authentication bypass vulnerability that Chinese-linked hackers have exploited in zero-day attacks since September 2026…"
         }
       ],
       "effective_date_evidence": null
