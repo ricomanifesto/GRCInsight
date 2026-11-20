@@ -3710,6 +3710,12 @@
       "run_id": "44647259441",
       "source_revision": "f41d69012c410e220edc8d5cdeb35fbbff01a84d",
       "stage": "admitted"
+    },
+    {
+      "admission_key": "digest:f41d69012c410e220edc8d5cdeb35fbbff01a84d",
+      "at": "2026-11-20T00:37:13.630Z",
+      "run_id": "44647259441",
+      "stage": "invoked"
     }
   ],
   "schema_version": 1,
