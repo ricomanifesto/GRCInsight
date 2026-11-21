@@ -4,75 +4,75 @@
   "report_plan": {
     "control_implications": [
       {
-        "control_id": "data_protection",
-        "evidence_excerpt": "Bell Canada has confirmed that an \"agentic\" threat actor breached its systems on November 17, 2026, and stole enterprise customer data, including information from a system used to order and provision telecommunications circuits",
+        "control_id": "vulnerability_management",
+        "evidence_excerpt": "Meta-owned WhatsApp has addressed security vulnerabilities, including one impacting its Android app that it suspects may have been exploited in connection with scam messages. The vulnerability, tracked as CVE-2026-23871, has been described as a case of incomplete validation of external ad-reply URLs in WhatsApp for Android and WhatsApp Business for Android before 2.26.17.4.",
         "evidence_origin": "summary",
-        "focus": "enterprise customer data",
-        "headline": "enterprise customer data stolen in Bell Canada breach",
+        "focus": "WhatsApp for Android",
+        "headline": "WhatsApp for Android patches vulnerability exploited in scams",
         "priority": "high",
-        "significance": "The breach exposes sensitive telecommunications provisioning data and confirms active targeting of critical infrastructure operators. Data and privacy owners should verify inventory of provisioning-system records, confirm access restrictions and audit logs, and document an exposure assessment for affected enterprise customers.",
+        "significance": "The suspected exploitation of an incomplete validation flaw in WhatsApp for Android indicates that mobile messaging platforms can be abused for scam delivery. The accountable owner should confirm that patch deployment covers all managed devices and that scam reporting channels are monitored.",
         "source_ids": [
-          6
-        ]
-      },
-      {
-        "control_id": "third_party_risk",
-        "evidence_excerpt": "J.P. Morgan Chase warned it suffered a data breach after a cyberattack at a third-party service provider exposed customers' personal information and marketing data",
-        "evidence_origin": "summary",
-        "focus": "third-party service provider",
-        "headline": "third-party service provider breach exposes Chase customer data",
-        "priority": "high",
-        "significance": "A supplier compromise cascaded to a major financial institution, revealing personal and marketing data. Supplier risk owners should review the provider's access scope, control responsibilities, and evidence of remediation assurance, and confirm escalation contacts for similar dependencies.",
-        "source_ids": [
-          11
+          1
         ]
       },
       {
         "control_id": "vulnerability_management",
-        "evidence_excerpt": "Threat actors have been observed exploiting a recently disclosed critical security flaw in Cisco Expressway to breach a Russian organization shortly after the public release of a proof-of-concept (PoC) exploit. The activity involves the exploitation of CVE-2026-76466 (CVSS score: 9.8), a vulnerability that could allow an unauthenticated, remote attacker with network access to a Cisco Expressway",
+        "evidence_excerpt": "A flaw in KVM, the hypervisor built into the Linux kernel, let researchers read about 127 GB of a cloud server's memory from inside a virtual machine of their own on DigitalOcean. On a shared server, that memory can include other customers' virtual machines. The flaw, tracked as CVE-2026-99312, affects only hosts with AMD processors and nested virtualization enabled. Fixed kernels shipped…",
+        "evidence_origin": "summary",
+        "focus": "Linux KVM",
+        "headline": "Linux KVM exposes host memory to guest VMs",
+        "priority": "high",
+        "significance": "The hypervisor memory isolation failure on AMD hosts with nested virtualization undermines multi-tenant cloud assurance. The accountable owner should verify that host patching includes nested virtualization configurations and that memory isolation controls are tested.",
+        "source_ids": [
+          2
+        ]
+      },
+      {
+        "control_id": "vulnerability_management",
+        "evidence_excerpt": "Threat actors have been observed exploiting a recently disclosed critical security flaw in Cisco Expressway to breach a Russian organization shortly after the public release of a proof-of-concept (PoC) exploit. The activity involves the exploitation of CVE-2026-76466 (CVSS score: 9.8), a vulnerability that could allow an unauthenticated, remote attacker with network access to a Cisco Expressway…",
         "evidence_origin": "summary",
         "focus": "Cisco Expressway",
-        "headline": "Cisco Expressway exploited after PoC release",
+        "headline": "Cisco Expressway exploitation breaches internal network",
         "priority": "high",
-        "significance": "Rapid weaponization of a critical remote-access flaw demonstrates shrinking patch windows for edge communication infrastructure. Vulnerability and asset owners should identify deployed Expressway instances, verify installed versions against the fixed release, and confirm remediation or compensating controls with their owners.",
+        "significance": "Active exploitation of a critical Cisco Expressway flaw shortly after PoC release demonstrates rapid weaponization. The accountable owner should confirm that exposed devices are patched or segmented and that network monitoring detects anomalous access.",
         "source_ids": [
           3
         ]
       },
       {
         "control_id": "vulnerability_management",
-        "evidence_excerpt": "The suspected China-nexus cyber espionage group known as Armory Castle (formerly UNC5221) has been attributed to the zero-day exploitation of a critical security flaw in VMware vCenter Server in early September 2026. The vulnerability, tracked as CVE-2026-123890 (CVSS score: 9.8), is a case of authentication bypass in the VMware Directory Service that could be exploited to gain unauthorized",
+        "evidence_excerpt": "The suspected China-nexus cyber espionage group known as Armory Castle (formerly UNC5221) has been attributed to the zero-day exploitation of a critical security flaw in VMware vCenter Server in early September 2026. The vulnerability, tracked as CVE-2026-123890 (CVSS score: 9.8), is a case of authentication bypass in the VMware Directory Service that could be exploited to gain unauthorized…",
         "evidence_origin": "summary",
         "focus": "VMware vCenter Server",
-        "headline": "VMware vCenter Server zero-day exploited by espionage group",
+        "headline": "VMware vCenter Server zero-day exploited for admin access",
         "priority": "high",
-        "significance": "Authentication bypass in a core virtualization management platform enables persistent administrative access. Vulnerability and asset owners should inventory vCenter deployments, verify emergency patch application, and validate that compensating detection covers Directory Service anomalies.",
+        "significance": "Zero-day exploitation of VMware vCenter authentication bypass by a state-linked group indicates targeted credential theft risk. The accountable owner should verify that vCenter instances are updated and that administrative access logs are reviewed for anomalies.",
         "source_ids": [
           4
         ]
       },
       {
-        "control_id": "third_party_risk",
-        "evidence_excerpt": "A flaw in KVM, the hypervisor built into the Linux kernel, let researchers read about 127 GB of a cloud server's memory from inside a virtual machine of their own on DigitalOcean. On a shared server, that memory can include other customers' virtual machines. The flaw, tracked as CVE-2026-99312, affects only hosts with AMD processors and nested virtualization enabled. Fixed kernels shipped",
+        "control_id": "data_protection",
+        "evidence_excerpt": "Bell Canada has confirmed that an \"agentic\" threat actor breached its systems on November 17, 2026, and stole enterprise customer data, including information from a system used to order and provision telecommunications circuits…",
         "evidence_origin": "summary",
-        "focus": "Linux KVM hypervisor on AMD hosts",
-        "headline": "Linux KVM hypervisor flaw exposes cross-VM memory on AMD hosts",
-        "priority": "medium",
-        "significance": "Cloud tenants on affected AMD hosts could access peer VM memory, undermining isolation guarantees. Supplier risk owners should confirm cloud providers' kernel patch status for nested-virtualization environments, review shared-tenancy assurances, and request evidence of remediation validation.",
+        "focus": "Bell Canada systems",
+        "headline": "Bell Canada systems breached by agentic threat actor",
+        "priority": "high",
+        "significance": "The confirmed breach of telecommunications provisioning systems exposes enterprise customer data and indicates sophisticated threat actor capability. The accountable owner should confirm that data access controls on provisioning systems are enforced and that breach notification procedures are executed.",
         "source_ids": [
-          2
+          7
         ]
       },
       {
-        "control_id": "access_management",
-        "evidence_excerpt": "Meta-owned WhatsApp has addressed security vulnerabilities, including one impacting its Android app that it suspects may have been exploited in connection with scam messages. The vulnerability, tracked as CVE-2026-23871, has been described as a case of incomplete validation of external ad-reply URLs in WhatsApp for Android and WhatsApp Business for Android before 2.26.17.4. The issue could",
+        "control_id": "third_party_risk",
+        "evidence_excerpt": "J.P. Morgan Chase warned it suffered a data breach after a cyberattack at a third-party service provider exposed customers' personal information and marketing data…",
         "evidence_origin": "summary",
-        "focus": "WhatsApp for Android and WhatsApp Business for Android",
-        "headline": "WhatsApp Android URL validation flaw suspected in scam exploitation",
-        "priority": "medium",
-        "significance": "Incomplete URL validation in a widely deployed messaging client enables credential harvesting via malicious ad-reply links. Identity and access owners should verify mobile device management policies enforce version 2.26.17.4 or later, confirm user awareness of scam vectors, and review session revocation capabilities for compromised accounts.",
+        "focus": "third-party service provider",
+        "headline": "Third-party service provider breach exposes financial customer data",
+        "priority": "high",
+        "significance": "A third-party service provider compromise exposing financial customer data highlights supply chain data protection gaps. The accountable owner should review supplier assurance evidence for data handling controls and confirm incident notification timelines.",
         "source_ids": [
-          1
+          12
         ]
       }
     ],
@@ -82,35 +82,35 @@
           "source_ids": [
             3,
             4,
-            6,
-            11
-          ],
-          "text": "Active exploitation of critical infrastructure flaws and supplier compromises dominated the period, with threat actors weaponizing zero-days in VMware vCenter and Cisco Expressway within days of disclosure while a third-party breach cascaded to major financial institutions and an \"agentic\" actor stole telecommunications provisioning data. These events reveal shrinking patch windows for edge and virtualization platforms and demonstrate how supplier dependencies amplify blast radius across banking and telecom sectors."
-        },
-        {
-          "source_ids": [
             1,
             2
           ],
-          "text": "Cloud hypervisor isolation failed on AMD hosts running nested virtualization, a widely used messaging client shipped an incomplete URL validation flaw suspected in scam campaigns, and password hygiene gaps persist in enterprise environments. Control owners should prioritize verification of emergency patches for vCenter and Expressway, confirm cloud provider kernel updates for KVM, enforce mobile app version minimums, and migrate credential storage from spreadsheets to centralized managers."
+          "text": "Active exploitation of critical vulnerabilities in Cisco Expressway, VMware vCenter, WhatsApp for Android, and Linux KVM demonstrates rapid weaponization across communication, virtualization, and mobile platforms. Control owners should prioritize patch verification, network segmentation, and memory isolation testing for affected assets."
+        },
+        {
+          "source_ids": [
+            7,
+            12
+          ],
+          "text": "Confirmed breaches at Bell Canada and a third-party service provider exposing financial customer data reveal persistent supply chain and direct compromise risks in telecommunications and banking. Data protection and third-party risk owners must validate access controls on provisioning systems and supplier assurance evidence."
         }
       ]
     },
     "industry_impacts": [],
     "regulatory_changes": []
   },
-  "generated_at": "2026-11-20T21:15:53.259948Z",
-  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/77d7474714c7a122d7d56e8f0fcb267734f96211/site/feed.xml",
+  "generated_at": "2026-11-21T00:34:57.573592Z",
+  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/8dcee8686abd2ff8d6920ff41f14c21d9f1a2ede/site/feed.xml",
   "feed_home_url": "https://sentrydigest.ricomanifesto.com/",
-  "digest_issue_date": "2026-11-20",
-  "digest_issue_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-20/",
+  "digest_issue_date": "2026-11-21",
+  "digest_issue_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-21/",
   "requested_model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
   "resolved_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
   "sources": [
     {
       "title": "WhatsApp Patches 3 Security Flaws, Including Android Bug Suspected of Use in Scams",
       "url": "https://thehackernews.com/2026/11/whatsapp-patches-3-security-flaws.html",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-20/#reporting-b44c0a854e15",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-21/#reporting-b44c0a854e15",
       "cves": [
         "CVE-2026-23871"
       ],
@@ -134,7 +134,7 @@
     {
       "title": "Linux KVM Flaw CVE-2026-99312 Lets Guest VMs Access Host Memory on AMD Hosts",
       "url": "https://thehackernews.com/2026/11/new-linux-kvm-flaw-cve-2026-99312-lets.html",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-20/#reporting-c7b209f2aed8",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-21/#reporting-c7b209f2aed8",
       "cves": [
         "CVE-2026-99312"
       ],
@@ -158,7 +158,7 @@
     {
       "title": "Hackers Exploit Critical Cisco Expressway Flaw, Breach Four Devices and Reach Internal Network",
       "url": "https://thehackernews.com/2026/11/hackers-exploit-critical-cisco.html",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-20/#reporting-c99f552cbbef",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-21/#reporting-c99f552cbbef",
       "cves": [
         "CVE-2026-76466"
       ],
@@ -182,7 +182,7 @@
     {
       "title": "China-Linked Hackers Exploit Critical VMware vCenter Zero-Day to Gain Admin Access and Steal Data",
       "url": "https://thehackernews.com/2026/11/china-linked-hackers-exploit-critical.html",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-20/#reporting-209921156d98",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-21/#reporting-209921156d98",
       "cves": [
         "CVE-2026-123890"
       ],
@@ -206,7 +206,7 @@
     {
       "title": "phpAfterShell Explained: How Hackers Could Turn a PHP Session Flaw Into Code Execution",
       "url": "https://thehackernews.com/2026/11/phpaftershell-explained-how-hackers.html",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-20/#reporting-ea8cebf5d32b",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-21/#reporting-ea8cebf5d32b",
       "cves": [
         "CVE-2026-126714"
       ],
@@ -228,9 +228,31 @@
       "effective_date_evidence": null
     },
     {
+      "title": "China's 'Armory Castle' Lays Siege to VMware vCenter Zero-Day",
+      "url": "https://www.darkreading.com/cyberattacks-data-breaches/china-armory-castle-vmware-vcenter-zero-day",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-21/#reporting-66f04c9a5869",
+      "cves": [],
+      "snippet": "China's 'Armory Castle' Lays Siege to VMware vCenter Zero-Day During the last wave of major VMware vCenter security updates, a China-nexus threat group likely already had its next zero-day up its sleeve. During the last wave of major VMware vCenter security updates, a China-nexus threat group likely already had its next zero-day up its sleeve.",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "During the last wave of major VMware vCenter security updates, a China-nexus threat group likely already had its next zero-day up its sleeve.",
+          "text": "During the last wave of major VMware vCenter security updates, a China-nexus threat group likely already had its next zero-day up its sleeve."
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "During the last wave of major VMware vCenter security updates, a China-nexus threat group likely already had its next zero-day up its sleeve.",
+          "text": "During the last wave of major VMware vCenter security updates, a China-nexus threat group likely already had its next zero-day up its sleeve."
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
       "title": "Bell Canada says 'agentic' hacker stole enterprise customer data",
       "url": "https://www.bleepingcomputer.com/news/security/bell-canada-says-agentic-hacker-stole-enterprise-customer-data/",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-20/#reporting-a1277bddeebe",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-21/#reporting-a1277bddeebe",
       "cves": [],
       "snippet": "Bell Canada says 'agentic' hacker stole enterprise customer data Bell Canada has confirmed that an \"agentic\" threat actor breached its systems on November 17, 2026, and stole enterprise customer data, including information from a system used to order and provision telecommunications circuits… Bell Canada has confirmed that an \"agentic\" threat actor breached its systems on November 17, 2026, and stole enterprise customer data, including information from a system used to order and provision telecommunications circuits…",
       "article_evidence": [
@@ -252,7 +274,7 @@
     {
       "title": "In Security, Words Matter as Much as Tools, Maybe More",
       "url": "https://www.darkreading.com/cybersecurity-operations/security-words-matter",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-20/#reporting-fdc780d56a7e",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-21/#reporting-fdc780d56a7e",
       "cves": [],
       "snippet": "In Security, Words Matter as Much as Tools, Maybe More From talking cloud security to using AI, cyber leaders are finding that clear, disciplined communication is now a front-line defense capability across the enterprise. From talking cloud security to using AI, cyber leaders are finding that clear, disciplined communication is now a front-line defense capability across the enterprise.",
       "article_evidence": [
@@ -274,7 +296,7 @@
     {
       "title": "Hackers use autonomous AI tool Cairn to find zero-day, take over server",
       "url": "https://www.bleepingcomputer.com/news/security/hackers-use-autonomous-ai-tool-cairn-to-find-zero-day-take-over-server/",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-20/#reporting-209648e572bd",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-21/#reporting-209648e572bd",
       "cves": [],
       "snippet": "Hackers use autonomous AI tool Cairn to find zero-day, take over server Threat actors used the open-source AI penetration-testing framework Cairn to find a previously unknown vulnerability in a medical imaging application… Threat actors used the open-source AI penetration-testing framework Cairn to find a previously unknown vulnerability in a medical imaging application…",
       "article_evidence": [
@@ -296,7 +318,7 @@
     {
       "title": "What We Missed: Nvidia CEO Scandal Rocks AI Industry",
       "url": "https://www.darkreading.com/cyber-risk/what-we-missed-nvidia-ceo-scandal-rocks-ai-industry",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-20/#reporting-6932b88861c6",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-21/#reporting-6932b88861c6",
       "cves": [],
       "snippet": "What We Missed: Nvidia CEO Scandal Rocks AI Industry In this video, Dark Reading editors discuss some of the news they didn't get a chance to cover, from Jensen Huang's resignation from Nvidia to Microsoft's recent cloud outage. In this video, Dark Reading editors discuss some of the news they didn't get a chance to cover, from Jensen Huang's resignation from Nvidia to Microsoft's recent cloud outage.",
       "article_evidence": [
@@ -318,7 +340,7 @@
     {
       "title": "Bazuka Android Malware Uses Fake Screen Overlays to Hide Credential Theft and Device Control",
       "url": "https://thehackernews.com/2026/11/bazuka-android-malware-uses-fake-screen.html",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-20/#reporting-0b4042589720",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-21/#reporting-0b4042589720",
       "cves": [],
       "snippet": "Bazuka Android Malware Uses Fake Screen Overlays to Hide Credential Theft and Device Control Cybersecurity researchers have disclosed details of a previously unknown Android malware framework called Bazuka that offers large language model (LLM) integration for victim management and control at scale. Dutch mobile security company ThreatFabric said it discovered the threat in late October 2026 during an investigation into an NFC-relay banking Trojan. \"Bazuka is a full malware framework… Cybersecurity researchers have disclosed details of a previously unknown Android malware framework called Bazuka that offers large language model (LLM) integration for victim management and control at scale. Du",
       "article_evidence": [
@@ -340,7 +362,7 @@
     {
       "title": "Vendor data breach exposes Chase, Visa, Mastercard customer info",
       "url": "https://www.bleepingcomputer.com/news/security/vendor-data-breach-exposes-chase-visa-mastercard-customer-info/",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-20/#reporting-c3a9fb72b6dc",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-21/#reporting-c3a9fb72b6dc",
       "cves": [],
       "snippet": "Vendor data breach exposes Chase, Visa, Mastercard customer info J.P. Morgan Chase warned it suffered a data breach after a cyberattack at a third-party service provider exposed customers' personal information and marketing data… J.P. Morgan Chase warned it suffered a data breach after a cyberattack at a third-party service provider exposed customers' personal information and marketing data…",
       "article_evidence": [
@@ -355,28 +377,6 @@
           "origin": "content",
           "raw_text": "J.P. Morgan Chase warned it suffered a data breach after a cyberattack at a third-party service provider exposed customers' personal information and marketing data…",
           "text": "J.P. Morgan Chase warned it suffered a data breach after a cyberattack at a third-party service provider exposed customers' personal information and marketing data…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "Still tracking company passwords in spreadsheets? You’re flying blind.",
-      "url": "https://www.bleepingcomputer.com/news/security/still-tracking-company-passwords-in-spreadsheets-youre-flying-blind/",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-20/#reporting-8991c2c279cd",
-      "cves": [],
-      "snippet": "Still tracking company passwords in spreadsheets? You’re flying blind. Tracking company passwords in spreadsheets can leave IT administrators unaware of weak, reused, or compromised credentials stored and shared outside approved systems. NordPass explains how centralized password management can improve credential visibility, identify security risks, and simplify secure password sharing… Tracking company passwords in spreadsheets can leave IT administrators unaware of weak, reused, or compromised credentials stored and shared outside approved systems. NordPass explains how centralized password management can improve credential visibility, identify security risks, and simplify secure password ",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "Tracking company passwords in spreadsheets can leave IT administrators unaware of weak, reused, or compromised credentials stored and shared outside approved systems. NordPass explains how centralized password management can improve credential visibility, identify security risks, and simplify secure password sharing…",
-          "text": "Tracking company passwords in spreadsheets can leave IT administrators unaware of weak, reused, or compromised credentials stored and shared outside approved systems. NordPass explains how centralized password management can improve credential visibility, identify security risks, and simplify secure password sharing…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "Tracking company passwords in spreadsheets can leave IT administrators unaware of weak, reused, or compromised credentials stored and shared outside approved systems. NordPass explains how centralized password management can improve credential visibility, identify security risks, and simplify secure password sharing…",
-          "text": "Tracking company passwords in spreadsheets can leave IT administrators unaware of weak, reused, or compromised credentials stored and shared outside approved systems. NordPass explains how centralized password management can improve credential visibility, identify security risks, and simplify secure password sharing…"
         }
       ],
       "effective_date_evidence": null
