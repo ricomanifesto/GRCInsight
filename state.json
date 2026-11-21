@@ -4050,6 +4050,13 @@
       "at": "2026-11-21T03:17:15.039Z",
       "run_id": "44860307347",
       "stage": "invoked"
+    },
+    {
+      "admission_key": "digest:920a3185e93ccc50cbd5ffde44bbf7cd9e6976a7",
+      "at": "2026-11-21T03:17:17.403Z",
+      "handle": "report_20261121_031716_820",
+      "run_id": "44860307347",
+      "stage": "invoked"
     }
   ],
   "schema_version": 1,
