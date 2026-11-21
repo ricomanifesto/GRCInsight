@@ -7,72 +7,72 @@
         "control_id": "vulnerability_management",
         "evidence_excerpt": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Friday added four flaws impacting Apache Roller, Cisco Expressway, SAP NetWeaver, and Broadcom VMware vCenter to its Known Exploited Vulnerabilities (KEV), citing evidence of active exploitation.",
         "evidence_origin": "summary",
-        "focus": "Broadcom VMware vCenter",
-        "headline": "Broadcom VMware vCenter appears in CISA Known Exploited Vulnerabilities catalog",
+        "focus": "Apache Roller, Cisco Expressway, SAP NetWeaver, and Broadcom VMware vCenter",
+        "headline": "Apache Roller, Cisco Expressway, SAP NetWeaver, and Broadcom VMware vCenter added to KEV with active exploitation",
         "priority": "high",
-        "significance": "Active exploitation of this vulnerability demands urgent asset identification and remediation tracking. The vulnerability owner should confirm affected asset inventory and remediation status.",
+        "significance": "Active exploitation of critical infrastructure vulnerabilities requires immediate asset identification and remediation verification. The vulnerability owner should confirm affected asset inventory, installed versions, and remediation status across the environment.",
         "source_ids": [
-          1
-        ]
-      },
-      {
-        "control_id": "incident_response",
-        "evidence_excerpt": "Threat actors have been observed exploiting a recently disclosed critical security flaw in Cisco Expressway to breach a Russian organization shortly after the public release of a proof-of-concept (PoC) exploit.",
-        "evidence_origin": "summary",
-        "focus": "Cisco Expressway",
-        "headline": "Cisco Expressway exploited by threat actors to breach organization network",
-        "priority": "high",
-        "significance": "Observed exploitation of a critical flaw indicates imminent risk to exposed systems. The incident response lead should review containment procedures and evidence retention for potential compromise.",
-        "source_ids": [
-          4
-        ]
-      },
-      {
-        "control_id": "data_protection",
-        "evidence_excerpt": "The suspected China-nexus cyber espionage group known as Armory Castle (formerly UNC5221) has been attributed to the zero-day exploitation of a critical security flaw in VMware vCenter Server in early September 2026.",
-        "evidence_origin": "summary",
-        "focus": "VMware vCenter Server",
-        "headline": "VMware vCenter Server targeted by Armory Castle for unauthorized access",
-        "priority": "high",
-        "significance": "Zero-day exploitation by a known espionage group threatens administrative control and data confidentiality. The data protection owner should assess sensitive data exposure and audit access logs.",
-        "source_ids": [
-          5
+          2
         ]
       },
       {
         "control_id": "vulnerability_management",
-        "evidence_excerpt": "A flaw in KVM, the hypervisor built into the Linux kernel, let researchers read about 127 GB of a cloud server's memory from inside a virtual machine of their own on DigitalOcean.",
+        "evidence_excerpt": "The suspected China-nexus cyber espionage group known as Armory Castle (formerly UNC5221) has been attributed to the zero-day exploitation of a critical security flaw in VMware vCenter Server in early September 2026. The vulnerability, tracked as CVE-2026-123890 (CVSS score: 9.8), is a case of authentication bypass in the VMware Directory Service that could be exploited to gain unauthorized…",
         "evidence_origin": "summary",
-        "focus": "KVM hypervisor",
-        "headline": "KVM hypervisor flaw allows guest VM memory access on AMD hosts",
-        "priority": "medium",
-        "significance": "Cross-tenant memory exposure in shared cloud environments undermines isolation guarantees. The vulnerability owner should identify affected AMD hosts with nested virtualization and verify kernel updates.",
+        "focus": "VMware vCenter Server",
+        "headline": "VMware vCenter Server exploited via authentication bypass by Armory Castle",
+        "priority": "high",
+        "significance": "Zero-day exploitation of a widely deployed virtualization platform undermines assumptions about authentication controls in virtualized infrastructure. The vulnerability owner should verify patch deployment across all vCenter instances and review authentication bypass detection capabilities.",
         "source_ids": [
-          3
+          6
         ]
       },
       {
-        "control_id": "monitoring",
+        "control_id": "data_protection",
         "evidence_excerpt": "Bell Canada has confirmed that an \"agentic\" threat actor breached its systems on November 17, 2026, and stole enterprise customer data, including information from a system used to order and provision telecommunications circuits…",
         "evidence_origin": "summary",
-        "focus": "Bell Canada enterprise customer data",
-        "headline": "Bell Canada enterprise customer data stolen by agentic threat actor",
+        "focus": "enterprise customer data",
+        "headline": "enterprise customer data stolen by agentic threat actor in Bell Canada breach",
         "priority": "high",
-        "significance": "Confirmed breach of telecommunications provisioning data indicates potential operational and regulatory impact. The monitoring owner should verify detection coverage for agentic actor techniques and review alert routing.",
+        "significance": "Confirmed data theft from a major telecommunications provider demonstrates that agentic threat actors can bypass perimeter controls and access provisioning systems. The data owner should confirm the scope of exposed customer data, access restrictions on provisioning systems, and audit log completeness for the breach period.",
         "source_ids": [
-          9
+          12
         ]
       },
       {
         "control_id": "third_party_risk",
         "evidence_excerpt": "The chief technology officer and co-founder of ransomwarehelp.com, a six year old Florida business that claimed to use \"advanced cryptographic tools\" to restore data locked by ransomware, has been charged with wire fraud after an FBI sting operation found the company was simply paying the attackers for a decryption key and charging victims a markup for work that was never performed.",
         "evidence_origin": "summary",
-        "focus": "RansomwareHelp service",
-        "headline": "RansomwareHelp service exposed as fraudulent decryption intermediary",
+        "focus": "ransomwarehelp.com",
+        "headline": "ransomwarehelp.com CTO indicted for wire fraud in fraudulent recovery scheme",
         "priority": "medium",
-        "significance": "Fraudulent ransomware recovery services undermine incident response trust and increase financial loss. The supplier risk owner should review approved recovery vendors and verify assurance evidence.",
+        "significance": "Enforcement action reveals a purported ransomware recovery service was fraudulently reselling attacker decryption keys, undermining trust in third-party incident response providers. The supplier risk owner should verify the legitimacy and operational methods of any engaged ransomware recovery vendors and review contractual assurance requirements.",
         "source_ids": [
-          7
+          10
+        ]
+      },
+      {
+        "control_id": "data_protection",
+        "evidence_excerpt": "A flaw in KVM, the hypervisor built into the Linux kernel, let researchers read about 127 GB of a cloud server's memory from inside a virtual machine of their own on DigitalOcean. On a shared server, that memory can include other customers' virtual machines. The flaw, tracked as CVE-2026-99312, affects only hosts with AMD processors and nested virtualization enabled. Fixed kernels shipped…",
+        "evidence_origin": "summary",
+        "focus": "KVM hypervisor",
+        "headline": "KVM hypervisor flaw allows cross-tenant memory access on AMD hosts",
+        "priority": "high",
+        "significance": "Hypervisor vulnerability enables cross-tenant memory disclosure in shared cloud environments, directly threatening data isolation guarantees. The data owner should confirm whether any organizational workloads run on affected AMD hosts with nested virtualization and verify cloud provider patch deployment timelines.",
+        "source_ids": [
+          4
+        ]
+      },
+      {
+        "control_id": "access_management",
+        "evidence_excerpt": "Threat actors have been observed exploiting a recently disclosed critical security flaw in Cisco Expressway to breach a Russian organization shortly after the public release of a proof-of-concept (PoC) exploit. The activity involves the exploitation of CVE-2026-76466 (CVSS score: 9.8), a vulnerability that could allow an unauthenticated, remote attacker with network access to a Cisco Expressway…",
+        "evidence_origin": "summary",
+        "focus": "Cisco Expressway",
+        "headline": "Cisco Expressway exploited for unauthenticated remote breach after PoC release",
+        "priority": "high",
+        "significance": "Rapid exploitation of a critical collaboration gateway following PoC publication demonstrates the urgency of patching internet-facing communication infrastructure. The access management owner should confirm that all Cisco Expressway instances are patched, network access is restricted, and authentication logs are reviewed for anomalous activity.",
+        "source_ids": [
+          5
         ]
       }
     ],
@@ -80,33 +80,57 @@
       "paragraphs": [
         {
           "source_ids": [
-            1,
-            4,
+            2,
+            6,
             5
           ],
-          "text": "CISA added four actively exploited flaws to its Known Exploited Vulnerabilities catalog, including critical vulnerabilities in VMware vCenter and Cisco Expressway. Threat actors are exploiting the Cisco Expressway flaw to breach networks, while a China-linked group leveraged a VMware vCenter zero-day for administrative access and data theft. These developments require immediate asset identification, remediation verification, and incident readiness across affected platforms. Vulnerability and incident response owners should confirm affected asset inventories, containment procedures, and evidence retention for potential compromise."
+          "text": "Critical infrastructure vulnerabilities are under active exploitation across multiple vendors, with CISA adding four flaws to its Known Exploited Vulnerabilities catalog citing evidence of active exploitation, a China-nexus group exploiting a VMware vCenter zero-day authentication bypass, and threat actors breaching organizations via a Cisco Expressway flaw shortly after proof-of-concept release. These developments indicate that internet-facing virtualization, collaboration, and application platforms are being targeted at scale, requiring immediate vulnerability management action to identify affected assets, verify patch deployment, and review authentication bypass detection capabilities."
         },
         {
           "source_ids": [
-            3,
-            9,
-            7
+            12,
+            10,
+            4
           ],
-          "text": "A Linux KVM hypervisor flaw allows cross-tenant memory access on AMD hosts with nested virtualization, challenging cloud isolation assumptions. Bell Canada confirmed a breach by an agentic threat actor that stole enterprise customer data from telecommunications provisioning systems. Separately, a ransomware recovery service was indicted for fraud, revealing that victims paid for decryption keys the provider simply purchased from attackers. Monitoring, data protection, and supplier risk owners should verify detection coverage for novel actor techniques, assess sensitive data exposure, and review approved recovery vendor assurances."
+          "text": "A confirmed breach at Bell Canada by an agentic threat actor stole enterprise customer data from provisioning systems, while a ransomware recovery service was indicted for fraudulently reselling attacker decryption keys, and a Linux KVM hypervisor flaw enables cross-tenant memory access on shared AMD hosts. These events reveal evolving threat actor tactics that bypass traditional perimeter controls, supply chain risks in incident response services, and cloud isolation failures that directly threaten data protection assurances. Control owners should confirm data exposure scope, third-party recovery vendor legitimacy, and cloud workload placement on affected hypervisor configurations."
         }
       ]
     },
     "industry_impacts": [],
     "regulatory_changes": []
   },
-  "generated_at": "2026-11-21T09:18:55.48885Z",
-  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/5cb31a4ae917ba8ea0ef2c3ea5dcc7a91a0e22aa/site/feed.xml",
+  "generated_at": "2026-11-21T12:21:13.225634Z",
+  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/7689926308d23c99b24f4057fad13f832921060a/site/feed.xml",
   "feed_home_url": "https://sentrydigest.ricomanifesto.com/",
   "digest_issue_date": "2026-11-21",
   "digest_issue_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-21/",
   "requested_model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
   "resolved_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
   "sources": [
+    {
+      "title": "GnuPG Warns Critical GPGME Flaw Could Expose App Data via Malicious OpenPGP Keys",
+      "url": "https://thehackernews.com/2026/11/gnupg-warns-critical-gpgme-flaw-could.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-21/#reporting-3b426a1ae487",
+      "cves": [
+        "CVE-2026-129975"
+      ],
+      "snippet": "GnuPG Warns Critical GPGME Flaw Could Expose App Data via Malicious OpenPGP Keys A malicious OpenPGP key with an unusually long user ID can trigger a critical memory bug in GPGME, the standard library that programs use to work with GnuPG. The GnuPG project warned yesterday that the flaw could be used to steal data from affected applications and has released fixed versions. The bug, tracked as CVE-2026-129975, affects all software that uses GPGME before version 2.3.0… A malicious OpenPGP key with an unusually long user ID can trigger a critical memory bug in GPGME, the standard library that programs use to work with GnuPG. The GnuPG project warned yesterday that the flaw could be used to stea",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "A malicious OpenPGP key with an unusually long user ID can trigger a critical memory bug in GPGME, the standard library that programs use to work with GnuPG. The GnuPG project warned yesterday that the flaw could be used to steal data from affected applications and has released fixed versions. The bug, tracked as CVE-2026-129975, affects all software that uses GPGME before version 2.3.0…",
+          "text": "A malicious OpenPGP key with an unusually long user ID can trigger a critical memory bug in GPGME, the standard library that programs use to work with GnuPG. The GnuPG project warned yesterday that the flaw could be used to steal data from affected applications and has released fixed versions. The bug, tracked as CVE-2026-129975, affects all software that uses GPGME before version 2.3.0…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "A malicious OpenPGP key with an unusually long user ID can trigger a critical memory bug in GPGME, the standard library that programs use to work with GnuPG. The GnuPG project warned yesterday that the flaw could be used to steal data from affected applications and has released fixed versions. The bug, tracked as CVE-2026-129975, affects all software that uses GPGME before version 2.3.0…",
+          "text": "A malicious OpenPGP key with an unusually long user ID can trigger a critical memory bug in GPGME, the standard library that programs use to work with GnuPG. The GnuPG project warned yesterday that the flaw could be used to steal data from affected applications and has released fixed versions. The bug, tracked as CVE-2026-129975, affects all software that uses GPGME before version 2.3.0…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
     {
       "title": "Hackers Exploit Critical VMware, Cisco, and Apache Flaws as Espionage Attacks Emerge",
       "url": "https://thehackernews.com/2026/11/hackers-exploit-critical-vmware-cisco.html",
@@ -228,6 +252,50 @@
       "effective_date_evidence": null
     },
     {
+      "title": "A Single Malicious Webpage Let Researchers Hijack Meta Muse and Access Private Chats",
+      "url": "https://thehackernews.com/2026/11/a-single-malicious-webpage-let.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-21/#reporting-059e30cfca73",
+      "cves": [],
+      "snippet": "A Single Malicious Webpage Let Researchers Hijack Meta Muse and Access Private Chats A malicious webpage could extract a Meta Muse user's private conversations and stored memories from the assistant without triggering any approval prompt, researchers have shown. The same attack could be extended to reach the credentials Muse stores for the user's connected accounts. The work was a laboratory demonstration, not an attack on real users, and it stayed inside the individual user's… A malicious webpage could extract a Meta Muse user's private conversations and stored memories from the assistant without triggering any approval prompt, researchers have shown. The same attack could be extended to re",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "A malicious webpage could extract a Meta Muse user's private conversations and stored memories from the assistant without triggering any approval prompt, researchers have shown. The same attack could be extended to reach the credentials Muse stores for the user's connected accounts. The work was a laboratory demonstration, not an attack on real users, and it stayed inside the individual user's…",
+          "text": "A malicious webpage could extract a Meta Muse user's private conversations and stored memories from the assistant without triggering any approval prompt, researchers have shown. The same attack could be extended to reach the credentials Muse stores for the user's connected accounts. The work was a laboratory demonstration, not an attack on real users, and it stayed inside the individual user's…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "A malicious webpage could extract a Meta Muse user's private conversations and stored memories from the assistant without triggering any approval prompt, researchers have shown. The same attack could be extended to reach the credentials Muse stores for the user's connected accounts. The work was a laboratory demonstration, not an attack on real users, and it stayed inside the individual user's…",
+          "text": "A malicious webpage could extract a Meta Muse user's private conversations and stored memories from the assistant without triggering any approval prompt, researchers have shown. The same attack could be extended to reach the credentials Muse stores for the user's connected accounts. The work was a laboratory demonstration, not an attack on real users, and it stayed inside the individual user's…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Attackers' AI Agents Found a Zero-Day in Medical-Imaging Software and Gained Root Access",
+      "url": "https://thehackernews.com/2026/11/attackers-ai-agents-found-zero-day-in.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-21/#reporting-31de93106fde",
+      "cves": [],
+      "snippet": "Attackers' AI Agents Found a Zero-Day in Medical-Imaging Software and Gained Root Access Suspected China-linked hackers used autonomous AI agents to find a previously unknown flaw in MONAI Label, an open-source medical imaging server, and gain root access to a university server, Amazon Threat Intelligence said this week. The flaw allows an attacker with no account to write files outside the server's storage folder, and it affects MONAI Label 0.8.5 and earlier in the default setup… Suspected China-linked hackers used autonomous AI agents to find a previously unknown flaw in MONAI Label, an open-source medical imaging server, and gain root access to a university server, Amazon Threat Intellige",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Suspected China-linked hackers used autonomous AI agents to find a previously unknown flaw in MONAI Label, an open-source medical imaging server, and gain root access to a university server, Amazon Threat Intelligence said this week. The flaw allows an attacker with no account to write files outside the server's storage folder, and it affects MONAI Label 0.8.5 and earlier in the default setup…",
+          "text": "Suspected China-linked hackers used autonomous AI agents to find a previously unknown flaw in MONAI Label, an open-source medical imaging server, and gain root access to a university server, Amazon Threat Intelligence said this week. The flaw allows an attacker with no account to write files outside the server's storage folder, and it affects MONAI Label 0.8.5 and earlier in the default setup…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Suspected China-linked hackers used autonomous AI agents to find a previously unknown flaw in MONAI Label, an open-source medical imaging server, and gain root access to a university server, Amazon Threat Intelligence said this week. The flaw allows an attacker with no account to write files outside the server's storage folder, and it affects MONAI Label 0.8.5 and earlier in the default setup…",
+          "text": "Suspected China-linked hackers used autonomous AI agents to find a previously unknown flaw in MONAI Label, an open-source medical imaging server, and gain root access to a university server, Amazon Threat Intelligence said this week. The flaw allows an attacker with no account to write files outside the server's storage folder, and it affects MONAI Label 0.8.5 and earlier in the default setup…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
       "title": "Signal Blocks AI Agents From Reading Private Chats via Screenshots on Android and iOS",
       "url": "https://thehackernews.com/2026/11/signal-blocks-ai-agents-from-reading.html",
       "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-21/#reporting-c5410e0ea07b",
@@ -311,72 +379,6 @@
           "origin": "content",
           "raw_text": "Bell Canada has confirmed that an \"agentic\" threat actor breached its systems on November 17, 2026, and stole enterprise customer data, including information from a system used to order and provision telecommunications circuits…",
           "text": "Bell Canada has confirmed that an \"agentic\" threat actor breached its systems on November 17, 2026, and stole enterprise customer data, including information from a system used to order and provision telecommunications circuits…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "In Security, Words Matter as Much as Tools, Maybe More",
-      "url": "https://www.darkreading.com/cybersecurity-operations/security-words-matter",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-21/#reporting-fdc780d56a7e",
-      "cves": [],
-      "snippet": "In Security, Words Matter as Much as Tools, Maybe More From talking cloud security to using AI, cyber leaders are finding that clear, disciplined communication is now a front-line defense capability across the enterprise. From talking cloud security to using AI, cyber leaders are finding that clear, disciplined communication is now a front-line defense capability across the enterprise.",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "From talking cloud security to using AI, cyber leaders are finding that clear, disciplined communication is now a front-line defense capability across the enterprise.",
-          "text": "From talking cloud security to using AI, cyber leaders are finding that clear, disciplined communication is now a front-line defense capability across the enterprise."
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "From talking cloud security to using AI, cyber leaders are finding that clear, disciplined communication is now a front-line defense capability across the enterprise.",
-          "text": "From talking cloud security to using AI, cyber leaders are finding that clear, disciplined communication is now a front-line defense capability across the enterprise."
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "Hackers use autonomous AI tool Cairn to find zero-day, take over server",
-      "url": "https://www.bleepingcomputer.com/news/security/hackers-use-autonomous-ai-tool-cairn-to-find-zero-day-take-over-server/",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-21/#reporting-209648e572bd",
-      "cves": [],
-      "snippet": "Hackers use autonomous AI tool Cairn to find zero-day, take over server Threat actors used the open-source AI penetration-testing framework Cairn to find a previously unknown vulnerability in a medical imaging application… Threat actors used the open-source AI penetration-testing framework Cairn to find a previously unknown vulnerability in a medical imaging application…",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "Threat actors used the open-source AI penetration-testing framework Cairn to find a previously unknown vulnerability in a medical imaging application…",
-          "text": "Threat actors used the open-source AI penetration-testing framework Cairn to find a previously unknown vulnerability in a medical imaging application…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "Threat actors used the open-source AI penetration-testing framework Cairn to find a previously unknown vulnerability in a medical imaging application…",
-          "text": "Threat actors used the open-source AI penetration-testing framework Cairn to find a previously unknown vulnerability in a medical imaging application…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "What We Missed: Nvidia CEO Scandal Rocks AI Industry",
-      "url": "https://www.darkreading.com/cyber-risk/what-we-missed-nvidia-ceo-scandal-rocks-ai-industry",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-21/#reporting-6932b88861c6",
-      "cves": [],
-      "snippet": "What We Missed: Nvidia CEO Scandal Rocks AI Industry In this video, Dark Reading editors discuss some of the news they didn't get a chance to cover, from Jensen Huang's resignation from Nvidia to Microsoft's recent cloud outage. In this video, Dark Reading editors discuss some of the news they didn't get a chance to cover, from Jensen Huang's resignation from Nvidia to Microsoft's recent cloud outage.",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "In this video, Dark Reading editors discuss some of the news they didn't get a chance to cover, from Jensen Huang's resignation from Nvidia to Microsoft's recent cloud outage.",
-          "text": "In this video, Dark Reading editors discuss some of the news they didn't get a chance to cover, from Jensen Huang's resignation from Nvidia to Microsoft's recent cloud outage."
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "In this video, Dark Reading editors discuss some of the news they didn't get a chance to cover, from Jensen Huang's resignation from Nvidia to Microsoft's recent cloud outage.",
-          "text": "In this video, Dark Reading editors discuss some of the news they didn't get a chance to cover, from Jensen Huang's resignation from Nvidia to Microsoft's recent cloud outage."
         }
       ],
       "effective_date_evidence": null
