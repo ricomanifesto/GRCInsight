@@ -16271,6 +16271,17 @@
       "release_key": "7599395613048fba7d0ee436a9a58f92dafa58fff927db2bc00c10c1e5d2d088",
       "release_ref": "66e33fe917c2a317e728304866b97873260e2887",
       "stage": "serving"
+    },
+    {
+      "at": "2026-11-21T13:07:41.180Z",
+      "kind": "release",
+      "payload_digest": "c34b6b61ee4d872c0c449d767eef2c09ca4edc8990b3c912c0578dabf37a37d0",
+      "proof": "on",
+      "release_key": "de9997bc105c8c5546469cd9848c544f9ba0e8597bb9bd95742c86195fcd939f",
+      "release_ref": "358b655ccf97e4e3f176308803625a965b69a505",
+      "source_revision": "af22f6ea957b28b6921549f835aa00b1ccf7b65c",
+      "stage": "released",
+      "tree_digest": "eb16cbfab3219d10c250bf07a5fc7f0a2c7b6ddbd866010936f0264de29a9989"
     }
   ],
   "schema_version": 1,
