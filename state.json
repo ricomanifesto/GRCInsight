@@ -4421,6 +4421,16 @@
       "handle": "report_20261122_211342_544",
       "run_id": "45070877534",
       "stage": "invoked"
+    },
+    {
+      "admission_key": "digest:2f5f593e7d5c7bb794212734ea8f96c9a28570ff",
+      "at": "2026-11-22T21:16:43.113Z",
+      "binding": "feed-bytes",
+      "digest_content_digest": "51878016795153f335965268ecfc10f258e3c2f6c664477ea5a41ad68812d86c",
+      "outcome": "published",
+      "release_key": "fe338dd1596396439ebf2c04cb79a2046e7980986c20f5252ae6a53b991038a4",
+      "run_id": "45070877534",
+      "stage": "completed"
     }
   ],
   "schema_version": 1,
