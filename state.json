@@ -4583,6 +4583,15 @@
       "release_key": "1415ddf0cf9fb8244e7b89984a872cfa5d7af793977a7bcf8c231bb561e845b7",
       "run_id": "45173539291",
       "stage": "completed"
+    },
+    {
+      "admission_key": "run:45180496957",
+      "at": "2026-11-23T13:05:54.155Z",
+      "binding": "none",
+      "event": "schedule",
+      "run_attempt": "1",
+      "run_id": "45180496957",
+      "stage": "admitted"
     }
   ],
   "schema_version": 1,
