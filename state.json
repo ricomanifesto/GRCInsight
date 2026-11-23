@@ -18105,6 +18105,17 @@
       "release_key": "27158e4eaab29654d5af72988e293c286510403fdb0f91161cde699a3c2e781e",
       "release_ref": "9b6ffd9c539e1116eb0a06bc79286cc7f321d4c4",
       "stage": "serving"
+    },
+    {
+      "at": "2026-11-23T18:22:27.959Z",
+      "kind": "release",
+      "payload_digest": "0636d13ad6d6c5e658826cfc056ead2cb49972cfeb88b1016c20eb2c0428f38e",
+      "proof": "on",
+      "release_key": "2fefafe2c87007a1ebfdd45ff17c3aa1e4e0784308b72c0d2286d6e29f1d3228",
+      "release_ref": "ec674bccca93534d3aac4462668f84566deaa2af",
+      "source_revision": "5c5afbe4086d10ffd53894e8fe8dc5b8e913001c",
+      "stage": "released",
+      "tree_digest": "b9956cee84d8cd2924febbf5c14840112ea4bfb01fc250ec3e2a0c9225db6fd9"
     }
   ],
   "schema_version": 1,
