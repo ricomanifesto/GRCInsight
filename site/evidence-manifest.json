@@ -5,74 +5,38 @@
     "control_implications": [
       {
         "control_id": "vulnerability_management",
-        "evidence_excerpt": "A malicious OpenPGP key with an unusually long user ID can trigger a critical memory bug in GPGME, the standard library that programs use to work with GnuPG. The GnuPG project warned yesterday that the flaw could be used to steal data from affected applications and has released fixed versions.",
+        "evidence_excerpt": "Cybersecurity researchers have urged users to discontinue using a legacy ASP.NET anti-CSRF library named Idunno.AntiCsrf (\"Idunno.AntiCsrf.dll\") following the discovery of a critical vulnerability that has been exploited in the wild. The vulnerability, tracked as CVE-2026-131914, carries a CVSS score of 9.3 out of 10.0. The issue affects versions 0.9.1.0 and 0.9.1 Beta",
         "evidence_origin": "summary",
-        "focus": "GPGME, the standard library",
-        "headline": "GPGME, the standard library exposes application data via malicious OpenPGP key",
-        "priority": "medium",
-        "significance": "The memory bug in GPGME could allow data theft from applications using the library, weakening assurance of cryptographic operations. The vulnerability management owner should confirm that all dependent applications have been updated to GPGME version 2.3.0 or later.",
+        "focus": "legacy ASP.NET anti-CSRF library",
+        "headline": "legacy ASP.NET anti-CSRF library exposes unauthenticated RCE",
+        "priority": "high",
+        "significance": "A widely deployed legacy component is actively exploited for remote code execution without authentication. Vulnerability and asset owners must identify all applications using Idunno.AntiCsrf versions 0.9.1.0 or 0.9.1 Beta and verify remediation or compensating controls.",
         "source_ids": [
           1
         ]
       },
       {
-        "control_id": "change_management",
-        "evidence_excerpt": "Microsoft confirmed printing issues on systems running Forcepoint DLP software after installing the KB5132043 November 2026 Windows 11 hotpatch…",
+        "control_id": "vulnerability_management",
+        "evidence_excerpt": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Friday added four flaws impacting Apache Roller, Cisco Expressway, SAP NetWeaver, and Broadcom VMware vCenter to its Known Exploited Vulnerabilities (KEV), citing evidence of active exploitation. The vulnerabilities are listed below - CVE-2026-129448 (CVSS score: 9.8) - A deserialization of untrusted data vulnerability in",
         "evidence_origin": "summary",
-        "focus": "KB5132043 November 2026 Windows 11 hotpatch",
-        "headline": "KB5132043 November 2026 Windows 11 hotpatch weakens printing functionality for Forcepoint DLP users",
-        "priority": "medium",
-        "significance": "The hotpatch introduces a regression that disrupts data loss prevention printing controls, weakening assurance of output security. The change management owner should verify that post-change validation includes Forcepoint DLP compatibility testing and that rollback procedures are documented.",
-        "source_ids": [
-          4
-        ]
-      },
-      {
-        "control_id": "monitoring",
-        "evidence_excerpt": "The Indian Computer Emergency Response Team (CERT-In) has warned that threat actors are carrying out artificial intelligence (AI)-assisted cyber attacks targeting information and communication technology (ICT) assets in the country. This unsanctioned activity has resulted in unauthorized financial transactions at banking and financial services entities, as well as technology service providers…",
-        "evidence_origin": "summary",
-        "focus": "AI-assisted cyber attacks",
-        "headline": "AI-assisted cyber attacks expose financial transactions at banking entities",
+        "focus": "CISA Known Exploited Vulnerabilities catalog additions",
+        "headline": "CISA Known Exploited Vulnerabilities catalog adds four actively exploited flaws",
         "priority": "high",
-        "significance": "AI-assisted attacks bypassing traditional detection have led to unauthorized payments, weakening monitoring assurance for financial transaction integrity. The monitoring owner should confirm that detection rules cover AI-generated attack patterns and that alert routing includes financial fraud teams.",
+        "significance": "Federal binding operational directives require remediation of KEV-listed vulnerabilities. Vulnerability and asset owners must confirm coverage for Apache Roller, Cisco Expressway, SAP NetWeaver, and VMware vCenter and validate remediation status against the updated catalog.",
         "source_ids": [
-          5
+          3
         ]
       },
       {
         "control_id": "third_party_risk",
-        "evidence_excerpt": "GL.iNet has confirmed that hackers exploited a vulnerability in its cloud remote management services to install custom malware on customers' routers and KVM devices, with some affected users reporting backdoors and reverse shells giving remote access to infected devices…",
+        "evidence_excerpt": "Hackers exploited a vulnerability in GL.iNet's GoodCloud remote management service to install malware on some customer routers and KVM devices, the maker of travel routers and remote-access KVM hardware said in a security notice updated today. The company identified and fixed the flaw on Friday and blocked the access the attacker used, so devices can no longer be infected through this route.",
         "evidence_origin": "summary",
-        "focus": "cloud remote management services",
-        "headline": "cloud remote management services exposes routers and KVM devices to malware installation",
-        "priority": "medium",
-        "significance": "The exploited cloud management vulnerability allows unauthorized device control, weakening third-party assurance for managed network equipment. The third-party risk owner should review GL.iNet's remediation evidence and confirm that affected devices have been patched or isolated.",
+        "focus": "GL.iNet GoodCloud remote management service",
+        "headline": "GL.iNet GoodCloud remote management service compromise installs malware",
+        "priority": "high",
+        "significance": "A supplier-hosted management plane was abused to deploy malware on customer devices. Supplier risk owners must review GL.iNet access scope, confirm the vendor's fix eliminates the attack path, and obtain evidence of remediation assurance for affected routers and KVM devices.",
         "source_ids": [
           7
-        ]
-      },
-      {
-        "control_id": "data_protection",
-        "evidence_excerpt": "E-commerce platform Cleverbridge is warning that hackers breached its systems and stole customers' payment card information, including credit card numbers and CVV security codes…",
-        "evidence_origin": "summary",
-        "focus": "E-commerce platform Cleverbridge",
-        "headline": "E-commerce platform Cleverbridge exposes payment card data via system breach",
-        "priority": "high",
-        "significance": "The breach of payment card data including CVV codes weakens data protection assurance for e-commerce transactions. The data protection owner should confirm that Cleverbridge has provided breach notification details and that affected card data has been reported to relevant payment networks.",
-        "source_ids": [
-          8
-        ]
-      },
-      {
-        "control_id": "access_management",
-        "evidence_excerpt": "Rackspace warned customers that hackers breached its Rackspace Spot cloud platform using compromised credentials, allowing them to deploy unauthorized workloads and access Kubernetes secrets in customer clusters…",
-        "evidence_origin": "summary",
-        "focus": "Rackspace Spot cloud platform",
-        "headline": "Rackspace Spot cloud platform exposes Kubernetes secrets via compromised credentials",
-        "priority": "high",
-        "significance": "Compromised credentials enabling unauthorized access to Kubernetes secrets weakens access management assurance for cloud-hosted workloads. The access management owner should verify that credential rotation and multi-factor authentication are enforced for Rackspace Spot access and that secret access logs are reviewed.",
-        "source_ids": [
-          12
         ]
       }
     ],
@@ -81,32 +45,53 @@
         {
           "source_ids": [
             1,
-            5
+            3
           ],
-          "text": "Active exploitation of a critical GPGME library flaw and AI-assisted cyber attacks targeting financial institutions have elevated the urgency for vulnerability and monitoring control assurance. The GPGME memory bug allows data theft from applications using OpenPGP keys, while AI-assisted attacks have bypassed detection to trigger unauthorized payments at banks and fintechs. Vulnerability management owners must confirm patching of GPGME-dependent software, and monitoring owners should validate detection coverage for AI-generated attack patterns."
+          "text": "Multiple critical vulnerabilities in widely deployed infrastructure components are actively exploited, requiring immediate asset identification and remediation verification. A legacy ASP.NET anti-CSRF library, the GPGME cryptographic library, and four products added to the CISA Known Exploited Vulnerabilities catalog all carry evidence of in-the-wild exploitation. Control owners must confirm affected-asset inventories, installed versions, and remediation status for each exposure."
         },
         {
           "source_ids": [
-            7,
-            8,
-            12,
-            4
+            7
           ],
-          "text": "Third-party compromises at GL.iNet, Cleverbridge, and Rackspace Spot demonstrate supply chain risks to device integrity, payment data, and cloud secrets, while a Windows hotpatch regression disrupts Forcepoint DLP printing controls. Third-party risk owners should obtain remediation evidence from GL.iNet and Rackspace, data protection owners must verify Cleverbridge breach notifications, and change management owners need to validate hotpatch compatibility testing. Access management owners should enforce credential hygiene for Rackspace Spot access."
+          "text": "Supply-chain and service-provider compromises extend risk beyond organizational boundaries. The GL.iNet GoodCloud management service was abused to install malware on customer routers and KVM devices, while a payment processor breach at Cleverbridge exposed credit card numbers and CVVs. Simultaneously, AI-assisted attacks are driving unauthorized financial transactions in banking and fintech sectors. Supplier risk, data protection, and monitoring owners must validate third-party assurance evidence, exposure assessments, and detection coverage for these emerging tactics."
         }
       ]
     },
     "industry_impacts": [],
     "regulatory_changes": []
   },
-  "generated_at": "2026-11-23T09:23:48.907815Z",
-  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/9a0b5a05c812017002ab1c40e855158414567132/site/feed.xml",
+  "generated_at": "2026-11-23T12:23:12.63048Z",
+  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/259a401b342f63434aa11a5a1af43ac71d4725e4/site/feed.xml",
   "feed_home_url": "https://sentrydigest.ricomanifesto.com/",
   "digest_issue_date": "2026-11-23",
   "digest_issue_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-23/",
   "requested_model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
   "resolved_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
   "sources": [
+    {
+      "title": "Hackers Exploit Critical ASP.NET Anti-CSRF Library Flaw Allowing Unauthenticated RCE",
+      "url": "https://thehackernews.com/2026/11/hackers-exploit-critical-aspnet-anti.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-23/#reporting-659149ed49d8",
+      "cves": [
+        "CVE-2026-131914"
+      ],
+      "snippet": "Hackers Exploit Critical ASP.NET Anti-CSRF Library Flaw Allowing Unauthenticated RCE Cybersecurity researchers have urged users to discontinue using a legacy ASP.NET anti-CSRF library named Idunno.AntiCsrf (\"Idunno.AntiCsrf.dll\") following the discovery of a critical vulnerability that has been exploited in the wild. The vulnerability, tracked as CVE-2026-131914, carries a CVSS score of 9.3 out of 10.0. The issue affects versions 0.9.1.0 and 0.9.1 Beta, and relates to an… Cybersecurity researchers have urged users to discontinue using a legacy ASP.NET anti-CSRF library named Idunno.AntiCsrf (\"Idunno.AntiCsrf.dll\") following the discovery of a critical vulnerability that has been exploited in",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Cybersecurity researchers have urged users to discontinue using a legacy ASP.NET anti-CSRF library named Idunno.AntiCsrf (\"Idunno.AntiCsrf.dll\") following the discovery of a critical vulnerability that has been exploited in the wild. The vulnerability, tracked as CVE-2026-131914, carries a CVSS score of 9.3 out of 10.0. The issue affects versions 0.9.1.0 and 0.9.1 Beta, and relates to an…",
+          "text": "Cybersecurity researchers have urged users to discontinue using a legacy ASP.NET anti-CSRF library named Idunno.AntiCsrf (\"Idunno.AntiCsrf.dll\") following the discovery of a critical vulnerability that has been exploited in the wild. The vulnerability, tracked as CVE-2026-131914, carries a CVSS score of 9.3 out of 10.0. The issue affects versions 0.9.1.0 and 0.9.1 Beta, and relates to an…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Cybersecurity researchers have urged users to discontinue using a legacy ASP.NET anti-CSRF library named Idunno.AntiCsrf (\"Idunno.AntiCsrf.dll\") following the discovery of a critical vulnerability that has been exploited in the wild. The vulnerability, tracked as CVE-2026-131914, carries a CVSS score of 9.3 out of 10.0. The issue affects versions 0.9.1.0 and 0.9.1 Beta, and relates to an…",
+          "text": "Cybersecurity researchers have urged users to discontinue using a legacy ASP.NET anti-CSRF library named Idunno.AntiCsrf (\"Idunno.AntiCsrf.dll\") following the discovery of a critical vulnerability that has been exploited in the wild. The vulnerability, tracked as CVE-2026-131914, carries a CVSS score of 9.3 out of 10.0. The issue affects versions 0.9.1.0 and 0.9.1 Beta, and relates to an…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
     {
       "title": "GnuPG Warns Critical GPGME Flaw Could Expose App Data via Malicious OpenPGP Keys",
       "url": "https://thehackernews.com/2026/11/gnupg-warns-critical-gpgme-flaw-could.html",
@@ -180,6 +165,28 @@
       "effective_date_evidence": null
     },
     {
+      "title": "Call center operator gets 8 years for helping scam 30,000 Americans",
+      "url": "https://www.bleepingcomputer.com/news/security/call-center-operator-gets-8-years-for-helping-scam-30-000-americans/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-23/#reporting-cac551e65d75",
+      "cves": [],
+      "snippet": "Call center operator gets 8 years for helping scam 30,000 Americans A Peruvian call center operator was sentenced to eight years in prison for stealing millions of dollars from over 30,000 Spanish-speaking US residents in a years-long government-impersonation fraud scheme… A Peruvian call center operator was sentenced to eight years in prison for stealing millions of dollars from over 30,000 Spanish-speaking US residents in a years-long government-impersonation fraud scheme…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "A Peruvian call center operator was sentenced to eight years in prison for stealing millions of dollars from over 30,000 Spanish-speaking US residents in a years-long government-impersonation fraud scheme…",
+          "text": "A Peruvian call center operator was sentenced to eight years in prison for stealing millions of dollars from over 30,000 Spanish-speaking US residents in a years-long government-impersonation fraud scheme…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "A Peruvian call center operator was sentenced to eight years in prison for stealing millions of dollars from over 30,000 Spanish-speaking US residents in a years-long government-impersonation fraud scheme…",
+          "text": "A Peruvian call center operator was sentenced to eight years in prison for stealing millions of dollars from over 30,000 Spanish-speaking US residents in a years-long government-impersonation fraud scheme…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
       "title": "Microsoft confirms Windows printing issues affecting Forcepoint users",
       "url": "https://www.bleepingcomputer.com/news/microsoft/microsoft-confirms-printing-issues-after-kb5132043-windows-hotpatch/",
       "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-23/#reporting-8ff53fd940c1",
@@ -197,6 +204,28 @@
           "origin": "content",
           "raw_text": "Microsoft confirmed printing issues on systems running Forcepoint DLP software after installing the KB5132043 November 2026 Windows 11 hotpatch…",
           "text": "Microsoft confirmed printing issues on systems running Forcepoint DLP software after installing the KB5132043 November 2026 Windows 11 hotpatch…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Hackers Exploited GL.iNet Cloud Flaw to Install Malware on Routers and KVM Devices",
+      "url": "https://thehackernews.com/2026/11/hackers-exploited-glinet-cloud-flaw-to.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-23/#reporting-8dee64bf666c",
+      "cves": [],
+      "snippet": "Hackers Exploited GL.iNet Cloud Flaw to Install Malware on Routers and KVM Devices Hackers exploited a vulnerability in GL.iNet's GoodCloud remote management service to install malware on some customer routers and KVM devices, the maker of travel routers and remote-access KVM hardware said in a security notice updated today. The company identified and fixed the flaw on Friday and blocked the access the attacker used, so devices can no longer be infected through this route. Hackers exploited a vulnerability in GL.iNet's GoodCloud remote management service to install malware on some customer routers and KVM devices, the maker of travel routers and remote-access KVM hardware said in a security ",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Hackers exploited a vulnerability in GL.iNet's GoodCloud remote management service to install malware on some customer routers and KVM devices, the maker of travel routers and remote-access KVM hardware said in a security notice updated today. The company identified and fixed the flaw on Friday and blocked the access the attacker used, so devices can no longer be infected through this route.",
+          "text": "Hackers exploited a vulnerability in GL.iNet's GoodCloud remote management service to install malware on some customer routers and KVM devices, the maker of travel routers and remote-access KVM hardware said in a security notice updated today. The company identified and fixed the flaw on Friday and blocked the access the attacker used, so devices can no longer be infected through this route."
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Hackers exploited a vulnerability in GL.iNet's GoodCloud remote management service to install malware on some customer routers and KVM devices, the maker of travel routers and remote-access KVM hardware said in a security notice updated today. The company identified and fixed the flaw on Friday and blocked the access the attacker used, so devices can no longer be infected through this route.",
+          "text": "Hackers exploited a vulnerability in GL.iNet's GoodCloud remote management service to install malware on some customer routers and KVM devices, the maker of travel routers and remote-access KVM hardware said in a security notice updated today. The company identified and fixed the flaw on Friday and blocked the access the attacker used, so devices can no longer be infected through this route."
         }
       ],
       "effective_date_evidence": null
@@ -307,72 +336,6 @@
           "origin": "content",
           "raw_text": "Signal has announced new protections that block screenshots on iOS 27 and prevent AI assistants from capturing conversations on supported Android devices…",
           "text": "Signal has announced new protections that block screenshots on iOS 27 and prevent AI assistants from capturing conversations on supported Android devices…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "OpenRouter Drops 3 Providers After Researchers Catch Months of Prompt Theft at AI Hosting Firms",
-      "url": "https://thehackernews.com/2026/11/openrouter-drops-3-providers-after.html",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-23/#reporting-6d087c898942",
-      "cves": [],
-      "snippet": "OpenRouter Drops 3 Providers After Researchers Catch Months of Prompt Theft at AI Hosting Firms Attackers stole data from inside three AI inference providers for months, and none of the three knew until researchers told them, the industrial cybersecurity company Dragos said this week. Some of the stolen requests were flagged as Zero Data Retention, the setting that is supposed to mean a prompt is never stored. OpenRouter, a gateway that routes customers' AI requests to a pool of… Attackers stole data from inside three AI inference providers for months, and none of the three knew until researchers told them, the industrial cybersecurity company Dragos said this week. Some of the stolen reques",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "Attackers stole data from inside three AI inference providers for months, and none of the three knew until researchers told them, the industrial cybersecurity company Dragos said this week. Some of the stolen requests were flagged as Zero Data Retention, the setting that is supposed to mean a prompt is never stored. OpenRouter, a gateway that routes customers' AI requests to a pool of…",
-          "text": "Attackers stole data from inside three AI inference providers for months, and none of the three knew until researchers told them, the industrial cybersecurity company Dragos said this week. Some of the stolen requests were flagged as Zero Data Retention, the setting that is supposed to mean a prompt is never stored. OpenRouter, a gateway that routes customers' AI requests to a pool of…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "Attackers stole data from inside three AI inference providers for months, and none of the three knew until researchers told them, the industrial cybersecurity company Dragos said this week. Some of the stolen requests were flagged as Zero Data Retention, the setting that is supposed to mean a prompt is never stored. OpenRouter, a gateway that routes customers' AI requests to a pool of…",
-          "text": "Attackers stole data from inside three AI inference providers for months, and none of the three knew until researchers told them, the industrial cybersecurity company Dragos said this week. Some of the stolen requests were flagged as Zero Data Retention, the setting that is supposed to mean a prompt is never stored. OpenRouter, a gateway that routes customers' AI requests to a pool of…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "Researchers Demonstrate Ghostscript Sandbox-Escape RCE via Crafted File Uploads in Popular Apps",
-      "url": "https://thehackernews.com/2026/11/researchers-demonstrate-ghostscript.html",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-23/#reporting-a3c63e958cb9",
-      "cves": [],
-      "snippet": "Researchers Demonstrate Ghostscript Sandbox-Escape RCE via Crafted File Uploads in Popular Apps A now-patched flaw in Ghostscript allows a crafted file to escape the program's security sandbox and run commands on the server that processes it. Ghostscript is the interpreter that many Linux servers use to convert uploaded PDFs, PostScript files, and images into other formats, often without the application calling it directly. Security firm pwn.ai showed this week that ordinary upload… A now-patched flaw in Ghostscript allows a crafted file to escape the program's security sandbox and run commands on the server that processes it. Ghostscript is the interpreter that many Linux servers use to con",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "A now-patched flaw in Ghostscript allows a crafted file to escape the program's security sandbox and run commands on the server that processes it. Ghostscript is the interpreter that many Linux servers use to convert uploaded PDFs, PostScript files, and images into other formats, often without the application calling it directly. Security firm pwn.ai showed this week that ordinary upload…",
-          "text": "A now-patched flaw in Ghostscript allows a crafted file to escape the program's security sandbox and run commands on the server that processes it. Ghostscript is the interpreter that many Linux servers use to convert uploaded PDFs, PostScript files, and images into other formats, often without the application calling it directly. Security firm pwn.ai showed this week that ordinary upload…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "A now-patched flaw in Ghostscript allows a crafted file to escape the program's security sandbox and run commands on the server that processes it. Ghostscript is the interpreter that many Linux servers use to convert uploaded PDFs, PostScript files, and images into other formats, often without the application calling it directly. Security firm pwn.ai showed this week that ordinary upload…",
-          "text": "A now-patched flaw in Ghostscript allows a crafted file to escape the program's security sandbox and run commands on the server that processes it. Ghostscript is the interpreter that many Linux servers use to convert uploaded PDFs, PostScript files, and images into other formats, often without the application calling it directly. Security firm pwn.ai showed this week that ordinary upload…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "Rackspace Spot breach let hackers access customer Kubernetes secrets",
-      "url": "https://www.bleepingcomputer.com/news/security/rackspace-spot-breach-let-hackers-access-customer-kubernetes-secrets/",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-23/#reporting-1fa3870c33e2",
-      "cves": [],
-      "snippet": "Rackspace Spot breach let hackers access customer Kubernetes secrets Rackspace warned customers that hackers breached its Rackspace Spot cloud platform using compromised credentials, allowing them to deploy unauthorized workloads and access Kubernetes secrets in customer clusters… Rackspace warned customers that hackers breached its Rackspace Spot cloud platform using compromised credentials, allowing them to deploy unauthorized workloads and access Kubernetes secrets in customer clusters…",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "Rackspace warned customers that hackers breached its Rackspace Spot cloud platform using compromised credentials, allowing them to deploy unauthorized workloads and access Kubernetes secrets in customer clusters…",
-          "text": "Rackspace warned customers that hackers breached its Rackspace Spot cloud platform using compromised credentials, allowing them to deploy unauthorized workloads and access Kubernetes secrets in customer clusters…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "Rackspace warned customers that hackers breached its Rackspace Spot cloud platform using compromised credentials, allowing them to deploy unauthorized workloads and access Kubernetes secrets in customer clusters…",
-          "text": "Rackspace warned customers that hackers breached its Rackspace Spot cloud platform using compromised credentials, allowing them to deploy unauthorized workloads and access Kubernetes secrets in customer clusters…"
         }
       ],
       "effective_date_evidence": null
