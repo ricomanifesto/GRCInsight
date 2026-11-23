@@ -5,12 +5,12 @@
     "control_implications": [
       {
         "control_id": "third_party_risk",
-        "evidence_excerpt": "Threat actors are exploiting a now-patched security flaw in ConnectWise ScreenConnect to target managed service provider (MSP) servers. The activity revolves around CVE-2026-84869 (CVSS score: 9.9), a critical ScreenConnect client flaw that allows a guest to transfer and execute a malicious payload on a connecting technician's host. \"On November 12, 2026, we observed one managed service",
+        "evidence_excerpt": "Threat actors are exploiting a now-patched security flaw in ConnectWise ScreenConnect to target managed service provider (MSP) servers. The activity revolves around CVE-2026-84869 (CVSS score: 9.9), a critical ScreenConnect client flaw that allows a guest to transfer and execute a malicious payload on a connecting technician's host.",
         "evidence_origin": "summary",
         "focus": "ConnectWise ScreenConnect",
-        "headline": "ConnectWise ScreenConnect enables guest payload execution on technician hosts",
+        "headline": "ConnectWise ScreenConnect exposes MSP technician PCs to hijacking",
         "priority": "high",
-        "significance": "This finding matters because MSP remote access tools create supply chain risk; accountable owner should confirm supplier patch deployment and technician endpoint monitoring.",
+        "significance": "Active exploitation of a critical ScreenConnect flaw allows attackers to compromise MSP technician endpoints, undermining trust in remote management tools. The third-party risk owner should confirm whether any MSP partners use ScreenConnect and verify patch deployment and monitoring for anomalous guest-to-technician payload transfers.",
         "source_ids": [
           2
         ]
@@ -20,9 +20,9 @@
         "evidence_excerpt": "N-able yesterday disclosed a critical flaw it found while investigating the breach of its Mail Assure and SpamExperts Hosted Cloud, an email filtering service it runs for managed service providers. The bug, tracked as CVE-2026-134624, is a server-side request forgery (SSRF) flaw. It allowed a user with high-level API access to open connections to internal systems of the user's choosing on the",
         "evidence_origin": "summary",
         "focus": "Mail Assure and SpamExperts Hosted Cloud",
-        "headline": "Mail Assure and SpamExperts Hosted Cloud exposes internal systems via SSRF flaw",
+        "headline": "Mail Assure and SpamExperts Hosted Cloud reveals SSRF during breach investigation",
         "priority": "high",
-        "significance": "This matters because email filtering services process sensitive communications; owner should verify supplier breach notification and API access controls.",
+        "significance": "A critical SSRF vulnerability discovered during a breach investigation indicates that the email filtering service used by MSPs was compromised, potentially exposing internal systems. The supplier risk owner should confirm the scope of the breach, request assurance of remediation, and evaluate dependencies on N-able services.",
         "source_ids": [
           3
         ]
@@ -31,12 +31,36 @@
         "control_id": "vulnerability_management",
         "evidence_excerpt": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Friday added four flaws impacting Apache Roller, Cisco Expressway, SAP NetWeaver, and Broadcom VMware vCenter to its Known Exploited Vulnerabilities (KEV), citing evidence of active exploitation. The vulnerabilities are listed below - CVE-2026-129448 (CVSS score: 9.8) - A deserialization of untrusted data vulnerability in",
         "evidence_origin": "summary",
-        "focus": "CISA Known Exploited Vulnerabilities catalog",
-        "headline": "CISA Known Exploited Vulnerabilities catalog adds four actively exploited enterprise flaws",
+        "focus": "Broadcom VMware vCenter",
+        "headline": "Broadcom VMware vCenter added to CISA KEV for active exploitation",
         "priority": "high",
-        "significance": "This matters because CISA KEV mandates federal remediation timelines; owner should confirm asset inventory covers listed products and patching status.",
+        "significance": "CISA's addition of VMware vCenter to the Known Exploited Vulnerabilities catalog signals confirmed active exploitation, requiring immediate asset identification and remediation. The vulnerability management owner should inventory all vCenter instances, apply patches, and validate compensating controls where patching is delayed.",
         "source_ids": [
           6
+        ]
+      },
+      {
+        "control_id": "third_party_risk",
+        "evidence_excerpt": "A critical security flaw has been disclosed in the popular binary-parser library that could allow an attacker who controls parser definitions to execute arbitrary code. The vulnerability, tracked as CVE-2026-134814 (CVSS score: 9.2 / 8.1), is a case of code injection impacting binary-parser versions prior to 2.3.1. \"Binary-parser before 2.3.1 contains a code injection vulnerability that allows",
+        "evidence_origin": "summary",
+        "focus": "binary-parser library",
+        "headline": "binary-parser library enables arbitrary code execution via parser definitions",
+        "priority": "medium",
+        "significance": "A code injection flaw in the widely used binary-parser library allows arbitrary code execution when attackers control parser definitions, creating supply chain risk for dependent applications. The third-party risk owner should identify applications using binary-parser versions prior to 2.3.1 and coordinate updates with development teams.",
+        "source_ids": [
+          1
+        ]
+      },
+      {
+        "control_id": "vulnerability_management",
+        "evidence_excerpt": "Cybersecurity researchers have urged users to discontinue using a legacy ASP.NET anti-CSRF library named Idunno.AntiCsrf (\"Idunno.AntiCsrf.dll\") following the discovery of a critical vulnerability that has been exploited in the wild. The vulnerability, tracked as CVE-2026-131914, carries a CVSS score of 9.3 out of 10.0. The issue affects versions 0.9.1.0 and 0.9.1 Beta, and relates to an",
+        "evidence_origin": "summary",
+        "focus": "Idunno.AntiCsrf library",
+        "headline": "Idunno.AntiCsrf library exploited in the wild for unauthenticated RCE",
+        "priority": "high",
+        "significance": "Active exploitation of a critical flaw in a legacy anti-CSRF library enables unauthenticated remote code execution, demanding immediate removal or replacement. The vulnerability management owner should scan for Idunno.AntiCsrf.dll versions 0.9.1.0 and 0.9.1 Beta, and enforce discontinuation across all environments.",
+        "source_ids": [
+          4
         ]
       },
       {
@@ -46,31 +70,7 @@
         "focus": "AI agents",
         "headline": "AI agents create shared responsibility gaps across platforms",
         "priority": "medium",
-        "significance": "This matters because autonomous agents blur accountability boundaries; owner should define identity and permission governance for agent deployments.",
-        "source_ids": [
-          7
-        ]
-      },
-      {
-        "control_id": "third_party_risk",
-        "evidence_excerpt": "Hackers exploited a vulnerability in GL.iNet's GoodCloud remote management service to install malware on some customer routers and KVM devices, the maker of travel routers and remote-access KVM hardware said in a security notice updated today. The company identified and fixed the flaw on Friday and blocked the access the attacker used, so devices can no longer be infected through this route.",
-        "evidence_origin": "summary",
-        "focus": "GL.iNet GoodCloud remote management service",
-        "headline": "GL.iNet GoodCloud remote management service enables malware installation on customer devices",
-        "priority": "high",
-        "significance": "This matters because remote management services provide persistent device access; owner should verify supplier incident response and device firmware validation.",
-        "source_ids": [
-          11
-        ]
-      },
-      {
-        "control_id": "monitoring",
-        "evidence_excerpt": "The Indian Computer Emergency Response Team (CERT-In) has warned that threat actors are carrying out artificial intelligence (AI)-assisted cyber attacks targeting information and communication technology (ICT) assets in the country. This unsanctioned activity has resulted in unauthorized financial transactions at banking and financial services entities, as well as technology service providers",
-        "evidence_origin": "summary",
-        "focus": "AI-assisted cyber attacks",
-        "headline": "AI-assisted cyber attacks trigger unauthorized payments at banking entities",
-        "priority": "high",
-        "significance": "This matters because AI-enabled fraud bypasses traditional detection; owner should enhance transaction monitoring for anomalous patterns and verify CERT-In advisory applicability.",
+        "significance": "The proliferation of autonomous AI agents across platforms introduces accountability gaps where no single vendor maintains visibility or control, challenging governance frameworks. The governance owner should define ownership for agent identities, permissions, and cross-platform accountability, and assess current controls against this emerging risk.",
         "source_ids": [
           12
         ]
@@ -82,25 +82,25 @@
           "source_ids": [
             2,
             3,
-            6,
-            11
+            6
           ],
-          "text": "Active exploitation of managed service provider remote access tools and enterprise software vulnerabilities demands immediate supplier assurance and patch verification. Threat actors compromised ConnectWise ScreenConnect to hijack technician endpoints, breached N-able Mail Assure email filtering during an active intrusion, and abused GL.iNet GoodCloud to install malware on customer routers. CISA added four actively exploited flaws in Apache Roller, Cisco Expressway, SAP NetWeaver, and VMware vCenter to its Known Exploited Vulnerabilities catalog. Control owners must confirm supplier patch deployment, asset coverage for listed products, and monitoring of remote management interfaces."
+          "text": "Active exploitation of critical flaws in ConnectWise ScreenConnect, N-able Mail Assure, and VMware vCenter has elevated third-party and vulnerability risk across managed service provider and virtualization dependencies. CISA's addition of actively exploited vulnerabilities to the Known Exploited Vulnerabilities catalog confirms that attackers are targeting widely deployed infrastructure components, while a supplier breach investigation revealed a critical SSRF flaw in email filtering services used by MSPs. Control owners must prioritize asset inventory, patch verification, and supplier assurance requests for these high-impact dependencies."
         },
         {
           "source_ids": [
-            7,
+            1,
+            4,
             12
           ],
-          "text": "AI agents and AI-assisted attacks introduce accountability gaps and detection challenges across financial and technology sectors. Autonomous agents operating across platforms create shared responsibility voids where no single vendor controls their actions, while AI-enabled fraud has already triggered unauthorized payments at Indian banks and fintech firms per CERT-In warning. Governance owners should define agent identity and permission frameworks, and monitoring owners must enhance detection for AI-driven anomalous transactions."
+          "text": "Supply chain vulnerabilities in the binary-parser library and the legacy Idunno.AntiCsrf component demonstrate that widely used open-source and legacy libraries continue to be exploited for arbitrary code execution, requiring urgent version identification and removal. Simultaneously, the emergence of autonomous AI agents operating across platforms introduces a shared responsibility gap where no single vendor maintains visibility or control, challenging existing governance frameworks. Organizations should extend third-party risk programs to cover library dependencies and establish accountability structures for AI agent deployments."
         }
       ]
     },
     "industry_impacts": [],
     "regulatory_changes": []
   },
-  "generated_at": "2026-11-23T15:20:12.369549Z",
-  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/eb2b7a7eed74bfe5631bdd9488698caad6e2f8c0/site/feed.xml",
+  "generated_at": "2026-11-23T18:21:02.249679Z",
+  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/b9a44990f7394d49364fcf681e59832ac75e9cdf/site/feed.xml",
   "feed_home_url": "https://sentrydigest.ricomanifesto.com/",
   "digest_issue_date": "2026-11-23",
   "digest_issue_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-23/",
@@ -252,6 +252,116 @@
       "effective_date_evidence": null
     },
     {
+      "title": "Behind the Alias: How One Researcher Unmasked a Decade of Ransomware Actors",
+      "url": "https://www.darkreading.com/cybersecurity-operations/alias-researcher-unmasked-ransomware-actors",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-23/#reporting-a7dc0a77e742",
+      "cves": [],
+      "snippet": "Behind the Alias: How One Researcher Unmasked a Decade of Ransomware Actors Ransomware isn't slowing down. A new framework gives security teams the edge to trace attackers back to their source. Ransomware isn't slowing down. A new framework gives security teams the edge to trace attackers back to their source.",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Ransomware isn't slowing down. A new framework gives security teams the edge to trace attackers back to their source.",
+          "text": "Ransomware isn't slowing down. A new framework gives security teams the edge to trace attackers back to their source."
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Ransomware isn't slowing down. A new framework gives security teams the edge to trace attackers back to their source.",
+          "text": "Ransomware isn't slowing down. A new framework gives security teams the edge to trace attackers back to their source."
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Webworm Suspected of Modifying SoftEther VPN to Evade Detection and Hide Remote Access",
+      "url": "https://thehackernews.com/2026/11/webworm-suspected-of-modifying.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-23/#reporting-5495a06dee26",
+      "cves": [],
+      "snippet": "Webworm Suspected of Modifying SoftEther VPN to Evade Detection and Hide Remote Access The China-aligned threat actor known as Webworm is suspected to be using a custom version of the open-source SoftEther VPN Bridge tool in an attempt to remove recognizable detection fingerprints, while disguising it as network-monitoring software to establish covert remote access to compromised networks. The modified variant \"implements various tricks to hide itself from security tools,\"… The China-aligned threat actor known as Webworm is suspected to be using a custom version of the open-source SoftEther VPN Bridge tool in an attempt to remove recognizable detection fingerprints, while disguising it as ne",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "The China-aligned threat actor known as Webworm is suspected to be using a custom version of the open-source SoftEther VPN Bridge tool in an attempt to remove recognizable detection fingerprints, while disguising it as network-monitoring software to establish covert remote access to compromised networks. The modified variant \"implements various tricks to hide itself from security tools,\"…",
+          "text": "The China-aligned threat actor known as Webworm is suspected to be using a custom version of the open-source SoftEther VPN Bridge tool in an attempt to remove recognizable detection fingerprints, while disguising it as network-monitoring software to establish covert remote access to compromised networks. The modified variant \"implements various tricks to hide itself from security tools,\"…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "The China-aligned threat actor known as Webworm is suspected to be using a custom version of the open-source SoftEther VPN Bridge tool in an attempt to remove recognizable detection fingerprints, while disguising it as network-monitoring software to establish covert remote access to compromised networks. The modified variant \"implements various tricks to hide itself from security tools,\"…",
+          "text": "The China-aligned threat actor known as Webworm is suspected to be using a custom version of the open-source SoftEther VPN Bridge tool in an attempt to remove recognizable detection fingerprints, while disguising it as network-monitoring software to establish covert remote access to compromised networks. The modified variant \"implements various tricks to hide itself from security tools,\"…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "GlobeTopper loses $2.5 million after hackers steal $70k in gift cards",
+      "url": "https://www.bleepingcomputer.com/news/security/globetopper-loses-25-million-after-hackers-steal-70k-in-gift-cards/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-23/#reporting-355e3ccfadfc",
+      "cves": [],
+      "snippet": "GlobeTopper loses $2.5 million after hackers steal $70k in gift cards A cyberattack disrupted operations at B2B top-up solutions provider GlobeTopper, causing an estimated $2.5 million in lost revenue, while the attacker redeemed digital gift cards worth $70,000… A cyberattack disrupted operations at B2B top-up solutions provider GlobeTopper, causing an estimated $2.5 million in lost revenue, while the attacker redeemed digital gift cards worth $70,000…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "A cyberattack disrupted operations at B2B top-up solutions provider GlobeTopper, causing an estimated $2.5 million in lost revenue, while the attacker redeemed digital gift cards worth $70,000…",
+          "text": "A cyberattack disrupted operations at B2B top-up solutions provider GlobeTopper, causing an estimated $2.5 million in lost revenue, while the attacker redeemed digital gift cards worth $70,000…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "A cyberattack disrupted operations at B2B top-up solutions provider GlobeTopper, causing an estimated $2.5 million in lost revenue, while the attacker redeemed digital gift cards worth $70,000…",
+          "text": "A cyberattack disrupted operations at B2B top-up solutions provider GlobeTopper, causing an estimated $2.5 million in lost revenue, while the attacker redeemed digital gift cards worth $70,000…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "AI Agents Zip From Flaw Discovery to Root Access in 11 Minutes",
+      "url": "https://www.darkreading.com/cyberattacks-data-breaches/ai-agents-flaw-discovery-root-access-11-minutes",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-23/#reporting-c76177176ec3",
+      "cves": [],
+      "snippet": "AI Agents Zip From Flaw Discovery to Root Access in 11 Minutes A China-nexus actor used the Cairn penetration testing tool in attacks against East Asian universities, exploiting a zero-day in a medical imaging app. A China-nexus actor used the Cairn penetration testing tool in attacks against East Asian universities, exploiting a zero-day in a medical imaging app.",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "A China-nexus actor used the Cairn penetration testing tool in attacks against East Asian universities, exploiting a zero-day in a medical imaging app.",
+          "text": "A China-nexus actor used the Cairn penetration testing tool in attacks against East Asian universities, exploiting a zero-day in a medical imaging app."
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "A China-nexus actor used the Cairn penetration testing tool in attacks against East Asian universities, exploiting a zero-day in a medical imaging app.",
+          "text": "A China-nexus actor used the Cairn penetration testing tool in attacks against East Asian universities, exploiting a zero-day in a medical imaging app."
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "⚡ Weekly Recap: VMware 0-Day, Java4Shell, NGINX2Root, Ruby2Shell, and a Whole Lot of Shell Trouble",
+      "url": "https://thehackernews.com/2026/11/weekly-recap-vmware-0-day-java4shell.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-23/#reporting-a75fd36abba0",
+      "cves": [],
+      "snippet": "⚡ Weekly Recap: VMware 0-Day, Java4Shell, NGINX2Root, Ruby2Shell, and a Whole Lot of Shell Trouble A stolen key. A trusted message. A routine update. None of these looks like the start of a major security problem. That's partly why they work. Attackers don't always need to break down a door. Sometimes they just use one that's already open. This week's stories show how quickly a small opening can turn into a much bigger mess. One breach helps attackers reach another target. Tools people rely… A stolen key. A trusted message. A routine update. None of these looks like the start of a major security problem. That's partly why they work. Attackers don't always need to break down a door. Sometimes",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "A stolen key. A trusted message. A routine update. None of these looks like the start of a major security problem. That's partly why they work. Attackers don't always need to break down a door. Sometimes they just use one that's already open. This week's stories show how quickly a small opening can turn into a much bigger mess. One breach helps attackers reach another target. Tools people rely…",
+          "text": "A stolen key. A trusted message. A routine update. None of these looks like the start of a major security problem. That's partly why they work. Attackers don't always need to break down a door. Sometimes they just use one that's already open. This week's stories show how quickly a small opening can turn into a much bigger mess. One breach helps attackers reach another target. Tools people rely…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "A stolen key. A trusted message. A routine update. None of these looks like the start of a major security problem. That's partly why they work. Attackers don't always need to break down a door. Sometimes they just use one that's already open. This week's stories show how quickly a small opening can turn into a much bigger mess. One breach helps attackers reach another target. Tools people rely…",
+          "text": "A stolen key. A trusted message. A routine update. None of these looks like the start of a major security problem. That's partly why they work. Attackers don't always need to break down a door. Sometimes they just use one that's already open. This week's stories show how quickly a small opening can turn into a much bigger mess. One breach helps attackers reach another target. Tools people rely…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
       "title": "AI Agents Are Creating a Shared Responsibility Gap",
       "url": "https://www.bleepingcomputer.com/news/security/ai-agents-are-creating-a-shared-responsibility-gap/",
       "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-23/#reporting-52eb9c59258a",
@@ -269,116 +379,6 @@
           "origin": "content",
           "raw_text": "AI agents operate across multiple platforms, creating security gaps when no single vendor can see or control their actions. Token Security examines the shared responsibility problem and explains how organizations can better manage agent identities, permissions, and accountability…",
           "text": "AI agents operate across multiple platforms, creating security gaps when no single vendor can see or control their actions. Token Security examines the shared responsibility problem and explains how organizations can better manage agent identities, permissions, and accountability…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "Microsoft testing fix for Windows 11 Bluetooth audio quality drops",
-      "url": "https://www.bleepingcomputer.com/news/microsoft/microsoft-testing-fix-for-windows-11-bluetooth-audio-quality-drops/",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-23/#reporting-fb4c07fac3ca",
-      "cves": [],
-      "snippet": "Microsoft testing fix for Windows 11 Bluetooth audio quality drops Microsoft is working to fix a long-standing Windows issue that has been causing significant audio quality drops for Bluetooth headphone users… Microsoft is working to fix a long-standing Windows issue that has been causing significant audio quality drops for Bluetooth headphone users…",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "Microsoft is working to fix a long-standing Windows issue that has been causing significant audio quality drops for Bluetooth headphone users…",
-          "text": "Microsoft is working to fix a long-standing Windows issue that has been causing significant audio quality drops for Bluetooth headphone users…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "Microsoft is working to fix a long-standing Windows issue that has been causing significant audio quality drops for Bluetooth headphone users…",
-          "text": "Microsoft is working to fix a long-standing Windows issue that has been causing significant audio quality drops for Bluetooth headphone users…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "Call center operator gets 8 years for helping scam 30,000 Americans",
-      "url": "https://www.bleepingcomputer.com/news/security/call-center-operator-gets-8-years-for-helping-scam-30-000-americans/",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-23/#reporting-cac551e65d75",
-      "cves": [],
-      "snippet": "Call center operator gets 8 years for helping scam 30,000 Americans A Peruvian call center operator was sentenced to eight years in prison for helping steal millions of dollars from over 30,000 Spanish-speaking US residents in a years-long government-impersonation fraud scheme… A Peruvian call center operator was sentenced to eight years in prison for helping steal millions of dollars from over 30,000 Spanish-speaking US residents in a years-long government-impersonation fraud scheme…",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "A Peruvian call center operator was sentenced to eight years in prison for helping steal millions of dollars from over 30,000 Spanish-speaking US residents in a years-long government-impersonation fraud scheme…",
-          "text": "A Peruvian call center operator was sentenced to eight years in prison for helping steal millions of dollars from over 30,000 Spanish-speaking US residents in a years-long government-impersonation fraud scheme…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "A Peruvian call center operator was sentenced to eight years in prison for helping steal millions of dollars from over 30,000 Spanish-speaking US residents in a years-long government-impersonation fraud scheme…",
-          "text": "A Peruvian call center operator was sentenced to eight years in prison for helping steal millions of dollars from over 30,000 Spanish-speaking US residents in a years-long government-impersonation fraud scheme…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "Microsoft confirms Windows printing issues affecting Forcepoint users",
-      "url": "https://www.bleepingcomputer.com/news/microsoft/microsoft-confirms-printing-issues-after-kb5132043-windows-hotpatch/",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-23/#reporting-8ff53fd940c1",
-      "cves": [],
-      "snippet": "Microsoft confirms Windows printing issues affecting Forcepoint users Microsoft confirmed printing issues on systems running Forcepoint DLP software after installing the KB5132043 November 2026 Windows 11 hotpatch… Microsoft confirmed printing issues on systems running Forcepoint DLP software after installing the KB5132043 November 2026 Windows 11 hotpatch…",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "Microsoft confirmed printing issues on systems running Forcepoint DLP software after installing the KB5132043 November 2026 Windows 11 hotpatch…",
-          "text": "Microsoft confirmed printing issues on systems running Forcepoint DLP software after installing the KB5132043 November 2026 Windows 11 hotpatch…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "Microsoft confirmed printing issues on systems running Forcepoint DLP software after installing the KB5132043 November 2026 Windows 11 hotpatch…",
-          "text": "Microsoft confirmed printing issues on systems running Forcepoint DLP software after installing the KB5132043 November 2026 Windows 11 hotpatch…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "Hackers Exploited GL.iNet Cloud Flaw to Install Malware on Routers and KVM Devices",
-      "url": "https://thehackernews.com/2026/11/hackers-exploited-glinet-cloud-flaw-to.html",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-23/#reporting-8dee64bf666c",
-      "cves": [],
-      "snippet": "Hackers Exploited GL.iNet Cloud Flaw to Install Malware on Routers and KVM Devices Hackers exploited a vulnerability in GL.iNet's GoodCloud remote management service to install malware on some customer routers and KVM devices, the maker of travel routers and remote-access KVM hardware said in a security notice updated today. The company identified and fixed the flaw on Friday and blocked the access the attacker used, so devices can no longer be infected through this route. Hackers exploited a vulnerability in GL.iNet's GoodCloud remote management service to install malware on some customer routers and KVM devices, the maker of travel routers and remote-access KVM hardware said in a security ",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "Hackers exploited a vulnerability in GL.iNet's GoodCloud remote management service to install malware on some customer routers and KVM devices, the maker of travel routers and remote-access KVM hardware said in a security notice updated today. The company identified and fixed the flaw on Friday and blocked the access the attacker used, so devices can no longer be infected through this route.",
-          "text": "Hackers exploited a vulnerability in GL.iNet's GoodCloud remote management service to install malware on some customer routers and KVM devices, the maker of travel routers and remote-access KVM hardware said in a security notice updated today. The company identified and fixed the flaw on Friday and blocked the access the attacker used, so devices can no longer be infected through this route."
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "Hackers exploited a vulnerability in GL.iNet's GoodCloud remote management service to install malware on some customer routers and KVM devices, the maker of travel routers and remote-access KVM hardware said in a security notice updated today. The company identified and fixed the flaw on Friday and blocked the access the attacker used, so devices can no longer be infected through this route.",
-          "text": "Hackers exploited a vulnerability in GL.iNet's GoodCloud remote management service to install malware on some customer routers and KVM devices, the maker of travel routers and remote-access KVM hardware said in a security notice updated today. The company identified and fixed the flaw on Friday and blocked the access the attacker used, so devices can no longer be infected through this route."
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "AI-Assisted Cyber Attacks Trigger Unauthorized Payments at Indian Banks and Fintech Firms",
-      "url": "https://thehackernews.com/2026/11/ai-assisted-cyberattacks-trigger.html",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-23/#reporting-3077523564b0",
-      "cves": [],
-      "snippet": "AI-Assisted Cyber Attacks Trigger Unauthorized Payments at Indian Banks and Fintech Firms The Indian Computer Emergency Response Team (CERT-In) has warned that threat actors are carrying out artificial intelligence (AI)-assisted cyber attacks targeting information and communication technology (ICT) assets in the country. This unsanctioned activity has resulted in unauthorized financial transactions at banking and financial services entities, as well as technology service providers… The Indian Computer Emergency Response Team (CERT-In) has warned that threat actors are carrying out artificial intelligence (AI)-assisted cyber attacks targeting information and communication technology (ICT) ass",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "The Indian Computer Emergency Response Team (CERT-In) has warned that threat actors are carrying out artificial intelligence (AI)-assisted cyber attacks targeting information and communication technology (ICT) assets in the country. This unsanctioned activity has resulted in unauthorized financial transactions at banking and financial services entities, as well as technology service providers…",
-          "text": "The Indian Computer Emergency Response Team (CERT-In) has warned that threat actors are carrying out artificial intelligence (AI)-assisted cyber attacks targeting information and communication technology (ICT) assets in the country. This unsanctioned activity has resulted in unauthorized financial transactions at banking and financial services entities, as well as technology service providers…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "The Indian Computer Emergency Response Team (CERT-In) has warned that threat actors are carrying out artificial intelligence (AI)-assisted cyber attacks targeting information and communication technology (ICT) assets in the country. This unsanctioned activity has resulted in unauthorized financial transactions at banking and financial services entities, as well as technology service providers…",
-          "text": "The Indian Computer Emergency Response Team (CERT-In) has warned that threat actors are carrying out artificial intelligence (AI)-assisted cyber attacks targeting information and communication technology (ICT) assets in the country. This unsanctioned activity has resulted in unauthorized financial transactions at banking and financial services entities, as well as technology service providers…"
         }
       ],
       "effective_date_evidence": null
