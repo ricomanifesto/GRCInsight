@@ -17450,6 +17450,17 @@
       "release_key": "9102d15b449507b577fd8dd8a500cc71cda83a53fc6d2c68dacc0d5359456818",
       "release_ref": "d1c2e769f6978a9f58b07d606e3f2ce66a6d81a3",
       "stage": "serving"
+    },
+    {
+      "at": "2026-11-23T06:34:28.515Z",
+      "kind": "release",
+      "payload_digest": "628030786240397e7145b50c5ea23b0de236656944f3e0dd27e43c14f95362d2",
+      "proof": "on",
+      "release_key": "b570c3bfb3f58bd7c99b86585700fcb0f4eae313976e532b3f6e52cc26db1d27",
+      "release_ref": "6c2b1a10661bc2cd2598ede0e452fd59630e24b7",
+      "source_revision": "99f89675374d5c0eb0d7ac390116a897937fcf2e",
+      "stage": "released",
+      "tree_digest": "9f7457032fde7da85742d46e8a0d37e5877f8ecedb389a2af07a3d0ed595b63f"
     }
   ],
   "schema_version": 1,
