@@ -4528,6 +4528,13 @@
       "at": "2026-11-23T09:20:58.192Z",
       "run_id": "45146121296",
       "stage": "invoked"
+    },
+    {
+      "admission_key": "digest:276c225225827c7554eb15855ae0760346084fdc",
+      "at": "2026-11-23T09:21:01.051Z",
+      "handle": "report_20261123_092100_351",
+      "run_id": "45146121296",
+      "stage": "invoked"
     }
   ],
   "schema_version": 1,
