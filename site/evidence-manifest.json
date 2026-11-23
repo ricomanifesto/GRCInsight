@@ -5,36 +5,24 @@
     "control_implications": [
       {
         "control_id": "vulnerability_management",
-        "evidence_excerpt": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Friday added four flaws impacting Apache Roller, Cisco Expressway, SAP NetWeaver, and Broadcom VMware vCenter to its Known Exploited Vulnerabilities (KEV), citing evidence of active exploitation.",
+        "evidence_excerpt": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Friday added four flaws impacting Apache Roller, Cisco Expressway, SAP NetWeaver, and Broadcom VMware vCenter to its Known Exploited Vulnerabilities (KEV), citing evidence of active exploitation. The vulnerabilities are listed below - CVE-2026-129448 (CVSS score: 9.8) - A deserialization of untrusted data vulnerability in…",
         "evidence_origin": "summary",
-        "focus": "Known Exploited Vulnerabilities (KEV)",
-        "headline": "Known Exploited Vulnerabilities (KEV) adds four actively exploited flaws",
+        "focus": "VMware vCenter",
+        "headline": "VMware vCenter weakens vulnerability remediation assurance",
         "priority": "high",
-        "significance": "The KEV catalog signals active exploitation requiring urgent patching. The vulnerability owner should confirm asset inventory covers the affected products and verify remediation status.",
+        "significance": "Active exploitation of critical vulnerabilities in widely deployed infrastructure requires immediate asset identification and patching. Vulnerability owners must confirm affected versions are inventoried and remediation status tracked.",
         "source_ids": [
           2
         ]
       },
       {
-        "control_id": "data_protection",
-        "evidence_excerpt": "E-commerce platform Cleverbridge is warning that hackers breached its systems and stole customers' payment card information, including credit card numbers and CVV security codes…",
-        "evidence_origin": "summary",
-        "focus": "payment card information",
-        "headline": "payment card information leaks in Cleverbridge breach",
-        "priority": "high",
-        "significance": "The breach exposes inadequate protection of payment card data. The data protection owner should confirm encryption, access restrictions, and audit logs for cardholder data.",
-        "source_ids": [
-          6
-        ]
-      },
-      {
-        "control_id": "third_party_risk",
+        "control_id": "access_management",
         "evidence_excerpt": "Rackspace warned customers that hackers breached its Rackspace Spot cloud platform using compromised credentials, allowing them to deploy unauthorized workloads and access Kubernetes secrets in customer clusters…",
         "evidence_origin": "summary",
         "focus": "Rackspace Spot cloud platform",
-        "headline": "Rackspace Spot cloud platform suffers breach via compromised credentials",
+        "headline": "Rackspace Spot cloud platform exposes privileged credential risks",
         "priority": "high",
-        "significance": "The breach shows supplier credential compromise can expose customer secrets. The supplier risk owner should confirm Rackspace access scope and Kubernetes secrets protection measures.",
+        "significance": "Compromised credentials enabling unauthorized workload deployment and Kubernetes secret access indicate gaps in privileged access monitoring. Identity owners must verify credential rotation and session revocation controls for cloud management planes.",
         "source_ids": [
           10
         ]
@@ -43,36 +31,48 @@
         "control_id": "access_management",
         "evidence_excerpt": "Microsoft is warning organizations that it suffered a data breach after attackers exploited a vulnerability in its Entra Connect Health service to gain unauthorized access to administrator email addresses and tenant configuration information…",
         "evidence_origin": "summary",
-        "focus": "Entra Connect Health service",
-        "headline": "Entra Connect Health service exposes tenant configuration data",
+        "focus": "Microsoft Entra Connect Health service",
+        "headline": "Microsoft Entra Connect Health service exposes tenant administration data",
         "priority": "high",
-        "significance": "The vulnerability allowed unauthorized access to privileged tenant data. The access management owner should confirm privileged access reviews and tenant configuration monitoring coverage.",
+        "significance": "Unauthorized access to administrator emails and tenant configurations through a Microsoft service flaw undermines identity governance. Access owners must review Entra Connect Health permissions and monitor for anomalous administrative activity.",
         "source_ids": [
           11
         ]
       },
       {
-        "control_id": "incident_response",
-        "evidence_excerpt": "GL.iNet has confirmed that hackers exploited a vulnerability in its cloud remote management services to install custom malware on customers' routers and KVM devices, with some affected users reporting backdoors and reverse shells giving remote access to infected devices…",
+        "control_id": "data_protection",
+        "evidence_excerpt": "E-commerce platform Cleverbridge is warning that hackers breached its systems and stole customers' payment card information, including credit card numbers and CVV security codes…",
         "evidence_origin": "summary",
-        "focus": "cloud remote management services",
-        "headline": "cloud remote management services enable malware installation",
-        "priority": "medium",
-        "significance": "The exploit allowed persistent remote access via management interfaces. The incident response owner should confirm containment procedures for compromised management planes.",
+        "focus": "Cleverbridge e-commerce platform",
+        "headline": "Cleverbridge e-commerce platform exposes payment card data",
+        "priority": "high",
+        "significance": "Theft of credit card numbers and CVV codes from a payment processor indicates inadequate data protection controls. Data owners must assess processor compliance with PCI-DSS and verify encryption and tokenization coverage.",
         "source_ids": [
-          5
+          6
         ]
       },
       {
-        "control_id": "governance",
+        "control_id": "third_party_risk",
         "evidence_excerpt": "Attackers stole data from inside three AI inference providers for months, and none of the three knew until researchers told them, the industrial cybersecurity company Dragos said this week. Some of the stolen requests were flagged as Zero Data Retention, the setting that is supposed to mean a prompt is never stored.",
         "evidence_origin": "summary",
-        "focus": "AI inference providers",
-        "headline": "AI inference providers leak prompt data despite retention settings",
+        "focus": "three AI inference providers",
+        "headline": "three AI inference providers weaken supplier data retention assurances",
         "priority": "medium",
-        "significance": "The long-term undetected data theft violates retention commitments. The governance owner should confirm supplier assurance evidence and data retention compliance verification.",
+        "significance": "Undetected data theft from AI providers despite zero-retention settings reveals gaps in supplier monitoring. Supplier risk owners must validate provider detection capabilities and contractual audit rights.",
         "source_ids": [
           8
+        ]
+      },
+      {
+        "control_id": "vulnerability_management",
+        "evidence_excerpt": "A flaw in KVM, the hypervisor built into the Linux kernel, let researchers read about 127 GB of a cloud server's memory from inside a virtual machine of their own on DigitalOcean. On a shared server, that memory can include other customers' virtual machines. The flaw, tracked as CVE-2026-99312, affects only hosts with AMD processors and nested virtualization enabled.",
+        "evidence_origin": "summary",
+        "focus": "KVM hypervisor",
+        "headline": "KVM hypervisor exposes cross-tenant memory isolation",
+        "priority": "medium",
+        "significance": "Guest-to-host memory read on shared AMD infrastructure undermines cloud tenant isolation. Vulnerability owners must identify affected hypervisor versions and confirm patching or compensating controls with cloud providers.",
+        "source_ids": [
+          4
         ]
       }
     ],
@@ -81,36 +81,36 @@
         {
           "source_ids": [
             2,
-            5,
-            8
+            10,
+            11
           ],
-          "text": "The CISA Known Exploited Vulnerabilities catalog added four critical flaws in widely deployed enterprise software, confirming active exploitation that demands immediate vulnerability management attention. Simultaneously, attackers exploited cloud management interfaces at GL.iNet and AI inference providers used by OpenRouter, demonstrating that supplier-side vulnerabilities can bypass customer controls."
+          "text": "CISA added four actively exploited vulnerabilities to its Known Exploited Vulnerabilities catalog, while credential compromises at Rackspace and Microsoft Entra Connect Health exposed Kubernetes secrets and tenant administration data. These events elevate the urgency for vulnerability remediation and privileged access monitoring across cloud infrastructure."
         },
         {
           "source_ids": [
-            10,
-            11,
-            6
+            6,
+            8,
+            4
           ],
-          "text": "Multiple third-party service breaches compromised privileged access and sensitive data: Rackspace Spot credentials exposed Kubernetes secrets, Microsoft Entra Connect Health vulnerability leaked tenant administration details, and Cleverbridge lost payment card numbers and CVV codes. These events indicate systemic gaps in supplier assurance, access management, and data protection controls."
+          "text": "Payment card theft at Cleverbridge, undetected prompt extraction from AI inference providers, and a Linux KVM hypervisor flaw enabling cross-tenant memory access collectively weaken data protection and third-party assurance. Owners must validate processor compliance, supplier detection capabilities, and hypervisor patching."
         }
       ]
     },
     "industry_impacts": [],
     "regulatory_changes": []
   },
-  "generated_at": "2026-11-22T21:15:59.259481Z",
-  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/ddff39ebb43fcd7b171f33641314fccca47db637/site/feed.xml",
+  "generated_at": "2026-11-23T00:38:46.445888Z",
+  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/e03f4dacfb35678aa00291059df17972312ed817/site/feed.xml",
   "feed_home_url": "https://sentrydigest.ricomanifesto.com/",
-  "digest_issue_date": "2026-11-22",
-  "digest_issue_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-22/",
+  "digest_issue_date": "2026-11-23",
+  "digest_issue_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-23/",
   "requested_model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
   "resolved_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
   "sources": [
     {
       "title": "GnuPG Warns Critical GPGME Flaw Could Expose App Data via Malicious OpenPGP Keys",
       "url": "https://thehackernews.com/2026/11/gnupg-warns-critical-gpgme-flaw-could.html",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-22/#reporting-3b426a1ae487",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-23/#reporting-3b426a1ae487",
       "cves": [
         "CVE-2026-129975"
       ],
@@ -134,7 +134,7 @@
     {
       "title": "Hackers Exploit Critical VMware, Cisco, and Apache Flaws as Espionage Attacks Emerge",
       "url": "https://thehackernews.com/2026/11/hackers-exploit-critical-vmware-cisco.html",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-22/#reporting-552b60cb29a0",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-23/#reporting-552b60cb29a0",
       "cves": [
         "CVE-2026-129448"
       ],
@@ -158,7 +158,7 @@
     {
       "title": "WhatsApp Patches 3 Security Flaws, Including Android Bug Suspected of Use in Scams",
       "url": "https://thehackernews.com/2026/11/whatsapp-patches-3-security-flaws.html",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-22/#reporting-b44c0a854e15",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-23/#reporting-b44c0a854e15",
       "cves": [
         "CVE-2026-23871"
       ],
@@ -182,7 +182,7 @@
     {
       "title": "Linux KVM Flaw CVE-2026-99312 Lets Guest VMs Access Host Memory on AMD Hosts",
       "url": "https://thehackernews.com/2026/11/new-linux-kvm-flaw-cve-2026-99312-lets.html",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-22/#reporting-c7b209f2aed8",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-23/#reporting-c7b209f2aed8",
       "cves": [
         "CVE-2026-99312"
       ],
@@ -206,7 +206,7 @@
     {
       "title": "Hackers exploit GL.iNet cloud flaw to infect routers, KVM devices",
       "url": "https://www.bleepingcomputer.com/news/security/hackers-exploit-glinet-cloud-flaw-to-infect-routers-kvm-devices/",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-22/#reporting-f7511684402b",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-23/#reporting-f7511684402b",
       "cves": [],
       "snippet": "Hackers exploit GL.iNet cloud flaw to infect routers, KVM devices GL.iNet has confirmed that hackers exploited a vulnerability in its cloud remote management services to install custom malware on customers' routers and KVM devices, with some affected users reporting backdoors and reverse shells giving remote access to infected devices… GL.iNet has confirmed that hackers exploited a vulnerability in its cloud remote management services to install custom malware on customers' routers and KVM devices, with some affected users reporting backdoors and reverse shells giving remote access to infected devices…",
       "article_evidence": [
@@ -228,7 +228,7 @@
     {
       "title": "Cleverbridge warns hackers stole credit card numbers, CVVs in data breach",
       "url": "https://www.bleepingcomputer.com/news/security/cleverbridge-warns-hackers-stole-credit-card-numbers-cvvs-in-data-breach/",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-22/#reporting-c75a4d0a4b58",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-23/#reporting-c75a4d0a4b58",
       "cves": [],
       "snippet": "Cleverbridge warns hackers stole credit card numbers, CVVs in data breach E-commerce platform Cleverbridge is warning that hackers breached its systems and stole customers' payment card information, including credit card numbers and CVV security codes… E-commerce platform Cleverbridge is warning that hackers breached its systems and stole customers' payment card information, including credit card numbers and CVV security codes…",
       "article_evidence": [
@@ -250,7 +250,7 @@
     {
       "title": "Signal to block Siri, Gemini AI from capturing chats on iOS, Android",
       "url": "https://www.bleepingcomputer.com/news/security/signal-to-block-siri-gemini-ai-from-capturing-chats-on-ios-android/",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-22/#reporting-daee16a474d4",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-23/#reporting-daee16a474d4",
       "cves": [],
       "snippet": "Signal to block Siri, Gemini AI from capturing chats on iOS, Android Signal has announced new protections that block screenshots on iOS 27 and prevent AI assistants from capturing conversations on supported Android devices… Signal has announced new protections that block screenshots on iOS 27 and prevent AI assistants from capturing conversations on supported Android devices…",
       "article_evidence": [
@@ -272,7 +272,7 @@
     {
       "title": "OpenRouter Drops 3 Providers After Researchers Catch Months of Prompt Theft at AI Hosting Firms",
       "url": "https://thehackernews.com/2026/11/openrouter-drops-3-providers-after.html",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-22/#reporting-6d087c898942",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-23/#reporting-6d087c898942",
       "cves": [],
       "snippet": "OpenRouter Drops 3 Providers After Researchers Catch Months of Prompt Theft at AI Hosting Firms Attackers stole data from inside three AI inference providers for months, and none of the three knew until researchers told them, the industrial cybersecurity company Dragos said this week. Some of the stolen requests were flagged as Zero Data Retention, the setting that is supposed to mean a prompt is never stored. OpenRouter, a gateway that routes customers' AI requests to a pool of… Attackers stole data from inside three AI inference providers for months, and none of the three knew until researchers told them, the industrial cybersecurity company Dragos said this week. Some of the stolen reques",
       "article_evidence": [
@@ -294,7 +294,7 @@
     {
       "title": "Researchers Demonstrate Ghostscript Sandbox-Escape RCE via Crafted File Uploads in Popular Apps",
       "url": "https://thehackernews.com/2026/11/researchers-demonstrate-ghostscript.html",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-22/#reporting-a3c63e958cb9",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-23/#reporting-a3c63e958cb9",
       "cves": [],
       "snippet": "Researchers Demonstrate Ghostscript Sandbox-Escape RCE via Crafted File Uploads in Popular Apps A now-patched flaw in Ghostscript allows a crafted file to escape the program's security sandbox and run commands on the server that processes it. Ghostscript is the interpreter that many Linux servers use to convert uploaded PDFs, PostScript files, and images into other formats, often without the application calling it directly. Security firm pwn.ai showed this week that ordinary upload… A now-patched flaw in Ghostscript allows a crafted file to escape the program's security sandbox and run commands on the server that processes it. Ghostscript is the interpreter that many Linux servers use to con",
       "article_evidence": [
@@ -316,7 +316,7 @@
     {
       "title": "Rackspace Spot breach let hackers access customer Kubernetes secrets",
       "url": "https://www.bleepingcomputer.com/news/security/rackspace-spot-breach-let-hackers-access-customer-kubernetes-secrets/",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-22/#reporting-1fa3870c33e2",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-23/#reporting-1fa3870c33e2",
       "cves": [],
       "snippet": "Rackspace Spot breach let hackers access customer Kubernetes secrets Rackspace warned customers that hackers breached its Rackspace Spot cloud platform using compromised credentials, allowing them to deploy unauthorized workloads and access Kubernetes secrets in customer clusters… Rackspace warned customers that hackers breached its Rackspace Spot cloud platform using compromised credentials, allowing them to deploy unauthorized workloads and access Kubernetes secrets in customer clusters…",
       "article_evidence": [
@@ -338,7 +338,7 @@
     {
       "title": "Microsoft Entra Connect Health flaw exploited to steal tenant data",
       "url": "https://www.bleepingcomputer.com/news/security/microsoft-entra-connect-health-flaw-exploited-to-steal-tenant-data/",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-22/#reporting-cd00c38abb0c",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-23/#reporting-cd00c38abb0c",
       "cves": [],
       "snippet": "Microsoft Entra Connect Health flaw exploited to steal tenant data Microsoft is warning organizations that it suffered a data breach after attackers exploited a vulnerability in its Entra Connect Health service to gain unauthorized access to administrator email addresses and tenant configuration information… Microsoft is warning organizations that it suffered a data breach after attackers exploited a vulnerability in its Entra Connect Health service to gain unauthorized access to administrator email addresses and tenant configuration information…",
       "article_evidence": [
@@ -360,7 +360,7 @@
     {
       "title": "BADBOX botnet returns with record-breaking 40 billion daily ad requests",
       "url": "https://www.bleepingcomputer.com/news/security/badbox-30-botnet-returns-with-record-breaking-40-billion-daily-ad-requests/",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-22/#reporting-9c3f2473640f",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-23/#reporting-9c3f2473640f",
       "cves": [],
       "snippet": "BADBOX botnet returns with record-breaking 40 billion daily ad requests The BADBOX malware found in a broad range of generic Android TV boxes has returned to large-scale ad-fraud operations following last year's disruptions… The BADBOX malware found in a broad range of generic Android TV boxes has returned to large-scale ad-fraud operations following last year's disruptions…",
       "article_evidence": [
