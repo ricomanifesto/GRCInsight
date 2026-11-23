@@ -1,3 +1,4 @@
+import asyncio
 import json
 from pathlib import Path
 import sqlite3
@@ -788,23 +789,34 @@ def test_runtime_conflict_is_recorded_when_the_product_record_was_lost(env):
     assert len(env.runtime.runs) == 1
 
 
-def test_egress_guard_refuses_real_http_clients_inside_boundaries(env):
+def test_egress_guard_refuses_real_http_clients_inside_boundaries(env, monkeypatch):
     import services.openrouter_client as openrouter_client
     import services.regulatory_sources as regulatory_sources
     import services.relevance_decisions as relevance_decisions
-    import services.rss_service as rss_service
+    import services.public_fetch as public_fetch
 
     fixture = load_fixture(
         env.fixtures,
         "model-plan",
         contract.sha256_hex((env.fixtures / "model-plan.json").read_bytes()),
     )
-    modules = (rss_service, openrouter_client, regulatory_sources, relevance_decisions)
+    modules = (public_fetch, openrouter_client, regulatory_sources, relevance_decisions)
+
+    async def refuse_dns(*args, **kwargs):
+        raise AssertionError("synthetic egress guard must stop before DNS resolution")
+
+    monkeypatch.setattr(asyncio.BaseEventLoop, "getaddrinfo", refuse_dns)
     with install_boundaries(fixture, attempt=1, record=lambda name: None):
         for module in modules:
             with pytest.raises(EgressRefused):
                 module.httpx.AsyncClient()
             assert module.httpx.HTTPError is httpx.HTTPError
+        with pytest.raises(EgressRefused):
+            asyncio.run(
+                public_fetch.fetch_public_text(
+                    "https://publisher.example/feed.xml", max_bytes=1024, timeout=1.0
+                )
+            )
     assert all(module.httpx is httpx for module in modules)
 
 

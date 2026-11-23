@@ -1,36 +1,35 @@
 """RSS feed processing service."""
 
-import httpx
 import feedparser
 from typing import Dict, Any, List
 from loguru import logger
 
 from models.api import ArticleInput
 from config.settings import settings
+from services.public_fetch import fetch_public_text
 
 # Publisher pages fetched for empty feed items are kept up to this length.
 PAGE_CONTENT_LIMIT = 5000
+PAGE_BYTE_LIMIT = 65536
+PAGE_FETCH_TIMEOUT = 10.0
+FEED_BYTE_LIMIT = 2 * 1024 * 1024
 
 
 class RSSService:
     """Service for handling RSS feed operations."""
 
     def __init__(self):
-        self.follow_redirects = True
         self.timeout = float(settings.rss_timeout)
 
     async def fetch_feed(self, feed_url: str) -> Dict[str, Any]:
         """Fetch and parse an RSS feed."""
         try:
             logger.info(f"Fetching RSS feed from {feed_url}")
-            async with httpx.AsyncClient(
-                follow_redirects=self.follow_redirects,
-                timeout=self.timeout,
-            ) as client:
-                response = await client.get(feed_url)
-                response.raise_for_status()
-
-            response_text = response.text
+            response_text, truncated = await fetch_public_text(
+                feed_url, max_bytes=FEED_BYTE_LIMIT, timeout=self.timeout
+            )
+            if truncated:
+                raise ValueError("RSS feed exceeded the response byte limit")
             if not response_text.strip():
                 raise ValueError("RSS feed response was empty")
 
@@ -74,43 +73,19 @@ class RSSService:
 
     async def enrich_articles(self, articles: List[ArticleInput]) -> List[ArticleInput]:
         """Enrich articles with additional content."""
-        enriched_articles = []
-
-        async with httpx.AsyncClient(
-            follow_redirects=self.follow_redirects,
-            timeout=self.timeout,
-        ) as client:
-            for article in articles:
+        for article in articles:
+            if not article.content and article.url:
                 try:
-                    logger.debug(f"Enriching article: {article.title}")
-
-                    # For now, just return the article as-is
-                    # In the future, you could fetch full content from the URL
-                    enriched_article = article
-
-                    # If the article has minimal content, try to fetch more
-                    if not article.content and article.url:
-                        try:
-                            response = await client.get(article.url, timeout=10.0)
-                            if response.status_code == 200:
-                                # Simple content extraction - in production you'd want
-                                # more sophisticated content extraction
-                                enriched_article.content = response.text[:PAGE_CONTENT_LIMIT]
-                                enriched_article.content_origin = "publisher_page"
-                                enriched_article.content_truncated = (
-                                    len(response.text) > PAGE_CONTENT_LIMIT
-                                )
-                        except Exception as e:
-                            logger.warning(f"Failed to fetch content for {article.url}: {e}")
-
-                    enriched_articles.append(enriched_article)
-
-                except Exception as e:
-                    logger.error(f"Error enriching article: {e}")
-                    # Add the article anyway, even if enrichment failed
-                    enriched_articles.append(article)
-
-        return enriched_articles
+                    content, truncated = await fetch_public_text(
+                        article.url, max_bytes=PAGE_BYTE_LIMIT, timeout=PAGE_FETCH_TIMEOUT
+                    )
+                    article.content = content[:PAGE_CONTENT_LIMIT]
+                    article.content_origin = "publisher_page"
+                    article.content_truncated = truncated or len(content) > PAGE_CONTENT_LIMIT
+                except Exception as error:
+                    # Enrichment is optional; preserve the feed item on policy/network failure.
+                    logger.warning("Publisher enrichment unavailable: {}", type(error).__name__)
+        return articles
 
     def _extract_content(self, entry) -> str:
         """Extract content from a feed entry."""

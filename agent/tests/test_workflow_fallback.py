@@ -1,4 +1,9 @@
 import asyncio
+from contextlib import asynccontextmanager
+import socket
+
+import httpx
+import pytest
 
 from core import workflow as workflow_mod
 from models.api import GRCAnalysisConfig
@@ -6,14 +11,12 @@ from services.model_service import GRCReportGeneration
 from services.rss_service import RSSService
 
 
-class StaticFeedResponse:
-    status_code = 200
+@pytest.fixture
+def public_feed_dns(monkeypatch):
+    async def resolve(_loop, _host, port, **kwargs):
+        return [(socket.AF_INET, socket.SOCK_STREAM, 6, "", ("93.184.216.34", port))]
 
-    def __init__(self, text):
-        self.text = text
-
-    def raise_for_status(self):
-        return None
+    monkeypatch.setattr(asyncio.BaseEventLoop, "getaddrinfo", resolve)
 
 
 class StaticFeedAsyncClient:
@@ -28,8 +31,9 @@ class StaticFeedAsyncClient:
     async def __aexit__(self, exc_type, exc_val, exc_tb):
         return None
 
-    async def get(self, _url, timeout=None):
-        return StaticFeedResponse(type(self).response_text)
+    @asynccontextmanager
+    async def stream(self, *args, **kwargs):
+        yield httpx.Response(200, text=type(self).response_text)
 
 
 def test_run_grc_analysis_endpoint_falls_back_when_model_is_unavailable(monkeypatch):
@@ -442,16 +446,7 @@ def test_run_grc_analysis_endpoint_passes_request_model_config(monkeypatch):
     assert captured_configs == [("openrouter/nvidia/nemotron-3-ultra-550b-a55b:free", 4096, 750.0)]
 
 
-def test_rss_service_fetch_feed_survives_multiple_event_loops(monkeypatch):
-    class FakeResponse:
-        status_code = 200
-
-        def __init__(self, text):
-            self.text = text
-
-        def raise_for_status(self):
-            return None
-
+def test_rss_service_fetch_feed_survives_multiple_event_loops(monkeypatch, public_feed_dns):
     class LoopBoundAsyncClient:
         def __init__(self, *args, **kwargs):
             self.bound_loop = None
@@ -462,14 +457,17 @@ def test_rss_service_fetch_feed_survives_multiple_event_loops(monkeypatch):
         async def __aexit__(self, exc_type, exc_val, exc_tb):
             return None
 
-        async def get(self, _url, timeout=None):
+        @asynccontextmanager
+        async def stream(self, *args, **kwargs):
             current_loop = asyncio.get_running_loop()
             if self.bound_loop is None:
                 self.bound_loop = current_loop
             elif self.bound_loop is not current_loop:
                 raise RuntimeError("Event loop is closed")
 
-            return FakeResponse("""<?xml version="1.0" encoding="UTF-8"?>
+            yield httpx.Response(
+                200,
+                text="""<?xml version="1.0" encoding="UTF-8"?>
                 <rss version="2.0">
                     <channel>
                         <title>Test Feed</title>
@@ -479,9 +477,10 @@ def test_rss_service_fetch_feed_survives_multiple_event_loops(monkeypatch):
                             <description>Test summary</description>
                         </item>
                     </channel>
-                </rss>""")
+                </rss>""",
+            )
 
-    monkeypatch.setattr("services.rss_service.httpx.AsyncClient", LoopBoundAsyncClient)
+    monkeypatch.setattr("services.public_fetch.httpx.AsyncClient", LoopBoundAsyncClient)
 
     service = RSSService()
 
@@ -492,9 +491,9 @@ def test_rss_service_fetch_feed_survives_multiple_event_loops(monkeypatch):
     assert second_result["entry_count"] == 1
 
 
-def test_unrecoverable_malformed_feed_maps_to_rss_fetch_failure(monkeypatch):
+def test_unrecoverable_malformed_feed_maps_to_rss_fetch_failure(monkeypatch, public_feed_dns):
     StaticFeedAsyncClient.response_text = "not xml at all"
-    monkeypatch.setattr("services.rss_service.httpx.AsyncClient", StaticFeedAsyncClient)
+    monkeypatch.setattr("services.public_fetch.httpx.AsyncClient", StaticFeedAsyncClient)
 
     response = asyncio.run(
         workflow_mod.run_grc_analysis_endpoint(
@@ -509,9 +508,9 @@ def test_unrecoverable_malformed_feed_maps_to_rss_fetch_failure(monkeypatch):
     assert "RSS feed parsing failed" in (response.error.details or "")
 
 
-def test_blank_feed_body_maps_to_rss_fetch_failure(monkeypatch):
+def test_blank_feed_body_maps_to_rss_fetch_failure(monkeypatch, public_feed_dns):
     StaticFeedAsyncClient.response_text = "   \n\t"
-    monkeypatch.setattr("services.rss_service.httpx.AsyncClient", StaticFeedAsyncClient)
+    monkeypatch.setattr("services.public_fetch.httpx.AsyncClient", StaticFeedAsyncClient)
 
     response = asyncio.run(
         workflow_mod.run_grc_analysis_endpoint(
@@ -526,9 +525,9 @@ def test_blank_feed_body_maps_to_rss_fetch_failure(monkeypatch):
     assert "RSS feed response was empty" in (response.error.details or "")
 
 
-def test_non_feed_payload_maps_to_rss_fetch_failure(monkeypatch):
+def test_non_feed_payload_maps_to_rss_fetch_failure(monkeypatch, public_feed_dns):
     StaticFeedAsyncClient.response_text = "<html><body>service unavailable</body></html>"
-    monkeypatch.setattr("services.rss_service.httpx.AsyncClient", StaticFeedAsyncClient)
+    monkeypatch.setattr("services.public_fetch.httpx.AsyncClient", StaticFeedAsyncClient)
 
     response = asyncio.run(
         workflow_mod.run_grc_analysis_endpoint(
@@ -543,13 +542,13 @@ def test_non_feed_payload_maps_to_rss_fetch_failure(monkeypatch):
     assert "no feed metadata or entries" in (response.error.details or "")
 
 
-def test_valid_empty_feed_remains_usable(monkeypatch):
+def test_valid_empty_feed_remains_usable(monkeypatch, public_feed_dns):
     StaticFeedAsyncClient.response_text = (
         "<rss><channel><title>Quiet Feed</title>"
         "<link>https://example.com/</link>"
         "<description>No current entries</description></channel></rss>"
     )
-    monkeypatch.setattr("services.rss_service.httpx.AsyncClient", StaticFeedAsyncClient)
+    monkeypatch.setattr("services.public_fetch.httpx.AsyncClient", StaticFeedAsyncClient)
 
     result = asyncio.run(RSSService().fetch_feed("https://example.com/feed.xml"))
 
@@ -559,12 +558,12 @@ def test_valid_empty_feed_remains_usable(monkeypatch):
     assert result["entries"] == []
 
 
-def test_malformed_feed_with_recoverable_entries_remains_usable(monkeypatch):
+def test_malformed_feed_with_recoverable_entries_remains_usable(monkeypatch, public_feed_dns):
     StaticFeedAsyncClient.response_text = (
         "<rss><channel><title>Recovered</title><item><title>One</title>"
         "<link>https://example.com/one</link>"
     )
-    monkeypatch.setattr("services.rss_service.httpx.AsyncClient", StaticFeedAsyncClient)
+    monkeypatch.setattr("services.public_fetch.httpx.AsyncClient", StaticFeedAsyncClient)
 
     result = asyncio.run(RSSService().fetch_feed("https://example.com/feed.xml"))
 

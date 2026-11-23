@@ -113,22 +113,6 @@ func (h *ReportsHandler) ListReports(c *gin.Context) {
 	c.JSON(http.StatusOK, response)
 }
 
-// DeleteReport deletes a specific report
-func (h *ReportsHandler) DeleteReport(c *gin.Context) {
-	id := c.Param("id")
-	if err := h.reportService.DeleteReport(id); err != nil {
-		h.logger.WithError(err).WithField("report_id", id).Error("Failed to delete report")
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"error": "Failed to delete report",
-		})
-		return
-	}
-
-	c.JSON(http.StatusOK, gin.H{
-		"message": "Report deleted successfully",
-	})
-}
-
 // GetReportStatus gets the status of a specific report
 func (h *ReportsHandler) GetReportStatus(c *gin.Context) {
 	id := c.Param("id")

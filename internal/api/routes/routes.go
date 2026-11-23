@@ -38,7 +38,6 @@ func SetupRouter(container *services.Container, logger *logrus.Logger) *gin.Engi
 			reports.GET("", reportsHandler.ListReports)
 			reports.POST("/generate", reportsHandler.GenerateReport)
 			reports.GET("/:id", reportsHandler.GetReport)
-			reports.DELETE("/:id", reportsHandler.DeleteReport)
 			reports.GET("/:id/status", reportsHandler.GetReportStatus)
 			reports.GET("/:id/articles", reportsHandler.ListReportArticles)
 		}

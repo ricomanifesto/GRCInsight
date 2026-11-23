@@ -40,7 +40,7 @@ MAX_DELAY_SECONDS = 120
 MODEL_MODES = ("plan", "unavailable")
 SYNTHETIC_FEED_ERROR = "synthetic feed boundary unavailable"
 GUARDED_MODULES = (
-    "services.rss_service",
+    "services.public_fetch",
     "services.openrouter_client",
     "services.regulatory_sources",
     "services.relevance_decisions",

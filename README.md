@@ -118,6 +118,12 @@ Before starting it, configure AWS credentials. Make the `grcinsight-reports` Dyn
 
 The Go service listens on port 8080 and calls the Python service at `http://localhost:8081` by default. Edit `configs/config.yaml` or use environment variables to change those settings.
 
+The standalone and Lambda Go APIs expose report reads and generation, with no HTTP report-deletion endpoint. Storage deletion remains an internal operation.
+
+RSS feeds and optional publisher-page enrichment accept HTTP or HTTPS on their default ports, with no URL credentials. Every DNS answer and redirect destination must be public unicast. Requests connect to a validated address while retaining the original Host and TLS hostname. Each hop uses a fresh client with automatic redirects and environment proxies disabled, and follows at most three redirects. These reads request uncompressed content and refuse compressed responses. Local and private-network feeds are unsupported.
+
+Enrichment has a ten-second total budget, including DNS and reading, and reads at most 64 KiB plus one byte to detect truncation before retaining the existing 5,000-character excerpt. A refused or failed enrichment leaves the feed item unchanged. Feed reads use the configured RSS timeout as a total budget and a separate 2 MiB limit. An oversized feed is refused instead of parsing partial XML. The production feed is the public SentryDigest feed configured in `configs/config.json`.
+
 ## Checks
 
 ### Optional article relevance pilot

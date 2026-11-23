@@ -773,6 +773,7 @@ def test_truncated_publisher_page_is_an_excerpt_with_its_own_scope(store):
 
 def test_publisher_page_enrichment_records_origin_and_truncation(monkeypatch):
     import asyncio
+    import socket
 
     import httpx
 
@@ -781,11 +782,16 @@ def test_publisher_page_enrichment_records_origin_and_truncation(monkeypatch):
 
     real_client = httpx.AsyncClient
 
+    async def resolve(_loop, _host, port, **kwargs):
+        return [(socket.AF_INET, socket.SOCK_STREAM, 6, "", ("93.184.216.34", port))]
+
+    monkeypatch.setattr(asyncio.BaseEventLoop, "getaddrinfo", resolve)
+
     def handler(request):
         return httpx.Response(200, text="<html>" + "y" * 6000 + "</html>")
 
     monkeypatch.setattr(
-        rss_module.httpx,
+        httpx,
         "AsyncClient",
         lambda **kw: real_client(transport=httpx.MockTransport(handler), **kw),
     )
