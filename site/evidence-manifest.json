@@ -5,74 +5,74 @@
     "control_implications": [
       {
         "control_id": "vulnerability_management",
-        "evidence_excerpt": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Friday added four flaws impacting Apache Roller, Cisco Expressway, SAP NetWeaver, and Broadcom VMware vCenter to its Known Exploited Vulnerabilities (KEV), citing evidence of active exploitation.",
+        "evidence_excerpt": "A malicious OpenPGP key with an unusually long user ID can trigger a critical memory bug in GPGME, the standard library that programs use to work with GnuPG. The GnuPG project warned yesterday that the flaw could be used to steal data from affected applications and has released fixed versions.",
         "evidence_origin": "summary",
-        "focus": "CISA Known Exploited Vulnerabilities",
-        "headline": "CISA Known Exploited Vulnerabilities adds actively exploited flaws",
-        "priority": "high",
-        "significance": "Active exploitation of critical enterprise software requires immediate asset identification and patching. The accountable owner should confirm affected asset inventory and remediation status for Apache Roller, Cisco Expressway, SAP NetWeaver, and VMware vCenter.",
-        "source_ids": [
-          2
-        ]
-      },
-      {
-        "control_id": "access_management",
-        "evidence_excerpt": "Rackspace warned customers that hackers breached its Rackspace Spot cloud platform using compromised credentials, allowing them to deploy unauthorized workloads and access Kubernetes secrets in customer clusters",
-        "evidence_origin": "summary",
-        "focus": "Rackspace Spot cloud platform",
-        "headline": "Rackspace Spot cloud platform breached via compromised credentials",
-        "priority": "high",
-        "significance": "Credential compromise in a cloud management platform exposes customer Kubernetes secrets. The accountable owner should confirm credential rotation, access reviews, and monitoring for unauthorized workload deployments.",
-        "source_ids": [
-          10
-        ]
-      },
-      {
-        "control_id": "third_party_risk",
-        "evidence_excerpt": "Microsoft is warning organizations that it suffered a data breach after attackers exploited a vulnerability in its Entra Connect Health service to gain unauthorized access to administrator email addresses and tenant configuration information",
-        "evidence_origin": "summary",
-        "focus": "Microsoft Entra Connect Health service",
-        "headline": "Microsoft Entra Connect Health service exploited to steal tenant data",
-        "priority": "high",
-        "significance": "A Microsoft identity service flaw exposed administrator credentials and tenant configurations. The accountable owner should confirm supplier assurance evidence from Microsoft and review dependencies on Entra Connect Health.",
-        "source_ids": [
-          11
-        ]
-      },
-      {
-        "control_id": "third_party_risk",
-        "evidence_excerpt": "GL.iNet has confirmed that hackers exploited a vulnerability in its cloud remote management services to install custom malware on customers' routers and KVM devices, with some affected users reporting backdoors and reverse shells giving remote access to infected devices",
-        "evidence_origin": "summary",
-        "focus": "GL.iNet cloud remote management services",
-        "headline": "GL.iNet cloud remote management services exploited to install malware",
+        "focus": "GPGME, the standard library",
+        "headline": "GPGME, the standard library exposes application data via malicious OpenPGP key",
         "priority": "medium",
-        "significance": "A supplier's cloud management service was compromised to deploy malware on customer devices. The accountable owner should review supplier dependencies on GL.iNet and request remediation assurance evidence.",
+        "significance": "The memory bug in GPGME could allow data theft from applications using the library, weakening assurance of cryptographic operations. The vulnerability management owner should confirm that all dependent applications have been updated to GPGME version 2.3.0 or later.",
+        "source_ids": [
+          1
+        ]
+      },
+      {
+        "control_id": "change_management",
+        "evidence_excerpt": "Microsoft confirmed printing issues on systems running Forcepoint DLP software after installing the KB5132043 November 2026 Windows 11 hotpatch…",
+        "evidence_origin": "summary",
+        "focus": "KB5132043 November 2026 Windows 11 hotpatch",
+        "headline": "KB5132043 November 2026 Windows 11 hotpatch weakens printing functionality for Forcepoint DLP users",
+        "priority": "medium",
+        "significance": "The hotpatch introduces a regression that disrupts data loss prevention printing controls, weakening assurance of output security. The change management owner should verify that post-change validation includes Forcepoint DLP compatibility testing and that rollback procedures are documented.",
+        "source_ids": [
+          4
+        ]
+      },
+      {
+        "control_id": "monitoring",
+        "evidence_excerpt": "The Indian Computer Emergency Response Team (CERT-In) has warned that threat actors are carrying out artificial intelligence (AI)-assisted cyber attacks targeting information and communication technology (ICT) assets in the country. This unsanctioned activity has resulted in unauthorized financial transactions at banking and financial services entities, as well as technology service providers…",
+        "evidence_origin": "summary",
+        "focus": "AI-assisted cyber attacks",
+        "headline": "AI-assisted cyber attacks expose financial transactions at banking entities",
+        "priority": "high",
+        "significance": "AI-assisted attacks bypassing traditional detection have led to unauthorized payments, weakening monitoring assurance for financial transaction integrity. The monitoring owner should confirm that detection rules cover AI-generated attack patterns and that alert routing includes financial fraud teams.",
         "source_ids": [
           5
         ]
       },
       {
-        "control_id": "data_protection",
-        "evidence_excerpt": "Attackers stole data from inside three AI inference providers for months, and none of the three knew until researchers told them, the industrial cybersecurity company Dragos said this week. Some of the stolen requests were flagged as Zero Data Retention, the setting that is supposed to mean a prompt is never stored.",
+        "control_id": "third_party_risk",
+        "evidence_excerpt": "GL.iNet has confirmed that hackers exploited a vulnerability in its cloud remote management services to install custom malware on customers' routers and KVM devices, with some affected users reporting backdoors and reverse shells giving remote access to infected devices…",
         "evidence_origin": "summary",
-        "focus": "AI inference providers",
-        "headline": "AI inference providers breached despite Zero Data Retention claims",
+        "focus": "cloud remote management services",
+        "headline": "cloud remote management services exposes routers and KVM devices to malware installation",
         "priority": "medium",
-        "significance": "AI providers failed to detect data theft and violated Zero Data Retention assurances. The accountable owner should confirm data protection controls for AI prompts and review supplier compliance with retention commitments.",
+        "significance": "The exploited cloud management vulnerability allows unauthorized device control, weakening third-party assurance for managed network equipment. The third-party risk owner should review GL.iNet's remediation evidence and confirm that affected devices have been patched or isolated.",
+        "source_ids": [
+          7
+        ]
+      },
+      {
+        "control_id": "data_protection",
+        "evidence_excerpt": "E-commerce platform Cleverbridge is warning that hackers breached its systems and stole customers' payment card information, including credit card numbers and CVV security codes…",
+        "evidence_origin": "summary",
+        "focus": "E-commerce platform Cleverbridge",
+        "headline": "E-commerce platform Cleverbridge exposes payment card data via system breach",
+        "priority": "high",
+        "significance": "The breach of payment card data including CVV codes weakens data protection assurance for e-commerce transactions. The data protection owner should confirm that Cleverbridge has provided breach notification details and that affected card data has been reported to relevant payment networks.",
         "source_ids": [
           8
         ]
       },
       {
-        "control_id": "data_protection",
-        "evidence_excerpt": "E-commerce platform Cleverbridge is warning that hackers breached its systems and stole customers' payment card information, including credit card numbers and CVV security codes",
+        "control_id": "access_management",
+        "evidence_excerpt": "Rackspace warned customers that hackers breached its Rackspace Spot cloud platform using compromised credentials, allowing them to deploy unauthorized workloads and access Kubernetes secrets in customer clusters…",
         "evidence_origin": "summary",
-        "focus": "Cleverbridge e-commerce platform",
-        "headline": "Cleverbridge e-commerce platform breached exposing payment card data",
+        "focus": "Rackspace Spot cloud platform",
+        "headline": "Rackspace Spot cloud platform exposes Kubernetes secrets via compromised credentials",
         "priority": "high",
-        "significance": "A payment processor breach exposed sensitive cardholder data. The accountable owner should confirm data protection controls for payment data shared with Cleverbridge and request breach notification evidence.",
+        "significance": "Compromised credentials enabling unauthorized access to Kubernetes secrets weakens access management assurance for cloud-hosted workloads. The access management owner should verify that credential rotation and multi-factor authentication are enforced for Rackspace Spot access and that secret access logs are reviewed.",
         "source_ids": [
-          6
+          12
         ]
       }
     ],
@@ -80,27 +80,27 @@
       "paragraphs": [
         {
           "source_ids": [
-            2,
-            10,
-            11
+            1,
+            5
           ],
-          "text": "CISA added four actively exploited vulnerabilities in widely deployed enterprise software to its Known Exploited Vulnerabilities catalog, while separate breaches at Rackspace Spot and Microsoft Entra Connect Health demonstrate that compromised credentials and identity service flaws can expose Kubernetes secrets and tenant configurations. These events indicate that vulnerability management and access controls for critical infrastructure and identity platforms require immediate reassessment. Control owners should verify asset coverage for the newly listed KEV flaws, confirm credential rotation and monitoring for cloud management platforms, and request supplier assurance evidence from Microsoft regarding the Entra Connect Health breach."
+          "text": "Active exploitation of a critical GPGME library flaw and AI-assisted cyber attacks targeting financial institutions have elevated the urgency for vulnerability and monitoring control assurance. The GPGME memory bug allows data theft from applications using OpenPGP keys, while AI-assisted attacks have bypassed detection to trigger unauthorized payments at banks and fintechs. Vulnerability management owners must confirm patching of GPGME-dependent software, and monitoring owners should validate detection coverage for AI-generated attack patterns."
         },
         {
           "source_ids": [
-            5,
+            7,
             8,
-            6
+            12,
+            4
           ],
-          "text": "Supply chain risks intensified as GL.iNet's cloud management service was exploited to install malware on customer devices, AI inference providers suffered undetected prompt theft despite Zero Data Retention settings, and payment processor Cleverbridge lost credit card data. These incidents reveal gaps in third-party risk oversight and data protection controls for outsourced services. Control owners should review dependencies on GL.iNet and AI providers, validate data retention assurances with suppliers, and confirm breach notification procedures for payment processors."
+          "text": "Third-party compromises at GL.iNet, Cleverbridge, and Rackspace Spot demonstrate supply chain risks to device integrity, payment data, and cloud secrets, while a Windows hotpatch regression disrupts Forcepoint DLP printing controls. Third-party risk owners should obtain remediation evidence from GL.iNet and Rackspace, data protection owners must verify Cleverbridge breach notifications, and change management owners need to validate hotpatch compatibility testing. Access management owners should enforce credential hygiene for Rackspace Spot access."
         }
       ]
     },
     "industry_impacts": [],
     "regulatory_changes": []
   },
-  "generated_at": "2026-11-23T06:33:25.913413Z",
-  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/c009c680cbfa80f1afe7ec92fdcb514dddf1fa48/site/feed.xml",
+  "generated_at": "2026-11-23T09:23:48.907815Z",
+  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/9a0b5a05c812017002ab1c40e855158414567132/site/feed.xml",
   "feed_home_url": "https://sentrydigest.ricomanifesto.com/",
   "digest_issue_date": "2026-11-23",
   "digest_issue_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-23/",
@@ -180,25 +180,67 @@
       "effective_date_evidence": null
     },
     {
-      "title": "Linux KVM Flaw CVE-2026-99312 Lets Guest VMs Access Host Memory on AMD Hosts",
-      "url": "https://thehackernews.com/2026/11/new-linux-kvm-flaw-cve-2026-99312-lets.html",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-23/#reporting-c7b209f2aed8",
-      "cves": [
-        "CVE-2026-99312"
-      ],
-      "snippet": "Linux KVM Flaw CVE-2026-99312 Lets Guest VMs Access Host Memory on AMD Hosts A flaw in KVM, the hypervisor built into the Linux kernel, let researchers read about 127 GB of a cloud server's memory from inside a virtual machine of their own on DigitalOcean. On a shared server, that memory can include other customers' virtual machines. The flaw, tracked as CVE-2026-99312, affects only hosts with AMD processors and nested virtualization enabled. Fixed kernels shipped… A flaw in KVM, the hypervisor built into the Linux kernel, let researchers read about 127 GB of a cloud server's memory from inside a virtual machine of their own on DigitalOcean. On a shared server, that memory can include other ",
+      "title": "Microsoft confirms Windows printing issues affecting Forcepoint users",
+      "url": "https://www.bleepingcomputer.com/news/microsoft/microsoft-confirms-printing-issues-after-kb5132043-windows-hotpatch/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-23/#reporting-8ff53fd940c1",
+      "cves": [],
+      "snippet": "Microsoft confirms Windows printing issues affecting Forcepoint users Microsoft confirmed printing issues on systems running Forcepoint DLP software after installing the KB5132043 November 2026 Windows 11 hotpatch… Microsoft confirmed printing issues on systems running Forcepoint DLP software after installing the KB5132043 November 2026 Windows 11 hotpatch…",
       "article_evidence": [
         {
           "extraction_version": 1,
           "origin": "summary",
-          "raw_text": "A flaw in KVM, the hypervisor built into the Linux kernel, let researchers read about 127 GB of a cloud server's memory from inside a virtual machine of their own on DigitalOcean. On a shared server, that memory can include other customers' virtual machines. The flaw, tracked as CVE-2026-99312, affects only hosts with AMD processors and nested virtualization enabled. Fixed kernels shipped…",
-          "text": "A flaw in KVM, the hypervisor built into the Linux kernel, let researchers read about 127 GB of a cloud server's memory from inside a virtual machine of their own on DigitalOcean. On a shared server, that memory can include other customers' virtual machines. The flaw, tracked as CVE-2026-99312, affects only hosts with AMD processors and nested virtualization enabled. Fixed kernels shipped…"
+          "raw_text": "Microsoft confirmed printing issues on systems running Forcepoint DLP software after installing the KB5132043 November 2026 Windows 11 hotpatch…",
+          "text": "Microsoft confirmed printing issues on systems running Forcepoint DLP software after installing the KB5132043 November 2026 Windows 11 hotpatch…"
         },
         {
           "extraction_version": 1,
           "origin": "content",
-          "raw_text": "A flaw in KVM, the hypervisor built into the Linux kernel, let researchers read about 127 GB of a cloud server's memory from inside a virtual machine of their own on DigitalOcean. On a shared server, that memory can include other customers' virtual machines. The flaw, tracked as CVE-2026-99312, affects only hosts with AMD processors and nested virtualization enabled. Fixed kernels shipped…",
-          "text": "A flaw in KVM, the hypervisor built into the Linux kernel, let researchers read about 127 GB of a cloud server's memory from inside a virtual machine of their own on DigitalOcean. On a shared server, that memory can include other customers' virtual machines. The flaw, tracked as CVE-2026-99312, affects only hosts with AMD processors and nested virtualization enabled. Fixed kernels shipped…"
+          "raw_text": "Microsoft confirmed printing issues on systems running Forcepoint DLP software after installing the KB5132043 November 2026 Windows 11 hotpatch…",
+          "text": "Microsoft confirmed printing issues on systems running Forcepoint DLP software after installing the KB5132043 November 2026 Windows 11 hotpatch…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "AI-Assisted Cyberattacks Trigger Unauthorized Payments at Indian Banks and Fintech Firms",
+      "url": "https://thehackernews.com/2026/11/ai-assisted-cyberattacks-trigger.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-23/#reporting-3077523564b0",
+      "cves": [],
+      "snippet": "AI-Assisted Cyberattacks Trigger Unauthorized Payments at Indian Banks and Fintech Firms The Indian Computer Emergency Response Team (CERT-In) has warned that threat actors are carrying out artificial intelligence (AI)-assisted cyber attacks targeting information and communication technology (ICT) assets in the country. This unsanctioned activity has resulted in unauthorized financial transactions at banking and financial services entities, as well as technology service providers… The Indian Computer Emergency Response Team (CERT-In) has warned that threat actors are carrying out artificial intelligence (AI)-assisted cyber attacks targeting information and communication technology (ICT) asse",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "The Indian Computer Emergency Response Team (CERT-In) has warned that threat actors are carrying out artificial intelligence (AI)-assisted cyber attacks targeting information and communication technology (ICT) assets in the country. This unsanctioned activity has resulted in unauthorized financial transactions at banking and financial services entities, as well as technology service providers…",
+          "text": "The Indian Computer Emergency Response Team (CERT-In) has warned that threat actors are carrying out artificial intelligence (AI)-assisted cyber attacks targeting information and communication technology (ICT) assets in the country. This unsanctioned activity has resulted in unauthorized financial transactions at banking and financial services entities, as well as technology service providers…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "The Indian Computer Emergency Response Team (CERT-In) has warned that threat actors are carrying out artificial intelligence (AI)-assisted cyber attacks targeting information and communication technology (ICT) assets in the country. This unsanctioned activity has resulted in unauthorized financial transactions at banking and financial services entities, as well as technology service providers…",
+          "text": "The Indian Computer Emergency Response Team (CERT-In) has warned that threat actors are carrying out artificial intelligence (AI)-assisted cyber attacks targeting information and communication technology (ICT) assets in the country. This unsanctioned activity has resulted in unauthorized financial transactions at banking and financial services entities, as well as technology service providers…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "CISA flags critical Cisco RCE flaw as actively exploited in attacks",
+      "url": "https://www.bleepingcomputer.com/news/security/cisa-flags-critical-cisco-expressway-rce-flaw-as-actively-exploited/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-23/#reporting-a3400f3457d4",
+      "cves": [],
+      "snippet": "CISA flags critical Cisco RCE flaw as actively exploited in attacks The US Cybersecurity and Infrastructure Security Agency (CISA) warned federal agencies that attackers are now exploiting a recently patched critical Cisco Expressway vulnerability in the wild… The US Cybersecurity and Infrastructure Security Agency (CISA) warned federal agencies that attackers are now exploiting a recently patched critical Cisco Expressway vulnerability in the wild…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "The US Cybersecurity and Infrastructure Security Agency (CISA) warned federal agencies that attackers are now exploiting a recently patched critical Cisco Expressway vulnerability in the wild…",
+          "text": "The US Cybersecurity and Infrastructure Security Agency (CISA) warned federal agencies that attackers are now exploiting a recently patched critical Cisco Expressway vulnerability in the wild…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "The US Cybersecurity and Infrastructure Security Agency (CISA) warned federal agencies that attackers are now exploiting a recently patched critical Cisco Expressway vulnerability in the wild…",
+          "text": "The US Cybersecurity and Infrastructure Security Agency (CISA) warned federal agencies that attackers are now exploiting a recently patched critical Cisco Expressway vulnerability in the wild…"
         }
       ],
       "effective_date_evidence": null
@@ -331,50 +373,6 @@
           "origin": "content",
           "raw_text": "Rackspace warned customers that hackers breached its Rackspace Spot cloud platform using compromised credentials, allowing them to deploy unauthorized workloads and access Kubernetes secrets in customer clusters…",
           "text": "Rackspace warned customers that hackers breached its Rackspace Spot cloud platform using compromised credentials, allowing them to deploy unauthorized workloads and access Kubernetes secrets in customer clusters…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "Microsoft Entra Connect Health flaw exploited to steal tenant data",
-      "url": "https://www.bleepingcomputer.com/news/security/microsoft-entra-connect-health-flaw-exploited-to-steal-tenant-data/",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-23/#reporting-cd00c38abb0c",
-      "cves": [],
-      "snippet": "Microsoft Entra Connect Health flaw exploited to steal tenant data Microsoft is warning organizations that it suffered a data breach after attackers exploited a vulnerability in its Entra Connect Health service to gain unauthorized access to administrator email addresses and tenant configuration information… Microsoft is warning organizations that it suffered a data breach after attackers exploited a vulnerability in its Entra Connect Health service to gain unauthorized access to administrator email addresses and tenant configuration information…",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "Microsoft is warning organizations that it suffered a data breach after attackers exploited a vulnerability in its Entra Connect Health service to gain unauthorized access to administrator email addresses and tenant configuration information…",
-          "text": "Microsoft is warning organizations that it suffered a data breach after attackers exploited a vulnerability in its Entra Connect Health service to gain unauthorized access to administrator email addresses and tenant configuration information…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "Microsoft is warning organizations that it suffered a data breach after attackers exploited a vulnerability in its Entra Connect Health service to gain unauthorized access to administrator email addresses and tenant configuration information…",
-          "text": "Microsoft is warning organizations that it suffered a data breach after attackers exploited a vulnerability in its Entra Connect Health service to gain unauthorized access to administrator email addresses and tenant configuration information…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "BADBOX botnet returns with record-breaking 40 billion daily ad requests",
-      "url": "https://www.bleepingcomputer.com/news/security/badbox-30-botnet-returns-with-record-breaking-40-billion-daily-ad-requests/",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-23/#reporting-9c3f2473640f",
-      "cves": [],
-      "snippet": "BADBOX botnet returns with record-breaking 40 billion daily ad requests The BADBOX malware found in a broad range of generic Android TV boxes has returned to large-scale ad-fraud operations following last year's disruptions… The BADBOX malware found in a broad range of generic Android TV boxes has returned to large-scale ad-fraud operations following last year's disruptions…",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "The BADBOX malware found in a broad range of generic Android TV boxes has returned to large-scale ad-fraud operations following last year's disruptions…",
-          "text": "The BADBOX malware found in a broad range of generic Android TV boxes has returned to large-scale ad-fraud operations following last year's disruptions…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "The BADBOX malware found in a broad range of generic Android TV boxes has returned to large-scale ad-fraud operations following last year's disruptions…",
-          "text": "The BADBOX malware found in a broad range of generic Android TV boxes has returned to large-scale ad-fraud operations following last year's disruptions…"
         }
       ],
       "effective_date_evidence": null
