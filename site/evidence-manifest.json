@@ -5,38 +5,74 @@
     "control_implications": [
       {
         "control_id": "vulnerability_management",
-        "evidence_excerpt": "Cybersecurity researchers have urged users to discontinue using a legacy ASP.NET anti-CSRF library named Idunno.AntiCsrf (\"Idunno.AntiCsrf.dll\") following the discovery of a critical vulnerability that has been exploited in the wild. The vulnerability, tracked as CVE-2026-131914, carries a CVSS score of 9.3 out of 10.0. The issue affects versions 0.9.1.0 and 0.9.1 Beta",
+        "evidence_excerpt": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Friday added four flaws impacting Apache Roller, Cisco Expressway, SAP NetWeaver, and Broadcom VMware vCenter to its Known Exploited Vulnerabilities (KEV), citing evidence of active exploitation. The vulnerabilities are listed below - CVE-2026-129448 (CVSS score: 9.8) - A deserialization of untrusted data vulnerability in…",
         "evidence_origin": "summary",
-        "focus": "legacy ASP.NET anti-CSRF library",
-        "headline": "legacy ASP.NET anti-CSRF library exposes unauthenticated RCE",
+        "focus": "Known Exploited Vulnerabilities list",
+        "headline": "Known Exploited Vulnerabilities list adds four actively exploited flaws",
         "priority": "high",
-        "significance": "A widely deployed legacy component is actively exploited for remote code execution without authentication. Vulnerability and asset owners must identify all applications using Idunno.AntiCsrf versions 0.9.1.0 or 0.9.1 Beta and verify remediation or compensating controls.",
-        "source_ids": [
-          1
-        ]
-      },
-      {
-        "control_id": "vulnerability_management",
-        "evidence_excerpt": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Friday added four flaws impacting Apache Roller, Cisco Expressway, SAP NetWeaver, and Broadcom VMware vCenter to its Known Exploited Vulnerabilities (KEV), citing evidence of active exploitation. The vulnerabilities are listed below - CVE-2026-129448 (CVSS score: 9.8) - A deserialization of untrusted data vulnerability in",
-        "evidence_origin": "summary",
-        "focus": "CISA Known Exploited Vulnerabilities catalog additions",
-        "headline": "CISA Known Exploited Vulnerabilities catalog adds four actively exploited flaws",
-        "priority": "high",
-        "significance": "Federal binding operational directives require remediation of KEV-listed vulnerabilities. Vulnerability and asset owners must confirm coverage for Apache Roller, Cisco Expressway, SAP NetWeaver, and VMware vCenter and validate remediation status against the updated catalog.",
+        "significance": "This development matters because CISA KEV additions require immediate remediation tracking for federal agencies and signal heightened risk for all organizations. Vulnerability management owners should confirm affected asset inventory and remediation status for each listed product.",
         "source_ids": [
           3
         ]
       },
       {
+        "control_id": "vulnerability_management",
+        "evidence_excerpt": "Cybersecurity researchers have urged users to discontinue using a legacy ASP.NET anti-CSRF library named Idunno.AntiCsrf (\"Idunno.AntiCsrf.dll\") following the discovery of a critical vulnerability that has been exploited in the wild. The vulnerability, tracked as CVE-2026-131914, carries a CVSS score of 9.3 out of 10.0. The issue affects versions 0.9.1.0 and 0.9.1 Beta, and relates to an…",
+        "evidence_origin": "summary",
+        "focus": "Idunno.AntiCsrf library",
+        "headline": "Idunno.AntiCsrf library exposes unauthenticated remote code execution",
+        "priority": "high",
+        "significance": "This finding matters because a widely used legacy library has a critical exploited vulnerability requiring immediate discontinuation. Vulnerability management owners should confirm whether any applications depend on Idunno.AntiCsrf and verify removal or patching.",
+        "source_ids": [
+          1
+        ]
+      },
+      {
         "control_id": "third_party_risk",
-        "evidence_excerpt": "Hackers exploited a vulnerability in GL.iNet's GoodCloud remote management service to install malware on some customer routers and KVM devices, the maker of travel routers and remote-access KVM hardware said in a security notice updated today. The company identified and fixed the flaw on Friday and blocked the access the attacker used, so devices can no longer be infected through this route.",
+        "evidence_excerpt": "E-commerce platform Cleverbridge is warning that hackers breached its systems and stole customers' payment card information, including credit card numbers and CVV security codes…",
+        "evidence_origin": "summary",
+        "focus": "E-commerce platform Cleverbridge",
+        "headline": "E-commerce platform Cleverbridge suffers payment card data breach",
+        "priority": "high",
+        "significance": "This breach matters because a payment processor exposed credit card numbers and CVVs, affecting downstream merchants and customers. Third-party risk owners should review Cleverbridge dependencies and request assurance evidence for cardholder data protection.",
+        "source_ids": [
+          11
+        ]
+      },
+      {
+        "control_id": "monitoring",
+        "evidence_excerpt": "The Indian Computer Emergency Response Team (CERT-In) has warned that threat actors are carrying out artificial intelligence (AI)-assisted cyber attacks targeting information and communication technology (ICT) assets in the country. This unsanctioned activity has resulted in unauthorized financial transactions at banking and financial services entities, as well as technology service providers…",
+        "evidence_origin": "summary",
+        "focus": "AI-assisted cyber attacks",
+        "headline": "AI-assisted cyber attacks trigger unauthorized financial transactions",
+        "priority": "medium",
+        "significance": "This warning matters because AI-enhanced attacks are causing unauthorized payments at financial institutions, challenging existing detection. Monitoring owners should review telemetry coverage for AI-driven transaction anomalies and confirm alert routing.",
+        "source_ids": [
+          8
+        ]
+      },
+      {
+        "control_id": "third_party_risk",
+        "evidence_excerpt": "GL.iNet has confirmed that hackers exploited a vulnerability in its cloud remote management services to install custom malware on customers' routers and KVM devices, with some affected users reporting backdoors and reverse shells giving remote access to infected devices…",
         "evidence_origin": "summary",
         "focus": "GL.iNet GoodCloud remote management service",
-        "headline": "GL.iNet GoodCloud remote management service compromise installs malware",
+        "headline": "GL.iNet GoodCloud remote management service enables malware installation",
         "priority": "high",
-        "significance": "A supplier-hosted management plane was abused to deploy malware on customer devices. Supplier risk owners must review GL.iNet access scope, confirm the vendor's fix eliminates the attack path, and obtain evidence of remediation assurance for affected routers and KVM devices.",
+        "significance": "This compromise matters because a vendor cloud management service was exploited to install malware on customer devices, creating supply chain risk. Third-party risk owners should assess GL.iNet dependencies and verify vendor remediation assurance.",
         "source_ids": [
-          7
+          10
+        ]
+      },
+      {
+        "control_id": "vulnerability_management",
+        "evidence_excerpt": "A malicious OpenPGP key with an unusually long user ID can trigger a critical memory bug in GPGME, the standard library that programs use to work with GnuPG. The GnuPG project warned yesterday that the flaw could be used to steal data from affected applications and has released fixed versions. The bug, tracked as CVE-2026-129975, affects all software that uses GPGME before version 2.3.0…",
+        "evidence_origin": "summary",
+        "focus": "GPGME standard library",
+        "headline": "GPGME standard library allows data theft via malicious OpenPGP key",
+        "priority": "medium",
+        "significance": "This flaw matters because a core cryptographic library used by many applications can leak data through crafted keys. Vulnerability management owners should inventory GPGME dependencies and verify upgrade to version 2.3.0 or later.",
+        "source_ids": [
+          2
         ]
       }
     ],
@@ -44,24 +80,27 @@
       "paragraphs": [
         {
           "source_ids": [
+            3,
             1,
-            3
+            10
           ],
-          "text": "Multiple critical vulnerabilities in widely deployed infrastructure components are actively exploited, requiring immediate asset identification and remediation verification. A legacy ASP.NET anti-CSRF library, the GPGME cryptographic library, and four products added to the CISA Known Exploited Vulnerabilities catalog all carry evidence of in-the-wild exploitation. Control owners must confirm affected-asset inventories, installed versions, and remediation status for each exposure."
+          "text": "CISA added four actively exploited vulnerabilities affecting Apache Roller, Cisco Expressway, SAP NetWeaver, and VMware vCenter to its Known Exploited Vulnerabilities catalog, while a critical ASP.NET library flaw and a GL.iNet cloud management compromise demonstrate widespread exploitation of software supply chain and vendor-managed services. These developments require immediate asset inventory and remediation tracking across multiple technology stacks. Vulnerability management owners must confirm coverage for each affected product and validate compensating controls where patching is delayed."
         },
         {
           "source_ids": [
-            7
+            11,
+            8,
+            2
           ],
-          "text": "Supply-chain and service-provider compromises extend risk beyond organizational boundaries. The GL.iNet GoodCloud management service was abused to install malware on customer routers and KVM devices, while a payment processor breach at Cleverbridge exposed credit card numbers and CVVs. Simultaneously, AI-assisted attacks are driving unauthorized financial transactions in banking and fintech sectors. Supplier risk, data protection, and monitoring owners must validate third-party assurance evidence, exposure assessments, and detection coverage for these emerging tactics."
+          "text": "A payment processor breach exposed credit card numbers and CVVs at Cleverbridge, AI-assisted attacks triggered unauthorized transactions at Indian financial institutions, and a cryptographic library flaw in GPGME permits data theft through malicious keys. These events highlight expanding third-party risk, evolving fraud techniques, and foundational library vulnerabilities affecting data protection. Data protection and third-party risk owners should review supplier assurance for cardholder data, enhance monitoring for AI-driven anomalies, and inventory GPGME dependencies."
         }
       ]
     },
     "industry_impacts": [],
     "regulatory_changes": []
   },
-  "generated_at": "2026-11-23T12:23:12.63048Z",
-  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/259a401b342f63434aa11a5a1af43ac71d4725e4/site/feed.xml",
+  "generated_at": "2026-11-23T13:07:41.634243Z",
+  "feed_url": "https://sentrydigest.ricomanifesto.com/feed.xml",
   "feed_home_url": "https://sentrydigest.ricomanifesto.com/",
   "digest_issue_date": "2026-11-23",
   "digest_issue_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-23/",
