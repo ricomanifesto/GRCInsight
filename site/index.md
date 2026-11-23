@@ -1,8 +1,8 @@
 # GRC Intelligence Report - 2026-11-23
-**Generated:** 2026-11-23T00:38:46.445888Z
+**Generated:** 2026-11-23T06:33:25.913413Z
 **Date of Issue:** November 2026
 **Analysis Period:** November 2026
-**Source:** [SentryDigest](https://raw.githubusercontent.com/ricomanifesto/SentryDigest/e03f4dacfb35678aa00291059df17972312ed817/site/feed.xml)
+**Source:** [SentryDigest](https://raw.githubusercontent.com/ricomanifesto/SentryDigest/c009c680cbfa80f1afe7ec92fdcb514dddf1fa48/site/feed.xml)
 **Source Issue:** [SentryDigest 2026-11-23](https://sentrydigest.ricomanifesto.com/archive/2026-11-23/)
 **Articles Analyzed:** 30
 **GRC-Relevant Articles:** 30
@@ -12,9 +12,9 @@
 
 ## Executive Summary
 
-CISA added four actively exploited vulnerabilities to its Known Exploited Vulnerabilities catalog, while credential compromises at Rackspace and Microsoft Entra Connect Health exposed Kubernetes secrets and tenant administration data. These events elevate the urgency for vulnerability remediation and privileged access monitoring across cloud infrastructure. [Hackers Exploit Critical VMware, Cisco, and Apache Flaws as Espionage Attacks Emerge](https://thehackernews.com/2026/11/hackers-exploit-critical-vmware-cisco.html); [Rackspace Spot breach let hackers access customer Kubernetes secrets](https://www.bleepingcomputer.com/news/security/rackspace-spot-breach-let-hackers-access-customer-kubernetes-secrets/); [Microsoft Entra Connect Health flaw exploited to steal tenant data](https://www.bleepingcomputer.com/news/security/microsoft-entra-connect-health-flaw-exploited-to-steal-tenant-data/)
+CISA added four actively exploited vulnerabilities in widely deployed enterprise software to its Known Exploited Vulnerabilities catalog, while separate breaches at Rackspace Spot and Microsoft Entra Connect Health demonstrate that compromised credentials and identity service flaws can expose Kubernetes secrets and tenant configurations. These events indicate that vulnerability management and access controls for critical infrastructure and identity platforms require immediate reassessment. Control owners should verify asset coverage for the newly listed KEV flaws, confirm credential rotation and monitoring for cloud management platforms, and request supplier assurance evidence from Microsoft regarding the Entra Connect Health breach. [Hackers Exploit Critical VMware, Cisco, and Apache Flaws as Espionage Attacks Emerge](https://thehackernews.com/2026/11/hackers-exploit-critical-vmware-cisco.html); [Rackspace Spot breach let hackers access customer Kubernetes secrets](https://www.bleepingcomputer.com/news/security/rackspace-spot-breach-let-hackers-access-customer-kubernetes-secrets/); [Microsoft Entra Connect Health flaw exploited to steal tenant data](https://www.bleepingcomputer.com/news/security/microsoft-entra-connect-health-flaw-exploited-to-steal-tenant-data/)
 
-Payment card theft at Cleverbridge, undetected prompt extraction from AI inference providers, and a Linux KVM hypervisor flaw enabling cross-tenant memory access collectively weaken data protection and third-party assurance. Owners must validate processor compliance, supplier detection capabilities, and hypervisor patching. [Cleverbridge warns hackers stole credit card numbers, CVVs in data breach](https://www.bleepingcomputer.com/news/security/cleverbridge-warns-hackers-stole-credit-card-numbers-cvvs-in-data-breach/); [OpenRouter Drops 3 Providers After Researchers Catch Months of Prompt Theft at AI Hosting Firms](https://thehackernews.com/2026/11/openrouter-drops-3-providers-after.html); [Linux KVM Flaw CVE-2026-99312 Lets Guest VMs Access Host Memory on AMD Hosts](https://thehackernews.com/2026/11/new-linux-kvm-flaw-cve-2026-99312-lets.html)
+Supply chain risks intensified as GL.iNet's cloud management service was exploited to install malware on customer devices, AI inference providers suffered undetected prompt theft despite Zero Data Retention settings, and payment processor Cleverbridge lost credit card data. These incidents reveal gaps in third-party risk oversight and data protection controls for outsourced services. Control owners should review dependencies on GL.iNet and AI providers, validate data retention assurances with suppliers, and confirm breach notification procedures for payment processors. [Hackers exploit GL.iNet cloud flaw to infect routers, KVM devices](https://www.bleepingcomputer.com/news/security/hackers-exploit-glinet-cloud-flaw-to-infect-routers-kvm-devices/); [OpenRouter Drops 3 Providers After Researchers Catch Months of Prompt Theft at AI Hosting Firms](https://thehackernews.com/2026/11/openrouter-drops-3-providers-after.html); [Cleverbridge warns hackers stole credit card numbers, CVVs in data breach](https://www.bleepingcomputer.com/news/security/cleverbridge-warns-hackers-stole-credit-card-numbers-cvvs-in-data-breach/)
 
 Scope: 6 findings and 0 sourced regulatory changes from 12 retained sources. Review priorities rank what to check first; confirm whether each finding applies to your organization before assigning work.
 
@@ -26,13 +26,13 @@ No sourced regulatory changes identified in the supplied evidence.
 
 Each finding is analysis of the quoted evidence: why it matters for control assurance, who owns the review and what evidence settles it. Reference controls are review aids, not a compliance determination.
 
-### VMware vCenter weakens vulnerability remediation assurance
+### CISA Known Exploited Vulnerabilities adds actively exploited flaws
 
 **Review priority:** High · Vulnerability management · Owner: Vulnerability and asset owners
 
-**Why it matters:** Active exploitation of critical vulnerabilities in widely deployed infrastructure requires immediate asset identification and patching. Vulnerability owners must confirm affected versions are inventoried and remediation status tracked.
+**Why it matters:** Active exploitation of critical enterprise software requires immediate asset identification and patching. The accountable owner should confirm affected asset inventory and remediation status for Apache Roller, Cisco Expressway, SAP NetWeaver, and VMware vCenter.
 
-**Source evidence:** “The U.S. Cybersecurity and Infrastructure Security Agency &#40;CISA&#41; on Friday added four flaws impacting Apache Roller, Cisco Expressway, SAP NetWeaver, and Broadcom VMware vCenter to its Known Exploited Vulnerabilities &#40;KEV&#41;, citing evidence of active exploitation. The vulnerabilities are listed below - CVE-2026-129448 &#40;CVSS score: 9.8&#41; - A deserialization of untrusted data vulnerability in…” [Hackers Exploit Critical VMware, Cisco, and Apache Flaws as Espionage Attacks Emerge](https://thehackernews.com/2026/11/hackers-exploit-critical-vmware-cisco.html)
+**Source evidence:** “The U.S. Cybersecurity and Infrastructure Security Agency &#40;CISA&#41; on Friday added four flaws impacting Apache Roller, Cisco Expressway, SAP NetWeaver, and Broadcom VMware vCenter to its Known Exploited Vulnerabilities &#40;KEV&#41;, citing evidence of active exploitation.” [Hackers Exploit Critical VMware, Cisco, and Apache Flaws as Espionage Attacks Emerge](https://thehackernews.com/2026/11/hackers-exploit-critical-vmware-cisco.html)
 
 **Evidence to request:** Affected-asset inventory, installed versions, remediation status and an exception owner.
 
@@ -40,13 +40,13 @@ Each finding is analysis of the quoted evidence: why it matters for control assu
 
 **Reference controls:** ISO/IEC 27001:2022 A.8.8 (management of technical vulnerabilities); NIST CSF 2.0 ID.RA (risk assessment), PR.PS (platform security)
 
-### Rackspace Spot cloud platform exposes privileged credential risks
+### Rackspace Spot cloud platform breached via compromised credentials
 
 **Review priority:** High · Access management · Owner: Identity and access owner
 
-**Why it matters:** Compromised credentials enabling unauthorized workload deployment and Kubernetes secret access indicate gaps in privileged access monitoring. Identity owners must verify credential rotation and session revocation controls for cloud management planes.
+**Why it matters:** Credential compromise in a cloud management platform exposes customer Kubernetes secrets. The accountable owner should confirm credential rotation, access reviews, and monitoring for unauthorized workload deployments.
 
-**Source evidence:** “Rackspace warned customers that hackers breached its Rackspace Spot cloud platform using compromised credentials, allowing them to deploy unauthorized workloads and access Kubernetes secrets in customer clusters…” [Rackspace Spot breach let hackers access customer Kubernetes secrets](https://www.bleepingcomputer.com/news/security/rackspace-spot-breach-let-hackers-access-customer-kubernetes-secrets/)
+**Source evidence:** “Rackspace warned customers that hackers breached its Rackspace Spot cloud platform using compromised credentials, allowing them to deploy unauthorized workloads and access Kubernetes secrets in customer clusters” [Rackspace Spot breach let hackers access customer Kubernetes secrets](https://www.bleepingcomputer.com/news/security/rackspace-spot-breach-let-hackers-access-customer-kubernetes-secrets/)
 
 **Evidence to request:** Access scope, authentication coverage, session revocation and a permission-test result.
 
@@ -54,41 +54,13 @@ Each finding is analysis of the quoted evidence: why it matters for control assu
 
 **Reference controls:** ISO/IEC 27001:2022 A.5.15 (access control), A.5.18 (access rights), A.8.2 (privileged access rights); NIST CSF 2.0 PR.AA (identity management, authentication and access control)
 
-### Microsoft Entra Connect Health service exposes tenant administration data
+### Microsoft Entra Connect Health service exploited to steal tenant data
 
-**Review priority:** High · Access management · Owner: Identity and access owner
+**Review priority:** High · Third-party risk · Owner: Supplier risk owner
 
-**Why it matters:** Unauthorized access to administrator emails and tenant configurations through a Microsoft service flaw undermines identity governance. Access owners must review Entra Connect Health permissions and monitor for anomalous administrative activity.
+**Why it matters:** A Microsoft identity service flaw exposed administrator credentials and tenant configurations. The accountable owner should confirm supplier assurance evidence from Microsoft and review dependencies on Entra Connect Health.
 
-**Source evidence:** “Microsoft is warning organizations that it suffered a data breach after attackers exploited a vulnerability in its Entra Connect Health service to gain unauthorized access to administrator email addresses and tenant configuration information…” [Microsoft Entra Connect Health flaw exploited to steal tenant data](https://www.bleepingcomputer.com/news/security/microsoft-entra-connect-health-flaw-exploited-to-steal-tenant-data/)
-
-**Evidence to request:** Access scope, authentication coverage, session revocation and a permission-test result.
-
-**Decision trigger:** If a permission gap is reproduced, assign a control correction and verify it; otherwise retain the test evidence.
-
-**Reference controls:** ISO/IEC 27001:2022 A.5.15 (access control), A.5.18 (access rights), A.8.2 (privileged access rights); NIST CSF 2.0 PR.AA (identity management, authentication and access control)
-
-### Cleverbridge e-commerce platform exposes payment card data
-
-**Review priority:** High · Data protection · Owner: Data and privacy owners
-
-**Why it matters:** Theft of credit card numbers and CVV codes from a payment processor indicates inadequate data protection controls. Data owners must assess processor compliance with PCI-DSS and verify encryption and tokenization coverage.
-
-**Source evidence:** “E-commerce platform Cleverbridge is warning that hackers breached its systems and stole customers' payment card information, including credit card numbers and CVV security codes…” [Cleverbridge warns hackers stole credit card numbers, CVVs in data breach](https://www.bleepingcomputer.com/news/security/cleverbridge-warns-hackers-stole-credit-card-numbers-cvvs-in-data-breach/)
-
-**Evidence to request:** Data inventory, access restrictions, audit logs and a documented exposure assessment.
-
-**Decision trigger:** If relevant data is exposed to the reported access path, decide which protection or access change is needed.
-
-**Reference controls:** ISO/IEC 27001:2022 A.5.34 (privacy and protection of PII), A.8.12 (data leakage prevention), A.8.24 (use of cryptography); NIST CSF 2.0 PR.DS (data security)
-
-### three AI inference providers weaken supplier data retention assurances
-
-**Review priority:** Medium · Third-party risk · Owner: Supplier risk owner
-
-**Why it matters:** Undetected data theft from AI providers despite zero-retention settings reveals gaps in supplier monitoring. Supplier risk owners must validate provider detection capabilities and contractual audit rights.
-
-**Source evidence:** “Attackers stole data from inside three AI inference providers for months, and none of the three knew until researchers told them, the industrial cybersecurity company Dragos said this week. Some of the stolen requests were flagged as Zero Data Retention, the setting that is supposed to mean a prompt is never stored.” [OpenRouter Drops 3 Providers After Researchers Catch Months of Prompt Theft at AI Hosting Firms](https://thehackernews.com/2026/11/openrouter-drops-3-providers-after.html)
+**Source evidence:** “Microsoft is warning organizations that it suffered a data breach after attackers exploited a vulnerability in its Entra Connect Health service to gain unauthorized access to administrator email addresses and tenant configuration information” [Microsoft Entra Connect Health flaw exploited to steal tenant data](https://www.bleepingcomputer.com/news/security/microsoft-entra-connect-health-flaw-exploited-to-steal-tenant-data/)
 
 **Evidence to request:** Supplier access scope, control responsibilities and evidence of remediation assurance.
 
@@ -96,19 +68,47 @@ Each finding is analysis of the quoted evidence: why it matters for control assu
 
 **Reference controls:** ISO/IEC 27001:2022 A.5.19 (supplier relationships), A.5.21 (ICT supply chain), A.5.22 (monitoring and review of supplier services); NIST CSF 2.0 GV.SC (cybersecurity supply chain risk management)
 
-### KVM hypervisor exposes cross-tenant memory isolation
+### GL.iNet cloud remote management services exploited to install malware
 
-**Review priority:** Medium · Vulnerability management · Owner: Vulnerability and asset owners
+**Review priority:** Medium · Third-party risk · Owner: Supplier risk owner
 
-**Why it matters:** Guest-to-host memory read on shared AMD infrastructure undermines cloud tenant isolation. Vulnerability owners must identify affected hypervisor versions and confirm patching or compensating controls with cloud providers.
+**Why it matters:** A supplier's cloud management service was compromised to deploy malware on customer devices. The accountable owner should review supplier dependencies on GL.iNet and request remediation assurance evidence.
 
-**Source evidence:** “A flaw in KVM, the hypervisor built into the Linux kernel, let researchers read about 127 GB of a cloud server's memory from inside a virtual machine of their own on DigitalOcean. On a shared server, that memory can include other customers' virtual machines. The flaw, tracked as CVE-2026-99312, affects only hosts with AMD processors and nested virtualization enabled.” [Linux KVM Flaw CVE-2026-99312 Lets Guest VMs Access Host Memory on AMD Hosts](https://thehackernews.com/2026/11/new-linux-kvm-flaw-cve-2026-99312-lets.html)
+**Source evidence:** “GL.iNet has confirmed that hackers exploited a vulnerability in its cloud remote management services to install custom malware on customers' routers and KVM devices, with some affected users reporting backdoors and reverse shells giving remote access to infected devices” [Hackers exploit GL.iNet cloud flaw to infect routers, KVM devices](https://www.bleepingcomputer.com/news/security/hackers-exploit-glinet-cloud-flaw-to-infect-routers-kvm-devices/)
 
-**Evidence to request:** Affected-asset inventory, installed versions, remediation status and an exception owner.
+**Evidence to request:** Supplier access scope, control responsibilities and evidence of remediation assurance.
 
-**Decision trigger:** If applicability is confirmed, decide on remediation or a documented exception; otherwise record why the finding does not apply.
+**Decision trigger:** If the supplier dependency exists and assurance is insufficient, request evidence or escalate the assurance gap to its owner.
 
-**Reference controls:** ISO/IEC 27001:2022 A.8.8 (management of technical vulnerabilities); NIST CSF 2.0 ID.RA (risk assessment), PR.PS (platform security)
+**Reference controls:** ISO/IEC 27001:2022 A.5.19 (supplier relationships), A.5.21 (ICT supply chain), A.5.22 (monitoring and review of supplier services); NIST CSF 2.0 GV.SC (cybersecurity supply chain risk management)
+
+### AI inference providers breached despite Zero Data Retention claims
+
+**Review priority:** Medium · Data protection · Owner: Data and privacy owners
+
+**Why it matters:** AI providers failed to detect data theft and violated Zero Data Retention assurances. The accountable owner should confirm data protection controls for AI prompts and review supplier compliance with retention commitments.
+
+**Source evidence:** “Attackers stole data from inside three AI inference providers for months, and none of the three knew until researchers told them, the industrial cybersecurity company Dragos said this week. Some of the stolen requests were flagged as Zero Data Retention, the setting that is supposed to mean a prompt is never stored.” [OpenRouter Drops 3 Providers After Researchers Catch Months of Prompt Theft at AI Hosting Firms](https://thehackernews.com/2026/11/openrouter-drops-3-providers-after.html)
+
+**Evidence to request:** Data inventory, access restrictions, audit logs and a documented exposure assessment.
+
+**Decision trigger:** If relevant data is exposed to the reported access path, decide which protection or access change is needed.
+
+**Reference controls:** ISO/IEC 27001:2022 A.5.34 (privacy and protection of PII), A.8.12 (data leakage prevention), A.8.24 (use of cryptography); NIST CSF 2.0 PR.DS (data security)
+
+### Cleverbridge e-commerce platform breached exposing payment card data
+
+**Review priority:** High · Data protection · Owner: Data and privacy owners
+
+**Why it matters:** A payment processor breach exposed sensitive cardholder data. The accountable owner should confirm data protection controls for payment data shared with Cleverbridge and request breach notification evidence.
+
+**Source evidence:** “E-commerce platform Cleverbridge is warning that hackers breached its systems and stole customers' payment card information, including credit card numbers and CVV security codes” [Cleverbridge warns hackers stole credit card numbers, CVVs in data breach](https://www.bleepingcomputer.com/news/security/cleverbridge-warns-hackers-stole-credit-card-numbers-cvvs-in-data-breach/)
+
+**Evidence to request:** Data inventory, access restrictions, audit logs and a documented exposure assessment.
+
+**Decision trigger:** If relevant data is exposed to the reported access path, decide which protection or access change is needed.
+
+**Reference controls:** ISO/IEC 27001:2022 A.5.34 (privacy and protection of PII), A.8.12 (data leakage prevention), A.8.24 (use of cryptography); NIST CSF 2.0 PR.DS (data security)
 
 ## Source Highlights
 
