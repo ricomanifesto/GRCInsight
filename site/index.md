@@ -1,8 +1,8 @@
 # GRC Intelligence Report - 2026-11-23
-**Generated:** 2026-11-23T09:23:48.907815Z
+**Generated:** 2026-11-23T12:23:12.63048Z
 **Date of Issue:** November 2026
 **Analysis Period:** November 2026
-**Source:** [SentryDigest](https://raw.githubusercontent.com/ricomanifesto/SentryDigest/9a0b5a05c812017002ab1c40e855158414567132/site/feed.xml)
+**Source:** [SentryDigest](https://raw.githubusercontent.com/ricomanifesto/SentryDigest/259a401b342f63434aa11a5a1af43ac71d4725e4/site/feed.xml)
 **Source Issue:** [SentryDigest 2026-11-23](https://sentrydigest.ricomanifesto.com/archive/2026-11-23/)
 **Articles Analyzed:** 30
 **GRC-Relevant Articles:** 30
@@ -12,11 +12,11 @@
 
 ## Executive Summary
 
-Active exploitation of a critical GPGME library flaw and AI-assisted cyber attacks targeting financial institutions have elevated the urgency for vulnerability and monitoring control assurance. The GPGME memory bug allows data theft from applications using OpenPGP keys, while AI-assisted attacks have bypassed detection to trigger unauthorized payments at banks and fintechs. Vulnerability management owners must confirm patching of GPGME-dependent software, and monitoring owners should validate detection coverage for AI-generated attack patterns. [GnuPG Warns Critical GPGME Flaw Could Expose App Data via Malicious OpenPGP Keys](https://thehackernews.com/2026/11/gnupg-warns-critical-gpgme-flaw-could.html); [AI-Assisted Cyberattacks Trigger Unauthorized Payments at Indian Banks and Fintech Firms](https://thehackernews.com/2026/11/ai-assisted-cyberattacks-trigger.html)
+Multiple critical vulnerabilities in widely deployed infrastructure components are actively exploited, requiring immediate asset identification and remediation verification. A legacy ASP.NET anti-CSRF library, the GPGME cryptographic library, and four products added to the CISA Known Exploited Vulnerabilities catalog all carry evidence of in-the-wild exploitation. Control owners must confirm affected-asset inventories, installed versions, and remediation status for each exposure. [Hackers Exploit Critical ASP.NET Anti-CSRF Library Flaw Allowing Unauthenticated RCE](https://thehackernews.com/2026/11/hackers-exploit-critical-aspnet-anti.html); [Hackers Exploit Critical VMware, Cisco, and Apache Flaws as Espionage Attacks Emerge](https://thehackernews.com/2026/11/hackers-exploit-critical-vmware-cisco.html)
 
-Third-party compromises at GL.iNet, Cleverbridge, and Rackspace Spot demonstrate supply chain risks to device integrity, payment data, and cloud secrets, while a Windows hotpatch regression disrupts Forcepoint DLP printing controls. Third-party risk owners should obtain remediation evidence from GL.iNet and Rackspace, data protection owners must verify Cleverbridge breach notifications, and change management owners need to validate hotpatch compatibility testing. Access management owners should enforce credential hygiene for Rackspace Spot access. [Hackers exploit GL.iNet cloud flaw to infect routers, KVM devices](https://www.bleepingcomputer.com/news/security/hackers-exploit-glinet-cloud-flaw-to-infect-routers-kvm-devices/); [Cleverbridge warns hackers stole credit card numbers, CVVs in data breach](https://www.bleepingcomputer.com/news/security/cleverbridge-warns-hackers-stole-credit-card-numbers-cvvs-in-data-breach/); [Rackspace Spot breach let hackers access customer Kubernetes secrets](https://www.bleepingcomputer.com/news/security/rackspace-spot-breach-let-hackers-access-customer-kubernetes-secrets/); [Microsoft confirms Windows printing issues affecting Forcepoint users](https://www.bleepingcomputer.com/news/microsoft/microsoft-confirms-printing-issues-after-kb5132043-windows-hotpatch/)
+Supply-chain and service-provider compromises extend risk beyond organizational boundaries. The GL.iNet GoodCloud management service was abused to install malware on customer routers and KVM devices, while a payment processor breach at Cleverbridge exposed credit card numbers and CVVs. Simultaneously, AI-assisted attacks are driving unauthorized financial transactions in banking and fintech sectors. Supplier risk, data protection, and monitoring owners must validate third-party assurance evidence, exposure assessments, and detection coverage for these emerging tactics. [Hackers Exploited GL.iNet Cloud Flaw to Install Malware on Routers and KVM Devices](https://thehackernews.com/2026/11/hackers-exploited-glinet-cloud-flaw-to.html)
 
-Scope: 6 findings and 0 sourced regulatory changes from 12 retained sources. Review priorities rank what to check first; confirm whether each finding applies to your organization before assigning work.
+Scope: 3 findings and 0 sourced regulatory changes from 12 retained sources. Review priorities rank what to check first; confirm whether each finding applies to your organization before assigning work.
 
 ## Sourced Regulatory Changes
 
@@ -26,13 +26,13 @@ No sourced regulatory changes identified in the supplied evidence.
 
 Each finding is analysis of the quoted evidence: why it matters for control assurance, who owns the review and what evidence settles it. Reference controls are review aids, not a compliance determination.
 
-### GPGME, the standard library exposes application data via malicious OpenPGP key
+### legacy ASP.NET anti-CSRF library exposes unauthenticated RCE
 
-**Review priority:** Medium · Vulnerability management · Owner: Vulnerability and asset owners
+**Review priority:** High · Vulnerability management · Owner: Vulnerability and asset owners
 
-**Why it matters:** The memory bug in GPGME could allow data theft from applications using the library, weakening assurance of cryptographic operations. The vulnerability management owner should confirm that all dependent applications have been updated to GPGME version 2.3.0 or later.
+**Why it matters:** A widely deployed legacy component is actively exploited for remote code execution without authentication. Vulnerability and asset owners must identify all applications using Idunno.AntiCsrf versions 0.9.1.0 or 0.9.1 Beta and verify remediation or compensating controls.
 
-**Source evidence:** “A malicious OpenPGP key with an unusually long user ID can trigger a critical memory bug in GPGME, the standard library that programs use to work with GnuPG. The GnuPG project warned yesterday that the flaw could be used to steal data from affected applications and has released fixed versions.” [GnuPG Warns Critical GPGME Flaw Could Expose App Data via Malicious OpenPGP Keys](https://thehackernews.com/2026/11/gnupg-warns-critical-gpgme-flaw-could.html)
+**Source evidence:** “Cybersecurity researchers have urged users to discontinue using a legacy ASP.NET anti-CSRF library named Idunno.AntiCsrf &#40;"Idunno.AntiCsrf.dll"&#41; following the discovery of a critical vulnerability that has been exploited in the wild. The vulnerability, tracked as CVE-2026-131914, carries a CVSS score of 9.3 out of 10.0. The issue affects versions 0.9.1.0 and 0.9.1 Beta” [Hackers Exploit Critical ASP.NET Anti-CSRF Library Flaw Allowing Unauthenticated RCE](https://thehackernews.com/2026/11/hackers-exploit-critical-aspnet-anti.html)
 
 **Evidence to request:** Affected-asset inventory, installed versions, remediation status and an exception owner.
 
@@ -40,27 +40,27 @@ Each finding is analysis of the quoted evidence: why it matters for control assu
 
 **Reference controls:** ISO/IEC 27001:2022 A.8.8 (management of technical vulnerabilities); NIST CSF 2.0 ID.RA (risk assessment), PR.PS (platform security)
 
-### AI-assisted cyber attacks expose financial transactions at banking entities
+### CISA Known Exploited Vulnerabilities catalog adds four actively exploited flaws
 
-**Review priority:** High · Monitoring and detection · Owner: Detection and monitoring owner
+**Review priority:** High · Vulnerability management · Owner: Vulnerability and asset owners
 
-**Why it matters:** AI-assisted attacks bypassing traditional detection have led to unauthorized payments, weakening monitoring assurance for financial transaction integrity. The monitoring owner should confirm that detection rules cover AI-generated attack patterns and that alert routing includes financial fraud teams.
+**Why it matters:** Federal binding operational directives require remediation of KEV-listed vulnerabilities. Vulnerability and asset owners must confirm coverage for Apache Roller, Cisco Expressway, SAP NetWeaver, and VMware vCenter and validate remediation status against the updated catalog.
 
-**Source evidence:** “The Indian Computer Emergency Response Team &#40;CERT-In&#41; has warned that threat actors are carrying out artificial intelligence &#40;AI&#41;-assisted cyber attacks targeting information and communication technology &#40;ICT&#41; assets in the country. This unsanctioned activity has resulted in unauthorized financial transactions at banking and financial services entities, as well as technology service providers…” [AI-Assisted Cyberattacks Trigger Unauthorized Payments at Indian Banks and Fintech Firms](https://thehackernews.com/2026/11/ai-assisted-cyberattacks-trigger.html)
+**Source evidence:** “The U.S. Cybersecurity and Infrastructure Security Agency &#40;CISA&#41; on Friday added four flaws impacting Apache Roller, Cisco Expressway, SAP NetWeaver, and Broadcom VMware vCenter to its Known Exploited Vulnerabilities &#40;KEV&#41;, citing evidence of active exploitation. The vulnerabilities are listed below - CVE-2026-129448 &#40;CVSS score: 9.8&#41; - A deserialization of untrusted data vulnerability in” [Hackers Exploit Critical VMware, Cisco, and Apache Flaws as Espionage Attacks Emerge](https://thehackernews.com/2026/11/hackers-exploit-critical-vmware-cisco.html)
 
-**Evidence to request:** Log coverage, a detection test, alert routing and investigation ownership.
+**Evidence to request:** Affected-asset inventory, installed versions, remediation status and an exception owner.
 
-**Decision trigger:** If a detection test fails, assign the coverage or routing correction and repeat the test.
+**Decision trigger:** If applicability is confirmed, decide on remediation or a documented exception; otherwise record why the finding does not apply.
 
-**Reference controls:** ISO/IEC 27001:2022 A.8.15 (logging), A.8.16 (monitoring activities); NIST CSF 2.0 DE.CM (continuous monitoring), DE.AE (adverse event analysis)
+**Reference controls:** ISO/IEC 27001:2022 A.8.8 (management of technical vulnerabilities); NIST CSF 2.0 ID.RA (risk assessment), PR.PS (platform security)
 
-### cloud remote management services exposes routers and KVM devices to malware installation
+### GL.iNet GoodCloud remote management service compromise installs malware
 
-**Review priority:** Medium · Third-party risk · Owner: Supplier risk owner
+**Review priority:** High · Third-party risk · Owner: Supplier risk owner
 
-**Why it matters:** The exploited cloud management vulnerability allows unauthorized device control, weakening third-party assurance for managed network equipment. The third-party risk owner should review GL.iNet's remediation evidence and confirm that affected devices have been patched or isolated.
+**Why it matters:** A supplier-hosted management plane was abused to deploy malware on customer devices. Supplier risk owners must review GL.iNet access scope, confirm the vendor's fix eliminates the attack path, and obtain evidence of remediation assurance for affected routers and KVM devices.
 
-**Source evidence:** “GL.iNet has confirmed that hackers exploited a vulnerability in its cloud remote management services to install custom malware on customers' routers and KVM devices, with some affected users reporting backdoors and reverse shells giving remote access to infected devices…” [Hackers exploit GL.iNet cloud flaw to infect routers, KVM devices](https://www.bleepingcomputer.com/news/security/hackers-exploit-glinet-cloud-flaw-to-infect-routers-kvm-devices/)
+**Source evidence:** “Hackers exploited a vulnerability in GL.iNet's GoodCloud remote management service to install malware on some customer routers and KVM devices, the maker of travel routers and remote-access KVM hardware said in a security notice updated today. The company identified and fixed the flaw on Friday and blocked the access the attacker used, so devices can no longer be infected through this route.” [Hackers Exploited GL.iNet Cloud Flaw to Install Malware on Routers and KVM Devices](https://thehackernews.com/2026/11/hackers-exploited-glinet-cloud-flaw-to.html)
 
 **Evidence to request:** Supplier access scope, control responsibilities and evidence of remediation assurance.
 
@@ -68,59 +68,17 @@ Each finding is analysis of the quoted evidence: why it matters for control assu
 
 **Reference controls:** ISO/IEC 27001:2022 A.5.19 (supplier relationships), A.5.21 (ICT supply chain), A.5.22 (monitoring and review of supplier services); NIST CSF 2.0 GV.SC (cybersecurity supply chain risk management)
 
-### E-commerce platform Cleverbridge exposes payment card data via system breach
-
-**Review priority:** High · Data protection · Owner: Data and privacy owners
-
-**Why it matters:** The breach of payment card data including CVV codes weakens data protection assurance for e-commerce transactions. The data protection owner should confirm that Cleverbridge has provided breach notification details and that affected card data has been reported to relevant payment networks.
-
-**Source evidence:** “E-commerce platform Cleverbridge is warning that hackers breached its systems and stole customers' payment card information, including credit card numbers and CVV security codes…” [Cleverbridge warns hackers stole credit card numbers, CVVs in data breach](https://www.bleepingcomputer.com/news/security/cleverbridge-warns-hackers-stole-credit-card-numbers-cvvs-in-data-breach/)
-
-**Evidence to request:** Data inventory, access restrictions, audit logs and a documented exposure assessment.
-
-**Decision trigger:** If relevant data is exposed to the reported access path, decide which protection or access change is needed.
-
-**Reference controls:** ISO/IEC 27001:2022 A.5.34 (privacy and protection of PII), A.8.12 (data leakage prevention), A.8.24 (use of cryptography); NIST CSF 2.0 PR.DS (data security)
-
-### Rackspace Spot cloud platform exposes Kubernetes secrets via compromised credentials
-
-**Review priority:** High · Access management · Owner: Identity and access owner
-
-**Why it matters:** Compromised credentials enabling unauthorized access to Kubernetes secrets weakens access management assurance for cloud-hosted workloads. The access management owner should verify that credential rotation and multi-factor authentication are enforced for Rackspace Spot access and that secret access logs are reviewed.
-
-**Source evidence:** “Rackspace warned customers that hackers breached its Rackspace Spot cloud platform using compromised credentials, allowing them to deploy unauthorized workloads and access Kubernetes secrets in customer clusters…” [Rackspace Spot breach let hackers access customer Kubernetes secrets](https://www.bleepingcomputer.com/news/security/rackspace-spot-breach-let-hackers-access-customer-kubernetes-secrets/)
-
-**Evidence to request:** Access scope, authentication coverage, session revocation and a permission-test result.
-
-**Decision trigger:** If a permission gap is reproduced, assign a control correction and verify it; otherwise retain the test evidence.
-
-**Reference controls:** ISO/IEC 27001:2022 A.5.15 (access control), A.5.18 (access rights), A.8.2 (privileged access rights); NIST CSF 2.0 PR.AA (identity management, authentication and access control)
-
-### KB5132043 November 2026 Windows 11 hotpatch weakens printing functionality for Forcepoint DLP users
-
-**Review priority:** Medium · Change management · Owner: Change and service owners
-
-**Why it matters:** The hotpatch introduces a regression that disrupts data loss prevention printing controls, weakening assurance of output security. The change management owner should verify that post-change validation includes Forcepoint DLP compatibility testing and that rollback procedures are documented.
-
-**Source evidence:** “Microsoft confirmed printing issues on systems running Forcepoint DLP software after installing the KB5132043 November 2026 Windows 11 hotpatch…” [Microsoft confirms Windows printing issues affecting Forcepoint users](https://www.bleepingcomputer.com/news/microsoft/microsoft-confirms-printing-issues-after-kb5132043-windows-hotpatch/)
-
-**Evidence to request:** Change approval, rollout coverage, post-change validation and rollback ownership.
-
-**Decision trigger:** If validation or recovery evidence is missing, resolve that gap before relying on the change.
-
-**Reference controls:** ISO/IEC 27001:2022 A.8.32 (change management); NIST CSF 2.0 PR.PS (platform security)
-
 ## Source Highlights
 
+- [Hackers Exploit Critical ASP.NET Anti-CSRF Library Flaw Allowing Unauthenticated RCE](https://thehackernews.com/2026/11/hackers-exploit-critical-aspnet-anti.html) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-23/#reporting-659149ed49d8)
 - [GnuPG Warns Critical GPGME Flaw Could Expose App Data via Malicious OpenPGP Keys](https://thehackernews.com/2026/11/gnupg-warns-critical-gpgme-flaw-could.html) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-23/#reporting-3b426a1ae487)
 - [Hackers Exploit Critical VMware, Cisco, and Apache Flaws as Espionage Attacks Emerge](https://thehackernews.com/2026/11/hackers-exploit-critical-vmware-cisco.html) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-23/#reporting-552b60cb29a0)
 - [WhatsApp Patches 3 Security Flaws, Including Android Bug Suspected of Use in Scams](https://thehackernews.com/2026/11/whatsapp-patches-3-security-flaws.html) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-23/#reporting-b44c0a854e15)
+- [Call center operator gets 8 years for helping scam 30,000 Americans](https://www.bleepingcomputer.com/news/security/call-center-operator-gets-8-years-for-helping-scam-30-000-americans/) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-23/#reporting-cac551e65d75)
 - [Microsoft confirms Windows printing issues affecting Forcepoint users](https://www.bleepingcomputer.com/news/microsoft/microsoft-confirms-printing-issues-after-kb5132043-windows-hotpatch/) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-23/#reporting-8ff53fd940c1)
+- [Hackers Exploited GL.iNet Cloud Flaw to Install Malware on Routers and KVM Devices](https://thehackernews.com/2026/11/hackers-exploited-glinet-cloud-flaw-to.html) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-23/#reporting-8dee64bf666c)
 - [AI-Assisted Cyberattacks Trigger Unauthorized Payments at Indian Banks and Fintech Firms](https://thehackernews.com/2026/11/ai-assisted-cyberattacks-trigger.html) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-23/#reporting-3077523564b0)
 - [CISA flags critical Cisco RCE flaw as actively exploited in attacks](https://www.bleepingcomputer.com/news/security/cisa-flags-critical-cisco-expressway-rce-flaw-as-actively-exploited/) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-23/#reporting-a3400f3457d4)
 - [Hackers exploit GL.iNet cloud flaw to infect routers, KVM devices](https://www.bleepingcomputer.com/news/security/hackers-exploit-glinet-cloud-flaw-to-infect-routers-kvm-devices/) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-23/#reporting-f7511684402b)
 - [Cleverbridge warns hackers stole credit card numbers, CVVs in data breach](https://www.bleepingcomputer.com/news/security/cleverbridge-warns-hackers-stole-credit-card-numbers-cvvs-in-data-breach/) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-23/#reporting-c75a4d0a4b58)
 - [Signal to block Siri, Gemini AI from capturing chats on iOS, Android](https://www.bleepingcomputer.com/news/security/signal-to-block-siri-gemini-ai-from-capturing-chats-on-ios-android/) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-23/#reporting-daee16a474d4)
-- [OpenRouter Drops 3 Providers After Researchers Catch Months of Prompt Theft at AI Hosting Firms](https://thehackernews.com/2026/11/openrouter-drops-3-providers-after.html) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-23/#reporting-6d087c898942)
-- [Researchers Demonstrate Ghostscript Sandbox-Escape RCE via Crafted File Uploads in Popular Apps](https://thehackernews.com/2026/11/researchers-demonstrate-ghostscript.html) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-23/#reporting-a3c63e958cb9)
-- [Rackspace Spot breach let hackers access customer Kubernetes secrets](https://www.bleepingcomputer.com/news/security/rackspace-spot-breach-let-hackers-access-customer-kubernetes-secrets/) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-23/#reporting-1fa3870c33e2)
