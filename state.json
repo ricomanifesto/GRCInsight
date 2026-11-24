@@ -4810,6 +4810,13 @@
       "at": "2026-11-24T05:09:14.625Z",
       "run_id": "45331226461",
       "stage": "invoked"
+    },
+    {
+      "admission_key": "run:45331226461",
+      "at": "2026-11-24T05:09:17.742Z",
+      "handle": "report_20261124_050916_893",
+      "run_id": "45331226461",
+      "stage": "invoked"
     }
   ],
   "schema_version": 1,
