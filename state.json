@@ -18760,6 +18760,17 @@
       "release_key": "70519ff84be091539e17d6c11f28901bdd25a42af6af10961d5ec0a667937def",
       "release_ref": "5f9acb35084b556bfb64d5d4e70fd1048ad66b57",
       "stage": "serving"
+    },
+    {
+      "at": "2026-11-24T09:20:49.430Z",
+      "kind": "release",
+      "payload_digest": "94e7df29715eecd916525f7ac65b9b2082981b5d6ce2f3a3f17b41f0df37345d",
+      "proof": "on",
+      "release_key": "74453610c9650b736b7385642a7235baaef440892b23a748ab5bfb320a97e815",
+      "release_ref": "9ef75acbcdf3ae7a367bbd02cbd972cefda4dffb",
+      "source_revision": "97362d0ffaae5d5e41f9ca96a9b2840c26d722cb",
+      "stage": "released",
+      "tree_digest": "148fce7dd62567bbbe2de0ee74135beba0327693552e855bd63a2aa40a2d320e"
     }
   ],
   "schema_version": 1,
