@@ -236,11 +236,10 @@ jobs:
       if: steps.handle.outputs.REPORT_ID
       env:
         FEED_URL: ${{ steps.feed-url.outputs.FEED_URL }}
+        REPORT_ID: ${{ steps.handle.outputs.REPORT_ID }}
       run: |
         set -e
-        echo "Retrieving report ID: ${{ steps.handle.outputs.REPORT_ID }}"
-
-        REPORT_ID=${{ steps.handle.outputs.REPORT_ID }}
+        echo "Retrieving report ID: $REPORT_ID"
         MAX_ATTEMPTS=${MAX_ATTEMPTS:-90}   # up to ~15 minutes
         SLEEP_SECONDS=${SLEEP_SECONDS:-10}
 
@@ -391,6 +390,9 @@ jobs:
     - name: Persist retained publication state
       id: retain
       if: always() && steps.get-report.outputs.refused == 'true'
+      env:
+        ATTEMPTED_AT: ${{ steps.get-report.outputs.attempted_at }}
+        REFUSAL_CATEGORY: ${{ steps.get-report.outputs.refusal_category }}
       run: |
         set -e
         git config --local user.email "action@github.com"
@@ -403,8 +405,8 @@ jobs:
           --manifest site/evidence-manifest.json \
           --output site/publication-state.json \
           --history site/publication-history.json \
-          --attempted-at "${{ steps.get-report.outputs.attempted_at }}" \
-          --category "${{ steps.get-report.outputs.refusal_category }}"
+          --attempted-at "$ATTEMPTED_AT" \
+          --category "$REFUSAL_CATEGORY"
         STATE_STATUS=$?
         set -e
         if [ $STATE_STATUS -eq 4 ]; then
@@ -445,8 +447,8 @@ jobs:
               --manifest site/evidence-manifest.json \
               --output site/publication-state.json \
               --history site/publication-history.json \
-              --attempted-at "${{ steps.get-report.outputs.attempted_at }}" \
-              --category "${{ steps.get-report.outputs.refusal_category }}"
+              --attempted-at "$ATTEMPTED_AT" \
+              --category "$REFUSAL_CATEGORY"
             STATE_STATUS=$?
             set -e
             if [ $STATE_STATUS -eq 4 ]; then
@@ -524,6 +526,9 @@ jobs:
     - name: Commit and push report
       id: publish
       if: steps.get-report.outputs.publishable == 'true'
+      env:
+        FEED_URL: ${{ steps.feed-url.outputs.FEED_URL }}
+        PUBLISHED_AT: ${{ steps.get-report.outputs.published_at }}
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
@@ -542,14 +547,14 @@ jobs:
           git rebase -X theirs "origin/$GITHUB_REF_NAME"
           python3 scripts/compose_site_report.py \
             --input report-data.json \
-            --feed-url "${{ steps.feed-url.outputs.FEED_URL }}" \
+            --feed-url "$FEED_URL" \
             --model "$LLM_MODEL"
           set +e
           python3 scripts/publication_state.py record-published \
             --manifest site/evidence-manifest.json \
             --output site/publication-state.json \
             --history site/publication-history.json \
-            --event-at "${{ steps.get-report.outputs.published_at }}"
+            --event-at "$PUBLISHED_AT"
           STATE_STATUS=$?
           set -e
           if [ $STATE_STATUS -eq 4 ]; then
