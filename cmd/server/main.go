@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"log"
+	"net/http"
+	"time"
 
 	"grcinsight/internal/api/routes"
 	"grcinsight/internal/config"
@@ -46,10 +48,23 @@ func main() {
 	router := routes.SetupRouter(serviceContainer, logger)
 
 	// Start server
-	addr := fmt.Sprintf(":%d", cfg.Server.Port)
+	addr := fmt.Sprintf("%s:%d", cfg.Server.Host, cfg.Server.Port)
 	logger.Infof("Server starting on %s", addr)
 
-	if err := router.Run(addr); err != nil {
+	if err := newHTTPServer(addr, router).ListenAndServe(); err != nil {
 		logger.Fatalf("Failed to start server: %v", err)
+	}
+}
+
+// newHTTPServer bounds connection lifetimes while allowing the synchronous
+// Python workflow its configured default five-minute deadline.
+func newHTTPServer(addr string, handler http.Handler) *http.Server {
+	return &http.Server{
+		Addr:              addr,
+		Handler:           handler,
+		ReadHeaderTimeout: 5 * time.Second,
+		ReadTimeout:       30 * time.Second,
+		WriteTimeout:      330 * time.Second,
+		IdleTimeout:       60 * time.Second,
 	}
 }

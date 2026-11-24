@@ -193,15 +193,23 @@ func (r *Repository) ListReports(ctx context.Context, limit int32) ([]Report, er
 
 // DeleteReport removes a report from DynamoDB
 func (r *Repository) DeleteReport(ctx context.Context, reportID string) error {
+	values := map[string]types.AttributeValue{}
+	names := map[string]string{}
+	condition := openReportCondition(values, names)
 	input := &dynamodb.DeleteItemInput{
 		TableName: aws.String(TableName),
 		Key: map[string]types.AttributeValue{
 			"report_id": &types.AttributeValueMemberS{Value: reportID},
 		},
-		ConditionExpression: aws.String("attribute_exists(report_id)"),
+		ConditionExpression:       aws.String(condition),
+		ExpressionAttributeNames:  names,
+		ExpressionAttributeValues: values,
 	}
 
 	_, err := r.client.DeleteItem(ctx, input)
+	if isConditionFailure(err) {
+		return ErrReportFinal
+	}
 	if err != nil {
 		return fmt.Errorf("failed to delete report: %w", err)
 	}
@@ -306,54 +314,50 @@ func (r *Repository) GetArticleByID(ctx context.Context, articleID string) (*Art
 	return &art, nil
 }
 
-// GetArticleByNumericID finds article by numeric_id (uint32 hash)
+// GetArticleByNumericID finds an article by numeric_id (uint32 hash).
 func (r *Repository) GetArticleByNumericID(ctx context.Context, numericID uint32) (*Article, error) {
-	// Scan with filter on numeric_id (simple implementation; consider GSI if needed)
-	input := &dynamodb.ScanInput{
-		TableName:        aws.String(ArticlesTable),
-		FilterExpression: aws.String("numeric_id = :nid"),
-		ExpressionAttributeValues: map[string]types.AttributeValue{
-			":nid": &types.AttributeValueMemberN{Value: fmt.Sprintf("%d", numericID)},
-		},
-		Limit: aws.Int32(1),
-	}
-	out, err := r.client.Scan(ctx, input)
-	if err != nil {
-		return nil, fmt.Errorf("failed to scan articles: %w", err)
-	}
-	if len(out.Items) == 0 {
-		return nil, fmt.Errorf("article not found")
-	}
-	var art Article
-	if err := attributevalue.UnmarshalMap(out.Items[0], &art); err != nil {
-		return nil, fmt.Errorf("failed to unmarshal article: %w", err)
-	}
-	return &art, nil
+	return r.findArticle(ctx, "numeric_id = :value", &types.AttributeValueMemberN{Value: fmt.Sprintf("%d", numericID)})
 }
 
-// GetArticleByURL finds article by URL
+// GetArticleByURL finds an article by URL.
 func (r *Repository) GetArticleByURL(ctx context.Context, url string) (*Article, error) {
-	// Scan with filter on url (consider adding a GSI on url for production)
-	input := &dynamodb.ScanInput{
-		TableName:        aws.String(ArticlesTable),
-		FilterExpression: aws.String("url = :u"),
-		ExpressionAttributeValues: map[string]types.AttributeValue{
-			":u": &types.AttributeValueMemberS{Value: url},
-		},
-		Limit: aws.Int32(1),
+	return r.findArticle(ctx, "url = :value", &types.AttributeValueMemberS{Value: url})
+}
+
+// scanArticleMatches follows evaluated pages until it has enough matching rows.
+// DynamoDB applies Scan Limit before its filter, so an empty page can continue.
+func (r *Repository) scanArticleMatches(ctx context.Context, input *dynamodb.ScanInput, needed int64) ([]map[string]types.AttributeValue, error) {
+	var matches []map[string]types.AttributeValue
+	for {
+		out, err := r.client.Scan(ctx, input)
+		if err != nil {
+			return nil, fmt.Errorf("failed to scan articles: %w", err)
+		}
+		matches = append(matches, out.Items...)
+		if int64(len(matches)) >= needed || len(out.LastEvaluatedKey) == 0 {
+			return matches, nil
+		}
+		input.ExclusiveStartKey = out.LastEvaluatedKey
 	}
-	out, err := r.client.Scan(ctx, input)
+}
+
+func (r *Repository) findArticle(ctx context.Context, filter string, value types.AttributeValue) (*Article, error) {
+	items, err := r.scanArticleMatches(ctx, &dynamodb.ScanInput{
+		TableName: aws.String(ArticlesTable), FilterExpression: aws.String(filter),
+		ExpressionAttributeValues: map[string]types.AttributeValue{":value": value},
+		Limit:                     aws.Int32(queryPageLimit),
+	}, 1)
 	if err != nil {
-		return nil, fmt.Errorf("failed to scan articles: %w", err)
+		return nil, err
 	}
-	if len(out.Items) == 0 {
+	if len(items) == 0 {
 		return nil, fmt.Errorf("article not found")
 	}
-	var art Article
-	if err := attributevalue.UnmarshalMap(out.Items[0], &art); err != nil {
+	var article Article
+	if err := attributevalue.UnmarshalMap(items[0], &article); err != nil {
 		return nil, fmt.Errorf("failed to unmarshal article: %w", err)
 	}
-	return &art, nil
+	return &article, nil
 }
 
 // ListArticles returns up to limit articles; ignores offset (naive skip)
@@ -449,33 +453,32 @@ func (r *Repository) DeleteArticle(ctx context.Context, articleID string) error 
 
 // GetGRCArticles returns articles flagged as GRC content
 func (r *Repository) GetGRCArticles(ctx context.Context, limit, offset int32) ([]Article, error) {
-	input := &dynamodb.ScanInput{
-		TableName:        aws.String(ArticlesTable),
-		FilterExpression: aws.String("has_grc_content = :t"),
-		ExpressionAttributeValues: map[string]types.AttributeValue{
-			":t": &types.AttributeValueMemberBOOL{Value: true},
-		},
-		Limit: aws.Int32(limit + offset),
+	if limit <= 0 || offset < 0 {
+		return nil, fmt.Errorf("limit must be positive and offset nonnegative")
 	}
-	out, err := r.client.Scan(ctx, input)
+	items, err := r.scanArticleMatches(ctx, &dynamodb.ScanInput{
+		TableName:                 aws.String(ArticlesTable),
+		FilterExpression:          aws.String("has_grc_content = :t"),
+		ExpressionAttributeValues: map[string]types.AttributeValue{":t": &types.AttributeValueMemberBOOL{Value: true}},
+		Limit:                     aws.Int32(queryPageLimit),
+	}, int64(limit)+int64(offset))
 	if err != nil {
-		return nil, fmt.Errorf("failed to scan GRC articles: %w", err)
+		return nil, err
 	}
-	items := out.Items
-	if int32(len(items)) > offset {
-		items = items[offset:]
-	} else {
-		items = []map[string]types.AttributeValue{}
+	if int64(offset) >= int64(len(items)) {
+		return []Article{}, nil
 	}
-	if int32(len(items)) > limit {
+	items = items[offset:]
+	if int64(len(items)) > int64(limit) {
 		items = items[:limit]
 	}
-	var arts []Article
-	for _, it := range items {
-		var a Article
-		if err := attributevalue.UnmarshalMap(it, &a); err == nil {
-			arts = append(arts, a)
+	arts := make([]Article, 0, len(items))
+	for _, item := range items {
+		var article Article
+		if err := attributevalue.UnmarshalMap(item, &article); err != nil {
+			return nil, fmt.Errorf("failed to unmarshal article: %w", err)
 		}
+		arts = append(arts, article)
 	}
 	return arts, nil
 }
