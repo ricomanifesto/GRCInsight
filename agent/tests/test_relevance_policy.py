@@ -228,6 +228,7 @@ def test_analyze_api_keeps_same_title_articles_distinct(monkeypatch):
     from tests.test_routes import request
 
     model = service(monkeypatch, "enabled")
+    monkeypatch.setenv("API_KEY", "synthetic-api-key")
     model.relevance_client.classify = AsyncMock(return_value=result())
     monkeypatch.setattr(route, "GRCModelService", lambda **_: model)
     response = request(

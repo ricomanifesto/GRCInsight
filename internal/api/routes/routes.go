@@ -33,7 +33,7 @@ func SetupRouter(container *services.Container, logger *logrus.Logger) *gin.Engi
 	api := router.Group("/api/v1")
 	{
 		// Report management
-		reports := api.Group("/reports")
+		reports := api.Group("/reports", middleware.APIKeyMiddleware(container.Config.Auth.APIKey))
 		{
 			reports.GET("", reportsHandler.ListReports)
 			reports.POST("/generate", reportsHandler.GenerateReport)

@@ -81,7 +81,7 @@ The stable article links shared with SentryDigest and SentryInsight follow Sentr
 
 ## Run It Locally
 
-You need Go 1.24, Python 3.11, and [`uv`](https://docs.astral.sh/uv/). Copy `.env.example` to `.env` and replace the placeholder values before calling model or AWS services.
+You need Go 1.24, Python 3.11, and [`uv`](https://docs.astral.sh/uv/). Copy `.env.example` to `.env`. Generate a random `API_KEY` for the Go and Python HTTP services and configure the same value in both processes. Set provider credentials separately when using model or AWS services.
 
 For model-backed analysis, set:
 
@@ -105,7 +105,7 @@ Start the Python service:
 ```bash
 cd agent
 uv sync --locked
-uv run uvicorn main:app --host 0.0.0.0 --port 8081 --reload
+uv run uvicorn main:app --host 127.0.0.1 --port 8081 --reload
 ```
 
 Start the Go API from the repository root:
@@ -118,11 +118,13 @@ Before starting it, configure AWS credentials. Make the `grcinsight-reports` Dyn
 
 The Go service listens on port 8080 and calls the Python service at `http://localhost:8081` by default. Edit `configs/config.yaml` or use environment variables to change those settings.
 
-The standalone and Lambda Go APIs expose report reads and generation, with no HTTP report-deletion endpoint. Storage deletion remains an internal operation.
+Report reads and generation require the `X-API-Key` header in the standalone Go API and its Lambda HTTP adapter. The Go service forwards the key when it calls protected Python HTTP routes. Keep the key on the server. Public site assets and shallow health checks remain accessible without credentials. Python’s `GRC_INTERNAL_TOKEN` separately authorizes the Go service to commit a named report over HTTP. The public site reads committed report artifacts.
 
 RSS feeds and optional publisher-page enrichment accept HTTP or HTTPS on their default ports, with no URL credentials. Every DNS answer and redirect destination must be public unicast. Requests connect to a validated address while retaining the original Host and TLS hostname. Each hop uses a fresh client with automatic redirects and environment proxies disabled, and follows at most three redirects. These reads request uncompressed content and refuse compressed responses. Local and private-network feeds are unsupported.
 
 Enrichment has a ten-second total budget, including DNS and reading, and reads at most 64 KiB plus one byte to detect truncation before retaining the existing 5,000-character excerpt. A refused or failed enrichment leaves the feed item unchanged. Feed reads use the configured RSS timeout as a total budget and a separate 2 MiB limit. An oversized feed is refused instead of parsing partial XML. The production feed is the public SentryDigest feed configured in `configs/config.json`.
+
+The agent processes up to 50 feed entries per run and gives the whole enrichment step 30 seconds. Its HTTP interface caps request bodies at 2 MiB. Costly HTTP routes share an allowance of ten starts per minute and two concurrent operations per Python process. These limits apply to each worker separately. `LLM_MODEL` selects the model for Go and Python. An omitted model uses the server configuration, and an unsupported choice is refused.
 
 ## Checks
 
@@ -284,7 +286,7 @@ The store and the receipts directory must be outside the repository. Route accep
 
 `.github/workflows/deploy-lambda.yml` runs for changes to Lambda image inputs on `main`, or by manual trigger. It requires preprovisioned ECR repositories and verifies existing Lambda retrieval access without creating repositories or replacing policies. It deploys the Go and Python Lambda images and verifies their image references. Environment updates merge deployment-owned fields with the current map using a fresh RevisionId; secret-bearing JSON goes through a stdin pipe. Reads, updates and verification polls use the same unqualified base function ARN, with responses required to identify that exact ARN and unpublished `$LATEST` version. Uncertain writes stop for inspection and are not automatically replayed. If Go reserved concurrency is zero, API health is explicitly deferred and only the Python non-inference health path is invoked. CI never restores concurrency; operator restoration and a subsequent Go health check remain separate. Normal nonpaused releases retain the Go health smoke test. The manual `scripts/deploy-lambda.sh` remains a bootstrap tool with broader ECR/IAM effects; it is not the normal existing-function release path.
 
-`.github/workflows/lambda-report-generation.yml` runs after a SentryDigest dispatch, daily at 13:00 UTC, or by manual trigger. Every unowned OpenRouter chat route disables provider fallbacks and enforces zero prompt, completion, request, and image price ceilings, including caller-selected aliases or IDs without a `:free` suffix. The documented `:online` modifier and standalone/combined `@preset/` references are refused because they can add separately billed server search/tools outside those token ceilings. Output is bounded to a positive integer of at most 16,000 tokens at the API and transport boundaries. The default route is `openrouter/nvidia/nemotron-3-ultra-550b-a55b:free`; selected paid profiles remain disabled outside synthetic offline rehearsal. This transport fence does not provide caller authentication or an aggregate budget. AWS credentials and `OPENROUTER_API_KEY` are required repository secrets.
+`.github/workflows/lambda-report-generation.yml` runs after a SentryDigest dispatch, daily at 13:00 UTC, or by manual trigger. Every unowned OpenRouter chat route disables provider fallbacks and enforces zero prompt, completion, request, and image price ceilings, including caller-selected aliases or IDs without a `:free` suffix. The documented `:online` modifier and standalone/combined `@preset/` references are refused because they can add separately billed server search/tools outside those token ceilings. Output is bounded to a positive integer of at most 16,000 tokens at the API and transport boundaries. The default route is `openrouter/nvidia/nemotron-3-ultra-550b-a55b:free`; selected paid profiles remain disabled outside synthetic offline rehearsal. HTTP authentication and provider price controls are separate. The provider price limits apply per request. GitHub Actions assumes separately scoped roles for report generation and Lambda deployment. Configure the `API_KEY` and `OPENROUTER_API_KEY` secrets as described in the [deployment guide](docs/README-Lambda-Deployment.md).
 
 Generation admission settles once a successful retrieval identifies the requested report as `completed` or `failed`, even when composition or publication subsequently fails. A refused report records `not-published`, preserves the last-good publication and retains input deduplication; later distinct inputs can proceed. Transport errors, mismatched responses and polling timeouts remain unresolved and reattach the saved handle. Publication success is separate from generation and validation success.
 

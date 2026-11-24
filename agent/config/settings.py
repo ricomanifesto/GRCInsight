@@ -1,7 +1,7 @@
 """Configuration settings for the FastAPI application."""
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
-from pydantic import Field
+from pydantic import Field, field_validator
 from typing import List, Literal
 
 
@@ -15,7 +15,7 @@ class Settings(BaseSettings):
     )
 
     # Server configuration
-    host: str = "0.0.0.0"
+    host: str = "127.0.0.1"
     port: int = 8081
     reload: bool = True
     log_level: str = "INFO"
@@ -24,6 +24,7 @@ class Settings(BaseSettings):
     llm_model: str = "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free"
     llm_max_tokens: int = 16000
     openrouter_api_key: str = ""
+    api_key: str = ""
     # Shared with the Go service; authenticates synchronous report runs.
     grc_internal_token: str = ""
     grc_relevance_mode: Literal["off", "shadow", "enabled"] = "off"
@@ -46,7 +47,27 @@ class Settings(BaseSettings):
     ]
 
     # CORS configuration
-    cors_allowed_origins: List[str] = ["*"]
+    cors_allowed_origins: List[str] = ["https://ricomanifesto.github.io"]
+
+    @field_validator("cors_allowed_origins")
+    @classmethod
+    def explicit_origins(cls, origins: List[str]) -> List[str]:
+        from urllib.parse import urlsplit
+
+        for origin in origins:
+            parsed = urlsplit(origin)
+            if (
+                "*" in origin
+                or parsed.scheme not in {"http", "https"}
+                or not parsed.hostname
+                or parsed.username
+                or parsed.password
+                or parsed.path
+                or parsed.query
+                or parsed.fragment
+            ):
+                raise ValueError("CORS requires explicit HTTP(S) origins")
+        return origins
 
 
 # Global settings instance

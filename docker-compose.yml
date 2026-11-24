@@ -6,17 +6,19 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "8080:8080"
+      - "127.0.0.1:8080:8080"
     environment:
       - GO_ENV=development
       - PYTHON_SERVICE_URL=http://python-service:8081
+      - LLM_MODEL=${LLM_MODEL:-openrouter/nvidia/nemotron-3-ultra-550b-a55b:free}
       - DATABASE_DSN=./data/grcinsight.db
       - LOG_LEVEL=info
+      - API_KEY=${API_KEY:?API_KEY is required}
       - GRC_INTERNAL_TOKEN=${GRC_INTERNAL_TOKEN:-}
     volumes:
-      - ./data:/root/data
-      - ./configs:/root/configs
-      - ./web:/root/web
+      - ./data:/app/data
+      - ./configs:/app/configs
+      - ./web:/app/web
     depends_on:
       - python-service
     networks:
@@ -28,7 +30,7 @@ services:
       context: ./agent
       dockerfile: Dockerfile
     ports:
-      - "8081:8081"
+      - "127.0.0.1:8081:8081"
     environment:
       - PYTHONPATH=/app
       - LLM_MODEL=${LLM_MODEL:-openrouter/nvidia/nemotron-3-ultra-550b-a55b:free}
@@ -36,6 +38,7 @@ services:
       - LOG_LEVEL=INFO
       - HOST=0.0.0.0
       - PORT=8081
+      - API_KEY=${API_KEY:?API_KEY is required}
       - GRC_INTERNAL_TOKEN=${GRC_INTERNAL_TOKEN:-}
     networks:
       - grcinsight-network

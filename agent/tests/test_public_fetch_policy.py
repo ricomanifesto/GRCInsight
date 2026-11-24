@@ -253,7 +253,7 @@ def test_feed_refuses_nonpublic_destination_before_transport(fetch_policy):
     result = asyncio.run(rss_service.RSSService().fetch_feed("https://publisher.example/feed.xml"))
 
     assert result["entries"] == []
-    assert "not public" in result["error"]
+    assert result["error"] == "RSS feed fetch failed"
     assert requests == []
 
 
@@ -265,4 +265,4 @@ def test_oversize_feed_is_refused_instead_of_parsing_partial_xml(fetch_policy, m
     result = asyncio.run(rss_service.RSSService().fetch_feed("https://publisher.example/feed.xml"))
 
     assert result["entries"] == []
-    assert "byte limit" in result["error"]
+    assert result["error"] == "RSS feed fetch failed"

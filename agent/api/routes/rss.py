@@ -1,17 +1,20 @@
 """RSS feed processing endpoints."""
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Body, Depends, HTTPException
 from loguru import logger
 from typing import List
 
-from models.api import RSSFeedResponse, ArticleInput
+from models.api import RSSFeedResponse, ArticleInput, MAX_ARTICLES, validate_article_batch
 from services.rss_service import RSSService
+from api.security import require_api_key, require_work_budget
 
-router = APIRouter()
+router = APIRouter(dependencies=[Depends(require_api_key)])
 rss_service = RSSService()
 
 
-@router.post("/rss/fetch", response_model=RSSFeedResponse)
+@router.post(
+    "/rss/fetch", response_model=RSSFeedResponse, dependencies=[Depends(require_work_budget)]
+)
 async def fetch_rss_feed(feed_url: str):
     """Fetch and parse an RSS feed."""
     logger.info(f"Fetching RSS feed: {feed_url}")
@@ -30,14 +33,18 @@ async def fetch_rss_feed(feed_url: str):
 
     except Exception as e:
         logger.error(f"RSS feed fetch failed: {str(e)}")
-        return RSSFeedResponse(title="Error", entry_count=0, error=str(e))
+        return RSSFeedResponse(title="Error", entry_count=0, error="RSS feed fetch failed")
 
 
-@router.post("/rss/enrich")
-async def enrich_articles(articles: List[ArticleInput]):
+@router.post("/rss/enrich", dependencies=[Depends(require_work_budget)])
+async def enrich_articles(articles: List[ArticleInput] = Body(max_length=MAX_ARTICLES)):
     """Enrich articles with additional content."""
     logger.info(f"Enriching {len(articles)} articles")
 
+    try:
+        validate_article_batch(articles)
+    except ValueError:
+        raise HTTPException(status_code=422, detail="Article batch exceeds the server limit")
     try:
         enriched_articles = await rss_service.enrich_articles(articles)
 
@@ -45,4 +52,4 @@ async def enrich_articles(articles: List[ArticleInput]):
 
     except Exception as e:
         logger.error(f"Article enrichment failed: {str(e)}")
-        raise HTTPException(status_code=500, detail=f"Article enrichment failed: {str(e)}")
+        raise HTTPException(status_code=500, detail="Article enrichment failed")

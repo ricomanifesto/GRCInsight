@@ -278,9 +278,17 @@ class OpenRouterClient:
         )
 
     def _provider_error(self, error: dict[str, Any]) -> OpenRouterError:
-        code = error.get("code", "unknown")
+        def token(value) -> str:
+            if type(value) is int and 0 <= value <= 999999:
+                return str(value)
+            if type(value) is str and re.fullmatch(r"[A-Za-z0-9_.-]{1,64}", value):
+                return value
+            return "unknown"
+
+        raw_code = error.get("code")
+        code = token(raw_code)
         metadata = error.get("metadata")
-        error_type = metadata.get("error_type") if isinstance(metadata, dict) else None
+        error_type = token(metadata.get("error_type")) if isinstance(metadata, dict) else "unknown"
         retryable_codes = {408, 429, 502, 503, 504}
         retryable_types = {
             "provider_overloaded",
@@ -290,5 +298,6 @@ class OpenRouterClient:
         }
         return OpenRouterError(
             f"OpenRouter generation failed: {code}",
-            retryable=code in retryable_codes or error_type in retryable_types,
+            retryable=(type(raw_code) is int and raw_code in retryable_codes)
+            or error_type in retryable_types,
         )

@@ -24,6 +24,9 @@ Set environment variables for the services:
 - `ARTICLES_TABLE_NAME=grcinsight-articles`
 
 ## Environment Variables
+
+Set the same random `API_KEY` in the Go and Python processes. HTTP clients send it in the `X-API-Key` header to read or generate reports and to call protected agent routes, including deep health. Shallow health is available without it. For synchronous report completion over HTTP, also configure the same `GRC_INTERNAL_TOKEN` in both processes.
+
 - Python agent
   - `LLM_MODEL=openrouter/provider-model` and `OPENROUTER_API_KEY` for model-backed analysis
   - `CORS_ALLOWED_ORIGINS` (optional; comma‑separated, or use `.env` with `cors_allowed_origins`)
@@ -38,7 +41,7 @@ Set environment variables for the services:
 - Python agent (FastAPI)
 ```
 cd agent
-python -m uvicorn main:app --reload --host 0.0.0.0 --port 8081
+python -m uvicorn main:app --reload --host 127.0.0.1 --port 8081
 ```
 
 - Go API (Gin)
@@ -66,7 +69,7 @@ make test-agent
 ```
 
 ## End‑to‑End Check
-Use the script to generate a report from an RSS feed and verify articles are persisted.
+With `API_KEY` exported in the shell, use the script to generate a report from an RSS feed and verify articles are persisted.
 
 ```
 FEED_URL="https://example.com/rss" \

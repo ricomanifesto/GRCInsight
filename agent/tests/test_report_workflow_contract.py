@@ -122,11 +122,26 @@ def test_report_generation_payload_uses_provider_model_runtime_config():
     assert "claude-opus-4-6" not in workflow
 
 
-def test_integration_report_payload_uses_openrouter_provider_model():
-    integration_script = (REPO_ROOT / "scripts" / "integration" / "run_e2e.sh").read_text()
+def test_integration_report_payload_uses_openrouter_provider_model(monkeypatch):
+    import pytest
+    from pydantic import ValidationError
+    from config.settings import settings
+    from models.api import WorkflowRequest
 
-    assert f'"model": "{DEFAULT_LLM_MODEL}"' in integration_script
-    assert '"model": "gpt-5"' not in integration_script
+    integration_script = (REPO_ROOT / "scripts" / "integration" / "run_e2e.sh").read_text()
+    # The smoke caller omits model so a deployment's configured identity wins.
+    assert '"model"' not in integration_script and "model:" not in integration_script
+    for configured in (DEFAULT_LLM_MODEL, "openrouter/fictional/configured-model"):
+        monkeypatch.setattr(settings, "llm_model", configured)
+        for config in ({}, {"model": configured}):
+            request = WorkflowRequest.model_validate(
+                {"feed_url": "https://feed.example.test/rss", "config": config}
+            )
+            assert request.config.model == configured
+        with pytest.raises(ValidationError):
+            WorkflowRequest.model_validate(
+                {"feed_url": "https://feed.example.test/rss", "config": {"model": "gpt-5"}}
+            )
 
 
 def test_site_report_check_accepts_fallback_numbered_sections():
@@ -375,7 +390,8 @@ def test_report_generation_fails_closed_after_two_malformed_drafts():
     )
 
     assert result.content.startswith("# GRC Intelligence Report - Error")
-    assert "valid report plan after retry" in result.content
+    assert result.content.endswith("Unable to generate report.")
+    assert "valid report plan after retry" in result.failure_reason
     assert result.resolved_model == ""
 
 
@@ -740,7 +756,9 @@ def test_report_generation_workflow_builds_prerender_and_archive():
     )
     assert workflow.count("scripts/publication_state.py record-published") >= 2
     assert "[skip ci]" not in workflow
-    assert "actions: write" in workflow
+    assert "actions: write" not in workflow
+    assert "contents: write" in workflow
+    assert "id-token: write" in workflow
     assert "deploy-site.yml" not in workflow
     assert "Dispatch Pages deployment" not in workflow
     assert "uses: ./.github/workflows/publish-production.yml" in workflow

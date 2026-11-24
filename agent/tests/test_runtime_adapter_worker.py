@@ -154,10 +154,7 @@ def test_fallback_report_completes_but_the_real_oracle_refuses_publication(env):
     assert worker(env).execute_one()["outcome"] == "completed"
     record = env.store.get(submitted["report_id"])
     assert record.metadata["analysis_mode"] == "fallback"
-    assert (
-        record.metadata["fallback_reason"]
-        == "OPENROUTER_API_KEY is required for model-backed analysis"
-    )
+    assert record.metadata["fallback_reason"] == "Model service unavailable"
     assert record.metadata["report_plan"] is None
     run = env.runtime.get_run(submitted["run_id"])
     assert run["state"] == "succeeded"

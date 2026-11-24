@@ -3,11 +3,12 @@
 from datetime import datetime, timezone
 from typing import Any
 
-from fastapi import APIRouter, Query
+from fastapi import APIRouter, Depends, Query
 from loguru import logger
 
 from models.api import HealthStatus
 from services.model_service import GRCModelService
+from api.security import require_deep_health_access
 import os
 
 boto3: Any | None = None
@@ -25,7 +26,9 @@ def _utc_now() -> datetime:
     return datetime.now(timezone.utc)
 
 
-@router.get("/health", response_model=HealthStatus)
+@router.get(
+    "/health", response_model=HealthStatus, dependencies=[Depends(require_deep_health_access)]
+)
 async def health_check(
     deep: bool = Query(
         default=False, description="Run deeper checks (LLM call, DynamoDB table describe)"
@@ -58,8 +61,9 @@ async def health_check(
                     "status": "unhealthy",
                     "provider": model_service.model.provider_id,
                     "model": model_service.model.model_id,
-                    "error": str(llm_err),
+                    "error": "Model health check failed",
                 }
+                logger.error("Model health check failed: {}", type(llm_err).__name__)
                 overall = "unhealthy"
         else:
             services["llm"] = {
@@ -68,7 +72,8 @@ async def health_check(
                 "model": model_service.model.model_id,
             }
     except Exception as e:
-        services["llm"] = {"status": "unhealthy", "error": str(e)}
+        services["llm"] = {"status": "unhealthy", "error": "Model configuration unavailable"}
+        logger.error("Model readiness failed: {}", type(e).__name__)
         overall = "unhealthy"
 
     # Workflow readiness: trivial OK for now (no background queues here)
@@ -77,15 +82,16 @@ async def health_check(
     # DynamoDB readiness (Lambda mode or explicit table configured)
     try:
         table_name = os.getenv("DDB_TABLE_NAME")
-        if table_name and boto3 is not None:
+        if deep and table_name and boto3 is not None:
             client = boto3.client("dynamodb")
             client.describe_table(TableName=table_name)
-            services["dynamodb"] = {"status": "healthy", "table": table_name}
-        elif table_name and boto3 is None:
+            services["dynamodb"] = {"status": "healthy"}
+        elif deep and table_name and boto3 is None:
             services["dynamodb"] = {"status": "unhealthy", "error": "boto3 not available"}
             overall = "unhealthy"
     except Exception as ddb_err:
-        services["dynamodb"] = {"status": "unhealthy", "error": str(ddb_err)}
+        services["dynamodb"] = {"status": "unhealthy", "error": "Database health check failed"}
+        logger.error("Database health check failed: {}", type(ddb_err).__name__)
         overall = "unhealthy"
 
     return HealthStatus(

@@ -19,7 +19,8 @@ The Go function invokes the Python function for report generation.
 
 `.github/workflows/deploy-lambda.yml` runs on pushes to `main` and by manual trigger. Configure:
 
-- Repository secrets: `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `OPENROUTER_API_KEY`.
+- Configure `API_KEY` as a GitHub Actions secret. Use the same key in the two Lambda HTTP adapters and the generation workflow. Keep the separate model credential in `OPENROUTER_API_KEY`.
+- Configure the deploy and generation workflows with separate IAM roles through GitHub OIDC. Set `AWS_DEPLOY_ROLE_ARN` for the `aws-lambda-deploy` environment and `AWS_REPORT_ROLE_ARN` for `aws-report-generation`. The deploy role can update the two functions and publish their images. The report role invokes the Go function and reads report diagnostics. The runtime execution roles own application data access. Scope each trust policy to its own GitHub environment and restrict those environments to the release branch before enabling either workflow. [GitHub OIDC with AWS](https://docs.github.com/en/actions/how-tos/secure-your-work/security-harden-deployments/oidc-in-aws)
 - Repository variable: `LLM_MODEL`, using `openrouter/provider-model` format. If unset, the workflow uses `openrouter/nvidia/nemotron-3-ultra-550b-a55b:free`.
 - Optional repository variables: `GRC_RELEVANCE_MODE`, `GRC_RELEVANCE_MIN_PROBABILITY`,
   and `GRC_RELEVANCE_TIMEOUT_SECONDS`. The workflow forwards them to the Python
@@ -39,7 +40,7 @@ The workflow:
 5. Waits for both functions to become active.
 6. Verifies image references and checks Go health. It reads Go reserved concurrency from `GetFunction`, which needs no separate `GetFunctionConcurrency` permission. If that concurrency is zero, it explicitly defers Go API health and checks only Python's non-inference health path; it never restores concurrency.
 
-The workflow updates Lambda functions; it does not create missing functions or their execution role.
+Before switching an existing deployment, provision the two roles, protect both GitHub environments for `main`, and configure each role ARN and the API secret. Apply the runtime permission changes and verify each repository’s Lambda image-pull policy. Use the checked-in policies in [deployments](../deployments/) to review the exact resources. Existing AWS permissions change only when an operator applies them. Preserve unrelated grants when updating a shared policy. The release workflow updates existing functions and checks registry access before building.
 
 ## Manual Deployment
 
@@ -47,6 +48,7 @@ The manual script can create missing ECR repositories, the shared Lambda role, a
 
 ```bash
 export AWS_REGION=us-east-1
+export API_KEY=...
 export OPENROUTER_API_KEY=...
 export LLM_MODEL=openrouter/nvidia/nemotron-3-ultra-550b-a55b:free
 export DOCKER_BUILDKIT=0
@@ -93,7 +95,7 @@ operator review and are not the normal existing-function release path.
 
 - Both images target `linux/amd64`.
 - The Go build sets `GOARCH=amd64`.
-- The Python Lambda base image is pinned by digest.
+- Builds select base images by digest. Refresh those digests when adopting a new base image.
 - Docker BuildKit is disabled so Lambda receives Docker schema v2 image manifests.
 
 ## Smoke Checks
@@ -109,13 +111,17 @@ aws lambda invoke \
 jq . health.json
 ```
 
-Start a report:
+To invoke a report directly, export the configured `API_KEY`. Provide the event over standard input so the key stays out of the command line. Use an approved feed and model configuration for this operation.
 
 ```bash
-aws lambda invoke \
+jq -cn '{
+  httpMethod: "POST",
+  path: "/api/v1/reports/generate",
+  headers: {"Content-Type":"application/json", "X-API-Key":env.API_KEY},
+  body: ({feed_url:"https://example.com/feed.xml"} | tojson)
+}' | aws lambda invoke \
   --function-name grcinsight-go-function \
-  --payload '{"httpMethod":"POST","path":"/api/v1/reports/generate","body":"{\"feed_url\":\"https://example.com/feed.xml\"}"}' \
-  --cli-binary-format raw-in-base64-out \
+  --payload fileb:///dev/stdin \
   report.json
 jq . report.json
 ```

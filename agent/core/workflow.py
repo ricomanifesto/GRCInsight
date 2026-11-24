@@ -16,6 +16,7 @@ from models.api import (
     GRCAnalysisConfig,
     ArticleInput,
     ArticleRecord,
+    MAX_ARTICLES,
 )
 from services.rss_service import RSSService
 from services.model_service import GRCModelService
@@ -274,7 +275,6 @@ async def run_grc_analysis_endpoint(
                 error=APIError(
                     code="RSS_FETCH_FAILED",
                     message="Failed to fetch RSS feed",
-                    details=feed_data["error"],
                 ),
             )
 
@@ -284,18 +284,17 @@ async def run_grc_analysis_endpoint(
             feed_home_url = _canonical_public_url(str(feed_data.get("link") or ""), "feed home URL")
             source_issue_date = _sentrydigest_issue_date(feed_data)
             source_issue_url = _sentrydigest_issue_url(feed_home_url, source_issue_date)
-        except ValueError as error:
+        except ValueError:
             return WorkflowResponse(
                 status="failed",
                 error=APIError(
                     code="FEED_IDENTITY_INVALID",
                     message="Feed does not expose a usable retained issue identity",
-                    details=str(error),
                 ),
             )
         articles: List[ArticleInput] = []
         seen_article_urls: set[str] = set()
-        for entry in feed_data.get("entries", []):
+        for entry in feed_data.get("entries", [])[:MAX_ARTICLES]:
             try:
                 title = re.sub(r"\s+", " ", str(entry.get("title") or "")).strip()
                 raw_url = str(entry.get("link") or "").strip()
@@ -379,7 +378,7 @@ async def run_grc_analysis_endpoint(
                 model_deadline=model_deadline,
             )
         except ValueError as e:
-            fallback_reason = str(e)
+            fallback_reason = "Model service unavailable"
             logger.warning(f"Model service unavailable, falling back to local analysis: {e}")
 
         # Step 5: Analyze articles for GRC content with the configured model
@@ -387,7 +386,7 @@ async def run_grc_analysis_endpoint(
         if model_service is not None:
             model_analysis = await model_service.analyze_articles_for_grc(enriched_articles)
             if "error" in model_analysis:
-                fallback_reason = model_analysis["error"]
+                fallback_reason = "Model analysis unavailable"
                 logger.warning(f"GRC analysis failed, using local fallback: {fallback_reason}")
             else:
                 analysis_results = model_analysis
@@ -530,6 +529,5 @@ async def run_grc_analysis_endpoint(
             error=APIError(
                 code="WORKFLOW_EXECUTION_ERROR",
                 message="Workflow execution failed",
-                details=str(e),
             ),
         )

@@ -2,27 +2,47 @@
 
 from datetime import datetime
 from typing import List, Optional, Dict, Any, Literal
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator, model_validator
+
+from config.settings import settings
+
+MAX_ARTICLES = 50
+MAX_ARTICLE_TEXT = 100_000
+MAX_BATCH_TEXT = 1_000_000
+
+
+def validate_article_batch(articles) -> None:
+    if len(articles) > MAX_ARTICLES:
+        raise ValueError("Too many articles")
+    if sum(len(article.content) + len(article.summary) for article in articles) > MAX_BATCH_TEXT:
+        raise ValueError("Article batch text exceeds the server limit")
 
 
 # Request Models
 class GRCAnalysisConfig(BaseModel):
     """Configuration for GRC analysis."""
 
-    model: str = "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free"
+    model: str = Field(default_factory=lambda: settings.llm_model, max_length=200)
     max_tokens: int = Field(default=16000, strict=True, ge=1, le=16000)
     focus_areas: List[str] = Field(default_factory=list)
+
+    @field_validator("model")
+    @classmethod
+    def server_model_only(cls, model: str) -> str:
+        if model and model != settings.llm_model:
+            raise ValueError("Requested model is not enabled by the server")
+        return model or settings.llm_model
 
 
 class ArticleInput(BaseModel):
     """Input model for an article to be analyzed."""
 
-    title: str
-    url: str
-    content: str
-    summary: str = ""
-    source: str = ""
-    digest_url: str = ""
+    title: str = Field(max_length=2000)
+    url: str = Field(max_length=4096)
+    content: str = Field(max_length=MAX_ARTICLE_TEXT)
+    summary: str = Field(default="", max_length=MAX_ARTICLE_TEXT)
+    source: str = Field(default="", max_length=2000)
+    digest_url: str = Field(default="", max_length=4096)
     published: datetime
     # False when the feed gave no usable date and ``published`` is a capture-time placeholder.
     published_known: bool = True
@@ -44,7 +64,7 @@ class ArticleRecord(ArticleInput):
 class WorkflowRequest(BaseModel):
     """Request model for running the complete GRC workflow."""
 
-    feed_url: str = Field(..., description="URL of the RSS feed to analyze")
+    feed_url: str = Field(..., max_length=4096, description="URL of the RSS feed to analyze")
     config: GRCAnalysisConfig = Field(default_factory=GRCAnalysisConfig)
 
 
@@ -57,8 +77,13 @@ class ReportWorkflowRequest(WorkflowRequest):
 class AnalysisRequest(BaseModel):
     """Request model for analyzing specific articles."""
 
-    articles: List[ArticleInput]
+    articles: List[ArticleInput] = Field(max_length=MAX_ARTICLES)
     config: GRCAnalysisConfig = Field(default_factory=GRCAnalysisConfig)
+
+    @model_validator(mode="after")
+    def bounded_batch(self):
+        validate_article_batch(self.articles)
+        return self
 
 
 # Response Models

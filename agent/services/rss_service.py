@@ -1,10 +1,13 @@
 """RSS feed processing service."""
 
+import asyncio
+import time
+
 import feedparser
 from typing import Dict, Any, List
 from loguru import logger
 
-from models.api import ArticleInput
+from models.api import ArticleInput, MAX_ARTICLES, validate_article_batch
 from config.settings import settings
 from services.public_fetch import fetch_public_text
 
@@ -13,6 +16,7 @@ PAGE_CONTENT_LIMIT = 5000
 PAGE_BYTE_LIMIT = 65536
 PAGE_FETCH_TIMEOUT = 10.0
 FEED_BYTE_LIMIT = 2 * 1024 * 1024
+ENRICHMENT_TIMEOUT = 30.0
 
 
 class RSSService:
@@ -47,7 +51,7 @@ class RSSService:
 
             # Extract entries
             entries = []
-            for entry in feed.entries:
+            for entry in feed.entries[:MAX_ARTICLES]:
                 entry_data = {
                     "title": entry.get("title", ""),
                     "link": entry.get("link", ""),
@@ -69,22 +73,37 @@ class RSSService:
 
         except Exception as e:
             logger.error(f"Error fetching RSS feed: {e}")
-            return {"error": str(e), "entries": []}
+            return {"error": "RSS feed fetch failed", "entries": []}
 
     async def enrich_articles(self, articles: List[ArticleInput]) -> List[ArticleInput]:
         """Enrich articles with additional content."""
-        for article in articles:
-            if not article.content and article.url:
-                try:
-                    content, truncated = await fetch_public_text(
-                        article.url, max_bytes=PAGE_BYTE_LIMIT, timeout=PAGE_FETCH_TIMEOUT
-                    )
-                    article.content = content[:PAGE_CONTENT_LIMIT]
-                    article.content_origin = "publisher_page"
-                    article.content_truncated = truncated or len(content) > PAGE_CONTENT_LIMIT
-                except Exception as error:
-                    # Enrichment is optional; preserve the feed item on policy/network failure.
-                    logger.warning("Publisher enrichment unavailable: {}", type(error).__name__)
+        validate_article_batch(articles)
+        deadline = time.monotonic() + ENRICHMENT_TIMEOUT
+        try:
+            async with asyncio.timeout(ENRICHMENT_TIMEOUT):
+                for article in articles:
+                    remaining = deadline - time.monotonic()
+                    if remaining <= 0:
+                        break
+                    if not article.content and article.url:
+                        try:
+                            content, truncated = await fetch_public_text(
+                                article.url,
+                                max_bytes=PAGE_BYTE_LIMIT,
+                                timeout=min(PAGE_FETCH_TIMEOUT, remaining),
+                            )
+                            article.content = content[:PAGE_CONTENT_LIMIT]
+                            article.content_origin = "publisher_page"
+                            article.content_truncated = (
+                                truncated or len(content) > PAGE_CONTENT_LIMIT
+                            )
+                        except Exception as error:
+                            # Enrichment is optional; retain the item on policy/network failure.
+                            logger.warning(
+                                "Publisher enrichment unavailable: {}", type(error).__name__
+                            )
+        except TimeoutError:
+            logger.warning("Publisher enrichment budget exhausted")
         return articles
 
     def _extract_content(self, entry) -> str:

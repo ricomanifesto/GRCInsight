@@ -102,7 +102,7 @@ def test_run_grc_analysis_endpoint_falls_back_when_model_is_unavailable(monkeypa
     assert response.metadata.article_count == 1
     assert response.metadata.grc_article_count >= 1
     assert response.metadata.analysis_mode == "fallback"
-    assert response.metadata.fallback_reason == "Error code: 429 - insufficient_quota"
+    assert response.metadata.fallback_reason == "Model analysis unavailable"
     assert response.metadata.report_plan is None
     assert response.metadata.relevance_diagnostics is None
 
@@ -505,7 +505,8 @@ def test_unrecoverable_malformed_feed_maps_to_rss_fetch_failure(monkeypatch, pub
     assert response.status == "failed"
     assert response.error is not None
     assert response.error.code == "RSS_FETCH_FAILED"
-    assert "RSS feed parsing failed" in (response.error.details or "")
+    assert response.error.message == "Failed to fetch RSS feed"
+    assert response.error.details is None
 
 
 def test_blank_feed_body_maps_to_rss_fetch_failure(monkeypatch, public_feed_dns):
@@ -522,7 +523,8 @@ def test_blank_feed_body_maps_to_rss_fetch_failure(monkeypatch, public_feed_dns)
     assert response.status == "failed"
     assert response.error is not None
     assert response.error.code == "RSS_FETCH_FAILED"
-    assert "RSS feed response was empty" in (response.error.details or "")
+    assert response.error.message == "Failed to fetch RSS feed"
+    assert response.error.details is None
 
 
 def test_non_feed_payload_maps_to_rss_fetch_failure(monkeypatch, public_feed_dns):
@@ -539,7 +541,8 @@ def test_non_feed_payload_maps_to_rss_fetch_failure(monkeypatch, public_feed_dns
     assert response.status == "failed"
     assert response.error is not None
     assert response.error.code == "RSS_FETCH_FAILED"
-    assert "no feed metadata or entries" in (response.error.details or "")
+    assert response.error.message == "Failed to fetch RSS feed"
+    assert response.error.details is None
 
 
 def test_valid_empty_feed_remains_usable(monkeypatch, public_feed_dns):

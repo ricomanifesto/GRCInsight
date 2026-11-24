@@ -27,6 +27,7 @@ func (f *configCapturingPython) RunWorkflowAsync(req *apimodels.WorkflowRequest,
 }
 
 func TestGenerateReportOmittedOutputReachesPythonAsDefault(t *testing.T) {
+	t.Setenv("LLM_MODEL", "openrouter/vendor/model:free")
 	for _, input := range []string{
 		`{"feed_url":"https://feed.example.test/rss","config":{"model":"openrouter/vendor/model:free"}}`,
 		`{"feed_url":"https://feed.example.test/rss"}`,
@@ -68,6 +69,37 @@ func TestGenerateReportInvalidOutputCannotCreateProcessingRecord(t *testing.T) {
 		})
 		if err == nil || repo.created != nil || python.calls != 0 {
 			t.Fatal("invalid allowance created state or entered Python workflow")
+		}
+	}
+}
+
+func TestGenerateReportModelPolicyRunsBeforeAdmission(t *testing.T) {
+	t.Setenv("LLM_MODEL", "openrouter/server-approved/model")
+	for _, requested := range []string{"", "openrouter/server-approved/model", "openrouter/other/model"} {
+		repo, python := &fakeReportRepo{}, &configCapturingPython{}
+		logger := logrus.New()
+		logger.SetOutput(io.Discard)
+		service := NewReportService(repo, &fakeArticleRepo2{}, python, logger)
+		_, err := service.GenerateReport(&apimodels.GenerateReportRequest{FeedURL: "https://feed.example.test/rss", Config: apimodels.GRCAnalysisConfig{Model: requested}})
+		if requested == "openrouter/other/model" {
+			if err == nil || repo.created != nil || python.calls != 0 {
+				t.Fatal("unsupported model admitted a job")
+			}
+			continue
+		}
+		if err != nil {
+			t.Fatal(err)
+		}
+		var event struct {
+			Config struct {
+				Model string `json:"model"`
+			} `json:"config"`
+		}
+		if err := json.Unmarshal(python.payload, &event); err != nil {
+			t.Fatal(err)
+		}
+		if event.Config.Model != "openrouter/server-approved/model" {
+			t.Fatalf("configured model lost: %q", event.Config.Model)
 		}
 	}
 }

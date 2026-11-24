@@ -29,7 +29,7 @@ from core.report_plan import (
     parse_report_plan,
     render_report_plan,
 )
-from models.api import ArticleInput
+from models.api import ArticleInput, validate_article_batch
 from services.openrouter_client import (
     OpenRouterClient,
     OpenRouterGeneration,
@@ -220,6 +220,7 @@ class GRCModelService:
 
     async def analyze_articles_for_grc(self, articles: List[ArticleInput]) -> Dict[str, Any]:
         """Use the optional relevance pilot without changing report generation."""
+        validate_article_batch(articles)
         self.last_relevance_diagnostics = None
         self.last_relevance_result = None
         self.last_selection_records = None
@@ -535,9 +536,9 @@ class GRCModelService:
             return analysis_result
 
         except Exception as e:
-            logger.error(f"Error during GRC analysis: {e}")
+            logger.error("Model analysis failed: {}", type(e).__name__)
             return {
-                "error": str(e),
+                "error": "Model analysis unavailable",
                 "grc_articles": [],
                 "summary": {
                     "total_articles": len(articles),
@@ -612,13 +613,15 @@ class GRCModelService:
             raise ValueError("Model did not return a valid report plan after retry")
 
         except Exception as e:
-            logger.error(f"Error generating report: {e}")
+            logger.error("Model report generation failed: {}", type(e).__name__)
             return GRCReportGeneration(
-                content=(
-                    "# GRC Intelligence Report - Error\n\n" f"Unable to generate report: {str(e)}"
-                ),
+                content=("# GRC Intelligence Report - Error\n\nUnable to generate report."),
                 resolved_model="",
-                failure_reason=str(e) if isinstance(e, ReportQualityError) else None,
+                failure_reason=(
+                    str(e)[:400]
+                    if isinstance(e, ReportQualityError)
+                    else "Model report generation unavailable"
+                ),
             )
 
     def _get_system_prompt(self) -> str:

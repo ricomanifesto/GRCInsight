@@ -1,6 +1,6 @@
 """GRC analysis endpoints."""
 
-from fastapi import APIRouter, HTTPException, Request
+from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from loguru import logger
 
 from models.api import (
@@ -13,6 +13,7 @@ from models.api import (
 from services.model_service import GRCModelService
 from core.entities import analyze_article_grc_content
 from core.article_selection import selected_article_mask
+from api.security import require_api_key, require_work_budget
 from core.runtime import (
     CALLER_DEADLINE_HEADER,
     deadline_from_unix_ms,
@@ -20,10 +21,12 @@ from core.runtime import (
     get_model_deadline,
 )
 
-router = APIRouter()
+router = APIRouter(dependencies=[Depends(require_api_key)])
 
 
-@router.post("/analyze", response_model=AnalysisResponse)
+@router.post(
+    "/analyze", response_model=AnalysisResponse, dependencies=[Depends(require_work_budget)]
+)
 async def analyze_ar(request: AnalysisRequest, http_request: Request):
     """Analyze articles for GRC content using the configured model service."""
     logger.info(f"Starting analysis of {len(request.articles)} articles")
@@ -34,7 +37,11 @@ async def analyze_ar(request: AnalysisRequest, http_request: Request):
                 get_model_deadline(),
                 deadline_from_unix_ms(http_request.headers.get(CALLER_DEADLINE_HEADER)),
             )
-            model_service = GRCModelService(model_deadline=model_deadline)
+            model_service = GRCModelService(
+                model_name=request.config.model or None,
+                max_tokens=request.config.max_tokens,
+                model_deadline=model_deadline,
+            )
         except ValueError as init_err:
             logger.error(f"Model service initialization failed: {init_err}")
             return AnalysisResponse(
@@ -50,7 +57,6 @@ async def analyze_ar(request: AnalysisRequest, http_request: Request):
                 error=APIError(
                     code="LLM_INIT_FAILED",
                     message="Model service initialization failed",
-                    details=str(init_err),
                 ),
             )
 
@@ -72,7 +78,6 @@ async def analyze_ar(request: AnalysisRequest, http_request: Request):
                 error=APIError(
                     code="GRC_ANALYSIS_FAILED",
                     message="GRC analysis failed",
-                    details=str(analysis.get("error")),
                 ),
             )
 
@@ -142,13 +147,12 @@ async def analyze_ar(request: AnalysisRequest, http_request: Request):
             error=APIError(
                 code="ANALYSIS_ERROR",
                 message="Article analysis failed",
-                details=str(e),
             ),
         )
 
 
 @router.post("/extract/entities")
-async def extract_entities(text: str):
+async def extract_entities(text: str = Query(max_length=100_000)):
     """Extract GRC entities from text."""
     logger.info("Extracting entities from text")
 
@@ -162,4 +166,4 @@ async def extract_entities(text: str):
 
     except Exception as e:
         logger.error(f"Entity extraction failed: {str(e)}")
-        raise HTTPException(status_code=500, detail=f"Entity extraction failed: {str(e)}")
+        raise HTTPException(status_code=500, detail="Entity extraction failed")

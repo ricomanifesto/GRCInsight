@@ -595,8 +595,9 @@ def test_http_report_route_commits_through_the_same_contract(monkeypatch, store)
     monkeypatch.setattr(core.workflow, "run_grc_analysis_endpoint", fake_run)
     monkeypatch.setattr(history.service, "history_tables", lambda: (reports, articles))
     monkeypatch.setenv("GRC_INTERNAL_TOKEN", "synthetic-internal-token")
+    monkeypatch.setenv("API_KEY", "synthetic-api-key")
     client = TestClient(app)
-    auth = {"X-GRC-Internal-Token": "synthetic-internal-token"}
+    auth = {"X-GRC-Internal-Token": "synthetic-internal-token", "X-API-Key": "synthetic-api-key"}
     body = {"feed_url": fx.FEED, "config": {}, "job_id": "job-r1"}
     first = client.post("/api/v1/workflow/reports/r1/run", json=body, headers=auth)
     assert first.status_code == 200 and first.json()["decision"] == "committed"
@@ -627,15 +628,24 @@ def test_http_report_route_refuses_before_running_the_workflow(monkeypatch, stor
     monkeypatch.setattr(workflow_route, "run_grc_analysis_endpoint", fake_run)
     monkeypatch.setattr(history.service, "history_tables", lambda: (reports, articles))
     client = TestClient(app)
+    from api import security
+
+    monkeypatch.setattr(security, "work_budget", security.WorkBudget())
+    monkeypatch.setenv("API_KEY", "synthetic-api-key")
     url = "/api/v1/workflow/reports/r1/run"
     body = {"feed_url": fx.FEED, "config": {}, "job_id": "job-r1"}
-    good = {"X-GRC-Internal-Token": "synthetic-internal-token"}
+    good = {"X-GRC-Internal-Token": "synthetic-internal-token", "X-API-Key": "synthetic-api-key"}
 
     monkeypatch.delenv("GRC_INTERNAL_TOKEN", raising=False)
     assert client.post(url, json=body, headers=good).status_code == 403  # disabled
     monkeypatch.setenv("GRC_INTERNAL_TOKEN", "synthetic-internal-token")
-    assert client.post(url, json=body).status_code == 403
-    assert client.post(url, json=body, headers={"X-GRC-Internal-Token": "x"}).status_code == 403
+    assert (
+        client.post(url, json=body, headers={"X-API-Key": "synthetic-api-key"}).status_code == 403
+    )
+    assert (
+        client.post(url, json=body, headers={**good, "X-GRC-Internal-Token": "x"}).status_code
+        == 403
+    )
     no_job = {k: v for k, v in body.items() if k != "job_id"}
     assert client.post(url, json=no_job, headers=good).status_code == 422
     other_feed = {**body, "feed_url": "https://attacker.example.test/feed.xml"}

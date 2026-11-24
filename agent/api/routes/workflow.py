@@ -4,7 +4,7 @@ import hmac
 import os
 from typing import Any
 
-from fastapi import APIRouter, HTTPException, Request
+from fastapi import APIRouter, Depends, HTTPException, Request
 from fastapi.responses import JSONResponse
 from loguru import logger
 
@@ -17,6 +17,7 @@ from core.runtime import (
 )
 from config.settings import settings
 from core.workflow import run_grc_analysis_endpoint
+from api.security import require_api_key, require_work_budget
 
 boto3: Any | None = None
 try:
@@ -26,10 +27,12 @@ try:
 except ImportError:  # pragma: no cover - exercised only when optional dependency is absent
     pass
 
-router = APIRouter()
+router = APIRouter(dependencies=[Depends(require_api_key)])
 
 
-@router.post("/workflow/run", response_model=WorkflowResponse)
+@router.post(
+    "/workflow/run", response_model=WorkflowResponse, dependencies=[Depends(require_work_budget)]
+)
 async def run_workflow(request: WorkflowRequest, http_request: Request):
     """Execute the complete GRC analysis workflow."""
     logger.info(f"Starting workflow execution for feed: {request.feed_url}")
@@ -53,9 +56,7 @@ async def run_workflow(request: WorkflowRequest, http_request: Request):
         logger.error(f"Workflow execution failed: {str(e)}")
         return WorkflowResponse(
             status="failed",
-            error=APIError(
-                code="WORKFLOW_ERROR", message="Workflow execution error", details=str(e)
-            ),
+            error=APIError(code="WORKFLOW_ERROR", message="Workflow execution error"),
         )
 
 
@@ -72,7 +73,7 @@ def _internal_caller(http_request: Request) -> bool:
     return bool(expected) and hmac.compare_digest(provided.encode(), expected.encode())
 
 
-@router.post("/workflow/reports/{report_id}/run")
+@router.post("/workflow/reports/{report_id}/run", dependencies=[Depends(require_work_budget)])
 async def run_report_workflow(
     report_id: str, request: ReportWorkflowRequest, http_request: Request
 ):
@@ -144,4 +145,4 @@ async def get_workflow_status(report_id: str):
         raise
     except Exception as e:
         logger.error(f"Failed to fetch workflow status from DynamoDB: {e}")
-        raise HTTPException(status_code=500, detail=f"Status lookup failed: {str(e)}")
+        raise HTTPException(status_code=500, detail="Status lookup failed")

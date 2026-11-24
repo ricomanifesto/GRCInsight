@@ -203,6 +203,7 @@ def test_direct_python_event_cannot_override_unowned_zero_price_policy(monkeypat
         return value
 
     monkeypatch.setattr(model_service.settings, "openrouter_api_key", "synthetic")
+    monkeypatch.setattr(model_service.settings, "llm_model", "openrouter/vendor/paid")
     monkeypatch.setattr(workflow, "GRCModelService", service)
     monkeypatch.setattr(workflow.rss_service, "fetch_feed", fetch)
     monkeypatch.setattr(workflow.rss_service, "enrich_articles", enrich)

@@ -27,7 +27,9 @@ def snapshot():
         "LastUpdateStatus": "Successful",
         "Timeout": 900,
         "Role": "unchanged-role",
-        "Environment": {"Variables": {"UNRELATED": "private-other", "OPENROUTER_API_KEY": "old"}},
+        "Environment": {
+            "Variables": {"UNRELATED": "private-other", "OPENROUTER_API_KEY": "old"}
+        },
     }
 
 
@@ -56,7 +58,13 @@ class Client:
             self.value["LastUpdateStatus"] = "InProgress"
         return {
             name: self.value[name]
-            for name in ("FunctionArn", "FunctionName", "Version", "RevisionId", "LastModified")
+            for name in (
+                "FunctionArn",
+                "FunctionName",
+                "Version",
+                "RevisionId",
+                "LastModified",
+            )
         }
 
 
@@ -88,7 +96,9 @@ def test_uncertain_mutation_and_failed_verification_never_replay(failure):
     assert len([name for name, _value in client.calls if name == "get"]) <= 4
 
 
-@pytest.mark.parametrize("change", ["identity", "revision", "env_error", "env_type", "updating"])
+@pytest.mark.parametrize(
+    "change", ["identity", "revision", "env_error", "env_type", "updating"]
+)
 def test_bad_snapshot_refuses_before_mutation(change):
     client = Client()
     if change == "identity":
@@ -113,7 +123,9 @@ def test_already_applied_environment_is_verified_without_second_mutation():
     assert not any(name == "update" for name, _value in client.calls)
 
 
-def test_aws_cli_uses_private_stdin_and_one_attempt_without_key_environment(monkeypatch):
+def test_aws_cli_uses_private_stdin_and_one_attempt_without_key_environment(
+    monkeypatch,
+):
     calls = []
 
     def invoke(argv, **kwargs):
@@ -133,7 +145,11 @@ def test_aws_cli_uses_private_stdin_and_one_attempt_without_key_environment(monk
         },
     )
     client.update(
-        {"FunctionName": ARN, "RevisionId": REVISION, "Environment": {"Variables": OWNED}}
+        {
+            "FunctionName": ARN,
+            "RevisionId": REVISION,
+            "Environment": {"Variables": OWNED},
+        }
     )
     argv, kwargs = calls[0]
     assert KEY not in " ".join(argv)
@@ -168,7 +184,11 @@ def test_cli_failure_discards_raw_diagnostics_and_does_not_retry(monkeypatch):
     )
     with pytest.raises(deploy.EnvironmentUpdateError) as error:
         client.update(
-            {"FunctionName": ARN, "RevisionId": REVISION, "Environment": {"Variables": OWNED}}
+            {
+                "FunctionName": ARN,
+                "RevisionId": REVISION,
+                "Environment": {"Variables": OWNED},
+            }
         )
     assert len(calls) == 1 and KEY not in str(error.value)
 
@@ -185,10 +205,17 @@ def test_cli_failure_discards_raw_diagnostics_and_does_not_retry(monkeypatch):
     ],
 )
 def test_relevance_defaults_and_overrides_reach_merged_environment(overrides):
-    environment = {"LLM_MODEL": "openrouter/test/model", "OPENROUTER_API_KEY": KEY, **overrides}
+    environment = {
+        "LLM_MODEL": "openrouter/test/model",
+        "OPENROUTER_API_KEY": KEY,
+        "API_KEY": "synthetic-api-key",
+        **overrides,
+    }
     owned = deploy.owned_environment("python", environment)
     client = Client()
-    assert deploy.configure(client, ARN, owned, pause=lambda _seconds: None) == "verified"
+    assert (
+        deploy.configure(client, ARN, owned, pause=lambda _seconds: None) == "verified"
+    )
     merged = client.value["Environment"]["Variables"]
     for name, default in (
         ("GRC_RELEVANCE_MODE", "off"),
@@ -196,7 +223,9 @@ def test_relevance_defaults_and_overrides_reach_merged_environment(overrides):
         ("GRC_RELEVANCE_TIMEOUT_SECONDS", "4"),
     ):
         assert merged[name] == overrides.get(name, default)
-    assert merged["UNRELATED"] == "private-other" and merged["OPENROUTER_API_KEY"] == KEY
+    assert (
+        merged["UNRELATED"] == "private-other" and merged["OPENROUTER_API_KEY"] == KEY
+    )
 
 
 COMPLETED_REVISION = "32345678-1234-1234-1234-123456789abc"
@@ -216,7 +245,9 @@ class LambdaLikeClient(Client):
         if any(name == "update" for name, _value in self.calls):
             self.polls += 1
             if self.polls >= 2:
-                self.value.update(LastUpdateStatus="Successful", RevisionId=COMPLETED_REVISION)
+                self.value.update(
+                    LastUpdateStatus="Successful", RevisionId=COMPLETED_REVISION
+                )
                 if self.concurrent:
                     self.value["LastModified"] = "2026-11-05T20:01:30.000+0000"
         return super().get(arn, **kwargs)
@@ -231,7 +262,13 @@ class LambdaLikeClient(Client):
         )
         return {
             name: self.value[name]
-            for name in ("FunctionArn", "FunctionName", "Version", "RevisionId", "LastModified")
+            for name in (
+                "FunctionArn",
+                "FunctionName",
+                "Version",
+                "RevisionId",
+                "LastModified",
+            )
         }
 
 

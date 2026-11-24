@@ -2,8 +2,7 @@ server:
   port: 8080
   mode: debug
   host: 0.0.0.0
-  allowed_origins:
-    - "*"  # Development default - restrict in production
+  allowed_origins: []  # Add explicit browser origins when needed
 
 database:
   region: us-east-1
@@ -22,5 +21,4 @@ logging:
   format: text
 
 auth:
-  jwt_secret: your-jwt-secret-change-in-production
-  api_key: your-api-key-change-in-production
+  api_key: ""  # Set API_KEY for both HTTP services; empty disables sensitive routes

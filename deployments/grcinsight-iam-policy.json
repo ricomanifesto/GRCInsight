@@ -2,29 +2,14 @@
   "Version": "2012-10-17",
   "Statement": [
     {
+      "Sid": "UpdateExistingFunctions",
       "Effect": "Allow",
       "Action": [
-        "dynamodb:GetItem",
-        "dynamodb:PutItem",
-        "dynamodb:UpdateItem",
-        "dynamodb:DeleteItem",
-        "dynamodb:Scan",
-        "dynamodb:Query",
-        "dynamodb:DescribeTable"
-      ],
-      "Resource": [
-        "arn:aws:dynamodb:us-east-1:076542168556:table/grcinsight-reports",
-        "arn:aws:dynamodb:us-east-1:076542168556:table/grcinsight-reports/index/*"
-      ]
-    },
-    {
-      "Effect": "Allow",
-      "Action": [
-        "lambda:InvokeFunction",
         "lambda:UpdateFunctionCode",
         "lambda:UpdateFunctionConfiguration",
         "lambda:GetFunction",
-        "lambda:GetFunctionConfiguration"
+        "lambda:GetFunctionConfiguration",
+        "lambda:InvokeFunction"
       ],
       "Resource": [
         "arn:aws:lambda:us-east-1:076542168556:function:grcinsight-go-function",
@@ -32,26 +17,29 @@
       ]
     },
     {
+      "Sid": "PublishExistingImages",
       "Effect": "Allow",
       "Action": [
-        "ecr:GetAuthorizationToken",
         "ecr:BatchCheckLayerAvailability",
         "ecr:GetDownloadUrlForLayer",
         "ecr:BatchGetImage",
         "ecr:DescribeRepositories",
         "ecr:GetRepositoryPolicy",
-        "ecr:SetRepositoryPolicy",
-        "ecr:CreateRepository",
         "ecr:PutImage",
         "ecr:InitiateLayerUpload",
         "ecr:UploadLayerPart",
         "ecr:CompleteLayerUpload"
       ],
-      "Resource": "*"
+      "Resource": [
+        "arn:aws:ecr:us-east-1:076542168556:repository/grcinsight-go",
+        "arn:aws:ecr:us-east-1:076542168556:repository/grcinsight-python"
+      ]
     },
     {
+      "Sid": "RegistryAuthentication",
       "Effect": "Allow",
       "Action": [
+        "ecr:GetAuthorizationToken",
         "sts:GetCallerIdentity"
       ],
       "Resource": "*"

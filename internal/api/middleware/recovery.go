@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"io"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -9,7 +10,9 @@ import (
 
 // RecoveryMiddleware creates a custom recovery middleware with structured logging
 func RecoveryMiddleware(logger *logrus.Logger) gin.HandlerFunc {
-	return gin.CustomRecovery(func(c *gin.Context, recovered interface{}) {
+	// Gin's default recovery logger dumps request headers in debug mode.
+	// Keep diagnostics in the structured callback without recording credentials.
+	return gin.CustomRecoveryWithWriter(io.Discard, func(c *gin.Context, recovered interface{}) {
 		logger.WithFields(logrus.Fields{
 			"panic":      recovered,
 			"path":       c.Request.URL.Path,

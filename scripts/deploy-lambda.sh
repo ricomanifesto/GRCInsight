@@ -2,7 +2,7 @@
 
 # AWS Lambda Deployment Script for GRCInsight
 set +x
-set -e
+set -eo pipefail
 # Protect every direct/helper AWS descendant, including full configuration
 # responses observed internally by existence checks and waiters.
 export AWS_CLI_HISTORY_FILE=/dev
@@ -63,6 +63,66 @@ case "$LLM_MODEL" in
         ;;
 esac
 
+# Explicit operator bootstrap: verify runtime permissions before publishing images.
+# Create execution role if it doesn't exist
+ROLE_NAME=grcinsight-lambda-role
+if ! aws iam get-role --role-name $ROLE_NAME > /dev/null 2>&1; then
+    print_warning "Creating IAM role for Lambda..."
+    aws iam create-role \
+        --role-name $ROLE_NAME \
+        --assume-role-policy-document '{
+            "Version": "2012-10-17",
+            "Statement": [
+                {
+                    "Effect": "Allow",
+                    "Principal": {
+                        "Service": "lambda.amazonaws.com"
+                    },
+                    "Action": "sts:AssumeRole"
+                }
+            ]
+        }'
+
+    aws iam attach-role-policy \
+        --role-name $ROLE_NAME \
+        --policy-arn arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+
+    # Wait for role to be available
+    sleep 10
+else
+    print_status "IAM role $ROLE_NAME already exists"
+fi
+
+# Ensure IAM policy for DynamoDB and Lambda invoke is attached to the role
+print_status "Ensuring IAM policies for DynamoDB and Lambda invoke..."
+POLICY_NAME=grcinsight-lambda-permissions
+POLICY_ARN=$(aws iam list-policies --scope Local --query "Policies[?PolicyName=='$POLICY_NAME'].Arn | [0]" --output text 2>/dev/null || echo "None")
+if [ "$POLICY_ARN" = "None" ] || [ -z "$POLICY_ARN" ]; then
+    print_warning "Creating customer managed policy: $POLICY_NAME"
+    POLICY_ARN=$(aws iam create-policy \
+        --policy-name $POLICY_NAME \
+        --policy-document file://deployments/lambda-permissions-policy.json \
+        --query 'Policy.Arn' --output text)
+else
+    print_status "Verifying existing runtime policy: $POLICY_NAME"
+    POLICY_VERSION=$(aws iam get-policy --policy-arn "$POLICY_ARN" \
+        --query 'Policy.DefaultVersionId' --output text)
+    if ! aws iam get-policy-version --policy-arn "$POLICY_ARN" --version-id "$POLICY_VERSION" \
+        --query 'PolicyVersion.Document' --output json | \
+        jq -e --slurpfile expected deployments/lambda-permissions-policy.json '. == $expected[0]' > /dev/null; then
+        print_error "Existing runtime policy requires owner reconciliation; no images or functions were updated."
+        exit 1
+    fi
+fi
+
+ATTACHED=$(aws iam list-attached-role-policies --role-name $ROLE_NAME --query "AttachedPolicies[?PolicyArn=='$POLICY_ARN'] | length(@)" --output text)
+if [ "$ATTACHED" = "0" ]; then
+    print_warning "Attaching policy $POLICY_NAME to role $ROLE_NAME"
+    aws iam attach-role-policy --role-name $ROLE_NAME --policy-arn $POLICY_ARN
+else
+    print_status "Role $ROLE_NAME already has policy $POLICY_NAME attached"
+fi
+
 # Step 1: Create ECR repositories if they don't exist
 print_status "Creating ECR repositories..."
 
@@ -80,12 +140,32 @@ done
 
 print_status "Ensuring Lambda ECR retrieval policies are present..."
 apply_ecr_policy() {
-    local repo="$1"
-    local policy_file
+    local repo="$1" function_name="$2"
+    local policy_file policy_error existing_policy
+    policy_error=$(mktemp)
+    if existing_policy=$(aws ecr get-repository-policy --repository-name "$repo" \
+        --region "$AWS_REGION" --output json 2>"$policy_error"); then
+        rm -f "$policy_error"
+        # Preserve all existing statements and denies; never replace another
+        # owner's policy. Broad or uncertain policies need explicit reconciliation.
+        if ! printf '%s' "$existing_policy" | python3 -I -B scripts/check_ecr_retrieval_policy.py \
+            --account-id "$AWS_ACCOUNT_ID" --region "$AWS_REGION" --function-name "$function_name"; then
+            print_error "Existing ECR policy requires owner reconciliation; it was not changed."
+            return 1
+        fi
+        return 0
+    fi
+    if ! grep -q 'RepositoryPolicyNotFoundException' "$policy_error"; then
+        rm -f "$policy_error"
+        print_error "Could not inspect ECR policy; no policy was changed."
+        return 1
+    fi
+    rm -f "$policy_error"
     policy_file=$(mktemp)
-    # Same-account Lambda functions need unconditional service access so
-    # inactive functions can re-fetch images during re-optimization.
-    cat >"$policy_file" <<'EOF'
+    # This explicit operator bootstrap is separate from routine release IAM.
+    # Bind service retrieval to this account and the matching function, including
+    # inactive-function re-optimization; normal CI only verifies this grant.
+    cat >"$policy_file" <<EOF
 {
   "Version": "2012-10-17",
   "Statement": [
@@ -98,7 +178,11 @@ apply_ecr_policy() {
       "Action": [
         "ecr:BatchGetImage",
         "ecr:GetDownloadUrlForLayer"
-      ]
+      ],
+      "Condition": {
+        "StringEquals": {"aws:SourceAccount": "$AWS_ACCOUNT_ID"},
+        "ArnLike": {"aws:SourceArn": "arn:aws:lambda:$AWS_REGION:$AWS_ACCOUNT_ID:function:$function_name"}
+      }
     }
   ]
 }
@@ -111,8 +195,8 @@ EOF
     print_status "Applied Lambda ECR retrieval policy to $repo"
 }
 
-apply_ecr_policy "$GO_REPO_NAME"
-apply_ecr_policy "$PYTHON_REPO_NAME"
+apply_ecr_policy "$GO_REPO_NAME" "$GO_FUNCTION_NAME"
+apply_ecr_policy "$PYTHON_REPO_NAME" "$PYTHON_FUNCTION_NAME"
 
 # Step 2: Login to ECR
 print_status "Logging in to ECR..."
@@ -142,35 +226,6 @@ cd ..
 
 # Step 5: Create or update Lambda functions
 print_status "Creating/updating Lambda functions..."
-
-# Create execution role if it doesn't exist
-ROLE_NAME=grcinsight-lambda-role
-if ! aws iam get-role --role-name $ROLE_NAME > /dev/null 2>&1; then
-    print_warning "Creating IAM role for Lambda..."
-    aws iam create-role \
-        --role-name $ROLE_NAME \
-        --assume-role-policy-document '{
-            "Version": "2012-10-17",
-            "Statement": [
-                {
-                    "Effect": "Allow",
-                    "Principal": {
-                        "Service": "lambda.amazonaws.com"
-                    },
-                    "Action": "sts:AssumeRole"
-                }
-            ]
-        }'
-
-    aws iam attach-role-policy \
-        --role-name $ROLE_NAME \
-        --policy-arn arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
-
-    # Wait for role to be available
-    sleep 10
-else
-    print_status "IAM role $ROLE_NAME already exists"
-fi
 
 ROLE_ARN=arn:aws:iam::${AWS_ACCOUNT_ID}:role/${ROLE_NAME}
 
@@ -232,28 +287,6 @@ aws lambda wait function-active-v2 --function-name "$PYTHON_FUNCTION_NAME" --reg
 aws lambda wait function-updated-v2 --function-name "$PYTHON_FUNCTION_NAME" --region "$AWS_REGION"
 python3 -I -B scripts/update_lambda_environment.py \
     --function-kind python --account-id "$AWS_ACCOUNT_ID" --region "$AWS_REGION" --manual-cli-auth
-
-# Ensure IAM policy for DynamoDB and Lambda invoke is attached to the role
-print_status "Ensuring IAM policies for DynamoDB and Lambda invoke..."
-POLICY_NAME=grcinsight-lambda-permissions
-POLICY_ARN=$(aws iam list-policies --scope Local --query "Policies[?PolicyName=='$POLICY_NAME'].Arn | [0]" --output text 2>/dev/null || echo "None")
-if [ "$POLICY_ARN" = "None" ] || [ -z "$POLICY_ARN" ]; then
-    print_warning "Creating customer managed policy: $POLICY_NAME"
-    POLICY_ARN=$(aws iam create-policy \
-        --policy-name $POLICY_NAME \
-        --policy-document file://deployments/lambda-permissions-policy.json \
-        --query 'Policy.Arn' --output text)
-else
-    print_status "Policy $POLICY_NAME already exists: $POLICY_ARN"
-fi
-
-ATTACHED=$(aws iam list-attached-role-policies --role-name $ROLE_NAME --query "AttachedPolicies[?PolicyArn=='$POLICY_ARN'] | length(@)" --output text)
-if [ "$ATTACHED" = "0" ]; then
-    print_warning "Attaching policy $POLICY_NAME to role $ROLE_NAME"
-    aws iam attach-role-policy --role-name $ROLE_NAME --policy-arn $POLICY_ARN
-else
-    print_status "Role $ROLE_NAME already has policy $POLICY_NAME attached"
-fi
 
 # Step 6: Summary
 print_status "Lambda functions deployed successfully!"

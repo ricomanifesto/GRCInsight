@@ -2,12 +2,23 @@ import asyncio
 from typing import Any, cast
 
 import httpx
+import pytest
 
 # Import the FastAPI app
 from main import app
 
 
+@pytest.fixture(autouse=True)
+def authenticated_web_client(monkeypatch):
+    from api import security
+
+    monkeypatch.setenv("API_KEY", "synthetic-api-key")
+    monkeypatch.setattr(security, "work_budget", security.WorkBudget())
+
+
 def request(method, url, **kwargs):
+    kwargs["headers"] = {"X-API-Key": "synthetic-api-key", **kwargs.get("headers", {})}
+
     async def send():
         transport = httpx.ASGITransport(app=cast(Any, app))
         async with httpx.AsyncClient(
@@ -32,7 +43,7 @@ def test_analyze_with_fake_model_service(monkeypatch):
     from api.routes import analysis as analysis_route
 
     class FakeGRCModelService:
-        def __init__(self, model_deadline=None):
+        def __init__(self, model_deadline=None, **_kwargs):
             pass
 
         async def analyze_articles_for_grc(self, articles):
@@ -83,7 +94,7 @@ def test_analyze_route_uses_the_tighter_caller_deadline(monkeypatch):
     captured_deadlines = []
 
     class FakeGRCModelService:
-        def __init__(self, model_deadline=None):
+        def __init__(self, model_deadline=None, **_kwargs):
             captured_deadlines.append(model_deadline)
 
         async def analyze_articles_for_grc(self, articles):

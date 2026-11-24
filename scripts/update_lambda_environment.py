@@ -70,7 +70,8 @@ def variables(value):
 def configure(client, arn, owned, *, pause=time.sleep, now=time.monotonic):
     if (
         not re.fullmatch(
-            r"arn:aws:lambda:us-east-1:\d{12}:function:grcinsight-(go|python)-function", arn
+            r"arn:aws:lambda:us-east-1:\d{12}:function:grcinsight-(go|python)-function",
+            arn,
         )
         or type(owned) is not dict
         or not owned
@@ -79,7 +80,10 @@ def configure(client, arn, owned, *, pause=time.sleep, now=time.monotonic):
         raise EnvironmentUpdateError()
     before = client.get(arn)
     identity(before, arn)
-    if before.get("State") != "Active" or before.get("LastUpdateStatus") != "Successful":
+    if (
+        before.get("State") != "Active"
+        or before.get("LastUpdateStatus") != "Successful"
+    ):
         raise EnvironmentUpdateError()
     original = variables(before)
     merged = {**original, **owned}
@@ -114,7 +118,10 @@ def configure(client, arn, owned, *, pause=time.sleep, now=time.monotonic):
             raise EnvironmentUpdateError()
         after = client.get(arn, timeout=min(10, remaining))
         identity(after, arn)
-        if after.get("LastModified") != written_at or after.get("LastUpdateStatus") == "Failed":
+        if (
+            after.get("LastModified") != written_at
+            or after.get("LastUpdateStatus") == "Failed"
+        ):
             raise EnvironmentUpdateError()
         if after.get("LastUpdateStatus") == "InProgress":
             if after["RevisionId"] != revision:
@@ -138,7 +145,10 @@ class AwsCli:
     """Existing CLI only; secret-bearing JSON travels through a private stdin pipe."""
 
     def __init__(self, executable, region, environment, *, manual_cli_auth=False):
-        pair = (environment.get("AWS_ACCESS_KEY_ID"), environment.get("AWS_SECRET_ACCESS_KEY"))
+        pair = (
+            environment.get("AWS_ACCESS_KEY_ID"),
+            environment.get("AWS_SECRET_ACCESS_KEY"),
+        )
         if (
             region != "us-east-1"
             or not executable
@@ -274,8 +284,15 @@ class AwsCli:
 
 
 def owned_environment(kind, env):
+    api_key = env.get("API_KEY", "")
+    if not api_key or not api_key.strip():
+        raise EnvironmentUpdateError()
     if kind == "go":
         values = {
+            "API_KEY": api_key,
+            "LLM_MODEL": env.get(
+                "LLM_MODEL", "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free"
+            ),
             "GO_ENV": "production",
             "GIN_MODE": "release",
             "PYTHON_LAMBDA_FUNCTION_NAME": FUNCTIONS["python"],
@@ -305,6 +322,7 @@ def owned_environment(kind, env):
     except (TypeError, ValueError):
         raise EnvironmentUpdateError() from None
     return {
+        "API_KEY": api_key,
         "LLM_MODEL": model,
         "OPENROUTER_API_KEY": key,
         "GRC_RELEVANCE_MODE": mode,
@@ -327,7 +345,10 @@ def main():
     try:
         owned = owned_environment(args.function_kind, os.environ)
         client = AwsCli(
-            shutil.which("aws"), args.region, os.environ, manual_cli_auth=args.manual_cli_auth
+            shutil.which("aws"),
+            args.region,
+            os.environ,
+            manual_cli_auth=args.manual_cli_auth,
         )
         if args.preflight_only:
             # Same filtered authentication/endpoint context as later writes.
@@ -352,7 +373,10 @@ def main():
                 flush=True,
             )
             return 1
-        print("Lambda environment update unavailable or uncertain; no automatic retry", flush=True)
+        print(
+            "Lambda environment update unavailable or uncertain; no automatic retry",
+            flush=True,
+        )
         return 1
 
 

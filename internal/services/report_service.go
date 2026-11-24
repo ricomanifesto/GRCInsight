@@ -3,6 +3,7 @@ package services
 import (
 	"errors"
 	"fmt"
+	"os"
 	"time"
 
 	"grcinsight/internal/database/dynamodb"
@@ -22,11 +23,17 @@ type PythonWorkflowClient interface {
 
 var _ PythonWorkflowClient = (*PythonServiceClient)(nil)
 
+const defaultAnalysisModel = "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free"
+
+// ErrInvalidAnalysisConfig identifies a client request rejected before admission.
+var ErrInvalidAnalysisConfig = errors.New("invalid analysis configuration")
+
 type ReportService struct {
 	reportRepo   repositories.ReportRepository
 	articleRepo  repositories.ArticleRepository
 	pythonClient PythonWorkflowClient
 	logger       *logrus.Logger
+	serverModel  string
 }
 
 // NewReportService creates a new report service
@@ -36,11 +43,16 @@ func NewReportService(
 	pythonClient PythonWorkflowClient,
 	logger *logrus.Logger,
 ) *ReportService {
+	model := os.Getenv("LLM_MODEL")
+	if model == "" {
+		model = defaultAnalysisModel
+	}
 	return &ReportService{
 		reportRepo:   reportRepo,
 		articleRepo:  articleRepo,
 		pythonClient: pythonClient,
 		logger:       logger,
+		serverModel:  model,
 	}
 }
 
@@ -48,8 +60,12 @@ func NewReportService(
 func (s *ReportService) GenerateReport(req *apiModels.GenerateReportRequest) (*models.Report, error) {
 	config, err := req.Config.WithDefaults()
 	if err != nil {
-		return nil, fmt.Errorf("invalid analysis configuration: %w", err)
+		return nil, fmt.Errorf("%w: %v", ErrInvalidAnalysisConfig, err)
 	}
+	if config.Model != "" && config.Model != s.serverModel {
+		return nil, fmt.Errorf("%w: model must match the server configuration", ErrInvalidAnalysisConfig)
+	}
+	config.Model = s.serverModel
 	s.logger.Info("Starting report generation")
 
 	// Create report record for one admitted generation job.

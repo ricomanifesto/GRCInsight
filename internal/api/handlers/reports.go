@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"errors"
 	"net/http"
 	"strconv"
 
@@ -42,9 +43,13 @@ func (h *ReportsHandler) GenerateReport(c *gin.Context) {
 	report, err := h.reportService.GenerateReport(&req)
 	if err != nil {
 		h.logger.WithError(err).Error("Failed to generate report")
+		if errors.Is(err, services.ErrInvalidAnalysisConfig) {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid analysis configuration", "request_id": c.GetString("request_id")})
+			return
+		}
 		c.JSON(http.StatusInternalServerError, gin.H{
-			"error":   "Failed to generate report",
-			"details": err.Error(),
+			"error":      "Failed to generate report",
+			"request_id": c.GetString("request_id"),
 		})
 		return
 	}

@@ -106,7 +106,7 @@ func (f *fakeArticleRepo2) GetByReportID(reportID string, limit, offset int) ([]
 func newGenerateService(fr *fakeReportRepo, fa *fakeArticleRepo2, pc *fakePythonClient) *ReportService {
 	logger := logrus.New()
 	logger.SetOutput(io.Discard)
-	return &ReportService{reportRepo: fr, articleRepo: fa, pythonClient: pc, logger: logger}
+	return &ReportService{reportRepo: fr, articleRepo: fa, pythonClient: pc, logger: logger, serverModel: defaultAnalysisModel}
 }
 
 var generateRequest = &apimodels.GenerateReportRequest{

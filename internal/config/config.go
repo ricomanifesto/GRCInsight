@@ -47,8 +47,7 @@ type LoggingConfig struct {
 
 // AuthConfig holds authentication configuration
 type AuthConfig struct {
-	JWTSecret string `mapstructure:"jwt_secret"`
-	APIKey    string `mapstructure:"api_key"`
+	APIKey string `mapstructure:"api_key"`
 }
 
 // Load loads configuration from file and environment variables
@@ -57,7 +56,7 @@ func Load() (*Config, error) {
 	viper.SetDefault("server.port", 8080)
 	viper.SetDefault("server.mode", "release")
 	viper.SetDefault("server.host", "0.0.0.0")
-	viper.SetDefault("server.allowed_origins", []string{"*"})
+	viper.SetDefault("server.allowed_origins", []string{})
 	viper.SetDefault("database.region", "us-east-1")
 	viper.SetDefault("database.endpoint", "")
 	viper.SetDefault("python_service.url", "http://localhost:8081")
@@ -66,6 +65,11 @@ func Load() (*Config, error) {
 	viper.SetDefault("python_service.invoke_async", false)
 	viper.SetDefault("logging.level", "info")
 	viper.SetDefault("logging.format", "text")
+
+	viper.SetDefault("auth.api_key", "")
+	if err := viper.BindEnv("auth.api_key", "API_KEY"); err != nil {
+		return nil, err
+	}
 
 	// Configuration file settings
 	viper.SetConfigName("config")

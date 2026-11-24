@@ -19,6 +19,7 @@ on:
 
 env:
   AWS_REGION: us-east-1
+  AWS_CLI_HISTORY_FILE: /dev
   GO_REPO_NAME: grcinsight-go
   PYTHON_REPO_NAME: grcinsight-python
   GO_FUNCTION_NAME: grcinsight-go-function
@@ -32,6 +33,7 @@ env:
 
 jobs:
   deploy:
+    environment: aws-lambda-deploy
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -69,16 +71,21 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@254c19bd240aabef8777f48595e9d2d7b972184b # v6.2.1
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          role-to-assume: ${{ vars.AWS_DEPLOY_ROLE_ARN }}
+          unset-current-credentials: true
           aws-region: ${{ env.AWS_REGION }}
 
       - name: Validate model runtime configuration
         env:
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          API_KEY: ${{ secrets.API_KEY }}
         run: |
           set +x
           set -e
+          if [ -z "$API_KEY" ]; then
+            echo "API_KEY secret is required for authenticated APIs" >&2
+            exit 1
+          fi
           case "$LLM_MODEL" in
             */*) ;;
             *)
@@ -144,10 +151,9 @@ jobs:
               delay=$((delay*2))
             done
           }
-          retry docker pull golang:1.22-alpine
-          retry docker pull public.ecr.aws/lambda/go:1
-          # Match Python base image digest used in agent/Dockerfile.lambda
-          retry docker pull public.ecr.aws/lambda/python:3.11@sha256:d044e45093a29946e452fe0f20bf8536fb50c6a1b25f9f0f7a854323d598454f
+          while IFS= read -r image; do
+            retry docker pull "$image"
+          done < <(awk '/^FROM / {print $2}' Dockerfile.lambda agent/Dockerfile.lambda | sort -u)
 
       - name: Resolve AWS account ID
         id: aws-account
@@ -159,23 +165,27 @@ jobs:
       - name: Verify preprovisioned ECR repositories and Lambda retrieval access
         run: |
           set -euo pipefail
-          for repo in "$GO_REPO_NAME" "$PYTHON_REPO_NAME"; do
+          for kind in go python; do
+            repo="grcinsight-$kind"
+            function_name="grcinsight-$kind-function"
             aws ecr describe-repositories --repository-names "$repo" --region "$AWS_REGION" > /dev/null
             aws ecr get-repository-policy --repository-name "$repo" --region "$AWS_REGION" --output json |
-              python3 -I -B scripts/check_ecr_retrieval_policy.py
+              python3 -I -B scripts/check_ecr_retrieval_policy.py --account-id "$AWS_ACCOUNT_ID" --region "$AWS_REGION" --function-name "$function_name"
           done
 
       - name: Login to Amazon ECR
+        env:
+          REGISTRY: ${{ steps.aws-account.outputs.registry }}
         run: |
-          aws ecr get-login-password --region "$AWS_REGION" | docker login --username AWS --password-stdin ${{ steps.aws-account.outputs.registry }}
+          aws ecr get-login-password --region "$AWS_REGION" | docker login --username AWS --password-stdin "$REGISTRY"
 
       - name: Build and push Go Lambda image (amd64, BuildKit off)
         env:
           DOCKER_BUILDKIT: "0"
+          REGISTRY: ${{ steps.aws-account.outputs.registry }}
         run: |
           set -e
-          REGISTRY=${{ steps.aws-account.outputs.registry }}
-          GO_IMAGE_SHA="$REGISTRY/$GO_REPO_NAME:${{ github.sha }}"
+          GO_IMAGE_SHA="$REGISTRY/$GO_REPO_NAME:${GITHUB_SHA}"
           GO_IMAGE_LATEST="$REGISTRY/$GO_REPO_NAME:latest"
           docker build --platform linux/amd64 -f Dockerfile.lambda -t "$GO_IMAGE_SHA" -t "$GO_IMAGE_LATEST" .
           docker push "$GO_IMAGE_SHA"
@@ -186,10 +196,10 @@ jobs:
         working-directory: agent
         env:
           DOCKER_BUILDKIT: "0"
+          REGISTRY: ${{ steps.aws-account.outputs.registry }}
         run: |
           set -e
-          REGISTRY=${{ steps.aws-account.outputs.registry }}
-          PY_IMAGE_SHA="$REGISTRY/$PYTHON_REPO_NAME:${{ github.sha }}"
+          PY_IMAGE_SHA="$REGISTRY/$PYTHON_REPO_NAME:${GITHUB_SHA}"
           PY_IMAGE_LATEST="$REGISTRY/$PYTHON_REPO_NAME:latest"
           docker build --platform linux/amd64 -f Dockerfile.lambda -t "$PY_IMAGE_SHA" -t "$PY_IMAGE_LATEST" .
           docker push "$PY_IMAGE_SHA"
@@ -197,6 +207,8 @@ jobs:
           echo "PYTHON_IMAGE_SHA=$PY_IMAGE_SHA" >> "$GITHUB_ENV"
 
       - name: Update Go Lambda to new image
+        env:
+          API_KEY: ${{ secrets.API_KEY }}
         run: |
           aws lambda update-function-code \
             --function-name "$GO_FUNCTION_NAME" \
@@ -225,6 +237,7 @@ jobs:
       - name: Merge Python Lambda runtime environment
         env:
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          API_KEY: ${{ secrets.API_KEY }}
         run: |
           set +x
           python3 -I -B scripts/update_lambda_environment.py \

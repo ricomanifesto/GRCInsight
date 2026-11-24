@@ -190,10 +190,13 @@ def test_provider_timeout_preserves_reportable_sources(monkeypatch):
 
 
 def test_date_provenance_survives_workflow_prompt_composer_and_manifest(monkeypatch):
+    from config.settings import settings
     from core import workflow
     from models.api import GRCAnalysisConfig
     from services.model_service import GRCModelService
     from services.openrouter_client import OpenRouterGeneration
+
+    monkeypatch.setattr(settings, "llm_model", "openrouter/example/model")
 
     install_http(monkeypatch, lambda request: httpx.Response(200, json=DOCUMENT))
 

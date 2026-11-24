@@ -1,4 +1,4 @@
-FROM python:3.11-slim
+FROM python:3.11-slim@sha256:07d4824036af339fa1b6ef769cc99d9c10a141769538b52b3b597c84f7a7b535
 
 # Set working directory
 WORKDIR /app
@@ -18,6 +18,9 @@ RUN UV_PROJECT_ENVIRONMENT=/usr/local uv sync --locked --no-dev
 
 # Copy application code
 COPY . .
+
+RUN groupadd --gid 10001 app && useradd --uid 10001 --gid app --no-create-home app
+USER 10001:10001
 
 # Set Python path
 ENV PYTHONPATH=/app

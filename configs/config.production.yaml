@@ -16,6 +16,5 @@ logging:
   format: json
 
 auth:
-  # These should be set via environment variables in production
-  jwt_secret: ""
+  # Set API_KEY for both HTTP services; empty disables sensitive routes.
   api_key: ""

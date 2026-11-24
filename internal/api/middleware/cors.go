@@ -37,10 +37,12 @@ func CORSMiddleware(allowedOrigins []string) gin.HandlerFunc {
 		if allowed != "" {
 			c.Header("Access-Control-Allow-Origin", allowed)
 			c.Header("Vary", "Origin")
-			c.Header("Access-Control-Allow-Credentials", "true")
+			if !allowAll {
+				c.Header("Access-Control-Allow-Credentials", "true")
+			}
 		}
 		c.Header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
-		c.Header("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Requested-With")
+		c.Header("Access-Control-Allow-Headers", "Content-Type, X-API-Key, X-Requested-With")
 		c.Header("Access-Control-Expose-Headers", "Content-Length")
 
 		if c.Request.Method == "OPTIONS" {

@@ -13,7 +13,11 @@ WORKFLOW = ROOT / ".github/workflows/lambda-report-generation.yml"
 
 
 def step(name):
-    block = WORKFLOW.read_text().split(f"    - name: {name}\n", 1)[1].split("\n    - name:", 1)[0]
+    block = (
+        WORKFLOW.read_text()
+        .split(f"    - name: {name}\n", 1)[1]
+        .split("\n    - name:", 1)[0]
+    )
     return block, textwrap.dedent(block.split("      run: |\n", 1)[1])
 
 
@@ -85,6 +89,7 @@ def test_terminal_observation_survives_composition_failure(
             "LLM_MODEL": "test/model",
             "FEED_URL": "https://digest.example/feed.xml",
             "REPORT_ID": "report-test",
+            "API_KEY": "synthetic-api-key",
         },
     )
     assert result.returncode != 0
@@ -107,7 +112,9 @@ def test_completion_runs_for_terminal_observation_despite_step_failure():
         ("", "true", "retained"),
     ],
 )
-def test_completion_records_publication_outcome_separately(tmp_path, published, retained, expected):
+def test_completion_records_publication_outcome_separately(
+    tmp_path, published, retained, expected
+):
     _, shell = step("Record generation outcome")
     node = tmp_path / "node"
     node.write_text('#!/bin/sh\nprintf "%s\\n" "$@" > completion-args\n')

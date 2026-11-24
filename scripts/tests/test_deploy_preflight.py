@@ -43,11 +43,14 @@ def shell_environment(tmp_path, *, fail_auth=False):
         "AWS_CONFIG_FILE": str(tmp_path / "config"),
         "AWS_SHARED_CREDENTIALS_FILE": str(tmp_path / "credentials"),
         "OPENROUTER_API_KEY": KEY,
+        "API_KEY": "synthetic-api-key",
         "LLM_MODEL": "openrouter/vendor/model:free",
     }
 
 
-@pytest.mark.parametrize("case", ["partial_pair", "wrong_region", "unsupported_role_env"])
+@pytest.mark.parametrize(
+    "case", ["partial_pair", "wrong_region", "unsupported_role_env"]
+)
 def test_manual_preflight_refuses_before_any_aws_or_docker_command(tmp_path, case):
     calls, environment = shell_environment(tmp_path)
     (tmp_path / "credentials").write_text(
@@ -57,7 +60,9 @@ def test_manual_preflight_refuses_before_any_aws_or_docker_command(tmp_path, cas
         environment["AWS_ACCESS_KEY_ID"] = "synthetic"
     elif case == "wrong_region":
         environment.update(
-            AWS_ACCESS_KEY_ID="synthetic", AWS_SECRET_ACCESS_KEY="synthetic", AWS_REGION="eu-west-1"
+            AWS_ACCESS_KEY_ID="synthetic",
+            AWS_SECRET_ACCESS_KEY="synthetic",
+            AWS_REGION="eu-west-1",
         )
     else:
         environment["AWS_ROLE_ARN"] = "unsupported-environment-role"
@@ -81,12 +86,19 @@ def test_manual_preflight_delegates_existing_configured_auth_without_reading_key
     monkeypatch.setattr(
         sys,
         "argv",
-        ["environment", "--function-kind", "python", "--preflight-only", "--manual-cli-auth"],
+        [
+            "environment",
+            "--function-kind",
+            "python",
+            "--preflight-only",
+            "--manual-cli-auth",
+        ],
     )
     for name in ("AWS_ACCESS_KEY_ID", "AWS_SECRET_ACCESS_KEY", "AWS_SESSION_TOKEN"):
         monkeypatch.delenv(name, raising=False)
     for name, value in {
         "OPENROUTER_API_KEY": KEY,
+        "API_KEY": "synthetic-api-key",
         "LLM_MODEL": "openrouter/vendor/model:free",
         "HOME": "/synthetic/home",
         "AWS_PROFILE": "selected",
@@ -108,10 +120,15 @@ def test_manual_preflight_delegates_existing_configured_auth_without_reading_key
     assert output.out.strip() == "123456789012" and len(calls) == 1
     argv, kwargs = calls[0]
     assert argv[1:3] == ["sts", "get-caller-identity"]
-    assert argv[argv.index("--endpoint-url") + 1] == "https://sts.us-east-1.amazonaws.com"
+    assert (
+        argv[argv.index("--endpoint-url") + 1] == "https://sts.us-east-1.amazonaws.com"
+    )
     assert kwargs["env"]["AWS_PROFILE"] == "selected"
     assert kwargs["env"]["AWS_CONFIG_FILE"] == "/synthetic/config"
-    assert "OPENROUTER_API_KEY" not in kwargs["env"] and "AWS_ACCESS_KEY_ID" not in kwargs["env"]
+    assert (
+        "OPENROUTER_API_KEY" not in kwargs["env"]
+        and "AWS_ACCESS_KEY_ID" not in kwargs["env"]
+    )
     assert KEY not in output.out + output.err
 
 
@@ -155,6 +172,7 @@ def test_manual_config_endpoint_overrides_cannot_receive_private_json(monkeypatc
             "HTTPS_PROXY": "untrusted-proxy",
             "AWS_DEBUG": "1",
             "OPENROUTER_API_KEY": KEY,
+            "API_KEY": "synthetic-api-key",
         },
         manual_cli_auth=True,
     )
@@ -172,8 +190,13 @@ def test_manual_config_endpoint_overrides_cannot_receive_private_json(monkeypatc
         calls[0][0][calls[0][0].index("--endpoint-url") + 1]
         == "https://sts.us-east-1.amazonaws.com"
     )
-    assert argv[argv.index("--endpoint-url") + 1] == "https://lambda.us-east-1.amazonaws.com"
-    assert kwargs["env"]["AWS_CONFIG_FILE"] == "/synthetic/config-with-endpoint-overrides"
+    assert (
+        argv[argv.index("--endpoint-url") + 1]
+        == "https://lambda.us-east-1.amazonaws.com"
+    )
+    assert (
+        kwargs["env"]["AWS_CONFIG_FILE"] == "/synthetic/config-with-endpoint-overrides"
+    )
     assert kwargs["env"]["AWS_CLI_HISTORY_FILE"] == "/dev"
     assert not any(
         name in kwargs["env"]
@@ -190,7 +213,9 @@ def test_manual_config_endpoint_overrides_cannot_receive_private_json(monkeypatc
 
 def test_default_ci_mode_does_not_fall_through_to_configured_credentials():
     with pytest.raises(deploy.EnvironmentUpdateError):
-        deploy.AwsCli("/fixed/aws", "us-east-1", {"HOME": "/synthetic", "AWS_PROFILE": "selected"})
+        deploy.AwsCli(
+            "/fixed/aws", "us-east-1", {"HOME": "/synthetic", "AWS_PROFILE": "selected"}
+        )
 
 
 def test_history_override_cannot_persist_sqlite_records():

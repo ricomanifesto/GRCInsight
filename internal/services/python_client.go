@@ -40,6 +40,7 @@ type PythonServiceClient struct {
 	invokeAsync  bool
 	// internalToken authenticates synchronous report runs to the Python HTTP service.
 	internalToken string
+	apiKey        string
 	httpClient    *http.Client
 	baseURL       string
 	logger        *logrus.Logger
@@ -81,7 +82,11 @@ func NewPythonServiceClient(cfg config.PythonServiceConfig, logger *logrus.Logge
 	}
 
 	// Build HTTP client regardless (used when not in Lambda mode)
-	httpClient := &http.Client{Timeout: cfg.Timeout}
+	httpClient := &http.Client{
+		Timeout: cfg.Timeout,
+		// Credentials belong only to the configured Python service origin.
+		CheckRedirect: func(*http.Request, []*http.Request) error { return http.ErrUseLastResponse },
+	}
 	baseURL := cfg.URL
 	if baseURL == "" {
 		baseURL = "http://localhost:8081"
@@ -94,6 +99,7 @@ func NewPythonServiceClient(cfg config.PythonServiceConfig, logger *logrus.Logge
 		isLambdaMode:  isLambdaMode,
 		invokeAsync:   invokeAsync,
 		internalToken: os.Getenv("GRC_INTERNAL_TOKEN"),
+		apiKey:        os.Getenv("API_KEY"),
 		httpClient:    httpClient,
 		baseURL:       baseURL,
 		logger:        logger,
@@ -143,6 +149,9 @@ func (c *PythonServiceClient) newCallerBoundRequest(
 		return nil, nil, err
 	}
 	httpReq.Header.Set("Content-Type", "application/json")
+	if c.apiKey != "" {
+		httpReq.Header.Set("X-API-Key", c.apiKey)
+	}
 	httpReq.Header.Set(callerDeadlineHeader, strconv.FormatInt(callerDeadline.UnixMilli(), 10))
 	return httpReq, cancel, nil
 }

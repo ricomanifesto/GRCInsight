@@ -66,7 +66,11 @@ def test_lambda_deploy_forwards_relevance_pilot_configuration():
     )
 
     helper = runpy.run_path(str(REPO_ROOT / "scripts/update_lambda_environment.py"))
-    environment = {"LLM_MODEL": "openrouter/test/model", "OPENROUTER_API_KEY": "synthetic"}
+    environment = {
+        "LLM_MODEL": "openrouter/test/model",
+        "OPENROUTER_API_KEY": "synthetic",
+        "API_KEY": "synthetic-api-key",
+    }
     defaults = helper["owned_environment"]("python", environment)
     overrides = {
         "GRC_RELEVANCE_MODE": "shadow",
@@ -114,6 +118,7 @@ def test_lambda_configuration_is_validated_before_deployment(mode, probability, 
             **os.environ,
             "LLM_MODEL": "openrouter/test/model",
             "OPENROUTER_API_KEY": "dummy-test-key",
+            "API_KEY": "synthetic-api-key",
             "GRC_RELEVANCE_MODE": mode,
             "GRC_RELEVANCE_MIN_PROBABILITY": probability,
             "GRC_RELEVANCE_TIMEOUT_SECONDS": timeout,

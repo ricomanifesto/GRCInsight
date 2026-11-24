@@ -1,4 +1,4 @@
-FROM golang:1.22-alpine AS builder
+FROM golang:1.27.4-alpine3.23@sha256:f70850ef6ce341e8b6427f677049145d63c0b7ce002d4d7e3d464828b1b96dcd AS builder
 
 # Set working directory
 WORKDIR /app
@@ -18,8 +18,8 @@ COPY . .
 # Build the Lambda application for x86_64 architecture
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -installsuffix cgo -o main cmd/lambda/main.go
 
-# Lambda stage - use AWS Lambda Go base image
-FROM public.ecr.aws/lambda/go:1
+# Lambda supplies its least-privileged runtime user; use the supported OS-only image.
+FROM public.ecr.aws/lambda/provided:al2023@sha256:4389209379db22f6caca72748d8cbfd86a470b5d0a9ff9efcdcf47198175edce
 
 # Copy the Lambda binary from builder stage
 COPY --from=builder /app/main ${LAMBDA_TASK_ROOT}
@@ -31,4 +31,4 @@ COPY --from=builder /app/configs ${LAMBDA_TASK_ROOT}/configs
 COPY --from=builder /app/site ${LAMBDA_TASK_ROOT}/site
 
 # Set the CMD to your handler
-CMD [ "main" ]
+ENTRYPOINT [ "/var/task/main" ]

@@ -8,6 +8,7 @@ from loguru import logger
 
 from api.routes import workflow, analysis, health, rss
 from config.settings import settings
+from api.security import RequestSizeLimitMiddleware
 
 
 @asynccontextmanager
@@ -26,13 +27,14 @@ app = FastAPI(
     version="1.0.0",
     lifespan=lifespan,
 )
+app.add_middleware(RequestSizeLimitMiddleware)
 
 # Add CORS middleware
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.cors_allowed_origins,
-    allow_credentials=True,
-    allow_methods=["*"],
+    allow_credentials=False,
+    allow_methods=["GET", "POST"],
     allow_headers=["*"],
 )
 

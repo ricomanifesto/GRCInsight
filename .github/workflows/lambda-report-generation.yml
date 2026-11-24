@@ -22,16 +22,18 @@ concurrency:
 
 env:
   AWS_REGION: us-east-1
+  AWS_CLI_HISTORY_FILE: /dev
   GO_FUNCTION_NAME: grcinsight-go-function
   PYTHON_FUNCTION_NAME: grcinsight-python-function
   LLM_MODEL: ${{ vars.LLM_MODEL || 'openrouter/nvidia/nemotron-3-ultra-550b-a55b:free' }}
 
 jobs:
   generate-report:
+    environment: aws-report-generation
     runs-on: ubuntu-latest
     permissions:
-      actions: write
       contents: write
+      id-token: write
     outputs:
       head_sha: ${{ steps.head.outputs.head_sha }}
 
@@ -72,6 +74,16 @@ jobs:
       with:
         node-version: '24'
 
+    - name: Validate API authentication configuration
+      env:
+        API_KEY: ${{ secrets.API_KEY }}
+      run: |
+        set +x
+        if [ -z "$API_KEY" ]; then
+          echo "API_KEY secret is required for authenticated APIs" >&2
+          exit 1
+        fi
+
     # Admission before any AWS or model call: SentryDigest release events are
     # bound to the release's commit-addressed feed snapshot; duplicate, stale
     # and unbindable events stop here; an earlier generation whose outcome is
@@ -90,8 +102,8 @@ jobs:
       if: steps.admission.outputs.decision == 'admitted' || steps.admission.outputs.decision == 'reattach'
       uses: aws-actions/configure-aws-credentials@254c19bd240aabef8777f48595e9d2d7b972184b # v6.2.1
       with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        role-to-assume: ${{ vars.AWS_REPORT_ROLE_ARN }}
+        unset-current-credentials: true
         aws-region: ${{ env.AWS_REGION }}
 
     - name: Health check (Go Lambda)
@@ -175,7 +187,9 @@ jobs:
       if: steps.admission.outputs.decision == 'admitted'
       env:
         FEED_URL: ${{ steps.feed-url.outputs.FEED_URL }}
+        API_KEY: ${{ secrets.API_KEY }}
       run: |
+        set +x
         case "$LLM_MODEL" in
           openrouter/*) ;;
           *)
@@ -189,14 +203,14 @@ jobs:
         BODY=$(jq -n --arg feed_url "$FEED_URL" --arg model "$LLM_MODEL" -c \
           '{feed_url: $feed_url, config: {model: $model, max_tokens: 8000, focus_areas: ["governance", "compliance", "risk"]}}')
         PAYLOAD=$(jq -n --arg body "$BODY" -c \
-          '{httpMethod: "POST", path: "/api/v1/reports/generate", headers: {"Content-Type": "application/json"}, body: $body}')
+          '{httpMethod: "POST", path: "/api/v1/reports/generate", headers: {"Content-Type": "application/json", "X-API-Key": env.API_KEY}, body: $body}')
 
         echo "Invoking Lambda function: $GO_FUNCTION_NAME"
 
         # Invoke Go Lambda function
-        if aws lambda invoke \
+        if printf '%s' "$PAYLOAD" | aws lambda invoke \
           --function-name "$GO_FUNCTION_NAME" \
-          --payload "$PAYLOAD" \
+          --payload fileb:///dev/stdin \
           --cli-binary-format raw-in-base64-out \
           --region "$AWS_REGION" \
           lambda-response.json; then
@@ -236,8 +250,10 @@ jobs:
       if: steps.handle.outputs.REPORT_ID
       env:
         FEED_URL: ${{ steps.feed-url.outputs.FEED_URL }}
+        API_KEY: ${{ secrets.API_KEY }}
         REPORT_ID: ${{ steps.handle.outputs.REPORT_ID }}
       run: |
+        set +x
         set -e
         echo "Retrieving report ID: $REPORT_ID"
         MAX_ATTEMPTS=${MAX_ATTEMPTS:-90}   # up to ~15 minutes
@@ -247,11 +263,12 @@ jobs:
         while [ "$attempt" -le "$MAX_ATTEMPTS" ]; do
           echo "Attempt $attempt/$MAX_ATTEMPTS to fetch report..."
 
-          GET_PAYLOAD='{"httpMethod":"GET","path":"/api/v1/reports/'$REPORT_ID'","headers":{}}'
+          GET_PAYLOAD=$(jq -n --arg id "$REPORT_ID" -c \
+            '{httpMethod: "GET", path: ("/api/v1/reports/" + $id), headers: {"X-API-Key": env.API_KEY}}')
 
-          aws lambda invoke \
+          printf '%s' "$GET_PAYLOAD" | aws lambda invoke \
             --function-name "$GO_FUNCTION_NAME" \
-            --payload "$GET_PAYLOAD" \
+            --payload fileb:///dev/stdin \
             --cli-binary-format raw-in-base64-out \
             --region "$AWS_REGION" \
             report-response.json >/dev/null

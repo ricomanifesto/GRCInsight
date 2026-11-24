@@ -11,6 +11,7 @@ from mangum import Mangum
 
 from api.routes import workflow, analysis, health, rss
 from config.settings import settings
+from api.security import RequestSizeLimitMiddleware
 from core.runtime import (
     deadline_from_unix_ms,
     earliest_deadline,
@@ -66,6 +67,7 @@ app = FastAPI(
     docs_url="/docs" if not os.getenv("AWS_LAMBDA_FUNCTION_NAME") else None,
     redoc_url="/redoc" if not os.getenv("AWS_LAMBDA_FUNCTION_NAME") else None,
 )
+app.add_middleware(RequestSizeLimitMiddleware)
 
 # Add CORS middleware (more restrictive for production Lambda)
 # Allow override via settings; default more restrictive in Lambda
@@ -85,8 +87,8 @@ else:
     app.add_middleware(
         CORSMiddleware,
         allow_origins=settings.cors_allowed_origins,
-        allow_credentials=True,
-        allow_methods=["*"],
+        allow_credentials=False,
+        allow_methods=["GET", "POST"],
         allow_headers=["*"],
     )
 
@@ -139,7 +141,7 @@ def _commit_report(report_id: str, event: dict, context, result) -> dict:
         logger.error(f"Failed to update DynamoDB for report {report_id}: {ddb_err}")
         return {
             "statusCode": 500,
-            "body": {"status": "failed", "report_id": report_id, "error": str(ddb_err)},
+            "body": {"status": "failed", "report_id": report_id, "error": "Report write failed"},
         }
     logger.info(f"Report {report_id} history decision: {body['decision']}")
     return {"statusCode": status, "body": body}
@@ -184,10 +186,7 @@ def handler(event, context):
                     focus_areas = ["governance", "compliance"]
 
                 config = GRCAnalysisConfig(
-                    model=config_data.get(
-                        "model",
-                        "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
-                    ),
+                    model=config_data.get("model") or settings.llm_model,
                     max_tokens=config_data.get("max_tokens", 16000),
                     focus_areas=focus_areas,
                 )
@@ -219,7 +218,10 @@ def handler(event, context):
 
             except Exception as e:
                 logger.error(f"Workflow execution failed: {str(e)}")
-                return {"statusCode": 500, "body": {"error": str(e), "status": "failed"}}
+                return {
+                    "statusCode": 500,
+                    "body": {"error": "Workflow execution failed", "status": "failed"},
+                }
 
         # Unknown direct invocation format
         return {
