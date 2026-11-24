@@ -4923,6 +4923,14 @@
       "handle": "report_20261124_130602_756",
       "run_id": "45399887874",
       "stage": "invoked"
+    },
+    {
+      "admission_key": "run:45399887874",
+      "at": "2026-11-24T13:10:16.234Z",
+      "binding": "none",
+      "outcome": "published",
+      "run_id": "45399887874",
+      "stage": "completed"
     }
   ],
   "schema_version": 1,
