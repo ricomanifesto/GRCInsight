@@ -4,73 +4,73 @@
   "report_plan": {
     "control_implications": [
       {
+        "control_id": "vulnerability_management",
+        "evidence_excerpt": "A critical security flaw has been disclosed in the popular binary-parser library that could allow an attacker who controls parser definitions to execute arbitrary code. The vulnerability, tracked as CVE-2026-134814 (CVSS score: 9.2 / 8.1), is a case of code injection impacting binary-parser versions prior to 2.3.1.",
+        "evidence_origin": "summary",
+        "focus": "binary-parser library",
+        "headline": "binary-parser library weakens code injection defenses",
+        "priority": "high",
+        "significance": "The vulnerability in a widely used library enables arbitrary code execution when parser definitions are attacker-controlled, undermining vulnerability management assurance. The vulnerable asset owner must confirm affected deployments and remediation status.",
+        "source_ids": [
+          1
+        ]
+      },
+      {
         "control_id": "third_party_risk",
-        "evidence_excerpt": "Threat actors are exploiting a now-patched security flaw in ConnectWise ScreenConnect to target managed service provider (MSP) servers. The activity revolves around CVE-2026-84869 (CVSS score: 9.9), a critical ScreenConnect client flaw that allows a guest to transfer and execute a malicious payload on a connecting technician's host. \"On November 12, 2026, we observed one managed service…",
+        "evidence_excerpt": "Threat actors are exploiting a now-patched security flaw in ConnectWise ScreenConnect to target managed service provider (MSP) servers. The activity revolves around CVE-2026-84869 (CVSS score: 9.9), a critical ScreenConnect client flaw that allows a guest to transfer and execute a malicious payload on a connecting technician's host.",
         "evidence_origin": "summary",
         "focus": "ConnectWise ScreenConnect",
-        "headline": "ConnectWise ScreenConnect flaw exploits MSP technician access",
+        "headline": "ConnectWise ScreenConnect exposes MSP technician hosts",
         "priority": "high",
-        "significance": "The exploited ScreenConnect vulnerability allows unauthorized payload execution on MSP technician hosts, weakening supply chain assurance. The third-party risk owner should confirm supplier remediation status and whether MSP access controls detect such guest-to-technician pivot attacks.",
+        "significance": "Active exploitation of a patched flaw in MSP remote access software indicates supply chain risk from unpatched vendor components. The supplier risk owner must verify patch deployment across MSP connections and assess technician access controls.",
         "source_ids": [
           2
         ]
       },
       {
-        "control_id": "third_party_risk",
-        "evidence_excerpt": "N-able yesterday disclosed a critical flaw it found while investigating the breach of its Mail Assure and SpamExperts Hosted Cloud, an email filtering service it runs for managed service providers. The bug, tracked as CVE-2026-134624, is a server-side request forgery (SSRF) flaw. It allowed a user with high-level API access to open connections to internal systems of the user's choosing on the…",
+        "control_id": "access_management",
+        "evidence_excerpt": "Critical OT access devices will often tell you, and anyone else, whether they're protected by authentication — and many aren't.",
         "evidence_origin": "summary",
-        "focus": "Mail Assure and SpamExperts Hosted Cloud",
-        "headline": "Mail Assure and SpamExperts Hosted Cloud SSRF flaw exposes internal systems",
-        "priority": "high",
-        "significance": "The SSRF vulnerability in the MSP email filtering service allowed high-privilege API users to reach internal systems, extending supply chain risk. The third-party risk owner should verify N-able's breach investigation scope and whether MSP tenants received timely assurance of containment.",
+        "focus": "Critical OT access devices",
+        "headline": "Critical OT access devices broadcast authentication status",
+        "priority": "medium",
+        "significance": "Industrial gateways revealing absent authentication weaken access management assurance for operational technology. The identity and access owner must verify authentication coverage on all OT access devices and enforce mandatory authentication.",
         "source_ids": [
-          3
+          5
         ]
       },
       {
         "control_id": "data_protection",
         "evidence_excerpt": "A threat actor breached the internal network of Korea Electric Power Corporation (KEPCO) and accessed two systems containing customer, employee, and contractor data…",
         "evidence_origin": "summary",
-        "focus": "Korea Electric Power Corporation (KEPCO) internal network",
-        "headline": "Korea Electric Power Corporation (KEPCO) internal network breach exposes customer employee contractor data",
+        "focus": "Korea Electric Power Corporation",
+        "headline": "Korea Electric Power Corporation exposes customer employee data",
         "priority": "high",
-        "significance": "The breach of KEPCO's internal network accessed systems holding personal data of 1.5 million individuals, challenging data protection controls. The data protection owner should confirm whether similar critical infrastructure entities have validated network segmentation and data access monitoring.",
+        "significance": "Breach of a national utility exposes sensitive personal data, indicating data protection control failures. The data protection owner must assess the scope of exposed records, regulatory notification obligations, and remedial access restrictions.",
         "source_ids": [
-          6
-        ]
-      },
-      {
-        "control_id": "third_party_risk",
-        "evidence_excerpt": "OpenRouter removed three AI providers from its platform after discovering that they had violated their stated data-handling policies and exposed sensitive data…",
-        "evidence_origin": "summary",
-        "focus": "OpenRouter AI providers",
-        "headline": "OpenRouter AI providers removed for violating data-handling policies and exposing sensitive data",
-        "priority": "medium",
-        "significance": "OpenRouter's removal of AI providers for policy violations and data exposure highlights third-party data handling gaps. The third-party risk owner should review AI supplier contractual obligations and evidence of continuous compliance monitoring.",
-        "source_ids": [
-          8
-        ]
-      },
-      {
-        "control_id": "vulnerability_management",
-        "evidence_excerpt": "Microsoft is warning customers that a security vulnerability in Azure API Management (APIM) Classic tiers was exploited to steal stored API credentials, with Norwegian authorities linking the flaw to cyberattacks against energy companies…",
-        "evidence_origin": "summary",
-        "focus": "Azure API Management (APIM) Classic tiers",
-        "headline": "Azure API Management (APIM) Classic tiers vulnerability exploited to steal API credentials",
-        "priority": "high",
-        "significance": "The exploited Azure APIM vulnerability allowed theft of stored API credentials, directly impacting cloud service assurance. The vulnerability management owner should identify affected APIM deployments and verify credential rotation and patching status.",
-        "source_ids": [
-          9
+          7
         ]
       },
       {
         "control_id": "monitoring",
-        "evidence_excerpt": "The China-aligned threat actor known as Webworm is suspected to be using a custom version of the open-source SoftEther VPN Bridge tool in an attempt to remove recognizable detection fingerprints, while disguising it as network-monitoring software to establish covert remote access to compromised networks. The modified variant \"implements various tricks to hide itself from security tools,\"…",
+        "evidence_excerpt": "Microsoft is warning customers that a security vulnerability in Azure API Management (APIM) Classic tiers was exploited to steal stored API credentials, with Norwegian authorities linking the flaw to cyberattacks against energy companies…",
         "evidence_origin": "summary",
-        "focus": "SoftEther VPN Bridge tool",
-        "headline": "SoftEther VPN Bridge tool modified by Webworm to evade detection and hide remote access",
+        "focus": "Azure API Management (APIM) Classic tiers",
+        "headline": "Azure API Management Classic tiers leak API credentials",
+        "priority": "high",
+        "significance": "Exploited cloud vulnerability enabling credential theft from API management tiers demonstrates monitoring gaps for credential misuse. The detection owner must verify telemetry coverage for anomalous API credential access and alerting on credential exfiltration.",
+        "source_ids": [
+          10
+        ]
+      },
+      {
+        "control_id": "incident_response",
+        "evidence_excerpt": "Ransomware isn't slowing down. A new framework gives security teams the edge to trace attackers back to their source.",
+        "evidence_origin": "summary",
+        "focus": "new framework",
+        "headline": "new framework enables ransomware actor tracing",
         "priority": "medium",
-        "significance": "The threat actor's modification of SoftEther VPN to evade detection and mask remote access challenges monitoring coverage. The monitoring owner should validate whether current telemetry can distinguish legitimate VPN use from such customized malicious variants.",
+        "significance": "Emerging attribution framework improves ransomware actor tracing, enhancing incident response evidence collection. The incident response lead should evaluate framework integration into response procedures and evidence preservation workflows.",
         "source_ids": [
           12
         ]
@@ -80,37 +80,37 @@
       "paragraphs": [
         {
           "source_ids": [
+            1,
             2,
-            3,
-            9
+            5,
+            10
           ],
-          "text": "Active exploitation of critical vulnerabilities in widely used MSP remote access and email filtering services, alongside a cloud API management flaw leveraged against energy sector targets, indicates systemic supply chain and cloud service risk. The ConnectWise ScreenConnect and N-able Mail Assure flaws enable direct compromise of technician and internal systems, while the Azure APIM vulnerability permits credential theft at scale. Control owners must prioritize verification of supplier patch deployment, credential rotation, and MSP access monitoring across these vectors."
+          "text": "Active exploitation of critical vulnerabilities in the binary-parser library, ConnectWise ScreenConnect, and Azure API Management Classic tiers, combined with industrial serial gateways broadcasting insufficient authentication, demonstrates systemic gaps in vulnerability management and access controls across software supply chains and operational technology. Control owners must verify asset inventory coverage, patch deployment, and authentication enforcement for exposed components."
         },
         {
           "source_ids": [
-            6,
-            8,
+            7,
             12
           ],
-          "text": "A confirmed breach at South Korea's national power utility exposing 1.5 million records, the removal of AI providers for data policy violations, and a state-aligned actor's customization of open-source VPN software to evade detection collectively expand the assurance gap across critical infrastructure, AI supply chains, and monitoring efficacy. Data protection owners should validate network segmentation and access logging for sensitive repositories, while third-party risk owners must enforce continuous compliance evidence from AI vendors. Monitoring owners need to test detection coverage against modified legitimate tools."
+          "text": "The KEPCO breach exposing customer, employee, and contractor data, alongside a new framework for ransomware actor attribution, underscores persistent data protection deficiencies and evolving incident response capabilities. Data protection owners should assess exposure scope and notification readiness, while incident response leads should evaluate integration of attribution advances into containment procedures."
         }
       ]
     },
     "industry_impacts": [],
     "regulatory_changes": []
   },
-  "generated_at": "2026-11-23T21:16:55.070453Z",
-  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/d996aba252482a70bce6686f4cdb2ef3c6153f62/site/feed.xml",
+  "generated_at": "2026-11-24T00:32:59.421368Z",
+  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/230e7cc68aa277805d44dda2a12197b77f066ece/site/feed.xml",
   "feed_home_url": "https://sentrydigest.ricomanifesto.com/",
-  "digest_issue_date": "2026-11-23",
-  "digest_issue_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-23/",
+  "digest_issue_date": "2026-11-24",
+  "digest_issue_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-24/",
   "requested_model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
   "resolved_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
   "sources": [
     {
       "title": "Critical binary-parser Flaw Enables JavaScript Injection via Malicious Parser Definitions",
       "url": "https://thehackernews.com/2026/11/critical-binary-parser-flaw-enables.html",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-23/#reporting-fa4289a3f22e",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-24/#reporting-fa4289a3f22e",
       "cves": [
         "CVE-2026-134814"
       ],
@@ -134,7 +134,7 @@
     {
       "title": "Hackers Exploit Critical ScreenConnect Flaw to Hijack MSP Technician PCs Without Warning",
       "url": "https://thehackernews.com/2026/11/hackers-exploit-critical-screenconnect.html",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-23/#reporting-2da724996ccb",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-24/#reporting-2da724996ccb",
       "cves": [
         "CVE-2026-84869"
       ],
@@ -158,7 +158,7 @@
     {
       "title": "N-able Discloses Critical Mail Assure Vulnerability Found During Breach Investigation",
       "url": "https://thehackernews.com/2026/11/n-able-discloses-critical-mail-assure.html",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-23/#reporting-89ef724f9ef4",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-24/#reporting-89ef724f9ef4",
       "cves": [
         "CVE-2026-134624"
       ],
@@ -182,7 +182,7 @@
     {
       "title": "Hackers Exploit Critical ASP.NET Anti-CSRF Library Flaw Allowing Unauthenticated RCE",
       "url": "https://thehackernews.com/2026/11/hackers-exploit-critical-aspnet-anti.html",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-23/#reporting-659149ed49d8",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-24/#reporting-659149ed49d8",
       "cves": [
         "CVE-2026-131914"
       ],
@@ -204,25 +204,45 @@
       "effective_date_evidence": null
     },
     {
-      "title": "GnuPG Warns Critical GPGME Flaw Could Expose App Data via Malicious OpenPGP Keys",
-      "url": "https://thehackernews.com/2026/11/gnupg-warns-critical-gpgme-flaw-could.html",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-23/#reporting-3b426a1ae487",
-      "cves": [
-        "CVE-2026-129975"
-      ],
-      "snippet": "GnuPG Warns Critical GPGME Flaw Could Expose App Data via Malicious OpenPGP Keys A malicious OpenPGP key with an unusually long user ID can trigger a critical memory bug in GPGME, the standard library that programs use to work with GnuPG. The GnuPG project warned yesterday that the flaw could be used to steal data from affected applications and has released fixed versions. The bug, tracked as CVE-2026-129975, affects all software that uses GPGME before version 2.3.0… A malicious OpenPGP key with an unusually long user ID can trigger a critical memory bug in GPGME, the standard library that programs use to work with GnuPG. The GnuPG project warned yesterday that the flaw could be used to stea",
+      "title": "Industrial Serial Gateways Broadcast That They're Insecure",
+      "url": "https://www.darkreading.com/ics-ot-security/industrial-serial-gateways-broadcast-insecure",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-24/#reporting-65ec879c983c",
+      "cves": [],
+      "snippet": "Industrial Serial Gateways Broadcast That They're Insecure Critical OT access devices will often tell you, and anyone else, whether they're protected by authentication — and many aren't. Critical OT access devices will often tell you, and anyone else, whether they're protected by authentication — and many aren't.",
       "article_evidence": [
         {
           "extraction_version": 1,
           "origin": "summary",
-          "raw_text": "A malicious OpenPGP key with an unusually long user ID can trigger a critical memory bug in GPGME, the standard library that programs use to work with GnuPG. The GnuPG project warned yesterday that the flaw could be used to steal data from affected applications and has released fixed versions. The bug, tracked as CVE-2026-129975, affects all software that uses GPGME before version 2.3.0…",
-          "text": "A malicious OpenPGP key with an unusually long user ID can trigger a critical memory bug in GPGME, the standard library that programs use to work with GnuPG. The GnuPG project warned yesterday that the flaw could be used to steal data from affected applications and has released fixed versions. The bug, tracked as CVE-2026-129975, affects all software that uses GPGME before version 2.3.0…"
+          "raw_text": "Critical OT access devices will often tell you, and anyone else, whether they're protected by authentication — and many aren't.",
+          "text": "Critical OT access devices will often tell you, and anyone else, whether they're protected by authentication — and many aren't."
         },
         {
           "extraction_version": 1,
           "origin": "content",
-          "raw_text": "A malicious OpenPGP key with an unusually long user ID can trigger a critical memory bug in GPGME, the standard library that programs use to work with GnuPG. The GnuPG project warned yesterday that the flaw could be used to steal data from affected applications and has released fixed versions. The bug, tracked as CVE-2026-129975, affects all software that uses GPGME before version 2.3.0…",
-          "text": "A malicious OpenPGP key with an unusually long user ID can trigger a critical memory bug in GPGME, the standard library that programs use to work with GnuPG. The GnuPG project warned yesterday that the flaw could be used to steal data from affected applications and has released fixed versions. The bug, tracked as CVE-2026-129975, affects all software that uses GPGME before version 2.3.0…"
+          "raw_text": "Critical OT access devices will often tell you, and anyone else, whether they're protected by authentication — and many aren't.",
+          "text": "Critical OT access devices will often tell you, and anyone else, whether they're protected by authentication — and many aren't."
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "CrowdStrike Makes AI Security Push With Blockbuster Zscaler Deal",
+      "url": "https://www.darkreading.com/endpoint-security/crowdstrike-ai-security-push-zscaler-deal",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-24/#reporting-ce2c122eeb6f",
+      "cves": [],
+      "snippet": "CrowdStrike Makes AI Security Push With Blockbuster Zscaler Deal CrowdStrike's $44 billion acquisition of Zscaler would unite endpoint protection and zero-trust network security to obtain greater control over AI agents. CrowdStrike's $44 billion acquisition of Zscaler would unite endpoint protection and zero-trust network security to obtain greater control over AI agents.",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "CrowdStrike's $44 billion acquisition of Zscaler would unite endpoint protection and zero-trust network security to obtain greater control over AI agents.",
+          "text": "CrowdStrike's $44 billion acquisition of Zscaler would unite endpoint protection and zero-trust network security to obtain greater control over AI agents."
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "CrowdStrike's $44 billion acquisition of Zscaler would unite endpoint protection and zero-trust network security to obtain greater control over AI agents.",
+          "text": "CrowdStrike's $44 billion acquisition of Zscaler would unite endpoint protection and zero-trust network security to obtain greater control over AI agents."
         }
       ],
       "effective_date_evidence": null
@@ -230,7 +250,7 @@
     {
       "title": "South Korea’s power giant KEPCO confirms data breach impacting 1.5 million",
       "url": "https://www.bleepingcomputer.com/news/security/south-koreas-power-giant-kepco-confirms-data-breach-impacting-15-million/",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-23/#reporting-957088ac58c0",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-24/#reporting-957088ac58c0",
       "cves": [],
       "snippet": "South Korea’s power giant KEPCO confirms data breach impacting 1.5 million A threat actor breached the internal network of Korea Electric Power Corporation (KEPCO) and accessed two systems containing customer, employee, and contractor data… A threat actor breached the internal network of Korea Electric Power Corporation (KEPCO) and accessed two systems containing customer, employee, and contractor data…",
       "article_evidence": [
@@ -252,7 +272,7 @@
     {
       "title": "US Cyber Director Pick Signals Shift Toward Expertise",
       "url": "https://www.darkreading.com/cybersecurity-operations/us-cyber-director-pick-signals-shift-toward-expertise",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-23/#reporting-a64057d195d2",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-24/#reporting-a64057d195d2",
       "cves": [],
       "snippet": "US Cyber Director Pick Signals Shift Toward Expertise Trump named Kirsten Davies as Acting National Cyber Director, bringing greater industry experience to the role amid recent outages and rising geopolitical tensions. Trump named Kirsten Davies as Acting National Cyber Director, bringing greater industry experience to the role amid recent outages and rising geopolitical tensions.",
       "article_evidence": [
@@ -274,7 +294,7 @@
     {
       "title": "OpenRouter drops AI providers over leaked prompts and secrets",
       "url": "https://www.bleepingcomputer.com/news/security/openrouter-drops-ai-providers-over-leaked-prompts-and-secrets/",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-23/#reporting-7b86d265d0e5",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-24/#reporting-7b86d265d0e5",
       "cves": [],
       "snippet": "OpenRouter drops AI providers over leaked prompts and secrets OpenRouter removed three AI providers from its platform after discovering that they had violated their stated data-handling policies and exposed sensitive data… OpenRouter removed three AI providers from its platform after discovering that they had violated their stated data-handling policies and exposed sensitive data…",
       "article_evidence": [
@@ -296,7 +316,7 @@
     {
       "title": "Microsoft Azure flaw exploited to steal customers' API credentials",
       "url": "https://www.bleepingcomputer.com/news/security/microsoft-azure-flaw-exploited-to-steal-customers-api-credentials/",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-23/#reporting-351ef75337d4",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-24/#reporting-351ef75337d4",
       "cves": [],
       "snippet": "Microsoft Azure flaw exploited to steal customers' API credentials Microsoft is warning customers that a security vulnerability in Azure API Management (APIM) Classic tiers was exploited to steal stored API credentials, with Norwegian authorities linking the flaw to cyberattacks against energy companies… Microsoft is warning customers that a security vulnerability in Azure API Management (APIM) Classic tiers was exploited to steal stored API credentials, with Norwegian authorities linking the flaw to cyberattacks against energy companies…",
       "article_evidence": [
@@ -318,7 +338,7 @@
     {
       "title": "Spanish LaLiga confirms hackers stole soccer fans’ personal data",
       "url": "https://www.bleepingcomputer.com/news/security/spanish-laliga-confirms-hackers-stole-soccer-fans-personal-data/",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-23/#reporting-6a4ef98e17a4",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-24/#reporting-6a4ef98e17a4",
       "cves": [],
       "snippet": "Spanish LaLiga confirms hackers stole soccer fans’ personal data LaLiga, Spain's top men's football league, disclosed a data breach that exposed personal information belonging to users of its services and those of some affiliated clubs… LaLiga, Spain's top men's football league, disclosed a data breach that exposed personal information belonging to users of its services and those of some affiliated clubs…",
       "article_evidence": [
@@ -340,7 +360,7 @@
     {
       "title": "Behind the Alias: How One Researcher Unmasked a Decade of Ransomware Actors",
       "url": "https://www.darkreading.com/cybersecurity-operations/alias-researcher-unmasked-ransomware-actors",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-23/#reporting-a7dc0a77e742",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-24/#reporting-a7dc0a77e742",
       "cves": [],
       "snippet": "Behind the Alias: How One Researcher Unmasked a Decade of Ransomware Actors Ransomware isn't slowing down. A new framework gives security teams the edge to trace attackers back to their source. Ransomware isn't slowing down. A new framework gives security teams the edge to trace attackers back to their source.",
       "article_evidence": [
@@ -355,28 +375,6 @@
           "origin": "content",
           "raw_text": "Ransomware isn't slowing down. A new framework gives security teams the edge to trace attackers back to their source.",
           "text": "Ransomware isn't slowing down. A new framework gives security teams the edge to trace attackers back to their source."
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "Webworm Suspected of Modifying SoftEther VPN to Evade Detection and Hide Remote Access",
-      "url": "https://thehackernews.com/2026/11/webworm-suspected-of-modifying.html",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-23/#reporting-5495a06dee26",
-      "cves": [],
-      "snippet": "Webworm Suspected of Modifying SoftEther VPN to Evade Detection and Hide Remote Access The China-aligned threat actor known as Webworm is suspected to be using a custom version of the open-source SoftEther VPN Bridge tool in an attempt to remove recognizable detection fingerprints, while disguising it as network-monitoring software to establish covert remote access to compromised networks. The modified variant \"implements various tricks to hide itself from security tools,\"… The China-aligned threat actor known as Webworm is suspected to be using a custom version of the open-source SoftEther VPN Bridge tool in an attempt to remove recognizable detection fingerprints, while disguising it as ne",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "The China-aligned threat actor known as Webworm is suspected to be using a custom version of the open-source SoftEther VPN Bridge tool in an attempt to remove recognizable detection fingerprints, while disguising it as network-monitoring software to establish covert remote access to compromised networks. The modified variant \"implements various tricks to hide itself from security tools,\"…",
-          "text": "The China-aligned threat actor known as Webworm is suspected to be using a custom version of the open-source SoftEther VPN Bridge tool in an attempt to remove recognizable detection fingerprints, while disguising it as network-monitoring software to establish covert remote access to compromised networks. The modified variant \"implements various tricks to hide itself from security tools,\"…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "The China-aligned threat actor known as Webworm is suspected to be using a custom version of the open-source SoftEther VPN Bridge tool in an attempt to remove recognizable detection fingerprints, while disguising it as network-monitoring software to establish covert remote access to compromised networks. The modified variant \"implements various tricks to hide itself from security tools,\"…",
-          "text": "The China-aligned threat actor known as Webworm is suspected to be using a custom version of the open-source SoftEther VPN Bridge tool in an attempt to remove recognizable detection fingerprints, while disguising it as network-monitoring software to establish covert remote access to compromised networks. The modified variant \"implements various tricks to hide itself from security tools,\"…"
         }
       ],
       "effective_date_evidence": null
