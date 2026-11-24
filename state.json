@@ -4984,6 +4984,12 @@
       "run_id": "45458103103",
       "source_revision": "5045557fc5ad2a8cff6db201008c3d2156488c30",
       "stage": "admitted"
+    },
+    {
+      "admission_key": "digest:5045557fc5ad2a8cff6db201008c3d2156488c30",
+      "at": "2026-11-24T18:18:52.983Z",
+      "run_id": "45458103103",
+      "stage": "invoked"
     }
   ],
   "schema_version": 1,
