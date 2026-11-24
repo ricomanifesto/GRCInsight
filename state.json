@@ -5022,6 +5022,12 @@
       "run_id": "45489193363",
       "source_revision": "229fbfa2c684a52664d0ec856345efcfdbcb5958",
       "stage": "admitted"
+    },
+    {
+      "admission_key": "digest:229fbfa2c684a52664d0ec856345efcfdbcb5958",
+      "at": "2026-11-24T21:15:38.247Z",
+      "run_id": "45489193363",
+      "stage": "invoked"
     }
   ],
   "schema_version": 1,
