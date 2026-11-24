@@ -19022,6 +19022,17 @@
       "release_key": "a0708a279f3105085ff653a887c8b0551120f57cb98429eea9315164f2c13fe7",
       "release_ref": "cbe36ea9054f6dcd1fe331a9eb48cbcabc01a6cc",
       "stage": "serving"
+    },
+    {
+      "at": "2026-11-24T13:10:54.752Z",
+      "kind": "release",
+      "payload_digest": "7e48e71b38f27e025556de9b6cc22fc2b9cda496b24c3446207d5fc502de1268",
+      "proof": "on",
+      "release_key": "f2f1d3dbebd0371abb3bcb71831d4ed9346b8ea4a0b0bcda0721791bf09ae29f",
+      "release_ref": "e596b87ecbf4411abe2d4992d98b16ba2f38a5c7",
+      "source_revision": "3c85cb2aeb32a627cd9221cfad236a01b79f6d5a",
+      "stage": "released",
+      "tree_digest": "6761952151fdf6cc8558095112eb1f248031589523d4578132c4ea30447788bf"
     }
   ],
   "schema_version": 1,
