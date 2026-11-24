@@ -8,35 +8,35 @@
         "evidence_excerpt": "A critical security flaw has been disclosed in the popular binary-parser library that could allow an attacker who controls parser definitions to execute arbitrary code. The vulnerability, tracked as CVE-2026-134814 (CVSS score: 9.2 / 8.1), is a case of code injection impacting binary-parser versions prior to 2.3.1.",
         "evidence_origin": "summary",
         "focus": "binary-parser library",
-        "headline": "binary-parser library weakens code injection defenses",
+        "headline": "binary-parser library discloses critical code injection vulnerability",
         "priority": "high",
-        "significance": "The vulnerability in a widely used library enables arbitrary code execution when parser definitions are attacker-controlled, undermining vulnerability management assurance. The vulnerable asset owner must confirm affected deployments and remediation status.",
+        "significance": "The widely used binary-parser library contains a critical code injection flaw that could allow arbitrary code execution. Control owners should identify all applications using affected versions and verify remediation to version 2.3.1 or later.",
         "source_ids": [
           1
         ]
       },
       {
-        "control_id": "third_party_risk",
+        "control_id": "vulnerability_management",
         "evidence_excerpt": "Threat actors are exploiting a now-patched security flaw in ConnectWise ScreenConnect to target managed service provider (MSP) servers. The activity revolves around CVE-2026-84869 (CVSS score: 9.9), a critical ScreenConnect client flaw that allows a guest to transfer and execute a malicious payload on a connecting technician's host.",
         "evidence_origin": "summary",
         "focus": "ConnectWise ScreenConnect",
-        "headline": "ConnectWise ScreenConnect exposes MSP technician hosts",
+        "headline": "ConnectWise ScreenConnect exploits critical client flaw",
         "priority": "high",
-        "significance": "Active exploitation of a patched flaw in MSP remote access software indicates supply chain risk from unpatched vendor components. The supplier risk owner must verify patch deployment across MSP connections and assess technician access controls.",
+        "significance": "Active exploitation of a critical ScreenConnect flaw allows compromise of MSP technician endpoints, creating supply chain risk. Control owners must confirm patch deployment across all ScreenConnect instances and monitor for signs of exploitation.",
         "source_ids": [
           2
         ]
       },
       {
-        "control_id": "access_management",
-        "evidence_excerpt": "Critical OT access devices will often tell you, and anyone else, whether they're protected by authentication — and many aren't.",
+        "control_id": "vulnerability_management",
+        "evidence_excerpt": "Cybersecurity researchers have urged users to discontinue using a legacy ASP.NET anti-CSRF library named Idunno.AntiCsrf (\"Idunno.AntiCsrf.dll\") following the discovery of a critical vulnerability that has been exploited in the wild. The vulnerability, tracked as CVE-2026-131914, carries a CVSS score of 9.3 out of 10.0. The issue affects versions 0.9.1.0 and 0.9.1 Beta, and relates to an…",
         "evidence_origin": "summary",
-        "focus": "Critical OT access devices",
-        "headline": "Critical OT access devices broadcast authentication status",
-        "priority": "medium",
-        "significance": "Industrial gateways revealing absent authentication weaken access management assurance for operational technology. The identity and access owner must verify authentication coverage on all OT access devices and enforce mandatory authentication.",
+        "focus": "Idunno.AntiCsrf library",
+        "headline": "Idunno.AntiCsrf library exploited for unauthenticated RCE",
+        "priority": "high",
+        "significance": "A legacy ASP.NET anti-CSRF library is being exploited in the wild for unauthenticated remote code execution. Control owners should inventory applications using Idunno.AntiCsrf versions 0.9.1.0 or 0.9.1 Beta and remove or replace the library immediately.",
         "source_ids": [
-          5
+          4
         ]
       },
       {
@@ -44,35 +44,35 @@
         "evidence_excerpt": "A threat actor breached the internal network of Korea Electric Power Corporation (KEPCO) and accessed two systems containing customer, employee, and contractor data…",
         "evidence_origin": "summary",
         "focus": "Korea Electric Power Corporation",
-        "headline": "Korea Electric Power Corporation exposes customer employee data",
+        "headline": "Korea Electric Power Corporation confirms data breach",
         "priority": "high",
-        "significance": "Breach of a national utility exposes sensitive personal data, indicating data protection control failures. The data protection owner must assess the scope of exposed records, regulatory notification obligations, and remedial access restrictions.",
+        "significance": "A breach at a national power utility exposed personal data of 1.5 million individuals, indicating potential gaps in network segmentation and data access controls. Control owners should assess whether similar critical infrastructure entities have adequate data protection and breach detection capabilities.",
         "source_ids": [
           7
         ]
       },
       {
-        "control_id": "monitoring",
+        "control_id": "vulnerability_management",
         "evidence_excerpt": "Microsoft is warning customers that a security vulnerability in Azure API Management (APIM) Classic tiers was exploited to steal stored API credentials, with Norwegian authorities linking the flaw to cyberattacks against energy companies…",
         "evidence_origin": "summary",
-        "focus": "Azure API Management (APIM) Classic tiers",
-        "headline": "Azure API Management Classic tiers leak API credentials",
+        "focus": "Azure API Management Classic tiers",
+        "headline": "Azure API Management Classic tiers exploited to steal API credentials",
         "priority": "high",
-        "significance": "Exploited cloud vulnerability enabling credential theft from API management tiers demonstrates monitoring gaps for credential misuse. The detection owner must verify telemetry coverage for anomalous API credential access and alerting on credential exfiltration.",
+        "significance": "An exploited vulnerability in Azure API Management Classic tiers allowed theft of API credentials, targeting energy sector organizations. Control owners must verify whether their APIM instances are affected, apply mitigations, and rotate any potentially compromised credentials.",
         "source_ids": [
           10
         ]
       },
       {
-        "control_id": "incident_response",
-        "evidence_excerpt": "Ransomware isn't slowing down. A new framework gives security teams the edge to trace attackers back to their source.",
+        "control_id": "access_management",
+        "evidence_excerpt": "Critical OT access devices will often tell you, and anyone else, whether they're protected by authentication — and many aren't.",
         "evidence_origin": "summary",
-        "focus": "new framework",
-        "headline": "new framework enables ransomware actor tracing",
+        "focus": "Industrial Serial Gateways",
+        "headline": "Industrial Serial Gateways expose authentication status",
         "priority": "medium",
-        "significance": "Emerging attribution framework improves ransomware actor tracing, enhancing incident response evidence collection. The incident response lead should evaluate framework integration into response procedures and evidence preservation workflows.",
+        "significance": "Industrial serial gateways broadcast their authentication status, revealing that many devices lack authentication protection. Control owners should audit OT device configurations, enforce authentication, and segment network access to these gateways.",
         "source_ids": [
-          12
+          5
         ]
       }
     ],
@@ -82,25 +82,25 @@
           "source_ids": [
             1,
             2,
-            5,
+            4,
             10
           ],
-          "text": "Active exploitation of critical vulnerabilities in the binary-parser library, ConnectWise ScreenConnect, and Azure API Management Classic tiers, combined with industrial serial gateways broadcasting insufficient authentication, demonstrates systemic gaps in vulnerability management and access controls across software supply chains and operational technology. Control owners must verify asset inventory coverage, patch deployment, and authentication enforcement for exposed components."
+          "text": "Critical vulnerabilities in widely used libraries and managed service provider tools are being actively exploited, requiring immediate asset identification and patching across software supply chains. The binary-parser library flaw allows arbitrary code execution, while ScreenConnect and ASP.NET anti-CSRF library vulnerabilities enable remote compromise of technician endpoints and legacy applications. Microsoft Azure API Management Classic tiers have also been exploited to steal API credentials targeting energy sector organizations. Control owners must verify affected versions, apply patches, and review supplier dependencies for these components."
         },
         {
           "source_ids": [
             7,
-            12
+            5
           ],
-          "text": "The KEPCO breach exposing customer, employee, and contractor data, alongside a new framework for ransomware actor attribution, underscores persistent data protection deficiencies and evolving incident response capabilities. Data protection owners should assess exposure scope and notification readiness, while incident response leads should evaluate integration of attribution advances into containment procedures."
+          "text": "Data breaches at critical infrastructure providers and exposed operational technology devices highlight gaps in data protection and authentication controls. Korea Electric Power Corporation confirmed a breach affecting 1.5 million individuals, and industrial serial gateways broadcast their authentication status with many lacking protection. These incidents underscore the need for robust data handling controls and OT device hardening."
         }
       ]
     },
     "industry_impacts": [],
     "regulatory_changes": []
   },
-  "generated_at": "2026-11-24T00:32:59.421368Z",
-  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/230e7cc68aa277805d44dda2a12197b77f066ece/site/feed.xml",
+  "generated_at": "2026-11-24T04:45:05.611141Z",
+  "feed_url": "https://sentrydigest.ricomanifesto.com/feed.xml",
   "feed_home_url": "https://sentrydigest.ricomanifesto.com/",
   "digest_issue_date": "2026-11-24",
   "digest_issue_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-24/",
