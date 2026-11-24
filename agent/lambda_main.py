@@ -232,7 +232,20 @@ def handler(event, context):
     # API Gateway event - use Mangum
     deadline_token = set_model_deadline(_lambda_model_deadline(context))
     try:
-        return mangum_handler(event, context)
+        # Mangum needs a current loop even after a direct invocation's
+        # asyncio.run() has cleared it. Preserve any policy-owned caller loop;
+        # Runner owns and cleans up only this HTTP invocation's loop.
+        try:
+            previous_loop = asyncio.get_event_loop()
+        except RuntimeError:
+            previous_loop = None
+        if previous_loop is not None and previous_loop.is_running():
+            raise RuntimeError("Lambda HTTP handler cannot run inside a running event loop")
+        try:
+            with asyncio.Runner():
+                return mangum_handler(event, context)
+        finally:
+            asyncio.set_event_loop(previous_loop)
     finally:
         reset_model_deadline(deadline_token)
 
