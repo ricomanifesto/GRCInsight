@@ -1,8 +1,8 @@
 # GRC Intelligence Report - 2026-11-24
-**Generated:** 2026-11-24T13:09:42.190936Z
+**Generated:** 2026-11-24T18:22:17.37667Z
 **Date of Issue:** November 2026
 **Analysis Period:** November 2026
-**Source:** [SentryDigest](https://sentrydigest.ricomanifesto.com/feed.xml)
+**Source:** [SentryDigest](https://raw.githubusercontent.com/ricomanifesto/SentryDigest/c3fdbcae077cf04cfb7aad35a6427d820b54db8e/site/feed.xml)
 **Source Issue:** [SentryDigest 2026-11-24](https://sentrydigest.ricomanifesto.com/archive/2026-11-24/)
 **Articles Analyzed:** 30
 **GRC-Relevant Articles:** 30
@@ -12,9 +12,9 @@
 
 ## Executive Summary
 
-Active exploitation of critical vulnerabilities in widely used email security, remote access, and legacy library components has been confirmed by CISA and researchers, demanding immediate vulnerability management and third-party risk verification across the supply chain. [Hackers Exploit N-able MailAssure Flaw While AI Agents Exploit MONAI Label Zero-Day](https://thehackernews.com/2026/11/hackers-exploit-n-able-mailassure-flaw.html); [Hackers Exploit Critical ScreenConnect Flaw to Hijack MSP Technician PCs Without Warning](https://thehackernews.com/2026/11/hackers-exploit-critical-screenconnect.html); [Hackers Exploit Critical ASP.NET Anti-CSRF Library Flaw Allowing Unauthenticated RCE](https://thehackernews.com/2026/11/hackers-exploit-critical-aspnet-anti.html); [Critical binary-parser Flaw Enables JavaScript Injection via Malicious Parser Definitions](https://thehackernews.com/2026/11/critical-binary-parser-flaw-enables.html)
+Critical authentication bypass in VMware Directory Service, active exploitation of N-able MailAssure SSRF flaw, and compromise of Check Point Security management servers across 22 organizations demand immediate patching and asset validation. The Radware supplier breach exposing customer cloud access keys and Iran-aligned espionage targeting telecommunications extend third-party and monitoring priorities. Control owners must confirm remediation status for all affected products and verify supplier assurance evidence. [VMware vCenter Hit by Another Critical 9.8-Rated Auth Bypass Flaw After Zero-Day Exploitation](https://thehackernews.com/2026/11/vmware-vcenter-hit-by-another-critical.html); [Hackers Exploit N-able MailAssure Flaw While AI Agents Exploit MONAI Label Zero-Day](https://thehackernews.com/2026/11/hackers-exploit-n-able-mailassure-flaw.html); [Radware discloses breach exposing customer cloud access keys](https://www.bleepingcomputer.com/news/security/radware-discloses-breach-exposing-customer-cloud-access-keys/); [Iran-Aligned Volant Manticore Uses IPFS-Based KuboShell Backdoor in Espionage Campaigns](https://thehackernews.com/2026/11/iran-aligned-volant-manticore-uses-ipfs.html); [Hackers compromise Check Point Servers in 22 organizations](https://www.bleepingcomputer.com/news/security/hackers-compromise-check-point-servers-in-22-organizations/)
 
-Simultaneously, a hosting billing platform flaw exposes customer data without authentication and a critical infrastructure breach compromises personal information, requiring enhanced data protection and incident response readiness. [WHMCS SQL Injection Could Expose Customer Data and Admin Password Hashes without Login](https://thehackernews.com/2026/11/whmcs-sql-injection-flaw-could-expose.html); [South Korea’s power giant KEPCO confirms data breach impacting 1.5 million](https://www.bleepingcomputer.com/news/security/south-koreas-power-giant-kepco-confirms-data-breach-impacting-15-million/)
+Personal data theft at the European Commission EU Academy online learning hub underscores data protection control gaps. CISA Known Exploited Vulnerabilities catalog additions for N-able MailAssure and MONAI Label elevate vulnerability management review priority. Data and privacy owners should assess exposure scope and retention controls for affected systems. [European Commission confirms data theft in EU Academy breach](https://www.bleepingcomputer.com/news/security/european-commission-confirms-data-theft-in-eu-academy-breach/); [Hackers Exploit N-able MailAssure Flaw While AI Agents Exploit MONAI Label Zero-Day](https://thehackernews.com/2026/11/hackers-exploit-n-able-mailassure-flaw.html)
 
 Scope: 6 findings and 0 sourced regulatory changes from 12 retained sources. Review priorities rank what to check first; confirm whether each finding applies to your organization before assigning work.
 
@@ -26,11 +26,25 @@ No sourced regulatory changes identified in the supplied evidence.
 
 Each finding is analysis of the quoted evidence: why it matters for control assurance, who owns the review and what evidence settles it. Reference controls are review aids, not a compliance determination.
 
-### N-able MailAssure's LDAP is added to CISA KEV catalog with active exploitation
+### VMware Directory Service weakens authentication controls
 
 **Review priority:** High · Vulnerability management · Owner: Vulnerability and asset owners
 
-**Why it matters:** This finding matters because active exploitation of a critical SSRF vulnerability in a widely used email security product demands immediate vulnerability management verification. The accountable owner should confirm affected asset inventory, installed versions, and remediation status across the environment.
+**Why it matters:** The authentication bypass in VMware Directory Service undermines identity verification for virtualized infrastructure. Vulnerability and asset owners should confirm patch deployment across all affected VMware products and validate that no unauthorized access occurred.
+
+**Source evidence:** “Broadcom has shipped patches to address 23 vulnerabilities impacting VMware ESX, vCenter, Workstation, Fusion, and Avi Load Balancer, including one critical bug that could be abused to bypass authentication. The critical vulnerability, tracked as CVE-2026-123903, is rated 9.8 out of 10.0 on the CVSS scoring system. It resides in the VMware Directory Service &#40;"vmdir"&#41;.” [VMware vCenter Hit by Another Critical 9.8-Rated Auth Bypass Flaw After Zero-Day Exploitation](https://thehackernews.com/2026/11/vmware-vcenter-hit-by-another-critical.html)
+
+**Evidence to request:** Affected-asset inventory, installed versions, remediation status and an exception owner.
+
+**Decision trigger:** If applicability is confirmed, decide on remediation or a documented exception; otherwise record why the finding does not apply.
+
+**Reference controls:** ISO/IEC 27001:2022 A.8.8 (management of technical vulnerabilities); NIST CSF 2.0 ID.RA (risk assessment), PR.PS (platform security)
+
+### N-able MailAssure exposes organizations to active exploitation
+
+**Review priority:** High · Vulnerability management · Owner: Vulnerability and asset owners
+
+**Why it matters:** CISA KEV listing confirms active exploitation of N-able MailAssure SSRF vulnerability. Vulnerability and asset owners must verify immediate patching or compensating controls for all deployed instances and confirm no unauthorized LDAP access occurred.
 
 **Source evidence:** “The U.S. Cybersecurity and Infrastructure Security Agency &#40;CISA&#41; on Monday added two flaws impacting N-able MailAssure and MONAI Label to its Known Exploited Vulnerabilities &#40;KEV&#41; catalog, citing evidence of active exploitation. The critical vulnerabilities are listed below - CVE-2026-134624 &#40;CVSS score: 9.3&#41; - A server-side request forgery &#40;SSRF&#41; vulnerability in N-able MailAssure's LDAP…” [Hackers Exploit N-able MailAssure Flaw While AI Agents Exploit MONAI Label Zero-Day](https://thehackernews.com/2026/11/hackers-exploit-n-able-mailassure-flaw.html)
 
@@ -40,13 +54,13 @@ Each finding is analysis of the quoted evidence: why it matters for control assu
 
 **Reference controls:** ISO/IEC 27001:2022 A.8.8 (management of technical vulnerabilities); NIST CSF 2.0 ID.RA (risk assessment), PR.PS (platform security)
 
-### ConnectWise ScreenConnect client exploited to hijack MSP technician PCs
+### Radware Cloud WAF management API exposes customer cloud access keys
 
 **Review priority:** High · Third-party risk · Owner: Supplier risk owner
 
-**Why it matters:** This finding matters because exploitation of a critical remote access tool used by managed service providers extends risk to downstream customers. The accountable owner should confirm supplier dependencies, assurance evidence, and escalation contacts for ScreenConnect deployments.
+**Why it matters:** Supplier breach at Radware exposed customer cloud access keys via an unsecured management API. Supplier risk owners should review Radware access scope, demand evidence of API security remediation, and rotate any potentially compromised cloud credentials.
 
-**Source evidence:** “Threat actors are exploiting a now-patched security flaw in ConnectWise ScreenConnect to target managed service provider &#40;MSP&#41; servers. The activity revolves around CVE-2026-84869 &#40;CVSS score: 9.9&#41;, a critical ScreenConnect client flaw that allows a guest to transfer and execute a malicious payload on a connecting technician's host. "On November 12, 2026, we observed one managed service…” [Hackers Exploit Critical ScreenConnect Flaw to Hijack MSP Technician PCs Without Warning](https://thehackernews.com/2026/11/hackers-exploit-critical-screenconnect.html)
+**Source evidence:** “Cybersecurity company Radware says attackers gained access to some of its customers' account details and cloud access keys through an unsecured internal Cloud WAF &#40;Web Application Firewall&#41; management API that was left exposed online…” [Radware discloses breach exposing customer cloud access keys](https://www.bleepingcomputer.com/news/security/radware-discloses-breach-exposing-customer-cloud-access-keys/)
 
 **Evidence to request:** Supplier access scope, control responsibilities and evidence of remediation assurance.
 
@@ -54,13 +68,27 @@ Each finding is analysis of the quoted evidence: why it matters for control assu
 
 **Reference controls:** ISO/IEC 27001:2022 A.5.19 (supplier relationships), A.5.21 (ICT supply chain), A.5.22 (monitoring and review of supplier services); NIST CSF 2.0 GV.SC (cybersecurity supply chain risk management)
 
-### Idunno.AntiCsrf library exploited in wild prompting discontinuation urging
+### Volant Manticore targets telecommunications companies with IPFS backdoor
+
+**Review priority:** Medium · Monitoring and detection · Owner: Detection and monitoring owner
+
+**Why it matters:** Novel IPFS-based command-and-control infrastructure evades traditional network monitoring. Detection and monitoring owners should validate telemetry coverage for IPFS traffic and kuboShell indicators, and confirm alert routing for telecommunications sector threats.
+
+**Source evidence:** “A previously undocumented Iran-aligned cyber espionage group called Volant Manticore has targeted telecommunications companies, airlines, and critical infrastructure in Cyprus. Central to the group's operations is a backdoor called KuboShell that uses the InterPlanetary File System &#40;IPFS&#41; for command-and-control &#40;C2&#41; and deploys Homa, a post-compromise framework that's a reimplementation of…” [Iran-Aligned Volant Manticore Uses IPFS-Based KuboShell Backdoor in Espionage Campaigns](https://thehackernews.com/2026/11/iran-aligned-volant-manticore-uses-ipfs.html)
+
+**Evidence to request:** Log coverage, a detection test, alert routing and investigation ownership.
+
+**Decision trigger:** If a detection test fails, assign the coverage or routing correction and repeat the test.
+
+**Reference controls:** ISO/IEC 27001:2022 A.8.15 (logging), A.8.16 (monitoring activities); NIST CSF 2.0 DE.CM (continuous monitoring), DE.AE (adverse event analysis)
+
+### Check Point Security management servers compromise 22 organizations
 
 **Review priority:** High · Vulnerability management · Owner: Vulnerability and asset owners
 
-**Why it matters:** This finding matters because a legacy anti-CSRF library with no patch available has been exploited, requiring immediate removal from applications. The accountable owner should confirm affected asset inventory, installed versions, and remediation status for any Idunno.AntiCsrf usage.
+**Why it matters:** Active exploitation of multiple vulnerabilities in security management infrastructure undermines defensive controls. Vulnerability and asset owners must inventory all Check Point management servers, apply emergency patches, and investigate for signs of compromise in management planes.
 
-**Source evidence:** “Cybersecurity researchers have urged users to discontinue using a legacy ASP.NET anti-CSRF library named Idunno.AntiCsrf &#40;"Idunno.AntiCsrf.dll"&#41; following the discovery of a critical vulnerability that has been exploited in the wild. The vulnerability, tracked as CVE-2026-131914, carries a CVSS score of 9.3 out of 10.0. The issue affects versions 0.9.1.0 and 0.9.1 Beta, and relates to an…” [Hackers Exploit Critical ASP.NET Anti-CSRF Library Flaw Allowing Unauthenticated RCE](https://thehackernews.com/2026/11/hackers-exploit-critical-aspnet-anti.html)
+**Source evidence:** “Threat actors have exploited multiple vulnerabilities to compromise two dozen Check Point Security management servers in an ongoing campaign targeting 22 organizations…” [Hackers compromise Check Point Servers in 22 organizations](https://www.bleepingcomputer.com/news/security/hackers-compromise-check-point-servers-in-22-organizations/)
 
 **Evidence to request:** Affected-asset inventory, installed versions, remediation status and an exception owner.
 
@@ -68,27 +96,13 @@ Each finding is analysis of the quoted evidence: why it matters for control assu
 
 **Reference controls:** ISO/IEC 27001:2022 A.8.8 (management of technical vulnerabilities); NIST CSF 2.0 ID.RA (risk assessment), PR.PS (platform security)
 
-### binary-parser library enables arbitrary code execution via malicious parser definitions
-
-**Review priority:** High · Third-party risk · Owner: Supplier risk owner
-
-**Why it matters:** This finding matters because a widely used open-source library with a code injection flaw creates supply chain risk for dependent applications. The accountable owner should confirm affected asset inventory, installed versions, and remediation status for binary-parser usage.
-
-**Source evidence:** “A critical security flaw has been disclosed in the popular binary-parser library that could allow an attacker who controls parser definitions to execute arbitrary code. The vulnerability, tracked as CVE-2026-134814 &#40;CVSS score: 9.2 / 8.1&#41;, is a case of code injection impacting binary-parser versions prior to 2.3.1. "Binary-parser before 2.3.1 contains a code injection vulnerability that allows…” [Critical binary-parser Flaw Enables JavaScript Injection via Malicious Parser Definitions](https://thehackernews.com/2026/11/critical-binary-parser-flaw-enables.html)
-
-**Evidence to request:** Supplier access scope, control responsibilities and evidence of remediation assurance.
-
-**Decision trigger:** If the supplier dependency exists and assurance is insufficient, request evidence or escalate the assurance gap to its owner.
-
-**Reference controls:** ISO/IEC 27001:2022 A.5.19 (supplier relationships), A.5.21 (ICT supply chain), A.5.22 (monitoring and review of supplier services); NIST CSF 2.0 GV.SC (cybersecurity supply chain risk management)
-
-### WHMCS's shopping cart exposes customer data and admin hashes without login
+### EU Academy online learning hub exposes personal data in breach
 
 **Review priority:** High · Data protection · Owner: Data and privacy owners
 
-**Why it matters:** This finding matters because an unauthenticated SQL injection in a widely used hosting billing platform directly exposes personal and credential data, requiring data protection controls validation. The accountable owner should confirm data inventory, access restrictions, and audit logs for WHMCS deployments.
+**Why it matters:** Personal data breach at European Commission learning platform indicates inadequate data protection controls. Data and privacy owners must assess the scope of exposed personal data, verify breach notification compliance, and review access restrictions for similar online hubs.
 
-**Source evidence:** “A flaw in WHMCS's shopping cart, the billing and automation platform many web hosting companies use to run their businesses, could allow anyone on the internet to retrieve customer records and administrator password hashes from an installation's database. No login is needed. The company disclosed the SQL injection yesterday along with two other flaws that need a logged-in client, and released…” [WHMCS SQL Injection Could Expose Customer Data and Admin Password Hashes without Login](https://thehackernews.com/2026/11/whmcs-sql-injection-flaw-could-expose.html)
+**Source evidence:** “The European Commission, the European Union's main executive body, has confirmed that attackers breached its EU Academy online learning hub and stole the personal data of an undisclosed number of users…” [European Commission confirms data theft in EU Academy breach](https://www.bleepingcomputer.com/news/security/european-commission-confirms-data-theft-in-eu-academy-breach/)
 
 **Evidence to request:** Data inventory, access restrictions, audit logs and a documented exposure assessment.
 
@@ -96,31 +110,17 @@ Each finding is analysis of the quoted evidence: why it matters for control assu
 
 **Reference controls:** ISO/IEC 27001:2022 A.5.34 (privacy and protection of PII), A.8.12 (data leakage prevention), A.8.24 (use of cryptography); NIST CSF 2.0 PR.DS (data security)
 
-### Korea Electric Power Corporation internal network breached exposing customer employee contractor data
-
-**Review priority:** High · Incident response · Owner: Incident response lead
-
-**Why it matters:** This finding matters because a critical infrastructure provider's network breach exposes sensitive personal data, requiring incident response readiness and evidence preservation. The accountable owner should confirm containment responsibilities, retained logs, and the most recent response exercise for similar scenarios.
-
-**Source evidence:** “A threat actor breached the internal network of Korea Electric Power Corporation &#40;KEPCO&#41; and accessed two systems containing customer, employee, and contractor data…” [South Korea’s power giant KEPCO confirms data breach impacting 1.5 million](https://www.bleepingcomputer.com/news/security/south-koreas-power-giant-kepco-confirms-data-breach-impacting-15-million/)
-
-**Evidence to request:** Containment responsibilities, retained logs and the most recent response exercise.
-
-**Decision trigger:** If an exercise exposes an ownership or evidence gap, assign a response-plan correction and retest it.
-
-**Reference controls:** ISO/IEC 27001:2022 A.5.24 (incident management planning and preparation), A.5.26 (response to information security incidents); NIST CSF 2.0 RS.MA (incident management), RS.MI (incident mitigation)
-
 ## Source Highlights
 
+- [VMware vCenter Hit by Another Critical 9.8-Rated Auth Bypass Flaw After Zero-Day Exploitation](https://thehackernews.com/2026/11/vmware-vcenter-hit-by-another-critical.html) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-24/#reporting-aa014f4b55f4)
+- [Google Researcher Shows How a Single Bit Change in .NET Files Bypassed Windows Code Integrity](https://thehackernews.com/2026/11/google-researcher-shows-how-single-bit.html) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-24/#reporting-372382395c6e)
 - [Hackers Exploit N-able MailAssure Flaw While AI Agents Exploit MONAI Label Zero-Day](https://thehackernews.com/2026/11/hackers-exploit-n-able-mailassure-flaw.html) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-24/#reporting-d70285cdacc0)
-- [Critical binary-parser Flaw Enables JavaScript Injection via Malicious Parser Definitions](https://thehackernews.com/2026/11/critical-binary-parser-flaw-enables.html) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-24/#reporting-fa4289a3f22e)
-- [Hackers Exploit Critical ScreenConnect Flaw to Hijack MSP Technician PCs Without Warning](https://thehackernews.com/2026/11/hackers-exploit-critical-screenconnect.html) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-24/#reporting-2da724996ccb)
-- [Hackers Exploit Critical ASP.NET Anti-CSRF Library Flaw Allowing Unauthenticated RCE](https://thehackernews.com/2026/11/hackers-exploit-critical-aspnet-anti.html) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-24/#reporting-659149ed49d8)
-- [Microsoft Fixes Azure API Management Classic Flaw as Actor Targets Customer Secrets](https://thehackernews.com/2026/11/microsoft-fixes-azure-api-management.html) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-24/#reporting-47c6e40ac66c)
-- [WHMCS SQL Injection Could Expose Customer Data and Admin Password Hashes without Login](https://thehackernews.com/2026/11/whmcs-sql-injection-flaw-could-expose.html) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-24/#reporting-63045753ac00)
-- [OpenAI and Cisco Unveil AI-Assisted Linux Security Tool to Block Exploits Before Patching](https://thehackernews.com/2026/11/openai-and-cisco-unveil-ai-assisted.html) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-24/#reporting-b0d72916ebec)
-- [Industrial Serial Gateways Broadcast That They're Insecure](https://www.darkreading.com/ics-ot-security/industrial-serial-gateways-broadcast-insecure) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-24/#reporting-65ec879c983c)
-- [CrowdStrike Makes AI Security Push With Blockbuster Zscaler Deal](https://www.darkreading.com/endpoint-security/crowdstrike-ai-security-push-zscaler-deal) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-24/#reporting-ce2c122eeb6f)
-- [South Korea’s power giant KEPCO confirms data breach impacting 1.5 million](https://www.bleepingcomputer.com/news/security/south-koreas-power-giant-kepco-confirms-data-breach-impacting-15-million/) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-24/#reporting-957088ac58c0)
-- [US Cyber Director Pick Signals Shift Toward Expertise](https://www.darkreading.com/cybersecurity-operations/us-cyber-director-pick-signals-shift-toward-expertise) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-24/#reporting-a64057d195d2)
-- [OpenRouter drops AI providers over leaked prompts and secrets](https://www.bleepingcomputer.com/news/security/openrouter-drops-ai-providers-over-leaked-prompts-and-secrets/) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-24/#reporting-7b86d265d0e5)
+- [Radware discloses breach exposing customer cloud access keys](https://www.bleepingcomputer.com/news/security/radware-discloses-breach-exposing-customer-cloud-access-keys/) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-24/#reporting-a251bdbac4c3)
+- [Iran-Aligned Volant Manticore Uses IPFS-Based KuboShell Backdoor in Espionage Campaigns](https://thehackernews.com/2026/11/iran-aligned-volant-manticore-uses-ipfs.html) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-24/#reporting-9582e29a3fdc)
+- [ShinyHunters claims to return after FBI arrests, uses old PGP keys as proof](https://www.bleepingcomputer.com/news/security/shinyhunters-resurfaces-after-fbi-arrests-uses-old-pgp-keys-as-proof/) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-24/#reporting-9078000bd51b)
+- [European Commission confirms data theft in EU Academy breach](https://www.bleepingcomputer.com/news/security/european-commission-confirms-data-theft-in-eu-academy-breach/) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-24/#reporting-0ddde081cc79)
+- [Hackers compromise Check Point Servers in 22 organizations](https://www.bleepingcomputer.com/news/security/hackers-compromise-check-point-servers-in-22-organizations/) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-24/#reporting-53f2a1acf596)
+- [Police disrupt 57 illegal streaming services with 7.3 million visits](https://www.bleepingcomputer.com/news/security/police-disrupt-57-illegal-streaming-services-with-73-million-visits/) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-24/#reporting-d8bd69410276)
+- [From Vulnerability Noise to Resilience: Rethinking Security in the AI Era](https://www.bleepingcomputer.com/news/security/from-vulnerability-noise-to-resilience-rethinking-security-in-the-ai-era/) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-24/#reporting-1f0ade1a2280)
+- [McDonald's Japan data breach exposes customer location information](https://www.bleepingcomputer.com/news/security/mcdonalds-japan-data-breach-exposes-customer-location-information/) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-24/#reporting-f249978bf6d5)
+- [New Shirudo tool uses AI to shield unpatched Linux systems from exploits](https://www.bleepingcomputer.com/news/security/new-shirudo-tool-uses-ai-to-shield-unpatched-linux-systems-from-exploits/) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-24/#reporting-5fdfc9b8efe4)
