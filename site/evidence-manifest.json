@@ -7,10 +7,10 @@
         "control_id": "vulnerability_management",
         "evidence_excerpt": "Broadcom has shipped patches to address 23 vulnerabilities impacting VMware ESX, vCenter, Workstation, Fusion, and Avi Load Balancer, including one critical bug that could be abused to bypass authentication. The critical vulnerability, tracked as CVE-2026-123903, is rated 9.8 out of 10.0 on the CVSS scoring system. It resides in the VMware Directory Service (\"vmdir\").",
         "evidence_origin": "summary",
-        "focus": "VMware Directory Service",
-        "headline": "VMware Directory Service weakens authentication controls",
+        "focus": "vCenter",
+        "headline": "vCenter weakens authentication assurance",
         "priority": "high",
-        "significance": "The authentication bypass in VMware Directory Service undermines identity verification for virtualized infrastructure. Vulnerability and asset owners should confirm patch deployment across all affected VMware products and validate that no unauthorized access occurred.",
+        "significance": "The critical authentication bypass in vCenter undermines identity verification controls across virtualized infrastructure. Vulnerability owners must confirm that all affected vCenter instances are inventoried and patched per Broadcom's advisory.",
         "source_ids": [
           1
         ]
@@ -20,35 +20,35 @@
         "evidence_excerpt": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Monday added two flaws impacting N-able MailAssure and MONAI Label to its Known Exploited Vulnerabilities (KEV) catalog, citing evidence of active exploitation. The critical vulnerabilities are listed below - CVE-2026-134624 (CVSS score: 9.3) - A server-side request forgery (SSRF) vulnerability in N-able MailAssure's LDAP…",
         "evidence_origin": "summary",
         "focus": "N-able MailAssure",
-        "headline": "N-able MailAssure exposes organizations to active exploitation",
+        "headline": "N-able MailAssure extends active exploitation risk",
         "priority": "high",
-        "significance": "CISA KEV listing confirms active exploitation of N-able MailAssure SSRF vulnerability. Vulnerability and asset owners must verify immediate patching or compensating controls for all deployed instances and confirm no unauthorized LDAP access occurred.",
+        "significance": "CISA's KEV listing confirms active exploitation of an SSRF flaw in N-able MailAssure, requiring immediate remediation verification. Vulnerability owners must confirm whether deployed instances are affected and that patches or mitigations are applied.",
         "source_ids": [
           3
+        ]
+      },
+      {
+        "control_id": "access_management",
+        "evidence_excerpt": "A newly formed data extortion group named 'Inception' has been linked to a large-scale campaign that targets single sign-on (SSO) credentials of multiple global brands and firms…",
+        "evidence_origin": "summary",
+        "focus": "single sign-on (SSO) credentials",
+        "headline": "single sign-on (SSO) credentials exposes credential theft risk",
+        "priority": "medium",
+        "significance": "The Inception group's vishing campaign directly targets SSO credentials, challenging authentication assurance for cloud and federated access. Identity owners should review MFA coverage, session revocation procedures, and user awareness training effectiveness.",
+        "source_ids": [
+          4
         ]
       },
       {
         "control_id": "third_party_risk",
         "evidence_excerpt": "Cybersecurity company Radware says attackers gained access to some of its customers' account details and cloud access keys through an unsecured internal Cloud WAF (Web Application Firewall) management API that was left exposed online…",
         "evidence_origin": "summary",
-        "focus": "Radware Cloud WAF management API",
-        "headline": "Radware Cloud WAF management API exposes customer cloud access keys",
+        "focus": "unsecured internal Cloud WAF (Web Application Firewall) management API",
+        "headline": "unsecured internal Cloud WAF (Web Application Firewall) management API exposes cloud access keys",
         "priority": "high",
-        "significance": "Supplier breach at Radware exposed customer cloud access keys via an unsecured management API. Supplier risk owners should review Radware access scope, demand evidence of API security remediation, and rotate any potentially compromised cloud credentials.",
+        "significance": "Radware's exposed management API compromised customer cloud access keys, demonstrating a critical supplier control failure. Supplier risk owners must assess Radware's access scope, request assurance of remediation, and review their own cloud key rotation policies.",
         "source_ids": [
-          4
-        ]
-      },
-      {
-        "control_id": "monitoring",
-        "evidence_excerpt": "A previously undocumented Iran-aligned cyber espionage group called Volant Manticore has targeted telecommunications companies, airlines, and critical infrastructure in Cyprus. Central to the group's operations is a backdoor called KuboShell that uses the InterPlanetary File System (IPFS) for command-and-control (C2) and deploys Homa, a post-compromise framework that's a reimplementation of…",
-        "evidence_origin": "summary",
-        "focus": "Volant Manticore",
-        "headline": "Volant Manticore targets telecommunications companies with IPFS backdoor",
-        "priority": "medium",
-        "significance": "Novel IPFS-based command-and-control infrastructure evades traditional network monitoring. Detection and monitoring owners should validate telemetry coverage for IPFS traffic and kuboShell indicators, and confirm alert routing for telecommunications sector threats.",
-        "source_ids": [
-          5
+          6
         ]
       },
       {
@@ -56,23 +56,23 @@
         "evidence_excerpt": "The European Commission, the European Union's main executive body, has confirmed that attackers breached its EU Academy online learning hub and stole the personal data of an undisclosed number of users…",
         "evidence_origin": "summary",
         "focus": "EU Academy online learning hub",
-        "headline": "EU Academy online learning hub exposes personal data in breach",
-        "priority": "high",
-        "significance": "Personal data breach at European Commission learning platform indicates inadequate data protection controls. Data and privacy owners must assess the scope of exposed personal data, verify breach notification compliance, and review access restrictions for similar online hubs.",
+        "headline": "EU Academy online learning hub exposes personal data theft",
+        "priority": "medium",
+        "significance": "The EU Academy breach resulted in personal data theft, triggering GDPR notification obligations and highlighting platform security gaps. Data protection owners must verify the scope of exposed data, assess notification compliance, and review learning platform security controls.",
         "source_ids": [
-          7
+          9
         ]
       },
       {
-        "control_id": "vulnerability_management",
-        "evidence_excerpt": "Threat actors have exploited multiple vulnerabilities to compromise two dozen Check Point Security management servers in an ongoing campaign targeting 22 organizations…",
+        "control_id": "monitoring",
+        "evidence_excerpt": "A previously undocumented Iran-aligned cyber espionage group called Volant Manticore has targeted telecommunications companies, airlines, and critical infrastructure in Cyprus. Central to the group's operations is a backdoor called KuboShell that uses the InterPlanetary File System (IPFS) for command-and-control (C2) and deploys Homa, a post-compromise framework that's a reimplementation of…",
         "evidence_origin": "summary",
-        "focus": "Check Point Security management servers",
-        "headline": "Check Point Security management servers compromise 22 organizations",
-        "priority": "high",
-        "significance": "Active exploitation of multiple vulnerabilities in security management infrastructure undermines defensive controls. Vulnerability and asset owners must inventory all Check Point management servers, apply emergency patches, and investigate for signs of compromise in management planes.",
+        "focus": "KuboShell",
+        "headline": "KuboShell extends IPFS-based espionage capability",
+        "priority": "medium",
+        "significance": "Volant Manticore's use of IPFS for C2 via KuboShell evades traditional network monitoring, targeting telecommunications and critical infrastructure. Monitoring owners should evaluate detection coverage for IPFS traffic and assess telemetry gaps in critical sectors.",
         "source_ids": [
-          8
+          7
         ]
       }
     ],
@@ -81,27 +81,26 @@
         {
           "source_ids": [
             1,
-            3,
-            4,
-            5,
-            8
+            3
           ],
-          "text": "Critical authentication bypass in VMware Directory Service, active exploitation of N-able MailAssure SSRF flaw, and compromise of Check Point Security management servers across 22 organizations demand immediate patching and asset validation. The Radware supplier breach exposing customer cloud access keys and Iran-aligned espionage targeting telecommunications extend third-party and monitoring priorities. Control owners must confirm remediation status for all affected products and verify supplier assurance evidence."
+          "text": "Critical vulnerabilities in widely deployed infrastructure demand urgent remediation verification. CISA added N-able MailAssure to its Known Exploited Vulnerabilities catalog citing active exploitation, while Broadcom released patches for 23 VMware flaws including a critical authentication bypass in vCenter. Control owners must confirm affected asset inventories and patch deployment status across virtualized and email security platforms."
         },
         {
           "source_ids": [
-            7,
-            3
+            4,
+            6,
+            9,
+            7
           ],
-          "text": "Personal data theft at the European Commission EU Academy online learning hub underscores data protection control gaps. CISA Known Exploited Vulnerabilities catalog additions for N-able MailAssure and MONAI Label elevate vulnerability management review priority. Data and privacy owners should assess exposure scope and retention controls for affected systems."
+          "text": "Identity-targeted campaigns and supplier breaches elevate access management and third-party risk. The Inception extortion group targets single sign-on credentials through vishing, Radware exposed customer cloud keys via an unsecured management API, and the EU Academy breach compromised personal data. Meanwhile, Iran-aligned Volant Manticore uses IPFS-based backdoors against telecommunications and critical infrastructure. Owners should validate privileged access controls, supplier assurance evidence, data protection monitoring, and detection coverage for novel command-and-control channels."
         }
       ]
     },
     "industry_impacts": [],
     "regulatory_changes": []
   },
-  "generated_at": "2026-11-24T18:22:17.37667Z",
-  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/c3fdbcae077cf04cfb7aad35a6427d820b54db8e/site/feed.xml",
+  "generated_at": "2026-11-24T21:18:34.983281Z",
+  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/7a8b8d67657eaa80bf4b3a04ee4b382d82db7ecf/site/feed.xml",
   "feed_home_url": "https://sentrydigest.ricomanifesto.com/",
   "digest_issue_date": "2026-11-24",
   "digest_issue_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-24/",
@@ -176,6 +175,50 @@
           "origin": "content",
           "raw_text": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Monday added two flaws impacting N-able MailAssure and MONAI Label to its Known Exploited Vulnerabilities (KEV) catalog, citing evidence of active exploitation. The critical vulnerabilities are listed below - CVE-2026-134624 (CVSS score: 9.3) - A server-side request forgery (SSRF) vulnerability in N-able MailAssure's LDAP…",
           "text": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Monday added two flaws impacting N-able MailAssure and MONAI Label to its Known Exploited Vulnerabilities (KEV) catalog, citing evidence of active exploitation. The critical vulnerabilities are listed below - CVE-2026-134624 (CVSS score: 9.3) - A server-side request forgery (SSRF) vulnerability in N-able MailAssure's LDAP…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "New Inception extortion gang launches large-scale vishing campaign",
+      "url": "https://www.bleepingcomputer.com/news/security/new-inception-extortion-gang-launches-large-scale-vishing-campaign/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-24/#reporting-347042e7abf2",
+      "cves": [],
+      "snippet": "New Inception extortion gang launches large-scale vishing campaign A newly formed data extortion group named 'Inception' has been linked to a large-scale campaign that targets single sign-on (SSO) credentials of multiple global brands and firms… A newly formed data extortion group named 'Inception' has been linked to a large-scale campaign that targets single sign-on (SSO) credentials of multiple global brands and firms…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "A newly formed data extortion group named 'Inception' has been linked to a large-scale campaign that targets single sign-on (SSO) credentials of multiple global brands and firms…",
+          "text": "A newly formed data extortion group named 'Inception' has been linked to a large-scale campaign that targets single sign-on (SSO) credentials of multiple global brands and firms…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "A newly formed data extortion group named 'Inception' has been linked to a large-scale campaign that targets single sign-on (SSO) credentials of multiple global brands and firms…",
+          "text": "A newly formed data extortion group named 'Inception' has been linked to a large-scale campaign that targets single sign-on (SSO) credentials of multiple global brands and firms…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Turnitin discloses cyberattack affecting customer-facing systems",
+      "url": "https://www.bleepingcomputer.com/news/security/turnitin-discloses-cyberattack-affecting-customer-facing-systems/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-24/#reporting-6c5bc98dced3",
+      "cves": [],
+      "snippet": "Turnitin discloses cyberattack affecting customer-facing systems Turnitin disclosed via a statement from its CEO, Chris Caren, that it recently detected unauthorized activity involving certain customer-facing systems… Turnitin disclosed via a statement from its CEO, Chris Caren, that it recently detected unauthorized activity involving certain customer-facing systems…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Turnitin disclosed via a statement from its CEO, Chris Caren, that it recently detected unauthorized activity involving certain customer-facing systems…",
+          "text": "Turnitin disclosed via a statement from its CEO, Chris Caren, that it recently detected unauthorized activity involving certain customer-facing systems…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Turnitin disclosed via a statement from its CEO, Chris Caren, that it recently detected unauthorized activity involving certain customer-facing systems…",
+          "text": "Turnitin disclosed via a statement from its CEO, Chris Caren, that it recently detected unauthorized activity involving certain customer-facing systems…"
         }
       ],
       "effective_date_evidence": null
@@ -330,50 +373,6 @@
           "origin": "content",
           "raw_text": "AI-driven development is adding complexity to software supply chains, leaving security teams overwhelmed by vulnerabilities that may pose little actual risk. RapidFort explains how runtime visibility, container hardening, and automated remediation can reduce vulnerability noise and improve software resilience…",
           "text": "AI-driven development is adding complexity to software supply chains, leaving security teams overwhelmed by vulnerabilities that may pose little actual risk. RapidFort explains how runtime visibility, container hardening, and automated remediation can reduce vulnerability noise and improve software resilience…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "McDonald's Japan data breach exposes customer location information",
-      "url": "https://www.bleepingcomputer.com/news/security/mcdonalds-japan-data-breach-exposes-customer-location-information/",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-24/#reporting-f249978bf6d5",
-      "cves": [],
-      "snippet": "McDonald's Japan data breach exposes customer location information McDonald's Japan, the fast-food giant's Japanese subsidiary, has disclosed a data breach after attackers accessed a database containing sensitive information for users of the company's official smartphone app… McDonald's Japan, the fast-food giant's Japanese subsidiary, has disclosed a data breach after attackers accessed a database containing sensitive information for users of the company's official smartphone app…",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "McDonald's Japan, the fast-food giant's Japanese subsidiary, has disclosed a data breach after attackers accessed a database containing sensitive information for users of the company's official smartphone app…",
-          "text": "McDonald's Japan, the fast-food giant's Japanese subsidiary, has disclosed a data breach after attackers accessed a database containing sensitive information for users of the company's official smartphone app…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "McDonald's Japan, the fast-food giant's Japanese subsidiary, has disclosed a data breach after attackers accessed a database containing sensitive information for users of the company's official smartphone app…",
-          "text": "McDonald's Japan, the fast-food giant's Japanese subsidiary, has disclosed a data breach after attackers accessed a database containing sensitive information for users of the company's official smartphone app…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "New Shirudo tool uses AI to shield unpatched Linux systems from exploits",
-      "url": "https://www.bleepingcomputer.com/news/security/new-shirudo-tool-uses-ai-to-shield-unpatched-linux-systems-from-exploits/",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-24/#reporting-5fdfc9b8efe4",
-      "cves": [],
-      "snippet": "New Shirudo tool uses AI to shield unpatched Linux systems from exploits OpenAI and Cisco launched an open-source Linux security tool named Shirudo that deploys temporary runtime protections to block vulnerability exploitation while administrators prepare and roll out patches, without restarting services… OpenAI and Cisco launched an open-source Linux security tool named Shirudo that deploys temporary runtime protections to block vulnerability exploitation while administrators prepare and roll out patches, without restarting services…",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "OpenAI and Cisco launched an open-source Linux security tool named Shirudo that deploys temporary runtime protections to block vulnerability exploitation while administrators prepare and roll out patches, without restarting services…",
-          "text": "OpenAI and Cisco launched an open-source Linux security tool named Shirudo that deploys temporary runtime protections to block vulnerability exploitation while administrators prepare and roll out patches, without restarting services…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "OpenAI and Cisco launched an open-source Linux security tool named Shirudo that deploys temporary runtime protections to block vulnerability exploitation while administrators prepare and roll out patches, without restarting services…",
-          "text": "OpenAI and Cisco launched an open-source Linux security tool named Shirudo that deploys temporary runtime protections to block vulnerability exploitation while administrators prepare and roll out patches, without restarting services…"
         }
       ],
       "effective_date_evidence": null
