@@ -96,7 +96,7 @@ def test_static_site_deploys_main_branch_site_changes():
     assert "playwright@1.62.1 screenshot" in workflow
     assert "--color-scheme dark" in workflow
     assert "--color-scheme light" in workflow
-    assert "actions/upload-artifact@v7" in workflow
+    assert "actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7" in workflow
 
 
 def test_report_generation_payload_treats_feed_url_as_json_data():
@@ -652,8 +652,10 @@ def test_report_generation_workflow_publishes_bound_retained_state():
     assert "name: Persist retained publication state" in workflow
     assert "if: always() && steps.get-report.outputs.refused == 'true'" in workflow
     assert "scripts/publication_state.py record-retained" in workflow
-    assert '--attempted-at "${{ steps.get-report.outputs.attempted_at }}"' in workflow
-    assert '--category "${{ steps.get-report.outputs.refusal_category }}"' in workflow
+    assert "ATTEMPTED_AT: ${{ steps.get-report.outputs.attempted_at }}" in workflow
+    assert '--attempted-at "$ATTEMPTED_AT"' in workflow
+    assert "REFUSAL_CATEGORY: ${{ steps.get-report.outputs.refusal_category }}" in workflow
+    assert '--category "$REFUSAL_CATEGORY"' in workflow
     assert workflow.count("--history site/publication-history.json") >= 4
     assert "if [ $STATE_STATUS -eq 4 ]; then" in workflow
     assert "python3 scripts/build_site.py" in workflow
@@ -687,7 +689,8 @@ def test_report_generation_workflow_uses_one_bounded_public_cadence_contract():
     assert history["schedule"] == {"cadence": "daily", "time_utc": "13:00"}
     assert history["max_entries"] == 30
     assert 'echo "published_at=$PUBLISHED_AT" >> "$GITHUB_OUTPUT"' in workflow
-    assert '--event-at "${{ steps.get-report.outputs.published_at }}"' in workflow
+    assert "PUBLISHED_AT: ${{ steps.get-report.outputs.published_at }}" in workflow
+    assert '--event-at "$PUBLISHED_AT"' in workflow
 
 
 def test_report_generation_workflow_requires_resolved_model_provenance():
@@ -1920,16 +1923,24 @@ def test_python_lambda_packaging_keeps_runtime_interface_client():
 def test_workflows_use_current_node_runtime_action_pins():
     workflow_text = "\n".join(workflow.read_text() for workflow in WORKFLOWS)
 
-    assert "actions/checkout@v7" in workflow_text
-    assert "aws-actions/configure-aws-credentials@v6" in workflow_text
-    assert "actions/setup-python@v6" in workflow_text
-    assert "actions/setup-node@v7" in workflow_text
-    assert "actions/cache@v6" in workflow_text
-    assert "hashicorp/setup-terraform@v4" in workflow_text
-    assert "actions/upload-pages-artifact@v5" in workflow_text
-    assert "actions/deploy-pages@v5" in workflow_text
-    assert "actions/upload-artifact@v7" in workflow_text
-    assert "astral-sh/setup-uv@v8.2.0" in workflow_text
+    assert "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7" in workflow_text
+    assert (
+        "aws-actions/configure-aws-credentials@254c19bd240aabef8777f48595e9d2d7b972184b # v6.2.1"
+        in workflow_text
+    )
+    assert "actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6" in workflow_text
+    assert "actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7" in workflow_text
+    assert "actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6" in workflow_text
+    assert (
+        "hashicorp/setup-terraform@dfe3c3f87815947d99a8997f908cb6525fc44e9e # v4" in workflow_text
+    )
+    assert (
+        "actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5"
+        in workflow_text
+    )
+    assert "actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5" in workflow_text
+    assert "actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7" in workflow_text
+    assert "astral-sh/setup-uv@fac544c07dec837d0ccb6301d7b5580bf5edae39 # v8.2.0" in workflow_text
     assert "actions/checkout@v4" not in workflow_text
     assert "aws-actions/configure-aws-credentials@v4" not in workflow_text
     assert "actions/setup-python@v5" not in workflow_text

@@ -3,8 +3,7 @@
 This directory holds the publisher that moves accepted static content to the
 production artifact branch, the hosting adapter that branch carries, and the
 admission checks the report generators use for SentryDigest release events.
-The library, adapter and tests are identical in SentryDigest, SentryInsight
-and GRCInsight; only `site.json` differs.
+SentryDigest, SentryInsight and GRCInsight each keep a copy of the publication kit alongside their own `site.json`.
 
 ## Configuration: `site.json`
 
@@ -49,7 +48,7 @@ State records live on the `publication-state` branch; nothing operational
 is served. Every run first resumes what the current release still needs.
 
 A rollback targets a release commit that was proved serving and never
-attested as a provider failure. Repeating a rollback that is already the tip
+attested as a provider failure. Before reading payload blobs, the publisher checks that each path is a unique relative name for a regular file under `site/`. Extraction uses a private directory and refuses existing files and symbolic links. Repeating a rollback that is already the tip
 is a no-op.
 
 ## Generation admission

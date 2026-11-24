@@ -37,7 +37,7 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v7
+      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
       with:
         fetch-depth: 0
 
@@ -68,7 +68,7 @@ jobs:
         --canonical-artifact "$RUNNER_TEMP/reporting-identity-v1.json"
 
     - name: Set up Node.js
-      uses: actions/setup-node@v6
+      uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
       with:
         node-version: '24'
 
@@ -88,7 +88,7 @@ jobs:
 
     - name: Configure AWS credentials
       if: steps.admission.outputs.decision == 'admitted' || steps.admission.outputs.decision == 'reattach'
-      uses: aws-actions/configure-aws-credentials@v6.2.1
+      uses: aws-actions/configure-aws-credentials@254c19bd240aabef8777f48595e9d2d7b972184b # v6.2.1
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}

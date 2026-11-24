@@ -85,5 +85,6 @@ def test_workflow_captures_precise_time_after_composition_and_reuses_it_on_retry
     assert retrieve.index(capture) < retrieve.index("scripts/publication_state.py record-published")
     assert 'echo "published_at=$PUBLISHED_AT" >> "$GITHUB_OUTPUT"' in retrieve
     retry = workflow.split("    - name: Commit and push report", 1)[1]
-    assert '--event-at "${{ steps.get-report.outputs.published_at }}"' in retry
+    assert "PUBLISHED_AT: ${{ steps.get-report.outputs.published_at }}" in retry
+    assert '--event-at "$PUBLISHED_AT"' in retry
     assert "publication_state.py timestamp" not in retry

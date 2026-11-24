@@ -84,6 +84,7 @@ def test_terminal_observation_survives_composition_failure(
             "AWS_REGION": "fake",
             "LLM_MODEL": "test/model",
             "FEED_URL": "https://digest.example/feed.xml",
+            "REPORT_ID": "report-test",
         },
     )
     assert result.returncode != 0
