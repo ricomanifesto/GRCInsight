@@ -24,7 +24,7 @@ const path = require('node:path');
 
 const { inventoryOfDir, sha256 } = require('./canonical');
 const { loadSiteConfig } = require('./config');
-const { buildArtifactTree, extractPayload } = require('./artifact');
+const { buildArtifactTree, extractPayload, listPayloadEntries } = require('./artifact');
 const { CompareAndSetLost, createGit } = require('./git');
 const { proveServing } = require('./proof');
 const { LAYOUT, SHA1, buildDescriptor, parseDescriptor } = require('./release');
@@ -113,7 +113,7 @@ function createPublisher({
   }
 
   function payloadEntriesOf(commit) {
-    const entries = git.listTree(commit).filter((entry) => entry.path.startsWith(LAYOUT.payloadPrefix));
+    const entries = listPayloadEntries(git, commit);
     const blobs = git.readBlobs(entries.map((entry) => entry.oid));
     return entries.map((entry, index) => ({
       path: entry.path.slice(LAYOUT.payloadPrefix.length),

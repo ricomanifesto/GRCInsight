@@ -16,11 +16,15 @@
   }
 
   function sanitizeMarkdownUrl(url) {
-    const value = decodeMarkdownEscapes(url).trim();
-    if (!value || /[\s"<>]/.test(value)) return null;
-    if (/^(https?:\/\/|\/(?!\/)|\.{0,2}\/|#)/i.test(value)) return value;
-    if (!/^[a-z][a-z0-9+.-]*:/i.test(value)) return value;
-    return null;
+    const value = decodeMarkdownEscapes(url);
+    // Browsers normalize controls and backslashes while parsing destinations.
+    // Reject them before scheme checks so every accepted href has one meaning.
+    if (!value || /[\u0000-\u0020\u007f\s"<>\\]/.test(value)) return null;
+    if (/^https?:\/\//i.test(value)) return value;
+    if (value.startsWith('//')) return null;
+    // A colon before the first path/query/fragment delimiter denotes a scheme.
+    if (/^[^/?#]*:/.test(value)) return null;
+    return value;
   }
 
   function renderMarkdownLink(text, url) {

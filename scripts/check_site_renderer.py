@@ -59,6 +59,22 @@ assert(renderer.sanitizeMarkdownUrl('https://example.com/"bad') === null, 'quote
 assert(renderer.renderMarkdownLink('Safe', 'https://example.com') === '<a href="https://example.com" target="_blank" rel="noopener">Safe</a>', 'safe link should render as anchor');
 assert(renderer.renderMarkdownLink('Unsafe', 'javascript:alert(1)') === 'Unsafe', 'unsafe link should render as text');
 
+// Reject browser-ignored controls and ambiguous network destinations as policy.
+// These inert fixtures never navigate or execute any rendered output.
+for (const code of [...Array(32).keys(), 127]) {{
+  const control = String.fromCharCode(code);
+  for (const destination of [control + 'https://example.test/safe', 'docs/' + control + 'safe']) {{
+    assert(renderer.sanitizeMarkdownUrl(destination) === null, 'control-bearing destination must be blocked: ' + code);
+    assert(renderer.renderMarkdownLink('Blocked', destination) === 'Blocked', 'blocked destination must render as plain text');
+  }}
+}}
+for (const destination of ['//example.test/path', String.fromCharCode(92) + String.fromCharCode(92) + 'example.test/path', '/'+String.fromCharCode(92)+'example.test/path', 'custom:opaque']) {{
+  assert(renderer.sanitizeMarkdownUrl(destination) === null, 'ambiguous or unsupported destination must be blocked');
+}}
+for (const destination of ['./controls', '../controls', 'controls/nist', '#summary', '/controls', 'http://example.test/controls']) {{
+  assert(renderer.sanitizeMarkdownUrl(destination) === destination, 'ordinary safe destination must remain available');
+}}
+
 // Numbered known section labels normalize to h2; numbered prose does not.
 const normalized = renderer.normalizeReportMarkdown('1. Executive Summary\\n1. Review vendor contracts.');
 assert(normalized.includes('## Executive Summary'), 'numbered known section labels should normalize to h2 headings');

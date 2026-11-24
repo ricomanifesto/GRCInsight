@@ -6,6 +6,7 @@ const childProcess = require('node:child_process');
 const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
+const { assertRelativePath } = require('./canonical');
 
 class CompareAndSetLost extends Error {}
 
@@ -58,6 +59,7 @@ function createGit(repoRoot, { env = process.env } = {}) {
     // Writes the given files as a new commit on top of parent (or as a root
     // commit) without touching any working tree or the repository index.
     commitFiles(files, { parent, message, extraEnv = {} }) {
+      for (const relativePath of files.keys()) assertRelativePath(relativePath);
       const scratch = fs.mkdtempSync(path.join(os.tmpdir(), 'publication-tree-'));
       try {
         const index = path.join(scratch, 'index');

@@ -7,8 +7,9 @@ const test = require('node:test');
 const { canonicalJson, inventoryDigest, inventoryOfDir, inventoryText, parseInventory } = require('../kit/canonical');
 const { loadSiteConfig } = require('../kit/config');
 const { LAYOUT, buildDescriptor, releaseKeyOf } = require('../kit/release');
-const { buildArtifactTree } = require('../kit/artifact');
+const { buildArtifactTree, extractPayload } = require('../kit/artifact');
 const { proveServing } = require('../kit/proof');
+const { createGit } = require('../kit/git');
 const { PAYLOAD, fakeOrigin, sha256, siteConfig, tempDir, writeFiles } = require('./helpers');
 
 const ADAPTER = path.join(__dirname, '..', 'adapter', 'build.js');
@@ -61,6 +62,59 @@ function materializeTree(t, files) {
   }
   return dir;
 }
+
+test('rollback payload extraction rejects invalid relative paths before reading or writing blobs', (t) => {
+  for (const relativePath of ['../outside.txt', 'nested/../../outside.txt', '/absolute.txt', 'nested//file.txt', './file.txt', 'nested\\file.txt', '']) {
+    const target = tempDir(t, 'rollback-payload-');
+    let read = false;
+    const git = {
+      listTree: () => [
+        { path: 'site/valid.txt', mode: '100644', type: 'blob', oid: 'valid' },
+        { path: `site/${relativePath}`, mode: '100644', type: 'blob', oid: 'invalid' },
+      ],
+      readBlobs: () => { read = true; throw new Error('unexpected blob read before path validation'); },
+    };
+
+    assert.throws(() => extractPayload(git, 'fixture', target), /safe relative path/, relativePath);
+    assert.equal(read, false, 'validate the complete inventory before reading any content');
+    assert.deepEqual(fs.readdirSync(target), [], 'a refused inventory writes nothing');
+  }
+});
+
+test('rollback payload extraction refuses pre-existing symlinks and preserves prior files', (t) => {
+  for (const linkPath of ['nested', 'nested/file.txt']) {
+    const target = tempDir(t, 'rollback-payload-');
+    const outside = tempDir(t, 'rollback-existing-');
+    fs.writeFileSync(path.join(outside, 'file.txt'), 'preserve');
+    fs.mkdirSync(path.dirname(path.join(target, linkPath)), { recursive: true });
+    fs.symlinkSync(linkPath === 'nested' ? outside : path.join(outside, 'file.txt'), path.join(target, linkPath));
+    const git = {
+      listTree: () => [{ path: 'site/nested/file.txt', mode: '100644', type: 'blob', oid: 'file' }],
+      readBlobs: () => { throw new Error('unexpected blob read before path validation'); },
+    };
+
+    assert.throws(() => extractPayload(git, 'fixture', target), /symlink|already exists/);
+    assert.equal(fs.readFileSync(path.join(outside, 'file.txt'), 'utf8'), 'preserve');
+  }
+});
+
+test('rollback payload extraction preserves exact nested regular-file bytes', (t) => {
+  const target = tempDir(t, 'rollback-payload-');
+  const bytes = Buffer.from([0, 1, 255]);
+  const git = {
+    listTree: () => [{ path: 'site/nested/file.bin', mode: '100644', type: 'blob', oid: 'file' }],
+    readBlobs: () => [bytes],
+  };
+
+  assert.equal(extractPayload(git, 'fixture', target), target);
+  assert.deepEqual(fs.readFileSync(path.join(target, 'nested/file.bin')), bytes);
+});
+
+test('Git commit inventories reject noncanonical paths before invoking Git', (t) => {
+  const git = createGit(tempDir(t, 'commit-path-policy-'));
+  const files = new Map([['valid.txt', Buffer.from('safe')], ['nested//file.txt', Buffer.from('safe')]]);
+  assert.throws(() => git.commitFiles(files, { message: 'fixture' }), /safe relative path/);
+});
 
 test('canonical inventory lines are sorted bytewise with two spaces and regular files only', (t) => {
   const { dir, entries } = payloadEntries(t);
