@@ -4840,6 +4840,12 @@
       "run_id": "45363745538",
       "source_revision": "82b31b095af7b9f26da7f5467c4ddf71fc9ec8cc",
       "stage": "admitted"
+    },
+    {
+      "admission_key": "digest:82b31b095af7b9f26da7f5467c4ddf71fc9ec8cc",
+      "at": "2026-11-24T09:17:36.543Z",
+      "run_id": "45363745538",
+      "stage": "invoked"
     }
   ],
   "schema_version": 1,
