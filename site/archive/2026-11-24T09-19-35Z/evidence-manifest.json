@@ -1,0 +1,370 @@
+{
+  "schema_version": 3,
+  "report_contract_version": 6,
+  "report_plan": {
+    "control_implications": [
+      {
+        "control_id": "vulnerability_management",
+        "evidence_excerpt": "Cybersecurity researchers have urged users to discontinue using a legacy ASP.NET anti-CSRF library named Idunno.AntiCsrf (\"Idunno.AntiCsrf.dll\") following the discovery of a critical vulnerability that has been exploited in the wild.",
+        "evidence_origin": "summary",
+        "focus": "Idunno.AntiCsrf library",
+        "headline": "Idunno.AntiCsrf library exploitation weakens legacy ASP.NET application security",
+        "priority": "high",
+        "significance": "Exploitation of a legacy anti-CSRF library in the wild demonstrates that unsupported components remain in production environments. The vulnerability management owner should identify all applications using Idunno.AntiCsrf, verify removal or upgrading, and ensure legacy component inventories are current.",
+        "source_ids": [
+          4
+        ]
+      },
+      {
+        "control_id": "data_protection",
+        "evidence_excerpt": "A threat actor breached the internal network of Korea Electric Power Corporation (KEPCO) and accessed two systems containing customer, employee, and contractor data",
+        "evidence_origin": "summary",
+        "focus": "Korea Electric Power Corporation (KEPCO)",
+        "headline": "Korea Electric Power Corporation (KEPCO) breach exposes customer employee contractor data",
+        "priority": "high",
+        "significance": "The KEPCO breach exposing customer, employee, and contractor data shows that internal network segmentation and data access controls failed. The data protection owner should review network segmentation, data access logging, and breach notification readiness for sensitive personal data.",
+        "source_ids": [
+          8
+        ]
+      },
+      {
+        "control_id": "vulnerability_management",
+        "evidence_excerpt": "Microsoft is warning customers that a security vulnerability in Azure API Management (APIM) Classic tiers was exploited to steal stored API credentials, with Norwegian authorities linking the flaw to cyberattacks against energy companies",
+        "evidence_origin": "summary",
+        "focus": "Azure API Management (APIM) Classic tiers",
+        "headline": "Azure API Management (APIM) Classic tiers vulnerability exposes stolen API credentials",
+        "priority": "high",
+        "significance": "Exploitation of an Azure API Management Classic tier flaw to steal API credentials linked to energy sector attacks indicates cloud API credential storage risks. The vulnerability management owner should confirm APIM Classic tier patching, credential rotation, and monitoring for anomalous API access.",
+        "source_ids": [
+          11
+        ]
+      },
+      {
+        "control_id": "data_protection",
+        "evidence_excerpt": "LaLiga, Spain's top men's football league, disclosed a data breach that exposed personal information belonging to users of its services and those of some affiliated clubs",
+        "evidence_origin": "summary",
+        "focus": "LaLiga",
+        "headline": "LaLiga data breach exposes personal information of users and affiliated clubs",
+        "priority": "medium",
+        "significance": "LaLiga's disclosure of personal data exposure for users and affiliated clubs highlights risks in shared sports league platforms. The data protection owner should assess data sharing agreements with affiliates, verify encryption of personal data, and confirm breach response coordination.",
+        "source_ids": [
+          12
+        ]
+      },
+      {
+        "control_id": "access_management",
+        "evidence_excerpt": "Critical OT access devices will often tell you, and anyone else, whether they're protected by authentication — and many aren't.",
+        "evidence_origin": "summary",
+        "focus": "Critical OT access devices",
+        "headline": "Critical OT access devices broadcast insecure authentication status",
+        "priority": "medium",
+        "significance": "Industrial serial gateways broadcasting their authentication status reveals widespread lack of basic access controls on OT devices. The access management owner should inventory all OT gateways, enforce authentication requirements, and implement network segmentation to limit exposure.",
+        "source_ids": [
+          6
+        ]
+      }
+    ],
+    "executive_brief": {
+      "paragraphs": [
+        {
+          "source_ids": [
+            4,
+            11
+          ],
+          "text": "CISA's addition of actively exploited flaws to the KEV catalog underscores the urgency for vulnerability management across federal and contractor environments. Concurrent exploitation of ScreenConnect targeting MSP technicians, a legacy ASP.NET library, and Azure API Management Classic tiers demonstrates that supply chain remote access tools, outdated components, and cloud API surfaces are being weaponized. Control owners should prioritize asset inventory for these technologies, verify patching or compensating controls, and assess supplier access governance."
+        },
+        {
+          "source_ids": [
+            8,
+            12,
+            6
+          ],
+          "text": "Confirmed data breaches at Korea Electric Power Corporation and LaLiga, combined with research showing industrial gateways broadcasting insecure authentication states, reveal persistent gaps in data protection and operational technology access management. The accountable owners should review network segmentation, data access logging, breach notification readiness, and OT device authentication enforcement to limit exposure of personal and sensitive data."
+        }
+      ]
+    },
+    "industry_impacts": [],
+    "regulatory_changes": []
+  },
+  "generated_at": "2026-11-24T09:19:35.824663Z",
+  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/1f3005a120cb9b70d5e920e9daaf49ce420a33a0/site/feed.xml",
+  "feed_home_url": "https://sentrydigest.ricomanifesto.com/",
+  "digest_issue_date": "2026-11-24",
+  "digest_issue_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-24/",
+  "requested_model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
+  "resolved_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+  "sources": [
+    {
+      "title": "Hackers Exploit N-able MailAssure Flaw While AI Agents Exploit MONAI Label Zero-Day",
+      "url": "https://thehackernews.com/2026/11/hackers-exploit-n-able-mailassure-flaw.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-24/#reporting-d70285cdacc0",
+      "cves": [
+        "CVE-2026-134624"
+      ],
+      "snippet": "Hackers Exploit N-able MailAssure Flaw While AI Agents Exploit MONAI Label Zero-Day The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Monday added two flaws impacting N-able MailAssure and MONAI Label to its Known Exploited Vulnerabilities (KEV) catalog, citing evidence of active exploitation. The critical vulnerabilities are listed below - CVE-2026-134624 (CVSS score: 9.3) - A server-side request forgery (SSRF) vulnerability in N-able MailAssure's LDAP… The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Monday added two flaws impacting N-able MailAssure and MONAI Label to its Known Exploited Vulnerabilities (KEV) catalog, citing evidence of active exploita",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Monday added two flaws impacting N-able MailAssure and MONAI Label to its Known Exploited Vulnerabilities (KEV) catalog, citing evidence of active exploitation. The critical vulnerabilities are listed below - CVE-2026-134624 (CVSS score: 9.3) - A server-side request forgery (SSRF) vulnerability in N-able MailAssure's LDAP…",
+          "text": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Monday added two flaws impacting N-able MailAssure and MONAI Label to its Known Exploited Vulnerabilities (KEV) catalog, citing evidence of active exploitation. The critical vulnerabilities are listed below - CVE-2026-134624 (CVSS score: 9.3) - A server-side request forgery (SSRF) vulnerability in N-able MailAssure's LDAP…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Monday added two flaws impacting N-able MailAssure and MONAI Label to its Known Exploited Vulnerabilities (KEV) catalog, citing evidence of active exploitation. The critical vulnerabilities are listed below - CVE-2026-134624 (CVSS score: 9.3) - A server-side request forgery (SSRF) vulnerability in N-able MailAssure's LDAP…",
+          "text": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Monday added two flaws impacting N-able MailAssure and MONAI Label to its Known Exploited Vulnerabilities (KEV) catalog, citing evidence of active exploitation. The critical vulnerabilities are listed below - CVE-2026-134624 (CVSS score: 9.3) - A server-side request forgery (SSRF) vulnerability in N-able MailAssure's LDAP…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Critical binary-parser Flaw Enables JavaScript Injection via Malicious Parser Definitions",
+      "url": "https://thehackernews.com/2026/11/critical-binary-parser-flaw-enables.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-24/#reporting-fa4289a3f22e",
+      "cves": [
+        "CVE-2026-134814"
+      ],
+      "snippet": "Critical binary-parser Flaw Enables JavaScript Injection via Malicious Parser Definitions A critical security flaw has been disclosed in the popular binary-parser library that could allow an attacker who controls parser definitions to execute arbitrary code. The vulnerability, tracked as CVE-2026-134814 (CVSS score: 9.2 / 8.1), is a case of code injection impacting binary-parser versions prior to 2.3.1. \"Binary-parser before 2.3.1 contains a code injection vulnerability that allows… A critical security flaw has been disclosed in the popular binary-parser library that could allow an attacker who controls parser definitions to execute arbitrary code. The vulnerability, tracked as CVE-2026-1348",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "A critical security flaw has been disclosed in the popular binary-parser library that could allow an attacker who controls parser definitions to execute arbitrary code. The vulnerability, tracked as CVE-2026-134814 (CVSS score: 9.2 / 8.1), is a case of code injection impacting binary-parser versions prior to 2.3.1. \"Binary-parser before 2.3.1 contains a code injection vulnerability that allows…",
+          "text": "A critical security flaw has been disclosed in the popular binary-parser library that could allow an attacker who controls parser definitions to execute arbitrary code. The vulnerability, tracked as CVE-2026-134814 (CVSS score: 9.2 / 8.1), is a case of code injection impacting binary-parser versions prior to 2.3.1. \"Binary-parser before 2.3.1 contains a code injection vulnerability that allows…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "A critical security flaw has been disclosed in the popular binary-parser library that could allow an attacker who controls parser definitions to execute arbitrary code. The vulnerability, tracked as CVE-2026-134814 (CVSS score: 9.2 / 8.1), is a case of code injection impacting binary-parser versions prior to 2.3.1. \"Binary-parser before 2.3.1 contains a code injection vulnerability that allows…",
+          "text": "A critical security flaw has been disclosed in the popular binary-parser library that could allow an attacker who controls parser definitions to execute arbitrary code. The vulnerability, tracked as CVE-2026-134814 (CVSS score: 9.2 / 8.1), is a case of code injection impacting binary-parser versions prior to 2.3.1. \"Binary-parser before 2.3.1 contains a code injection vulnerability that allows…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Hackers Exploit Critical ScreenConnect Flaw to Hijack MSP Technician PCs Without Warning",
+      "url": "https://thehackernews.com/2026/11/hackers-exploit-critical-screenconnect.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-24/#reporting-2da724996ccb",
+      "cves": [
+        "CVE-2026-84869"
+      ],
+      "snippet": "Hackers Exploit Critical ScreenConnect Flaw to Hijack MSP Technician PCs Without Warning Threat actors are exploiting a now-patched security flaw in ConnectWise ScreenConnect to target managed service provider (MSP) servers. The activity revolves around CVE-2026-84869 (CVSS score: 9.9), a critical ScreenConnect client flaw that allows a guest to transfer and execute a malicious payload on a connecting technician's host. \"On November 12, 2026, we observed one managed service… Threat actors are exploiting a now-patched security flaw in ConnectWise ScreenConnect to target managed service provider (MSP) servers. The activity revolves around CVE-2026-84869 (CVSS score: 9.9), a critical ScreenConn",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Threat actors are exploiting a now-patched security flaw in ConnectWise ScreenConnect to target managed service provider (MSP) servers. The activity revolves around CVE-2026-84869 (CVSS score: 9.9), a critical ScreenConnect client flaw that allows a guest to transfer and execute a malicious payload on a connecting technician's host. \"On November 12, 2026, we observed one managed service…",
+          "text": "Threat actors are exploiting a now-patched security flaw in ConnectWise ScreenConnect to target managed service provider (MSP) servers. The activity revolves around CVE-2026-84869 (CVSS score: 9.9), a critical ScreenConnect client flaw that allows a guest to transfer and execute a malicious payload on a connecting technician's host. \"On November 12, 2026, we observed one managed service…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Threat actors are exploiting a now-patched security flaw in ConnectWise ScreenConnect to target managed service provider (MSP) servers. The activity revolves around CVE-2026-84869 (CVSS score: 9.9), a critical ScreenConnect client flaw that allows a guest to transfer and execute a malicious payload on a connecting technician's host. \"On November 12, 2026, we observed one managed service…",
+          "text": "Threat actors are exploiting a now-patched security flaw in ConnectWise ScreenConnect to target managed service provider (MSP) servers. The activity revolves around CVE-2026-84869 (CVSS score: 9.9), a critical ScreenConnect client flaw that allows a guest to transfer and execute a malicious payload on a connecting technician's host. \"On November 12, 2026, we observed one managed service…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Hackers Exploit Critical ASP.NET Anti-CSRF Library Flaw Allowing Unauthenticated RCE",
+      "url": "https://thehackernews.com/2026/11/hackers-exploit-critical-aspnet-anti.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-24/#reporting-659149ed49d8",
+      "cves": [
+        "CVE-2026-131914"
+      ],
+      "snippet": "Hackers Exploit Critical ASP.NET Anti-CSRF Library Flaw Allowing Unauthenticated RCE Cybersecurity researchers have urged users to discontinue using a legacy ASP.NET anti-CSRF library named Idunno.AntiCsrf (\"Idunno.AntiCsrf.dll\") following the discovery of a critical vulnerability that has been exploited in the wild. The vulnerability, tracked as CVE-2026-131914, carries a CVSS score of 9.3 out of 10.0. The issue affects versions 0.9.1.0 and 0.9.1 Beta, and relates to an… Cybersecurity researchers have urged users to discontinue using a legacy ASP.NET anti-CSRF library named Idunno.AntiCsrf (\"Idunno.AntiCsrf.dll\") following the discovery of a critical vulnerability that has been exploited in",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Cybersecurity researchers have urged users to discontinue using a legacy ASP.NET anti-CSRF library named Idunno.AntiCsrf (\"Idunno.AntiCsrf.dll\") following the discovery of a critical vulnerability that has been exploited in the wild. The vulnerability, tracked as CVE-2026-131914, carries a CVSS score of 9.3 out of 10.0. The issue affects versions 0.9.1.0 and 0.9.1 Beta, and relates to an…",
+          "text": "Cybersecurity researchers have urged users to discontinue using a legacy ASP.NET anti-CSRF library named Idunno.AntiCsrf (\"Idunno.AntiCsrf.dll\") following the discovery of a critical vulnerability that has been exploited in the wild. The vulnerability, tracked as CVE-2026-131914, carries a CVSS score of 9.3 out of 10.0. The issue affects versions 0.9.1.0 and 0.9.1 Beta, and relates to an…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Cybersecurity researchers have urged users to discontinue using a legacy ASP.NET anti-CSRF library named Idunno.AntiCsrf (\"Idunno.AntiCsrf.dll\") following the discovery of a critical vulnerability that has been exploited in the wild. The vulnerability, tracked as CVE-2026-131914, carries a CVSS score of 9.3 out of 10.0. The issue affects versions 0.9.1.0 and 0.9.1 Beta, and relates to an…",
+          "text": "Cybersecurity researchers have urged users to discontinue using a legacy ASP.NET anti-CSRF library named Idunno.AntiCsrf (\"Idunno.AntiCsrf.dll\") following the discovery of a critical vulnerability that has been exploited in the wild. The vulnerability, tracked as CVE-2026-131914, carries a CVSS score of 9.3 out of 10.0. The issue affects versions 0.9.1.0 and 0.9.1 Beta, and relates to an…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "OpenAI and Cisco Unveil AI-Assisted Linux Security Tool to Block Exploits Before Patching",
+      "url": "https://thehackernews.com/2026/11/openai-and-cisco-unveil-ai-assisted.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-24/#reporting-b0d72916ebec",
+      "cves": [],
+      "snippet": "OpenAI and Cisco Unveil AI-Assisted Linux Security Tool to Block Exploits Before Patching OpenAI and Cisco have teamed up to launch Shirudo (meaning \"shield\" in Japanese), an open-source Linux runtime that allows artificial intelligence (AI) agents to defend systems without downtime. \"It lets agents write dynamic eBPF controls to shield systems from exploits, giving defenders more time to test and roll out patches,\" OpenAI said in a post on X. The AI upstart called the initiative a… OpenAI and Cisco have teamed up to launch Shirudo (meaning \"shield\" in Japanese), an open-source Linux runtime that allows artificial intelligence (AI) agents to defend systems without downtime. \"It lets agents w",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "OpenAI and Cisco have teamed up to launch Shirudo (meaning \"shield\" in Japanese), an open-source Linux runtime that allows artificial intelligence (AI) agents to defend systems without downtime. \"It lets agents write dynamic eBPF controls to shield systems from exploits, giving defenders more time to test and roll out patches,\" OpenAI said in a post on X. The AI upstart called the initiative a…",
+          "text": "OpenAI and Cisco have teamed up to launch Shirudo (meaning \"shield\" in Japanese), an open-source Linux runtime that allows artificial intelligence (AI) agents to defend systems without downtime. \"It lets agents write dynamic eBPF controls to shield systems from exploits, giving defenders more time to test and roll out patches,\" OpenAI said in a post on X. The AI upstart called the initiative a…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "OpenAI and Cisco have teamed up to launch Shirudo (meaning \"shield\" in Japanese), an open-source Linux runtime that allows artificial intelligence (AI) agents to defend systems without downtime. \"It lets agents write dynamic eBPF controls to shield systems from exploits, giving defenders more time to test and roll out patches,\" OpenAI said in a post on X. The AI upstart called the initiative a…",
+          "text": "OpenAI and Cisco have teamed up to launch Shirudo (meaning \"shield\" in Japanese), an open-source Linux runtime that allows artificial intelligence (AI) agents to defend systems without downtime. \"It lets agents write dynamic eBPF controls to shield systems from exploits, giving defenders more time to test and roll out patches,\" OpenAI said in a post on X. The AI upstart called the initiative a…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Industrial Serial Gateways Broadcast That They're Insecure",
+      "url": "https://www.darkreading.com/ics-ot-security/industrial-serial-gateways-broadcast-insecure",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-24/#reporting-65ec879c983c",
+      "cves": [],
+      "snippet": "Industrial Serial Gateways Broadcast That They're Insecure Critical OT access devices will often tell you, and anyone else, whether they're protected by authentication — and many aren't. Critical OT access devices will often tell you, and anyone else, whether they're protected by authentication — and many aren't.",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Critical OT access devices will often tell you, and anyone else, whether they're protected by authentication — and many aren't.",
+          "text": "Critical OT access devices will often tell you, and anyone else, whether they're protected by authentication — and many aren't."
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Critical OT access devices will often tell you, and anyone else, whether they're protected by authentication — and many aren't.",
+          "text": "Critical OT access devices will often tell you, and anyone else, whether they're protected by authentication — and many aren't."
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "CrowdStrike Makes AI Security Push With Blockbuster Zscaler Deal",
+      "url": "https://www.darkreading.com/endpoint-security/crowdstrike-ai-security-push-zscaler-deal",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-24/#reporting-ce2c122eeb6f",
+      "cves": [],
+      "snippet": "CrowdStrike Makes AI Security Push With Blockbuster Zscaler Deal CrowdStrike's $44 billion acquisition of Zscaler would unite endpoint protection and zero-trust network security to obtain greater control over AI agents. CrowdStrike's $44 billion acquisition of Zscaler would unite endpoint protection and zero-trust network security to obtain greater control over AI agents.",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "CrowdStrike's $44 billion acquisition of Zscaler would unite endpoint protection and zero-trust network security to obtain greater control over AI agents.",
+          "text": "CrowdStrike's $44 billion acquisition of Zscaler would unite endpoint protection and zero-trust network security to obtain greater control over AI agents."
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "CrowdStrike's $44 billion acquisition of Zscaler would unite endpoint protection and zero-trust network security to obtain greater control over AI agents.",
+          "text": "CrowdStrike's $44 billion acquisition of Zscaler would unite endpoint protection and zero-trust network security to obtain greater control over AI agents."
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "South Korea’s power giant KEPCO confirms data breach impacting 1.5 million",
+      "url": "https://www.bleepingcomputer.com/news/security/south-koreas-power-giant-kepco-confirms-data-breach-impacting-15-million/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-24/#reporting-957088ac58c0",
+      "cves": [],
+      "snippet": "South Korea’s power giant KEPCO confirms data breach impacting 1.5 million A threat actor breached the internal network of Korea Electric Power Corporation (KEPCO) and accessed two systems containing customer, employee, and contractor data… A threat actor breached the internal network of Korea Electric Power Corporation (KEPCO) and accessed two systems containing customer, employee, and contractor data…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "A threat actor breached the internal network of Korea Electric Power Corporation (KEPCO) and accessed two systems containing customer, employee, and contractor data…",
+          "text": "A threat actor breached the internal network of Korea Electric Power Corporation (KEPCO) and accessed two systems containing customer, employee, and contractor data…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "A threat actor breached the internal network of Korea Electric Power Corporation (KEPCO) and accessed two systems containing customer, employee, and contractor data…",
+          "text": "A threat actor breached the internal network of Korea Electric Power Corporation (KEPCO) and accessed two systems containing customer, employee, and contractor data…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "US Cyber Director Pick Signals Shift Toward Expertise",
+      "url": "https://www.darkreading.com/cybersecurity-operations/us-cyber-director-pick-signals-shift-toward-expertise",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-24/#reporting-a64057d195d2",
+      "cves": [],
+      "snippet": "US Cyber Director Pick Signals Shift Toward Expertise Trump named Kirsten Davies as Acting National Cyber Director, bringing greater industry experience to the role amid recent outages and rising geopolitical tensions. Trump named Kirsten Davies as Acting National Cyber Director, bringing greater industry experience to the role amid recent outages and rising geopolitical tensions.",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Trump named Kirsten Davies as Acting National Cyber Director, bringing greater industry experience to the role amid recent outages and rising geopolitical tensions.",
+          "text": "Trump named Kirsten Davies as Acting National Cyber Director, bringing greater industry experience to the role amid recent outages and rising geopolitical tensions."
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Trump named Kirsten Davies as Acting National Cyber Director, bringing greater industry experience to the role amid recent outages and rising geopolitical tensions.",
+          "text": "Trump named Kirsten Davies as Acting National Cyber Director, bringing greater industry experience to the role amid recent outages and rising geopolitical tensions."
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "OpenRouter drops AI providers over leaked prompts and secrets",
+      "url": "https://www.bleepingcomputer.com/news/security/openrouter-drops-ai-providers-over-leaked-prompts-and-secrets/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-24/#reporting-7b86d265d0e5",
+      "cves": [],
+      "snippet": "OpenRouter drops AI providers over leaked prompts and secrets OpenRouter removed three AI providers from its platform after discovering that they had violated their stated data-handling policies and exposed sensitive data… OpenRouter removed three AI providers from its platform after discovering that they had violated their stated data-handling policies and exposed sensitive data…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "OpenRouter removed three AI providers from its platform after discovering that they had violated their stated data-handling policies and exposed sensitive data…",
+          "text": "OpenRouter removed three AI providers from its platform after discovering that they had violated their stated data-handling policies and exposed sensitive data…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "OpenRouter removed three AI providers from its platform after discovering that they had violated their stated data-handling policies and exposed sensitive data…",
+          "text": "OpenRouter removed three AI providers from its platform after discovering that they had violated their stated data-handling policies and exposed sensitive data…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Microsoft Azure flaw exploited to steal customers' API credentials",
+      "url": "https://www.bleepingcomputer.com/news/security/microsoft-azure-flaw-exploited-to-steal-customers-api-credentials/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-24/#reporting-351ef75337d4",
+      "cves": [],
+      "snippet": "Microsoft Azure flaw exploited to steal customers' API credentials Microsoft is warning customers that a security vulnerability in Azure API Management (APIM) Classic tiers was exploited to steal stored API credentials, with Norwegian authorities linking the flaw to cyberattacks against energy companies… Microsoft is warning customers that a security vulnerability in Azure API Management (APIM) Classic tiers was exploited to steal stored API credentials, with Norwegian authorities linking the flaw to cyberattacks against energy companies…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Microsoft is warning customers that a security vulnerability in Azure API Management (APIM) Classic tiers was exploited to steal stored API credentials, with Norwegian authorities linking the flaw to cyberattacks against energy companies…",
+          "text": "Microsoft is warning customers that a security vulnerability in Azure API Management (APIM) Classic tiers was exploited to steal stored API credentials, with Norwegian authorities linking the flaw to cyberattacks against energy companies…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Microsoft is warning customers that a security vulnerability in Azure API Management (APIM) Classic tiers was exploited to steal stored API credentials, with Norwegian authorities linking the flaw to cyberattacks against energy companies…",
+          "text": "Microsoft is warning customers that a security vulnerability in Azure API Management (APIM) Classic tiers was exploited to steal stored API credentials, with Norwegian authorities linking the flaw to cyberattacks against energy companies…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Spanish LaLiga confirms hackers stole soccer fans’ personal data",
+      "url": "https://www.bleepingcomputer.com/news/security/spanish-laliga-confirms-hackers-stole-soccer-fans-personal-data/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-24/#reporting-6a4ef98e17a4",
+      "cves": [],
+      "snippet": "Spanish LaLiga confirms hackers stole soccer fans’ personal data LaLiga, Spain's top men's football league, disclosed a data breach that exposed personal information belonging to users of its services and those of some affiliated clubs… LaLiga, Spain's top men's football league, disclosed a data breach that exposed personal information belonging to users of its services and those of some affiliated clubs…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "LaLiga, Spain's top men's football league, disclosed a data breach that exposed personal information belonging to users of its services and those of some affiliated clubs…",
+          "text": "LaLiga, Spain's top men's football league, disclosed a data breach that exposed personal information belonging to users of its services and those of some affiliated clubs…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "LaLiga, Spain's top men's football league, disclosed a data breach that exposed personal information belonging to users of its services and those of some affiliated clubs…",
+          "text": "LaLiga, Spain's top men's football league, disclosed a data breach that exposed personal information belonging to users of its services and those of some affiliated clubs…"
+        }
+      ],
+      "effective_date_evidence": null
+    }
+  ]
+}

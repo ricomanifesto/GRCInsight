@@ -5,74 +5,62 @@
     "control_implications": [
       {
         "control_id": "vulnerability_management",
-        "evidence_excerpt": "A critical security flaw has been disclosed in the popular binary-parser library that could allow an attacker who controls parser definitions to execute arbitrary code. The vulnerability, tracked as CVE-2026-134814 (CVSS score: 9.2 / 8.1), is a case of code injection impacting binary-parser versions prior to 2.3.1.",
-        "evidence_origin": "summary",
-        "focus": "popular binary-parser library",
-        "headline": "popular binary-parser library enables arbitrary code execution",
-        "priority": "high",
-        "significance": "This finding matters because the library is widely used and the flaw allows arbitrary code execution, which could compromise applications that incorporate it. The accountable owner should confirm whether any deployed products include affected binary-parser versions and verify remediation or compensating controls.",
-        "source_ids": [
-          1
-        ]
-      },
-      {
-        "control_id": "third_party_risk",
-        "evidence_excerpt": "Threat actors are exploiting a now-patched security flaw in ConnectWise ScreenConnect to target managed service provider (MSP) servers. The activity revolves around CVE-2026-84869 (CVSS score: 9.9), a critical ScreenConnect client flaw that allows a guest to transfer and execute a malicious payload on a connecting technician's host.",
-        "evidence_origin": "summary",
-        "focus": "ConnectWise ScreenConnect",
-        "headline": "ConnectWise ScreenConnect exposes MSP technician hosts",
-        "priority": "high",
-        "significance": "This finding matters because MSPs rely on ScreenConnect for remote management, and exploitation could give attackers control over technician endpoints, extending risk to downstream customers. The accountable owner should confirm the scope of ScreenConnect usage across suppliers and verify that patches have been applied and validated.",
-        "source_ids": [
-          2
-        ]
-      },
-      {
-        "control_id": "third_party_risk",
-        "evidence_excerpt": "N-able yesterday disclosed a critical flaw it found while investigating the breach of its Mail Assure and SpamExperts Hosted Cloud, an email filtering service it runs for managed service providers. The bug, tracked as CVE-2026-134624, is a server-side request forgery (SSRF) flaw. It allowed a user with high-level API access to open connections to internal systems of the user's choosing on the…",
-        "evidence_origin": "summary",
-        "focus": "Mail Assure and SpamExperts Hosted Cloud",
-        "headline": "Mail Assure and SpamExperts Hosted Cloud reveals SSRF vulnerability",
-        "priority": "medium",
-        "significance": "This finding matters because the email filtering service is used by MSPs for customer protection, and an SSRF flaw could allow internal network access. The accountable owner should confirm whether the organization or its suppliers use this service and request assurance of remediation from N-able.",
-        "source_ids": [
-          3
-        ]
-      },
-      {
-        "control_id": "vulnerability_management",
-        "evidence_excerpt": "Cybersecurity researchers have urged users to discontinue using a legacy ASP.NET anti-CSRF library named Idunno.AntiCsrf (\"Idunno.AntiCsrf.dll\") following the discovery of a critical vulnerability that has been exploited in the wild. The vulnerability, tracked as CVE-2026-131914, carries a CVSS score of 9.3 out of 10.0. The issue affects versions 0.9.1.0 and 0.9.1 Beta, and relates to an…",
+        "evidence_excerpt": "Cybersecurity researchers have urged users to discontinue using a legacy ASP.NET anti-CSRF library named Idunno.AntiCsrf (\"Idunno.AntiCsrf.dll\") following the discovery of a critical vulnerability that has been exploited in the wild.",
         "evidence_origin": "summary",
         "focus": "Idunno.AntiCsrf library",
-        "headline": "Idunno.AntiCsrf library enables unauthenticated remote code execution",
+        "headline": "Idunno.AntiCsrf library exploitation weakens legacy ASP.NET application security",
         "priority": "high",
-        "significance": "This finding matters because the legacy library is no longer maintained and has been exploited in the wild, posing a direct risk to applications that still depend on it. The accountable owner should identify any systems using Idunno.AntiCsrf and plan for replacement or isolation.",
+        "significance": "Exploitation of a legacy anti-CSRF library in the wild demonstrates that unsupported components remain in production environments. The vulnerability management owner should identify all applications using Idunno.AntiCsrf, verify removal or upgrading, and ensure legacy component inventories are current.",
         "source_ids": [
           4
         ]
       },
       {
         "control_id": "data_protection",
-        "evidence_excerpt": "A threat actor breached the internal network of Korea Electric Power Corporation (KEPCO) and accessed two systems containing customer, employee, and contractor data…",
+        "evidence_excerpt": "A threat actor breached the internal network of Korea Electric Power Corporation (KEPCO) and accessed two systems containing customer, employee, and contractor data",
         "evidence_origin": "summary",
         "focus": "Korea Electric Power Corporation (KEPCO)",
-        "headline": "Korea Electric Power Corporation (KEPCO) suffers data breach exposing personal information",
+        "headline": "Korea Electric Power Corporation (KEPCO) breach exposes customer employee contractor data",
         "priority": "high",
-        "significance": "This finding matters because a critical infrastructure provider lost control of sensitive personal data, indicating potential gaps in data protection controls. The accountable owner should confirm whether similar data handling practices exist in their environment and review access restrictions and audit logs.",
+        "significance": "The KEPCO breach exposing customer, employee, and contractor data shows that internal network segmentation and data access controls failed. The data protection owner should review network segmentation, data access logging, and breach notification readiness for sensitive personal data.",
         "source_ids": [
-          7
+          8
+        ]
+      },
+      {
+        "control_id": "vulnerability_management",
+        "evidence_excerpt": "Microsoft is warning customers that a security vulnerability in Azure API Management (APIM) Classic tiers was exploited to steal stored API credentials, with Norwegian authorities linking the flaw to cyberattacks against energy companies",
+        "evidence_origin": "summary",
+        "focus": "Azure API Management (APIM) Classic tiers",
+        "headline": "Azure API Management (APIM) Classic tiers vulnerability exposes stolen API credentials",
+        "priority": "high",
+        "significance": "Exploitation of an Azure API Management Classic tier flaw to steal API credentials linked to energy sector attacks indicates cloud API credential storage risks. The vulnerability management owner should confirm APIM Classic tier patching, credential rotation, and monitoring for anomalous API access.",
+        "source_ids": [
+          11
+        ]
+      },
+      {
+        "control_id": "data_protection",
+        "evidence_excerpt": "LaLiga, Spain's top men's football league, disclosed a data breach that exposed personal information belonging to users of its services and those of some affiliated clubs",
+        "evidence_origin": "summary",
+        "focus": "LaLiga",
+        "headline": "LaLiga data breach exposes personal information of users and affiliated clubs",
+        "priority": "medium",
+        "significance": "LaLiga's disclosure of personal data exposure for users and affiliated clubs highlights risks in shared sports league platforms. The data protection owner should assess data sharing agreements with affiliates, verify encryption of personal data, and confirm breach response coordination.",
+        "source_ids": [
+          12
         ]
       },
       {
         "control_id": "access_management",
-        "evidence_excerpt": "Microsoft is warning customers that a security vulnerability in Azure API Management (APIM) Classic tiers was exploited to steal stored API credentials, with Norwegian authorities linking the flaw to cyberattacks against energy companies…",
+        "evidence_excerpt": "Critical OT access devices will often tell you, and anyone else, whether they're protected by authentication — and many aren't.",
         "evidence_origin": "summary",
-        "focus": "Azure API Management (APIM) Classic tiers",
-        "headline": "Azure API Management (APIM) Classic tiers exposes stored API credentials",
-        "priority": "high",
-        "significance": "This finding matters because API credentials provide privileged access to cloud resources, and their theft could enable further compromise of customer environments. The accountable owner should verify whether the organization uses APIM Classic tiers, rotate any potentially exposed credentials, and review privileged access controls.",
+        "focus": "Critical OT access devices",
+        "headline": "Critical OT access devices broadcast insecure authentication status",
+        "priority": "medium",
+        "significance": "Industrial serial gateways broadcasting their authentication status reveals widespread lack of basic access controls on OT devices. The access management owner should inventory all OT gateways, enforce authentication requirements, and implement network segmentation to limit exposure.",
         "source_ids": [
-          10
+          6
         ]
       }
     ],
@@ -80,33 +68,56 @@
       "paragraphs": [
         {
           "source_ids": [
-            1,
-            2,
-            3,
-            4
+            4,
+            11
           ],
-          "text": "Multiple critical vulnerabilities have been disclosed in widely used software libraries and third-party remote management tools, including a code injection flaw in a popular binary parser, an exploited ScreenConnect flaw targeting managed service providers, an SSRF vulnerability in an email filtering service, and an actively exploited legacy anti-CSRF library. These findings increase supply chain risk and require urgent verification of asset inventories and supplier patching."
+          "text": "CISA's addition of actively exploited flaws to the KEV catalog underscores the urgency for vulnerability management across federal and contractor environments. Concurrent exploitation of ScreenConnect targeting MSP technicians, a legacy ASP.NET library, and Azure API Management Classic tiers demonstrates that supply chain remote access tools, outdated components, and cloud API surfaces are being weaponized. Control owners should prioritize asset inventory for these technologies, verify patching or compensating controls, and assess supplier access governance."
         },
         {
           "source_ids": [
-            7,
-            10
+            8,
+            12,
+            6
           ],
-          "text": "A data breach at a national power utility exposed personal information of customers, employees, and contractors, while a vulnerability in Azure API Management Classic tiers was exploited to steal API credentials linked to attacks on energy companies. These incidents highlight gaps in data protection and privileged access controls for critical infrastructure and cloud services."
+          "text": "Confirmed data breaches at Korea Electric Power Corporation and LaLiga, combined with research showing industrial gateways broadcasting insecure authentication states, reveal persistent gaps in data protection and operational technology access management. The accountable owners should review network segmentation, data access logging, breach notification readiness, and OT device authentication enforcement to limit exposure of personal and sensitive data."
         }
       ]
     },
     "industry_impacts": [],
     "regulatory_changes": []
   },
-  "generated_at": "2026-11-24T05:12:00.401978Z",
-  "feed_url": "https://sentrydigest.ricomanifesto.com/feed.xml",
+  "generated_at": "2026-11-24T09:19:35.824663Z",
+  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/1f3005a120cb9b70d5e920e9daaf49ce420a33a0/site/feed.xml",
   "feed_home_url": "https://sentrydigest.ricomanifesto.com/",
   "digest_issue_date": "2026-11-24",
   "digest_issue_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-24/",
   "requested_model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
   "resolved_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
   "sources": [
+    {
+      "title": "Hackers Exploit N-able MailAssure Flaw While AI Agents Exploit MONAI Label Zero-Day",
+      "url": "https://thehackernews.com/2026/11/hackers-exploit-n-able-mailassure-flaw.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-24/#reporting-d70285cdacc0",
+      "cves": [
+        "CVE-2026-134624"
+      ],
+      "snippet": "Hackers Exploit N-able MailAssure Flaw While AI Agents Exploit MONAI Label Zero-Day The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Monday added two flaws impacting N-able MailAssure and MONAI Label to its Known Exploited Vulnerabilities (KEV) catalog, citing evidence of active exploitation. The critical vulnerabilities are listed below - CVE-2026-134624 (CVSS score: 9.3) - A server-side request forgery (SSRF) vulnerability in N-able MailAssure's LDAP… The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Monday added two flaws impacting N-able MailAssure and MONAI Label to its Known Exploited Vulnerabilities (KEV) catalog, citing evidence of active exploita",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Monday added two flaws impacting N-able MailAssure and MONAI Label to its Known Exploited Vulnerabilities (KEV) catalog, citing evidence of active exploitation. The critical vulnerabilities are listed below - CVE-2026-134624 (CVSS score: 9.3) - A server-side request forgery (SSRF) vulnerability in N-able MailAssure's LDAP…",
+          "text": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Monday added two flaws impacting N-able MailAssure and MONAI Label to its Known Exploited Vulnerabilities (KEV) catalog, citing evidence of active exploitation. The critical vulnerabilities are listed below - CVE-2026-134624 (CVSS score: 9.3) - A server-side request forgery (SSRF) vulnerability in N-able MailAssure's LDAP…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Monday added two flaws impacting N-able MailAssure and MONAI Label to its Known Exploited Vulnerabilities (KEV) catalog, citing evidence of active exploitation. The critical vulnerabilities are listed below - CVE-2026-134624 (CVSS score: 9.3) - A server-side request forgery (SSRF) vulnerability in N-able MailAssure's LDAP…",
+          "text": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Monday added two flaws impacting N-able MailAssure and MONAI Label to its Known Exploited Vulnerabilities (KEV) catalog, citing evidence of active exploitation. The critical vulnerabilities are listed below - CVE-2026-134624 (CVSS score: 9.3) - A server-side request forgery (SSRF) vulnerability in N-able MailAssure's LDAP…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
     {
       "title": "Critical binary-parser Flaw Enables JavaScript Injection via Malicious Parser Definitions",
       "url": "https://thehackernews.com/2026/11/critical-binary-parser-flaw-enables.html",
@@ -156,30 +167,6 @@
       "effective_date_evidence": null
     },
     {
-      "title": "N-able Discloses Critical Mail Assure Vulnerability Found During Breach Investigation",
-      "url": "https://thehackernews.com/2026/11/n-able-discloses-critical-mail-assure.html",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-24/#reporting-89ef724f9ef4",
-      "cves": [
-        "CVE-2026-134624"
-      ],
-      "snippet": "N-able Discloses Critical Mail Assure Vulnerability Found During Breach Investigation N-able yesterday disclosed a critical flaw it found while investigating the breach of its Mail Assure and SpamExperts Hosted Cloud, an email filtering service it runs for managed service providers. The bug, tracked as CVE-2026-134624, is a server-side request forgery (SSRF) flaw. It allowed a user with high-level API access to open connections to internal systems of the user's choosing on the… N-able yesterday disclosed a critical flaw it found while investigating the breach of its Mail Assure and SpamExperts Hosted Cloud, an email filtering service it runs for managed service providers. The bug, tracked as",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "N-able yesterday disclosed a critical flaw it found while investigating the breach of its Mail Assure and SpamExperts Hosted Cloud, an email filtering service it runs for managed service providers. The bug, tracked as CVE-2026-134624, is a server-side request forgery (SSRF) flaw. It allowed a user with high-level API access to open connections to internal systems of the user's choosing on the…",
-          "text": "N-able yesterday disclosed a critical flaw it found while investigating the breach of its Mail Assure and SpamExperts Hosted Cloud, an email filtering service it runs for managed service providers. The bug, tracked as CVE-2026-134624, is a server-side request forgery (SSRF) flaw. It allowed a user with high-level API access to open connections to internal systems of the user's choosing on the…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "N-able yesterday disclosed a critical flaw it found while investigating the breach of its Mail Assure and SpamExperts Hosted Cloud, an email filtering service it runs for managed service providers. The bug, tracked as CVE-2026-134624, is a server-side request forgery (SSRF) flaw. It allowed a user with high-level API access to open connections to internal systems of the user's choosing on the…",
-          "text": "N-able yesterday disclosed a critical flaw it found while investigating the breach of its Mail Assure and SpamExperts Hosted Cloud, an email filtering service it runs for managed service providers. The bug, tracked as CVE-2026-134624, is a server-side request forgery (SSRF) flaw. It allowed a user with high-level API access to open connections to internal systems of the user's choosing on the…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
       "title": "Hackers Exploit Critical ASP.NET Anti-CSRF Library Flaw Allowing Unauthenticated RCE",
       "url": "https://thehackernews.com/2026/11/hackers-exploit-critical-aspnet-anti.html",
       "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-24/#reporting-659149ed49d8",
@@ -199,6 +186,28 @@
           "origin": "content",
           "raw_text": "Cybersecurity researchers have urged users to discontinue using a legacy ASP.NET anti-CSRF library named Idunno.AntiCsrf (\"Idunno.AntiCsrf.dll\") following the discovery of a critical vulnerability that has been exploited in the wild. The vulnerability, tracked as CVE-2026-131914, carries a CVSS score of 9.3 out of 10.0. The issue affects versions 0.9.1.0 and 0.9.1 Beta, and relates to an…",
           "text": "Cybersecurity researchers have urged users to discontinue using a legacy ASP.NET anti-CSRF library named Idunno.AntiCsrf (\"Idunno.AntiCsrf.dll\") following the discovery of a critical vulnerability that has been exploited in the wild. The vulnerability, tracked as CVE-2026-131914, carries a CVSS score of 9.3 out of 10.0. The issue affects versions 0.9.1.0 and 0.9.1 Beta, and relates to an…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "OpenAI and Cisco Unveil AI-Assisted Linux Security Tool to Block Exploits Before Patching",
+      "url": "https://thehackernews.com/2026/11/openai-and-cisco-unveil-ai-assisted.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-24/#reporting-b0d72916ebec",
+      "cves": [],
+      "snippet": "OpenAI and Cisco Unveil AI-Assisted Linux Security Tool to Block Exploits Before Patching OpenAI and Cisco have teamed up to launch Shirudo (meaning \"shield\" in Japanese), an open-source Linux runtime that allows artificial intelligence (AI) agents to defend systems without downtime. \"It lets agents write dynamic eBPF controls to shield systems from exploits, giving defenders more time to test and roll out patches,\" OpenAI said in a post on X. The AI upstart called the initiative a… OpenAI and Cisco have teamed up to launch Shirudo (meaning \"shield\" in Japanese), an open-source Linux runtime that allows artificial intelligence (AI) agents to defend systems without downtime. \"It lets agents w",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "OpenAI and Cisco have teamed up to launch Shirudo (meaning \"shield\" in Japanese), an open-source Linux runtime that allows artificial intelligence (AI) agents to defend systems without downtime. \"It lets agents write dynamic eBPF controls to shield systems from exploits, giving defenders more time to test and roll out patches,\" OpenAI said in a post on X. The AI upstart called the initiative a…",
+          "text": "OpenAI and Cisco have teamed up to launch Shirudo (meaning \"shield\" in Japanese), an open-source Linux runtime that allows artificial intelligence (AI) agents to defend systems without downtime. \"It lets agents write dynamic eBPF controls to shield systems from exploits, giving defenders more time to test and roll out patches,\" OpenAI said in a post on X. The AI upstart called the initiative a…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "OpenAI and Cisco have teamed up to launch Shirudo (meaning \"shield\" in Japanese), an open-source Linux runtime that allows artificial intelligence (AI) agents to defend systems without downtime. \"It lets agents write dynamic eBPF controls to shield systems from exploits, giving defenders more time to test and roll out patches,\" OpenAI said in a post on X. The AI upstart called the initiative a…",
+          "text": "OpenAI and Cisco have teamed up to launch Shirudo (meaning \"shield\" in Japanese), an open-source Linux runtime that allows artificial intelligence (AI) agents to defend systems without downtime. \"It lets agents write dynamic eBPF controls to shield systems from exploits, giving defenders more time to test and roll out patches,\" OpenAI said in a post on X. The AI upstart called the initiative a…"
         }
       ],
       "effective_date_evidence": null
@@ -353,28 +362,6 @@
           "origin": "content",
           "raw_text": "LaLiga, Spain's top men's football league, disclosed a data breach that exposed personal information belonging to users of its services and those of some affiliated clubs…",
           "text": "LaLiga, Spain's top men's football league, disclosed a data breach that exposed personal information belonging to users of its services and those of some affiliated clubs…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "Behind the Alias: How One Researcher Unmasked a Decade of Ransomware Actors",
-      "url": "https://www.darkreading.com/cybersecurity-operations/alias-researcher-unmasked-ransomware-actors",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-24/#reporting-a7dc0a77e742",
-      "cves": [],
-      "snippet": "Behind the Alias: How One Researcher Unmasked a Decade of Ransomware Actors Ransomware isn't slowing down. A new framework gives security teams the edge to trace attackers back to their source. Ransomware isn't slowing down. A new framework gives security teams the edge to trace attackers back to their source.",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "Ransomware isn't slowing down. A new framework gives security teams the edge to trace attackers back to their source.",
-          "text": "Ransomware isn't slowing down. A new framework gives security teams the edge to trace attackers back to their source."
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "Ransomware isn't slowing down. A new framework gives security teams the edge to trace attackers back to their source.",
-          "text": "Ransomware isn't slowing down. A new framework gives security teams the edge to trace attackers back to their source."
         }
       ],
       "effective_date_evidence": null
