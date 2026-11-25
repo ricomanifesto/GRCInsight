@@ -5060,6 +5060,12 @@
       "run_id": "45518988360",
       "source_revision": "35705b7b1d1a03addd3b43d6e8341e4033197eaa",
       "stage": "admitted"
+    },
+    {
+      "admission_key": "digest:35705b7b1d1a03addd3b43d6e8341e4033197eaa",
+      "at": "2026-11-25T00:33:46.691Z",
+      "run_id": "45518988360",
+      "stage": "invoked"
     }
   ],
   "schema_version": 1,
