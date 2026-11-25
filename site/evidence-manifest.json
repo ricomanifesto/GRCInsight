@@ -5,62 +5,74 @@
     "control_implications": [
       {
         "control_id": "vulnerability_management",
-        "evidence_excerpt": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Tuesday added a critical flaw impacting Drupal to its Known Exploited Vulnerabilities (KEV) catalog, requiring federal agencies to apply the fixes by November 27, 2026. The vulnerability, tracked as CVE-2026-132165 aka Fail2Install (CVSS score: 9.8), is a case of remote code execution (RCE) impacting Drupal core.",
+        "evidence_excerpt": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Tuesday added a critical flaw impacting Drupal to its Known Exploited Vulnerabilities (KEV) catalog, requiring federal agencies to apply the fixes by November 27, 2026. The vulnerability, tracked as CVE-2026-132165 aka Fail2Install (CVSS score: 9.8), is a case of remote code execution (RCE) impacting Drupal core. \"Drupal Core…",
         "evidence_origin": "summary",
         "focus": "Drupal core",
-        "headline": "Drupal core added to CISA KEV catalog requiring federal agency patching",
+        "headline": "Drupal core requires urgent patching per CISA directive",
         "priority": "high",
-        "significance": "This development matters for control assurance because a critical remote code execution flaw in widely used content management software now has a federal remediation deadline. The accountable owner should confirm affected Drupal instances are identified and patched within the required timeframe.",
-        "source_ids": [
-          1
-        ]
-      },
-      {
-        "control_id": "vulnerability_management",
-        "evidence_excerpt": "Broadcom has shipped patches to address 23 vulnerabilities impacting VMware ESX, vCenter, Workstation, Fusion, and Avi Load Balancer, including one critical bug that could be abused to bypass authentication. The critical vulnerability, tracked as CVE-2026-123903, is rated 9.8 out of 10.0 on the CVSS scoring system. It resides in the VMware Directory Service (\"vmdir\").",
-        "evidence_origin": "summary",
-        "focus": "VMware Directory Service",
-        "headline": "VMware Directory Service receives critical authentication bypass patch",
-        "priority": "high",
-        "significance": "This development matters for control assurance because a critical authentication bypass in core virtualization infrastructure could allow unauthorized administrative access. The accountable owner should confirm all affected VMware products are inventoried and patched.",
+        "significance": "The CISA KEV inclusion mandates federal agencies to remediate a critical RCE in Drupal core by a fixed deadline, elevating patching priority for all Drupal deployments. Vulnerability owners must confirm affected assets are identified and patched or compensated.",
         "source_ids": [
           2
         ]
       },
       {
-        "control_id": "third_party_risk",
-        "evidence_excerpt": "An attacker ran operating system commands on Monday on six production servers of Hex.pm, the package registry that Elixir and Erlang developers fetch their dependencies from. The flaw used in the attack had been in the registry's code since February 2016, and the team that maintains the service had every server on a patched build within about 15 minutes of the first malicious request.",
+        "control_id": "vulnerability_management",
+        "evidence_excerpt": "Threat actors are actively exploiting two newly patched security flaws in GeoServer, according to watchTowr. The vulnerabilities in question are CVE-2026-120705 and CVE-2026-129243, details of which are below - CVE-2026-120705 (CVSS score: 8.6) - An arbitrary file read vulnerability that could enable an attacker to access local text files readable by the GeoServer process or fetch…",
         "evidence_origin": "summary",
-        "focus": "Hex.pm package registry",
-        "headline": "Hex.pm package registry compromised via decade-old supply chain flaw",
+        "focus": "GeoServer",
+        "headline": "GeoServer faces active exploitation of critical flaws",
         "priority": "high",
-        "significance": "This development matters for control assurance because a long-dormant vulnerability in a critical dependency registry was actively exploited, demonstrating supply chain risk persistence. The accountable owner should confirm dependency source integrity controls and supplier incident response capabilities.",
+        "significance": "Active exploitation of GeoServer vulnerabilities demands immediate asset identification and patching to prevent unauthorized file access. Vulnerability owners must verify GeoServer instances are inventoried and remediated.",
+        "source_ids": [
+          1
+        ]
+      },
+      {
+        "control_id": "third_party_risk",
+        "evidence_excerpt": "Eclypsium's November InfraTrust report warns that most infrastructure security advisories addressing exploited vulnerabilities over the past month involve flaws in third-party software bundled into products rather than code developed by the vendors themselves…",
+        "evidence_origin": "summary",
+        "focus": "third-party software bundled into products",
+        "headline": "Third-party software bundled into products drives exploited advisories",
+        "priority": "high",
+        "significance": "The prevalence of exploited flaws in bundled third-party components shifts accountability to supplier assurance programs. Supplier risk owners must review vendor dependency maps and demand evidence of component-level vulnerability management.",
+        "source_ids": [
+          5
+        ]
+      },
+      {
+        "control_id": "incident_response",
+        "evidence_excerpt": "The U.S. Treasury Department's Financial Crimes Enforcement Network (FinCEN) has been hit by a cybersecurity incident that resulted in \"unauthorized access to a limited subset of its systems,\" the bureau said on Tuesday. As a precaution, it has taken some systems offline. The bureau collects suspicious activity reports and other Bank Secrecy Act (BSA) filings from banks and other financial…",
+        "evidence_origin": "summary",
+        "focus": "Financial Crimes Enforcement Network (FinCEN)",
+        "headline": "Financial Crimes Enforcement Network (FinCEN) suffers unauthorized access incident",
+        "priority": "high",
+        "significance": "A breach at the financial intelligence unit underscores the need for robust containment and evidence preservation in high-value targets. Incident response leads must verify that detection coverage and offline procedures are tested for similar critical systems.",
         "source_ids": [
           8
         ]
       },
       {
-        "control_id": "monitoring",
-        "evidence_excerpt": "An unknown threat actor has been using artificial intelligence (AI)-driven offensive tooling in a campaign targeting Check Point Security Management servers, impacting 22 distinct organizations across the world. The intrusion activity, tracked by GreyNoise under the moniker GreyNoise Threat 13 (GT13), is assessed to have targeted organizations in the financial services, energy, government",
+        "control_id": "access_management",
+        "evidence_excerpt": "More than 64% still valid after four years: GitGuardian’s State of Secrets Sprawl 2026 found that most valid secrets discovered in 2022 still worked in January 2026, because teams stall on what a revoke will break. Validity-only triage misses 46% of critical secrets: Prioritize by impact instead, weighing what a credential can access and whether it leaked publicly, and update the…",
         "evidence_origin": "summary",
-        "focus": "Check Point Security Management servers",
-        "headline": "Check Point Security Management servers targeted by AI-driven campaign",
-        "priority": "high",
-        "significance": "This development matters for control assurance because AI-driven offensive tooling is actively compromising security management infrastructure across multiple sectors. The accountable owner should confirm detection coverage for anomalous management server activity and review supplier threat intelligence sharing.",
+        "focus": "valid secrets discovered in 2022",
+        "headline": "Valid secrets discovered in 2022 remain active despite remediation delays",
+        "priority": "medium",
+        "significance": "Long-lived valid secrets indicate broken revocation workflows and insufficient impact-based prioritization. Access management owners must confirm that credential inventories are tied to dependency mapping and that revocation testing is routine.",
         "source_ids": [
-          11
+          9
         ]
       },
       {
         "control_id": "access_management",
-        "evidence_excerpt": "Palo Alto Networks Unit 42 has disclosed that it's tracking and has responded to \"numerous waves of vishing attacks\" orchestrated by Com-affiliated threat actors since August 2026 that have led to data theft and extortion attempts. The attacks have targeted financial services, healthcare, and legal services located in the U.S., the U.K., and Australia.",
+        "evidence_excerpt": "Bot detection has become a losing game. Security teams need to limit privileged access for humans and their machine counterparts equally.",
         "evidence_origin": "summary",
-        "focus": "cloud accounts",
-        "headline": "Cloud accounts hijacked via vishing for data theft and extortion",
+        "focus": "privileged access for humans and their machine counterparts",
+        "headline": "Privileged access for humans and their machine counterparts requires equal limitation",
         "priority": "medium",
-        "significance": "This development matters for control assurance because voice-based social engineering is bypassing technical controls to compromise cloud identities in regulated sectors. The accountable owner should confirm identity verification controls resist vishing and cloud access monitoring detects anomalous administrative actions.",
+        "significance": "The erosion of bot detection efficacy expands the attack surface for credential misuse across human and machine identities. Access management owners must verify that privileged session controls and just-in-time provisioning cover both human and automated accounts.",
         "source_ids": [
-          12
+          3
         ]
       }
     ],
@@ -68,32 +80,57 @@
       "paragraphs": [
         {
           "source_ids": [
-            1,
             2,
-            8
+            1
           ],
-          "text": "Critical vulnerabilities in widely deployed platforms have entered active exploitation with federal remediation deadlines, while credential hygiene failures persist across the ecosystem. CISA added a critical Drupal remote code execution flaw to its Known Exploited Vulnerabilities catalog requiring federal agency patching, Broadcom released patches for 23 VMware vulnerabilities including a critical authentication bypass, and a decade-old flaw in the Hex.pm package registry was exploited to compromise production servers. Simultaneously, research shows most valid secrets discovered years ago remain active because teams hesitate to revoke them, and validity-only triage misses nearly half of critical credentials."
+          "text": "Critical vulnerability deadlines and active exploitation dominate the quarter, with CISA adding a Drupal RCE to its KEV catalog requiring federal patching by November 27 and threat actors exploiting GeoServer flaws in the wild. These developments force vulnerability owners to accelerate asset discovery, validate patch deployment, and document compensating controls for any unpatched instances."
         },
         {
           "source_ids": [
-            11,
-            12
+            5,
+            9,
+            3
           ],
-          "text": "AI-driven offensive tooling is now targeting security management infrastructure and cloud identities through social engineering, expanding the threat surface for monitoring and access controls. An AI-driven campaign compromised Check Point Security Management servers across 22 organizations in financial services, energy, and government sectors, while Com-affiliated actors conduct vishing waves against cloud accounts in healthcare, legal, and financial services leading to data theft and extortion. These developments indicate that both automated attack tooling and human-targeted deception are bypassing traditional perimeter defenses."
+          "text": "Supply chain exposure, credential hygiene gaps, and privileged access erosion compound risk across third-party dependencies and identity management. The InfraTrust report highlights that most exploited advisories stem from bundled third-party components, while GitGuardian data shows most secrets remain valid for years, and bot detection failures demand equal privilege limits for human and machine accounts."
         }
       ]
     },
     "industry_impacts": [],
     "regulatory_changes": []
   },
-  "generated_at": "2026-11-25T13:09:08.471222Z",
-  "feed_url": "https://sentrydigest.ricomanifesto.com/feed.xml",
+  "generated_at": "2026-11-25T15:22:30.61715Z",
+  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/981b89484a7428b54222d09d3d3f0c5e98acdf44/site/feed.xml",
   "feed_home_url": "https://sentrydigest.ricomanifesto.com/",
   "digest_issue_date": "2026-11-25",
   "digest_issue_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-25/",
   "requested_model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
   "resolved_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
   "sources": [
+    {
+      "title": "Hackers Exploit Two GeoServer Flaws as Researchers Warn of Unauthenticated RCE Chains",
+      "url": "https://thehackernews.com/2026/11/hackers-exploit-two-geoserver-flaws-as.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-25/#reporting-27873297949c",
+      "cves": [
+        "CVE-2026-120705",
+        "CVE-2026-129243"
+      ],
+      "snippet": "Hackers Exploit Two GeoServer Flaws as Researchers Warn of Unauthenticated RCE Chains Threat actors are actively exploiting two newly patched security flaws in GeoServer, according to watchTowr. The vulnerabilities in question are CVE-2026-120705 and CVE-2026-129243, details of which are below - CVE-2026-120705 (CVSS score: 8.6) - An arbitrary file read vulnerability that could enable an attacker to access local text files readable by the GeoServer process or fetch… Threat actors are actively exploiting two newly patched security flaws in GeoServer, according to watchTowr. The vulnerabilities in question are CVE-2026-120705 and CVE-2026-129243, details of which are below - CVE-2026-120705 (C",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Threat actors are actively exploiting two newly patched security flaws in GeoServer, according to watchTowr. The vulnerabilities in question are CVE-2026-120705 and CVE-2026-129243, details of which are below - CVE-2026-120705 (CVSS score: 8.6) - An arbitrary file read vulnerability that could enable an attacker to access local text files readable by the GeoServer process or fetch…",
+          "text": "Threat actors are actively exploiting two newly patched security flaws in GeoServer, according to watchTowr. The vulnerabilities in question are CVE-2026-120705 and CVE-2026-129243, details of which are below - CVE-2026-120705 (CVSS score: 8.6) - An arbitrary file read vulnerability that could enable an attacker to access local text files readable by the GeoServer process or fetch…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Threat actors are actively exploiting two newly patched security flaws in GeoServer, according to watchTowr. The vulnerabilities in question are CVE-2026-120705 and CVE-2026-129243, details of which are below - CVE-2026-120705 (CVSS score: 8.6) - An arbitrary file read vulnerability that could enable an attacker to access local text files readable by the GeoServer process or fetch…",
+          "text": "Threat actors are actively exploiting two newly patched security flaws in GeoServer, according to watchTowr. The vulnerabilities in question are CVE-2026-120705 and CVE-2026-129243, details of which are below - CVE-2026-120705 (CVSS score: 8.6) - An arbitrary file read vulnerability that could enable an attacker to access local text files readable by the GeoServer process or fetch…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
     {
       "title": "Drupal Fail2Install Exploit Details Emerge as Critical RCE Flaw Faces Active Exploitation",
       "url": "https://thehackernews.com/2026/11/drupal-fail2install-exploit-details.html",
@@ -119,25 +156,67 @@
       "effective_date_evidence": null
     },
     {
-      "title": "VMware vCenter Hit by Another Critical 9.8-Rated Auth Bypass Flaw After Zero-Day Exploitation",
-      "url": "https://thehackernews.com/2026/11/vmware-vcenter-hit-by-another-critical.html",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-25/#reporting-aa014f4b55f4",
-      "cves": [
-        "CVE-2026-123903"
-      ],
-      "snippet": "VMware vCenter Hit by Another Critical 9.8-Rated Auth Bypass Flaw After Zero-Day Exploitation Broadcom has shipped patches to address 23 vulnerabilities impacting VMware ESX, vCenter, Workstation, Fusion, and Avi Load Balancer, including one critical bug that could be abused to bypass authentication. The critical vulnerability, tracked as CVE-2026-123903, is rated 9.8 out of 10.0 on the CVSS scoring system. It resides in the VMware Directory Service (\"vmdir\"). \"A malicious actor with… Broadcom has shipped patches to address 23 vulnerabilities impacting VMware ESX, vCenter, Workstation, Fusion, and Avi Load Balancer, including one critical bug that could be abused to bypass authentication. Th",
+      "title": "It's a Bot World. We're Just Living in It",
+      "url": "https://www.darkreading.com/cyber-risk/bot-world-just-living",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-25/#reporting-60b6b3868921",
+      "cves": [],
+      "snippet": "It's a Bot World. We're Just Living in It Bot detection has become a losing game. Security teams need to limit privileged access for humans and their machine counterparts equally. Bot detection has become a losing game. Security teams need to limit privileged access for humans and their machine counterparts equally.",
       "article_evidence": [
         {
           "extraction_version": 1,
           "origin": "summary",
-          "raw_text": "Broadcom has shipped patches to address 23 vulnerabilities impacting VMware ESX, vCenter, Workstation, Fusion, and Avi Load Balancer, including one critical bug that could be abused to bypass authentication. The critical vulnerability, tracked as CVE-2026-123903, is rated 9.8 out of 10.0 on the CVSS scoring system. It resides in the VMware Directory Service (\"vmdir\"). \"A malicious actor with…",
-          "text": "Broadcom has shipped patches to address 23 vulnerabilities impacting VMware ESX, vCenter, Workstation, Fusion, and Avi Load Balancer, including one critical bug that could be abused to bypass authentication. The critical vulnerability, tracked as CVE-2026-123903, is rated 9.8 out of 10.0 on the CVSS scoring system. It resides in the VMware Directory Service (\"vmdir\"). \"A malicious actor with…"
+          "raw_text": "Bot detection has become a losing game. Security teams need to limit privileged access for humans and their machine counterparts equally.",
+          "text": "Bot detection has become a losing game. Security teams need to limit privileged access for humans and their machine counterparts equally."
         },
         {
           "extraction_version": 1,
           "origin": "content",
-          "raw_text": "Broadcom has shipped patches to address 23 vulnerabilities impacting VMware ESX, vCenter, Workstation, Fusion, and Avi Load Balancer, including one critical bug that could be abused to bypass authentication. The critical vulnerability, tracked as CVE-2026-123903, is rated 9.8 out of 10.0 on the CVSS scoring system. It resides in the VMware Directory Service (\"vmdir\"). \"A malicious actor with…",
-          "text": "Broadcom has shipped patches to address 23 vulnerabilities impacting VMware ESX, vCenter, Workstation, Fusion, and Avi Load Balancer, including one critical bug that could be abused to bypass authentication. The critical vulnerability, tracked as CVE-2026-123903, is rated 9.8 out of 10.0 on the CVSS scoring system. It resides in the VMware Directory Service (\"vmdir\"). \"A malicious actor with…"
+          "raw_text": "Bot detection has become a losing game. Security teams need to limit privileged access for humans and their machine counterparts equally.",
+          "text": "Bot detection has become a losing game. Security teams need to limit privileged access for humans and their machine counterparts equally."
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "More Pentests Without More Pentesters: Where AI Safely Helps",
+      "url": "https://www.bleepingcomputer.com/news/security/more-pentests-without-more-pentesters-where-ai-safely-helps/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-25/#reporting-571e665497ad",
+      "cves": [],
+      "snippet": "More Pentests Without More Pentesters: Where AI Safely Helps Penetration testers spend a significant portion of their engagements on documentation, reporting, and other tasks outside of testing. PentestPad explains how AI can reduce this workload, help teams handle more engagements, and keep sensitive client data within their own infrastructure… Penetration testers spend a significant portion of their engagements on documentation, reporting, and other tasks outside of testing. PentestPad explains how AI can reduce this workload, help teams handle more engagements, and keep sensitive client data within their own infrastructure…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Penetration testers spend a significant portion of their engagements on documentation, reporting, and other tasks outside of testing. PentestPad explains how AI can reduce this workload, help teams handle more engagements, and keep sensitive client data within their own infrastructure…",
+          "text": "Penetration testers spend a significant portion of their engagements on documentation, reporting, and other tasks outside of testing. PentestPad explains how AI can reduce this workload, help teams handle more engagements, and keep sensitive client data within their own infrastructure…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Penetration testers spend a significant portion of their engagements on documentation, reporting, and other tasks outside of testing. PentestPad explains how AI can reduce this workload, help teams handle more engagements, and keep sensitive client data within their own infrastructure…",
+          "text": "Penetration testers spend a significant portion of their engagements on documentation, reporting, and other tasks outside of testing. PentestPad explains how AI can reduce this workload, help teams handle more engagements, and keep sensitive client data within their own infrastructure…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "InfraTrust warns of exploited supply chain flaws in network appliances",
+      "url": "https://www.bleepingcomputer.com/news/security/infratrust-warns-of-exploited-supply-chain-flaws-in-network-appliances/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-25/#reporting-918f8236c2b6",
+      "cves": [],
+      "snippet": "InfraTrust warns of exploited supply chain flaws in network appliances Eclypsium's November InfraTrust report warns that most infrastructure security advisories addressing exploited vulnerabilities over the past month involve flaws in third-party software bundled into products rather than code developed by the vendors themselves… Eclypsium's November InfraTrust report warns that most infrastructure security advisories addressing exploited vulnerabilities over the past month involve flaws in third-party software bundled into products rather than code developed by the vendors themselves…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Eclypsium's November InfraTrust report warns that most infrastructure security advisories addressing exploited vulnerabilities over the past month involve flaws in third-party software bundled into products rather than code developed by the vendors themselves…",
+          "text": "Eclypsium's November InfraTrust report warns that most infrastructure security advisories addressing exploited vulnerabilities over the past month involve flaws in third-party software bundled into products rather than code developed by the vendors themselves…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Eclypsium's November InfraTrust report warns that most infrastructure security advisories addressing exploited vulnerabilities over the past month involve flaws in third-party software bundled into products rather than code developed by the vendors themselves…",
+          "text": "Eclypsium's November InfraTrust report warns that most infrastructure security advisories addressing exploited vulnerabilities over the past month involve flaws in third-party software bundled into products rather than code developed by the vendors themselves…"
         }
       ],
       "effective_date_evidence": null
@@ -147,19 +226,63 @@
       "url": "https://www.darkreading.com/cybersecurity-operations/cyber-insurers-see-new-ai-divide",
       "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-25/#reporting-45ee7c2e482d",
       "cves": [],
-      "snippet": "Cyber Insurers See New Divide: AI Defense 'Haves' & 'Have Nots' Dark Reading Confidential Episode 23: Cyber insurers share their view of the AI-driven threat landscape and how mounting challenges are putting pressure on both sides of the policy, leaving the current model unsustainable. Dark Reading Confidential Episode 23: Cyber insurers share their view of the AI-driven threat landscape and how mounting challenges are putting pressure on both sides of the policy, leaving the current model unsustainable.",
+      "snippet": "Cyber Insurers See New Divide: AI Defense 'Haves' & 'Have Nots' Dark Reading Confidential Episode 23: Cyber insurers share their view of the AI-driven threat landscape and how mounting challenges are putting pressure on both sides of the policy, making the current model unsustainable. Dark Reading Confidential Episode 23: Cyber insurers share their view of the AI-driven threat landscape and how mounting challenges are putting pressure on both sides of the policy, making the current model unsustainable.",
       "article_evidence": [
         {
           "extraction_version": 1,
           "origin": "summary",
-          "raw_text": "Dark Reading Confidential Episode 23: Cyber insurers share their view of the AI-driven threat landscape and how mounting challenges are putting pressure on both sides of the policy, leaving the current model unsustainable.",
-          "text": "Dark Reading Confidential Episode 23: Cyber insurers share their view of the AI-driven threat landscape and how mounting challenges are putting pressure on both sides of the policy, leaving the current model unsustainable."
+          "raw_text": "Dark Reading Confidential Episode 23: Cyber insurers share their view of the AI-driven threat landscape and how mounting challenges are putting pressure on both sides of the policy, making the current model unsustainable.",
+          "text": "Dark Reading Confidential Episode 23: Cyber insurers share their view of the AI-driven threat landscape and how mounting challenges are putting pressure on both sides of the policy, making the current model unsustainable."
         },
         {
           "extraction_version": 1,
           "origin": "content",
-          "raw_text": "Dark Reading Confidential Episode 23: Cyber insurers share their view of the AI-driven threat landscape and how mounting challenges are putting pressure on both sides of the policy, leaving the current model unsustainable.",
-          "text": "Dark Reading Confidential Episode 23: Cyber insurers share their view of the AI-driven threat landscape and how mounting challenges are putting pressure on both sides of the policy, leaving the current model unsustainable."
+          "raw_text": "Dark Reading Confidential Episode 23: Cyber insurers share their view of the AI-driven threat landscape and how mounting challenges are putting pressure on both sides of the policy, making the current model unsustainable.",
+          "text": "Dark Reading Confidential Episode 23: Cyber insurers share their view of the AI-driven threat landscape and how mounting challenges are putting pressure on both sides of the policy, making the current model unsustainable."
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Latin America Sees Cyberattacks on Ports, Pipelines & Manufacturing",
+      "url": "https://www.darkreading.com/cyberattacks-data-breaches/latin-america-cyberattacks-ports-pipelines-manufacturing",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-25/#reporting-1ccaa1266b3e",
+      "cves": [],
+      "snippet": "Latin America Sees Cyberattacks on Ports, Pipelines & Manufacturing From the Port of Santos in Brazil to a pipeline in Argentina, cyberattacks are increasingly affecting industrial systems throughout the region. From the Port of Santos in Brazil to a pipeline in Argentina, cyberattacks are increasingly affecting industrial systems throughout the region.",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "From the Port of Santos in Brazil to a pipeline in Argentina, cyberattacks are increasingly affecting industrial systems throughout the region.",
+          "text": "From the Port of Santos in Brazil to a pipeline in Argentina, cyberattacks are increasingly affecting industrial systems throughout the region."
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "From the Port of Santos in Brazil to a pipeline in Argentina, cyberattacks are increasingly affecting industrial systems throughout the region.",
+          "text": "From the Port of Santos in Brazil to a pipeline in Argentina, cyberattacks are increasingly affecting industrial systems throughout the region."
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "U.S. Treasury's Financial Crimes Agency Takes Some Systems Offline After Cyber Intrusion",
+      "url": "https://thehackernews.com/2026/11/us-treasurys-fincen-takes-some-systems.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-25/#reporting-b72d4a699599",
+      "cves": [],
+      "snippet": "U.S. Treasury's Financial Crimes Agency Takes Some Systems Offline After Cyber Intrusion The U.S. Treasury Department's Financial Crimes Enforcement Network (FinCEN) has been hit by a cybersecurity incident that resulted in \"unauthorized access to a limited subset of its systems,\" the bureau said on Tuesday. As a precaution, it has taken some systems offline. The bureau collects suspicious activity reports and other Bank Secrecy Act (BSA) filings from banks and other financial… The U.S. Treasury Department's Financial Crimes Enforcement Network (FinCEN) has been hit by a cybersecurity incident that resulted in \"unauthorized access to a limited subset of its systems,\" the bureau said on Tuesd",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "The U.S. Treasury Department's Financial Crimes Enforcement Network (FinCEN) has been hit by a cybersecurity incident that resulted in \"unauthorized access to a limited subset of its systems,\" the bureau said on Tuesday. As a precaution, it has taken some systems offline. The bureau collects suspicious activity reports and other Bank Secrecy Act (BSA) filings from banks and other financial…",
+          "text": "The U.S. Treasury Department's Financial Crimes Enforcement Network (FinCEN) has been hit by a cybersecurity incident that resulted in \"unauthorized access to a limited subset of its systems,\" the bureau said on Tuesday. As a precaution, it has taken some systems offline. The bureau collects suspicious activity reports and other Bank Secrecy Act (BSA) filings from banks and other financial…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "The U.S. Treasury Department's Financial Crimes Enforcement Network (FinCEN) has been hit by a cybersecurity incident that resulted in \"unauthorized access to a limited subset of its systems,\" the bureau said on Tuesday. As a precaution, it has taken some systems offline. The bureau collects suspicious activity reports and other Bank Secrecy Act (BSA) filings from banks and other financial…",
+          "text": "The U.S. Treasury Department's Financial Crimes Enforcement Network (FinCEN) has been hit by a cybersecurity incident that resulted in \"unauthorized access to a limited subset of its systems,\" the bureau said on Tuesday. As a precaution, it has taken some systems offline. The bureau collects suspicious activity reports and other Bank Secrecy Act (BSA) filings from banks and other financial…"
         }
       ],
       "effective_date_evidence": null
@@ -248,116 +371,6 @@
           "origin": "content",
           "raw_text": "The Drupal security team has confirmed that a critical vulnerability that lets attackers hijack unpatched sites has been actively exploited since at least Thursday…",
           "text": "The Drupal security team has confirmed that a critical vulnerability that lets attackers hijack unpatched sites has been actively exploited since at least Thursday…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "Hackers Exploited CVSS 10.0 Hex.pm RCE Flaw to Compromise 6 Package Registry Servers",
-      "url": "https://thehackernews.com/2026/11/hackers-exploited-cvss-100-hexpm-rce.html",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-25/#reporting-c4aa0fb84786",
-      "cves": [],
-      "snippet": "Hackers Exploited CVSS 10.0 Hex.pm RCE Flaw to Compromise 6 Package Registry Servers An attacker ran operating system commands on Monday on six production servers of Hex.pm, the package registry that Elixir and Erlang developers fetch their dependencies from. The flaw used in the attack had been in the registry's code since February 2016, and the team that maintains the service had every server on a patched build within about 15 minutes of the first malicious request. Checks… An attacker ran operating system commands on Monday on six production servers of Hex.pm, the package registry that Elixir and Erlang developers fetch their dependencies from. The flaw used in the attack had been in the ",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "An attacker ran operating system commands on Monday on six production servers of Hex.pm, the package registry that Elixir and Erlang developers fetch their dependencies from. The flaw used in the attack had been in the registry's code since February 2016, and the team that maintains the service had every server on a patched build within about 15 minutes of the first malicious request. Checks…",
-          "text": "An attacker ran operating system commands on Monday on six production servers of Hex.pm, the package registry that Elixir and Erlang developers fetch their dependencies from. The flaw used in the attack had been in the registry's code since February 2016, and the team that maintains the service had every server on a patched build within about 15 minutes of the first malicious request. Checks…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "An attacker ran operating system commands on Monday on six production servers of Hex.pm, the package registry that Elixir and Erlang developers fetch their dependencies from. The flaw used in the attack had been in the registry's code since February 2016, and the team that maintains the service had every server on a patched build within about 15 minutes of the first malicious request. Checks…",
-          "text": "An attacker ran operating system commands on Monday on six production servers of Hex.pm, the package registry that Elixir and Erlang developers fetch their dependencies from. The flaw used in the attack had been in the registry's code since February 2016, and the team that maintains the service had every server on a patched build within about 15 minutes of the first malicious request. Checks…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "Microsoft confirms authentication issues after November updates",
-      "url": "https://www.bleepingcomputer.com/news/microsoft/microsoft-confirms-authentication-issues-after-november-updates/",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-25/#reporting-29df4a0d48be",
-      "cves": [],
-      "snippet": "Microsoft confirms authentication issues after November updates Microsoft has confirmed that customers may experience authentication issues after installing November security updates that address a high-severity remote code execution vulnerability… Microsoft has confirmed that customers may experience authentication issues after installing November security updates that address a high-severity remote code execution vulnerability…",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "Microsoft has confirmed that customers may experience authentication issues after installing November security updates that address a high-severity remote code execution vulnerability…",
-          "text": "Microsoft has confirmed that customers may experience authentication issues after installing November security updates that address a high-severity remote code execution vulnerability…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "Microsoft has confirmed that customers may experience authentication issues after installing November security updates that address a high-severity remote code execution vulnerability…",
-          "text": "Microsoft has confirmed that customers may experience authentication issues after installing November security updates that address a high-severity remote code execution vulnerability…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "Hackers reportedly breached CIA intelligence analysis system",
-      "url": "https://www.bleepingcomputer.com/news/security/hackers-reportedly-breached-cia-intelligence-analysis-system/",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-25/#reporting-0fe0d4f016d0",
-      "cves": [],
-      "snippet": "Hackers reportedly breached CIA intelligence analysis system Unknown attackers have reportedly breached an open-source intelligence analysis system at the US Central Intelligence Agency (CIA)… Unknown attackers have reportedly breached an open-source intelligence analysis system at the US Central Intelligence Agency (CIA)…",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "Unknown attackers have reportedly breached an open-source intelligence analysis system at the US Central Intelligence Agency (CIA)…",
-          "text": "Unknown attackers have reportedly breached an open-source intelligence analysis system at the US Central Intelligence Agency (CIA)…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "Unknown attackers have reportedly breached an open-source intelligence analysis system at the US Central Intelligence Agency (CIA)…",
-          "text": "Unknown attackers have reportedly breached an open-source intelligence analysis system at the US Central Intelligence Agency (CIA)…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "Hackers Compromise 24 Check Point Management Servers in Suspected AI-Driven Attack Campaign",
-      "url": "https://thehackernews.com/2026/11/hackers-compromise-24-check-point.html",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-25/#reporting-d5f3ce6a4d9a",
-      "cves": [],
-      "snippet": "Hackers Compromise 24 Check Point Management Servers in Suspected AI-Driven Attack Campaign An unknown threat actor has been using artificial intelligence (AI)-driven offensive tooling in a campaign targeting Check Point Security Management servers, impacting 22 distinct organizations across the world. The intrusion activity, tracked by GreyNoise under the moniker GreyNoise Threat 13 (GT13), is assessed to have targeted organizations in the financial services, energy, government… An unknown threat actor has been using artificial intelligence (AI)-driven offensive tooling in a campaign targeting Check Point Security Management servers, impacting 22 distinct organizations across the world. The",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "An unknown threat actor has been using artificial intelligence (AI)-driven offensive tooling in a campaign targeting Check Point Security Management servers, impacting 22 distinct organizations across the world. The intrusion activity, tracked by GreyNoise under the moniker GreyNoise Threat 13 (GT13), is assessed to have targeted organizations in the financial services, energy, government…",
-          "text": "An unknown threat actor has been using artificial intelligence (AI)-driven offensive tooling in a campaign targeting Check Point Security Management servers, impacting 22 distinct organizations across the world. The intrusion activity, tracked by GreyNoise under the moniker GreyNoise Threat 13 (GT13), is assessed to have targeted organizations in the financial services, energy, government…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "An unknown threat actor has been using artificial intelligence (AI)-driven offensive tooling in a campaign targeting Check Point Security Management servers, impacting 22 distinct organizations across the world. The intrusion activity, tracked by GreyNoise under the moniker GreyNoise Threat 13 (GT13), is assessed to have targeted organizations in the financial services, energy, government…",
-          "text": "An unknown threat actor has been using artificial intelligence (AI)-driven offensive tooling in a campaign targeting Check Point Security Management servers, impacting 22 distinct organizations across the world. The intrusion activity, tracked by GreyNoise under the moniker GreyNoise Threat 13 (GT13), is assessed to have targeted organizations in the financial services, energy, government…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "Com-Affiliated Hackers Hijack Cloud Accounts via Vishing for Data Theft and Extortion",
-      "url": "https://thehackernews.com/2026/11/com-affiliated-hackers-hijack-cloud.html",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-25/#reporting-da2703c97fc2",
-      "cves": [],
-      "snippet": "Com-Affiliated Hackers Hijack Cloud Accounts via Vishing for Data Theft and Extortion Palo Alto Networks Unit 42 has disclosed that it's tracking and has responded to \"numerous waves of vishing attacks\" orchestrated by Com-affiliated threat actors since August 2026 that have led to data theft and extortion attempts. The attacks have targeted financial services, healthcare, and legal services located in the U.S., the U.K., and Australia. Other targets include construction… Palo Alto Networks Unit 42 has disclosed that it's tracking and has responded to \"numerous waves of vishing attacks\" orchestrated by Com-affiliated threat actors since August 2026 that have led to data theft and extortion a",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "Palo Alto Networks Unit 42 has disclosed that it's tracking and has responded to \"numerous waves of vishing attacks\" orchestrated by Com-affiliated threat actors since August 2026 that have led to data theft and extortion attempts. The attacks have targeted financial services, healthcare, and legal services located in the U.S., the U.K., and Australia. Other targets include construction…",
-          "text": "Palo Alto Networks Unit 42 has disclosed that it's tracking and has responded to \"numerous waves of vishing attacks\" orchestrated by Com-affiliated threat actors since August 2026 that have led to data theft and extortion attempts. The attacks have targeted financial services, healthcare, and legal services located in the U.S., the U.K., and Australia. Other targets include construction…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "Palo Alto Networks Unit 42 has disclosed that it's tracking and has responded to \"numerous waves of vishing attacks\" orchestrated by Com-affiliated threat actors since August 2026 that have led to data theft and extortion attempts. The attacks have targeted financial services, healthcare, and legal services located in the U.S., the U.K., and Australia. Other targets include construction…",
-          "text": "Palo Alto Networks Unit 42 has disclosed that it's tracking and has responded to \"numerous waves of vishing attacks\" orchestrated by Com-affiliated threat actors since August 2026 that have led to data theft and extortion attempts. The attacks have targeted financial services, healthcare, and legal services located in the U.S., the U.K., and Australia. Other targets include construction…"
         }
       ],
       "effective_date_evidence": null

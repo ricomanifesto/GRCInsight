@@ -1,8 +1,8 @@
 # GRC Intelligence Report - 2026-11-25
-**Generated:** 2026-11-25T13:09:08.471222Z
+**Generated:** 2026-11-25T15:22:30.61715Z
 **Date of Issue:** November 2026
 **Analysis Period:** November 2026
-**Source:** [SentryDigest](https://sentrydigest.ricomanifesto.com/feed.xml)
+**Source:** [SentryDigest](https://raw.githubusercontent.com/ricomanifesto/SentryDigest/981b89484a7428b54222d09d3d3f0c5e98acdf44/site/feed.xml)
 **Source Issue:** [SentryDigest 2026-11-25](https://sentrydigest.ricomanifesto.com/archive/2026-11-25/)
 **Articles Analyzed:** 30
 **GRC-Relevant Articles:** 30
@@ -12,11 +12,11 @@
 
 ## Executive Summary
 
-Critical vulnerabilities in widely deployed platforms have entered active exploitation with federal remediation deadlines, while credential hygiene failures persist across the ecosystem. CISA added a critical Drupal remote code execution flaw to its Known Exploited Vulnerabilities catalog requiring federal agency patching, Broadcom released patches for 23 VMware vulnerabilities including a critical authentication bypass, and a decade-old flaw in the Hex.pm package registry was exploited to compromise production servers. Simultaneously, research shows most valid secrets discovered years ago remain active because teams hesitate to revoke them, and validity-only triage misses nearly half of critical credentials. [Drupal Fail2Install Exploit Details Emerge as Critical RCE Flaw Faces Active Exploitation](https://thehackernews.com/2026/11/drupal-fail2install-exploit-details.html); [VMware vCenter Hit by Another Critical 9.8-Rated Auth Bypass Flaw After Zero-Day Exploitation](https://thehackernews.com/2026/11/vmware-vcenter-hit-by-another-critical.html); [Hackers Exploited CVSS 10.0 Hex.pm RCE Flaw to Compromise 6 Package Registry Servers](https://thehackernews.com/2026/11/hackers-exploited-cvss-100-hexpm-rce.html)
+Critical vulnerability deadlines and active exploitation dominate the quarter, with CISA adding a Drupal RCE to its KEV catalog requiring federal patching by November 27 and threat actors exploiting GeoServer flaws in the wild. These developments force vulnerability owners to accelerate asset discovery, validate patch deployment, and document compensating controls for any unpatched instances. [Drupal Fail2Install Exploit Details Emerge as Critical RCE Flaw Faces Active Exploitation](https://thehackernews.com/2026/11/drupal-fail2install-exploit-details.html); [Hackers Exploit Two GeoServer Flaws as Researchers Warn of Unauthenticated RCE Chains](https://thehackernews.com/2026/11/hackers-exploit-two-geoserver-flaws-as.html)
 
-AI-driven offensive tooling is now targeting security management infrastructure and cloud identities through social engineering, expanding the threat surface for monitoring and access controls. An AI-driven campaign compromised Check Point Security Management servers across 22 organizations in financial services, energy, and government sectors, while Com-affiliated actors conduct vishing waves against cloud accounts in healthcare, legal, and financial services leading to data theft and extortion. These developments indicate that both automated attack tooling and human-targeted deception are bypassing traditional perimeter defenses. [Hackers Compromise 24 Check Point Management Servers in Suspected AI-Driven Attack Campaign](https://thehackernews.com/2026/11/hackers-compromise-24-check-point.html); [Com-Affiliated Hackers Hijack Cloud Accounts via Vishing for Data Theft and Extortion](https://thehackernews.com/2026/11/com-affiliated-hackers-hijack-cloud.html)
+Supply chain exposure, credential hygiene gaps, and privileged access erosion compound risk across third-party dependencies and identity management. The InfraTrust report highlights that most exploited advisories stem from bundled third-party components, while GitGuardian data shows most secrets remain valid for years, and bot detection failures demand equal privilege limits for human and machine accounts. [InfraTrust warns of exploited supply chain flaws in network appliances](https://www.bleepingcomputer.com/news/security/infratrust-warns-of-exploited-supply-chain-flaws-in-network-appliances/); [Credential Remediation Is Slow When You Don’t Know What Will Break](https://thehackernews.com/2026/11/credential-remediation-is-slow-when-you.html); [It's a Bot World. We're Just Living in It](https://www.darkreading.com/cyber-risk/bot-world-just-living)
 
-Scope: 5 findings and 0 sourced regulatory changes from 12 retained sources. Review priorities rank what to check first; confirm whether each finding applies to your organization before assigning work.
+Scope: 6 findings and 0 sourced regulatory changes from 12 retained sources. Review priorities rank what to check first; confirm whether each finding applies to your organization before assigning work.
 
 ## Sourced Regulatory Changes
 
@@ -26,13 +26,13 @@ No sourced regulatory changes identified in the supplied evidence.
 
 Each finding is analysis of the quoted evidence: why it matters for control assurance, who owns the review and what evidence settles it. Reference controls are review aids, not a compliance determination.
 
-### Drupal core added to CISA KEV catalog requiring federal agency patching
+### Drupal core requires urgent patching per CISA directive
 
 **Review priority:** High · Vulnerability management · Owner: Vulnerability and asset owners
 
-**Why it matters:** This development matters for control assurance because a critical remote code execution flaw in widely used content management software now has a federal remediation deadline. The accountable owner should confirm affected Drupal instances are identified and patched within the required timeframe.
+**Why it matters:** The CISA KEV inclusion mandates federal agencies to remediate a critical RCE in Drupal core by a fixed deadline, elevating patching priority for all Drupal deployments. Vulnerability owners must confirm affected assets are identified and patched or compensated.
 
-**Source evidence:** “The U.S. Cybersecurity and Infrastructure Security Agency &#40;CISA&#41; on Tuesday added a critical flaw impacting Drupal to its Known Exploited Vulnerabilities &#40;KEV&#41; catalog, requiring federal agencies to apply the fixes by November 27, 2026. The vulnerability, tracked as CVE-2026-132165 aka Fail2Install &#40;CVSS score: 9.8&#41;, is a case of remote code execution &#40;RCE&#41; impacting Drupal core.” [Drupal Fail2Install Exploit Details Emerge as Critical RCE Flaw Faces Active Exploitation](https://thehackernews.com/2026/11/drupal-fail2install-exploit-details.html)
+**Source evidence:** “The U.S. Cybersecurity and Infrastructure Security Agency &#40;CISA&#41; on Tuesday added a critical flaw impacting Drupal to its Known Exploited Vulnerabilities &#40;KEV&#41; catalog, requiring federal agencies to apply the fixes by November 27, 2026. The vulnerability, tracked as CVE-2026-132165 aka Fail2Install &#40;CVSS score: 9.8&#41;, is a case of remote code execution &#40;RCE&#41; impacting Drupal core. "Drupal Core…” [Drupal Fail2Install Exploit Details Emerge as Critical RCE Flaw Faces Active Exploitation](https://thehackernews.com/2026/11/drupal-fail2install-exploit-details.html)
 
 **Evidence to request:** Affected-asset inventory, installed versions, remediation status and an exception owner.
 
@@ -40,13 +40,13 @@ Each finding is analysis of the quoted evidence: why it matters for control assu
 
 **Reference controls:** ISO/IEC 27001:2022 A.8.8 (management of technical vulnerabilities); NIST CSF 2.0 ID.RA (risk assessment), PR.PS (platform security)
 
-### VMware Directory Service receives critical authentication bypass patch
+### GeoServer faces active exploitation of critical flaws
 
 **Review priority:** High · Vulnerability management · Owner: Vulnerability and asset owners
 
-**Why it matters:** This development matters for control assurance because a critical authentication bypass in core virtualization infrastructure could allow unauthorized administrative access. The accountable owner should confirm all affected VMware products are inventoried and patched.
+**Why it matters:** Active exploitation of GeoServer vulnerabilities demands immediate asset identification and patching to prevent unauthorized file access. Vulnerability owners must verify GeoServer instances are inventoried and remediated.
 
-**Source evidence:** “Broadcom has shipped patches to address 23 vulnerabilities impacting VMware ESX, vCenter, Workstation, Fusion, and Avi Load Balancer, including one critical bug that could be abused to bypass authentication. The critical vulnerability, tracked as CVE-2026-123903, is rated 9.8 out of 10.0 on the CVSS scoring system. It resides in the VMware Directory Service &#40;"vmdir"&#41;.” [VMware vCenter Hit by Another Critical 9.8-Rated Auth Bypass Flaw After Zero-Day Exploitation](https://thehackernews.com/2026/11/vmware-vcenter-hit-by-another-critical.html)
+**Source evidence:** “Threat actors are actively exploiting two newly patched security flaws in GeoServer, according to watchTowr. The vulnerabilities in question are CVE-2026-120705 and CVE-2026-129243, details of which are below - CVE-2026-120705 &#40;CVSS score: 8.6&#41; - An arbitrary file read vulnerability that could enable an attacker to access local text files readable by the GeoServer process or fetch…” [Hackers Exploit Two GeoServer Flaws as Researchers Warn of Unauthenticated RCE Chains](https://thehackernews.com/2026/11/hackers-exploit-two-geoserver-flaws-as.html)
 
 **Evidence to request:** Affected-asset inventory, installed versions, remediation status and an exception owner.
 
@@ -54,13 +54,13 @@ Each finding is analysis of the quoted evidence: why it matters for control assu
 
 **Reference controls:** ISO/IEC 27001:2022 A.8.8 (management of technical vulnerabilities); NIST CSF 2.0 ID.RA (risk assessment), PR.PS (platform security)
 
-### Hex.pm package registry compromised via decade-old supply chain flaw
+### Third-party software bundled into products drives exploited advisories
 
 **Review priority:** High · Third-party risk · Owner: Supplier risk owner
 
-**Why it matters:** This development matters for control assurance because a long-dormant vulnerability in a critical dependency registry was actively exploited, demonstrating supply chain risk persistence. The accountable owner should confirm dependency source integrity controls and supplier incident response capabilities.
+**Why it matters:** The prevalence of exploited flaws in bundled third-party components shifts accountability to supplier assurance programs. Supplier risk owners must review vendor dependency maps and demand evidence of component-level vulnerability management.
 
-**Source evidence:** “An attacker ran operating system commands on Monday on six production servers of Hex.pm, the package registry that Elixir and Erlang developers fetch their dependencies from. The flaw used in the attack had been in the registry's code since February 2016, and the team that maintains the service had every server on a patched build within about 15 minutes of the first malicious request.” [Hackers Exploited CVSS 10.0 Hex.pm RCE Flaw to Compromise 6 Package Registry Servers](https://thehackernews.com/2026/11/hackers-exploited-cvss-100-hexpm-rce.html)
+**Source evidence:** “Eclypsium's November InfraTrust report warns that most infrastructure security advisories addressing exploited vulnerabilities over the past month involve flaws in third-party software bundled into products rather than code developed by the vendors themselves…” [InfraTrust warns of exploited supply chain flaws in network appliances](https://www.bleepingcomputer.com/news/security/infratrust-warns-of-exploited-supply-chain-flaws-in-network-appliances/)
 
 **Evidence to request:** Supplier access scope, control responsibilities and evidence of remediation assurance.
 
@@ -68,27 +68,13 @@ Each finding is analysis of the quoted evidence: why it matters for control assu
 
 **Reference controls:** ISO/IEC 27001:2022 A.5.19 (supplier relationships), A.5.21 (ICT supply chain), A.5.22 (monitoring and review of supplier services); NIST CSF 2.0 GV.SC (cybersecurity supply chain risk management)
 
-### Check Point Security Management servers targeted by AI-driven campaign
-
-**Review priority:** High · Monitoring and detection · Owner: Detection and monitoring owner
-
-**Why it matters:** This development matters for control assurance because AI-driven offensive tooling is actively compromising security management infrastructure across multiple sectors. The accountable owner should confirm detection coverage for anomalous management server activity and review supplier threat intelligence sharing.
-
-**Source evidence:** “An unknown threat actor has been using artificial intelligence &#40;AI&#41;-driven offensive tooling in a campaign targeting Check Point Security Management servers, impacting 22 distinct organizations across the world. The intrusion activity, tracked by GreyNoise under the moniker GreyNoise Threat 13 &#40;GT13&#41;, is assessed to have targeted organizations in the financial services, energy, government” [Hackers Compromise 24 Check Point Management Servers in Suspected AI-Driven Attack Campaign](https://thehackernews.com/2026/11/hackers-compromise-24-check-point.html)
-
-**Evidence to request:** Log coverage, a detection test, alert routing and investigation ownership.
-
-**Decision trigger:** If a detection test fails, assign the coverage or routing correction and repeat the test.
-
-**Reference controls:** ISO/IEC 27001:2022 A.8.15 (logging), A.8.16 (monitoring activities); NIST CSF 2.0 DE.CM (continuous monitoring), DE.AE (adverse event analysis)
-
-### Cloud accounts hijacked via vishing for data theft and extortion
+### Valid secrets discovered in 2022 remain active despite remediation delays
 
 **Review priority:** Medium · Access management · Owner: Identity and access owner
 
-**Why it matters:** This development matters for control assurance because voice-based social engineering is bypassing technical controls to compromise cloud identities in regulated sectors. The accountable owner should confirm identity verification controls resist vishing and cloud access monitoring detects anomalous administrative actions.
+**Why it matters:** Long-lived valid secrets indicate broken revocation workflows and insufficient impact-based prioritization. Access management owners must confirm that credential inventories are tied to dependency mapping and that revocation testing is routine.
 
-**Source evidence:** “Palo Alto Networks Unit 42 has disclosed that it's tracking and has responded to "numerous waves of vishing attacks" orchestrated by Com-affiliated threat actors since August 2026 that have led to data theft and extortion attempts. The attacks have targeted financial services, healthcare, and legal services located in the U.S., the U.K., and Australia.” [Com-Affiliated Hackers Hijack Cloud Accounts via Vishing for Data Theft and Extortion](https://thehackernews.com/2026/11/com-affiliated-hackers-hijack-cloud.html)
+**Source evidence:** “More than 64&#37; still valid after four years: GitGuardian’s State of Secrets Sprawl 2026 found that most valid secrets discovered in 2022 still worked in January 2026, because teams stall on what a revoke will break. Validity-only triage misses 46&#37; of critical secrets: Prioritize by impact instead, weighing what a credential can access and whether it leaked publicly, and update the…” [Credential Remediation Is Slow When You Don’t Know What Will Break](https://thehackernews.com/2026/11/credential-remediation-is-slow-when-you.html)
 
 **Evidence to request:** Access scope, authentication coverage, session revocation and a permission-test result.
 
@@ -96,17 +82,45 @@ Each finding is analysis of the quoted evidence: why it matters for control assu
 
 **Reference controls:** ISO/IEC 27001:2022 A.5.15 (access control), A.5.18 (access rights), A.8.2 (privileged access rights); NIST CSF 2.0 PR.AA (identity management, authentication and access control)
 
+### Privileged access for humans and their machine counterparts requires equal limitation
+
+**Review priority:** Medium · Access management · Owner: Identity and access owner
+
+**Why it matters:** The erosion of bot detection efficacy expands the attack surface for credential misuse across human and machine identities. Access management owners must verify that privileged session controls and just-in-time provisioning cover both human and automated accounts.
+
+**Source evidence:** “Bot detection has become a losing game. Security teams need to limit privileged access for humans and their machine counterparts equally.” [It's a Bot World. We're Just Living in It](https://www.darkreading.com/cyber-risk/bot-world-just-living)
+
+**Evidence to request:** Access scope, authentication coverage, session revocation and a permission-test result.
+
+**Decision trigger:** If a permission gap is reproduced, assign a control correction and verify it; otherwise retain the test evidence.
+
+**Reference controls:** ISO/IEC 27001:2022 A.5.15 (access control), A.5.18 (access rights), A.8.2 (privileged access rights); NIST CSF 2.0 PR.AA (identity management, authentication and access control)
+
+### Financial Crimes Enforcement Network &#40;FinCEN&#41; suffers unauthorized access incident
+
+**Review priority:** High · Incident response · Owner: Incident response lead
+
+**Why it matters:** A breach at the financial intelligence unit underscores the need for robust containment and evidence preservation in high-value targets. Incident response leads must verify that detection coverage and offline procedures are tested for similar critical systems.
+
+**Source evidence:** “The U.S. Treasury Department's Financial Crimes Enforcement Network &#40;FinCEN&#41; has been hit by a cybersecurity incident that resulted in "unauthorized access to a limited subset of its systems," the bureau said on Tuesday. As a precaution, it has taken some systems offline. The bureau collects suspicious activity reports and other Bank Secrecy Act &#40;BSA&#41; filings from banks and other financial…” [U.S. Treasury's Financial Crimes Agency Takes Some Systems Offline After Cyber Intrusion](https://thehackernews.com/2026/11/us-treasurys-fincen-takes-some-systems.html)
+
+**Evidence to request:** Containment responsibilities, retained logs and the most recent response exercise.
+
+**Decision trigger:** If an exercise exposes an ownership or evidence gap, assign a response-plan correction and retest it.
+
+**Reference controls:** ISO/IEC 27001:2022 A.5.24 (incident management planning and preparation), A.5.26 (response to information security incidents); NIST CSF 2.0 RS.MA (incident management), RS.MI (incident mitigation)
+
 ## Source Highlights
 
+- [Hackers Exploit Two GeoServer Flaws as Researchers Warn of Unauthenticated RCE Chains](https://thehackernews.com/2026/11/hackers-exploit-two-geoserver-flaws-as.html) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-25/#reporting-27873297949c)
 - [Drupal Fail2Install Exploit Details Emerge as Critical RCE Flaw Faces Active Exploitation](https://thehackernews.com/2026/11/drupal-fail2install-exploit-details.html) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-25/#reporting-f8d0d1935ac4)
-- [VMware vCenter Hit by Another Critical 9.8-Rated Auth Bypass Flaw After Zero-Day Exploitation](https://thehackernews.com/2026/11/vmware-vcenter-hit-by-another-critical.html) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-25/#reporting-aa014f4b55f4)
+- [It's a Bot World. We're Just Living in It](https://www.darkreading.com/cyber-risk/bot-world-just-living) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-25/#reporting-60b6b3868921)
+- [More Pentests Without More Pentesters: Where AI Safely Helps](https://www.bleepingcomputer.com/news/security/more-pentests-without-more-pentesters-where-ai-safely-helps/) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-25/#reporting-571e665497ad)
+- [InfraTrust warns of exploited supply chain flaws in network appliances](https://www.bleepingcomputer.com/news/security/infratrust-warns-of-exploited-supply-chain-flaws-in-network-appliances/) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-25/#reporting-918f8236c2b6)
 - [Cyber Insurers See New Divide: AI Defense 'Haves' & 'Have Nots'](https://www.darkreading.com/cybersecurity-operations/cyber-insurers-see-new-ai-divide) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-25/#reporting-45ee7c2e482d)
+- [Latin America Sees Cyberattacks on Ports, Pipelines & Manufacturing](https://www.darkreading.com/cyberattacks-data-breaches/latin-america-cyberattacks-ports-pipelines-manufacturing) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-25/#reporting-1ccaa1266b3e)
+- [U.S. Treasury's Financial Crimes Agency Takes Some Systems Offline After Cyber Intrusion](https://thehackernews.com/2026/11/us-treasurys-fincen-takes-some-systems.html) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-25/#reporting-b72d4a699599)
 - [Credential Remediation Is Slow When You Don’t Know What Will Break](https://thehackernews.com/2026/11/credential-remediation-is-slow-when-you.html) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-25/#reporting-2d3fe69c638a)
 - [Microsoft fixes Microsoft 365 bug blocking access to Office apps](https://www.bleepingcomputer.com/news/microsoft/microsoft-fixes-blank-dialog-that-made-microsoft-365-office-apps-unusable/) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-25/#reporting-b5ac7b882982)
 - [Ex-OpenAI Employee Accused of Bugging Company Offices Granted $1 Million Bail](https://thehackernews.com/2026/11/ex-openai-employee-accused-of-bugging.html) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-25/#reporting-df7e6d35b0bf)
 - [Hackers now exploit critical Drupal RCE flaw to hijack sites](https://www.bleepingcomputer.com/news/security/hackers-now-exploit-critical-drupal-rce-flaw-to-hijack-sites/) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-25/#reporting-2a09216dda16)
-- [Hackers Exploited CVSS 10.0 Hex.pm RCE Flaw to Compromise 6 Package Registry Servers](https://thehackernews.com/2026/11/hackers-exploited-cvss-100-hexpm-rce.html) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-25/#reporting-c4aa0fb84786)
-- [Microsoft confirms authentication issues after November updates](https://www.bleepingcomputer.com/news/microsoft/microsoft-confirms-authentication-issues-after-november-updates/) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-25/#reporting-29df4a0d48be)
-- [Hackers reportedly breached CIA intelligence analysis system](https://www.bleepingcomputer.com/news/security/hackers-reportedly-breached-cia-intelligence-analysis-system/) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-25/#reporting-0fe0d4f016d0)
-- [Hackers Compromise 24 Check Point Management Servers in Suspected AI-Driven Attack Campaign](https://thehackernews.com/2026/11/hackers-compromise-24-check-point.html) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-25/#reporting-d5f3ce6a4d9a)
-- [Com-Affiliated Hackers Hijack Cloud Accounts via Vishing for Data Theft and Extortion](https://thehackernews.com/2026/11/com-affiliated-hackers-hijack-cloud.html) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-25/#reporting-da2703c97fc2)
