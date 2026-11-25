@@ -5280,6 +5280,12 @@
       "run_id": "45673724668",
       "source_revision": "554f73f8338755e64bbc56619521105f9bf3155b",
       "stage": "admitted"
+    },
+    {
+      "admission_key": "digest:554f73f8338755e64bbc56619521105f9bf3155b",
+      "at": "2026-11-25T18:18:39.331Z",
+      "run_id": "45673724668",
+      "stage": "invoked"
     }
   ],
   "schema_version": 1,
