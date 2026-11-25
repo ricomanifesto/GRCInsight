@@ -1,0 +1,381 @@
+{
+  "schema_version": 3,
+  "report_contract_version": 6,
+  "report_plan": {
+    "control_implications": [
+      {
+        "control_id": "vulnerability_management",
+        "evidence_excerpt": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Monday added two flaws impacting N-able MailAssure and MONAI Label to its Known Exploited Vulnerabilities (KEV) catalog, citing evidence of active exploitation. The critical vulnerabilities are listed below - CVE-2026-134624 (CVSS score: 9.3) - A server-side request forgery (SSRF) vulnerability in N-able MailAssure's LDAP",
+        "evidence_origin": "summary",
+        "focus": "N-able MailAssure's LDAP",
+        "headline": "N-able MailAssure's LDAP vulnerability added to CISA exploited catalog",
+        "priority": "high",
+        "significance": "Active exploitation of this SSRF vulnerability requires immediate asset identification and patching. Vulnerability owners should confirm affected deployments and verify remediation status.",
+        "source_ids": [
+          3
+        ]
+      },
+      {
+        "control_id": "third_party_risk",
+        "evidence_excerpt": "Rackspace is shutting down its Rackspace Spot cloud platform after a security breach allowed hackers to access customer Kubernetes clusters and secrets, giving customers until December 8 to migrate their services and download their data",
+        "evidence_origin": "summary",
+        "focus": "Rackspace Spot cloud platform",
+        "headline": "Rackspace Spot cloud platform shutdown after breach exposes customer clusters",
+        "priority": "high",
+        "significance": "A supplier breach forced platform shutdown and customer migration, indicating control failures in supplier assurance. Supplier risk owners should review dependencies on Rackspace and verify migration completeness.",
+        "source_ids": [
+          7
+        ]
+      },
+      {
+        "control_id": "data_protection",
+        "evidence_excerpt": "Cybersecurity company Radware says attackers gained access to some of its customers' account details and cloud access keys through an unsecured internal Cloud WAF (Web Application Firewall) management API that was left exposed online",
+        "evidence_origin": "summary",
+        "focus": "customer cloud access keys",
+        "headline": "Customer cloud access keys exposed via unsecured Radware management API",
+        "priority": "high",
+        "significance": "Exposed management API led to credential theft, weakening data protection assurances for affected customers. Data protection owners should assess exposure scope and rotate compromised credentials.",
+        "source_ids": [
+          11
+        ]
+      },
+      {
+        "control_id": "vulnerability_management",
+        "evidence_excerpt": "Broadcom has shipped patches to address 23 vulnerabilities impacting VMware ESX, vCenter, Workstation, Fusion, and Avi Load Balancer, including one critical bug that could be abused to bypass authentication. The critical vulnerability, tracked as CVE-2026-123903, is rated 9.8 out of 10.0 on the CVSS scoring system. It resides in the VMware Directory Service (\"vmdir\")",
+        "evidence_origin": "summary",
+        "focus": "VMware Directory Service",
+        "headline": "VMware Directory Service authentication bypass patched after zero-day exploitation",
+        "priority": "high",
+        "significance": "Critical authentication bypass in core directory service requires urgent patching across virtualization infrastructure. Vulnerability owners should inventory affected VMware products and confirm patch deployment.",
+        "source_ids": [
+          1
+        ]
+      },
+      {
+        "control_id": "access_management",
+        "evidence_excerpt": "A newly formed data extortion group named 'Inception' has been linked to a large-scale campaign that targets single sign-on (SSO) credentials of multiple global brands and firms",
+        "evidence_origin": "summary",
+        "focus": "single sign-on (SSO) credentials",
+        "headline": "Single sign-on (SSO) credentials targeted by Inception extortion group vishing campaign",
+        "priority": "medium",
+        "significance": "Large-scale vishing targeting SSO credentials tests authentication controls and privilege boundaries. Access management owners should review SSO protections and verify phishing-resistant authentication coverage.",
+        "source_ids": [
+          9
+        ]
+      },
+      {
+        "control_id": "monitoring",
+        "evidence_excerpt": "A previously undocumented Iran-aligned cyber espionage group called Volant Manticore has targeted telecommunications companies, airlines, and critical infrastructure in Cyprus. Central to the group's operations is a backdoor called KuboShell that uses the InterPlanetary File System (IPFS) for command-and-control (C2)",
+        "evidence_origin": "summary",
+        "focus": "telecommunications companies",
+        "headline": "Telecommunications companies targeted by Volant Manticore IPFS-based backdoor campaign",
+        "priority": "medium",
+        "significance": "Novel IPFS-based C2 infrastructure challenges existing detection capabilities for telecommunications sector. Monitoring owners should evaluate IPFS traffic visibility and update detection rules for KuboShell indicators.",
+        "source_ids": [
+          12
+        ]
+      }
+    ],
+    "executive_brief": {
+      "paragraphs": [
+        {
+          "source_ids": [
+            3,
+            7,
+            11
+          ],
+          "text": "CISA added an actively exploited N-able MailAssure vulnerability to its Known Exploited Vulnerabilities catalog while two major service providers, Rackspace and Radware, disclosed breaches exposing customer Kubernetes clusters and cloud access keys respectively. These events demonstrate that vulnerability exploitation and supplier control failures are converging to create immediate remediation demands. Vulnerability and supplier risk owners must prioritize asset identification for the MailAssure flaw, verify Rackspace migration completion, and assess Radware credential exposure across their environments."
+        },
+        {
+          "source_ids": [
+            1,
+            9,
+            12
+          ],
+          "text": "Broadcom patched a critical VMware vCenter authentication bypass following zero-day exploitation, a new extortion group launched large-scale vishing against single sign-on credentials, and an Iran-aligned actor deployed IPFS-based command infrastructure against telecommunications targets. These developments extend the threat surface across virtualization platforms, identity systems, and sector-specific espionage. Access management, vulnerability management, and monitoring owners should confirm patch deployment for VMware Directory Service, evaluate SSO phishing resistance, and assess IPFS traffic detection coverage."
+        }
+      ]
+    },
+    "industry_impacts": [],
+    "regulatory_changes": []
+  },
+  "generated_at": "2026-11-25T06:25:11.856032Z",
+  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/c14e4bc3a889db78dba37da044ce854d188bf37a/site/feed.xml",
+  "feed_home_url": "https://sentrydigest.ricomanifesto.com/",
+  "digest_issue_date": "2026-11-25",
+  "digest_issue_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-25/",
+  "requested_model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
+  "resolved_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+  "sources": [
+    {
+      "title": "VMware vCenter Hit by Another Critical 9.8-Rated Auth Bypass Flaw After Zero-Day Exploitation",
+      "url": "https://thehackernews.com/2026/11/vmware-vcenter-hit-by-another-critical.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-25/#reporting-aa014f4b55f4",
+      "cves": [
+        "CVE-2026-123903"
+      ],
+      "snippet": "VMware vCenter Hit by Another Critical 9.8-Rated Auth Bypass Flaw After Zero-Day Exploitation Broadcom has shipped patches to address 23 vulnerabilities impacting VMware ESX, vCenter, Workstation, Fusion, and Avi Load Balancer, including one critical bug that could be abused to bypass authentication. The critical vulnerability, tracked as CVE-2026-123903, is rated 9.8 out of 10.0 on the CVSS scoring system. It resides in the VMware Directory Service (\"vmdir\"). \"A malicious actor with… Broadcom has shipped patches to address 23 vulnerabilities impacting VMware ESX, vCenter, Workstation, Fusion, and Avi Load Balancer, including one critical bug that could be abused to bypass authentication. Th",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Broadcom has shipped patches to address 23 vulnerabilities impacting VMware ESX, vCenter, Workstation, Fusion, and Avi Load Balancer, including one critical bug that could be abused to bypass authentication. The critical vulnerability, tracked as CVE-2026-123903, is rated 9.8 out of 10.0 on the CVSS scoring system. It resides in the VMware Directory Service (\"vmdir\"). \"A malicious actor with…",
+          "text": "Broadcom has shipped patches to address 23 vulnerabilities impacting VMware ESX, vCenter, Workstation, Fusion, and Avi Load Balancer, including one critical bug that could be abused to bypass authentication. The critical vulnerability, tracked as CVE-2026-123903, is rated 9.8 out of 10.0 on the CVSS scoring system. It resides in the VMware Directory Service (\"vmdir\"). \"A malicious actor with…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Broadcom has shipped patches to address 23 vulnerabilities impacting VMware ESX, vCenter, Workstation, Fusion, and Avi Load Balancer, including one critical bug that could be abused to bypass authentication. The critical vulnerability, tracked as CVE-2026-123903, is rated 9.8 out of 10.0 on the CVSS scoring system. It resides in the VMware Directory Service (\"vmdir\"). \"A malicious actor with…",
+          "text": "Broadcom has shipped patches to address 23 vulnerabilities impacting VMware ESX, vCenter, Workstation, Fusion, and Avi Load Balancer, including one critical bug that could be abused to bypass authentication. The critical vulnerability, tracked as CVE-2026-123903, is rated 9.8 out of 10.0 on the CVSS scoring system. It resides in the VMware Directory Service (\"vmdir\"). \"A malicious actor with…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Google Researcher Shows How a Single Bit Change in .NET Files Bypassed Windows Code Integrity",
+      "url": "https://thehackernews.com/2026/11/google-researcher-shows-how-single-bit.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-25/#reporting-372382395c6e",
+      "cves": [
+        "CVE-2026-87268"
+      ],
+      "snippet": "Google Researcher Shows How a Single Bit Change in .NET Files Bypassed Windows Code Integrity A quirk in how the .NET Framework loads a program file let a local attacker run untrusted code past two separate protections on Windows built to block it, Google Project Zero researcher James Forshaw showed in a write-up published yesterday. The same loading behavior bypassed Oracle VirtualBox's process hardening on Windows hosts, tracked as CVE-2026-87268, and Windows code integrity, tracked… A quirk in how the .NET Framework loads a program file let a local attacker run untrusted code past two separate protections on Windows built to block it, Google Project Zero researcher James Forshaw showed in",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "A quirk in how the .NET Framework loads a program file let a local attacker run untrusted code past two separate protections on Windows built to block it, Google Project Zero researcher James Forshaw showed in a write-up published yesterday. The same loading behavior bypassed Oracle VirtualBox's process hardening on Windows hosts, tracked as CVE-2026-87268, and Windows code integrity, tracked…",
+          "text": "A quirk in how the .NET Framework loads a program file let a local attacker run untrusted code past two separate protections on Windows built to block it, Google Project Zero researcher James Forshaw showed in a write-up published yesterday. The same loading behavior bypassed Oracle VirtualBox's process hardening on Windows hosts, tracked as CVE-2026-87268, and Windows code integrity, tracked…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "A quirk in how the .NET Framework loads a program file let a local attacker run untrusted code past two separate protections on Windows built to block it, Google Project Zero researcher James Forshaw showed in a write-up published yesterday. The same loading behavior bypassed Oracle VirtualBox's process hardening on Windows hosts, tracked as CVE-2026-87268, and Windows code integrity, tracked…",
+          "text": "A quirk in how the .NET Framework loads a program file let a local attacker run untrusted code past two separate protections on Windows built to block it, Google Project Zero researcher James Forshaw showed in a write-up published yesterday. The same loading behavior bypassed Oracle VirtualBox's process hardening on Windows hosts, tracked as CVE-2026-87268, and Windows code integrity, tracked…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Hackers Exploit N-able MailAssure Flaw While AI Agents Exploit MONAI Label Zero-Day",
+      "url": "https://thehackernews.com/2026/11/hackers-exploit-n-able-mailassure-flaw.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-25/#reporting-d70285cdacc0",
+      "cves": [
+        "CVE-2026-134624"
+      ],
+      "snippet": "Hackers Exploit N-able MailAssure Flaw While AI Agents Exploit MONAI Label Zero-Day The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Monday added two flaws impacting N-able MailAssure and MONAI Label to its Known Exploited Vulnerabilities (KEV) catalog, citing evidence of active exploitation. The critical vulnerabilities are listed below - CVE-2026-134624 (CVSS score: 9.3) - A server-side request forgery (SSRF) vulnerability in N-able MailAssure's LDAP… The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Monday added two flaws impacting N-able MailAssure and MONAI Label to its Known Exploited Vulnerabilities (KEV) catalog, citing evidence of active exploita",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Monday added two flaws impacting N-able MailAssure and MONAI Label to its Known Exploited Vulnerabilities (KEV) catalog, citing evidence of active exploitation. The critical vulnerabilities are listed below - CVE-2026-134624 (CVSS score: 9.3) - A server-side request forgery (SSRF) vulnerability in N-able MailAssure's LDAP…",
+          "text": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Monday added two flaws impacting N-able MailAssure and MONAI Label to its Known Exploited Vulnerabilities (KEV) catalog, citing evidence of active exploitation. The critical vulnerabilities are listed below - CVE-2026-134624 (CVSS score: 9.3) - A server-side request forgery (SSRF) vulnerability in N-able MailAssure's LDAP…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Monday added two flaws impacting N-able MailAssure and MONAI Label to its Known Exploited Vulnerabilities (KEV) catalog, citing evidence of active exploitation. The critical vulnerabilities are listed below - CVE-2026-134624 (CVSS score: 9.3) - A server-side request forgery (SSRF) vulnerability in N-able MailAssure's LDAP…",
+          "text": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Monday added two flaws impacting N-able MailAssure and MONAI Label to its Known Exploited Vulnerabilities (KEV) catalog, citing evidence of active exploitation. The critical vulnerabilities are listed below - CVE-2026-134624 (CVSS score: 9.3) - A server-side request forgery (SSRF) vulnerability in N-able MailAssure's LDAP…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Cyber Insurers See New Divide: AI Defense 'Haves' & 'Have Nots'",
+      "url": "https://www.darkreading.com/cybersecurity-operations/cyber-insurers-see-new-ai-divide",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-25/#reporting-45ee7c2e482d",
+      "cves": [],
+      "snippet": "Cyber Insurers See New Divide: AI Defense 'Haves' & 'Have Nots' Dark Reading Confidential Episode 23: Cyber insurers share their view of the AI-driven threat landscape and how mounting challenges are putting pressure on both sides of the policy, leaving the current model unsustainable. Dark Reading Confidential Episode 23: Cyber insurers share their view of the AI-driven threat landscape and how mounting challenges are putting pressure on both sides of the policy, leaving the current model unsustainable.",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Dark Reading Confidential Episode 23: Cyber insurers share their view of the AI-driven threat landscape and how mounting challenges are putting pressure on both sides of the policy, leaving the current model unsustainable.",
+          "text": "Dark Reading Confidential Episode 23: Cyber insurers share their view of the AI-driven threat landscape and how mounting challenges are putting pressure on both sides of the policy, leaving the current model unsustainable."
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Dark Reading Confidential Episode 23: Cyber insurers share their view of the AI-driven threat landscape and how mounting challenges are putting pressure on both sides of the policy, leaving the current model unsustainable.",
+          "text": "Dark Reading Confidential Episode 23: Cyber insurers share their view of the AI-driven threat landscape and how mounting challenges are putting pressure on both sides of the policy, leaving the current model unsustainable."
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Satellites Have a Ground-Level Cybersecurity Problem",
+      "url": "https://www.darkreading.com/cyber-risk/satellites-ground-level-cybersecurity-problem",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-25/#reporting-1b2736ce0451",
+      "cves": [],
+      "snippet": "Satellites Have a Ground-Level Cybersecurity Problem Weaknesses in the ground-based infrastructure supporting satellite services are becoming more consequential as a new space race gathers pace. Weaknesses in the ground-based infrastructure supporting satellite services are becoming more consequential as a new space race gathers pace.",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Weaknesses in the ground-based infrastructure supporting satellite services are becoming more consequential as a new space race gathers pace.",
+          "text": "Weaknesses in the ground-based infrastructure supporting satellite services are becoming more consequential as a new space race gathers pace."
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Weaknesses in the ground-based infrastructure supporting satellite services are becoming more consequential as a new space race gathers pace.",
+          "text": "Weaknesses in the ground-based infrastructure supporting satellite services are becoming more consequential as a new space race gathers pace."
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Webworm APT Slithers Into Networks With Customized SoftEther VPN",
+      "url": "https://www.darkreading.com/perimeter/webworm-slithers-customized-softether-vpn",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-25/#reporting-c83402675689",
+      "cves": [],
+      "snippet": "Webworm APT Slithers Into Networks With Customized SoftEther VPN The China-aligned espionage group rebuilt the open source VPN software from source, stripping out the artifacts that would normally expose it to defenders. The China-aligned espionage group rebuilt the open source VPN software from source, stripping out the artifacts that would normally expose it to defenders.",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "The China-aligned espionage group rebuilt the open source VPN software from source, stripping out the artifacts that would normally expose it to defenders.",
+          "text": "The China-aligned espionage group rebuilt the open source VPN software from source, stripping out the artifacts that would normally expose it to defenders."
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "The China-aligned espionage group rebuilt the open source VPN software from source, stripping out the artifacts that would normally expose it to defenders.",
+          "text": "The China-aligned espionage group rebuilt the open source VPN software from source, stripping out the artifacts that would normally expose it to defenders."
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Rackspace shuts down Spot cloud platform after security breach",
+      "url": "https://www.bleepingcomputer.com/news/security/rackspace-shuts-down-spot-cloud-platform-after-security-breach/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-25/#reporting-2b855346dd50",
+      "cves": [],
+      "snippet": "Rackspace shuts down Spot cloud platform after security breach Rackspace is shutting down its Rackspace Spot cloud platform after a security breach allowed hackers to access customer Kubernetes clusters and secrets, giving customers until December 8 to migrate their services and download their data… Rackspace is shutting down its Rackspace Spot cloud platform after a security breach allowed hackers to access customer Kubernetes clusters and secrets, giving customers until December 8 to migrate their services and download their data…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Rackspace is shutting down its Rackspace Spot cloud platform after a security breach allowed hackers to access customer Kubernetes clusters and secrets, giving customers until December 8 to migrate their services and download their data…",
+          "text": "Rackspace is shutting down its Rackspace Spot cloud platform after a security breach allowed hackers to access customer Kubernetes clusters and secrets, giving customers until December 8 to migrate their services and download their data…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Rackspace is shutting down its Rackspace Spot cloud platform after a security breach allowed hackers to access customer Kubernetes clusters and secrets, giving customers until December 8 to migrate their services and download their data…",
+          "text": "Rackspace is shutting down its Rackspace Spot cloud platform after a security breach allowed hackers to access customer Kubernetes clusters and secrets, giving customers until December 8 to migrate their services and download their data…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "'God Mode' Flaws Could Wreak Border-Control Havoc",
+      "url": "https://www.darkreading.com/vulnerabilities-threats/god-mode-flaws-wreak-border-control-havoc",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-25/#reporting-716dc2a9a70d",
+      "cves": [],
+      "snippet": "'God Mode' Flaws Could Wreak Border-Control Havoc Attackers could have disrupted traveler entry into Nigeria, Ethiopia, Zambia, Sri Lanka, Fiji, and Ghana via several vulnerabilities in their online visa and immigration systems. Attackers could have disrupted traveler entry into Nigeria, Ethiopia, Zambia, Sri Lanka, Fiji, and Ghana via several vulnerabilities in their online visa and immigration systems.",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Attackers could have disrupted traveler entry into Nigeria, Ethiopia, Zambia, Sri Lanka, Fiji, and Ghana via several vulnerabilities in their online visa and immigration systems.",
+          "text": "Attackers could have disrupted traveler entry into Nigeria, Ethiopia, Zambia, Sri Lanka, Fiji, and Ghana via several vulnerabilities in their online visa and immigration systems."
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Attackers could have disrupted traveler entry into Nigeria, Ethiopia, Zambia, Sri Lanka, Fiji, and Ghana via several vulnerabilities in their online visa and immigration systems.",
+          "text": "Attackers could have disrupted traveler entry into Nigeria, Ethiopia, Zambia, Sri Lanka, Fiji, and Ghana via several vulnerabilities in their online visa and immigration systems."
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "New Inception extortion gang launches large-scale vishing campaign",
+      "url": "https://www.bleepingcomputer.com/news/security/new-inception-extortion-gang-launches-large-scale-vishing-campaign/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-25/#reporting-347042e7abf2",
+      "cves": [],
+      "snippet": "New Inception extortion gang launches large-scale vishing campaign A newly formed data extortion group named 'Inception' has been linked to a large-scale campaign that targets single sign-on (SSO) credentials of multiple global brands and firms… A newly formed data extortion group named 'Inception' has been linked to a large-scale campaign that targets single sign-on (SSO) credentials of multiple global brands and firms…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "A newly formed data extortion group named 'Inception' has been linked to a large-scale campaign that targets single sign-on (SSO) credentials of multiple global brands and firms…",
+          "text": "A newly formed data extortion group named 'Inception' has been linked to a large-scale campaign that targets single sign-on (SSO) credentials of multiple global brands and firms…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "A newly formed data extortion group named 'Inception' has been linked to a large-scale campaign that targets single sign-on (SSO) credentials of multiple global brands and firms…",
+          "text": "A newly formed data extortion group named 'Inception' has been linked to a large-scale campaign that targets single sign-on (SSO) credentials of multiple global brands and firms…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Turnitin discloses cyberattack affecting customer-facing systems",
+      "url": "https://www.bleepingcomputer.com/news/security/turnitin-discloses-cyberattack-affecting-customer-facing-systems/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-25/#reporting-6c5bc98dced3",
+      "cves": [],
+      "snippet": "Turnitin discloses cyberattack affecting customer-facing systems Turnitin disclosed via a statement from its CEO, Chris Caren, that it recently detected unauthorized activity involving certain customer-facing systems… Turnitin disclosed via a statement from its CEO, Chris Caren, that it recently detected unauthorized activity involving certain customer-facing systems…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Turnitin disclosed via a statement from its CEO, Chris Caren, that it recently detected unauthorized activity involving certain customer-facing systems…",
+          "text": "Turnitin disclosed via a statement from its CEO, Chris Caren, that it recently detected unauthorized activity involving certain customer-facing systems…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Turnitin disclosed via a statement from its CEO, Chris Caren, that it recently detected unauthorized activity involving certain customer-facing systems…",
+          "text": "Turnitin disclosed via a statement from its CEO, Chris Caren, that it recently detected unauthorized activity involving certain customer-facing systems…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Radware discloses breach exposing customer cloud access keys",
+      "url": "https://www.bleepingcomputer.com/news/security/radware-discloses-breach-exposing-customer-cloud-access-keys/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-25/#reporting-a251bdbac4c3",
+      "cves": [],
+      "snippet": "Radware discloses breach exposing customer cloud access keys Cybersecurity company Radware says attackers gained access to some of its customers' account details and cloud access keys through an unsecured internal Cloud WAF (Web Application Firewall) management API that was left exposed online… Cybersecurity company Radware says attackers gained access to some of its customers' account details and cloud access keys through an unsecured internal Cloud WAF (Web Application Firewall) management API that was left exposed online…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Cybersecurity company Radware says attackers gained access to some of its customers' account details and cloud access keys through an unsecured internal Cloud WAF (Web Application Firewall) management API that was left exposed online…",
+          "text": "Cybersecurity company Radware says attackers gained access to some of its customers' account details and cloud access keys through an unsecured internal Cloud WAF (Web Application Firewall) management API that was left exposed online…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Cybersecurity company Radware says attackers gained access to some of its customers' account details and cloud access keys through an unsecured internal Cloud WAF (Web Application Firewall) management API that was left exposed online…",
+          "text": "Cybersecurity company Radware says attackers gained access to some of its customers' account details and cloud access keys through an unsecured internal Cloud WAF (Web Application Firewall) management API that was left exposed online…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Iran-Aligned Volant Manticore Uses IPFS-Based KuboShell Backdoor in Espionage Campaigns",
+      "url": "https://thehackernews.com/2026/11/iran-aligned-volant-manticore-uses-ipfs.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-25/#reporting-9582e29a3fdc",
+      "cves": [],
+      "snippet": "Iran-Aligned Volant Manticore Uses IPFS-Based KuboShell Backdoor in Espionage Campaigns A previously undocumented Iran-aligned cyber espionage group called Volant Manticore has targeted telecommunications companies, airlines, and critical infrastructure in Cyprus. Central to the group's operations is a backdoor called KuboShell that uses the InterPlanetary File System (IPFS) for command-and-control (C2) and deploys Homa, a post-compromise framework that's a reimplementation of… A previously undocumented Iran-aligned cyber espionage group called Volant Manticore has targeted telecommunications companies, airlines, and critical infrastructure in Cyprus. Central to the group's operations is a b",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "A previously undocumented Iran-aligned cyber espionage group called Volant Manticore has targeted telecommunications companies, airlines, and critical infrastructure in Cyprus. Central to the group's operations is a backdoor called KuboShell that uses the InterPlanetary File System (IPFS) for command-and-control (C2) and deploys Homa, a post-compromise framework that's a reimplementation of…",
+          "text": "A previously undocumented Iran-aligned cyber espionage group called Volant Manticore has targeted telecommunications companies, airlines, and critical infrastructure in Cyprus. Central to the group's operations is a backdoor called KuboShell that uses the InterPlanetary File System (IPFS) for command-and-control (C2) and deploys Homa, a post-compromise framework that's a reimplementation of…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "A previously undocumented Iran-aligned cyber espionage group called Volant Manticore has targeted telecommunications companies, airlines, and critical infrastructure in Cyprus. Central to the group's operations is a backdoor called KuboShell that uses the InterPlanetary File System (IPFS) for command-and-control (C2) and deploys Homa, a post-compromise framework that's a reimplementation of…",
+          "text": "A previously undocumented Iran-aligned cyber espionage group called Volant Manticore has targeted telecommunications companies, airlines, and critical infrastructure in Cyprus. Central to the group's operations is a backdoor called KuboShell that uses the InterPlanetary File System (IPFS) for command-and-control (C2) and deploys Homa, a post-compromise framework that's a reimplementation of…"
+        }
+      ],
+      "effective_date_evidence": null
+    }
+  ]
+}
