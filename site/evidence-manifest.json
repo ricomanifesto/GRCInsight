@@ -5,14 +5,62 @@
     "control_implications": [
       {
         "control_id": "vulnerability_management",
+        "evidence_excerpt": "Broadcom has shipped patches to address 23 vulnerabilities impacting VMware ESX, vCenter, Workstation, Fusion, and Avi Load Balancer, including one critical bug that could be abused to bypass authentication. The critical vulnerability, tracked as CVE-2026-123903, is rated 9.8 out of 10.0 on the CVSS scoring system. It resides in the VMware Directory Service (\"vmdir\").",
+        "evidence_origin": "summary",
+        "focus": "VMware vCenter",
+        "headline": "VMware vCenter exposes authentication bypass",
+        "priority": "high",
+        "significance": "This critical authentication bypass in VMware vCenter weakens access controls for virtualized infrastructure. Vulnerability owners should confirm affected versions are identified and patches applied or compensating controls validated.",
+        "source_ids": [
+          1
+        ]
+      },
+      {
+        "control_id": "vulnerability_management",
         "evidence_excerpt": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Monday added two flaws impacting N-able MailAssure and MONAI Label to its Known Exploited Vulnerabilities (KEV) catalog, citing evidence of active exploitation. The critical vulnerabilities are listed below - CVE-2026-134624 (CVSS score: 9.3) - A server-side request forgery (SSRF) vulnerability in N-able MailAssure's LDAP",
         "evidence_origin": "summary",
-        "focus": "N-able MailAssure's LDAP",
-        "headline": "N-able MailAssure's LDAP vulnerability added to CISA exploited catalog",
+        "focus": "N-able MailAssure",
+        "headline": "N-able MailAssure appears in CISA exploited catalog",
         "priority": "high",
-        "significance": "Active exploitation of this SSRF vulnerability requires immediate asset identification and patching. Vulnerability owners should confirm affected deployments and verify remediation status.",
+        "significance": "Active exploitation of N-able MailAssure SSRF vulnerability demands immediate asset identification. Vulnerability owners should verify whether MailAssure instances exist in the environment and confirm remediation status.",
         "source_ids": [
           3
+        ]
+      },
+      {
+        "control_id": "monitoring",
+        "evidence_excerpt": "An unknown threat actor has been using artificial intelligence (AI)-driven offensive tooling in a campaign targeting Check Point Security Management servers, impacting 22 distinct organizations across the world. The intrusion activity, tracked by GreyNoise under the moniker GreyNoise Threat 13 (GT13), is assessed to have targeted organizations in the financial services, energy, government",
+        "evidence_origin": "summary",
+        "focus": "Check Point Security Management servers",
+        "headline": "Check Point Security Management servers targeted by AI campaign",
+        "priority": "high",
+        "significance": "AI-driven targeting of security management infrastructure challenges detection assumptions. Monitoring owners should review telemetry coverage for Check Point management interfaces and validate alert routing for anomalous administrative activity.",
+        "source_ids": [
+          7
+        ]
+      },
+      {
+        "control_id": "access_management",
+        "evidence_excerpt": "Palo Alto Networks Unit 42 has disclosed that it's tracking and has responded to \"numerous waves of vishing attacks\" orchestrated by Com-affiliated threat actors since August 2026 that have led to data theft and extortion attempts. The attacks have targeted financial services, healthcare, and legal services located in the U.S., the U.K., and Australia.",
+        "evidence_origin": "summary",
+        "focus": "cloud accounts",
+        "headline": "Cloud accounts hijacked via vishing campaigns",
+        "priority": "high",
+        "significance": "Vishing campaigns bypassing authentication to hijack cloud accounts expose gaps in identity verification. Access management owners should confirm multi-factor authentication coverage for cloud administrative access and review session revocation procedures.",
+        "source_ids": [
+          8
+        ]
+      },
+      {
+        "control_id": "third_party_risk",
+        "evidence_excerpt": "WordPress has removed six WordPress plugins developed by WP Connect after they were backdoored on November 22, 2026, to enable arbitrary code execution on sites that have them installed, following a suspected compromise of the developer's account. The WordPress plugins team has independently detected and blocked the threat before it could be officially released.",
+        "evidence_origin": "summary",
+        "focus": "WP Connect plugins",
+        "headline": "WP Connect plugins backdoored in supply chain compromise",
+        "priority": "medium",
+        "significance": "Supply chain compromise of WordPress plugins introduces arbitrary code execution risk. Third-party risk owners should inventory WP Connect plugin usage and verify removal or mitigation with application owners.",
+        "source_ids": [
+          9
         ]
       },
       {
@@ -20,57 +68,9 @@
         "evidence_excerpt": "Rackspace is shutting down its Rackspace Spot cloud platform after a security breach allowed hackers to access customer Kubernetes clusters and secrets, giving customers until December 8 to migrate their services and download their data",
         "evidence_origin": "summary",
         "focus": "Rackspace Spot cloud platform",
-        "headline": "Rackspace Spot cloud platform shutdown after breach exposes customer clusters",
+        "headline": "Rackspace Spot cloud platform shut down after breach",
         "priority": "high",
-        "significance": "A supplier breach forced platform shutdown and customer migration, indicating control failures in supplier assurance. Supplier risk owners should review dependencies on Rackspace and verify migration completeness.",
-        "source_ids": [
-          7
-        ]
-      },
-      {
-        "control_id": "data_protection",
-        "evidence_excerpt": "Cybersecurity company Radware says attackers gained access to some of its customers' account details and cloud access keys through an unsecured internal Cloud WAF (Web Application Firewall) management API that was left exposed online",
-        "evidence_origin": "summary",
-        "focus": "customer cloud access keys",
-        "headline": "Customer cloud access keys exposed via unsecured Radware management API",
-        "priority": "high",
-        "significance": "Exposed management API led to credential theft, weakening data protection assurances for affected customers. Data protection owners should assess exposure scope and rotate compromised credentials.",
-        "source_ids": [
-          11
-        ]
-      },
-      {
-        "control_id": "vulnerability_management",
-        "evidence_excerpt": "Broadcom has shipped patches to address 23 vulnerabilities impacting VMware ESX, vCenter, Workstation, Fusion, and Avi Load Balancer, including one critical bug that could be abused to bypass authentication. The critical vulnerability, tracked as CVE-2026-123903, is rated 9.8 out of 10.0 on the CVSS scoring system. It resides in the VMware Directory Service (\"vmdir\")",
-        "evidence_origin": "summary",
-        "focus": "VMware Directory Service",
-        "headline": "VMware Directory Service authentication bypass patched after zero-day exploitation",
-        "priority": "high",
-        "significance": "Critical authentication bypass in core directory service requires urgent patching across virtualization infrastructure. Vulnerability owners should inventory affected VMware products and confirm patch deployment.",
-        "source_ids": [
-          1
-        ]
-      },
-      {
-        "control_id": "access_management",
-        "evidence_excerpt": "A newly formed data extortion group named 'Inception' has been linked to a large-scale campaign that targets single sign-on (SSO) credentials of multiple global brands and firms",
-        "evidence_origin": "summary",
-        "focus": "single sign-on (SSO) credentials",
-        "headline": "Single sign-on (SSO) credentials targeted by Inception extortion group vishing campaign",
-        "priority": "medium",
-        "significance": "Large-scale vishing targeting SSO credentials tests authentication controls and privilege boundaries. Access management owners should review SSO protections and verify phishing-resistant authentication coverage.",
-        "source_ids": [
-          9
-        ]
-      },
-      {
-        "control_id": "monitoring",
-        "evidence_excerpt": "A previously undocumented Iran-aligned cyber espionage group called Volant Manticore has targeted telecommunications companies, airlines, and critical infrastructure in Cyprus. Central to the group's operations is a backdoor called KuboShell that uses the InterPlanetary File System (IPFS) for command-and-control (C2)",
-        "evidence_origin": "summary",
-        "focus": "telecommunications companies",
-        "headline": "Telecommunications companies targeted by Volant Manticore IPFS-based backdoor campaign",
-        "priority": "medium",
-        "significance": "Novel IPFS-based C2 infrastructure challenges existing detection capabilities for telecommunications sector. Monitoring owners should evaluate IPFS traffic visibility and update detection rules for KuboShell indicators.",
+        "significance": "Cloud provider breach exposing Kubernetes clusters and secrets forces customer migration. Third-party risk owners should assess dependency on Rackspace Spot, confirm data retrieval, and evaluate alternative provider assurances.",
         "source_ids": [
           12
         ]
@@ -80,27 +80,27 @@
       "paragraphs": [
         {
           "source_ids": [
+            1,
             3,
-            7,
-            11
+            7
           ],
-          "text": "CISA added an actively exploited N-able MailAssure vulnerability to its Known Exploited Vulnerabilities catalog while two major service providers, Rackspace and Radware, disclosed breaches exposing customer Kubernetes clusters and cloud access keys respectively. These events demonstrate that vulnerability exploitation and supplier control failures are converging to create immediate remediation demands. Vulnerability and supplier risk owners must prioritize asset identification for the MailAssure flaw, verify Rackspace migration completion, and assess Radware credential exposure across their environments."
+          "text": "Critical authentication bypass in VMware vCenter and active exploitation of N-able MailAssure and Check Point management servers demand immediate vulnerability management attention. Broadcom has released patches for 23 VMware vulnerabilities including a 9.8-rated auth bypass, while CISA added MailAssure SSRF to its exploited catalog. An AI-driven campaign compromised 24 Check Point management servers across financial services, energy, and government sectors. Vulnerability and monitoring owners should prioritize asset identification, patch validation, and detection coverage for security management interfaces."
         },
         {
           "source_ids": [
-            1,
+            8,
             9,
             12
           ],
-          "text": "Broadcom patched a critical VMware vCenter authentication bypass following zero-day exploitation, a new extortion group launched large-scale vishing against single sign-on credentials, and an Iran-aligned actor deployed IPFS-based command infrastructure against telecommunications targets. These developments extend the threat surface across virtualization platforms, identity systems, and sector-specific espionage. Access management, vulnerability management, and monitoring owners should confirm patch deployment for VMware Directory Service, evaluate SSO phishing resistance, and assess IPFS traffic detection coverage."
+          "text": "Vishing campaigns hijacking cloud accounts, backdoored WordPress plugins, and the Rackspace Spot platform shutdown reveal expanding identity and supply chain exposures. Com-affiliated actors have conducted vishing against financial services, healthcare, and legal sectors since August 2026. WordPress removed six WP Connect plugins backdoored for arbitrary code execution. Rackspace customers must migrate from Spot by December 8 after Kubernetes cluster and secrets access. Access management and third-party risk owners should verify cloud authentication controls, inventory affected plugins, and assess provider dependencies."
         }
       ]
     },
     "industry_impacts": [],
     "regulatory_changes": []
   },
-  "generated_at": "2026-11-25T06:25:11.856032Z",
-  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/c14e4bc3a889db78dba37da044ce854d188bf37a/site/feed.xml",
+  "generated_at": "2026-11-25T09:19:58.996688Z",
+  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/f5fdb4460076ddfe32055586d8979c66faebdd43/site/feed.xml",
   "feed_home_url": "https://sentrydigest.ricomanifesto.com/",
   "digest_issue_date": "2026-11-25",
   "digest_issue_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-25/",
@@ -202,6 +202,116 @@
       "effective_date_evidence": null
     },
     {
+      "title": "Microsoft confirms authentication issues after November updates",
+      "url": "https://www.bleepingcomputer.com/news/microsoft/microsoft-confirms-authentication-issues-after-november-updates/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-25/#reporting-29df4a0d48be",
+      "cves": [],
+      "snippet": "Microsoft confirms authentication issues after November updates Microsoft has confirmed that customers may experience authentication issues after installing November security updates that address a high-severity remote code execution vulnerability… Microsoft has confirmed that customers may experience authentication issues after installing November security updates that address a high-severity remote code execution vulnerability…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Microsoft has confirmed that customers may experience authentication issues after installing November security updates that address a high-severity remote code execution vulnerability…",
+          "text": "Microsoft has confirmed that customers may experience authentication issues after installing November security updates that address a high-severity remote code execution vulnerability…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Microsoft has confirmed that customers may experience authentication issues after installing November security updates that address a high-severity remote code execution vulnerability…",
+          "text": "Microsoft has confirmed that customers may experience authentication issues after installing November security updates that address a high-severity remote code execution vulnerability…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Hackers reportedly breached CIA intelligence analysis system",
+      "url": "https://www.bleepingcomputer.com/news/security/hackers-reportedly-breached-cia-intelligence-analysis-system/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-25/#reporting-0fe0d4f016d0",
+      "cves": [],
+      "snippet": "Hackers reportedly breached CIA intelligence analysis system Unknown attackers have reportedly breached an open-source intelligence analysis system at the US Central Intelligence Agency (CIA)… Unknown attackers have reportedly breached an open-source intelligence analysis system at the US Central Intelligence Agency (CIA)…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Unknown attackers have reportedly breached an open-source intelligence analysis system at the US Central Intelligence Agency (CIA)…",
+          "text": "Unknown attackers have reportedly breached an open-source intelligence analysis system at the US Central Intelligence Agency (CIA)…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Unknown attackers have reportedly breached an open-source intelligence analysis system at the US Central Intelligence Agency (CIA)…",
+          "text": "Unknown attackers have reportedly breached an open-source intelligence analysis system at the US Central Intelligence Agency (CIA)…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Hackers Compromise 24 Check Point Management Servers in Suspected AI-Driven Attack Campaign",
+      "url": "https://thehackernews.com/2026/11/hackers-compromise-24-check-point.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-25/#reporting-d5f3ce6a4d9a",
+      "cves": [],
+      "snippet": "Hackers Compromise 24 Check Point Management Servers in Suspected AI-Driven Attack Campaign An unknown threat actor has been using artificial intelligence (AI)-driven offensive tooling in a campaign targeting Check Point Security Management servers, impacting 22 distinct organizations across the world. The intrusion activity, tracked by GreyNoise under the moniker GreyNoise Threat 13 (GT13), is assessed to have targeted organizations in the financial services, energy, government… An unknown threat actor has been using artificial intelligence (AI)-driven offensive tooling in a campaign targeting Check Point Security Management servers, impacting 22 distinct organizations across the world. The",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "An unknown threat actor has been using artificial intelligence (AI)-driven offensive tooling in a campaign targeting Check Point Security Management servers, impacting 22 distinct organizations across the world. The intrusion activity, tracked by GreyNoise under the moniker GreyNoise Threat 13 (GT13), is assessed to have targeted organizations in the financial services, energy, government…",
+          "text": "An unknown threat actor has been using artificial intelligence (AI)-driven offensive tooling in a campaign targeting Check Point Security Management servers, impacting 22 distinct organizations across the world. The intrusion activity, tracked by GreyNoise under the moniker GreyNoise Threat 13 (GT13), is assessed to have targeted organizations in the financial services, energy, government…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "An unknown threat actor has been using artificial intelligence (AI)-driven offensive tooling in a campaign targeting Check Point Security Management servers, impacting 22 distinct organizations across the world. The intrusion activity, tracked by GreyNoise under the moniker GreyNoise Threat 13 (GT13), is assessed to have targeted organizations in the financial services, energy, government…",
+          "text": "An unknown threat actor has been using artificial intelligence (AI)-driven offensive tooling in a campaign targeting Check Point Security Management servers, impacting 22 distinct organizations across the world. The intrusion activity, tracked by GreyNoise under the moniker GreyNoise Threat 13 (GT13), is assessed to have targeted organizations in the financial services, energy, government…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Com-Affiliated Hackers Hijack Cloud Accounts via Vishing for Data Theft and Extortion",
+      "url": "https://thehackernews.com/2026/11/com-affiliated-hackers-hijack-cloud.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-25/#reporting-da2703c97fc2",
+      "cves": [],
+      "snippet": "Com-Affiliated Hackers Hijack Cloud Accounts via Vishing for Data Theft and Extortion Palo Alto Networks Unit 42 has disclosed that it's tracking and has responded to \"numerous waves of vishing attacks\" orchestrated by Com-affiliated threat actors since August 2026 that have led to data theft and extortion attempts. The attacks have targeted financial services, healthcare, and legal services located in the U.S., the U.K., and Australia. Other targets include construction… Palo Alto Networks Unit 42 has disclosed that it's tracking and has responded to \"numerous waves of vishing attacks\" orchestrated by Com-affiliated threat actors since August 2026 that have led to data theft and extortion a",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Palo Alto Networks Unit 42 has disclosed that it's tracking and has responded to \"numerous waves of vishing attacks\" orchestrated by Com-affiliated threat actors since August 2026 that have led to data theft and extortion attempts. The attacks have targeted financial services, healthcare, and legal services located in the U.S., the U.K., and Australia. Other targets include construction…",
+          "text": "Palo Alto Networks Unit 42 has disclosed that it's tracking and has responded to \"numerous waves of vishing attacks\" orchestrated by Com-affiliated threat actors since August 2026 that have led to data theft and extortion attempts. The attacks have targeted financial services, healthcare, and legal services located in the U.S., the U.K., and Australia. Other targets include construction…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Palo Alto Networks Unit 42 has disclosed that it's tracking and has responded to \"numerous waves of vishing attacks\" orchestrated by Com-affiliated threat actors since August 2026 that have led to data theft and extortion attempts. The attacks have targeted financial services, healthcare, and legal services located in the U.S., the U.K., and Australia. Other targets include construction…",
+          "text": "Palo Alto Networks Unit 42 has disclosed that it's tracking and has responded to \"numerous waves of vishing attacks\" orchestrated by Com-affiliated threat actors since August 2026 that have led to data theft and extortion attempts. The attacks have targeted financial services, healthcare, and legal services located in the U.S., the U.K., and Australia. Other targets include construction…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "WordPress Blocks Six Backdoored WP Connect Plugins Before Malicious Releases Go Live",
+      "url": "https://thehackernews.com/2026/11/wordpress-blocks-six-backdoored-wp.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-25/#reporting-da78c9293f40",
+      "cves": [],
+      "snippet": "WordPress Blocks Six Backdoored WP Connect Plugins Before Malicious Releases Go Live WordPress has removed six WordPress plugins developed by WP Connect after they were backdoored on November 22, 2026, to enable arbitrary code execution on sites that have them installed, following a suspected compromise of the developer's account. The WordPress plugins team has independently detected and blocked the threat before it could be officially released. Visiting each plugin listing now… WordPress has removed six WordPress plugins developed by WP Connect after they were backdoored on November 22, 2026, to enable arbitrary code execution on sites that have them installed, following a suspected comprom",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "WordPress has removed six WordPress plugins developed by WP Connect after they were backdoored on November 22, 2026, to enable arbitrary code execution on sites that have them installed, following a suspected compromise of the developer's account. The WordPress plugins team has independently detected and blocked the threat before it could be officially released. Visiting each plugin listing now…",
+          "text": "WordPress has removed six WordPress plugins developed by WP Connect after they were backdoored on November 22, 2026, to enable arbitrary code execution on sites that have them installed, following a suspected compromise of the developer's account. The WordPress plugins team has independently detected and blocked the threat before it could be officially released. Visiting each plugin listing now…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "WordPress has removed six WordPress plugins developed by WP Connect after they were backdoored on November 22, 2026, to enable arbitrary code execution on sites that have them installed, following a suspected compromise of the developer's account. The WordPress plugins team has independently detected and blocked the threat before it could be officially released. Visiting each plugin listing now…",
+          "text": "WordPress has removed six WordPress plugins developed by WP Connect after they were backdoored on November 22, 2026, to enable arbitrary code execution on sites that have them installed, following a suspected compromise of the developer's account. The WordPress plugins team has independently detected and blocked the threat before it could be officially released. Visiting each plugin listing now…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
       "title": "Satellites Have a Ground-Level Cybersecurity Problem",
       "url": "https://www.darkreading.com/cyber-risk/satellites-ground-level-cybersecurity-problem",
       "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-25/#reporting-1b2736ce0451",
@@ -263,116 +373,6 @@
           "origin": "content",
           "raw_text": "Rackspace is shutting down its Rackspace Spot cloud platform after a security breach allowed hackers to access customer Kubernetes clusters and secrets, giving customers until December 8 to migrate their services and download their data…",
           "text": "Rackspace is shutting down its Rackspace Spot cloud platform after a security breach allowed hackers to access customer Kubernetes clusters and secrets, giving customers until December 8 to migrate their services and download their data…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "'God Mode' Flaws Could Wreak Border-Control Havoc",
-      "url": "https://www.darkreading.com/vulnerabilities-threats/god-mode-flaws-wreak-border-control-havoc",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-25/#reporting-716dc2a9a70d",
-      "cves": [],
-      "snippet": "'God Mode' Flaws Could Wreak Border-Control Havoc Attackers could have disrupted traveler entry into Nigeria, Ethiopia, Zambia, Sri Lanka, Fiji, and Ghana via several vulnerabilities in their online visa and immigration systems. Attackers could have disrupted traveler entry into Nigeria, Ethiopia, Zambia, Sri Lanka, Fiji, and Ghana via several vulnerabilities in their online visa and immigration systems.",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "Attackers could have disrupted traveler entry into Nigeria, Ethiopia, Zambia, Sri Lanka, Fiji, and Ghana via several vulnerabilities in their online visa and immigration systems.",
-          "text": "Attackers could have disrupted traveler entry into Nigeria, Ethiopia, Zambia, Sri Lanka, Fiji, and Ghana via several vulnerabilities in their online visa and immigration systems."
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "Attackers could have disrupted traveler entry into Nigeria, Ethiopia, Zambia, Sri Lanka, Fiji, and Ghana via several vulnerabilities in their online visa and immigration systems.",
-          "text": "Attackers could have disrupted traveler entry into Nigeria, Ethiopia, Zambia, Sri Lanka, Fiji, and Ghana via several vulnerabilities in their online visa and immigration systems."
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "New Inception extortion gang launches large-scale vishing campaign",
-      "url": "https://www.bleepingcomputer.com/news/security/new-inception-extortion-gang-launches-large-scale-vishing-campaign/",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-25/#reporting-347042e7abf2",
-      "cves": [],
-      "snippet": "New Inception extortion gang launches large-scale vishing campaign A newly formed data extortion group named 'Inception' has been linked to a large-scale campaign that targets single sign-on (SSO) credentials of multiple global brands and firms… A newly formed data extortion group named 'Inception' has been linked to a large-scale campaign that targets single sign-on (SSO) credentials of multiple global brands and firms…",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "A newly formed data extortion group named 'Inception' has been linked to a large-scale campaign that targets single sign-on (SSO) credentials of multiple global brands and firms…",
-          "text": "A newly formed data extortion group named 'Inception' has been linked to a large-scale campaign that targets single sign-on (SSO) credentials of multiple global brands and firms…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "A newly formed data extortion group named 'Inception' has been linked to a large-scale campaign that targets single sign-on (SSO) credentials of multiple global brands and firms…",
-          "text": "A newly formed data extortion group named 'Inception' has been linked to a large-scale campaign that targets single sign-on (SSO) credentials of multiple global brands and firms…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "Turnitin discloses cyberattack affecting customer-facing systems",
-      "url": "https://www.bleepingcomputer.com/news/security/turnitin-discloses-cyberattack-affecting-customer-facing-systems/",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-25/#reporting-6c5bc98dced3",
-      "cves": [],
-      "snippet": "Turnitin discloses cyberattack affecting customer-facing systems Turnitin disclosed via a statement from its CEO, Chris Caren, that it recently detected unauthorized activity involving certain customer-facing systems… Turnitin disclosed via a statement from its CEO, Chris Caren, that it recently detected unauthorized activity involving certain customer-facing systems…",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "Turnitin disclosed via a statement from its CEO, Chris Caren, that it recently detected unauthorized activity involving certain customer-facing systems…",
-          "text": "Turnitin disclosed via a statement from its CEO, Chris Caren, that it recently detected unauthorized activity involving certain customer-facing systems…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "Turnitin disclosed via a statement from its CEO, Chris Caren, that it recently detected unauthorized activity involving certain customer-facing systems…",
-          "text": "Turnitin disclosed via a statement from its CEO, Chris Caren, that it recently detected unauthorized activity involving certain customer-facing systems…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "Radware discloses breach exposing customer cloud access keys",
-      "url": "https://www.bleepingcomputer.com/news/security/radware-discloses-breach-exposing-customer-cloud-access-keys/",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-25/#reporting-a251bdbac4c3",
-      "cves": [],
-      "snippet": "Radware discloses breach exposing customer cloud access keys Cybersecurity company Radware says attackers gained access to some of its customers' account details and cloud access keys through an unsecured internal Cloud WAF (Web Application Firewall) management API that was left exposed online… Cybersecurity company Radware says attackers gained access to some of its customers' account details and cloud access keys through an unsecured internal Cloud WAF (Web Application Firewall) management API that was left exposed online…",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "Cybersecurity company Radware says attackers gained access to some of its customers' account details and cloud access keys through an unsecured internal Cloud WAF (Web Application Firewall) management API that was left exposed online…",
-          "text": "Cybersecurity company Radware says attackers gained access to some of its customers' account details and cloud access keys through an unsecured internal Cloud WAF (Web Application Firewall) management API that was left exposed online…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "Cybersecurity company Radware says attackers gained access to some of its customers' account details and cloud access keys through an unsecured internal Cloud WAF (Web Application Firewall) management API that was left exposed online…",
-          "text": "Cybersecurity company Radware says attackers gained access to some of its customers' account details and cloud access keys through an unsecured internal Cloud WAF (Web Application Firewall) management API that was left exposed online…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "Iran-Aligned Volant Manticore Uses IPFS-Based KuboShell Backdoor in Espionage Campaigns",
-      "url": "https://thehackernews.com/2026/11/iran-aligned-volant-manticore-uses-ipfs.html",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-25/#reporting-9582e29a3fdc",
-      "cves": [],
-      "snippet": "Iran-Aligned Volant Manticore Uses IPFS-Based KuboShell Backdoor in Espionage Campaigns A previously undocumented Iran-aligned cyber espionage group called Volant Manticore has targeted telecommunications companies, airlines, and critical infrastructure in Cyprus. Central to the group's operations is a backdoor called KuboShell that uses the InterPlanetary File System (IPFS) for command-and-control (C2) and deploys Homa, a post-compromise framework that's a reimplementation of… A previously undocumented Iran-aligned cyber espionage group called Volant Manticore has targeted telecommunications companies, airlines, and critical infrastructure in Cyprus. Central to the group's operations is a b",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "A previously undocumented Iran-aligned cyber espionage group called Volant Manticore has targeted telecommunications companies, airlines, and critical infrastructure in Cyprus. Central to the group's operations is a backdoor called KuboShell that uses the InterPlanetary File System (IPFS) for command-and-control (C2) and deploys Homa, a post-compromise framework that's a reimplementation of…",
-          "text": "A previously undocumented Iran-aligned cyber espionage group called Volant Manticore has targeted telecommunications companies, airlines, and critical infrastructure in Cyprus. Central to the group's operations is a backdoor called KuboShell that uses the InterPlanetary File System (IPFS) for command-and-control (C2) and deploys Homa, a post-compromise framework that's a reimplementation of…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "A previously undocumented Iran-aligned cyber espionage group called Volant Manticore has targeted telecommunications companies, airlines, and critical infrastructure in Cyprus. Central to the group's operations is a backdoor called KuboShell that uses the InterPlanetary File System (IPFS) for command-and-control (C2) and deploys Homa, a post-compromise framework that's a reimplementation of…",
-          "text": "A previously undocumented Iran-aligned cyber espionage group called Volant Manticore has targeted telecommunications companies, airlines, and critical infrastructure in Cyprus. Central to the group's operations is a backdoor called KuboShell that uses the InterPlanetary File System (IPFS) for command-and-control (C2) and deploys Homa, a post-compromise framework that's a reimplementation of…"
         }
       ],
       "effective_date_evidence": null
