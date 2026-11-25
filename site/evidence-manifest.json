@@ -5,24 +5,12 @@
     "control_implications": [
       {
         "control_id": "vulnerability_management",
-        "evidence_excerpt": "Broadcom has shipped patches to address 23 vulnerabilities impacting VMware ESX, vCenter, Workstation, Fusion, and Avi Load Balancer, including one critical bug that could be abused to bypass authentication. The critical vulnerability, tracked as CVE-2026-123903, is rated 9.8 out of 10.0 on the CVSS scoring system. It resides in the VMware Directory Service (\"vmdir\").",
-        "evidence_origin": "summary",
-        "focus": "VMware vCenter Server",
-        "headline": "VMware vCenter Server weakens authentication controls",
-        "priority": "high",
-        "significance": "The critical authentication bypass in VMware Directory Service undermines identity verification for virtualized infrastructure. Vulnerability and asset owners should confirm patch deployment across all affected ESX, vCenter, Workstation, Fusion, and Avi Load Balancer instances and verify compensating controls where patching is delayed.",
-        "source_ids": [
-          1
-        ]
-      },
-      {
-        "control_id": "vulnerability_management",
         "evidence_excerpt": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Monday added two flaws impacting N-able MailAssure and MONAI Label to its Known Exploited Vulnerabilities (KEV) catalog, citing evidence of active exploitation. The critical vulnerabilities are listed below - CVE-2026-134624 (CVSS score: 9.3) - A server-side request forgery (SSRF) vulnerability in N-able MailAssure's LDAP",
         "evidence_origin": "summary",
-        "focus": "N-able MailAssure LDAP",
-        "headline": "N-able MailAssure LDAP exposes server-side request forgery",
+        "focus": "N-able MailAssure's LDAP",
+        "headline": "N-able MailAssure's LDAP vulnerability added to CISA exploited catalog",
         "priority": "high",
-        "significance": "CISA confirmation of active exploitation for N-able MailAssure and MONAI Label flaws requires immediate asset identification and remediation. Vulnerability and asset owners should verify whether deployed instances are affected and apply vendor patches or implement network segmentation to limit SSRF exposure.",
+        "significance": "Active exploitation of this SSRF vulnerability requires immediate asset identification and patching. Vulnerability owners should confirm affected deployments and verify remediation status.",
         "source_ids": [
           3
         ]
@@ -32,47 +20,59 @@
         "evidence_excerpt": "Rackspace is shutting down its Rackspace Spot cloud platform after a security breach allowed hackers to access customer Kubernetes clusters and secrets, giving customers until December 8 to migrate their services and download their data",
         "evidence_origin": "summary",
         "focus": "Rackspace Spot cloud platform",
-        "headline": "Rackspace Spot cloud platform terminates after breach",
+        "headline": "Rackspace Spot cloud platform shutdown after breach exposes customer clusters",
         "priority": "high",
-        "significance": "The platform shutdown following unauthorized access to Kubernetes clusters and secrets disrupts service continuity and raises data custody concerns. Supplier risk owners should confirm migration completion, validate data integrity, and assess whether other Rackspace services share similar control gaps.",
+        "significance": "A supplier breach forced platform shutdown and customer migration, indicating control failures in supplier assurance. Supplier risk owners should review dependencies on Rackspace and verify migration completeness.",
         "source_ids": [
-          6
+          7
         ]
       },
       {
-        "control_id": "third_party_risk",
+        "control_id": "data_protection",
         "evidence_excerpt": "Cybersecurity company Radware says attackers gained access to some of its customers' account details and cloud access keys through an unsecured internal Cloud WAF (Web Application Firewall) management API that was left exposed online",
         "evidence_origin": "summary",
-        "focus": "Radware Cloud WAF management API",
-        "headline": "Radware Cloud WAF management API exposes cloud access keys",
+        "focus": "customer cloud access keys",
+        "headline": "Customer cloud access keys exposed via unsecured Radware management API",
         "priority": "high",
-        "significance": "Exposure of customer cloud access keys via an unsecured management API indicates a critical configuration failure in a security vendor's infrastructure. Supplier risk owners should verify key rotation, assess downstream access impact, and demand evidence of API security hardening from Radware.",
+        "significance": "Exposed management API led to credential theft, weakening data protection assurances for affected customers. Data protection owners should assess exposure scope and rotate compromised credentials.",
         "source_ids": [
-          10
+          11
+        ]
+      },
+      {
+        "control_id": "vulnerability_management",
+        "evidence_excerpt": "Broadcom has shipped patches to address 23 vulnerabilities impacting VMware ESX, vCenter, Workstation, Fusion, and Avi Load Balancer, including one critical bug that could be abused to bypass authentication. The critical vulnerability, tracked as CVE-2026-123903, is rated 9.8 out of 10.0 on the CVSS scoring system. It resides in the VMware Directory Service (\"vmdir\")",
+        "evidence_origin": "summary",
+        "focus": "VMware Directory Service",
+        "headline": "VMware Directory Service authentication bypass patched after zero-day exploitation",
+        "priority": "high",
+        "significance": "Critical authentication bypass in core directory service requires urgent patching across virtualization infrastructure. Vulnerability owners should inventory affected VMware products and confirm patch deployment.",
+        "source_ids": [
+          1
         ]
       },
       {
         "control_id": "access_management",
         "evidence_excerpt": "A newly formed data extortion group named 'Inception' has been linked to a large-scale campaign that targets single sign-on (SSO) credentials of multiple global brands and firms",
         "evidence_origin": "summary",
-        "focus": "Inception extortion gang",
-        "headline": "Inception extortion gang targets single sign-on credentials",
+        "focus": "single sign-on (SSO) credentials",
+        "headline": "Single sign-on (SSO) credentials targeted by Inception extortion group vishing campaign",
         "priority": "medium",
-        "significance": "A large-scale vishing campaign targeting SSO credentials threatens identity federation across multiple organizations. Identity and access owners should review SSO authentication policies, enforce phishing-resistant MFA, and verify that credential compromise detection covers social engineering vectors.",
+        "significance": "Large-scale vishing targeting SSO credentials tests authentication controls and privilege boundaries. Access management owners should review SSO protections and verify phishing-resistant authentication coverage.",
         "source_ids": [
-          8
+          9
         ]
       },
       {
         "control_id": "monitoring",
-        "evidence_excerpt": "A previously undocumented Iran-aligned cyber espionage group called Volant Manticore has targeted telecommunications companies, airlines, and critical infrastructure in Cyprus. Central to the group's operations is a backdoor called KuboShell that uses the InterPlanetary File System (IPFS) for command-and-control (C2) and deploys Homa, a post-compromise framework",
+        "evidence_excerpt": "A previously undocumented Iran-aligned cyber espionage group called Volant Manticore has targeted telecommunications companies, airlines, and critical infrastructure in Cyprus. Central to the group's operations is a backdoor called KuboShell that uses the InterPlanetary File System (IPFS) for command-and-control (C2)",
         "evidence_origin": "summary",
-        "focus": "Volant Manticore KuboShell backdoor",
-        "headline": "Volant Manticore KuboShell backdoor uses IPFS for command",
+        "focus": "telecommunications companies",
+        "headline": "Telecommunications companies targeted by Volant Manticore IPFS-based backdoor campaign",
         "priority": "medium",
-        "significance": "IPFS-based command and control evades traditional network monitoring and targets telecommunications infrastructure. Detection and monitoring owners should evaluate whether current telemetry can identify IPFS traffic patterns and confirm coverage for post-compromise frameworks like Homa in critical sectors.",
+        "significance": "Novel IPFS-based C2 infrastructure challenges existing detection capabilities for telecommunications sector. Monitoring owners should evaluate IPFS traffic visibility and update detection rules for KuboShell indicators.",
         "source_ids": [
-          11
+          12
         ]
       }
     ],
@@ -80,27 +80,27 @@
       "paragraphs": [
         {
           "source_ids": [
-            1,
             3,
-            6,
-            10
+            7,
+            11
           ],
-          "text": "Multiple critical vulnerabilities with confirmed active exploitation and two major cloud provider breaches demand immediate vendor risk review and patching. Broadcom released patches for 23 VMware flaws including a 9.8-rated authentication bypass in vCenter Directory Service, while CISA added N-able MailAssure and MONAI Label flaws to its Known Exploited Vulnerabilities catalog. Simultaneously, Rackspace shut down its Spot platform after attackers accessed customer Kubernetes clusters and secrets, and Radware exposed customer cloud access keys via an unsecured management API, creating cascading supply chain risk."
+          "text": "CISA added an actively exploited N-able MailAssure vulnerability to its Known Exploited Vulnerabilities catalog while two major service providers, Rackspace and Radware, disclosed breaches exposing customer Kubernetes clusters and cloud access keys respectively. These events demonstrate that vulnerability exploitation and supplier control failures are converging to create immediate remediation demands. Vulnerability and supplier risk owners must prioritize asset identification for the MailAssure flaw, verify Rackspace migration completion, and assess Radware credential exposure across their environments."
         },
         {
           "source_ids": [
-            8,
-            11
+            1,
+            9,
+            12
           ],
-          "text": "Identity-targeted campaigns and novel evasion techniques challenge existing detection and authentication controls. The Inception extortion group conducts large-scale vishing against single sign-on credentials across global brands, while the Iran-aligned Volant Manticore group deploys an IPFS-based KuboShell backdoor against telecommunications and critical infrastructure in Cyprus. These developments require identity owners to enforce phishing-resistant MFA and monitoring teams to validate coverage for decentralized command-and-control channels."
+          "text": "Broadcom patched a critical VMware vCenter authentication bypass following zero-day exploitation, a new extortion group launched large-scale vishing against single sign-on credentials, and an Iran-aligned actor deployed IPFS-based command infrastructure against telecommunications targets. These developments extend the threat surface across virtualization platforms, identity systems, and sector-specific espionage. Access management, vulnerability management, and monitoring owners should confirm patch deployment for VMware Directory Service, evaluate SSO phishing resistance, and assess IPFS traffic detection coverage."
         }
       ]
     },
     "industry_impacts": [],
     "regulatory_changes": []
   },
-  "generated_at": "2026-11-25T00:35:36.623023Z",
-  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/af44a86bd52d3564d5f87b32da8aca4c0d517d33/site/feed.xml",
+  "generated_at": "2026-11-25T06:25:11.856032Z",
+  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/c14e4bc3a889db78dba37da044ce854d188bf37a/site/feed.xml",
   "feed_home_url": "https://sentrydigest.ricomanifesto.com/",
   "digest_issue_date": "2026-11-25",
   "digest_issue_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-25/",
@@ -175,6 +175,28 @@
           "origin": "content",
           "raw_text": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Monday added two flaws impacting N-able MailAssure and MONAI Label to its Known Exploited Vulnerabilities (KEV) catalog, citing evidence of active exploitation. The critical vulnerabilities are listed below - CVE-2026-134624 (CVSS score: 9.3) - A server-side request forgery (SSRF) vulnerability in N-able MailAssure's LDAP…",
           "text": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Monday added two flaws impacting N-able MailAssure and MONAI Label to its Known Exploited Vulnerabilities (KEV) catalog, citing evidence of active exploitation. The critical vulnerabilities are listed below - CVE-2026-134624 (CVSS score: 9.3) - A server-side request forgery (SSRF) vulnerability in N-able MailAssure's LDAP…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Cyber Insurers See New Divide: AI Defense 'Haves' & 'Have Nots'",
+      "url": "https://www.darkreading.com/cybersecurity-operations/cyber-insurers-see-new-ai-divide",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-25/#reporting-45ee7c2e482d",
+      "cves": [],
+      "snippet": "Cyber Insurers See New Divide: AI Defense 'Haves' & 'Have Nots' Dark Reading Confidential Episode 23: Cyber insurers share their view of the AI-driven threat landscape and how mounting challenges are putting pressure on both sides of the policy, leaving the current model unsustainable. Dark Reading Confidential Episode 23: Cyber insurers share their view of the AI-driven threat landscape and how mounting challenges are putting pressure on both sides of the policy, leaving the current model unsustainable.",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Dark Reading Confidential Episode 23: Cyber insurers share their view of the AI-driven threat landscape and how mounting challenges are putting pressure on both sides of the policy, leaving the current model unsustainable.",
+          "text": "Dark Reading Confidential Episode 23: Cyber insurers share their view of the AI-driven threat landscape and how mounting challenges are putting pressure on both sides of the policy, leaving the current model unsustainable."
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Dark Reading Confidential Episode 23: Cyber insurers share their view of the AI-driven threat landscape and how mounting challenges are putting pressure on both sides of the policy, leaving the current model unsustainable.",
+          "text": "Dark Reading Confidential Episode 23: Cyber insurers share their view of the AI-driven threat landscape and how mounting challenges are putting pressure on both sides of the policy, leaving the current model unsustainable."
         }
       ],
       "effective_date_evidence": null
@@ -351,28 +373,6 @@
           "origin": "content",
           "raw_text": "A previously undocumented Iran-aligned cyber espionage group called Volant Manticore has targeted telecommunications companies, airlines, and critical infrastructure in Cyprus. Central to the group's operations is a backdoor called KuboShell that uses the InterPlanetary File System (IPFS) for command-and-control (C2) and deploys Homa, a post-compromise framework that's a reimplementation of…",
           "text": "A previously undocumented Iran-aligned cyber espionage group called Volant Manticore has targeted telecommunications companies, airlines, and critical infrastructure in Cyprus. Central to the group's operations is a backdoor called KuboShell that uses the InterPlanetary File System (IPFS) for command-and-control (C2) and deploys Homa, a post-compromise framework that's a reimplementation of…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "ShinyHunters claims to return after FBI arrests, uses old PGP keys as proof",
-      "url": "https://www.bleepingcomputer.com/news/security/shinyhunters-resurfaces-after-fbi-arrests-uses-old-pgp-keys-as-proof/",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-25/#reporting-9078000bd51b",
-      "cves": [],
-      "snippet": "ShinyHunters claims to return after FBI arrests, uses old PGP keys as proof The ShinyHunters extortion gang claims to have returned in posts on a new data leak site after a series of arrests over the past two months targeting alleged members… The ShinyHunters extortion gang claims to have returned in posts on a new data leak site after a series of arrests over the past two months targeting alleged members…",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "The ShinyHunters extortion gang claims to have returned in posts on a new data leak site after a series of arrests over the past two months targeting alleged members…",
-          "text": "The ShinyHunters extortion gang claims to have returned in posts on a new data leak site after a series of arrests over the past two months targeting alleged members…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "The ShinyHunters extortion gang claims to have returned in posts on a new data leak site after a series of arrests over the past two months targeting alleged members…",
-          "text": "The ShinyHunters extortion gang claims to have returned in posts on a new data leak site after a series of arrests over the past two months targeting alleged members…"
         }
       ],
       "effective_date_evidence": null
