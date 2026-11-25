@@ -5180,6 +5180,13 @@
       "at": "2026-11-25T12:22:23.976Z",
       "run_id": "45613070001",
       "stage": "invoked"
+    },
+    {
+      "admission_key": "digest:0218da148bbd86b6a1d40e9ef51efd284a3eb858",
+      "at": "2026-11-25T12:22:26.539Z",
+      "handle": "report_20261125_122225_596",
+      "run_id": "45613070001",
+      "stage": "invoked"
     }
   ],
   "schema_version": 1,
