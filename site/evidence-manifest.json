@@ -5,12 +5,12 @@
     "control_implications": [
       {
         "control_id": "vulnerability_management",
-        "evidence_excerpt": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Tuesday added a critical flaw impacting Drupal to its Known Exploited Vulnerabilities (KEV) catalog, requiring federal agencies to apply the fixes by November 27, 2026. The vulnerability, tracked as CVE-2026-132165 aka Fail2Install (CVSS score: 9.8), is a case of remote code execution (RCE) impacting Drupal core. \"Drupal Core…",
+        "evidence_excerpt": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Tuesday added a critical flaw impacting Drupal to its Known Exploited Vulnerabilities (KEV) catalog, requiring federal agencies to apply the fixes by November 27, 2026. The vulnerability, tracked as CVE-2026-132165 aka Fail2Install (CVSS score: 9.8), is a case of remote code execution (RCE) impacting Drupal core.",
         "evidence_origin": "summary",
         "focus": "Drupal core",
-        "headline": "Drupal core requires urgent patching per CISA directive",
+        "headline": "Drupal core added to CISA KEV catalog requiring federal agency remediation",
         "priority": "high",
-        "significance": "The CISA KEV inclusion mandates federal agencies to remediate a critical RCE in Drupal core by a fixed deadline, elevating patching priority for all Drupal deployments. Vulnerability owners must confirm affected assets are identified and patched or compensated.",
+        "significance": "The KEV catalog addition mandates federal remediation deadlines, making timely patching a compliance imperative. Vulnerability management owners should confirm asset inventory covers all Drupal instances and that emergency patching procedures meet the November 27 deadline.",
         "source_ids": [
           2
         ]
@@ -20,11 +20,23 @@
         "evidence_excerpt": "Threat actors are actively exploiting two newly patched security flaws in GeoServer, according to watchTowr. The vulnerabilities in question are CVE-2026-120705 and CVE-2026-129243, details of which are below - CVE-2026-120705 (CVSS score: 8.6) - An arbitrary file read vulnerability that could enable an attacker to access local text files readable by the GeoServer process or fetch…",
         "evidence_origin": "summary",
         "focus": "GeoServer",
-        "headline": "GeoServer faces active exploitation of critical flaws",
+        "headline": "GeoServer actively exploited by threat actors despite patches",
         "priority": "high",
-        "significance": "Active exploitation of GeoServer vulnerabilities demands immediate asset identification and patching to prevent unauthorized file access. Vulnerability owners must verify GeoServer instances are inventoried and remediated.",
+        "significance": "Active exploitation of patched flaws indicates delayed remediation windows are being targeted. Vulnerability management owners should verify GeoServer deployments are updated and that compensating controls exist for any unpatched instances.",
         "source_ids": [
           1
+        ]
+      },
+      {
+        "control_id": "third_party_risk",
+        "evidence_excerpt": "Researchers discovered 13 malicious NuGet packages as part of a fake recruitment campaign that spreads malware and gives attackers access to developers' machines.",
+        "evidence_origin": "summary",
+        "focus": "13 malicious NuGet packages",
+        "headline": "13 malicious NuGet packages discovered in fake recruitment campaign",
+        "priority": "high",
+        "significance": "Software supply chain attacks targeting developer environments bypass traditional perimeter controls. Third-party risk owners should assess NuGet package verification processes and developer machine isolation controls.",
+        "source_ids": [
+          4
         ]
       },
       {
@@ -32,47 +44,35 @@
         "evidence_excerpt": "Eclypsium's November InfraTrust report warns that most infrastructure security advisories addressing exploited vulnerabilities over the past month involve flaws in third-party software bundled into products rather than code developed by the vendors themselves…",
         "evidence_origin": "summary",
         "focus": "third-party software bundled into products",
-        "headline": "Third-party software bundled into products drives exploited advisories",
-        "priority": "high",
-        "significance": "The prevalence of exploited flaws in bundled third-party components shifts accountability to supplier assurance programs. Supplier risk owners must review vendor dependency maps and demand evidence of component-level vulnerability management.",
+        "headline": "third-party software bundled into products drives exploited vulnerability advisories",
+        "priority": "medium",
+        "significance": "The prevalence of bundled third-party flaws shifts accountability to vendors and their customers for supply chain visibility. Third-party risk owners should request software bills of materials from appliance vendors and track bundled component patching.",
         "source_ids": [
-          5
+          7
         ]
       },
       {
         "control_id": "incident_response",
         "evidence_excerpt": "The U.S. Treasury Department's Financial Crimes Enforcement Network (FinCEN) has been hit by a cybersecurity incident that resulted in \"unauthorized access to a limited subset of its systems,\" the bureau said on Tuesday. As a precaution, it has taken some systems offline. The bureau collects suspicious activity reports and other Bank Secrecy Act (BSA) filings from banks and other financial…",
         "evidence_origin": "summary",
-        "focus": "Financial Crimes Enforcement Network (FinCEN)",
-        "headline": "Financial Crimes Enforcement Network (FinCEN) suffers unauthorized access incident",
+        "focus": "FinCEN",
+        "headline": "FinCEN takes systems offline after unauthorized access incident",
         "priority": "high",
-        "significance": "A breach at the financial intelligence unit underscores the need for robust containment and evidence preservation in high-value targets. Incident response leads must verify that detection coverage and offline procedures are tested for similar critical systems.",
+        "significance": "A financial regulator's operational disruption demonstrates cascading risk to BSA filing infrastructure. Incident response owners should validate containment procedures for critical financial data systems and confirm offline recovery capabilities.",
         "source_ids": [
-          8
+          10
         ]
       },
       {
         "control_id": "access_management",
-        "evidence_excerpt": "More than 64% still valid after four years: GitGuardian’s State of Secrets Sprawl 2026 found that most valid secrets discovered in 2022 still worked in January 2026, because teams stall on what a revoke will break. Validity-only triage misses 46% of critical secrets: Prioritize by impact instead, weighing what a credential can access and whether it leaked publicly, and update the…",
+        "evidence_excerpt": "TL;DR More than 64% still valid after four years: GitGuardian’s State of Secrets Sprawl 2026 found that most valid secrets discovered in 2022 still worked in January 2026, because teams stall on what a revoke will break. Validity-only triage misses 46% of critical secrets: Prioritize by impact instead, weighing what a credential can access and whether it leaked publicly, and update the…",
         "evidence_origin": "summary",
         "focus": "valid secrets discovered in 2022",
-        "headline": "Valid secrets discovered in 2022 remain active despite remediation delays",
+        "headline": "valid secrets discovered in 2022 remain active after four years",
         "priority": "medium",
-        "significance": "Long-lived valid secrets indicate broken revocation workflows and insufficient impact-based prioritization. Access management owners must confirm that credential inventories are tied to dependency mapping and that revocation testing is routine.",
+        "significance": "Long-lived valid secrets indicate broken revocation workflows and excessive credential scope. Access management owners should implement impact-based secret rotation and validate that revocation testing covers production dependencies.",
         "source_ids": [
-          9
-        ]
-      },
-      {
-        "control_id": "access_management",
-        "evidence_excerpt": "Bot detection has become a losing game. Security teams need to limit privileged access for humans and their machine counterparts equally.",
-        "evidence_origin": "summary",
-        "focus": "privileged access for humans and their machine counterparts",
-        "headline": "Privileged access for humans and their machine counterparts requires equal limitation",
-        "priority": "medium",
-        "significance": "The erosion of bot detection efficacy expands the attack surface for credential misuse across human and machine identities. Access management owners must verify that privileged session controls and just-in-time provisioning cover both human and automated accounts.",
-        "source_ids": [
-          3
+          11
         ]
       }
     ],
@@ -81,25 +81,26 @@
         {
           "source_ids": [
             2,
-            1
+            1,
+            10
           ],
-          "text": "Critical vulnerability deadlines and active exploitation dominate the quarter, with CISA adding a Drupal RCE to its KEV catalog requiring federal patching by November 27 and threat actors exploiting GeoServer flaws in the wild. These developments force vulnerability owners to accelerate asset discovery, validate patch deployment, and document compensating controls for any unpatched instances."
+          "text": "CISA's addition of a critical Drupal flaw to the Known Exploited Vulnerabilities catalog with a November 27 federal remediation deadline, combined with active exploitation of patched GeoServer vulnerabilities and the FinCEN system outage from unauthorized access, elevates vulnerability management and incident response urgency for control owners. These events demonstrate that delayed patching and insufficient containment procedures directly threaten operational continuity and regulatory compliance."
         },
         {
           "source_ids": [
-            5,
-            9,
-            3
+            4,
+            7,
+            11
           ],
-          "text": "Supply chain exposure, credential hygiene gaps, and privileged access erosion compound risk across third-party dependencies and identity management. The InfraTrust report highlights that most exploited advisories stem from bundled third-party components, while GitGuardian data shows most secrets remain valid for years, and bot detection failures demand equal privilege limits for human and machine accounts."
+          "text": "Simultaneously, software supply chain risks persist through malicious NuGet packages targeting developers and a trend of exploited flaws originating from third-party components bundled into network appliances. Long-lived valid secrets further weaken identity assurance, as most credentials discovered years ago remain active due to revocation hesitancy. Third-party risk and access management owners should prioritize supply chain verification and impact-based credential rotation."
         }
       ]
     },
     "industry_impacts": [],
     "regulatory_changes": []
   },
-  "generated_at": "2026-11-25T15:22:30.61715Z",
-  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/981b89484a7428b54222d09d3d3f0c5e98acdf44/site/feed.xml",
+  "generated_at": "2026-11-25T18:25:21.51142Z",
+  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/667db9232dd8f998930406413fc18441837f16d3/site/feed.xml",
   "feed_home_url": "https://sentrydigest.ricomanifesto.com/",
   "digest_issue_date": "2026-11-25",
   "digest_issue_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-25/",
@@ -151,6 +152,50 @@
           "origin": "content",
           "raw_text": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Tuesday added a critical flaw impacting Drupal to its Known Exploited Vulnerabilities (KEV) catalog, requiring federal agencies to apply the fixes by November 27, 2026. The vulnerability, tracked as CVE-2026-132165 aka Fail2Install (CVSS score: 9.8), is a case of remote code execution (RCE) impacting Drupal core. \"Drupal Core…",
           "text": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Tuesday added a critical flaw impacting Drupal to its Known Exploited Vulnerabilities (KEV) catalog, requiring federal agencies to apply the fixes by November 27, 2026. The vulnerability, tracked as CVE-2026-132165 aka Fail2Install (CVSS score: 9.8), is a case of remote code execution (RCE) impacting Drupal core. \"Drupal Core…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "CISA warns of critical unpatched flaw in Danfoss refrigeration controllers",
+      "url": "https://www.bleepingcomputer.com/news/security/cisa-warns-of-critical-unpatched-flaw-in-danfoss-refrigeration-controllers/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-25/#reporting-820a6be24763",
+      "cves": [],
+      "snippet": "CISA warns of critical unpatched flaw in Danfoss refrigeration controllers The U.S. Cybersecurity and Infrastructure Security Agency (CISA) is warning about a critical vulnerability in Danfoss AK-SM 8xxA Series controllers used by food retailers to manage commercial refrigeration, HVAC, and lighting systems… The U.S. Cybersecurity and Infrastructure Security Agency (CISA) is warning about a critical vulnerability in Danfoss AK-SM 8xxA Series controllers used by food retailers to manage commercial refrigeration, HVAC, and lighting systems…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) is warning about a critical vulnerability in Danfoss AK-SM 8xxA Series controllers used by food retailers to manage commercial refrigeration, HVAC, and lighting systems…",
+          "text": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) is warning about a critical vulnerability in Danfoss AK-SM 8xxA Series controllers used by food retailers to manage commercial refrigeration, HVAC, and lighting systems…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) is warning about a critical vulnerability in Danfoss AK-SM 8xxA Series controllers used by food retailers to manage commercial refrigeration, HVAC, and lighting systems…",
+          "text": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) is warning about a critical vulnerability in Danfoss AK-SM 8xxA Series controllers used by food retailers to manage commercial refrigeration, HVAC, and lighting systems…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Attackers Target .NET Developers With Poisoned Job Assessments",
+      "url": "https://www.darkreading.com/threat-intelligence/attackers-net-developers-poisoned-job-assessments",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-25/#reporting-f30f7b2280e9",
+      "cves": [],
+      "snippet": "Attackers Target .NET Developers With Poisoned Job Assessments Researchers discovered 13 malicious NuGet packages as part of a fake recruitment campaign that spreads malware and gives attackers access to developers' machines. Researchers discovered 13 malicious NuGet packages as part of a fake recruitment campaign that spreads malware and gives attackers access to developers' machines.",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Researchers discovered 13 malicious NuGet packages as part of a fake recruitment campaign that spreads malware and gives attackers access to developers' machines.",
+          "text": "Researchers discovered 13 malicious NuGet packages as part of a fake recruitment campaign that spreads malware and gives attackers access to developers' machines."
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Researchers discovered 13 malicious NuGet packages as part of a fake recruitment campaign that spreads malware and gives attackers access to developers' machines.",
+          "text": "Researchers discovered 13 malicious NuGet packages as part of a fake recruitment campaign that spreads malware and gives attackers access to developers' machines."
         }
       ],
       "effective_date_evidence": null
@@ -226,19 +271,19 @@
       "url": "https://www.darkreading.com/cybersecurity-operations/cyber-insurers-see-new-ai-divide",
       "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-25/#reporting-45ee7c2e482d",
       "cves": [],
-      "snippet": "Cyber Insurers See New Divide: AI Defense 'Haves' & 'Have Nots' Dark Reading Confidential Episode 23: Cyber insurers share their view of the AI-driven threat landscape and how mounting challenges are putting pressure on both sides of the policy, making the current model unsustainable. Dark Reading Confidential Episode 23: Cyber insurers share their view of the AI-driven threat landscape and how mounting challenges are putting pressure on both sides of the policy, making the current model unsustainable.",
+      "snippet": "Cyber Insurers See New Divide: AI Defense 'Haves' & 'Have Nots' Dark Reading Confidential Episode 23: Cyber insurers share their view of the AI-driven threat landscape and how mounting challenges are putting pressure on both sides of the policy, leaving the current model unsustainable. Dark Reading Confidential Episode 23: Cyber insurers share their view of the AI-driven threat landscape and how mounting challenges are putting pressure on both sides of the policy, leaving the current model unsustainable.",
       "article_evidence": [
         {
           "extraction_version": 1,
           "origin": "summary",
-          "raw_text": "Dark Reading Confidential Episode 23: Cyber insurers share their view of the AI-driven threat landscape and how mounting challenges are putting pressure on both sides of the policy, making the current model unsustainable.",
-          "text": "Dark Reading Confidential Episode 23: Cyber insurers share their view of the AI-driven threat landscape and how mounting challenges are putting pressure on both sides of the policy, making the current model unsustainable."
+          "raw_text": "Dark Reading Confidential Episode 23: Cyber insurers share their view of the AI-driven threat landscape and how mounting challenges are putting pressure on both sides of the policy, leaving the current model unsustainable.",
+          "text": "Dark Reading Confidential Episode 23: Cyber insurers share their view of the AI-driven threat landscape and how mounting challenges are putting pressure on both sides of the policy, leaving the current model unsustainable."
         },
         {
           "extraction_version": 1,
           "origin": "content",
-          "raw_text": "Dark Reading Confidential Episode 23: Cyber insurers share their view of the AI-driven threat landscape and how mounting challenges are putting pressure on both sides of the policy, making the current model unsustainable.",
-          "text": "Dark Reading Confidential Episode 23: Cyber insurers share their view of the AI-driven threat landscape and how mounting challenges are putting pressure on both sides of the policy, making the current model unsustainable."
+          "raw_text": "Dark Reading Confidential Episode 23: Cyber insurers share their view of the AI-driven threat landscape and how mounting challenges are putting pressure on both sides of the policy, leaving the current model unsustainable.",
+          "text": "Dark Reading Confidential Episode 23: Cyber insurers share their view of the AI-driven threat landscape and how mounting challenges are putting pressure on both sides of the policy, leaving the current model unsustainable."
         }
       ],
       "effective_date_evidence": null
@@ -327,50 +372,6 @@
           "origin": "content",
           "raw_text": "Earlier this week, Microsoft resolved a known issue that was preventing some Microsoft 365 customers from accessing Office applications…",
           "text": "Earlier this week, Microsoft resolved a known issue that was preventing some Microsoft 365 customers from accessing Office applications…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "Ex-OpenAI Employee Accused of Bugging Company Offices Granted $1 Million Bail",
-      "url": "https://thehackernews.com/2026/11/ex-openai-employee-accused-of-bugging.html",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-25/#reporting-df7e6d35b0bf",
-      "cves": [],
-      "snippet": "Ex-OpenAI Employee Accused of Bugging Company Offices Granted $1 Million Bail A former OpenAI employee accused of concealing a covert recording device at the company's San Francisco offices will be allowed to be released from jail on a $1 million bond, a San Francisco federal court judge ruled Tuesday. Abdulrahman Alfozan, a 35-year-old Saudi national, was arrested on October 9, 2026, for allegedly bugging the artificial intelligence (AI) company's offices with the aim… A former OpenAI employee accused of concealing a covert recording device at the company's San Francisco offices will be allowed to be released from jail on a $1 million bond, a San Francisco federal court judge ruled Tuesday.",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "A former OpenAI employee accused of concealing a covert recording device at the company's San Francisco offices will be allowed to be released from jail on a $1 million bond, a San Francisco federal court judge ruled Tuesday. Abdulrahman Alfozan, a 35-year-old Saudi national, was arrested on October 9, 2026, for allegedly bugging the artificial intelligence (AI) company's offices with the aim…",
-          "text": "A former OpenAI employee accused of concealing a covert recording device at the company's San Francisco offices will be allowed to be released from jail on a $1 million bond, a San Francisco federal court judge ruled Tuesday. Abdulrahman Alfozan, a 35-year-old Saudi national, was arrested on October 9, 2026, for allegedly bugging the artificial intelligence (AI) company's offices with the aim…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "A former OpenAI employee accused of concealing a covert recording device at the company's San Francisco offices will be allowed to be released from jail on a $1 million bond, a San Francisco federal court judge ruled Tuesday. Abdulrahman Alfozan, a 35-year-old Saudi national, was arrested on October 9, 2026, for allegedly bugging the artificial intelligence (AI) company's offices with the aim…",
-          "text": "A former OpenAI employee accused of concealing a covert recording device at the company's San Francisco offices will be allowed to be released from jail on a $1 million bond, a San Francisco federal court judge ruled Tuesday. Abdulrahman Alfozan, a 35-year-old Saudi national, was arrested on October 9, 2026, for allegedly bugging the artificial intelligence (AI) company's offices with the aim…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "Hackers now exploit critical Drupal RCE flaw to hijack sites",
-      "url": "https://www.bleepingcomputer.com/news/security/hackers-now-exploit-critical-drupal-rce-flaw-to-hijack-sites/",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-25/#reporting-2a09216dda16",
-      "cves": [],
-      "snippet": "Hackers now exploit critical Drupal RCE flaw to hijack sites The Drupal security team has confirmed that a critical vulnerability that lets attackers hijack unpatched sites has been actively exploited since at least Thursday… The Drupal security team has confirmed that a critical vulnerability that lets attackers hijack unpatched sites has been actively exploited since at least Thursday…",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "The Drupal security team has confirmed that a critical vulnerability that lets attackers hijack unpatched sites has been actively exploited since at least Thursday…",
-          "text": "The Drupal security team has confirmed that a critical vulnerability that lets attackers hijack unpatched sites has been actively exploited since at least Thursday…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "The Drupal security team has confirmed that a critical vulnerability that lets attackers hijack unpatched sites has been actively exploited since at least Thursday…",
-          "text": "The Drupal security team has confirmed that a critical vulnerability that lets attackers hijack unpatched sites has been actively exploited since at least Thursday…"
         }
       ],
       "effective_date_evidence": null
