@@ -19808,6 +19808,17 @@
       "release_key": "c20aca055a4e208bebb95d2b3d4b7e0de5d5e659cc54cf5ce27ac5c08e1556ec",
       "release_ref": "a891de3289ae4e32e107ed9d30b4bf2bf39334bd",
       "stage": "serving"
+    },
+    {
+      "at": "2026-11-25T09:21:18.554Z",
+      "kind": "release",
+      "payload_digest": "ece34b3225ceae9d9d24e7e210cb427680b548bda3684fe73bafcac52219ad63",
+      "proof": "on",
+      "release_key": "6990fd2ccb18d0b6fc4a344834dfab4fa6554a0a826cea11ead8096bc5176cae",
+      "release_ref": "7639252e8fd8730b10e2ac84129fdcceb4989647",
+      "source_revision": "72af2e6fb04b2b165ee2b355e2c65f24b90248fe",
+      "stage": "released",
+      "tree_digest": "ca7229856c665109d252d76286b367e440c10595b49effe5f880dd6ae11a8cb1"
     }
   ],
   "schema_version": 1,
