@@ -5,74 +5,74 @@
     "control_implications": [
       {
         "control_id": "vulnerability_management",
-        "evidence_excerpt": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Tuesday added a critical flaw impacting Drupal to its Known Exploited Vulnerabilities (KEV) catalog, requiring federal agencies to apply the fixes by November 27, 2026. The vulnerability, tracked as CVE-2026-132165 aka Fail2Install (CVSS score: 9.8), is a case of remote code execution (RCE) impacting Drupal core.",
-        "evidence_origin": "summary",
-        "focus": "Drupal core",
-        "headline": "Drupal core added to CISA KEV catalog requiring federal agency remediation",
-        "priority": "high",
-        "significance": "The KEV catalog addition mandates federal remediation deadlines, making timely patching a compliance imperative. Vulnerability management owners should confirm asset inventory covers all Drupal instances and that emergency patching procedures meet the November 27 deadline.",
-        "source_ids": [
-          2
-        ]
-      },
-      {
-        "control_id": "vulnerability_management",
         "evidence_excerpt": "Threat actors are actively exploiting two newly patched security flaws in GeoServer, according to watchTowr. The vulnerabilities in question are CVE-2026-120705 and CVE-2026-129243, details of which are below - CVE-2026-120705 (CVSS score: 8.6) - An arbitrary file read vulnerability that could enable an attacker to access local text files readable by the GeoServer process or fetch…",
-        "evidence_origin": "summary",
+        "evidence_origin": "content",
         "focus": "GeoServer",
-        "headline": "GeoServer actively exploited by threat actors despite patches",
+        "headline": "GeoServer arbitrary file read vulnerability actively exploited",
         "priority": "high",
-        "significance": "Active exploitation of patched flaws indicates delayed remediation windows are being targeted. Vulnerability management owners should verify GeoServer deployments are updated and that compensating controls exist for any unpatched instances.",
+        "significance": "Active exploitation of unpatched GeoServer instances exposes systems to arbitrary file read and potential remote code execution. The accountable owner should confirm asset inventory coverage for GeoServer and verify patch deployment or compensating controls.",
         "source_ids": [
           1
         ]
       },
       {
-        "control_id": "third_party_risk",
-        "evidence_excerpt": "Researchers discovered 13 malicious NuGet packages as part of a fake recruitment campaign that spreads malware and gives attackers access to developers' machines.",
-        "evidence_origin": "summary",
-        "focus": "13 malicious NuGet packages",
-        "headline": "13 malicious NuGet packages discovered in fake recruitment campaign",
+        "control_id": "vulnerability_management",
+        "evidence_excerpt": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Tuesday added a critical flaw impacting Drupal to its Known Exploited Vulnerabilities (KEV) catalog, requiring federal agencies to apply the fixes by November 27, 2026. The vulnerability, tracked as CVE-2026-132165 aka Fail2Install (CVSS score: 9.8), is a case of remote code execution (RCE) impacting Drupal core.",
+        "evidence_origin": "content",
+        "focus": "Drupal core",
+        "headline": "Drupal core critical RCE added to CISA KEV catalog",
         "priority": "high",
-        "significance": "Software supply chain attacks targeting developer environments bypass traditional perimeter controls. Third-party risk owners should assess NuGet package verification processes and developer machine isolation controls.",
+        "significance": "Inclusion in the CISA KEV catalog imposes a mandatory remediation deadline for federal agencies and signals active exploitation risk for all Drupal deployments. The accountable owner should identify all Drupal core instances and validate emergency patching or mitigation status.",
+        "source_ids": [
+          2
+        ]
+      },
+      {
+        "control_id": "monitoring",
+        "evidence_excerpt": "Swiss and Italian cybersecurity agencies are warning about automated cyberattacks powered by AI agents targeting organizations in the critical infrastructure sector…",
+        "evidence_origin": "content",
+        "focus": "automated cyberattacks powered by AI agents",
+        "headline": "Automated cyberattacks powered by AI agents target critical infrastructure",
+        "priority": "medium",
+        "significance": "National agencies warn that AI-driven automation increases attack speed and scale against critical infrastructure. The accountable owner should review detection coverage for automated attack patterns and confirm alert routing for anomalous machine-driven activity.",
+        "source_ids": [
+          3
+        ]
+      },
+      {
+        "control_id": "third_party_risk",
+        "evidence_excerpt": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) is warning about a critical vulnerability in Danfoss AK-SM 8xxA Series controllers used by food retailers to manage commercial refrigeration, HVAC, and lighting systems…",
+        "evidence_origin": "content",
+        "focus": "Danfoss AK-SM 8xxA Series controllers",
+        "headline": "Danfoss AK-SM 8xxA Series controllers critical vulnerability unpatched",
+        "priority": "high",
+        "significance": "A critical flaw in widely deployed OT controllers used by food retailers remains unpatched per the vendor advisory. The accountable owner should assess exposure of Danfoss controllers in the environment and verify compensating controls or vendor mitigation plans.",
         "source_ids": [
           4
         ]
       },
       {
-        "control_id": "third_party_risk",
-        "evidence_excerpt": "Eclypsium's November InfraTrust report warns that most infrastructure security advisories addressing exploited vulnerabilities over the past month involve flaws in third-party software bundled into products rather than code developed by the vendors themselves…",
-        "evidence_origin": "summary",
-        "focus": "third-party software bundled into products",
-        "headline": "third-party software bundled into products drives exploited vulnerability advisories",
-        "priority": "medium",
-        "significance": "The prevalence of bundled third-party flaws shifts accountability to vendors and their customers for supply chain visibility. Third-party risk owners should request software bills of materials from appliance vendors and track bundled component patching.",
-        "source_ids": [
-          7
-        ]
-      },
-      {
         "control_id": "incident_response",
-        "evidence_excerpt": "The U.S. Treasury Department's Financial Crimes Enforcement Network (FinCEN) has been hit by a cybersecurity incident that resulted in \"unauthorized access to a limited subset of its systems,\" the bureau said on Tuesday. As a precaution, it has taken some systems offline. The bureau collects suspicious activity reports and other Bank Secrecy Act (BSA) filings from banks and other financial…",
-        "evidence_origin": "summary",
-        "focus": "FinCEN",
-        "headline": "FinCEN takes systems offline after unauthorized access incident",
+        "evidence_excerpt": "The U.S. Treasury Department's Financial Crimes Enforcement Network (FinCEN) has been hit by a cybersecurity incident that resulted in \"unauthorized access to a limited subset of its systems,\" the bureau said on Tuesday. As a precaution, it has taken some systems offline.",
+        "evidence_origin": "content",
+        "focus": "FinCEN systems",
+        "headline": "FinCEN systems taken offline after cyber intrusion",
         "priority": "high",
-        "significance": "A financial regulator's operational disruption demonstrates cascading risk to BSA filing infrastructure. Incident response owners should validate containment procedures for critical financial data systems and confirm offline recovery capabilities.",
+        "significance": "A financial regulator's core systems were compromised and taken offline, disrupting Bank Secrecy Act reporting. The accountable owner should review incident containment procedures, evidence preservation, and recovery validation for critical financial infrastructure.",
         "source_ids": [
-          10
+          11
         ]
       },
       {
         "control_id": "access_management",
-        "evidence_excerpt": "TL;DR More than 64% still valid after four years: GitGuardian’s State of Secrets Sprawl 2026 found that most valid secrets discovered in 2022 still worked in January 2026, because teams stall on what a revoke will break. Validity-only triage misses 46% of critical secrets: Prioritize by impact instead, weighing what a credential can access and whether it leaked publicly, and update the…",
-        "evidence_origin": "summary",
+        "evidence_excerpt": "More than 64% still valid after four years: GitGuardian’s State of Secrets Sprawl 2026 found that most valid secrets discovered in 2022 still worked in January 2026, because teams stall on what a revoke will break. Validity-only triage misses 46% of critical secrets: Prioritize by impact instead, weighing what a credential can access and whether it leaked publicly, and update the…",
+        "evidence_origin": "content",
         "focus": "valid secrets discovered in 2022",
-        "headline": "valid secrets discovered in 2022 remain active after four years",
+        "headline": "Valid secrets discovered in 2022 remain active for years",
         "priority": "medium",
-        "significance": "Long-lived valid secrets indicate broken revocation workflows and excessive credential scope. Access management owners should implement impact-based secret rotation and validate that revocation testing covers production dependencies.",
+        "significance": "Long-lived valid secrets increase breach impact because remediation is delayed by dependency uncertainty. The accountable owner should implement impact-based credential rotation and verify revocation procedures for high-access secrets.",
         "source_ids": [
-          11
+          12
         ]
       }
     ],
@@ -80,27 +80,27 @@
       "paragraphs": [
         {
           "source_ids": [
-            2,
             1,
-            10
+            2,
+            4
           ],
-          "text": "CISA's addition of a critical Drupal flaw to the Known Exploited Vulnerabilities catalog with a November 27 federal remediation deadline, combined with active exploitation of patched GeoServer vulnerabilities and the FinCEN system outage from unauthorized access, elevates vulnerability management and incident response urgency for control owners. These events demonstrate that delayed patching and insufficient containment procedures directly threaten operational continuity and regulatory compliance."
+          "text": "Active exploitation of critical vulnerabilities in GeoServer, Drupal core, and Danfoss controllers demands immediate asset identification and patching, with federal agencies facing a binding deadline for Drupal."
         },
         {
           "source_ids": [
-            4,
-            7,
-            11
+            3,
+            11,
+            12
           ],
-          "text": "Simultaneously, software supply chain risks persist through malicious NuGet packages targeting developers and a trend of exploited flaws originating from third-party components bundled into network appliances. Long-lived valid secrets further weaken identity assurance, as most credentials discovered years ago remain active due to revocation hesitancy. Third-party risk and access management owners should prioritize supply chain verification and impact-based credential rotation."
+          "text": "AI-driven automated attacks targeting critical infrastructure, a cyber intrusion at FinCEN taking systems offline, and persistent secret sprawl delaying credential revocation expand the scope for monitoring, incident response, and access management reviews."
         }
       ]
     },
     "industry_impacts": [],
     "regulatory_changes": []
   },
-  "generated_at": "2026-11-25T18:25:21.51142Z",
-  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/667db9232dd8f998930406413fc18441837f16d3/site/feed.xml",
+  "generated_at": "2026-11-25T21:19:18.174573Z",
+  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/2a8db3c4b8a2adca59a61e12e61d741dc42e0430/site/feed.xml",
   "feed_home_url": "https://sentrydigest.ricomanifesto.com/",
   "digest_issue_date": "2026-11-25",
   "digest_issue_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-25/",
@@ -152,6 +152,28 @@
           "origin": "content",
           "raw_text": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Tuesday added a critical flaw impacting Drupal to its Known Exploited Vulnerabilities (KEV) catalog, requiring federal agencies to apply the fixes by November 27, 2026. The vulnerability, tracked as CVE-2026-132165 aka Fail2Install (CVSS score: 9.8), is a case of remote code execution (RCE) impacting Drupal core. \"Drupal Core…",
           "text": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Tuesday added a critical flaw impacting Drupal to its Known Exploited Vulnerabilities (KEV) catalog, requiring federal agencies to apply the fixes by November 27, 2026. The vulnerability, tracked as CVE-2026-132165 aka Fail2Install (CVSS score: 9.8), is a case of remote code execution (RCE) impacting Drupal core. \"Drupal Core…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Italy and Switzerland warn of autonomous AI-driven cyberattacks",
+      "url": "https://www.bleepingcomputer.com/news/security/italy-and-switzerland-warn-of-autonomous-ai-driven-cyberattacks/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-25/#reporting-bb8a3d866a04",
+      "cves": [],
+      "snippet": "Italy and Switzerland warn of autonomous AI-driven cyberattacks Swiss and Italian cybersecurity agencies are warning about automated cyberattacks powered by AI agents targeting organizations in the critical infrastructure sector… Swiss and Italian cybersecurity agencies are warning about automated cyberattacks powered by AI agents targeting organizations in the critical infrastructure sector…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Swiss and Italian cybersecurity agencies are warning about automated cyberattacks powered by AI agents targeting organizations in the critical infrastructure sector…",
+          "text": "Swiss and Italian cybersecurity agencies are warning about automated cyberattacks powered by AI agents targeting organizations in the critical infrastructure sector…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Swiss and Italian cybersecurity agencies are warning about automated cyberattacks powered by AI agents targeting organizations in the critical infrastructure sector…",
+          "text": "Swiss and Italian cybersecurity agencies are warning about automated cyberattacks powered by AI agents targeting organizations in the critical infrastructure sector…"
         }
       ],
       "effective_date_evidence": null
@@ -350,28 +372,6 @@
           "origin": "content",
           "raw_text": "TL;DR More than 64% still valid after four years: GitGuardian’s State of Secrets Sprawl 2026 found that most valid secrets discovered in 2022 still worked in January 2026, because teams stall on what a revoke will break. Validity-only triage misses 46% of critical secrets: Prioritize by impact instead, weighing what a credential can access and whether it leaked publicly, and update the…",
           "text": "TL;DR More than 64% still valid after four years: GitGuardian’s State of Secrets Sprawl 2026 found that most valid secrets discovered in 2022 still worked in January 2026, because teams stall on what a revoke will break. Validity-only triage misses 46% of critical secrets: Prioritize by impact instead, weighing what a credential can access and whether it leaked publicly, and update the…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "Microsoft fixes Microsoft 365 bug blocking access to Office apps",
-      "url": "https://www.bleepingcomputer.com/news/microsoft/microsoft-fixes-blank-dialog-that-made-microsoft-365-office-apps-unusable/",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-25/#reporting-b5ac7b882982",
-      "cves": [],
-      "snippet": "Microsoft fixes Microsoft 365 bug blocking access to Office apps Earlier this week, Microsoft resolved a known issue that was preventing some Microsoft 365 customers from accessing Office applications… Earlier this week, Microsoft resolved a known issue that was preventing some Microsoft 365 customers from accessing Office applications…",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "Earlier this week, Microsoft resolved a known issue that was preventing some Microsoft 365 customers from accessing Office applications…",
-          "text": "Earlier this week, Microsoft resolved a known issue that was preventing some Microsoft 365 customers from accessing Office applications…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "Earlier this week, Microsoft resolved a known issue that was preventing some Microsoft 365 customers from accessing Office applications…",
-          "text": "Earlier this week, Microsoft resolved a known issue that was preventing some Microsoft 365 customers from accessing Office applications…"
         }
       ],
       "effective_date_evidence": null
