@@ -5515,6 +5515,14 @@
       "handle": "report_20261126_130523_178",
       "run_id": "45825687983",
       "stage": "invoked"
+    },
+    {
+      "admission_key": "run:45825687983",
+      "at": "2026-11-26T13:09:10.653Z",
+      "binding": "none",
+      "outcome": "published",
+      "run_id": "45825687983",
+      "stage": "completed"
     }
   ],
   "schema_version": 1,
