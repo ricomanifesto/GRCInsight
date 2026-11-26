@@ -5,74 +5,74 @@
     "control_implications": [
       {
         "control_id": "vulnerability_management",
-        "evidence_excerpt": "Threat actors are actively exploiting two newly patched security flaws in GeoServer, according to watchTowr. The vulnerabilities in question are CVE-2026-120705 and CVE-2026-129243, details of which are below - CVE-2026-120705 (CVSS score: 8.6) - An arbitrary file read vulnerability that could enable an attacker to access local text files readable by the GeoServer process or fetch…",
-        "evidence_origin": "content",
-        "focus": "GeoServer",
-        "headline": "GeoServer arbitrary file read vulnerability actively exploited",
+        "evidence_excerpt": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Tuesday added a critical flaw impacting Drupal to its Known Exploited Vulnerabilities (KEV) catalog, requiring federal agencies to apply the fixes by November 27, 2026. The vulnerability, tracked as CVE-2026-132165 aka Fail2Install (CVSS score: 9.8), is a case of remote code execution (RCE) impacting Drupal core.",
+        "evidence_origin": "summary",
+        "focus": "Drupal core",
+        "headline": "Drupal core requires urgent remediation per CISA directive",
         "priority": "high",
-        "significance": "Active exploitation of unpatched GeoServer instances exposes systems to arbitrary file read and potential remote code execution. The accountable owner should confirm asset inventory coverage for GeoServer and verify patch deployment or compensating controls.",
+        "significance": "CISA KEV inclusion mandates federal agency remediation by a specific date, changing vulnerability management assumptions. Vulnerability owners should confirm affected Drupal deployments and remediation status.",
+        "source_ids": [
+          2
+        ]
+      },
+      {
+        "control_id": "access_management",
+        "evidence_excerpt": "1Password has disclosed a data breach after a an employee's corporate GitHub account was hacked and used to deploy malicious code to the company's backend services to steal customer data",
+        "evidence_origin": "summary",
+        "focus": "employee's corporate GitHub account",
+        "headline": "employee's corporate GitHub account enables backend compromise and data theft",
+        "priority": "high",
+        "significance": "Compromised developer credentials bypassed access controls to reach production systems and exfiltrate customer data. Access management owners should review privileged account protection and GitHub security posture.",
+        "source_ids": [
+          4
+        ]
+      },
+      {
+        "control_id": "third_party_risk",
+        "evidence_excerpt": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) is warning about a critical vulnerability in Danfoss AK-SM 8xxA Series controllers used by food retailers to manage commercial refrigeration, HVAC, and lighting systems",
+        "evidence_origin": "summary",
+        "focus": "Danfoss AK-SM 8xxA Series controllers",
+        "headline": "Danfoss AK-SM 8xxA Series controllers expose critical infrastructure to unpatched flaw",
+        "priority": "medium",
+        "significance": "CISA warning highlights unpatchable critical infrastructure components in food retail environments. Third-party risk owners should assess vendor remediation timelines and compensating controls.",
+        "source_ids": [
+          6
+        ]
+      },
+      {
+        "control_id": "third_party_risk",
+        "evidence_excerpt": "Eclypsium's November InfraTrust report warns that most infrastructure security advisories addressing exploited vulnerabilities over the past month involve flaws in third-party software bundled into products rather than code developed by the vendors themselves",
+        "evidence_origin": "summary",
+        "focus": "third-party software bundled into products",
+        "headline": "third-party software bundled into products drives majority of exploited infrastructure advisories",
+        "priority": "high",
+        "significance": "Supply chain analysis shows exploited flaws originate in bundled third-party components, not vendor code. Third-party risk owners should review supplier software bill-of-materials and vulnerability disclosure practices.",
+        "source_ids": [
+          10
+        ]
+      },
+      {
+        "control_id": "vulnerability_management",
+        "evidence_excerpt": "Threat actors are actively exploiting two newly patched security flaws in GeoServer, according to watchTowr. The vulnerabilities in question are CVE-2026-120705 and CVE-2026-129243, details of which are below - CVE-2026-120705 (CVSS score: 8.6) - An arbitrary file read vulnerability that could enable an attacker to access local text files readable by the GeoServer process or fetch",
+        "evidence_origin": "summary",
+        "focus": "GeoServer",
+        "headline": "GeoServer faces active exploitation of arbitrary file read and unauthenticated RCE chains",
+        "priority": "high",
+        "significance": "Active exploitation of recently patched GeoServer flaws demands immediate asset identification and patch verification. Vulnerability owners should confirm GeoServer inventory and remediation completion.",
         "source_ids": [
           1
         ]
       },
       {
         "control_id": "vulnerability_management",
-        "evidence_excerpt": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Tuesday added a critical flaw impacting Drupal to its Known Exploited Vulnerabilities (KEV) catalog, requiring federal agencies to apply the fixes by November 27, 2026. The vulnerability, tracked as CVE-2026-132165 aka Fail2Install (CVSS score: 9.8), is a case of remote code execution (RCE) impacting Drupal core.",
-        "evidence_origin": "content",
-        "focus": "Drupal core",
-        "headline": "Drupal core critical RCE added to CISA KEV catalog",
+        "evidence_excerpt": "Threat actors are chaining exploits for the PHP2Shell and Fragnesia vulnerabilities to target Palo Alto Networks devices with management interfaces exposed to the internet",
+        "evidence_origin": "summary",
+        "focus": "Palo Alto Networks devices with management interfaces exposed to the internet",
+        "headline": "Palo Alto Networks devices with management interfaces exposed to the internet face chained exploit attacks",
         "priority": "high",
-        "significance": "Inclusion in the CISA KEV catalog imposes a mandatory remediation deadline for federal agencies and signals active exploitation risk for all Drupal deployments. The accountable owner should identify all Drupal core instances and validate emergency patching or mitigation status.",
-        "source_ids": [
-          2
-        ]
-      },
-      {
-        "control_id": "monitoring",
-        "evidence_excerpt": "Swiss and Italian cybersecurity agencies are warning about automated cyberattacks powered by AI agents targeting organizations in the critical infrastructure sector…",
-        "evidence_origin": "content",
-        "focus": "automated cyberattacks powered by AI agents",
-        "headline": "Automated cyberattacks powered by AI agents target critical infrastructure",
-        "priority": "medium",
-        "significance": "National agencies warn that AI-driven automation increases attack speed and scale against critical infrastructure. The accountable owner should review detection coverage for automated attack patterns and confirm alert routing for anomalous machine-driven activity.",
+        "significance": "Exposed management interfaces enable exploit chaining against critical network infrastructure. Vulnerability owners should verify management interface exposure and apply vendor mitigations.",
         "source_ids": [
           3
-        ]
-      },
-      {
-        "control_id": "third_party_risk",
-        "evidence_excerpt": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) is warning about a critical vulnerability in Danfoss AK-SM 8xxA Series controllers used by food retailers to manage commercial refrigeration, HVAC, and lighting systems…",
-        "evidence_origin": "content",
-        "focus": "Danfoss AK-SM 8xxA Series controllers",
-        "headline": "Danfoss AK-SM 8xxA Series controllers critical vulnerability unpatched",
-        "priority": "high",
-        "significance": "A critical flaw in widely deployed OT controllers used by food retailers remains unpatched per the vendor advisory. The accountable owner should assess exposure of Danfoss controllers in the environment and verify compensating controls or vendor mitigation plans.",
-        "source_ids": [
-          4
-        ]
-      },
-      {
-        "control_id": "incident_response",
-        "evidence_excerpt": "The U.S. Treasury Department's Financial Crimes Enforcement Network (FinCEN) has been hit by a cybersecurity incident that resulted in \"unauthorized access to a limited subset of its systems,\" the bureau said on Tuesday. As a precaution, it has taken some systems offline.",
-        "evidence_origin": "content",
-        "focus": "FinCEN systems",
-        "headline": "FinCEN systems taken offline after cyber intrusion",
-        "priority": "high",
-        "significance": "A financial regulator's core systems were compromised and taken offline, disrupting Bank Secrecy Act reporting. The accountable owner should review incident containment procedures, evidence preservation, and recovery validation for critical financial infrastructure.",
-        "source_ids": [
-          11
-        ]
-      },
-      {
-        "control_id": "access_management",
-        "evidence_excerpt": "More than 64% still valid after four years: GitGuardian’s State of Secrets Sprawl 2026 found that most valid secrets discovered in 2022 still worked in January 2026, because teams stall on what a revoke will break. Validity-only triage misses 46% of critical secrets: Prioritize by impact instead, weighing what a credential can access and whether it leaked publicly, and update the…",
-        "evidence_origin": "content",
-        "focus": "valid secrets discovered in 2022",
-        "headline": "Valid secrets discovered in 2022 remain active for years",
-        "priority": "medium",
-        "significance": "Long-lived valid secrets increase breach impact because remediation is delayed by dependency uncertainty. The accountable owner should implement impact-based credential rotation and verify revocation procedures for high-access secrets.",
-        "source_ids": [
-          12
         ]
       }
     ],
@@ -80,37 +80,37 @@
       "paragraphs": [
         {
           "source_ids": [
-            1,
             2,
-            4
+            1,
+            3,
+            6
           ],
-          "text": "Active exploitation of critical vulnerabilities in GeoServer, Drupal core, and Danfoss controllers demands immediate asset identification and patching, with federal agencies facing a binding deadline for Drupal."
+          "text": "CISA KEV mandate for Drupal and active exploitation of multiple critical infrastructure components including GeoServer, Palo Alto Networks firewalls, and Danfoss refrigeration controllers create urgent remediation priorities for vulnerability management programs across sectors."
         },
         {
           "source_ids": [
-            3,
-            11,
-            12
+            10,
+            4
           ],
-          "text": "AI-driven automated attacks targeting critical infrastructure, a cyber intrusion at FinCEN taking systems offline, and persistent secret sprawl delaying credential revocation expand the scope for monitoring, incident response, and access management reviews."
+          "text": "Supply chain analysis reveals third-party bundled software drives most exploited infrastructure advisories, while developer credential compromise at 1Password demonstrates access control bypass reaching production systems and customer data."
         }
       ]
     },
     "industry_impacts": [],
     "regulatory_changes": []
   },
-  "generated_at": "2026-11-25T21:19:18.174573Z",
-  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/2a8db3c4b8a2adca59a61e12e61d741dc42e0430/site/feed.xml",
+  "generated_at": "2026-11-26T00:36:05.576107Z",
+  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/0aeb1af2885e7adfda9884de0b6e3e00d296d34f/site/feed.xml",
   "feed_home_url": "https://sentrydigest.ricomanifesto.com/",
-  "digest_issue_date": "2026-11-25",
-  "digest_issue_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-25/",
+  "digest_issue_date": "2026-11-26",
+  "digest_issue_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-26/",
   "requested_model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
   "resolved_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
   "sources": [
     {
       "title": "Hackers Exploit Two GeoServer Flaws as Researchers Warn of Unauthenticated RCE Chains",
       "url": "https://thehackernews.com/2026/11/hackers-exploit-two-geoserver-flaws-as.html",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-25/#reporting-27873297949c",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-26/#reporting-27873297949c",
       "cves": [
         "CVE-2026-120705",
         "CVE-2026-129243"
@@ -135,7 +135,7 @@
     {
       "title": "Drupal Fail2Install Exploit Details Emerge as Critical RCE Flaw Faces Active Exploitation",
       "url": "https://thehackernews.com/2026/11/drupal-fail2install-exploit-details.html",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-25/#reporting-f8d0d1935ac4",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-26/#reporting-f8d0d1935ac4",
       "cves": [
         "CVE-2026-132165"
       ],
@@ -157,9 +157,53 @@
       "effective_date_evidence": null
     },
     {
+      "title": "Palo Alto Networks warns of Fragnesia flaw exploited in PAN-OS attacks",
+      "url": "https://www.bleepingcomputer.com/news/security/palo-alto-networks-warns-of-fragnesia-flaw-exploited-in-pan-os-attacks/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-26/#reporting-85d71203b57c",
+      "cves": [],
+      "snippet": "Palo Alto Networks warns of Fragnesia flaw exploited in PAN-OS attacks Threat actors are chaining exploits for the PHP2Shell and Fragnesia vulnerabilities to target Palo Alto Networks devices with management interfaces exposed to the internet… Threat actors are chaining exploits for the PHP2Shell and Fragnesia vulnerabilities to target Palo Alto Networks devices with management interfaces exposed to the internet…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Threat actors are chaining exploits for the PHP2Shell and Fragnesia vulnerabilities to target Palo Alto Networks devices with management interfaces exposed to the internet…",
+          "text": "Threat actors are chaining exploits for the PHP2Shell and Fragnesia vulnerabilities to target Palo Alto Networks devices with management interfaces exposed to the internet…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Threat actors are chaining exploits for the PHP2Shell and Fragnesia vulnerabilities to target Palo Alto Networks devices with management interfaces exposed to the internet…",
+          "text": "Threat actors are chaining exploits for the PHP2Shell and Fragnesia vulnerabilities to target Palo Alto Networks devices with management interfaces exposed to the internet…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "1Password customer data stolen after employee GitHub account breach",
+      "url": "https://www.bleepingcomputer.com/news/security/1password-customer-data-stolen-after-employee-github-account-breach/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-26/#reporting-29838573f890",
+      "cves": [],
+      "snippet": "1Password customer data stolen after employee GitHub account breach 1Password has disclosed a data breach after a an employee's corporate GitHub account was hacked and used to deploy malicious code to the company's backend services to steal customer data… 1Password has disclosed a data breach after a an employee's corporate GitHub account was hacked and used to deploy malicious code to the company's backend services to steal customer data…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "1Password has disclosed a data breach after a an employee's corporate GitHub account was hacked and used to deploy malicious code to the company's backend services to steal customer data…",
+          "text": "1Password has disclosed a data breach after a an employee's corporate GitHub account was hacked and used to deploy malicious code to the company's backend services to steal customer data…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "1Password has disclosed a data breach after a an employee's corporate GitHub account was hacked and used to deploy malicious code to the company's backend services to steal customer data…",
+          "text": "1Password has disclosed a data breach after a an employee's corporate GitHub account was hacked and used to deploy malicious code to the company's backend services to steal customer data…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
       "title": "Italy and Switzerland warn of autonomous AI-driven cyberattacks",
       "url": "https://www.bleepingcomputer.com/news/security/italy-and-switzerland-warn-of-autonomous-ai-driven-cyberattacks/",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-25/#reporting-bb8a3d866a04",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-26/#reporting-bb8a3d866a04",
       "cves": [],
       "snippet": "Italy and Switzerland warn of autonomous AI-driven cyberattacks Swiss and Italian cybersecurity agencies are warning about automated cyberattacks powered by AI agents targeting organizations in the critical infrastructure sector… Swiss and Italian cybersecurity agencies are warning about automated cyberattacks powered by AI agents targeting organizations in the critical infrastructure sector…",
       "article_evidence": [
@@ -181,7 +225,7 @@
     {
       "title": "CISA warns of critical unpatched flaw in Danfoss refrigeration controllers",
       "url": "https://www.bleepingcomputer.com/news/security/cisa-warns-of-critical-unpatched-flaw-in-danfoss-refrigeration-controllers/",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-25/#reporting-820a6be24763",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-26/#reporting-820a6be24763",
       "cves": [],
       "snippet": "CISA warns of critical unpatched flaw in Danfoss refrigeration controllers The U.S. Cybersecurity and Infrastructure Security Agency (CISA) is warning about a critical vulnerability in Danfoss AK-SM 8xxA Series controllers used by food retailers to manage commercial refrigeration, HVAC, and lighting systems… The U.S. Cybersecurity and Infrastructure Security Agency (CISA) is warning about a critical vulnerability in Danfoss AK-SM 8xxA Series controllers used by food retailers to manage commercial refrigeration, HVAC, and lighting systems…",
       "article_evidence": [
@@ -203,7 +247,7 @@
     {
       "title": "Attackers Target .NET Developers With Poisoned Job Assessments",
       "url": "https://www.darkreading.com/threat-intelligence/attackers-net-developers-poisoned-job-assessments",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-25/#reporting-f30f7b2280e9",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-26/#reporting-f30f7b2280e9",
       "cves": [],
       "snippet": "Attackers Target .NET Developers With Poisoned Job Assessments Researchers discovered 13 malicious NuGet packages as part of a fake recruitment campaign that spreads malware and gives attackers access to developers' machines. Researchers discovered 13 malicious NuGet packages as part of a fake recruitment campaign that spreads malware and gives attackers access to developers' machines.",
       "article_evidence": [
@@ -225,7 +269,7 @@
     {
       "title": "It's a Bot World. We're Just Living in It",
       "url": "https://www.darkreading.com/cyber-risk/bot-world-just-living",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-25/#reporting-60b6b3868921",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-26/#reporting-60b6b3868921",
       "cves": [],
       "snippet": "It's a Bot World. We're Just Living in It Bot detection has become a losing game. Security teams need to limit privileged access for humans and their machine counterparts equally. Bot detection has become a losing game. Security teams need to limit privileged access for humans and their machine counterparts equally.",
       "article_evidence": [
@@ -247,7 +291,7 @@
     {
       "title": "More Pentests Without More Pentesters: Where AI Safely Helps",
       "url": "https://www.bleepingcomputer.com/news/security/more-pentests-without-more-pentesters-where-ai-safely-helps/",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-25/#reporting-571e665497ad",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-26/#reporting-571e665497ad",
       "cves": [],
       "snippet": "More Pentests Without More Pentesters: Where AI Safely Helps Penetration testers spend a significant portion of their engagements on documentation, reporting, and other tasks outside of testing. PentestPad explains how AI can reduce this workload, help teams handle more engagements, and keep sensitive client data within their own infrastructure… Penetration testers spend a significant portion of their engagements on documentation, reporting, and other tasks outside of testing. PentestPad explains how AI can reduce this workload, help teams handle more engagements, and keep sensitive client data within their own infrastructure…",
       "article_evidence": [
@@ -269,7 +313,7 @@
     {
       "title": "InfraTrust warns of exploited supply chain flaws in network appliances",
       "url": "https://www.bleepingcomputer.com/news/security/infratrust-warns-of-exploited-supply-chain-flaws-in-network-appliances/",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-25/#reporting-918f8236c2b6",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-26/#reporting-918f8236c2b6",
       "cves": [],
       "snippet": "InfraTrust warns of exploited supply chain flaws in network appliances Eclypsium's November InfraTrust report warns that most infrastructure security advisories addressing exploited vulnerabilities over the past month involve flaws in third-party software bundled into products rather than code developed by the vendors themselves… Eclypsium's November InfraTrust report warns that most infrastructure security advisories addressing exploited vulnerabilities over the past month involve flaws in third-party software bundled into products rather than code developed by the vendors themselves…",
       "article_evidence": [
@@ -291,7 +335,7 @@
     {
       "title": "Cyber Insurers See New Divide: AI Defense 'Haves' & 'Have Nots'",
       "url": "https://www.darkreading.com/cybersecurity-operations/cyber-insurers-see-new-ai-divide",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-25/#reporting-45ee7c2e482d",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-26/#reporting-45ee7c2e482d",
       "cves": [],
       "snippet": "Cyber Insurers See New Divide: AI Defense 'Haves' & 'Have Nots' Dark Reading Confidential Episode 23: Cyber insurers share their view of the AI-driven threat landscape and how mounting challenges are putting pressure on both sides of the policy, leaving the current model unsustainable. Dark Reading Confidential Episode 23: Cyber insurers share their view of the AI-driven threat landscape and how mounting challenges are putting pressure on both sides of the policy, leaving the current model unsustainable.",
       "article_evidence": [
@@ -313,7 +357,7 @@
     {
       "title": "Latin America Sees Cyberattacks on Ports, Pipelines & Manufacturing",
       "url": "https://www.darkreading.com/cyberattacks-data-breaches/latin-america-cyberattacks-ports-pipelines-manufacturing",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-25/#reporting-1ccaa1266b3e",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-26/#reporting-1ccaa1266b3e",
       "cves": [],
       "snippet": "Latin America Sees Cyberattacks on Ports, Pipelines & Manufacturing From the Port of Santos in Brazil to a pipeline in Argentina, cyberattacks are increasingly affecting industrial systems throughout the region. From the Port of Santos in Brazil to a pipeline in Argentina, cyberattacks are increasingly affecting industrial systems throughout the region.",
       "article_evidence": [
@@ -328,50 +372,6 @@
           "origin": "content",
           "raw_text": "From the Port of Santos in Brazil to a pipeline in Argentina, cyberattacks are increasingly affecting industrial systems throughout the region.",
           "text": "From the Port of Santos in Brazil to a pipeline in Argentina, cyberattacks are increasingly affecting industrial systems throughout the region."
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "U.S. Treasury's Financial Crimes Agency Takes Some Systems Offline After Cyber Intrusion",
-      "url": "https://thehackernews.com/2026/11/us-treasurys-fincen-takes-some-systems.html",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-25/#reporting-b72d4a699599",
-      "cves": [],
-      "snippet": "U.S. Treasury's Financial Crimes Agency Takes Some Systems Offline After Cyber Intrusion The U.S. Treasury Department's Financial Crimes Enforcement Network (FinCEN) has been hit by a cybersecurity incident that resulted in \"unauthorized access to a limited subset of its systems,\" the bureau said on Tuesday. As a precaution, it has taken some systems offline. The bureau collects suspicious activity reports and other Bank Secrecy Act (BSA) filings from banks and other financial… The U.S. Treasury Department's Financial Crimes Enforcement Network (FinCEN) has been hit by a cybersecurity incident that resulted in \"unauthorized access to a limited subset of its systems,\" the bureau said on Tuesd",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "The U.S. Treasury Department's Financial Crimes Enforcement Network (FinCEN) has been hit by a cybersecurity incident that resulted in \"unauthorized access to a limited subset of its systems,\" the bureau said on Tuesday. As a precaution, it has taken some systems offline. The bureau collects suspicious activity reports and other Bank Secrecy Act (BSA) filings from banks and other financial…",
-          "text": "The U.S. Treasury Department's Financial Crimes Enforcement Network (FinCEN) has been hit by a cybersecurity incident that resulted in \"unauthorized access to a limited subset of its systems,\" the bureau said on Tuesday. As a precaution, it has taken some systems offline. The bureau collects suspicious activity reports and other Bank Secrecy Act (BSA) filings from banks and other financial…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "The U.S. Treasury Department's Financial Crimes Enforcement Network (FinCEN) has been hit by a cybersecurity incident that resulted in \"unauthorized access to a limited subset of its systems,\" the bureau said on Tuesday. As a precaution, it has taken some systems offline. The bureau collects suspicious activity reports and other Bank Secrecy Act (BSA) filings from banks and other financial…",
-          "text": "The U.S. Treasury Department's Financial Crimes Enforcement Network (FinCEN) has been hit by a cybersecurity incident that resulted in \"unauthorized access to a limited subset of its systems,\" the bureau said on Tuesday. As a precaution, it has taken some systems offline. The bureau collects suspicious activity reports and other Bank Secrecy Act (BSA) filings from banks and other financial…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "Credential Remediation Is Slow When You Don’t Know What Will Break",
-      "url": "https://thehackernews.com/2026/11/credential-remediation-is-slow-when-you.html",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-25/#reporting-2d3fe69c638a",
-      "cves": [],
-      "snippet": "Credential Remediation Is Slow When You Don’t Know What Will Break TL;DR More than 64% still valid after four years: GitGuardian’s State of Secrets Sprawl 2026 found that most valid secrets discovered in 2022 still worked in January 2026, because teams stall on what a revoke will break. Validity-only triage misses 46% of critical secrets: Prioritize by impact instead, weighing what a credential can access and whether it leaked publicly, and update the… TL;DR More than 64% still valid after four years: GitGuardian’s State of Secrets Sprawl 2026 found that most valid secrets discovered in 2022 still worked in January 2026, because teams stall on what a revoke will break. Validity-only triage m",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "TL;DR More than 64% still valid after four years: GitGuardian’s State of Secrets Sprawl 2026 found that most valid secrets discovered in 2022 still worked in January 2026, because teams stall on what a revoke will break. Validity-only triage misses 46% of critical secrets: Prioritize by impact instead, weighing what a credential can access and whether it leaked publicly, and update the…",
-          "text": "TL;DR More than 64% still valid after four years: GitGuardian’s State of Secrets Sprawl 2026 found that most valid secrets discovered in 2022 still worked in January 2026, because teams stall on what a revoke will break. Validity-only triage misses 46% of critical secrets: Prioritize by impact instead, weighing what a credential can access and whether it leaked publicly, and update the…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "TL;DR More than 64% still valid after four years: GitGuardian’s State of Secrets Sprawl 2026 found that most valid secrets discovered in 2022 still worked in January 2026, because teams stall on what a revoke will break. Validity-only triage misses 46% of critical secrets: Prioritize by impact instead, weighing what a credential can access and whether it leaked publicly, and update the…",
-          "text": "TL;DR More than 64% still valid after four years: GitGuardian’s State of Secrets Sprawl 2026 found that most valid secrets discovered in 2022 still worked in January 2026, because teams stall on what a revoke will break. Validity-only triage misses 46% of critical secrets: Prioritize by impact instead, weighing what a credential can access and whether it leaked publicly, and update the…"
         }
       ],
       "effective_date_evidence": null
