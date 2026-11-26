@@ -1,8 +1,8 @@
 # GRC Intelligence Report - 2026-11-26
-**Generated:** 2026-11-26T18:22:37.411163Z
+**Generated:** 2026-11-26T21:16:53.129084Z
 **Date of Issue:** November 2026
 **Analysis Period:** November 2026
-**Source:** [SentryDigest](https://raw.githubusercontent.com/ricomanifesto/SentryDigest/7eb4ba5194d1c59e1a9ddf7f772bdb228f1222b6/site/feed.xml)
+**Source:** [SentryDigest](https://raw.githubusercontent.com/ricomanifesto/SentryDigest/0af84ca5c8721ec500e5e041e4102a69c01f0618/site/feed.xml)
 **Source Issue:** [SentryDigest 2026-11-26](https://sentrydigest.ricomanifesto.com/archive/2026-11-26/)
 **Articles Analyzed:** 30
 **GRC-Relevant Articles:** 29
@@ -12,9 +12,9 @@
 
 ## Executive Summary
 
-Active exploitation of highly critical vulnerabilities in Drupal core, Mitel MiCollab, and GeoServer has been confirmed, with CISA adding ten flaws to its Known Exploited Vulnerabilities catalog. These developments demand immediate asset identification and patching across widely deployed content management, collaboration, and geospatial platforms. Vulnerability and asset owners must verify affected versions are inventoried and remediated to maintain control assurance. [Drupal Warns of New Highly Critical Site Takeover Vulnerability Under Active Exploitation](https://thehackernews.com/2026/11/drupal-warns-of-new-highly-critical.html); [Hackers Exploit 10 Vulnerabilities Across Mitel, Juniper, Vates, and Danfoss Products](https://thehackernews.com/2026/11/hackers-exploit-10-vulnerabilities.html); [Hackers Exploit Two GeoServer Flaws as Researchers Warn of Unauthenticated RCE Chains](https://thehackernews.com/2026/11/hackers-exploit-two-geoserver-flaws-as.html)
+Active exploitation of highly critical vulnerabilities in Drupal core and GeoServer, alongside CISA's addition of ten flaws to the Known Exploited Vulnerabilities catalog including Mitel MiCollab, signals an elevated tempo of weaponized vulnerability exploitation against widely deployed platforms. Control owners must verify that asset inventories capture affected products and that remediation or compensating controls are validated with version evidence. [Drupal Warns of New Highly Critical Site Takeover Vulnerability Under Active Exploitation](https://thehackernews.com/2026/11/drupal-warns-of-new-highly-critical.html); [Hackers Exploit Two GeoServer Flaws as Researchers Warn of Unauthenticated RCE Chains](https://thehackernews.com/2026/11/hackers-exploit-two-geoserver-flaws-as.html)
 
-Simultaneously, a sophisticated phishing campaign impersonating major brands steals corporate Google and Okta credentials, while North Korean actors poison thousands of GitHub repositories and a password manager suffers a backend breach via GitHub compromise. These identity and supply chain attacks bypass traditional controls and concentrate risk in trusted dependencies. Identity and access owners should review authentication coverage, and supplier risk owners must assess third-party assurance evidence. [Fake paid expert interviews impersonate brands to steal Google logins](https://www.bleepingcomputer.com/news/apple/fake-paid-expert-interviews-impersonate-brands-to-steal-google-logins/); [North Korea-Linked PolinRider Poisons Over 7,600 GitHub Repositories to Spread Malware](https://thehackernews.com/2026/11/north-korea-linked-polinrider-poisons.html); [1Password Hacked, Customer Data and Source Code Stolen in GitHub Account Breach](https://thehackernews.com/2026/11/1password-hacked-customer-data-and.html)
+Simultaneous identity-focused campaigns — including the GoodGuys phishing operation harvesting corporate Google and Okta credentials, North Korea-linked PolinRider poisoning over 7,600 GitHub repositories, and the 1Password backend breach exposing customer information — extend risk beyond perimeter defenses into trusted software supply chains and identity providers. Access management and third-party risk owners should confirm authentication coverage against brand-impersonation lures and review supplier dependencies on compromised repositories. [Fake paid expert interviews impersonate brands to steal Google logins](https://www.bleepingcomputer.com/news/apple/fake-paid-expert-interviews-impersonate-brands-to-steal-google-logins/); [North Korea-Linked PolinRider Poisons Over 7,600 GitHub Repositories to Spread Malware](https://thehackernews.com/2026/11/north-korea-linked-polinrider-poisons.html); [1Password Hacked, Customer Data and Source Code Stolen in GitHub Account Breach](https://thehackernews.com/2026/11/1password-hacked-customer-data-and.html)
 
 Scope: 6 findings and 0 sourced regulatory changes from 12 retained sources. Review priorities rank what to check first; confirm whether each finding applies to your organization before assigning work.
 
@@ -30,9 +30,9 @@ Each finding is analysis of the quoted evidence: why it matters for control assu
 
 **Review priority:** High · Vulnerability management · Owner: Vulnerability and asset owners
 
-**Why it matters:** Active exploitation of a highly critical Drupal vulnerability requires immediate asset identification and patching to prevent site takeover. Vulnerability and asset owners should confirm affected Drupal installations are inventoried and remediated.
+**Why it matters:** Active exploitation of a highly critical Drupal core flaw weakens assurance that web platforms are patched against known threats. Vulnerability and asset owners should confirm whether deployed Drupal instances meet the exposure conditions and verify remediation status with installed version evidence.
 
-**Source evidence:** “Drupal has warned of a new "highly critical" security flaw impacting Drupal core that it said has been exploited in the wild. The vulnerability, tracked as CVE-2026-136716 &#40;CVSS score: N/A&#41;, has been described as a case of improper checking for unusual or exceptional conditions. It also relates to CVE-2026-132165 aka Fail2Install in that it addresses remaining vulnerable installation states…” [Drupal Warns of New Highly Critical Site Takeover Vulnerability Under Active Exploitation](https://thehackernews.com/2026/11/drupal-warns-of-new-highly-critical.html)
+**Source evidence:** “Drupal has warned of a new "highly critical" security flaw impacting Drupal core that it said has been exploited in the wild. The vulnerability, tracked as CVE-2026-136716 &#40;CVSS score: N/A&#41;, has been described as a case of improper checking for unusual or exceptional conditions. It also relates to CVE-2026-132165 aka Fail2Install in that it addresses remaining vulnerable installation states” [Drupal Warns of New Highly Critical Site Takeover Vulnerability Under Active Exploitation](https://thehackernews.com/2026/11/drupal-warns-of-new-highly-critical.html)
 
 **Evidence to request:** Affected-asset inventory, installed versions, remediation status and an exception owner.
 
@@ -40,27 +40,13 @@ Each finding is analysis of the quoted evidence: why it matters for control assu
 
 **Reference controls:** ISO/IEC 27001:2022 A.8.8 (management of technical vulnerabilities); NIST CSF 2.0 ID.RA (risk assessment), PR.PS (platform security)
 
-### Mitel MiCollab joins CISA KEV catalog with active exploitation
+### GeoServer flaws enable active exploitation of arbitrary file read
 
 **Review priority:** High · Vulnerability management · Owner: Vulnerability and asset owners
 
-**Why it matters:** CISA KEV inclusion mandates federal agencies and signals critical risk for all organizations using Mitel MiCollab. Vulnerability and asset owners should verify Mitel MiCollab deployments and apply vendor patches.
+**Why it matters:** Active exploitation of GeoServer arbitrary file read vulnerabilities weakens patch management assurance for geospatial infrastructure. Vulnerability and asset owners should confirm whether deployed GeoServer instances are patched and verify compensating controls for unpatched assets.
 
-**Source evidence:** “The U.S. Cybersecurity and Infrastructure Security Agency &#40;CISA&#41; on Wednesday added 10 security flaws to its Known Exploited Vulnerabilities &#40;KEV&#41; catalog, including five vulnerabilities impacting Mitel MiCollab that were disclosed last week. The Mitel MiCollab vulnerabilities are listed below - CVE-2026-133275 &#40;CVSS score: 5.3&#41; - An arbitrary file upload vulnerability in the Audio, Web and…” [Hackers Exploit 10 Vulnerabilities Across Mitel, Juniper, Vates, and Danfoss Products](https://thehackernews.com/2026/11/hackers-exploit-10-vulnerabilities.html)
-
-**Evidence to request:** Affected-asset inventory, installed versions, remediation status and an exception owner.
-
-**Decision trigger:** If applicability is confirmed, decide on remediation or a documented exception; otherwise record why the finding does not apply.
-
-**Reference controls:** ISO/IEC 27001:2022 A.8.8 (management of technical vulnerabilities); NIST CSF 2.0 ID.RA (risk assessment), PR.PS (platform security)
-
-### GeoServer faces active exploitation of unauthenticated RCE chains
-
-**Review priority:** High · Vulnerability management · Owner: Vulnerability and asset owners
-
-**Why it matters:** Active exploitation of high-severity GeoServer flaws demands immediate patching of internet-facing instances. Vulnerability and asset owners should confirm GeoServer versions and apply vendor patches.
-
-**Source evidence:** “Threat actors are actively exploiting two newly patched security flaws in GeoServer, according to watchTowr. The vulnerabilities in question are CVE-2026-120705 and CVE-2026-129243, details of which are below - CVE-2026-120705 &#40;CVSS score: 8.6&#41; - An arbitrary file read vulnerability that could enable an attacker to access local text files readable by the GeoServer process or fetch…” [Hackers Exploit Two GeoServer Flaws as Researchers Warn of Unauthenticated RCE Chains](https://thehackernews.com/2026/11/hackers-exploit-two-geoserver-flaws-as.html)
+**Source evidence:** “Threat actors are actively exploiting two newly patched security flaws in GeoServer, according to watchTowr. The vulnerabilities in question are CVE-2026-120705 and CVE-2026-129243, details of which are below - CVE-2026-120705 &#40;CVSS score: 8.6&#41; - An arbitrary file read vulnerability that could enable an attacker to access local text files readable by the GeoServer process or fetch” [Hackers Exploit Two GeoServer Flaws as Researchers Warn of Unauthenticated RCE Chains](https://thehackernews.com/2026/11/hackers-exploit-two-geoserver-flaws-as.html)
 
 **Evidence to request:** Affected-asset inventory, installed versions, remediation status and an exception owner.
 
@@ -68,13 +54,13 @@ Each finding is analysis of the quoted evidence: why it matters for control assu
 
 **Reference controls:** ISO/IEC 27001:2022 A.8.8 (management of technical vulnerabilities); NIST CSF 2.0 ID.RA (risk assessment), PR.PS (platform security)
 
-### Corporate Google and Okta credentials targeted by GoodGuys phishing
+### GoodGuys phishing campaign steals corporate Google and Okta credentials
 
 **Review priority:** High · Access management · Owner: Identity and access owner
 
-**Why it matters:** Credential theft via sophisticated brand impersonation bypasses email controls and threatens identity systems. Identity and access owners should review authentication coverage and session revocation for Google and Okta.
+**Why it matters:** An active phishing campaign bypassing brand trust to harvest corporate identity credentials weakens access boundary assurance. Identity and access owners should confirm whether authentication coverage and account revocation controls detect credential theft from brand-impersonation lures.
 
-**Source evidence:** “An ongoing phishing campaign dubbed "GoodGuys" impersonates major brands, including Google, Nvidia, Accenture, and SpaceX, to steal corporate Google and Okta credentials using fake invitations to paid expert interviews and webinars…” [Fake paid expert interviews impersonate brands to steal Google logins](https://www.bleepingcomputer.com/news/apple/fake-paid-expert-interviews-impersonate-brands-to-steal-google-logins/)
+**Source evidence:** “An ongoing phishing campaign dubbed "GoodGuys" impersonates major brands, including Google, Nvidia, Accenture, and SpaceX, to steal corporate Google and Okta credentials using fake invitations to paid expert interviews and webinars” [Fake paid expert interviews impersonate brands to steal Google logins](https://www.bleepingcomputer.com/news/apple/fake-paid-expert-interviews-impersonate-brands-to-steal-google-logins/)
 
 **Evidence to request:** Access scope, authentication coverage, session revocation and a permission-test result.
 
@@ -82,13 +68,13 @@ Each finding is analysis of the quoted evidence: why it matters for control assu
 
 **Reference controls:** ISO/IEC 27001:2022 A.5.15 (access control), A.5.18 (access rights), A.8.2 (privileged access rights); NIST CSF 2.0 PR.AA (identity management, authentication and access control)
 
-### GitHub repositories poisoned with Python loader in supply chain attack
+### PolinRider campaign poisons GitHub repositories with Python loader
 
 **Review priority:** High · Third-party risk · Owner: Supplier risk owner
 
-**Why it matters:** Long-running supply chain compromise of open-source repositories undermines software integrity assumptions. Supplier risk owners should review dependency scanning and verify provenance of Python packages.
+**Why it matters:** Nation-state-linked repository poisoning across thousands of GitHub projects weakens software supply chain assurance. Supplier risk owners should confirm whether internal builds depend on compromised repositories and review supplier remediation assurance evidence.
 
-**Source evidence:** “The threat actors behind the PolinRider campaign have been observed planting a Python loader in GitHub repositories, as evidence emerges that the activity may have started as far back as February 2025. "The loader hides in a small utils package or in conftest.py," SafeDep said in a report published this week. "When Python imports the file, the loader reads the newest transaction that an…” [North Korea-Linked PolinRider Poisons Over 7,600 GitHub Repositories to Spread Malware](https://thehackernews.com/2026/11/north-korea-linked-polinrider-poisons.html)
+**Source evidence:** “The threat actors behind the PolinRider campaign have been observed planting a Python loader in GitHub repositories, as evidence emerges that the activity may have started as far back as February 2025. "The loader hides in a small utils package or in conftest.py," SafeDep said in a report published this week.” [North Korea-Linked PolinRider Poisons Over 7,600 GitHub Repositories to Spread Malware](https://thehackernews.com/2026/11/north-korea-linked-polinrider-poisons.html)
 
 **Evidence to request:** Supplier access scope, control responsibilities and evidence of remediation assurance.
 
@@ -96,25 +82,41 @@ Each finding is analysis of the quoted evidence: why it matters for control assu
 
 **Reference controls:** ISO/IEC 27001:2022 A.5.19 (supplier relationships), A.5.21 (ICT supply chain), A.5.22 (monitoring and review of supplier services); NIST CSF 2.0 GV.SC (cybersecurity supply chain risk management)
 
-### 1Password backend systems breached via GitHub account compromise
+### 1Password backend systems breach exposes customer information
 
-**Review priority:** High · Third-party risk · Owner: Supplier risk owner
+**Review priority:** High · Data protection · Owner: Data and privacy owners
 
-**Why it matters:** Compromise of a password manager's backend via supply chain highlights third-party risk concentration. Supplier risk owners should assess 1Password assurance evidence and verify vault isolation claims.
+**Why it matters:** A password manager's backend compromise exposing customer data weakens trust in credential storage assurances. Data and privacy owners should confirm whether the accessed customer information includes sensitive identifiers and review the supplier's containment evidence.
 
-**Source evidence:** “Popular password management software 1Password on Wednesday disclosed a security incident involving its backend systems that led to the unauthorized access of some customer information, but emphasized that customer password vaults and other secrets were not accessed. "While we took immediate steps to contain the incident, the attacker gained access to some of our backend systems and accessed a…” [1Password Hacked, Customer Data and Source Code Stolen in GitHub Account Breach](https://thehackernews.com/2026/11/1password-hacked-customer-data-and.html)
+**Source evidence:** “Popular password management software 1Password on Wednesday disclosed a security incident involving its backend systems that led to the unauthorized access of some customer information, but emphasized that customer password vaults and other secrets were not accessed. "While we took immediate steps to contain the incident, the attacker gained access to some of our backend systems and accessed a” [1Password Hacked, Customer Data and Source Code Stolen in GitHub Account Breach](https://thehackernews.com/2026/11/1password-hacked-customer-data-and.html)
 
-**Evidence to request:** Supplier access scope, control responsibilities and evidence of remediation assurance.
+**Evidence to request:** Data inventory, access restrictions, audit logs and a documented exposure assessment.
 
-**Decision trigger:** If the supplier dependency exists and assurance is insufficient, request evidence or escalate the assurance gap to its owner.
+**Decision trigger:** If relevant data is exposed to the reported access path, decide which protection or access change is needed.
 
-**Reference controls:** ISO/IEC 27001:2022 A.5.19 (supplier relationships), A.5.21 (ICT supply chain), A.5.22 (monitoring and review of supplier services); NIST CSF 2.0 GV.SC (cybersecurity supply chain risk management)
+**Reference controls:** ISO/IEC 27001:2022 A.5.34 (privacy and protection of PII), A.8.12 (data leakage prevention), A.8.24 (use of cryptography); NIST CSF 2.0 PR.DS (data security)
+
+### Phishing kits bypass email security web filtering and safe browsing
+
+**Review priority:** Medium · Monitoring and detection · Owner: Detection and monitoring owner
+
+**Why it matters:** Measured breakthrough rates showing phishing kits evading layered defenses weaken detection coverage assurance. Detection and monitoring owners should confirm whether telemetry distinguishes breakthrough attacks from expected traffic and review alert routing for high-breakthrough kits.
+
+**Source evidence:** “Every phishing attack has to get past email security, web filtering, and safe browsing before it reaches an employee. Some kits manage that far more often than others, and those are the kits that security teams need to know about. At Push Security, we measure this as breakthrough rate: The share of attacks that get past email security, web gateways, and safe browsing to reach the user.” [Most Wanted: The Phishing Kits and Techniques Getting Past Security Controls](https://thehackernews.com/2026/11/most-wanted-phishing-kits-and.html)
+
+**Evidence to request:** Log coverage, a detection test, alert routing and investigation ownership.
+
+**Decision trigger:** If a detection test fails, assign the coverage or routing correction and repeat the test.
+
+**Reference controls:** ISO/IEC 27001:2022 A.8.15 (logging), A.8.16 (monitoring activities); NIST CSF 2.0 DE.CM (continuous monitoring), DE.AE (adverse event analysis)
 
 ## Source Highlights
 
 - [Drupal Warns of New Highly Critical Site Takeover Vulnerability Under Active Exploitation](https://thehackernews.com/2026/11/drupal-warns-of-new-highly-critical.html) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-26/#reporting-61e3be14c2b6)
 - [Hackers Exploit 10 Vulnerabilities Across Mitel, Juniper, Vates, and Danfoss Products](https://thehackernews.com/2026/11/hackers-exploit-10-vulnerabilities.html) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-26/#reporting-451f3a785e32)
 - [Hackers Exploit Two GeoServer Flaws as Researchers Warn of Unauthenticated RCE Chains](https://thehackernews.com/2026/11/hackers-exploit-two-geoserver-flaws-as.html) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-26/#reporting-27873297949c)
+- [OpenAI warns GPT-6.2 Astra will hit usage limits 40% faster because it fixed a bug](https://www.bleepingcomputer.com/news/artificial-intelligence/openai-warns-gpt-62-astra-will-hit-usage-limits-40-percent-faster-because-it-fixed-a-bug/) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-26/#reporting-ac6c22bfffe5)
+- [ThreatsDay: 10M NGINX Services at Risk, 250+ Malicious Extensions, AI Server Hijacking + 17 More Stories](https://thehackernews.com/2026/11/threatsday-250-rogue-extensions-10m.html) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-26/#reporting-0b75246ced86)
 - [NordVPN Black Friday Deal: Get 78% off VPN plans in 2026](https://www.bleepingcomputer.com/news/security/nordvpn-black-friday-deal-get-78-percent-off-vpn-plans-in-2026/) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-26/#reporting-0bd18f3d2e78)
 - [Fake paid expert interviews impersonate brands to steal Google logins](https://www.bleepingcomputer.com/news/apple/fake-paid-expert-interviews-impersonate-brands-to-steal-google-logins/) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-26/#reporting-deebe28bb42d)
 - [Remus malware steals Gmail messages via fake Google Sheets extension](https://www.bleepingcomputer.com/news/security/remus-malware-steals-gmail-messages-via-fake-google-sheets-extension/) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-26/#reporting-57d73d788295)
@@ -122,5 +124,3 @@ Each finding is analysis of the quoted evidence: why it matters for control assu
 - [SYS010 malware abuses browser management to spy on Gmail, Outlook](https://www.bleepingcomputer.com/news/security/sys010-malware-abuses-browser-management-to-spy-on-gmail-outlook/) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-26/#reporting-34599e7b6c56)
 - [Most Wanted: The Phishing Kits and Techniques Getting Past Security Controls](https://thehackernews.com/2026/11/most-wanted-phishing-kits-and.html) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-26/#reporting-54cc21ceab24)
 - [1Password Hacked, Customer Data and Source Code Stolen in GitHub Account Breach](https://thehackernews.com/2026/11/1password-hacked-customer-data-and.html) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-26/#reporting-5e5b0d3bb248)
-- [Cyprus Becomes Espionage Target for Iranian Hackers](https://www.darkreading.com/cyberattacks-data-breaches/cyprus-espionage-target-iranian-hackers) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-26/#reporting-9bbd9ec06777)
-- [13 Malicious NuGet Packages Turn Fake .NET Job Assessments Into Malware Delivery Traps](https://thehackernews.com/2026/11/13-malicious-nuget-packages-turn-fake.html) · [View in SentryDigest](https://sentrydigest.ricomanifesto.com/archive/2026-11-26/#reporting-8720d53f4644)
