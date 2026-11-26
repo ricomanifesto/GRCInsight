@@ -1,0 +1,382 @@
+{
+  "schema_version": 3,
+  "report_contract_version": 6,
+  "report_plan": {
+    "control_implications": [
+      {
+        "control_id": "vulnerability_management",
+        "evidence_excerpt": "Drupal has warned of a new \"highly critical\" security flaw impacting Drupal core that it said has been exploited in the wild. The vulnerability, tracked as CVE-2026-136716 (CVSS score: N/A), has been described as a case of improper checking for unusual or exceptional conditions. It also relates to CVE-2026-132165 aka Fail2Install in that it addresses remaining vulnerable installation states",
+        "evidence_origin": "content",
+        "focus": "Drupal core",
+        "headline": "Drupal core exposes site takeover under active exploitation",
+        "priority": "high",
+        "significance": "Active exploitation of a highly critical Drupal core flaw weakens assurance that web platforms are patched against known threats. Vulnerability and asset owners should confirm whether deployed Drupal instances meet the exposure conditions and verify remediation status with installed version evidence.",
+        "source_ids": [
+          1
+        ]
+      },
+      {
+        "control_id": "access_management",
+        "evidence_excerpt": "An ongoing phishing campaign dubbed \"GoodGuys\" impersonates major brands, including Google, Nvidia, Accenture, and SpaceX, to steal corporate Google and Okta credentials using fake invitations to paid expert interviews and webinars",
+        "evidence_origin": "content",
+        "focus": "GoodGuys phishing campaign",
+        "headline": "GoodGuys phishing campaign steals corporate Google and Okta credentials",
+        "priority": "high",
+        "significance": "An active phishing campaign bypassing brand trust to harvest corporate identity credentials weakens access boundary assurance. Identity and access owners should confirm whether authentication coverage and account revocation controls detect credential theft from brand-impersonation lures.",
+        "source_ids": [
+          7
+        ]
+      },
+      {
+        "control_id": "third_party_risk",
+        "evidence_excerpt": "The threat actors behind the PolinRider campaign have been observed planting a Python loader in GitHub repositories, as evidence emerges that the activity may have started as far back as February 2025. \"The loader hides in a small utils package or in conftest.py,\" SafeDep said in a report published this week.",
+        "evidence_origin": "content",
+        "focus": "PolinRider campaign",
+        "headline": "PolinRider campaign poisons GitHub repositories with Python loader",
+        "priority": "high",
+        "significance": "Nation-state-linked repository poisoning across thousands of GitHub projects weakens software supply chain assurance. Supplier risk owners should confirm whether internal builds depend on compromised repositories and review supplier remediation assurance evidence.",
+        "source_ids": [
+          9
+        ]
+      },
+      {
+        "control_id": "data_protection",
+        "evidence_excerpt": "Popular password management software 1Password on Wednesday disclosed a security incident involving its backend systems that led to the unauthorized access of some customer information, but emphasized that customer password vaults and other secrets were not accessed. \"While we took immediate steps to contain the incident, the attacker gained access to some of our backend systems and accessed a",
+        "evidence_origin": "content",
+        "focus": "1Password backend systems",
+        "headline": "1Password backend systems breach exposes customer information",
+        "priority": "high",
+        "significance": "A password manager's backend compromise exposing customer data weakens trust in credential storage assurances. Data and privacy owners should confirm whether the accessed customer information includes sensitive identifiers and review the supplier's containment evidence.",
+        "source_ids": [
+          12
+        ]
+      },
+      {
+        "control_id": "vulnerability_management",
+        "evidence_excerpt": "Threat actors are actively exploiting two newly patched security flaws in GeoServer, according to watchTowr. The vulnerabilities in question are CVE-2026-120705 and CVE-2026-129243, details of which are below - CVE-2026-120705 (CVSS score: 8.6) - An arbitrary file read vulnerability that could enable an attacker to access local text files readable by the GeoServer process or fetch",
+        "evidence_origin": "content",
+        "focus": "GeoServer",
+        "headline": "GeoServer flaws enable active exploitation of arbitrary file read",
+        "priority": "high",
+        "significance": "Active exploitation of GeoServer arbitrary file read vulnerabilities weakens patch management assurance for geospatial infrastructure. Vulnerability and asset owners should confirm whether deployed GeoServer instances are patched and verify compensating controls for unpatched assets.",
+        "source_ids": [
+          3
+        ]
+      },
+      {
+        "control_id": "monitoring",
+        "evidence_excerpt": "Every phishing attack has to get past email security, web filtering, and safe browsing before it reaches an employee. Some kits manage that far more often than others, and those are the kits that security teams need to know about. At Push Security, we measure this as breakthrough rate: The share of attacks that get past email security, web gateways, and safe browsing to reach the user.",
+        "evidence_origin": "content",
+        "focus": "phishing kits",
+        "headline": "Phishing kits bypass email security web filtering and safe browsing",
+        "priority": "medium",
+        "significance": "Measured breakthrough rates showing phishing kits evading layered defenses weaken detection coverage assurance. Detection and monitoring owners should confirm whether telemetry distinguishes breakthrough attacks from expected traffic and review alert routing for high-breakthrough kits.",
+        "source_ids": [
+          11
+        ]
+      }
+    ],
+    "executive_brief": {
+      "paragraphs": [
+        {
+          "source_ids": [
+            1,
+            3
+          ],
+          "text": "Active exploitation of highly critical vulnerabilities in Drupal core and GeoServer, alongside CISA's addition of ten flaws to the Known Exploited Vulnerabilities catalog including Mitel MiCollab, signals an elevated tempo of weaponized vulnerability exploitation against widely deployed platforms. Control owners must verify that asset inventories capture affected products and that remediation or compensating controls are validated with version evidence."
+        },
+        {
+          "source_ids": [
+            7,
+            9,
+            12
+          ],
+          "text": "Simultaneous identity-focused campaigns — including the GoodGuys phishing operation harvesting corporate Google and Okta credentials, North Korea-linked PolinRider poisoning over 7,600 GitHub repositories, and the 1Password backend breach exposing customer information — extend risk beyond perimeter defenses into trusted software supply chains and identity providers. Access management and third-party risk owners should confirm authentication coverage against brand-impersonation lures and review supplier dependencies on compromised repositories."
+        }
+      ]
+    },
+    "industry_impacts": [],
+    "regulatory_changes": []
+  },
+  "generated_at": "2026-11-26T21:16:53.129084Z",
+  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/0af84ca5c8721ec500e5e041e4102a69c01f0618/site/feed.xml",
+  "feed_home_url": "https://sentrydigest.ricomanifesto.com/",
+  "digest_issue_date": "2026-11-26",
+  "digest_issue_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-26/",
+  "requested_model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
+  "resolved_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+  "sources": [
+    {
+      "title": "Drupal Warns of New Highly Critical Site Takeover Vulnerability Under Active Exploitation",
+      "url": "https://thehackernews.com/2026/11/drupal-warns-of-new-highly-critical.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-26/#reporting-61e3be14c2b6",
+      "cves": [
+        "CVE-2026-136716",
+        "CVE-2026-132165"
+      ],
+      "snippet": "Drupal Warns of New Highly Critical Site Takeover Vulnerability Under Active Exploitation Drupal has warned of a new \"highly critical\" security flaw impacting Drupal core that it said has been exploited in the wild. The vulnerability, tracked as CVE-2026-136716 (CVSS score: N/A), has been described as a case of improper checking for unusual or exceptional conditions. It also relates to CVE-2026-132165 aka Fail2Install in that it addresses remaining vulnerable installation states… Drupal has warned of a new \"highly critical\" security flaw impacting Drupal core that it said has been exploited in the wild. The vulnerability, tracked as CVE-2026-136716 (CVSS score: N/A), has been described as a ",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Drupal has warned of a new \"highly critical\" security flaw impacting Drupal core that it said has been exploited in the wild. The vulnerability, tracked as CVE-2026-136716 (CVSS score: N/A), has been described as a case of improper checking for unusual or exceptional conditions. It also relates to CVE-2026-132165 aka Fail2Install in that it addresses remaining vulnerable installation states…",
+          "text": "Drupal has warned of a new \"highly critical\" security flaw impacting Drupal core that it said has been exploited in the wild. The vulnerability, tracked as CVE-2026-136716 (CVSS score: N/A), has been described as a case of improper checking for unusual or exceptional conditions. It also relates to CVE-2026-132165 aka Fail2Install in that it addresses remaining vulnerable installation states…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Drupal has warned of a new \"highly critical\" security flaw impacting Drupal core that it said has been exploited in the wild. The vulnerability, tracked as CVE-2026-136716 (CVSS score: N/A), has been described as a case of improper checking for unusual or exceptional conditions. It also relates to CVE-2026-132165 aka Fail2Install in that it addresses remaining vulnerable installation states…",
+          "text": "Drupal has warned of a new \"highly critical\" security flaw impacting Drupal core that it said has been exploited in the wild. The vulnerability, tracked as CVE-2026-136716 (CVSS score: N/A), has been described as a case of improper checking for unusual or exceptional conditions. It also relates to CVE-2026-132165 aka Fail2Install in that it addresses remaining vulnerable installation states…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Hackers Exploit 10 Vulnerabilities Across Mitel, Juniper, Vates, and Danfoss Products",
+      "url": "https://thehackernews.com/2026/11/hackers-exploit-10-vulnerabilities.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-26/#reporting-451f3a785e32",
+      "cves": [
+        "CVE-2026-133275"
+      ],
+      "snippet": "Hackers Exploit 10 Vulnerabilities Across Mitel, Juniper, Vates, and Danfoss Products The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Wednesday added 10 security flaws to its Known Exploited Vulnerabilities (KEV) catalog, including five vulnerabilities impacting Mitel MiCollab that were disclosed last week. The Mitel MiCollab vulnerabilities are listed below - CVE-2026-133275 (CVSS score: 5.3) - An arbitrary file upload vulnerability in the Audio, Web and… The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Wednesday added 10 security flaws to its Known Exploited Vulnerabilities (KEV) catalog, including five vulnerabilities impacting Mitel MiCollab that we",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Wednesday added 10 security flaws to its Known Exploited Vulnerabilities (KEV) catalog, including five vulnerabilities impacting Mitel MiCollab that were disclosed last week. The Mitel MiCollab vulnerabilities are listed below - CVE-2026-133275 (CVSS score: 5.3) - An arbitrary file upload vulnerability in the Audio, Web and…",
+          "text": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Wednesday added 10 security flaws to its Known Exploited Vulnerabilities (KEV) catalog, including five vulnerabilities impacting Mitel MiCollab that were disclosed last week. The Mitel MiCollab vulnerabilities are listed below - CVE-2026-133275 (CVSS score: 5.3) - An arbitrary file upload vulnerability in the Audio, Web and…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Wednesday added 10 security flaws to its Known Exploited Vulnerabilities (KEV) catalog, including five vulnerabilities impacting Mitel MiCollab that were disclosed last week. The Mitel MiCollab vulnerabilities are listed below - CVE-2026-133275 (CVSS score: 5.3) - An arbitrary file upload vulnerability in the Audio, Web and…",
+          "text": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Wednesday added 10 security flaws to its Known Exploited Vulnerabilities (KEV) catalog, including five vulnerabilities impacting Mitel MiCollab that were disclosed last week. The Mitel MiCollab vulnerabilities are listed below - CVE-2026-133275 (CVSS score: 5.3) - An arbitrary file upload vulnerability in the Audio, Web and…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Hackers Exploit Two GeoServer Flaws as Researchers Warn of Unauthenticated RCE Chains",
+      "url": "https://thehackernews.com/2026/11/hackers-exploit-two-geoserver-flaws-as.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-26/#reporting-27873297949c",
+      "cves": [
+        "CVE-2026-120705",
+        "CVE-2026-129243"
+      ],
+      "snippet": "Hackers Exploit Two GeoServer Flaws as Researchers Warn of Unauthenticated RCE Chains Threat actors are actively exploiting two newly patched security flaws in GeoServer, according to watchTowr. The vulnerabilities in question are CVE-2026-120705 and CVE-2026-129243, details of which are below - CVE-2026-120705 (CVSS score: 8.6) - An arbitrary file read vulnerability that could enable an attacker to access local text files readable by the GeoServer process or fetch… Threat actors are actively exploiting two newly patched security flaws in GeoServer, according to watchTowr. The vulnerabilities in question are CVE-2026-120705 and CVE-2026-129243, details of which are below - CVE-2026-120705 (C",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Threat actors are actively exploiting two newly patched security flaws in GeoServer, according to watchTowr. The vulnerabilities in question are CVE-2026-120705 and CVE-2026-129243, details of which are below - CVE-2026-120705 (CVSS score: 8.6) - An arbitrary file read vulnerability that could enable an attacker to access local text files readable by the GeoServer process or fetch…",
+          "text": "Threat actors are actively exploiting two newly patched security flaws in GeoServer, according to watchTowr. The vulnerabilities in question are CVE-2026-120705 and CVE-2026-129243, details of which are below - CVE-2026-120705 (CVSS score: 8.6) - An arbitrary file read vulnerability that could enable an attacker to access local text files readable by the GeoServer process or fetch…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Threat actors are actively exploiting two newly patched security flaws in GeoServer, according to watchTowr. The vulnerabilities in question are CVE-2026-120705 and CVE-2026-129243, details of which are below - CVE-2026-120705 (CVSS score: 8.6) - An arbitrary file read vulnerability that could enable an attacker to access local text files readable by the GeoServer process or fetch…",
+          "text": "Threat actors are actively exploiting two newly patched security flaws in GeoServer, according to watchTowr. The vulnerabilities in question are CVE-2026-120705 and CVE-2026-129243, details of which are below - CVE-2026-120705 (CVSS score: 8.6) - An arbitrary file read vulnerability that could enable an attacker to access local text files readable by the GeoServer process or fetch…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "OpenAI warns GPT-6.2 Astra will hit usage limits 40% faster because it fixed a bug",
+      "url": "https://www.bleepingcomputer.com/news/artificial-intelligence/openai-warns-gpt-62-astra-will-hit-usage-limits-40-percent-faster-because-it-fixed-a-bug/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-26/#reporting-ac6c22bfffe5",
+      "cves": [],
+      "snippet": "OpenAI warns GPT-6.2 Astra will hit usage limits 40% faster because it fixed a bug OpenAI confirmed that it fixed a 'bug' that incorrectly discounted GPT-6.2 usage, which means you'll now hit GPT usage limits 40% faster than before… OpenAI confirmed that it fixed a 'bug' that incorrectly discounted GPT-6.2 usage, which means you'll now hit GPT usage limits 40% faster than before…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "OpenAI confirmed that it fixed a 'bug' that incorrectly discounted GPT-6.2 usage, which means you'll now hit GPT usage limits 40% faster than before…",
+          "text": "OpenAI confirmed that it fixed a 'bug' that incorrectly discounted GPT-6.2 usage, which means you'll now hit GPT usage limits 40% faster than before…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "OpenAI confirmed that it fixed a 'bug' that incorrectly discounted GPT-6.2 usage, which means you'll now hit GPT usage limits 40% faster than before…",
+          "text": "OpenAI confirmed that it fixed a 'bug' that incorrectly discounted GPT-6.2 usage, which means you'll now hit GPT usage limits 40% faster than before…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "ThreatsDay: 10M NGINX Services at Risk, 250+ Malicious Extensions, AI Server Hijacking + 17 More Stories",
+      "url": "https://thehackernews.com/2026/11/threatsday-250-rogue-extensions-10m.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-26/#reporting-0b75246ced86",
+      "cves": [],
+      "snippet": "ThreatsDay: 10M NGINX Services at Risk, 250+ Malicious Extensions, AI Server Hijacking + 17 More Stories A website can look perfectly fine to the person running it. Log out, visit the same page, and things might look different. Something similar is happening with browser extensions, where even the way you find and install one can change what it does. Checking whether software works as expected only tells you so much. Then there’s the question of who gets to use what. Stolen logins are opening… A website can look perfectly fine to the person running it. Log out, visit the same page, and things might look different. Something similar is happening with browser extensions, where even the way you",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "A website can look perfectly fine to the person running it. Log out, visit the same page, and things might look different. Something similar is happening with browser extensions, where even the way you find and install one can change what it does. Checking whether software works as expected only tells you so much. Then there’s the question of who gets to use what. Stolen logins are opening…",
+          "text": "A website can look perfectly fine to the person running it. Log out, visit the same page, and things might look different. Something similar is happening with browser extensions, where even the way you find and install one can change what it does. Checking whether software works as expected only tells you so much. Then there’s the question of who gets to use what. Stolen logins are opening…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "A website can look perfectly fine to the person running it. Log out, visit the same page, and things might look different. Something similar is happening with browser extensions, where even the way you find and install one can change what it does. Checking whether software works as expected only tells you so much. Then there’s the question of who gets to use what. Stolen logins are opening…",
+          "text": "A website can look perfectly fine to the person running it. Log out, visit the same page, and things might look different. Something similar is happening with browser extensions, where even the way you find and install one can change what it does. Checking whether software works as expected only tells you so much. Then there’s the question of who gets to use what. Stolen logins are opening…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "NordVPN Black Friday Deal: Get 78% off VPN plans in 2026",
+      "url": "https://www.bleepingcomputer.com/news/security/nordvpn-black-friday-deal-get-78-percent-off-vpn-plans-in-2026/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-26/#reporting-0bd18f3d2e78",
+      "cves": [],
+      "snippet": "NordVPN Black Friday Deal: Get 78% off VPN plans in 2026 NordVPN's 2026 Black Friday and Cyber Monday deal is now live, offering savings of up to 78% on VPN subscriptions, plus three extra months of protection… NordVPN's 2026 Black Friday and Cyber Monday deal is now live, offering savings of up to 78% on VPN subscriptions, plus three extra months of protection…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "NordVPN's 2026 Black Friday and Cyber Monday deal is now live, offering savings of up to 78% on VPN subscriptions, plus three extra months of protection…",
+          "text": "NordVPN's 2026 Black Friday and Cyber Monday deal is now live, offering savings of up to 78% on VPN subscriptions, plus three extra months of protection…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "NordVPN's 2026 Black Friday and Cyber Monday deal is now live, offering savings of up to 78% on VPN subscriptions, plus three extra months of protection…",
+          "text": "NordVPN's 2026 Black Friday and Cyber Monday deal is now live, offering savings of up to 78% on VPN subscriptions, plus three extra months of protection…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Fake paid expert interviews impersonate brands to steal Google logins",
+      "url": "https://www.bleepingcomputer.com/news/apple/fake-paid-expert-interviews-impersonate-brands-to-steal-google-logins/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-26/#reporting-deebe28bb42d",
+      "cves": [],
+      "snippet": "Fake paid expert interviews impersonate brands to steal Google logins An ongoing phishing campaign dubbed \"GoodGuys\" impersonates major brands, including Google, Nvidia, Accenture, and SpaceX, to steal corporate Google and Okta credentials using fake invitations to paid expert interviews and webinars… An ongoing phishing campaign dubbed \"GoodGuys\" impersonates major brands, including Google, Nvidia, Accenture, and SpaceX, to steal corporate Google and Okta credentials using fake invitations to paid expert interviews and webinars…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "An ongoing phishing campaign dubbed \"GoodGuys\" impersonates major brands, including Google, Nvidia, Accenture, and SpaceX, to steal corporate Google and Okta credentials using fake invitations to paid expert interviews and webinars…",
+          "text": "An ongoing phishing campaign dubbed \"GoodGuys\" impersonates major brands, including Google, Nvidia, Accenture, and SpaceX, to steal corporate Google and Okta credentials using fake invitations to paid expert interviews and webinars…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "An ongoing phishing campaign dubbed \"GoodGuys\" impersonates major brands, including Google, Nvidia, Accenture, and SpaceX, to steal corporate Google and Okta credentials using fake invitations to paid expert interviews and webinars…",
+          "text": "An ongoing phishing campaign dubbed \"GoodGuys\" impersonates major brands, including Google, Nvidia, Accenture, and SpaceX, to steal corporate Google and Okta credentials using fake invitations to paid expert interviews and webinars…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Remus malware steals Gmail messages via fake Google Sheets extension",
+      "url": "https://www.bleepingcomputer.com/news/security/remus-malware-steals-gmail-messages-via-fake-google-sheets-extension/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-26/#reporting-57d73d788295",
+      "cves": [],
+      "snippet": "Remus malware steals Gmail messages via fake Google Sheets extension The Remus infostealer is stealing Gmail messages through a stealthy malicious Chrome extension, a capability the malware operators marketed as a zero-day exploit in Google's email service… The Remus infostealer is stealing Gmail messages through a stealthy malicious Chrome extension, a capability the malware operators marketed as a zero-day exploit in Google's email service…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "The Remus infostealer is stealing Gmail messages through a stealthy malicious Chrome extension, a capability the malware operators marketed as a zero-day exploit in Google's email service…",
+          "text": "The Remus infostealer is stealing Gmail messages through a stealthy malicious Chrome extension, a capability the malware operators marketed as a zero-day exploit in Google's email service…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "The Remus infostealer is stealing Gmail messages through a stealthy malicious Chrome extension, a capability the malware operators marketed as a zero-day exploit in Google's email service…",
+          "text": "The Remus infostealer is stealing Gmail messages through a stealthy malicious Chrome extension, a capability the malware operators marketed as a zero-day exploit in Google's email service…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "North Korea-Linked PolinRider Poisons Over 7,600 GitHub Repositories to Spread Malware",
+      "url": "https://thehackernews.com/2026/11/north-korea-linked-polinrider-poisons.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-26/#reporting-0574110d7d17",
+      "cves": [],
+      "snippet": "North Korea-Linked PolinRider Poisons Over 7,600 GitHub Repositories to Spread Malware The threat actors behind the PolinRider campaign have been observed planting a Python loader in GitHub repositories, as evidence emerges that the activity may have started as far back as February 2025. \"The loader hides in a small utils package or in conftest.py,\" SafeDep said in a report published this week. \"When Python imports the file, the loader reads the newest transaction that an… The threat actors behind the PolinRider campaign have been observed planting a Python loader in GitHub repositories, as evidence emerges that the activity may have started as far back as February 2025. \"The loader hides in",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "The threat actors behind the PolinRider campaign have been observed planting a Python loader in GitHub repositories, as evidence emerges that the activity may have started as far back as February 2025. \"The loader hides in a small utils package or in conftest.py,\" SafeDep said in a report published this week. \"When Python imports the file, the loader reads the newest transaction that an…",
+          "text": "The threat actors behind the PolinRider campaign have been observed planting a Python loader in GitHub repositories, as evidence emerges that the activity may have started as far back as February 2025. \"The loader hides in a small utils package or in conftest.py,\" SafeDep said in a report published this week. \"When Python imports the file, the loader reads the newest transaction that an…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "The threat actors behind the PolinRider campaign have been observed planting a Python loader in GitHub repositories, as evidence emerges that the activity may have started as far back as February 2025. \"The loader hides in a small utils package or in conftest.py,\" SafeDep said in a report published this week. \"When Python imports the file, the loader reads the newest transaction that an…",
+          "text": "The threat actors behind the PolinRider campaign have been observed planting a Python loader in GitHub repositories, as evidence emerges that the activity may have started as far back as February 2025. \"The loader hides in a small utils package or in conftest.py,\" SafeDep said in a report published this week. \"When Python imports the file, the loader reads the newest transaction that an…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "SYS010 malware abuses browser management to spy on Gmail, Outlook",
+      "url": "https://www.bleepingcomputer.com/news/security/sys010-malware-abuses-browser-management-to-spy-on-gmail-outlook/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-26/#reporting-34599e7b6c56",
+      "cves": [],
+      "snippet": "SYS010 malware abuses browser management to spy on Gmail, Outlook A new version of the SYS01 infostealer malware delivered through Meta ads is enrolling browsers into enterprise-style management to force the installation of an extension that steals sensitive data, including Gmail and Outlook emails… A new version of the SYS01 infostealer malware delivered through Meta ads is enrolling browsers into enterprise-style management to force the installation of an extension that steals sensitive data, including Gmail and Outlook emails…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "A new version of the SYS01 infostealer malware delivered through Meta ads is enrolling browsers into enterprise-style management to force the installation of an extension that steals sensitive data, including Gmail and Outlook emails…",
+          "text": "A new version of the SYS01 infostealer malware delivered through Meta ads is enrolling browsers into enterprise-style management to force the installation of an extension that steals sensitive data, including Gmail and Outlook emails…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "A new version of the SYS01 infostealer malware delivered through Meta ads is enrolling browsers into enterprise-style management to force the installation of an extension that steals sensitive data, including Gmail and Outlook emails…",
+          "text": "A new version of the SYS01 infostealer malware delivered through Meta ads is enrolling browsers into enterprise-style management to force the installation of an extension that steals sensitive data, including Gmail and Outlook emails…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Most Wanted: The Phishing Kits and Techniques Getting Past Security Controls",
+      "url": "https://thehackernews.com/2026/11/most-wanted-phishing-kits-and.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-26/#reporting-54cc21ceab24",
+      "cves": [],
+      "snippet": "Most Wanted: The Phishing Kits and Techniques Getting Past Security Controls Every phishing attack has to get past email security, web filtering, and safe browsing before it reaches an employee. Some kits manage that far more often than others, and those are the kits that security teams need to know about. At Push Security, we measure this as breakthrough rate: The share of attacks that get past email security, web gateways, and safe browsing to reach the user. How an… Every phishing attack has to get past email security, web filtering, and safe browsing before it reaches an employee. Some kits manage that far more often than others, and those are the kits that security teams need to know ab",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Every phishing attack has to get past email security, web filtering, and safe browsing before it reaches an employee. Some kits manage that far more often than others, and those are the kits that security teams need to know about. At Push Security, we measure this as breakthrough rate: The share of attacks that get past email security, web gateways, and safe browsing to reach the user. How an…",
+          "text": "Every phishing attack has to get past email security, web filtering, and safe browsing before it reaches an employee. Some kits manage that far more often than others, and those are the kits that security teams need to know about. At Push Security, we measure this as breakthrough rate: The share of attacks that get past email security, web gateways, and safe browsing to reach the user. How an…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Every phishing attack has to get past email security, web filtering, and safe browsing before it reaches an employee. Some kits manage that far more often than others, and those are the kits that security teams need to know about. At Push Security, we measure this as breakthrough rate: The share of attacks that get past email security, web gateways, and safe browsing to reach the user. How an…",
+          "text": "Every phishing attack has to get past email security, web filtering, and safe browsing before it reaches an employee. Some kits manage that far more often than others, and those are the kits that security teams need to know about. At Push Security, we measure this as breakthrough rate: The share of attacks that get past email security, web gateways, and safe browsing to reach the user. How an…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "1Password Hacked, Customer Data and Source Code Stolen in GitHub Account Breach",
+      "url": "https://thehackernews.com/2026/11/1password-hacked-customer-data-and.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-26/#reporting-5e5b0d3bb248",
+      "cves": [],
+      "snippet": "1Password Hacked, Customer Data and Source Code Stolen in GitHub Account Breach Popular password management software 1Password on Wednesday disclosed a security incident involving its backend systems that led to the unauthorized access of some customer information, but emphasized that customer password vaults and other secrets were not accessed. \"While we took immediate steps to contain the incident, the attacker gained access to some of our backend systems and accessed a… Popular password management software 1Password on Wednesday disclosed a security incident involving its backend systems that led to the unauthorized access of some customer information, but emphasized that customer passwor",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Popular password management software 1Password on Wednesday disclosed a security incident involving its backend systems that led to the unauthorized access of some customer information, but emphasized that customer password vaults and other secrets were not accessed. \"While we took immediate steps to contain the incident, the attacker gained access to some of our backend systems and accessed a…",
+          "text": "Popular password management software 1Password on Wednesday disclosed a security incident involving its backend systems that led to the unauthorized access of some customer information, but emphasized that customer password vaults and other secrets were not accessed. \"While we took immediate steps to contain the incident, the attacker gained access to some of our backend systems and accessed a…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Popular password management software 1Password on Wednesday disclosed a security incident involving its backend systems that led to the unauthorized access of some customer information, but emphasized that customer password vaults and other secrets were not accessed. \"While we took immediate steps to contain the incident, the attacker gained access to some of our backend systems and accessed a…",
+          "text": "Popular password management software 1Password on Wednesday disclosed a security incident involving its backend systems that led to the unauthorized access of some customer information, but emphasized that customer password vaults and other secrets were not accessed. \"While we took immediate steps to contain the incident, the attacker gained access to some of our backend systems and accessed a…"
+        }
+      ],
+      "effective_date_evidence": null
+    }
+  ]
+}
