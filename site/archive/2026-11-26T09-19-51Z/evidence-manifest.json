@@ -1,0 +1,383 @@
+{
+  "schema_version": 3,
+  "report_contract_version": 6,
+  "report_plan": {
+    "control_implications": [
+      {
+        "control_id": "vulnerability_management",
+        "evidence_excerpt": "Drupal has warned of a new \"highly critical\" security flaw impacting Drupal core that it said has been exploited in the wild. The vulnerability, tracked as CVE-2026-136716 (CVSS score: N/A), has been described as a case of improper checking for unusual or exceptional conditions. It also relates to CVE-2026-132165 aka Fail2Install in that it addresses remaining vulnerable installation states…",
+        "evidence_origin": "content",
+        "focus": "Drupal core",
+        "headline": "Drupal core weakens site assurance under active exploitation",
+        "priority": "high",
+        "significance": "Active exploitation of highly critical flaw in Drupal core undermines vulnerability remediation controls. Vulnerability and asset owners should confirm affected Drupal installations are identified and patched or compensating controls applied.",
+        "source_ids": [
+          1
+        ]
+      },
+      {
+        "control_id": "vulnerability_management",
+        "evidence_excerpt": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Wednesday added 10 security flaws to its Known Exploited Vulnerabilities (KEV) catalog, including five vulnerabilities impacting Mitel MiCollab that were disclosed last week. The Mitel MiCollab vulnerabilities are listed below - CVE-2026-133275 (CVSS score: 5.3) - An arbitrary file upload vulnerability in the Audio, Web and…",
+        "evidence_origin": "content",
+        "focus": "Mitel MiCollab",
+        "headline": "Mitel MiCollab extends remediation urgency via KEV listing",
+        "priority": "high",
+        "significance": "CISA KEV inclusion signals active exploitation requiring immediate remediation tracking. Vulnerability and asset owners should verify Mitel MiCollab deployments are inventoried and patched per binding operational directive timelines.",
+        "source_ids": [
+          2
+        ]
+      },
+      {
+        "control_id": "vulnerability_management",
+        "evidence_excerpt": "Threat actors are actively exploiting two newly patched security flaws in GeoServer, according to watchTowr. The vulnerabilities in question are CVE-2026-120705 and CVE-2026-129243, details of which are below - CVE-2026-120705 (CVSS score: 8.6) - An arbitrary file read vulnerability that could enable an attacker to access local text files readable by the GeoServer process or fetch…",
+        "evidence_origin": "content",
+        "focus": "GeoServer",
+        "headline": "GeoServer exposes file read risk through active exploitation",
+        "priority": "high",
+        "significance": "Active exploitation of patched GeoServer flaws indicates delayed patch deployment risk. Vulnerability and asset owners should confirm GeoServer instances are updated and arbitrary file read access is monitored.",
+        "source_ids": [
+          3
+        ]
+      },
+      {
+        "control_id": "access_management",
+        "evidence_excerpt": "Popular password management software 1Password on Wednesday disclosed a security incident involving its backend systems that led to the unauthorized access of some customer information, but emphasized that customer password vaults and other secrets were not accessed. \"While we took immediate steps to contain the incident, the attacker gained access to some of our backend systems and accessed a…",
+        "evidence_origin": "content",
+        "focus": "1Password backend systems",
+        "headline": "1Password backend systems compromise customer data access",
+        "priority": "high",
+        "significance": "Employee GitHub account breach leading to backend access reveals identity control gaps. Identity and access owners should review privileged access pathways and confirm session revocation controls cover supply chain identities.",
+        "source_ids": [
+          5
+        ]
+      },
+      {
+        "control_id": "third_party_risk",
+        "evidence_excerpt": "Cybersecurity researchers have discovered 13 malicious NuGet packages that are designed to target Windows .NET developers under the guise of a fake take-home job assessment. \"Most of the packages pose as WinUI 3 and WPF [Windows Presentation Foundation] button controls,\" Socket security researcher Kush Pandya said in a technical write-up. \"In the versions we analyzed, building or running a…",
+        "evidence_origin": "content",
+        "focus": "malicious NuGet packages",
+        "headline": "Malicious NuGet packages target developer machines via fake assessments",
+        "priority": "medium",
+        "significance": "Software supply chain attack through developer tooling bypasses traditional perimeter controls. Third-party risk owners should assess NuGet package verification processes and confirm developer environment isolation controls.",
+        "source_ids": [
+          6
+        ]
+      },
+      {
+        "control_id": "monitoring",
+        "evidence_excerpt": "Swiss and Italian cybersecurity agencies are warning about automated cyberattacks powered by AI agents targeting organizations in the critical infrastructure sector…",
+        "evidence_origin": "content",
+        "focus": "automated cyberattacks powered by AI agents",
+        "headline": "Automated cyberattacks powered by AI agents challenge detection coverage",
+        "priority": "medium",
+        "significance": "Nation-state warnings of AI-driven attacks indicate evolving threat actor capabilities. Monitoring and detection owners should evaluate telemetry coverage for autonomous attack patterns and confirm alert routing for novel techniques.",
+        "source_ids": [
+          9
+        ]
+      }
+    ],
+    "executive_brief": {
+      "paragraphs": [
+        {
+          "source_ids": [
+            1,
+            2,
+            3
+          ],
+          "text": "Multiple critical vulnerabilities added to CISA KEV catalog and actively exploited across Drupal, GeoServer, Mitel, and Palo Alto platforms demand immediate vulnerability management attention. Active exploitation of highly critical flaws in widely deployed systems indicates remediation delays create material control gaps. Vulnerability and asset owners must confirm affected assets are inventoried and patched per binding operational directive timelines."
+        },
+        {
+          "source_ids": [
+            5,
+            6,
+            9
+          ],
+          "text": "Identity supply chain compromise via 1Password employee GitHub account and malicious NuGet packages targeting developers reveal access management and third-party risk control weaknesses. Simultaneously, national cybersecurity agencies warn of AI-driven autonomous attacks on critical infrastructure, challenging detection coverage. Identity and access owners should review privileged access pathways while monitoring owners evaluate telemetry for novel attack patterns."
+        }
+      ]
+    },
+    "industry_impacts": [],
+    "regulatory_changes": []
+  },
+  "generated_at": "2026-11-26T09:19:51.621497Z",
+  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/c6a099cf5648f161ed2d27e26b3f9f26a036aba3/site/feed.xml",
+  "feed_home_url": "https://sentrydigest.ricomanifesto.com/",
+  "digest_issue_date": "2026-11-26",
+  "digest_issue_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-26/",
+  "requested_model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
+  "resolved_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+  "sources": [
+    {
+      "title": "Drupal Warns of New Highly Critical Site Takeover Vulnerability Under Active Exploitation",
+      "url": "https://thehackernews.com/2026/11/drupal-warns-of-new-highly-critical.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-26/#reporting-61e3be14c2b6",
+      "cves": [
+        "CVE-2026-136716",
+        "CVE-2026-132165"
+      ],
+      "snippet": "Drupal Warns of New Highly Critical Site Takeover Vulnerability Under Active Exploitation Drupal has warned of a new \"highly critical\" security flaw impacting Drupal core that it said has been exploited in the wild. The vulnerability, tracked as CVE-2026-136716 (CVSS score: N/A), has been described as a case of improper checking for unusual or exceptional conditions. It also relates to CVE-2026-132165 aka Fail2Install in that it addresses remaining vulnerable installation states… Drupal has warned of a new \"highly critical\" security flaw impacting Drupal core that it said has been exploited in the wild. The vulnerability, tracked as CVE-2026-136716 (CVSS score: N/A), has been described as a ",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Drupal has warned of a new \"highly critical\" security flaw impacting Drupal core that it said has been exploited in the wild. The vulnerability, tracked as CVE-2026-136716 (CVSS score: N/A), has been described as a case of improper checking for unusual or exceptional conditions. It also relates to CVE-2026-132165 aka Fail2Install in that it addresses remaining vulnerable installation states…",
+          "text": "Drupal has warned of a new \"highly critical\" security flaw impacting Drupal core that it said has been exploited in the wild. The vulnerability, tracked as CVE-2026-136716 (CVSS score: N/A), has been described as a case of improper checking for unusual or exceptional conditions. It also relates to CVE-2026-132165 aka Fail2Install in that it addresses remaining vulnerable installation states…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Drupal has warned of a new \"highly critical\" security flaw impacting Drupal core that it said has been exploited in the wild. The vulnerability, tracked as CVE-2026-136716 (CVSS score: N/A), has been described as a case of improper checking for unusual or exceptional conditions. It also relates to CVE-2026-132165 aka Fail2Install in that it addresses remaining vulnerable installation states…",
+          "text": "Drupal has warned of a new \"highly critical\" security flaw impacting Drupal core that it said has been exploited in the wild. The vulnerability, tracked as CVE-2026-136716 (CVSS score: N/A), has been described as a case of improper checking for unusual or exceptional conditions. It also relates to CVE-2026-132165 aka Fail2Install in that it addresses remaining vulnerable installation states…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Hackers Exploit 10 Vulnerabilities Across Mitel, Juniper, Vates, and Danfoss Products",
+      "url": "https://thehackernews.com/2026/11/hackers-exploit-10-vulnerabilities.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-26/#reporting-451f3a785e32",
+      "cves": [
+        "CVE-2026-133275"
+      ],
+      "snippet": "Hackers Exploit 10 Vulnerabilities Across Mitel, Juniper, Vates, and Danfoss Products The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Wednesday added 10 security flaws to its Known Exploited Vulnerabilities (KEV) catalog, including five vulnerabilities impacting Mitel MiCollab that were disclosed last week. The Mitel MiCollab vulnerabilities are listed below - CVE-2026-133275 (CVSS score: 5.3) - An arbitrary file upload vulnerability in the Audio, Web and… The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Wednesday added 10 security flaws to its Known Exploited Vulnerabilities (KEV) catalog, including five vulnerabilities impacting Mitel MiCollab that we",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Wednesday added 10 security flaws to its Known Exploited Vulnerabilities (KEV) catalog, including five vulnerabilities impacting Mitel MiCollab that were disclosed last week. The Mitel MiCollab vulnerabilities are listed below - CVE-2026-133275 (CVSS score: 5.3) - An arbitrary file upload vulnerability in the Audio, Web and…",
+          "text": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Wednesday added 10 security flaws to its Known Exploited Vulnerabilities (KEV) catalog, including five vulnerabilities impacting Mitel MiCollab that were disclosed last week. The Mitel MiCollab vulnerabilities are listed below - CVE-2026-133275 (CVSS score: 5.3) - An arbitrary file upload vulnerability in the Audio, Web and…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Wednesday added 10 security flaws to its Known Exploited Vulnerabilities (KEV) catalog, including five vulnerabilities impacting Mitel MiCollab that were disclosed last week. The Mitel MiCollab vulnerabilities are listed below - CVE-2026-133275 (CVSS score: 5.3) - An arbitrary file upload vulnerability in the Audio, Web and…",
+          "text": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Wednesday added 10 security flaws to its Known Exploited Vulnerabilities (KEV) catalog, including five vulnerabilities impacting Mitel MiCollab that were disclosed last week. The Mitel MiCollab vulnerabilities are listed below - CVE-2026-133275 (CVSS score: 5.3) - An arbitrary file upload vulnerability in the Audio, Web and…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Hackers Exploit Two GeoServer Flaws as Researchers Warn of Unauthenticated RCE Chains",
+      "url": "https://thehackernews.com/2026/11/hackers-exploit-two-geoserver-flaws-as.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-26/#reporting-27873297949c",
+      "cves": [
+        "CVE-2026-120705",
+        "CVE-2026-129243"
+      ],
+      "snippet": "Hackers Exploit Two GeoServer Flaws as Researchers Warn of Unauthenticated RCE Chains Threat actors are actively exploiting two newly patched security flaws in GeoServer, according to watchTowr. The vulnerabilities in question are CVE-2026-120705 and CVE-2026-129243, details of which are below - CVE-2026-120705 (CVSS score: 8.6) - An arbitrary file read vulnerability that could enable an attacker to access local text files readable by the GeoServer process or fetch… Threat actors are actively exploiting two newly patched security flaws in GeoServer, according to watchTowr. The vulnerabilities in question are CVE-2026-120705 and CVE-2026-129243, details of which are below - CVE-2026-120705 (C",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Threat actors are actively exploiting two newly patched security flaws in GeoServer, according to watchTowr. The vulnerabilities in question are CVE-2026-120705 and CVE-2026-129243, details of which are below - CVE-2026-120705 (CVSS score: 8.6) - An arbitrary file read vulnerability that could enable an attacker to access local text files readable by the GeoServer process or fetch…",
+          "text": "Threat actors are actively exploiting two newly patched security flaws in GeoServer, according to watchTowr. The vulnerabilities in question are CVE-2026-120705 and CVE-2026-129243, details of which are below - CVE-2026-120705 (CVSS score: 8.6) - An arbitrary file read vulnerability that could enable an attacker to access local text files readable by the GeoServer process or fetch…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Threat actors are actively exploiting two newly patched security flaws in GeoServer, according to watchTowr. The vulnerabilities in question are CVE-2026-120705 and CVE-2026-129243, details of which are below - CVE-2026-120705 (CVSS score: 8.6) - An arbitrary file read vulnerability that could enable an attacker to access local text files readable by the GeoServer process or fetch…",
+          "text": "Threat actors are actively exploiting two newly patched security flaws in GeoServer, according to watchTowr. The vulnerabilities in question are CVE-2026-120705 and CVE-2026-129243, details of which are below - CVE-2026-120705 (CVSS score: 8.6) - An arbitrary file read vulnerability that could enable an attacker to access local text files readable by the GeoServer process or fetch…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Cyprus Becomes Espionage Target for Iranian Hackers",
+      "url": "https://www.darkreading.com/cyberattacks-data-breaches/cyprus-espionage-target-iranian-hackers",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-26/#reporting-9bbd9ec06777",
+      "cves": [],
+      "snippet": "Cyprus Becomes Espionage Target for Iranian Hackers A previously undocumented Iranian threat group called \"Volant Manticore\" is targeting Cypriot organizations as part of an intelligence-gathering effort for Tehran. A previously undocumented Iranian threat group called \"Volant Manticore\" is targeting Cypriot organizations as part of an intelligence-gathering effort for Tehran.",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "A previously undocumented Iranian threat group called \"Volant Manticore\" is targeting Cypriot organizations as part of an intelligence-gathering effort for Tehran.",
+          "text": "A previously undocumented Iranian threat group called \"Volant Manticore\" is targeting Cypriot organizations as part of an intelligence-gathering effort for Tehran."
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "A previously undocumented Iranian threat group called \"Volant Manticore\" is targeting Cypriot organizations as part of an intelligence-gathering effort for Tehran.",
+          "text": "A previously undocumented Iranian threat group called \"Volant Manticore\" is targeting Cypriot organizations as part of an intelligence-gathering effort for Tehran."
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "1Password Hacked, Customer Data and Source Code Stolen in GitHub Account Breach",
+      "url": "https://thehackernews.com/2026/11/1password-hacked-customer-data-and.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-26/#reporting-5e5b0d3bb248",
+      "cves": [],
+      "snippet": "1Password Hacked, Customer Data and Source Code Stolen in GitHub Account Breach Popular password management software 1Password on Wednesday disclosed a security incident involving its backend systems that led to the unauthorized access of some customer information, but emphasized that customer password vaults and other secrets were not accessed. \"While we took immediate steps to contain the incident, the attacker gained access to some of our backend systems and accessed a… Popular password management software 1Password on Wednesday disclosed a security incident involving its backend systems that led to the unauthorized access of some customer information, but emphasized that customer passwor",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Popular password management software 1Password on Wednesday disclosed a security incident involving its backend systems that led to the unauthorized access of some customer information, but emphasized that customer password vaults and other secrets were not accessed. \"While we took immediate steps to contain the incident, the attacker gained access to some of our backend systems and accessed a…",
+          "text": "Popular password management software 1Password on Wednesday disclosed a security incident involving its backend systems that led to the unauthorized access of some customer information, but emphasized that customer password vaults and other secrets were not accessed. \"While we took immediate steps to contain the incident, the attacker gained access to some of our backend systems and accessed a…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Popular password management software 1Password on Wednesday disclosed a security incident involving its backend systems that led to the unauthorized access of some customer information, but emphasized that customer password vaults and other secrets were not accessed. \"While we took immediate steps to contain the incident, the attacker gained access to some of our backend systems and accessed a…",
+          "text": "Popular password management software 1Password on Wednesday disclosed a security incident involving its backend systems that led to the unauthorized access of some customer information, but emphasized that customer password vaults and other secrets were not accessed. \"While we took immediate steps to contain the incident, the attacker gained access to some of our backend systems and accessed a…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "13 Malicious NuGet Packages Turn Fake .NET Job Assessments Into Malware Delivery Traps",
+      "url": "https://thehackernews.com/2026/11/13-malicious-nuget-packages-turn-fake.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-26/#reporting-8720d53f4644",
+      "cves": [],
+      "snippet": "13 Malicious NuGet Packages Turn Fake .NET Job Assessments Into Malware Delivery Traps Cybersecurity researchers have discovered 13 malicious NuGet packages that are designed to target Windows .NET developers under the guise of a fake take-home job assessment. \"Most of the packages pose as WinUI 3 and WPF [Windows Presentation Foundation] button controls,\" Socket security researcher Kush Pandya said in a technical write-up. \"In the versions we analyzed, building or running a… Cybersecurity researchers have discovered 13 malicious NuGet packages that are designed to target Windows .NET developers under the guise of a fake take-home job assessment. \"Most of the packages pose as WinUI 3 and WPF",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Cybersecurity researchers have discovered 13 malicious NuGet packages that are designed to target Windows .NET developers under the guise of a fake take-home job assessment. \"Most of the packages pose as WinUI 3 and WPF [Windows Presentation Foundation] button controls,\" Socket security researcher Kush Pandya said in a technical write-up. \"In the versions we analyzed, building or running a…",
+          "text": "Cybersecurity researchers have discovered 13 malicious NuGet packages that are designed to target Windows .NET developers under the guise of a fake take-home job assessment. \"Most of the packages pose as WinUI 3 and WPF [Windows Presentation Foundation] button controls,\" Socket security researcher Kush Pandya said in a technical write-up. \"In the versions we analyzed, building or running a…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Cybersecurity researchers have discovered 13 malicious NuGet packages that are designed to target Windows .NET developers under the guise of a fake take-home job assessment. \"Most of the packages pose as WinUI 3 and WPF [Windows Presentation Foundation] button controls,\" Socket security researcher Kush Pandya said in a technical write-up. \"In the versions we analyzed, building or running a…",
+          "text": "Cybersecurity researchers have discovered 13 malicious NuGet packages that are designed to target Windows .NET developers under the guise of a fake take-home job assessment. \"Most of the packages pose as WinUI 3 and WPF [Windows Presentation Foundation] button controls,\" Socket security researcher Kush Pandya said in a technical write-up. \"In the versions we analyzed, building or running a…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Palo Alto Networks warns of Fragnesia flaw exploited in PAN-OS attacks",
+      "url": "https://www.bleepingcomputer.com/news/security/palo-alto-networks-warns-of-fragnesia-flaw-exploited-in-pan-os-attacks/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-26/#reporting-85d71203b57c",
+      "cves": [],
+      "snippet": "Palo Alto Networks warns of Fragnesia flaw exploited in PAN-OS attacks Threat actors are chaining exploits for the PHP2Shell and Fragnesia vulnerabilities to target Palo Alto Networks devices with management interfaces exposed to the internet… Threat actors are chaining exploits for the PHP2Shell and Fragnesia vulnerabilities to target Palo Alto Networks devices with management interfaces exposed to the internet…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Threat actors are chaining exploits for the PHP2Shell and Fragnesia vulnerabilities to target Palo Alto Networks devices with management interfaces exposed to the internet…",
+          "text": "Threat actors are chaining exploits for the PHP2Shell and Fragnesia vulnerabilities to target Palo Alto Networks devices with management interfaces exposed to the internet…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Threat actors are chaining exploits for the PHP2Shell and Fragnesia vulnerabilities to target Palo Alto Networks devices with management interfaces exposed to the internet…",
+          "text": "Threat actors are chaining exploits for the PHP2Shell and Fragnesia vulnerabilities to target Palo Alto Networks devices with management interfaces exposed to the internet…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "1Password customer data stolen after employee GitHub account breach",
+      "url": "https://www.bleepingcomputer.com/news/security/1password-customer-data-stolen-after-employee-github-account-breach/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-26/#reporting-29838573f890",
+      "cves": [],
+      "snippet": "1Password customer data stolen after employee GitHub account breach 1Password has disclosed a data breach after a an employee's corporate GitHub account was hacked and used to deploy malicious code to the company's backend services to steal customer data… 1Password has disclosed a data breach after a an employee's corporate GitHub account was hacked and used to deploy malicious code to the company's backend services to steal customer data…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "1Password has disclosed a data breach after a an employee's corporate GitHub account was hacked and used to deploy malicious code to the company's backend services to steal customer data…",
+          "text": "1Password has disclosed a data breach after a an employee's corporate GitHub account was hacked and used to deploy malicious code to the company's backend services to steal customer data…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "1Password has disclosed a data breach after a an employee's corporate GitHub account was hacked and used to deploy malicious code to the company's backend services to steal customer data…",
+          "text": "1Password has disclosed a data breach after a an employee's corporate GitHub account was hacked and used to deploy malicious code to the company's backend services to steal customer data…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Italy and Switzerland warn of autonomous AI-driven cyberattacks",
+      "url": "https://www.bleepingcomputer.com/news/security/italy-and-switzerland-warn-of-autonomous-ai-driven-cyberattacks/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-26/#reporting-bb8a3d866a04",
+      "cves": [],
+      "snippet": "Italy and Switzerland warn of autonomous AI-driven cyberattacks Swiss and Italian cybersecurity agencies are warning about automated cyberattacks powered by AI agents targeting organizations in the critical infrastructure sector… Swiss and Italian cybersecurity agencies are warning about automated cyberattacks powered by AI agents targeting organizations in the critical infrastructure sector…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Swiss and Italian cybersecurity agencies are warning about automated cyberattacks powered by AI agents targeting organizations in the critical infrastructure sector…",
+          "text": "Swiss and Italian cybersecurity agencies are warning about automated cyberattacks powered by AI agents targeting organizations in the critical infrastructure sector…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Swiss and Italian cybersecurity agencies are warning about automated cyberattacks powered by AI agents targeting organizations in the critical infrastructure sector…",
+          "text": "Swiss and Italian cybersecurity agencies are warning about automated cyberattacks powered by AI agents targeting organizations in the critical infrastructure sector…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "CISA warns of critical unpatched flaw in Danfoss refrigeration controllers",
+      "url": "https://www.bleepingcomputer.com/news/security/cisa-warns-of-critical-unpatched-flaw-in-danfoss-refrigeration-controllers/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-26/#reporting-820a6be24763",
+      "cves": [],
+      "snippet": "CISA warns of critical unpatched flaw in Danfoss refrigeration controllers The U.S. Cybersecurity and Infrastructure Security Agency (CISA) is warning about a critical vulnerability in Danfoss AK-SM 8xxA Series controllers used by food retailers to manage commercial refrigeration, HVAC, and lighting systems… The U.S. Cybersecurity and Infrastructure Security Agency (CISA) is warning about a critical vulnerability in Danfoss AK-SM 8xxA Series controllers used by food retailers to manage commercial refrigeration, HVAC, and lighting systems…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) is warning about a critical vulnerability in Danfoss AK-SM 8xxA Series controllers used by food retailers to manage commercial refrigeration, HVAC, and lighting systems…",
+          "text": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) is warning about a critical vulnerability in Danfoss AK-SM 8xxA Series controllers used by food retailers to manage commercial refrigeration, HVAC, and lighting systems…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) is warning about a critical vulnerability in Danfoss AK-SM 8xxA Series controllers used by food retailers to manage commercial refrigeration, HVAC, and lighting systems…",
+          "text": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) is warning about a critical vulnerability in Danfoss AK-SM 8xxA Series controllers used by food retailers to manage commercial refrigeration, HVAC, and lighting systems…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Attackers Target .NET Developers With Poisoned Job Assessments",
+      "url": "https://www.darkreading.com/threat-intelligence/attackers-net-developers-poisoned-job-assessments",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-26/#reporting-f30f7b2280e9",
+      "cves": [],
+      "snippet": "Attackers Target .NET Developers With Poisoned Job Assessments Researchers discovered 13 malicious NuGet packages as part of a fake recruitment campaign that spreads malware and gives attackers access to developers' machines. Researchers discovered 13 malicious NuGet packages as part of a fake recruitment campaign that spreads malware and gives attackers access to developers' machines.",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Researchers discovered 13 malicious NuGet packages as part of a fake recruitment campaign that spreads malware and gives attackers access to developers' machines.",
+          "text": "Researchers discovered 13 malicious NuGet packages as part of a fake recruitment campaign that spreads malware and gives attackers access to developers' machines."
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Researchers discovered 13 malicious NuGet packages as part of a fake recruitment campaign that spreads malware and gives attackers access to developers' machines.",
+          "text": "Researchers discovered 13 malicious NuGet packages as part of a fake recruitment campaign that spreads malware and gives attackers access to developers' machines."
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "It's a Bot World. We're Just Living in It",
+      "url": "https://www.darkreading.com/cyber-risk/bot-world-just-living",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-26/#reporting-60b6b3868921",
+      "cves": [],
+      "snippet": "It's a Bot World. We're Just Living in It Bot detection has become a losing game. Security teams need to limit privileged access for humans and their machine counterparts equally. Bot detection has become a losing game. Security teams need to limit privileged access for humans and their machine counterparts equally.",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Bot detection has become a losing game. Security teams need to limit privileged access for humans and their machine counterparts equally.",
+          "text": "Bot detection has become a losing game. Security teams need to limit privileged access for humans and their machine counterparts equally."
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Bot detection has become a losing game. Security teams need to limit privileged access for humans and their machine counterparts equally.",
+          "text": "Bot detection has become a losing game. Security teams need to limit privileged access for humans and their machine counterparts equally."
+        }
+      ],
+      "effective_date_evidence": null
+    }
+  ]
+}
