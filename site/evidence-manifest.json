@@ -6,47 +6,35 @@
       {
         "control_id": "vulnerability_management",
         "evidence_excerpt": "Drupal has warned of a new \"highly critical\" security flaw impacting Drupal core that it said has been exploited in the wild. The vulnerability, tracked as CVE-2026-136716 (CVSS score: N/A), has been described as a case of improper checking for unusual or exceptional conditions.",
-        "evidence_origin": "content",
+        "evidence_origin": "summary",
         "focus": "Drupal core",
-        "headline": "Drupal core exposes site takeover vulnerability",
+        "headline": "Drupal core enables site takeover",
         "priority": "high",
-        "significance": "Active exploitation of a core platform weakness undermines patch assurance and exposes web assets to takeover. The vulnerability owner must confirm emergency patching coverage and verify that no unpatched installations remain in production.",
+        "significance": "This finding matters because active exploitation of a core Drupal vulnerability bypasses patch assumptions and threatens web application integrity. The vulnerability owner should confirm emergency patch deployment and verify no compromise of hosted applications.",
         "source_ids": [
           2
         ]
       },
       {
-        "control_id": "third_party_risk",
-        "evidence_excerpt": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Wednesday added 10 security flaws to its Known Exploited Vulnerabilities (KEV) catalog, including five vulnerabilities impacting Mitel MiCollab that were disclosed last week.",
-        "evidence_origin": "content",
-        "focus": "Mitel MiCollab",
-        "headline": "Mitel MiCollab adds exploited vulnerabilities to KEV catalog",
+        "control_id": "vulnerability_management",
+        "evidence_excerpt": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Wednesday added 10 security flaws to its Known Exploited Vulnerabilities (KEV) catalog, including five vulnerabilities impacting Mitel MiCollab that were disclosed last week. The Mitel MiCollab vulnerabilities are listed below - CVE-2026-133275 (CVSS score: 5.3) - An arbitrary file upload vulnerability in the Audio, Web and…",
+        "evidence_origin": "summary",
+        "focus": "Mitel MiCollab vulnerabilities",
+        "headline": "Mitel MiCollab vulnerabilities enter KEV catalog",
         "priority": "high",
-        "significance": "Inclusion in the KEV catalog signals confirmed exploitation of a communication platform used across the enterprise. The supplier risk owner must obtain mitigation evidence from the vendor and assess dependency on affected MiCollab versions.",
+        "significance": "This finding matters because KEV inclusion mandates urgent remediation for federal agencies and signals active exploitation risk for all users. The asset owner should confirm mitigation of all five MiCollab flaws and validate compensating controls.",
         "source_ids": [
           3
         ]
       },
       {
-        "control_id": "change_management",
-        "evidence_excerpt": "Microsoft will remove the WSUS server role from Windows Server 2028, the next major release of its server operating system…",
-        "evidence_origin": "content",
-        "focus": "WSUS server role",
-        "headline": "WSUS server role removes patch management capability",
-        "priority": "medium",
-        "significance": "Removal of the native update service forces a transition to alternative patch distribution methods. The change owner must validate replacement tooling, update approval workflows, and ensure coverage before the 2028 release.",
-        "source_ids": [
-          4
-        ]
-      },
-      {
         "control_id": "incident_response",
         "evidence_excerpt": "SAP has confirmed to BleepingComputer that it took urgent action to protect its customers after detecting suspicious activity in its IT environment…",
-        "evidence_origin": "content",
-        "focus": "SAP",
-        "headline": "SAP detects suspicious activity triggering urgent response",
-        "priority": "high",
-        "significance": "A major SaaS provider's confirmed incident requires customers to verify their own exposure and review incident notification timelines. The incident response lead must confirm receipt of SAP advisories and assess potential data access impact.",
+        "evidence_origin": "summary",
+        "focus": "SAP IT environment",
+        "headline": "SAP IT environment triggers urgent action",
+        "priority": "medium",
+        "significance": "This finding matters because a major ERP provider's incident detection and response directly affects customer data integrity and service continuity. The incident response lead should review SAP's disclosure scope and assess downstream impact on integrated systems.",
         "source_ids": [
           7
         ]
@@ -54,11 +42,11 @@
       {
         "control_id": "third_party_risk",
         "evidence_excerpt": "Cybersecurity researchers have disclosed details of a software supply chain attack that has tampered with Q-Dir and DesktopOK installation files distributed via the official SoftwareOK website. \"Evidence indicates that malicious files were generated not only when users downloaded the programs directly from the official download page but also during the update process of previously installed…",
-        "evidence_origin": "content",
-        "focus": "software supply chain attack",
-        "headline": "software supply chain attack compromises legitimate downloads",
+        "evidence_origin": "summary",
+        "focus": "SoftwareOK website",
+        "headline": "SoftwareOK website distributes trojanized installers",
         "priority": "high",
-        "significance": "Tampering at the official distribution point bypasses standard software verification controls. The supplier risk owner must inventory affected utilities, verify hash integrity, and block execution of unverified installer versions.",
+        "significance": "This finding matters because a legitimate vendor's distribution channel was compromised, undermining trust in official updates and exposing downstream users. The supplier risk owner should verify software integrity controls and assess exposure from any deployed Q-Dir or DesktopOK instances.",
         "source_ids": [
           8
         ]
@@ -66,13 +54,25 @@
       {
         "control_id": "monitoring",
         "evidence_excerpt": "Attackers using AI agents have broken into computer systems at Swiss organizations in four of five confirmed attacks, the first such cases in the country, the country's cybersecurity agency said yesterday. Three of the attacks targeted critical infrastructure operators, and two of those succeeded, with no major disruptions reported.",
-        "evidence_origin": "content",
-        "focus": "critical infrastructure operators",
-        "headline": "critical infrastructure operators breached by AI-assisted intrusions",
+        "evidence_origin": "summary",
+        "focus": "Swiss critical infrastructure operators",
+        "headline": "Swiss critical infrastructure operators breached by AI agents",
         "priority": "high",
-        "significance": "AI-driven attacks succeeding against critical infrastructure indicate detection gaps for novel threat behaviors. The monitoring owner must evaluate telemetry for AI-agent indicators and test detection rules against autonomous intrusion patterns.",
+        "significance": "This finding matters because AI-assisted intrusions evade traditional detection and have successfully penetrated critical infrastructure, raising the bar for monitoring effectiveness. The detection owner should evaluate whether current telemetry can identify AI-driven attack patterns and update detection rules accordingly.",
         "source_ids": [
           10
+        ]
+      },
+      {
+        "control_id": "vulnerability_management",
+        "evidence_excerpt": "Details have emerged about a new zero-day vulnerability in Cacti, an open-source network monitoring tool, that could be exploited to achieve remote code execution. The proof-of-concept (PoC) exploit, which has yet to be assigned a CVE identifier, has been tracked as 4HTTP2SHELL and 4HTTP2ROOT. \"I found a path from a fresh, unauthenticated HTTP session to command execution as the Cacti server…",
+        "evidence_origin": "summary",
+        "focus": "Cacti network monitoring tool",
+        "headline": "Cacti network monitoring tool enables remote code execution",
+        "priority": "high",
+        "significance": "This finding matters because an unauthenticated RCE in a widely used monitoring tool allows trivial compromise of network visibility infrastructure. The vulnerability owner should inventory all Cacti instances, apply mitigations, and restrict guest access until a patch is released.",
+        "source_ids": [
+          11
         ]
       }
     ],
@@ -82,25 +82,25 @@
           "source_ids": [
             2,
             3,
+            11
+          ],
+          "text": "Active exploitation of critical vulnerabilities in Drupal core, Mitel MiCollab, and Cacti monitoring tools has triggered emergency remediation demands across web, communications, and network management layers. CISA's addition of ten flaws to the Known Exploited Vulnerabilities catalog, including five MiCollab issues, elevates patching urgency for federal and commercial users alike. The unauthenticated remote code execution path in Cacti and the installed-site takeover in Drupal demonstrate that legacy and current deployments alike face immediate compromise risk. Vulnerability owners must confirm asset coverage, deployment status, and compensating controls for each affected product."
+        },
+        {
+          "source_ids": [
             7,
             8,
             10
           ],
-          "text": "Active exploitation of critical vulnerabilities in widely used platforms and supply chain compromises demand immediate review of vulnerability management, third-party risk, and detection controls. Drupal core exploits, CISA KEV additions including Mitel MiCollab, SAP security incident, and trojanized software downloads indicate systemic exposure across web applications, communication systems, and endpoint utilities. AI-assisted intrusions against critical infrastructure further challenge monitoring assumptions."
-        },
-        {
-          "source_ids": [
-            4
-          ],
-          "text": "Microsoft's planned removal of the WSUS server role in Windows Server 2028 requires change management owners to validate patch delivery alternatives and update approval workflows well before the release."
+          "text": "A software supply chain attack on the official SoftwareOK distribution site delivered trojanized Q-Dir and DesktopOK installers through both downloads and automatic updates, while SAP disclosed urgent defensive actions after detecting suspicious GitHub activity in its environment. Simultaneously, Switzerland's cyber agency confirmed AI-assisted intrusions breached critical infrastructure operators in two of three targeted incidents, marking the first such cases nationally. These events challenge third-party trust assumptions and traditional detection capabilities. Supplier risk and monitoring owners should verify software integrity pipelines and assess AI-driven threat visibility."
         }
       ]
     },
     "industry_impacts": [],
     "regulatory_changes": []
   },
-  "generated_at": "2026-11-27T12:25:12.526132Z",
-  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/07527ceebf5da9a2abb8e5dda7c0efa217fef2a8/site/feed.xml",
+  "generated_at": "2026-11-27T13:11:52.89395Z",
+  "feed_url": "https://sentrydigest.ricomanifesto.com/feed.xml",
   "feed_home_url": "https://sentrydigest.ricomanifesto.com/",
   "digest_issue_date": "2026-11-27",
   "digest_issue_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-27/",
