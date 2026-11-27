@@ -5,74 +5,74 @@
     "control_implications": [
       {
         "control_id": "vulnerability_management",
-        "evidence_excerpt": "Drupal has warned of a new \"highly critical\" security flaw impacting Drupal core that it said has been exploited in the wild. The vulnerability, tracked as CVE-2026-136716 (CVSS score: N/A), has been described as a case of improper checking for unusual or exceptional conditions. It also relates to CVE-2026-132165 aka Fail2Install in that it addresses remaining vulnerable installation states…",
-        "evidence_origin": "summary",
+        "evidence_excerpt": "Drupal has warned of a new \"highly critical\" security flaw impacting Drupal core that it said has been exploited in the wild. The vulnerability, tracked as CVE-2026-136716 (CVSS score: N/A), has been described as a case of improper checking for unusual or exceptional conditions.",
+        "evidence_origin": "content",
         "focus": "Drupal core",
-        "headline": "Drupal core faces active exploitation",
+        "headline": "Drupal core exposes site takeover vulnerability",
         "priority": "high",
-        "significance": "Active exploitation of a highly critical Drupal core flaw means vulnerability and asset owners must identify all deployed Drupal instances and confirm patching or compensating controls are in place. The accountable owner should verify that affected assets are inventoried and remediation status is tracked.",
+        "significance": "Active exploitation of a core platform weakness undermines patch assurance and exposes web assets to takeover. The vulnerability owner must confirm emergency patching coverage and verify that no unpatched installations remain in production.",
         "source_ids": [
           2
         ]
       },
       {
         "control_id": "third_party_risk",
-        "evidence_excerpt": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Wednesday added 10 security flaws to its Known Exploited Vulnerabilities (KEV) catalog, including five vulnerabilities impacting Mitel MiCollab that were disclosed last week. The Mitel MiCollab vulnerabilities are listed below - CVE-2026-133275 (CVSS score: 5.3) - An arbitrary file upload vulnerability in the Audio, Web and…",
-        "evidence_origin": "summary",
+        "evidence_excerpt": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Wednesday added 10 security flaws to its Known Exploited Vulnerabilities (KEV) catalog, including five vulnerabilities impacting Mitel MiCollab that were disclosed last week.",
+        "evidence_origin": "content",
         "focus": "Mitel MiCollab",
-        "headline": "Mitel MiCollab appears in CISA KEV catalog",
+        "headline": "Mitel MiCollab adds exploited vulnerabilities to KEV catalog",
         "priority": "high",
-        "significance": "CISA adding Mitel MiCollab vulnerabilities to the Known Exploited Vulnerabilities catalog indicates supplier risk owners must review dependencies on Mitel products and request assurance evidence from the vendor. The accountable owner should confirm supplier access scope and remediation assurance.",
+        "significance": "Inclusion in the KEV catalog signals confirmed exploitation of a communication platform used across the enterprise. The supplier risk owner must obtain mitigation evidence from the vendor and assess dependency on affected MiCollab versions.",
         "source_ids": [
           3
         ]
       },
       {
-        "control_id": "monitoring",
-        "evidence_excerpt": "Threat actors are actively exploiting two newly patched security flaws in GeoServer, according to watchTowr. The vulnerabilities in question are CVE-2026-120705 and CVE-2026-129243, details of which are below - CVE-2026-120705 (CVSS score: 8.6) - An arbitrary file read vulnerability that could enable an attacker to access local text files readable by the GeoServer process or fetch…",
-        "evidence_origin": "summary",
-        "focus": "GeoServer",
-        "headline": "GeoServer suffers active exploitation of patched flaws",
-        "priority": "high",
-        "significance": "Active exploitation of GeoServer vulnerabilities after patches were released means monitoring and detection owners must verify telemetry can identify exploitation attempts against GeoServer deployments. The accountable owner should review log coverage and detection rules for arbitrary file read and unauthenticated RCE chains.",
+        "control_id": "change_management",
+        "evidence_excerpt": "Microsoft will remove the WSUS server role from Windows Server 2028, the next major release of its server operating system…",
+        "evidence_origin": "content",
+        "focus": "WSUS server role",
+        "headline": "WSUS server role removes patch management capability",
+        "priority": "medium",
+        "significance": "Removal of the native update service forces a transition to alternative patch distribution methods. The change owner must validate replacement tooling, update approval workflows, and ensure coverage before the 2028 release.",
         "source_ids": [
           4
         ]
       },
       {
         "control_id": "incident_response",
-        "evidence_excerpt": "Attackers using AI agents have broken into computer systems at Swiss organizations in four of five confirmed attacks, the first such cases in the country, the country's cybersecurity agency said yesterday. Three of the attacks targeted critical infrastructure operators, and two of those succeeded, with no major disruptions reported. The victims have not been named, and it is not known who is…",
-        "evidence_origin": "summary",
-        "focus": "critical infrastructure operators",
-        "headline": "critical infrastructure operators experience AI-assisted breaches",
+        "evidence_excerpt": "SAP has confirmed to BleepingComputer that it took urgent action to protect its customers after detecting suspicious activity in its IT environment…",
+        "evidence_origin": "content",
+        "focus": "SAP",
+        "headline": "SAP detects suspicious activity triggering urgent response",
         "priority": "high",
-        "significance": "Confirmed AI-assisted breaches against critical infrastructure operators require incident response leads to assess containment procedures for AI-driven attack vectors and ensure evidence preservation. The accountable owner should review response ownership and retained logs for such incidents.",
+        "significance": "A major SaaS provider's confirmed incident requires customers to verify their own exposure and review incident notification timelines. The incident response lead must confirm receipt of SAP advisories and assess potential data access impact.",
         "source_ids": [
-          5
+          7
         ]
       },
       {
-        "control_id": "access_management",
-        "evidence_excerpt": "An ongoing phishing campaign dubbed \"GoodGuys\" impersonates major brands, including Google, Nvidia, Accenture, and SpaceX, to steal corporate Google and Okta credentials using fake invitations to paid expert interviews and webinars…",
-        "evidence_origin": "summary",
-        "focus": "Google and Okta credentials",
-        "headline": "Google and Okta credentials targeted by phishing campaign",
-        "priority": "medium",
-        "significance": "An ongoing phishing campaign stealing corporate Google and Okta credentials means identity and access owners must verify authentication coverage and session revocation controls resist credential theft. The accountable owner should confirm access scope and permission-test results for affected identity providers.",
+        "control_id": "third_party_risk",
+        "evidence_excerpt": "Cybersecurity researchers have disclosed details of a software supply chain attack that has tampered with Q-Dir and DesktopOK installation files distributed via the official SoftwareOK website. \"Evidence indicates that malicious files were generated not only when users downloaded the programs directly from the official download page but also during the update process of previously installed…",
+        "evidence_origin": "content",
+        "focus": "software supply chain attack",
+        "headline": "software supply chain attack compromises legitimate downloads",
+        "priority": "high",
+        "significance": "Tampering at the official distribution point bypasses standard software verification controls. The supplier risk owner must inventory affected utilities, verify hash integrity, and block execution of unverified installer versions.",
+        "source_ids": [
+          8
+        ]
+      },
+      {
+        "control_id": "monitoring",
+        "evidence_excerpt": "Attackers using AI agents have broken into computer systems at Swiss organizations in four of five confirmed attacks, the first such cases in the country, the country's cybersecurity agency said yesterday. Three of the attacks targeted critical infrastructure operators, and two of those succeeded, with no major disruptions reported.",
+        "evidence_origin": "content",
+        "focus": "critical infrastructure operators",
+        "headline": "critical infrastructure operators breached by AI-assisted intrusions",
+        "priority": "high",
+        "significance": "AI-driven attacks succeeding against critical infrastructure indicate detection gaps for novel threat behaviors. The monitoring owner must evaluate telemetry for AI-agent indicators and test detection rules against autonomous intrusion patterns.",
         "source_ids": [
           10
-        ]
-      },
-      {
-        "control_id": "data_protection",
-        "evidence_excerpt": "The Remus infostealer is stealing Gmail messages through a stealthy malicious Chrome extension, a capability the malware operators marketed as a zero-day exploit in Google's email service…",
-        "evidence_origin": "summary",
-        "focus": "Gmail messages",
-        "headline": "Gmail messages stolen via malicious Chrome extension",
-        "priority": "medium",
-        "significance": "Theft of Gmail messages through a malicious Chrome extension requires data and privacy owners to assess whether sensitive data in email is exposed by browser extension risks. The accountable owner should review data inventory, access restrictions, and audit logs for email services.",
-        "source_ids": [
-          11
         ]
       }
     ],
@@ -82,25 +82,25 @@
           "source_ids": [
             2,
             3,
-            4
+            7,
+            8,
+            10
           ],
-          "text": "Multiple widely used enterprise platforms are under active exploitation despite available patches, including Drupal core, GeoServer, and Mitel MiCollab, which now appear on the CISA Known Exploited Vulnerabilities catalog. Control owners must accelerate vulnerability identification and verification of compensating controls across these assets."
+          "text": "Active exploitation of critical vulnerabilities in widely used platforms and supply chain compromises demand immediate review of vulnerability management, third-party risk, and detection controls. Drupal core exploits, CISA KEV additions including Mitel MiCollab, SAP security incident, and trojanized software downloads indicate systemic exposure across web applications, communication systems, and endpoint utilities. AI-assisted intrusions against critical infrastructure further challenge monitoring assumptions."
         },
         {
           "source_ids": [
-            5,
-            10,
-            11
+            4
           ],
-          "text": "Novel attack vectors are succeeding against critical infrastructure and corporate identities, with AI-assisted breaches confirmed in Switzerland, a phishing campaign harvesting Google and Okta credentials, and a malicious Chrome extension exfiltrating Gmail messages. These developments demand updated incident response procedures, stronger authentication monitoring, and data protection reviews for browser-based risks."
+          "text": "Microsoft's planned removal of the WSUS server role in Windows Server 2028 requires change management owners to validate patch delivery alternatives and update approval workflows well before the release."
         }
       ]
     },
     "industry_impacts": [],
     "regulatory_changes": []
   },
-  "generated_at": "2026-11-27T09:20:27.358923Z",
-  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/e486ae18c3ce4aab8dbb8f7b3defc6dffd440a13/site/feed.xml",
+  "generated_at": "2026-11-27T12:25:12.526132Z",
+  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/07527ceebf5da9a2abb8e5dda7c0efa217fef2a8/site/feed.xml",
   "feed_home_url": "https://sentrydigest.ricomanifesto.com/",
   "digest_issue_date": "2026-11-27",
   "digest_issue_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-27/",
@@ -168,26 +168,133 @@
       "effective_date_evidence": null
     },
     {
-      "title": "Hackers Exploit Two GeoServer Flaws as Researchers Warn of Unauthenticated RCE Chains",
-      "url": "https://thehackernews.com/2026/11/hackers-exploit-two-geoserver-flaws-as.html",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-27/#reporting-27873297949c",
-      "cves": [
-        "CVE-2026-120705",
-        "CVE-2026-129243"
-      ],
-      "snippet": "Hackers Exploit Two GeoServer Flaws as Researchers Warn of Unauthenticated RCE Chains Threat actors are actively exploiting two newly patched security flaws in GeoServer, according to watchTowr. The vulnerabilities in question are CVE-2026-120705 and CVE-2026-129243, details of which are below - CVE-2026-120705 (CVSS score: 8.6) - An arbitrary file read vulnerability that could enable an attacker to access local text files readable by the GeoServer process or fetch… Threat actors are actively exploiting two newly patched security flaws in GeoServer, according to watchTowr. The vulnerabilities in question are CVE-2026-120705 and CVE-2026-129243, details of which are below - CVE-2026-120705 (C",
+      "title": "Microsoft removes WSUS server role in Windows Server 2028",
+      "url": "https://www.bleepingcomputer.com/news/microsoft/microsoft-removes-wsus-server-role-in-windows-server-2028/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-27/#reporting-d4f2d117646b",
+      "cves": [],
+      "snippet": "Microsoft removes WSUS server role in Windows Server 2028 Microsoft will remove the WSUS server role from Windows Server 2028, the next major release of its server operating system… Microsoft will remove the WSUS server role from Windows Server 2028, the next major release of its server operating system…",
       "article_evidence": [
         {
           "extraction_version": 1,
           "origin": "summary",
-          "raw_text": "Threat actors are actively exploiting two newly patched security flaws in GeoServer, according to watchTowr. The vulnerabilities in question are CVE-2026-120705 and CVE-2026-129243, details of which are below - CVE-2026-120705 (CVSS score: 8.6) - An arbitrary file read vulnerability that could enable an attacker to access local text files readable by the GeoServer process or fetch…",
-          "text": "Threat actors are actively exploiting two newly patched security flaws in GeoServer, according to watchTowr. The vulnerabilities in question are CVE-2026-120705 and CVE-2026-129243, details of which are below - CVE-2026-120705 (CVSS score: 8.6) - An arbitrary file read vulnerability that could enable an attacker to access local text files readable by the GeoServer process or fetch…"
+          "raw_text": "Microsoft will remove the WSUS server role from Windows Server 2028, the next major release of its server operating system…",
+          "text": "Microsoft will remove the WSUS server role from Windows Server 2028, the next major release of its server operating system…"
         },
         {
           "extraction_version": 1,
           "origin": "content",
-          "raw_text": "Threat actors are actively exploiting two newly patched security flaws in GeoServer, according to watchTowr. The vulnerabilities in question are CVE-2026-120705 and CVE-2026-129243, details of which are below - CVE-2026-120705 (CVSS score: 8.6) - An arbitrary file read vulnerability that could enable an attacker to access local text files readable by the GeoServer process or fetch…",
-          "text": "Threat actors are actively exploiting two newly patched security flaws in GeoServer, according to watchTowr. The vulnerabilities in question are CVE-2026-120705 and CVE-2026-129243, details of which are below - CVE-2026-120705 (CVSS score: 8.6) - An arbitrary file read vulnerability that could enable an attacker to access local text files readable by the GeoServer process or fetch…"
+          "raw_text": "Microsoft will remove the WSUS server role from Windows Server 2028, the next major release of its server operating system…",
+          "text": "Microsoft will remove the WSUS server role from Windows Server 2028, the next major release of its server operating system…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "How to Keep Your Security Picture Current When Attackers Move at AI Speed",
+      "url": "https://thehackernews.com/2026/11/how-to-keep-your-security-picture.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-27/#reporting-982bfc2fadcb",
+      "cves": [],
+      "snippet": "How to Keep Your Security Picture Current When Attackers Move at AI Speed Most security metrics are not built to be used. They are built to be shown. Somewhere between the quarterly review and the next status update, a set of numbers gets assembled that looks reassuring in a room and tells almost no one what is actually happening across the environment that week. Someone pulls them together the week before, cleans them up, and presents a picture of a program that is… Most security metrics are not built to be used. They are built to be shown. Somewhere between the quarterly review and the next status update, a set of numbers gets assembled that looks reassuring in a room and tells almost no o",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Most security metrics are not built to be used. They are built to be shown. Somewhere between the quarterly review and the next status update, a set of numbers gets assembled that looks reassuring in a room and tells almost no one what is actually happening across the environment that week. Someone pulls them together the week before, cleans them up, and presents a picture of a program that is…",
+          "text": "Most security metrics are not built to be used. They are built to be shown. Somewhere between the quarterly review and the next status update, a set of numbers gets assembled that looks reassuring in a room and tells almost no one what is actually happening across the environment that week. Someone pulls them together the week before, cleans them up, and presents a picture of a program that is…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Most security metrics are not built to be used. They are built to be shown. Somewhere between the quarterly review and the next status update, a set of numbers gets assembled that looks reassuring in a room and tells almost no one what is actually happening across the environment that week. Someone pulls them together the week before, cleans them up, and presents a picture of a program that is…",
+          "text": "Most security metrics are not built to be used. They are built to be shown. Somewhere between the quarterly review and the next status update, a set of numbers gets assembled that looks reassuring in a room and tells almost no one what is actually happening across the environment that week. Someone pulls them together the week before, cleans them up, and presents a picture of a program that is…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Drupal warns of new site takeover flaw exploited in attacks",
+      "url": "https://www.bleepingcomputer.com/news/security/drupal-warns-of-new-access-bypass-flaw-exploited-in-attacks/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-27/#reporting-319bafb516c2",
+      "cves": [],
+      "snippet": "Drupal warns of new site takeover flaw exploited in attacks The Drupal security team says attackers are exploiting a second critical vulnerability that lets them breach and hijack unpatched websites… The Drupal security team says attackers are exploiting a second critical vulnerability that lets them breach and hijack unpatched websites…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "The Drupal security team says attackers are exploiting a second critical vulnerability that lets them breach and hijack unpatched websites…",
+          "text": "The Drupal security team says attackers are exploiting a second critical vulnerability that lets them breach and hijack unpatched websites…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "The Drupal security team says attackers are exploiting a second critical vulnerability that lets them breach and hijack unpatched websites…",
+          "text": "The Drupal security team says attackers are exploiting a second critical vulnerability that lets them breach and hijack unpatched websites…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "SAP confirms security incident after suspicious GitHub activity",
+      "url": "https://www.bleepingcomputer.com/news/security/sap-confirms-security-incident-after-suspicious-github-activity/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-27/#reporting-1147158f7c1b",
+      "cves": [],
+      "snippet": "SAP confirms security incident after suspicious GitHub activity SAP has confirmed to BleepingComputer that it took urgent action to protect its customers after detecting suspicious activity in its IT environment… SAP has confirmed to BleepingComputer that it took urgent action to protect its customers after detecting suspicious activity in its IT environment…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "SAP has confirmed to BleepingComputer that it took urgent action to protect its customers after detecting suspicious activity in its IT environment…",
+          "text": "SAP has confirmed to BleepingComputer that it took urgent action to protect its customers after detecting suspicious activity in its IT environment…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "SAP has confirmed to BleepingComputer that it took urgent action to protect its customers after detecting suspicious activity in its IT environment…",
+          "text": "SAP has confirmed to BleepingComputer that it took urgent action to protect its customers after detecting suspicious activity in its IT environment…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Hackers Trojanize Official Q-Dir and DesktopOK Downloads to Deliver Remote Access Malware",
+      "url": "https://thehackernews.com/2026/11/hackers-trojanize-official-q-dir-and.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-27/#reporting-d8fcf47e119c",
+      "cves": [],
+      "snippet": "Hackers Trojanize Official Q-Dir and DesktopOK Downloads to Deliver Remote Access Malware Cybersecurity researchers have disclosed details of a software supply chain attack that has tampered with Q-Dir and DesktopOK installation files distributed via the official SoftwareOK website. \"Evidence indicates that malicious files were generated not only when users downloaded the programs directly from the official download page but also during the update process of previously installed… Cybersecurity researchers have disclosed details of a software supply chain attack that has tampered with Q-Dir and DesktopOK installation files distributed via the official SoftwareOK website. \"Evidence indicates t",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Cybersecurity researchers have disclosed details of a software supply chain attack that has tampered with Q-Dir and DesktopOK installation files distributed via the official SoftwareOK website. \"Evidence indicates that malicious files were generated not only when users downloaded the programs directly from the official download page but also during the update process of previously installed…",
+          "text": "Cybersecurity researchers have disclosed details of a software supply chain attack that has tampered with Q-Dir and DesktopOK installation files distributed via the official SoftwareOK website. \"Evidence indicates that malicious files were generated not only when users downloaded the programs directly from the official download page but also during the update process of previously installed…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Cybersecurity researchers have disclosed details of a software supply chain attack that has tampered with Q-Dir and DesktopOK installation files distributed via the official SoftwareOK website. \"Evidence indicates that malicious files were generated not only when users downloaded the programs directly from the official download page but also during the update process of previously installed…",
+          "text": "Cybersecurity researchers have disclosed details of a software supply chain attack that has tampered with Q-Dir and DesktopOK installation files distributed via the official SoftwareOK website. \"Evidence indicates that malicious files were generated not only when users downloaded the programs directly from the official download page but also during the update process of previously installed…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Microsoft pushes emergency hotpatch to fix Windows Server crashes",
+      "url": "https://www.bleepingcomputer.com/news/microsoft/new-out-of-band-oob-emergency-hotpatch-fixes-windows-server-2025-crashes/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-27/#reporting-b44222591fc1",
+      "cves": [],
+      "snippet": "Microsoft pushes emergency hotpatch to fix Windows Server crashes Microsoft has released an emergency hotpatch update to address Windows Server 2025 crashes triggered after installing this month's security hotpatch update (KB5131077)… Microsoft has released an emergency hotpatch update to address Windows Server 2025 crashes triggered after installing this month's security hotpatch update (KB5131077)…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Microsoft has released an emergency hotpatch update to address Windows Server 2025 crashes triggered after installing this month's security hotpatch update (KB5131077)…",
+          "text": "Microsoft has released an emergency hotpatch update to address Windows Server 2025 crashes triggered after installing this month's security hotpatch update (KB5131077)…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Microsoft has released an emergency hotpatch update to address Windows Server 2025 crashes triggered after installing this month's security hotpatch update (KB5131077)…",
+          "text": "Microsoft has released an emergency hotpatch update to address Windows Server 2025 crashes triggered after installing this month's security hotpatch update (KB5131077)…"
         }
       ],
       "effective_date_evidence": null
@@ -254,116 +361,6 @@
           "origin": "content",
           "raw_text": "OpenAI confirmed that it fixed a 'bug' that incorrectly discounted GPT-6.2 usage, which means you'll now hit GPT usage limits 40% faster than before…",
           "text": "OpenAI confirmed that it fixed a 'bug' that incorrectly discounted GPT-6.2 usage, which means you'll now hit GPT usage limits 40% faster than before…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "ThreatsDay: 10M NGINX Services at Risk, 250+ Malicious Extensions, AI Server Hijacking + 17 More Stories",
-      "url": "https://thehackernews.com/2026/11/threatsday-250-rogue-extensions-10m.html",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-27/#reporting-0b75246ced86",
-      "cves": [],
-      "snippet": "ThreatsDay: 10M NGINX Services at Risk, 250+ Malicious Extensions, AI Server Hijacking + 17 More Stories A website can look perfectly fine to the person running it. Log out, visit the same page, and things might look different. Something similar is happening with browser extensions, where even the way you find and install one can change what it does. Checking whether software works as expected only tells you so much. Then there’s the question of who gets to use what. Stolen logins are opening… A website can look perfectly fine to the person running it. Log out, visit the same page, and things might look different. Something similar is happening with browser extensions, where even the way you",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "A website can look perfectly fine to the person running it. Log out, visit the same page, and things might look different. Something similar is happening with browser extensions, where even the way you find and install one can change what it does. Checking whether software works as expected only tells you so much. Then there’s the question of who gets to use what. Stolen logins are opening…",
-          "text": "A website can look perfectly fine to the person running it. Log out, visit the same page, and things might look different. Something similar is happening with browser extensions, where even the way you find and install one can change what it does. Checking whether software works as expected only tells you so much. Then there’s the question of who gets to use what. Stolen logins are opening…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "A website can look perfectly fine to the person running it. Log out, visit the same page, and things might look different. Something similar is happening with browser extensions, where even the way you find and install one can change what it does. Checking whether software works as expected only tells you so much. Then there’s the question of who gets to use what. Stolen logins are opening…",
-          "text": "A website can look perfectly fine to the person running it. Log out, visit the same page, and things might look different. Something similar is happening with browser extensions, where even the way you find and install one can change what it does. Checking whether software works as expected only tells you so much. Then there’s the question of who gets to use what. Stolen logins are opening…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "NordVPN Black Friday Deal: Get 78% off VPN plans in 2026",
-      "url": "https://www.bleepingcomputer.com/news/security/nordvpn-black-friday-deal-get-78-percent-off-vpn-plans-in-2026/",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-27/#reporting-0bd18f3d2e78",
-      "cves": [],
-      "snippet": "NordVPN Black Friday Deal: Get 78% off VPN plans in 2026 NordVPN's 2026 Black Friday and Cyber Monday deal is now live, offering savings of up to 78% on VPN subscriptions, plus three extra months of protection… NordVPN's 2026 Black Friday and Cyber Monday deal is now live, offering savings of up to 78% on VPN subscriptions, plus three extra months of protection…",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "NordVPN's 2026 Black Friday and Cyber Monday deal is now live, offering savings of up to 78% on VPN subscriptions, plus three extra months of protection…",
-          "text": "NordVPN's 2026 Black Friday and Cyber Monday deal is now live, offering savings of up to 78% on VPN subscriptions, plus three extra months of protection…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "NordVPN's 2026 Black Friday and Cyber Monday deal is now live, offering savings of up to 78% on VPN subscriptions, plus three extra months of protection…",
-          "text": "NordVPN's 2026 Black Friday and Cyber Monday deal is now live, offering savings of up to 78% on VPN subscriptions, plus three extra months of protection…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "Fake paid expert interviews impersonate brands to steal Google logins",
-      "url": "https://www.bleepingcomputer.com/news/apple/fake-paid-expert-interviews-impersonate-brands-to-steal-google-logins/",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-27/#reporting-deebe28bb42d",
-      "cves": [],
-      "snippet": "Fake paid expert interviews impersonate brands to steal Google logins An ongoing phishing campaign dubbed \"GoodGuys\" impersonates major brands, including Google, Nvidia, Accenture, and SpaceX, to steal corporate Google and Okta credentials using fake invitations to paid expert interviews and webinars… An ongoing phishing campaign dubbed \"GoodGuys\" impersonates major brands, including Google, Nvidia, Accenture, and SpaceX, to steal corporate Google and Okta credentials using fake invitations to paid expert interviews and webinars…",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "An ongoing phishing campaign dubbed \"GoodGuys\" impersonates major brands, including Google, Nvidia, Accenture, and SpaceX, to steal corporate Google and Okta credentials using fake invitations to paid expert interviews and webinars…",
-          "text": "An ongoing phishing campaign dubbed \"GoodGuys\" impersonates major brands, including Google, Nvidia, Accenture, and SpaceX, to steal corporate Google and Okta credentials using fake invitations to paid expert interviews and webinars…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "An ongoing phishing campaign dubbed \"GoodGuys\" impersonates major brands, including Google, Nvidia, Accenture, and SpaceX, to steal corporate Google and Okta credentials using fake invitations to paid expert interviews and webinars…",
-          "text": "An ongoing phishing campaign dubbed \"GoodGuys\" impersonates major brands, including Google, Nvidia, Accenture, and SpaceX, to steal corporate Google and Okta credentials using fake invitations to paid expert interviews and webinars…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "Remus malware steals Gmail messages via fake Google Sheets extension",
-      "url": "https://www.bleepingcomputer.com/news/security/remus-malware-steals-gmail-messages-via-fake-google-sheets-extension/",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-27/#reporting-57d73d788295",
-      "cves": [],
-      "snippet": "Remus malware steals Gmail messages via fake Google Sheets extension The Remus infostealer is stealing Gmail messages through a stealthy malicious Chrome extension, a capability the malware operators marketed as a zero-day exploit in Google's email service… The Remus infostealer is stealing Gmail messages through a stealthy malicious Chrome extension, a capability the malware operators marketed as a zero-day exploit in Google's email service…",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "The Remus infostealer is stealing Gmail messages through a stealthy malicious Chrome extension, a capability the malware operators marketed as a zero-day exploit in Google's email service…",
-          "text": "The Remus infostealer is stealing Gmail messages through a stealthy malicious Chrome extension, a capability the malware operators marketed as a zero-day exploit in Google's email service…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "The Remus infostealer is stealing Gmail messages through a stealthy malicious Chrome extension, a capability the malware operators marketed as a zero-day exploit in Google's email service…",
-          "text": "The Remus infostealer is stealing Gmail messages through a stealthy malicious Chrome extension, a capability the malware operators marketed as a zero-day exploit in Google's email service…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "North Korea-Linked PolinRider Poisons Over 7,600 GitHub Repositories to Spread Malware",
-      "url": "https://thehackernews.com/2026/11/north-korea-linked-polinrider-poisons.html",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-27/#reporting-0574110d7d17",
-      "cves": [],
-      "snippet": "North Korea-Linked PolinRider Poisons Over 7,600 GitHub Repositories to Spread Malware The threat actors behind the PolinRider campaign have been observed planting a Python loader in GitHub repositories, as evidence emerges that the activity may have started as far back as February 2025. \"The loader hides in a small utils package or in conftest.py,\" SafeDep said in a report published this week. \"When Python imports the file, the loader reads the newest transaction that an… The threat actors behind the PolinRider campaign have been observed planting a Python loader in GitHub repositories, as evidence emerges that the activity may have started as far back as February 2025. \"The loader hides in",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "The threat actors behind the PolinRider campaign have been observed planting a Python loader in GitHub repositories, as evidence emerges that the activity may have started as far back as February 2025. \"The loader hides in a small utils package or in conftest.py,\" SafeDep said in a report published this week. \"When Python imports the file, the loader reads the newest transaction that an…",
-          "text": "The threat actors behind the PolinRider campaign have been observed planting a Python loader in GitHub repositories, as evidence emerges that the activity may have started as far back as February 2025. \"The loader hides in a small utils package or in conftest.py,\" SafeDep said in a report published this week. \"When Python imports the file, the loader reads the newest transaction that an…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "The threat actors behind the PolinRider campaign have been observed planting a Python loader in GitHub repositories, as evidence emerges that the activity may have started as far back as February 2025. \"The loader hides in a small utils package or in conftest.py,\" SafeDep said in a report published this week. \"When Python imports the file, the loader reads the newest transaction that an…",
-          "text": "The threat actors behind the PolinRider campaign have been observed planting a Python loader in GitHub repositories, as evidence emerges that the activity may have started as far back as February 2025. \"The loader hides in a small utils package or in conftest.py,\" SafeDep said in a report published this week. \"When Python imports the file, the loader reads the newest transaction that an…"
         }
       ],
       "effective_date_evidence": null
