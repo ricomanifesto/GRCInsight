@@ -21773,6 +21773,17 @@
       "release_key": "900587628cdea9cd60f791a65d598a0c8ba8e983038687d040c02c52f75358f1",
       "release_ref": "a463a156a89e226588a75ff4e1d166267e01197b",
       "stage": "serving"
+    },
+    {
+      "at": "2026-11-27T13:13:18.672Z",
+      "kind": "release",
+      "payload_digest": "3d37d5de4b0e23d6257405818f48efe6830cabedcb5692b729974171806100a9",
+      "proof": "on",
+      "release_key": "f85aa9a6a089df8c0fd4ad06c20bbd15a0ca4143b097c4673cb9eec98ea612fd",
+      "release_ref": "1fc36e17478c9f56e86b767ed5b285d6bebd0e61",
+      "source_revision": "91c74f0130eb732b6d674719d3e88238aae85e00",
+      "stage": "released",
+      "tree_digest": "d5651f73c8ffecd91805c242d4b717be0bbfb5558d4a9ae7af780d52763335fb"
     }
   ],
   "schema_version": 1,
