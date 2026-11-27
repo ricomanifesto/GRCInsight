@@ -5658,6 +5658,13 @@
       "at": "2026-11-27T12:22:34.461Z",
       "run_id": "45998064966",
       "stage": "invoked"
+    },
+    {
+      "admission_key": "digest:77311ff42d87c5054dd7afeb2d3c590557de6a26",
+      "at": "2026-11-27T12:22:36.915Z",
+      "handle": "report_20261127_122236_550",
+      "run_id": "45998064966",
+      "stage": "invoked"
     }
   ],
   "schema_version": 1,
