@@ -1,8 +1,8 @@
 # GRC Intelligence Report - 2026-11-27
-**Generated:** 2026-11-27T12:25:12.526132Z
+**Generated:** 2026-11-27T13:11:52.89395Z
 **Date of Issue:** November 2026
 **Analysis Period:** November 2026
-**Source:** [SentryDigest](https://raw.githubusercontent.com/ricomanifesto/SentryDigest/07527ceebf5da9a2abb8e5dda7c0efa217fef2a8/site/feed.xml)
+**Source:** [SentryDigest](https://sentrydigest.ricomanifesto.com/feed.xml)
 **Source Issue:** [SentryDigest 2026-11-27](https://sentrydigest.ricomanifesto.com/archive/2026-11-27/)
 **Articles Analyzed:** 30
 **GRC-Relevant Articles:** 29
@@ -12,9 +12,9 @@
 
 ## Executive Summary
 
-Active exploitation of critical vulnerabilities in widely used platforms and supply chain compromises demand immediate review of vulnerability management, third-party risk, and detection controls. Drupal core exploits, CISA KEV additions including Mitel MiCollab, SAP security incident, and trojanized software downloads indicate systemic exposure across web applications, communication systems, and endpoint utilities. AI-assisted intrusions against critical infrastructure further challenge monitoring assumptions. [Drupal Warns of New Highly Critical Site Takeover Vulnerability Under Active Exploitation](https://thehackernews.com/2026/11/drupal-warns-of-new-highly-critical.html); [Hackers Exploit 10 Vulnerabilities Across Mitel, Juniper, Vates, and Danfoss Products](https://thehackernews.com/2026/11/hackers-exploit-10-vulnerabilities.html); [SAP confirms security incident after suspicious GitHub activity](https://www.bleepingcomputer.com/news/security/sap-confirms-security-incident-after-suspicious-github-activity/); [Hackers Trojanize Official Q-Dir and DesktopOK Downloads to Deliver Remote Access Malware](https://thehackernews.com/2026/11/hackers-trojanize-official-q-dir-and.html); [Switzerland Confirms AI-Assisted Cyberattacks Breached Critical Infrastructure Operators](https://thehackernews.com/2026/11/switzerland-confirms-ai-assisted.html)
+Active exploitation of critical vulnerabilities in Drupal core, Mitel MiCollab, and Cacti monitoring tools has triggered emergency remediation demands across web, communications, and network management layers. CISA's addition of ten flaws to the Known Exploited Vulnerabilities catalog, including five MiCollab issues, elevates patching urgency for federal and commercial users alike. The unauthenticated remote code execution path in Cacti and the installed-site takeover in Drupal demonstrate that legacy and current deployments alike face immediate compromise risk. Vulnerability owners must confirm asset coverage, deployment status, and compensating controls for each affected product. [Drupal Warns of New Highly Critical Site Takeover Vulnerability Under Active Exploitation](https://thehackernews.com/2026/11/drupal-warns-of-new-highly-critical.html); [Hackers Exploit 10 Vulnerabilities Across Mitel, Juniper, Vates, and Danfoss Products](https://thehackernews.com/2026/11/hackers-exploit-10-vulnerabilities.html); [Unpatched Cacti Zero-Day Enables RCE in Just Four HTTP Requests via Guest Access](https://thehackernews.com/2026/11/unpatched-cacti-zero-day-enables-rce-in.html)
 
-Microsoft's planned removal of the WSUS server role in Windows Server 2028 requires change management owners to validate patch delivery alternatives and update approval workflows well before the release. [Microsoft removes WSUS server role in Windows Server 2028](https://www.bleepingcomputer.com/news/microsoft/microsoft-removes-wsus-server-role-in-windows-server-2028/)
+A software supply chain attack on the official SoftwareOK distribution site delivered trojanized Q-Dir and DesktopOK installers through both downloads and automatic updates, while SAP disclosed urgent defensive actions after detecting suspicious GitHub activity in its environment. Simultaneously, Switzerland's cyber agency confirmed AI-assisted intrusions breached critical infrastructure operators in two of three targeted incidents, marking the first such cases nationally. These events challenge third-party trust assumptions and traditional detection capabilities. Supplier risk and monitoring owners should verify software integrity pipelines and assess AI-driven threat visibility. [SAP confirms security incident after suspicious GitHub activity](https://www.bleepingcomputer.com/news/security/sap-confirms-security-incident-after-suspicious-github-activity/); [Hackers Trojanize Official Q-Dir and DesktopOK Downloads to Deliver Remote Access Malware](https://thehackernews.com/2026/11/hackers-trojanize-official-q-dir-and.html); [Switzerland Confirms AI-Assisted Cyberattacks Breached Critical Infrastructure Operators](https://thehackernews.com/2026/11/switzerland-confirms-ai-assisted.html)
 
 Scope: 6 findings and 0 sourced regulatory changes from 12 retained sources. Review priorities rank what to check first; confirm whether each finding applies to your organization before assigning work.
 
@@ -26,11 +26,11 @@ No sourced regulatory changes identified in the supplied evidence.
 
 Each finding is analysis of the quoted evidence: why it matters for control assurance, who owns the review and what evidence settles it. Reference controls are review aids, not a compliance determination.
 
-### Drupal core exposes site takeover vulnerability
+### Drupal core enables site takeover
 
 **Review priority:** High · Vulnerability management · Owner: Vulnerability and asset owners
 
-**Why it matters:** Active exploitation of a core platform weakness undermines patch assurance and exposes web assets to takeover. The vulnerability owner must confirm emergency patching coverage and verify that no unpatched installations remain in production.
+**Why it matters:** This finding matters because active exploitation of a core Drupal vulnerability bypasses patch assumptions and threatens web application integrity. The vulnerability owner should confirm emergency patch deployment and verify no compromise of hosted applications.
 
 **Source evidence:** “Drupal has warned of a new "highly critical" security flaw impacting Drupal core that it said has been exploited in the wild. The vulnerability, tracked as CVE-2026-136716 &#40;CVSS score: N/A&#41;, has been described as a case of improper checking for unusual or exceptional conditions.” [Drupal Warns of New Highly Critical Site Takeover Vulnerability Under Active Exploitation](https://thehackernews.com/2026/11/drupal-warns-of-new-highly-critical.html)
 
@@ -40,25 +40,39 @@ Each finding is analysis of the quoted evidence: why it matters for control assu
 
 **Reference controls:** ISO/IEC 27001:2022 A.8.8 (management of technical vulnerabilities); NIST CSF 2.0 ID.RA (risk assessment), PR.PS (platform security)
 
-### Mitel MiCollab adds exploited vulnerabilities to KEV catalog
+### Mitel MiCollab vulnerabilities enter KEV catalog
 
-**Review priority:** High · Third-party risk · Owner: Supplier risk owner
+**Review priority:** High · Vulnerability management · Owner: Vulnerability and asset owners
 
-**Why it matters:** Inclusion in the KEV catalog signals confirmed exploitation of a communication platform used across the enterprise. The supplier risk owner must obtain mitigation evidence from the vendor and assess dependency on affected MiCollab versions.
+**Why it matters:** This finding matters because KEV inclusion mandates urgent remediation for federal agencies and signals active exploitation risk for all users. The asset owner should confirm mitigation of all five MiCollab flaws and validate compensating controls.
 
-**Source evidence:** “The U.S. Cybersecurity and Infrastructure Security Agency &#40;CISA&#41; on Wednesday added 10 security flaws to its Known Exploited Vulnerabilities &#40;KEV&#41; catalog, including five vulnerabilities impacting Mitel MiCollab that were disclosed last week.” [Hackers Exploit 10 Vulnerabilities Across Mitel, Juniper, Vates, and Danfoss Products](https://thehackernews.com/2026/11/hackers-exploit-10-vulnerabilities.html)
+**Source evidence:** “The U.S. Cybersecurity and Infrastructure Security Agency &#40;CISA&#41; on Wednesday added 10 security flaws to its Known Exploited Vulnerabilities &#40;KEV&#41; catalog, including five vulnerabilities impacting Mitel MiCollab that were disclosed last week. The Mitel MiCollab vulnerabilities are listed below - CVE-2026-133275 &#40;CVSS score: 5.3&#41; - An arbitrary file upload vulnerability in the Audio, Web and…” [Hackers Exploit 10 Vulnerabilities Across Mitel, Juniper, Vates, and Danfoss Products](https://thehackernews.com/2026/11/hackers-exploit-10-vulnerabilities.html)
 
-**Evidence to request:** Supplier access scope, control responsibilities and evidence of remediation assurance.
+**Evidence to request:** Affected-asset inventory, installed versions, remediation status and an exception owner.
 
-**Decision trigger:** If the supplier dependency exists and assurance is insufficient, request evidence or escalate the assurance gap to its owner.
+**Decision trigger:** If applicability is confirmed, decide on remediation or a documented exception; otherwise record why the finding does not apply.
 
-**Reference controls:** ISO/IEC 27001:2022 A.5.19 (supplier relationships), A.5.21 (ICT supply chain), A.5.22 (monitoring and review of supplier services); NIST CSF 2.0 GV.SC (cybersecurity supply chain risk management)
+**Reference controls:** ISO/IEC 27001:2022 A.8.8 (management of technical vulnerabilities); NIST CSF 2.0 ID.RA (risk assessment), PR.PS (platform security)
 
-### SAP detects suspicious activity triggering urgent response
+### Cacti network monitoring tool enables remote code execution
 
-**Review priority:** High · Incident response · Owner: Incident response lead
+**Review priority:** High · Vulnerability management · Owner: Vulnerability and asset owners
 
-**Why it matters:** A major SaaS provider's confirmed incident requires customers to verify their own exposure and review incident notification timelines. The incident response lead must confirm receipt of SAP advisories and assess potential data access impact.
+**Why it matters:** This finding matters because an unauthenticated RCE in a widely used monitoring tool allows trivial compromise of network visibility infrastructure. The vulnerability owner should inventory all Cacti instances, apply mitigations, and restrict guest access until a patch is released.
+
+**Source evidence:** “Details have emerged about a new zero-day vulnerability in Cacti, an open-source network monitoring tool, that could be exploited to achieve remote code execution. The proof-of-concept &#40;PoC&#41; exploit, which has yet to be assigned a CVE identifier, has been tracked as 4HTTP2SHELL and 4HTTP2ROOT. "I found a path from a fresh, unauthenticated HTTP session to command execution as the Cacti server…” [Unpatched Cacti Zero-Day Enables RCE in Just Four HTTP Requests via Guest Access](https://thehackernews.com/2026/11/unpatched-cacti-zero-day-enables-rce-in.html)
+
+**Evidence to request:** Affected-asset inventory, installed versions, remediation status and an exception owner.
+
+**Decision trigger:** If applicability is confirmed, decide on remediation or a documented exception; otherwise record why the finding does not apply.
+
+**Reference controls:** ISO/IEC 27001:2022 A.8.8 (management of technical vulnerabilities); NIST CSF 2.0 ID.RA (risk assessment), PR.PS (platform security)
+
+### SAP IT environment triggers urgent action
+
+**Review priority:** Medium · Incident response · Owner: Incident response lead
+
+**Why it matters:** This finding matters because a major ERP provider's incident detection and response directly affects customer data integrity and service continuity. The incident response lead should review SAP's disclosure scope and assess downstream impact on integrated systems.
 
 **Source evidence:** “SAP has confirmed to BleepingComputer that it took urgent action to protect its customers after detecting suspicious activity in its IT environment…” [SAP confirms security incident after suspicious GitHub activity](https://www.bleepingcomputer.com/news/security/sap-confirms-security-incident-after-suspicious-github-activity/)
 
@@ -68,11 +82,11 @@ Each finding is analysis of the quoted evidence: why it matters for control assu
 
 **Reference controls:** ISO/IEC 27001:2022 A.5.24 (incident management planning and preparation), A.5.26 (response to information security incidents); NIST CSF 2.0 RS.MA (incident management), RS.MI (incident mitigation)
 
-### software supply chain attack compromises legitimate downloads
+### SoftwareOK website distributes trojanized installers
 
 **Review priority:** High · Third-party risk · Owner: Supplier risk owner
 
-**Why it matters:** Tampering at the official distribution point bypasses standard software verification controls. The supplier risk owner must inventory affected utilities, verify hash integrity, and block execution of unverified installer versions.
+**Why it matters:** This finding matters because a legitimate vendor's distribution channel was compromised, undermining trust in official updates and exposing downstream users. The supplier risk owner should verify software integrity controls and assess exposure from any deployed Q-Dir or DesktopOK instances.
 
 **Source evidence:** “Cybersecurity researchers have disclosed details of a software supply chain attack that has tampered with Q-Dir and DesktopOK installation files distributed via the official SoftwareOK website. "Evidence indicates that malicious files were generated not only when users downloaded the programs directly from the official download page but also during the update process of previously installed…” [Hackers Trojanize Official Q-Dir and DesktopOK Downloads to Deliver Remote Access Malware](https://thehackernews.com/2026/11/hackers-trojanize-official-q-dir-and.html)
 
@@ -82,11 +96,11 @@ Each finding is analysis of the quoted evidence: why it matters for control assu
 
 **Reference controls:** ISO/IEC 27001:2022 A.5.19 (supplier relationships), A.5.21 (ICT supply chain), A.5.22 (monitoring and review of supplier services); NIST CSF 2.0 GV.SC (cybersecurity supply chain risk management)
 
-### critical infrastructure operators breached by AI-assisted intrusions
+### Swiss critical infrastructure operators breached by AI agents
 
 **Review priority:** High · Monitoring and detection · Owner: Detection and monitoring owner
 
-**Why it matters:** AI-driven attacks succeeding against critical infrastructure indicate detection gaps for novel threat behaviors. The monitoring owner must evaluate telemetry for AI-agent indicators and test detection rules against autonomous intrusion patterns.
+**Why it matters:** This finding matters because AI-assisted intrusions evade traditional detection and have successfully penetrated critical infrastructure, raising the bar for monitoring effectiveness. The detection owner should evaluate whether current telemetry can identify AI-driven attack patterns and update detection rules accordingly.
 
 **Source evidence:** “Attackers using AI agents have broken into computer systems at Swiss organizations in four of five confirmed attacks, the first such cases in the country, the country's cybersecurity agency said yesterday. Three of the attacks targeted critical infrastructure operators, and two of those succeeded, with no major disruptions reported.” [Switzerland Confirms AI-Assisted Cyberattacks Breached Critical Infrastructure Operators](https://thehackernews.com/2026/11/switzerland-confirms-ai-assisted.html)
 
@@ -95,20 +109,6 @@ Each finding is analysis of the quoted evidence: why it matters for control assu
 **Decision trigger:** If a detection test fails, assign the coverage or routing correction and repeat the test.
 
 **Reference controls:** ISO/IEC 27001:2022 A.8.15 (logging), A.8.16 (monitoring activities); NIST CSF 2.0 DE.CM (continuous monitoring), DE.AE (adverse event analysis)
-
-### WSUS server role removes patch management capability
-
-**Review priority:** Medium · Change management · Owner: Change and service owners
-
-**Why it matters:** Removal of the native update service forces a transition to alternative patch distribution methods. The change owner must validate replacement tooling, update approval workflows, and ensure coverage before the 2028 release.
-
-**Source evidence:** “Microsoft will remove the WSUS server role from Windows Server 2028, the next major release of its server operating system…” [Microsoft removes WSUS server role in Windows Server 2028](https://www.bleepingcomputer.com/news/microsoft/microsoft-removes-wsus-server-role-in-windows-server-2028/)
-
-**Evidence to request:** Change approval, rollout coverage, post-change validation and rollback ownership.
-
-**Decision trigger:** If validation or recovery evidence is missing, resolve that gap before relying on the change.
-
-**Reference controls:** ISO/IEC 27001:2022 A.8.32 (change management); NIST CSF 2.0 PR.PS (platform security)
 
 ## Source Highlights
 
