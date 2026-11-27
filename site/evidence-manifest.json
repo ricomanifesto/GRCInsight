@@ -4,63 +4,51 @@
   "report_plan": {
     "control_implications": [
       {
-        "control_id": "governance",
-        "evidence_excerpt": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Wednesday added 10 security flaws to its Known Exploited Vulnerabilities (KEV) catalog, including five vulnerabilities impacting Mitel MiCollab that were disclosed last week. The Mitel MiCollab vulnerabilities are listed below - CVE-2026-133275 (CVSS score: 5.3) - An arbitrary file upload vulnerability in the Audio, Web and…",
-        "evidence_origin": "summary",
-        "focus": "Known Exploited Vulnerabilities catalog",
-        "headline": "Known Exploited Vulnerabilities catalog expands with ten exploited flaws",
-        "priority": "high",
-        "significance": "The KEV catalog expansion signals heightened regulatory expectation for timely remediation of actively exploited vulnerabilities. Governance owners should confirm that vulnerability management processes align with CISA KEV tracking and that remediation evidence is auditable.",
-        "source_ids": [
-          3
-        ]
-      },
-      {
-        "control_id": "incident_response",
-        "evidence_excerpt": "Hackers have reportedly breached the US Air Force's Cloud One computing platform, adding to a recent wave of cyberattacks affecting US government agencies, including the FBI, CIA, and Treasury Department…",
-        "evidence_origin": "summary",
-        "focus": "Cloud One computing platform",
-        "headline": "Cloud One computing platform breached in federal attack wave",
-        "priority": "high",
-        "significance": "The breach of a major government cloud platform indicates potential gaps in cloud incident response and containment. Incident response leads should verify that cloud-specific playbooks exist and that evidence preservation covers multi-tenant environments.",
-        "source_ids": [
-          4
-        ]
-      },
-      {
         "control_id": "vulnerability_management",
-        "evidence_excerpt": "Drupal has warned of a new \"highly critical\" security flaw impacting Drupal core that it said has been exploited in the wild. The vulnerability, tracked as CVE-2026-136716 (CVSS score: N/A), has been described as a case of improper checking for unusual or exceptional conditions. It also relates to CVE-2026-132165 aka Fail2Install in that it addresses remaining vulnerable installation states…",
+        "evidence_excerpt": "Drupal has warned of a new \"highly critical\" security flaw impacting Drupal core that it said has been exploited in the wild. The vulnerability, tracked as CVE-2026-136716 (CVSS score: N/A), has been described as a case of improper checking for unusual or exceptional conditions.",
         "evidence_origin": "summary",
         "focus": "Drupal core",
-        "headline": "Drupal core exploitation demands immediate asset verification",
+        "headline": "Drupal core enables site takeover under active exploitation",
         "priority": "high",
-        "significance": "Active exploitation of a highly critical Drupal flaw requires urgent confirmation of asset inventory and patch deployment. Vulnerability management owners should validate that all Drupal instances are identified, patched, or protected by compensating controls.",
+        "significance": "Active exploitation of a highly critical Drupal core flaw weakens assurance that web content management systems are protected against known exploited vulnerabilities. The accountable owner should confirm that all Drupal instances are inventoried, patched, or compensated with mitigating controls.",
         "source_ids": [
           2
         ]
       },
       {
         "control_id": "third_party_risk",
-        "evidence_excerpt": "Cybersecurity researchers have disclosed details of a cyber attack in which a threat actor leveraged a Microsoft Store application to deliver a remote access trojan (RAT) called Vinci RAT. The intrusion, according to eSentire, begins with a redirection to a bogus site for a sniping tool (\"snipp.codes-team[.]com\"), from where a Microsoft-signed installer called \"Snipping-Tool.exe\" is…",
+        "evidence_excerpt": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Wednesday added 10 security flaws to its Known Exploited Vulnerabilities (KEV) catalog, including five vulnerabilities impacting Mitel MiCollab that were disclosed last week. The Mitel MiCollab vulnerabilities are listed below - CVE-2026-133275 (CVSS score: 5.3) - An arbitrary file upload vulnerability in the Audio, Web and…",
         "evidence_origin": "summary",
-        "focus": "Microsoft Store application",
-        "headline": "Microsoft Store application delivers remote access trojan",
+        "focus": "Mitel MiCollab vulnerabilities",
+        "headline": "Mitel MiCollab vulnerabilities added to CISA Known Exploited Vulnerabilities catalog",
         "priority": "high",
-        "significance": "A trusted app store channel delivered malware, indicating supply chain verification gaps. Third-party risk owners should assess application allowlisting policies and verify that store-sourced software undergoes integrity validation.",
+        "significance": "Inclusion of Mitel MiCollab vulnerabilities in the CISA KEV catalog extends third-party risk exposure for organizations relying on this communication platform. The accountable owner should confirm supplier remediation status and validate that compensating controls are documented and effective.",
         "source_ids": [
-          8
+          3
         ]
       },
       {
-        "control_id": "third_party_risk",
-        "evidence_excerpt": "SAP has confirmed to BleepingComputer that it took urgent action to protect its customers after detecting suspicious activity in its IT environment…",
+        "control_id": "vulnerability_management",
+        "evidence_excerpt": "A zero-day vulnerability in the Cacti network monitoring platform has been publicly disclosed, along with a proof-of-concept exploit that lets unauthenticated attackers execute commands on vulnerable servers…",
         "evidence_origin": "summary",
-        "focus": "IT environment",
-        "headline": "IT environment suspicious activity triggers customer protection",
-        "priority": "medium",
-        "significance": "SAP's detection of suspicious activity in its environment raises questions about supplier incident notification timeliness. Supplier risk owners should confirm contractual obligations for breach notification and request assurance of control effectiveness.",
+        "focus": "Cacti network monitoring platform",
+        "headline": "Cacti network monitoring platform exposes unauthenticated remote code execution",
+        "priority": "high",
+        "significance": "Public disclosure of a zero-day with proof-of-concept exploit in the Cacti monitoring platform removes the window for controlled remediation and weakens vulnerability management assurance. The accountable owner should confirm whether Cacti is deployed, assess exposure, and apply emergency mitigations.",
         "source_ids": [
-          12
+          4
+        ]
+      },
+      {
+        "control_id": "incident_response",
+        "evidence_excerpt": "Hackers have reportedly breached the US Air Force's Cloud One computing platform, adding to a recent wave of cyberattacks affecting US government agencies, including the FBI, CIA, and Treasury Department…",
+        "evidence_origin": "summary",
+        "focus": "US Air Force's Cloud One computing platform",
+        "headline": "US Air Force's Cloud One computing platform breached in federal cyberattack wave",
+        "priority": "high",
+        "significance": "Breach of a government cloud platform indicates that incident response capabilities may be insufficient to contain sophisticated intrusions across federal systems. The accountable owner should confirm that cloud incident response procedures are tested and that forensic evidence preservation is operational.",
+        "source_ids": [
+          7
         ]
       },
       {
@@ -68,11 +56,23 @@
         "evidence_excerpt": "Attackers could have disrupted traveler entry into Nigeria, Ethiopia, Zambia, Sri Lanka, Fiji, and Ghana via several vulnerabilities in their online visa and immigration systems.",
         "evidence_origin": "summary",
         "focus": "online visa and immigration systems",
-        "headline": "Online visa and immigration systems expose border control risks",
+        "headline": "online visa and immigration systems contain vulnerabilities enabling travel disruption",
         "priority": "high",
-        "significance": "Vulnerabilities in government identity systems demonstrate access control failures with operational impact. Access management owners should review privilege boundaries for citizen-facing services and verify that authentication and authorization controls are independently tested.",
+        "significance": "Vulnerabilities in government visa and immigration systems expose access management weaknesses that could disrupt critical border control operations. The accountable owner should confirm that privileged access to these systems is restricted and that vulnerability scanning covers all internet-facing components.",
         "source_ids": [
-          7
+          10
+        ]
+      },
+      {
+        "control_id": "third_party_risk",
+        "evidence_excerpt": "Cybersecurity researchers have disclosed details of a cyber attack in which a threat actor leveraged a Microsoft Store application to deliver a remote access trojan (RAT) called Vinci RAT. The intrusion, according to eSentire, begins with a redirection to a bogus site for a sniping tool (\"snipp.codes-team[.]com\"), from where a Microsoft-signed installer called \"Snipping-Tool.exe\" is…",
+        "evidence_origin": "summary",
+        "focus": "Microsoft Store application",
+        "headline": "Microsoft Store application delivers Vinci RAT remote access trojan",
+        "priority": "high",
+        "significance": "Compromise of a Microsoft Store application to deliver malware indicates that application vetting and supply chain controls may not prevent malicious code distribution through trusted platforms. The accountable owner should confirm that application allow-listing policies and endpoint detection cover Microsoft Store sourced software.",
+        "source_ids": [
+          11
         ]
       }
     ],
@@ -80,27 +80,27 @@
       "paragraphs": [
         {
           "source_ids": [
-            3,
             2,
             4,
-            7
+            7,
+            10
           ],
-          "text": "CISA's addition of ten actively exploited vulnerabilities to the Known Exploited Vulnerabilities catalog elevates remediation expectations while critical flaws in Drupal core and government visa systems are under active exploitation. Concurrent breaches of the US Air Force Cloud One platform and multiple national immigration portals indicate systemic cloud identity and access control weaknesses that demand immediate assurance review."
+          "text": "Active exploitation of critical vulnerabilities in Drupal core, the Cacti network monitoring platform, US Air Force cloud infrastructure, and government visa systems demonstrates that vulnerability management and monitoring controls must address both known exploited flaws and zero-day threats across diverse technology stacks."
         },
         {
           "source_ids": [
-            8,
-            12
+            3,
+            11
           ],
-          "text": "Supply chain incidents involving a Microsoft Store application delivering a remote access trojan and SAP's detection of suspicious activity in its IT environment reveal gaps in third-party software integrity and supplier incident notification. Control owners should prioritize application allowlisting validation and contractual breach notification assurances."
+          "text": "The addition of Mitel MiCollab vulnerabilities to the CISA Known Exploited Vulnerabilities catalog and the compromise of a Microsoft Store application to deliver a remote access trojan indicate that third-party risk assurance and application vetting controls require reinforcement to address supply chain exploitation."
         }
       ]
     },
     "industry_impacts": [],
     "regulatory_changes": []
   },
-  "generated_at": "2026-11-27T15:19:42.025095Z",
-  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/f0767f2fdc4f8e8a434c8d1d6cdadbb328ea5884/site/feed.xml",
+  "generated_at": "2026-11-27T18:19:40.174593Z",
+  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/0e0cad68a710b757b2f0ab51ae80f572b67219d5/site/feed.xml",
   "feed_home_url": "https://sentrydigest.ricomanifesto.com/",
   "digest_issue_date": "2026-11-27",
   "digest_issue_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-27/",
@@ -163,6 +163,72 @@
           "origin": "content",
           "raw_text": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Wednesday added 10 security flaws to its Known Exploited Vulnerabilities (KEV) catalog, including five vulnerabilities impacting Mitel MiCollab that were disclosed last week. The Mitel MiCollab vulnerabilities are listed below - CVE-2026-133275 (CVSS score: 5.3) - An arbitrary file upload vulnerability in the Audio, Web and…",
           "text": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Wednesday added 10 security flaws to its Known Exploited Vulnerabilities (KEV) catalog, including five vulnerabilities impacting Mitel MiCollab that were disclosed last week. The Mitel MiCollab vulnerabilities are listed below - CVE-2026-133275 (CVSS score: 5.3) - An arbitrary file upload vulnerability in the Audio, Web and…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Unpatched Cacti zero-day with public PoC gives remote code execution",
+      "url": "https://www.bleepingcomputer.com/news/security/unpatched-cacti-zero-day-with-public-poc-gives-remote-code-execution/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-27/#reporting-9064d3864e25",
+      "cves": [],
+      "snippet": "Unpatched Cacti zero-day with public PoC gives remote code execution A zero-day vulnerability in the Cacti network monitoring platform has been publicly disclosed, along with a proof-of-concept exploit that lets unauthenticated attackers execute commands on vulnerable servers… A zero-day vulnerability in the Cacti network monitoring platform has been publicly disclosed, along with a proof-of-concept exploit that lets unauthenticated attackers execute commands on vulnerable servers…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "A zero-day vulnerability in the Cacti network monitoring platform has been publicly disclosed, along with a proof-of-concept exploit that lets unauthenticated attackers execute commands on vulnerable servers…",
+          "text": "A zero-day vulnerability in the Cacti network monitoring platform has been publicly disclosed, along with a proof-of-concept exploit that lets unauthenticated attackers execute commands on vulnerable servers…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "A zero-day vulnerability in the Cacti network monitoring platform has been publicly disclosed, along with a proof-of-concept exploit that lets unauthenticated attackers execute commands on vulnerable servers…",
+          "text": "A zero-day vulnerability in the Cacti network monitoring platform has been publicly disclosed, along with a proof-of-concept exploit that lets unauthenticated attackers execute commands on vulnerable servers…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Suspected Vietnam-Linked Hackers Target Southeast Asia in South China Sea Espionage Campaign",
+      "url": "https://thehackernews.com/2026/11/suspected-vietnam-linked-hackers-target.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-27/#reporting-a061202fd8df",
+      "cves": [],
+      "snippet": "Suspected Vietnam-Linked Hackers Target Southeast Asia in South China Sea Espionage Campaign A Vietnam-sponsored hacking group has been attributed to attacks targeting Southeast Asian military, government, and legislative organizations with an aim to gather intelligence on South China Sea defense and military agreements. The previously undocumented incursion set, detailed by SOCRadar, has been codenamed WeaveLotus. The activity is assessed to have comprised five intrusions in Thailand… A Vietnam-sponsored hacking group has been attributed to attacks targeting Southeast Asian military, government, and legislative organizations with an aim to gather intelligence on South China Sea defense and ",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "A Vietnam-sponsored hacking group has been attributed to attacks targeting Southeast Asian military, government, and legislative organizations with an aim to gather intelligence on South China Sea defense and military agreements. The previously undocumented incursion set, detailed by SOCRadar, has been codenamed WeaveLotus. The activity is assessed to have comprised five intrusions in Thailand…",
+          "text": "A Vietnam-sponsored hacking group has been attributed to attacks targeting Southeast Asian military, government, and legislative organizations with an aim to gather intelligence on South China Sea defense and military agreements. The previously undocumented incursion set, detailed by SOCRadar, has been codenamed WeaveLotus. The activity is assessed to have comprised five intrusions in Thailand…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "A Vietnam-sponsored hacking group has been attributed to attacks targeting Southeast Asian military, government, and legislative organizations with an aim to gather intelligence on South China Sea defense and military agreements. The previously undocumented incursion set, detailed by SOCRadar, has been codenamed WeaveLotus. The activity is assessed to have comprised five intrusions in Thailand…",
+          "text": "A Vietnam-sponsored hacking group has been attributed to attacks targeting Southeast Asian military, government, and legislative organizations with an aim to gather intelligence on South China Sea defense and military agreements. The previously undocumented incursion set, detailed by SOCRadar, has been codenamed WeaveLotus. The activity is assessed to have comprised five intrusions in Thailand…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Matters.AI Lands India’s Largest Cybersecurity Pre-Series A Round to Fight AI Data Risks",
+      "url": "https://www.darkreading.com/cyber-risk/matters-india-cybersecurity-pre-series-ai-data-risks",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-27/#reporting-cc6b1f3c94a6",
+      "cves": [],
+      "snippet": "Matters.AI Lands India’s Largest Cybersecurity Pre-Series A Round to Fight AI Data Risks The security startup consolidates four legacy security tools into an autonomous platform that uses context-aware AI to trace sensitive data lineage, analyze user intent, and automatically remediate threats across enterprise environments. The security startup consolidates four legacy security tools into an autonomous platform that uses context-aware AI to trace sensitive data lineage, analyze user intent, and automatically remediate threats across enterprise environments.",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "The security startup consolidates four legacy security tools into an autonomous platform that uses context-aware AI to trace sensitive data lineage, analyze user intent, and automatically remediate threats across enterprise environments.",
+          "text": "The security startup consolidates four legacy security tools into an autonomous platform that uses context-aware AI to trace sensitive data lineage, analyze user intent, and automatically remediate threats across enterprise environments."
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "The security startup consolidates four legacy security tools into an autonomous platform that uses context-aware AI to trace sensitive data lineage, analyze user intent, and automatically remediate threats across enterprise environments.",
+          "text": "The security startup consolidates four legacy security tools into an autonomous platform that uses context-aware AI to trace sensitive data lineage, analyze user intent, and automatically remediate threats across enterprise environments."
         }
       ],
       "effective_date_evidence": null
@@ -295,72 +361,6 @@
           "origin": "content",
           "raw_text": "Microsoft will remove the WSUS server role from Windows Server 2028, the next major release of its server operating system…",
           "text": "Microsoft will remove the WSUS server role from Windows Server 2028, the next major release of its server operating system…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "How to Keep Your Security Picture Current When Attackers Move at AI Speed",
-      "url": "https://thehackernews.com/2026/11/how-to-keep-your-security-picture.html",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-27/#reporting-982bfc2fadcb",
-      "cves": [],
-      "snippet": "How to Keep Your Security Picture Current When Attackers Move at AI Speed Most security metrics are not built to be used. They are built to be shown. Somewhere between the quarterly review and the next status update, a set of numbers gets assembled that looks reassuring in a room and tells almost no one what is actually happening across the environment that week. Someone pulls them together the week before, cleans them up, and presents a picture of a program that is… Most security metrics are not built to be used. They are built to be shown. Somewhere between the quarterly review and the next status update, a set of numbers gets assembled that looks reassuring in a room and tells almost no o",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "Most security metrics are not built to be used. They are built to be shown. Somewhere between the quarterly review and the next status update, a set of numbers gets assembled that looks reassuring in a room and tells almost no one what is actually happening across the environment that week. Someone pulls them together the week before, cleans them up, and presents a picture of a program that is…",
-          "text": "Most security metrics are not built to be used. They are built to be shown. Somewhere between the quarterly review and the next status update, a set of numbers gets assembled that looks reassuring in a room and tells almost no one what is actually happening across the environment that week. Someone pulls them together the week before, cleans them up, and presents a picture of a program that is…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "Most security metrics are not built to be used. They are built to be shown. Somewhere between the quarterly review and the next status update, a set of numbers gets assembled that looks reassuring in a room and tells almost no one what is actually happening across the environment that week. Someone pulls them together the week before, cleans them up, and presents a picture of a program that is…",
-          "text": "Most security metrics are not built to be used. They are built to be shown. Somewhere between the quarterly review and the next status update, a set of numbers gets assembled that looks reassuring in a room and tells almost no one what is actually happening across the environment that week. Someone pulls them together the week before, cleans them up, and presents a picture of a program that is…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "Drupal warns of new site takeover flaw exploited in attacks",
-      "url": "https://www.bleepingcomputer.com/news/security/drupal-warns-of-new-access-bypass-flaw-exploited-in-attacks/",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-27/#reporting-319bafb516c2",
-      "cves": [],
-      "snippet": "Drupal warns of new site takeover flaw exploited in attacks The Drupal security team says attackers are exploiting a second critical vulnerability that lets them breach and hijack unpatched websites… The Drupal security team says attackers are exploiting a second critical vulnerability that lets them breach and hijack unpatched websites…",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "The Drupal security team says attackers are exploiting a second critical vulnerability that lets them breach and hijack unpatched websites…",
-          "text": "The Drupal security team says attackers are exploiting a second critical vulnerability that lets them breach and hijack unpatched websites…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "The Drupal security team says attackers are exploiting a second critical vulnerability that lets them breach and hijack unpatched websites…",
-          "text": "The Drupal security team says attackers are exploiting a second critical vulnerability that lets them breach and hijack unpatched websites…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "SAP confirms security incident after suspicious GitHub activity",
-      "url": "https://www.bleepingcomputer.com/news/security/sap-confirms-security-incident-after-suspicious-github-activity/",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-27/#reporting-1147158f7c1b",
-      "cves": [],
-      "snippet": "SAP confirms security incident after suspicious GitHub activity SAP has confirmed to BleepingComputer that it took urgent action to protect its customers after detecting suspicious activity in its IT environment… SAP has confirmed to BleepingComputer that it took urgent action to protect its customers after detecting suspicious activity in its IT environment…",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "SAP has confirmed to BleepingComputer that it took urgent action to protect its customers after detecting suspicious activity in its IT environment…",
-          "text": "SAP has confirmed to BleepingComputer that it took urgent action to protect its customers after detecting suspicious activity in its IT environment…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "SAP has confirmed to BleepingComputer that it took urgent action to protect its customers after detecting suspicious activity in its IT environment…",
-          "text": "SAP has confirmed to BleepingComputer that it took urgent action to protect its customers after detecting suspicious activity in its IT environment…"
         }
       ],
       "effective_date_evidence": null
