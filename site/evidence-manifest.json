@@ -5,26 +5,50 @@
     "control_implications": [
       {
         "control_id": "vulnerability_management",
-        "evidence_excerpt": "Drupal has warned of a new \"highly critical\" security flaw impacting Drupal core that it said has been exploited in the wild. The vulnerability, tracked as CVE-2026-136716 (CVSS score: N/A), has been described as a case of improper checking for unusual or exceptional conditions.",
+        "evidence_excerpt": "Drupal has warned of a new \"highly critical\" security flaw impacting Drupal core that it said has been exploited in the wild. The vulnerability, tracked as CVE-2026-136716 (CVSS score: N/A), has been described as a case of improper checking for unusual or exceptional conditions. It also relates to CVE-2026-132165 aka Fail2Install in that it addresses remaining vulnerable installation states…",
         "evidence_origin": "summary",
         "focus": "Drupal core",
-        "headline": "Drupal core enables site takeover under active exploitation",
+        "headline": "Drupal core exposes active exploitation",
         "priority": "high",
-        "significance": "Active exploitation of a highly critical Drupal core flaw weakens assurance that web content management systems are protected against known exploited vulnerabilities. The accountable owner should confirm that all Drupal instances are inventoried, patched, or compensated with mitigating controls.",
+        "significance": "Active exploitation of Drupal core weakens vulnerability management assurance by confirming weaponized flaws in production. The vulnerability owner should confirm all Drupal instances are patched or have compensating controls documented.",
         "source_ids": [
           2
         ]
       },
       {
-        "control_id": "third_party_risk",
+        "control_id": "vulnerability_management",
         "evidence_excerpt": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Wednesday added 10 security flaws to its Known Exploited Vulnerabilities (KEV) catalog, including five vulnerabilities impacting Mitel MiCollab that were disclosed last week. The Mitel MiCollab vulnerabilities are listed below - CVE-2026-133275 (CVSS score: 5.3) - An arbitrary file upload vulnerability in the Audio, Web and…",
         "evidence_origin": "summary",
-        "focus": "Mitel MiCollab vulnerabilities",
-        "headline": "Mitel MiCollab vulnerabilities added to CISA Known Exploited Vulnerabilities catalog",
+        "focus": "Mitel MiCollab",
+        "headline": "Mitel MiCollab joins CISA exploited catalog",
         "priority": "high",
-        "significance": "Inclusion of Mitel MiCollab vulnerabilities in the CISA KEV catalog extends third-party risk exposure for organizations relying on this communication platform. The accountable owner should confirm supplier remediation status and validate that compensating controls are documented and effective.",
+        "significance": "CISA KEV inclusion mandates urgent remediation for federal enterprises and signals active exploitation risk. The asset owner should verify Mitel MiCollab deployments are inventoried and patched per binding operational directives.",
         "source_ids": [
           3
+        ]
+      },
+      {
+        "control_id": "access_management",
+        "evidence_excerpt": "The pCloud Pass password manager suffered a cyberattack, with users reporting that unknown devices had connected to their accounts even with two-factor authentication (2FA) enabled…",
+        "evidence_origin": "summary",
+        "focus": "pCloud Pass password manager",
+        "headline": "pCloud Pass password manager weakens 2FA assurance",
+        "priority": "high",
+        "significance": "Reported 2FA bypass indicates access management controls may not prevent unauthorized device enrollment. The identity owner should review authentication logs and confirm password manager vendor assurance evidence.",
+        "source_ids": [
+          4
+        ]
+      },
+      {
+        "control_id": "data_protection",
+        "evidence_excerpt": "Medical technology company Boston Scientific is sending data breach notices to individuals affected by a cyberattack on the firm…",
+        "evidence_origin": "summary",
+        "focus": "Boston Scientific",
+        "headline": "Boston Scientific exposes personal medical data",
+        "priority": "high",
+        "significance": "Breach of medical and personal data triggers data protection obligations and regulatory scrutiny. The privacy owner should confirm breach notification compliance and assess sensitive data handling controls against the exposure.",
+        "source_ids": [
+          5
         ]
       },
       {
@@ -32,11 +56,11 @@
         "evidence_excerpt": "A zero-day vulnerability in the Cacti network monitoring platform has been publicly disclosed, along with a proof-of-concept exploit that lets unauthenticated attackers execute commands on vulnerable servers…",
         "evidence_origin": "summary",
         "focus": "Cacti network monitoring platform",
-        "headline": "Cacti network monitoring platform exposes unauthenticated remote code execution",
+        "headline": "Cacti network monitoring platform exposes unauthenticated RCE",
         "priority": "high",
-        "significance": "Public disclosure of a zero-day with proof-of-concept exploit in the Cacti monitoring platform removes the window for controlled remediation and weakens vulnerability management assurance. The accountable owner should confirm whether Cacti is deployed, assess exposure, and apply emergency mitigations.",
+        "significance": "Public PoC for unauthenticated remote code execution demands immediate vulnerability management action. The monitoring owner should identify all Cacti instances and apply compensating controls until patches are available.",
         "source_ids": [
-          4
+          6
         ]
       },
       {
@@ -44,35 +68,11 @@
         "evidence_excerpt": "Hackers have reportedly breached the US Air Force's Cloud One computing platform, adding to a recent wave of cyberattacks affecting US government agencies, including the FBI, CIA, and Treasury Department…",
         "evidence_origin": "summary",
         "focus": "US Air Force's Cloud One computing platform",
-        "headline": "US Air Force's Cloud One computing platform breached in federal cyberattack wave",
+        "headline": "US Air Force's Cloud One computing platform exposes cloud breach",
         "priority": "high",
-        "significance": "Breach of a government cloud platform indicates that incident response capabilities may be insufficient to contain sophisticated intrusions across federal systems. The accountable owner should confirm that cloud incident response procedures are tested and that forensic evidence preservation is operational.",
+        "significance": "Cloud platform breach in a federal agency tests incident response readiness for cloud environments. The response owner should verify cloud containment procedures and evidence preservation capabilities for similar infrastructures.",
         "source_ids": [
-          7
-        ]
-      },
-      {
-        "control_id": "access_management",
-        "evidence_excerpt": "Attackers could have disrupted traveler entry into Nigeria, Ethiopia, Zambia, Sri Lanka, Fiji, and Ghana via several vulnerabilities in their online visa and immigration systems.",
-        "evidence_origin": "summary",
-        "focus": "online visa and immigration systems",
-        "headline": "online visa and immigration systems contain vulnerabilities enabling travel disruption",
-        "priority": "high",
-        "significance": "Vulnerabilities in government visa and immigration systems expose access management weaknesses that could disrupt critical border control operations. The accountable owner should confirm that privileged access to these systems is restricted and that vulnerability scanning covers all internet-facing components.",
-        "source_ids": [
-          10
-        ]
-      },
-      {
-        "control_id": "third_party_risk",
-        "evidence_excerpt": "Cybersecurity researchers have disclosed details of a cyber attack in which a threat actor leveraged a Microsoft Store application to deliver a remote access trojan (RAT) called Vinci RAT. The intrusion, according to eSentire, begins with a redirection to a bogus site for a sniping tool (\"snipp.codes-team[.]com\"), from where a Microsoft-signed installer called \"Snipping-Tool.exe\" is…",
-        "evidence_origin": "summary",
-        "focus": "Microsoft Store application",
-        "headline": "Microsoft Store application delivers Vinci RAT remote access trojan",
-        "priority": "high",
-        "significance": "Compromise of a Microsoft Store application to deliver malware indicates that application vetting and supply chain controls may not prevent malicious code distribution through trusted platforms. The accountable owner should confirm that application allow-listing policies and endpoint detection cover Microsoft Store sourced software.",
-        "source_ids": [
-          11
+          9
         ]
       }
     ],
@@ -81,26 +81,26 @@
         {
           "source_ids": [
             2,
-            4,
-            7,
-            10
+            3,
+            6
           ],
-          "text": "Active exploitation of critical vulnerabilities in Drupal core, the Cacti network monitoring platform, US Air Force cloud infrastructure, and government visa systems demonstrates that vulnerability management and monitoring controls must address both known exploited flaws and zero-day threats across diverse technology stacks."
+          "text": "Active exploitation of critical vulnerabilities in Drupal core, Mitel MiCollab, and Cacti network monitoring platform, alongside CISA Known Exploited Vulnerabilities catalog additions, demands immediate vulnerability management attention across technology stacks. Control owners must confirm patching status, compensating controls, and asset inventory coverage for these actively targeted systems."
         },
         {
           "source_ids": [
-            3,
-            11
+            4,
+            5,
+            9
           ],
-          "text": "The addition of Mitel MiCollab vulnerabilities to the CISA Known Exploited Vulnerabilities catalog and the compromise of a Microsoft Store application to deliver a remote access trojan indicate that third-party risk assurance and application vetting controls require reinforcement to address supply chain exploitation."
+          "text": "Concurrent identity and cloud security failures, including a password manager breach bypassing two-factor authentication and a reported US Air Force cloud platform compromise, extend risk to access management and incident response domains. A medical device manufacturer data breach further underscores data protection accountability. Owners should validate authentication assurances, cloud containment procedures, and breach notification readiness."
         }
       ]
     },
     "industry_impacts": [],
     "regulatory_changes": []
   },
-  "generated_at": "2026-11-27T18:19:40.174593Z",
-  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/0e0cad68a710b757b2f0ab51ae80f572b67219d5/site/feed.xml",
+  "generated_at": "2026-11-27T21:21:23.468897Z",
+  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/c38e0a0b10c8ad394fa8e54ddf839a3b1ec1e67d/site/feed.xml",
   "feed_home_url": "https://sentrydigest.ricomanifesto.com/",
   "digest_issue_date": "2026-11-27",
   "digest_issue_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-27/",
@@ -163,6 +163,50 @@
           "origin": "content",
           "raw_text": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Wednesday added 10 security flaws to its Known Exploited Vulnerabilities (KEV) catalog, including five vulnerabilities impacting Mitel MiCollab that were disclosed last week. The Mitel MiCollab vulnerabilities are listed below - CVE-2026-133275 (CVSS score: 5.3) - An arbitrary file upload vulnerability in the Audio, Web and…",
           "text": "The U.S. Cybersecurity and Infrastructure Security Agency (CISA) on Wednesday added 10 security flaws to its Known Exploited Vulnerabilities (KEV) catalog, including five vulnerabilities impacting Mitel MiCollab that were disclosed last week. The Mitel MiCollab vulnerabilities are listed below - CVE-2026-133275 (CVSS score: 5.3) - An arbitrary file upload vulnerability in the Audio, Web and…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "pCloud confirms password manager hack after suspicious login alerts",
+      "url": "https://www.bleepingcomputer.com/news/security/pcloud-confirms-password-manager-hack-after-suspicious-login-alerts/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-27/#reporting-dfa374b10167",
+      "cves": [],
+      "snippet": "pCloud confirms password manager hack after suspicious login alerts The pCloud Pass password manager suffered a cyberattack, with users reporting that unknown devices had connected to their accounts even with two-factor authentication (2FA) enabled… The pCloud Pass password manager suffered a cyberattack, with users reporting that unknown devices had connected to their accounts even with two-factor authentication (2FA) enabled…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "The pCloud Pass password manager suffered a cyberattack, with users reporting that unknown devices had connected to their accounts even with two-factor authentication (2FA) enabled…",
+          "text": "The pCloud Pass password manager suffered a cyberattack, with users reporting that unknown devices had connected to their accounts even with two-factor authentication (2FA) enabled…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "The pCloud Pass password manager suffered a cyberattack, with users reporting that unknown devices had connected to their accounts even with two-factor authentication (2FA) enabled…",
+          "text": "The pCloud Pass password manager suffered a cyberattack, with users reporting that unknown devices had connected to their accounts even with two-factor authentication (2FA) enabled…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "New Boston Scientific data breach exposes personal, medical info",
+      "url": "https://www.bleepingcomputer.com/news/security/new-boston-scientific-data-breach-exposes-personal-medical-info/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-27/#reporting-0d3b0b5ebdba",
+      "cves": [],
+      "snippet": "New Boston Scientific data breach exposes personal, medical info Medical technology company Boston Scientific is sending data breach notices to individuals affected by a cyberattack on the firm… Medical technology company Boston Scientific is sending data breach notices to individuals affected by a cyberattack on the firm…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Medical technology company Boston Scientific is sending data breach notices to individuals affected by a cyberattack on the firm…",
+          "text": "Medical technology company Boston Scientific is sending data breach notices to individuals affected by a cyberattack on the firm…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Medical technology company Boston Scientific is sending data breach notices to individuals affected by a cyberattack on the firm…",
+          "text": "Medical technology company Boston Scientific is sending data breach notices to individuals affected by a cyberattack on the firm…"
         }
       ],
       "effective_date_evidence": null
@@ -317,50 +361,6 @@
           "origin": "content",
           "raw_text": "Attackers could have disrupted traveler entry into Nigeria, Ethiopia, Zambia, Sri Lanka, Fiji, and Ghana via several vulnerabilities in their online visa and immigration systems.",
           "text": "Attackers could have disrupted traveler entry into Nigeria, Ethiopia, Zambia, Sri Lanka, Fiji, and Ghana via several vulnerabilities in their online visa and immigration systems."
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "Microsoft Store App Found Delivering Vinci RAT Capable of Remote System Control",
-      "url": "https://thehackernews.com/2026/11/microsoft-store-app-found-delivering.html",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-27/#reporting-c60eeeaa334b",
-      "cves": [],
-      "snippet": "Microsoft Store App Found Delivering Vinci RAT Capable of Remote System Control Cybersecurity researchers have disclosed details of a cyber attack in which a threat actor leveraged a Microsoft Store application to deliver a remote access trojan (RAT) called Vinci RAT. The intrusion, according to eSentire, begins with a redirection to a bogus site for a sniping tool (\"snipp.codes-team[.]com\"), from where a Microsoft-signed installer called \"Snipping-Tool.exe\" is… Cybersecurity researchers have disclosed details of a cyber attack in which a threat actor leveraged a Microsoft Store application to deliver a remote access trojan (RAT) called Vinci RAT. The intrusion, according to eSentire, begins",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "Cybersecurity researchers have disclosed details of a cyber attack in which a threat actor leveraged a Microsoft Store application to deliver a remote access trojan (RAT) called Vinci RAT. The intrusion, according to eSentire, begins with a redirection to a bogus site for a sniping tool (\"snipp.codes-team[.]com\"), from where a Microsoft-signed installer called \"Snipping-Tool.exe\" is…",
-          "text": "Cybersecurity researchers have disclosed details of a cyber attack in which a threat actor leveraged a Microsoft Store application to deliver a remote access trojan (RAT) called Vinci RAT. The intrusion, according to eSentire, begins with a redirection to a bogus site for a sniping tool (\"snipp.codes-team[.]com\"), from where a Microsoft-signed installer called \"Snipping-Tool.exe\" is…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "Cybersecurity researchers have disclosed details of a cyber attack in which a threat actor leveraged a Microsoft Store application to deliver a remote access trojan (RAT) called Vinci RAT. The intrusion, according to eSentire, begins with a redirection to a bogus site for a sniping tool (\"snipp.codes-team[.]com\"), from where a Microsoft-signed installer called \"Snipping-Tool.exe\" is…",
-          "text": "Cybersecurity researchers have disclosed details of a cyber attack in which a threat actor leveraged a Microsoft Store application to deliver a remote access trojan (RAT) called Vinci RAT. The intrusion, according to eSentire, begins with a redirection to a bogus site for a sniping tool (\"snipp.codes-team[.]com\"), from where a Microsoft-signed installer called \"Snipping-Tool.exe\" is…"
-        }
-      ],
-      "effective_date_evidence": null
-    },
-    {
-      "title": "Microsoft removes WSUS server role in Windows Server 2028",
-      "url": "https://www.bleepingcomputer.com/news/microsoft/microsoft-removes-wsus-server-role-in-windows-server-2028/",
-      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-27/#reporting-d4f2d117646b",
-      "cves": [],
-      "snippet": "Microsoft removes WSUS server role in Windows Server 2028 Microsoft will remove the WSUS server role from Windows Server 2028, the next major release of its server operating system… Microsoft will remove the WSUS server role from Windows Server 2028, the next major release of its server operating system…",
-      "article_evidence": [
-        {
-          "extraction_version": 1,
-          "origin": "summary",
-          "raw_text": "Microsoft will remove the WSUS server role from Windows Server 2028, the next major release of its server operating system…",
-          "text": "Microsoft will remove the WSUS server role from Windows Server 2028, the next major release of its server operating system…"
-        },
-        {
-          "extraction_version": 1,
-          "origin": "content",
-          "raw_text": "Microsoft will remove the WSUS server role from Windows Server 2028, the next major release of its server operating system…",
-          "text": "Microsoft will remove the WSUS server role from Windows Server 2028, the next major release of its server operating system…"
         }
       ],
       "effective_date_evidence": null
