@@ -1,0 +1,367 @@
+{
+  "schema_version": 3,
+  "report_contract_version": 6,
+  "report_plan": {
+    "control_implications": [
+      {
+        "control_id": "vulnerability_management",
+        "evidence_excerpt": "Drupal has warned of a new \"highly critical\" security flaw impacting Drupal core that it said has been exploited in the wild. The vulnerability, tracked as CVE-2026-136716 (CVSS score: N/A), has been described as a case of improper checking for unusual or exceptional conditions. It also relates to CVE-2026-132165 aka Fail2Install in that it addresses remaining vulnerable installation states…",
+        "evidence_origin": "content",
+        "focus": "Drupal core",
+        "headline": "Drupal core weakens assurance as active exploitation targets installation states",
+        "priority": "high",
+        "significance": "Active exploitation of a highly critical Drupal core flaw undermines vulnerability management assurance. The vulnerability owner should confirm asset inventory covers all Drupal installations and that emergency patching procedures have been executed.",
+        "source_ids": [
+          2
+        ]
+      },
+      {
+        "control_id": "vulnerability_management",
+        "evidence_excerpt": "A zero-day vulnerability in the Cacti network monitoring platform has been publicly disclosed, along with a proof-of-concept exploit that lets unauthenticated attackers execute commands on vulnerable servers…",
+        "evidence_origin": "summary",
+        "focus": "Cacti network monitoring platform",
+        "headline": "Cacti network monitoring platform enables remote code execution via public zero-day exploit",
+        "priority": "high",
+        "significance": "Public disclosure of a zero-day with proof-of-concept exploit elevates remediation urgency for monitoring infrastructure. The vulnerability owner should identify all deployed Cacti instances and validate compensating controls or patching status.",
+        "source_ids": [
+          6
+        ]
+      },
+      {
+        "control_id": "access_management",
+        "evidence_excerpt": "The pCloud Pass password manager suffered a cyberattack, with users reporting that unknown devices had connected to their accounts even with two-factor authentication (2FA) enabled…",
+        "evidence_origin": "summary",
+        "focus": "pCloud Pass password manager",
+        "headline": "pCloud Pass password manager exposes access gaps as unknown devices bypass two-factor authentication",
+        "priority": "high",
+        "significance": "Unauthorized device connections despite enabled two-factor authentication indicate access management control failures. The identity and access owner should verify authentication coverage, session revocation processes, and privilege boundary enforcement.",
+        "source_ids": [
+          4
+        ]
+      },
+      {
+        "control_id": "data_protection",
+        "evidence_excerpt": "Medical technology company Boston Scientific is sending data breach notices to individuals affected by a cyberattack on the firm…",
+        "evidence_origin": "summary",
+        "focus": "Boston Scientific",
+        "headline": "Boston Scientific triggers breach notification as cyberattack exposes personal medical information",
+        "priority": "high",
+        "significance": "A confirmed cyberattack exposing personal and medical data activates regulatory breach notification obligations. The data and privacy owner should confirm the scope of exposed records and the completeness of notification evidence.",
+        "source_ids": [
+          5
+        ]
+      },
+      {
+        "control_id": "incident_response",
+        "evidence_excerpt": "Hackers have reportedly breached the US Air Force's Cloud One computing platform, adding to a recent wave of cyberattacks affecting US government agencies, including the FBI, CIA, and Treasury Department…",
+        "evidence_origin": "summary",
+        "focus": "US Air Force's Cloud One computing platform",
+        "headline": "US Air Force's Cloud One computing platform suffers breach amid federal agency attack wave",
+        "priority": "medium",
+        "significance": "A breach of a military cloud platform signals systemic risk across federal infrastructure. The incident response lead should verify containment procedures and evidence preservation for the affected cloud environment.",
+        "source_ids": [
+          9
+        ]
+      },
+      {
+        "control_id": "vulnerability_management",
+        "evidence_excerpt": "Attackers could have disrupted traveler entry into Nigeria, Ethiopia, Zambia, Sri Lanka, Fiji, and Ghana via several vulnerabilities in their online visa and immigration systems.",
+        "evidence_origin": "summary",
+        "focus": "online visa and immigration systems",
+        "headline": "online visa and immigration systems expose border control disruption via multiple vulnerabilities",
+        "priority": "medium",
+        "significance": "Vulnerabilities in government visa systems threaten critical border control operations and traveler data integrity. The vulnerability owner should assess exposure of national immigration platforms and coordinate patching with responsible authorities.",
+        "source_ids": [
+          12
+        ]
+      }
+    ],
+    "executive_brief": {
+      "paragraphs": [
+        {
+          "source_ids": [
+            2,
+            6,
+            4
+          ],
+          "text": "Active exploitation of a highly critical Drupal core vulnerability and public disclosure of a Cacti zero-day with proof-of-concept exploit demonstrate that vulnerability management controls are under pressure from rapidly weaponized flaws. Simultaneously, the pCloud Pass password manager breach where unknown devices bypassed two-factor authentication reveals gaps in access management assurance for authentication systems. Control owners should prioritize asset identification and emergency patching for exposed platforms while verifying authentication coverage and session revocation processes."
+        },
+        {
+          "source_ids": [
+            5,
+            9,
+            12
+          ],
+          "text": "A confirmed cyberattack on Boston Scientific triggering breach notifications for personal and medical data, alongside a reported breach of the US Air Force Cloud One platform amid a wave of federal agency compromises, elevates incident response and data protection priorities. Additionally, vulnerabilities in online visa and immigration systems across multiple nations threaten border control operations. Accountable owners should confirm breach notification completeness, cloud environment containment evidence, and vulnerability remediation coordination for critical government systems."
+        }
+      ]
+    },
+    "industry_impacts": [],
+    "regulatory_changes": []
+  },
+  "generated_at": "2026-11-28T09:19:04.563771Z",
+  "feed_url": "https://raw.githubusercontent.com/ricomanifesto/SentryDigest/918b10560e8567a91a1d81e554a0e7c2d35b9e58/site/feed.xml",
+  "feed_home_url": "https://sentrydigest.ricomanifesto.com/",
+  "digest_issue_date": "2026-11-28",
+  "digest_issue_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-28/",
+  "requested_model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
+  "resolved_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+  "sources": [
+    {
+      "title": "New NFS2ROOT Linux flaw can let attackers gain root privileges",
+      "url": "https://www.bleepingcomputer.com/news/security/new-nfs2root-linux-flaw-can-let-attackers-gain-root-privileges/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-28/#reporting-0f84e2352a98",
+      "cves": [
+        "CVE-2026-99362"
+      ],
+      "snippet": "New NFS2ROOT Linux flaw can let attackers gain root privileges ​A 12-year-old critical vulnerability in the Linux kernel's Network File System (NFS) server, tracked as CVE-2026-99362, allows remote attackers to gain root privileges… ​A 12-year-old critical vulnerability in the Linux kernel's Network File System (NFS) server, tracked as CVE-2026-99362, allows remote attackers to gain root privileges…",
+      "article_evidence": [],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Drupal Warns of New Highly Critical Site Takeover Vulnerability Under Active Exploitation",
+      "url": "https://thehackernews.com/2026/11/drupal-warns-of-new-highly-critical.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-28/#reporting-61e3be14c2b6",
+      "cves": [
+        "CVE-2026-136716",
+        "CVE-2026-132165"
+      ],
+      "snippet": "Drupal Warns of New Highly Critical Site Takeover Vulnerability Under Active Exploitation Drupal has warned of a new \"highly critical\" security flaw impacting Drupal core that it said has been exploited in the wild. The vulnerability, tracked as CVE-2026-136716 (CVSS score: N/A), has been described as a case of improper checking for unusual or exceptional conditions. It also relates to CVE-2026-132165 aka Fail2Install in that it addresses remaining vulnerable installation states… Drupal has warned of a new \"highly critical\" security flaw impacting Drupal core that it said has been exploited in the wild. The vulnerability, tracked as CVE-2026-136716 (CVSS score: N/A), has been described as a ",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Drupal has warned of a new \"highly critical\" security flaw impacting Drupal core that it said has been exploited in the wild. The vulnerability, tracked as CVE-2026-136716 (CVSS score: N/A), has been described as a case of improper checking for unusual or exceptional conditions. It also relates to CVE-2026-132165 aka Fail2Install in that it addresses remaining vulnerable installation states…",
+          "text": "Drupal has warned of a new \"highly critical\" security flaw impacting Drupal core that it said has been exploited in the wild. The vulnerability, tracked as CVE-2026-136716 (CVSS score: N/A), has been described as a case of improper checking for unusual or exceptional conditions. It also relates to CVE-2026-132165 aka Fail2Install in that it addresses remaining vulnerable installation states…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Drupal has warned of a new \"highly critical\" security flaw impacting Drupal core that it said has been exploited in the wild. The vulnerability, tracked as CVE-2026-136716 (CVSS score: N/A), has been described as a case of improper checking for unusual or exceptional conditions. It also relates to CVE-2026-132165 aka Fail2Install in that it addresses remaining vulnerable installation states…",
+          "text": "Drupal has warned of a new \"highly critical\" security flaw impacting Drupal core that it said has been exploited in the wild. The vulnerability, tracked as CVE-2026-136716 (CVSS score: N/A), has been described as a case of improper checking for unusual or exceptional conditions. It also relates to CVE-2026-132165 aka Fail2Install in that it addresses remaining vulnerable installation states…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "pCloud Password Manager Hit by Cyber Attack Involving Email Address Exposure and Login Attempts",
+      "url": "https://thehackernews.com/2026/11/pcloud-password-manager-hit-by-cyber.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-28/#reporting-98be6a877e81",
+      "cves": [],
+      "snippet": "pCloud Password Manager Hit by Cyber Attack Involving Email Address Exposure and Login Attempts Cross-platform password manager pCloud Pass has confirmed it was targeted by a cyber attack after users reported seeing unknown devices being connected to their accounts. \"A cyber attack targeting pCloud Pass occurred, which was promptly contained by the pCloud team,\" the Swiss company said in response to a number of posts on Reddit. \"Unfortunately, a small number of pCloud Pass user email… Cross-platform password manager pCloud Pass has confirmed it was targeted by a cyber attack after users reported seeing unknown devices being connected to their accounts. \"A cyber attack targeting pCloud Pass o",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Cross-platform password manager pCloud Pass has confirmed it was targeted by a cyber attack after users reported seeing unknown devices being connected to their accounts. \"A cyber attack targeting pCloud Pass occurred, which was promptly contained by the pCloud team,\" the Swiss company said in response to a number of posts on Reddit. \"Unfortunately, a small number of pCloud Pass user email…",
+          "text": "Cross-platform password manager pCloud Pass has confirmed it was targeted by a cyber attack after users reported seeing unknown devices being connected to their accounts. \"A cyber attack targeting pCloud Pass occurred, which was promptly contained by the pCloud team,\" the Swiss company said in response to a number of posts on Reddit. \"Unfortunately, a small number of pCloud Pass user email…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Cross-platform password manager pCloud Pass has confirmed it was targeted by a cyber attack after users reported seeing unknown devices being connected to their accounts. \"A cyber attack targeting pCloud Pass occurred, which was promptly contained by the pCloud team,\" the Swiss company said in response to a number of posts on Reddit. \"Unfortunately, a small number of pCloud Pass user email…",
+          "text": "Cross-platform password manager pCloud Pass has confirmed it was targeted by a cyber attack after users reported seeing unknown devices being connected to their accounts. \"A cyber attack targeting pCloud Pass occurred, which was promptly contained by the pCloud team,\" the Swiss company said in response to a number of posts on Reddit. \"Unfortunately, a small number of pCloud Pass user email…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "pCloud confirms password manager hack after suspicious login alerts",
+      "url": "https://www.bleepingcomputer.com/news/security/pcloud-confirms-password-manager-hack-after-suspicious-login-alerts/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-28/#reporting-dfa374b10167",
+      "cves": [],
+      "snippet": "pCloud confirms password manager hack after suspicious login alerts The pCloud Pass password manager suffered a cyberattack, with users reporting that unknown devices had connected to their accounts even with two-factor authentication (2FA) enabled… The pCloud Pass password manager suffered a cyberattack, with users reporting that unknown devices had connected to their accounts even with two-factor authentication (2FA) enabled…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "The pCloud Pass password manager suffered a cyberattack, with users reporting that unknown devices had connected to their accounts even with two-factor authentication (2FA) enabled…",
+          "text": "The pCloud Pass password manager suffered a cyberattack, with users reporting that unknown devices had connected to their accounts even with two-factor authentication (2FA) enabled…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "The pCloud Pass password manager suffered a cyberattack, with users reporting that unknown devices had connected to their accounts even with two-factor authentication (2FA) enabled…",
+          "text": "The pCloud Pass password manager suffered a cyberattack, with users reporting that unknown devices had connected to their accounts even with two-factor authentication (2FA) enabled…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "New Boston Scientific data breach exposes personal, medical info",
+      "url": "https://www.bleepingcomputer.com/news/security/new-boston-scientific-data-breach-exposes-personal-medical-info/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-28/#reporting-0d3b0b5ebdba",
+      "cves": [],
+      "snippet": "New Boston Scientific data breach exposes personal, medical info Medical technology company Boston Scientific is sending data breach notices to individuals affected by a cyberattack on the firm… Medical technology company Boston Scientific is sending data breach notices to individuals affected by a cyberattack on the firm…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Medical technology company Boston Scientific is sending data breach notices to individuals affected by a cyberattack on the firm…",
+          "text": "Medical technology company Boston Scientific is sending data breach notices to individuals affected by a cyberattack on the firm…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Medical technology company Boston Scientific is sending data breach notices to individuals affected by a cyberattack on the firm…",
+          "text": "Medical technology company Boston Scientific is sending data breach notices to individuals affected by a cyberattack on the firm…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Unpatched Cacti zero-day with public PoC gives remote code execution",
+      "url": "https://www.bleepingcomputer.com/news/security/unpatched-cacti-zero-day-with-public-poc-gives-remote-code-execution/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-28/#reporting-9064d3864e25",
+      "cves": [],
+      "snippet": "Unpatched Cacti zero-day with public PoC gives remote code execution A zero-day vulnerability in the Cacti network monitoring platform has been publicly disclosed, along with a proof-of-concept exploit that lets unauthenticated attackers execute commands on vulnerable servers… A zero-day vulnerability in the Cacti network monitoring platform has been publicly disclosed, along with a proof-of-concept exploit that lets unauthenticated attackers execute commands on vulnerable servers…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "A zero-day vulnerability in the Cacti network monitoring platform has been publicly disclosed, along with a proof-of-concept exploit that lets unauthenticated attackers execute commands on vulnerable servers…",
+          "text": "A zero-day vulnerability in the Cacti network monitoring platform has been publicly disclosed, along with a proof-of-concept exploit that lets unauthenticated attackers execute commands on vulnerable servers…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "A zero-day vulnerability in the Cacti network monitoring platform has been publicly disclosed, along with a proof-of-concept exploit that lets unauthenticated attackers execute commands on vulnerable servers…",
+          "text": "A zero-day vulnerability in the Cacti network monitoring platform has been publicly disclosed, along with a proof-of-concept exploit that lets unauthenticated attackers execute commands on vulnerable servers…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Suspected Vietnam-Linked Hackers Target Southeast Asia in South China Sea Espionage Campaign",
+      "url": "https://thehackernews.com/2026/11/suspected-vietnam-linked-hackers-target.html",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-28/#reporting-a061202fd8df",
+      "cves": [],
+      "snippet": "Suspected Vietnam-Linked Hackers Target Southeast Asia in South China Sea Espionage Campaign A Vietnam-sponsored hacking group has been attributed to attacks targeting Southeast Asian military, government, and legislative organizations with an aim to gather intelligence on South China Sea defense and military agreements. The previously undocumented incursion set, detailed by SOCRadar, has been codenamed WeaveLotus. The activity is assessed to have comprised five intrusions in Thailand… A Vietnam-sponsored hacking group has been attributed to attacks targeting Southeast Asian military, government, and legislative organizations with an aim to gather intelligence on South China Sea defense and ",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "A Vietnam-sponsored hacking group has been attributed to attacks targeting Southeast Asian military, government, and legislative organizations with an aim to gather intelligence on South China Sea defense and military agreements. The previously undocumented incursion set, detailed by SOCRadar, has been codenamed WeaveLotus. The activity is assessed to have comprised five intrusions in Thailand…",
+          "text": "A Vietnam-sponsored hacking group has been attributed to attacks targeting Southeast Asian military, government, and legislative organizations with an aim to gather intelligence on South China Sea defense and military agreements. The previously undocumented incursion set, detailed by SOCRadar, has been codenamed WeaveLotus. The activity is assessed to have comprised five intrusions in Thailand…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "A Vietnam-sponsored hacking group has been attributed to attacks targeting Southeast Asian military, government, and legislative organizations with an aim to gather intelligence on South China Sea defense and military agreements. The previously undocumented incursion set, detailed by SOCRadar, has been codenamed WeaveLotus. The activity is assessed to have comprised five intrusions in Thailand…",
+          "text": "A Vietnam-sponsored hacking group has been attributed to attacks targeting Southeast Asian military, government, and legislative organizations with an aim to gather intelligence on South China Sea defense and military agreements. The previously undocumented incursion set, detailed by SOCRadar, has been codenamed WeaveLotus. The activity is assessed to have comprised five intrusions in Thailand…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Matters.AI Lands India’s Largest Cybersecurity Pre-Series A Round to Fight AI Data Risks",
+      "url": "https://www.darkreading.com/cyber-risk/matters-india-cybersecurity-pre-series-ai-data-risks",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-28/#reporting-cc6b1f3c94a6",
+      "cves": [],
+      "snippet": "Matters.AI Lands India’s Largest Cybersecurity Pre-Series A Round to Fight AI Data Risks The security startup consolidates four legacy security tools into an autonomous platform that uses context-aware AI to trace sensitive data lineage, analyze user intent, and automatically remediate threats across enterprise environments. The security startup consolidates four legacy security tools into an autonomous platform that uses context-aware AI to trace sensitive data lineage, analyze user intent, and automatically remediate threats across enterprise environments.",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "The security startup consolidates four legacy security tools into an autonomous platform that uses context-aware AI to trace sensitive data lineage, analyze user intent, and automatically remediate threats across enterprise environments.",
+          "text": "The security startup consolidates four legacy security tools into an autonomous platform that uses context-aware AI to trace sensitive data lineage, analyze user intent, and automatically remediate threats across enterprise environments."
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "The security startup consolidates four legacy security tools into an autonomous platform that uses context-aware AI to trace sensitive data lineage, analyze user intent, and automatically remediate threats across enterprise environments.",
+          "text": "The security startup consolidates four legacy security tools into an autonomous platform that uses context-aware AI to trace sensitive data lineage, analyze user intent, and automatically remediate threats across enterprise environments."
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "US Air Force cloud platform reportedly hacked in latest federal breach",
+      "url": "https://www.bleepingcomputer.com/news/security/us-air-force-cloud-platform-reportedly-hacked-in-latest-federal-breach/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-28/#reporting-0b5d82f7ad3e",
+      "cves": [],
+      "snippet": "US Air Force cloud platform reportedly hacked in latest federal breach Hackers have reportedly breached the US Air Force's Cloud One computing platform, adding to a recent wave of cyberattacks affecting US government agencies, including the FBI, CIA, and Treasury Department… Hackers have reportedly breached the US Air Force's Cloud One computing platform, adding to a recent wave of cyberattacks affecting US government agencies, including the FBI, CIA, and Treasury Department…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Hackers have reportedly breached the US Air Force's Cloud One computing platform, adding to a recent wave of cyberattacks affecting US government agencies, including the FBI, CIA, and Treasury Department…",
+          "text": "Hackers have reportedly breached the US Air Force's Cloud One computing platform, adding to a recent wave of cyberattacks affecting US government agencies, including the FBI, CIA, and Treasury Department…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Hackers have reportedly breached the US Air Force's Cloud One computing platform, adding to a recent wave of cyberattacks affecting US government agencies, including the FBI, CIA, and Treasury Department…",
+          "text": "Hackers have reportedly breached the US Air Force's Cloud One computing platform, adding to a recent wave of cyberattacks affecting US government agencies, including the FBI, CIA, and Treasury Department…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Your Firewall Isn't Enough: The Hidden Risk of Unmanaged VMs",
+      "url": "https://www.bleepingcomputer.com/news/security/your-firewall-isnt-enough-the-hidden-risk-of-unmanaged-vms/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-28/#reporting-dc95b561cad3",
+      "cves": [],
+      "snippet": "Your Firewall Isn't Enough: The Hidden Risk of Unmanaged VMs Forgotten virtual machines, unpatched servers, and excessive access permissions can create security blind spots across IT infrastructure. ISPsystem explains how centralized infrastructure management, access controls, and resource lifecycle automation can help reduce these risks… Forgotten virtual machines, unpatched servers, and excessive access permissions can create security blind spots across IT infrastructure. ISPsystem explains how centralized infrastructure management, access controls, and resource lifecycle automation can help reduce these risks…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Forgotten virtual machines, unpatched servers, and excessive access permissions can create security blind spots across IT infrastructure. ISPsystem explains how centralized infrastructure management, access controls, and resource lifecycle automation can help reduce these risks…",
+          "text": "Forgotten virtual machines, unpatched servers, and excessive access permissions can create security blind spots across IT infrastructure. ISPsystem explains how centralized infrastructure management, access controls, and resource lifecycle automation can help reduce these risks…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Forgotten virtual machines, unpatched servers, and excessive access permissions can create security blind spots across IT infrastructure. ISPsystem explains how centralized infrastructure management, access controls, and resource lifecycle automation can help reduce these risks…",
+          "text": "Forgotten virtual machines, unpatched servers, and excessive access permissions can create security blind spots across IT infrastructure. ISPsystem explains how centralized infrastructure management, access controls, and resource lifecycle automation can help reduce these risks…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "Malwarebytes Antivirus: Get 50% off during Black Friday 2026",
+      "url": "https://www.bleepingcomputer.com/news/security/malwarebytes-antivirus-get-50-percent-off-during-black-friday-2026/",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-28/#reporting-24b01fe057d6",
+      "cves": [],
+      "snippet": "Malwarebytes Antivirus: Get 50% off during Black Friday 2026 Malwarebytes' 2026 Black Friday and Cyber Monday sale is now live, offering 50% off security subscriptions for individuals, families, and small businesses, including its antivirus software, VPN, identity theft protection, and personal data removal services… Malwarebytes' 2026 Black Friday and Cyber Monday sale is now live, offering 50% off security subscriptions for individuals, families, and small businesses, including its antivirus software, VPN, identity theft protection, and personal data removal services…",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Malwarebytes' 2026 Black Friday and Cyber Monday sale is now live, offering 50% off security subscriptions for individuals, families, and small businesses, including its antivirus software, VPN, identity theft protection, and personal data removal services…",
+          "text": "Malwarebytes' 2026 Black Friday and Cyber Monday sale is now live, offering 50% off security subscriptions for individuals, families, and small businesses, including its antivirus software, VPN, identity theft protection, and personal data removal services…"
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Malwarebytes' 2026 Black Friday and Cyber Monday sale is now live, offering 50% off security subscriptions for individuals, families, and small businesses, including its antivirus software, VPN, identity theft protection, and personal data removal services…",
+          "text": "Malwarebytes' 2026 Black Friday and Cyber Monday sale is now live, offering 50% off security subscriptions for individuals, families, and small businesses, including its antivirus software, VPN, identity theft protection, and personal data removal services…"
+        }
+      ],
+      "effective_date_evidence": null
+    },
+    {
+      "title": "'God Mode' Flaws Could Wreak Border-Control Havoc",
+      "url": "https://www.darkreading.com/vulnerabilities-threats/god-mode-flaws-wreak-border-control-havoc",
+      "digest_url": "https://sentrydigest.ricomanifesto.com/archive/2026-11-28/#reporting-716dc2a9a70d",
+      "cves": [],
+      "snippet": "'God Mode' Flaws Could Wreak Border-Control Havoc Attackers could have disrupted traveler entry into Nigeria, Ethiopia, Zambia, Sri Lanka, Fiji, and Ghana via several vulnerabilities in their online visa and immigration systems. Attackers could have disrupted traveler entry into Nigeria, Ethiopia, Zambia, Sri Lanka, Fiji, and Ghana via several vulnerabilities in their online visa and immigration systems.",
+      "article_evidence": [
+        {
+          "extraction_version": 1,
+          "origin": "summary",
+          "raw_text": "Attackers could have disrupted traveler entry into Nigeria, Ethiopia, Zambia, Sri Lanka, Fiji, and Ghana via several vulnerabilities in their online visa and immigration systems.",
+          "text": "Attackers could have disrupted traveler entry into Nigeria, Ethiopia, Zambia, Sri Lanka, Fiji, and Ghana via several vulnerabilities in their online visa and immigration systems."
+        },
+        {
+          "extraction_version": 1,
+          "origin": "content",
+          "raw_text": "Attackers could have disrupted traveler entry into Nigeria, Ethiopia, Zambia, Sri Lanka, Fiji, and Ghana via several vulnerabilities in their online visa and immigration systems.",
+          "text": "Attackers could have disrupted traveler entry into Nigeria, Ethiopia, Zambia, Sri Lanka, Fiji, and Ghana via several vulnerabilities in their online visa and immigration systems."
+        }
+      ],
+      "effective_date_evidence": null
+    }
+  ]
+}
